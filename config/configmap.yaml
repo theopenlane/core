@@ -162,6 +162,7 @@ data:
   CORE_OBJECTSTORAGE_SECRETKEY: {{ .Values.core.objectStorage.secretKey }}
   CORE_OBJECTSTORAGE_CREDENTIALSJSON: {{ .Values.core.objectStorage.credentialsJSON }}
   CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.core.objectStorage.defaultBucket | default "file_uploads" }}
+  CORE_OBJECTSTORAGE_LOCALURL: {{ .Values.core.objectStorage.localURL | default "http://localhost:17608/files/" }}
   CORE_OBJECTSTORAGE_KEYS: {{ .Values.core.objectStorage.keys | default "uploadFile" }}
   CORE_SUBSCRIPTION_ENABLED: {{ .Values.core.subscription.enabled | default false }}
   CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.core.subscription.publicStripeKey }}

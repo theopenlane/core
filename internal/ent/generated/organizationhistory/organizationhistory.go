@@ -51,6 +51,10 @@ const (
 	FieldPersonalOrg = "personal_org"
 	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
 	FieldAvatarRemoteURL = "avatar_remote_url"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
+	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
+	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldDedicatedDb holds the string denoting the dedicated_db field in the database.
 	FieldDedicatedDb = "dedicated_db"
 	// Table holds the table name of the organizationhistory in the database.
@@ -77,6 +81,8 @@ var Columns = []string{
 	FieldParentOrganizationID,
 	FieldPersonalOrg,
 	FieldAvatarRemoteURL,
+	FieldAvatarLocalFileID,
+	FieldAvatarUpdatedAt,
 	FieldDedicatedDb,
 }
 
@@ -113,6 +119,10 @@ var (
 	DefaultDisplayName string
 	// DefaultPersonalOrg holds the default value on creation for the "personal_org" field.
 	DefaultPersonalOrg bool
+	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
+	DefaultAvatarUpdatedAt func() time.Time
+	// UpdateDefaultAvatarUpdatedAt holds the default value on update for the "avatar_updated_at" field.
+	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// DefaultDedicatedDb holds the default value on creation for the "dedicated_db" field.
 	DefaultDedicatedDb bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -215,6 +225,16 @@ func ByPersonalOrg(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatarRemoteURL orders the results by the avatar_remote_url field.
 func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
+}
+
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
+}
+
+// ByAvatarUpdatedAt orders the results by the avatar_updated_at field.
+func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarUpdatedAt, opts...).ToFunc()
 }
 
 // ByDedicatedDb orders the results by the dedicated_db field.

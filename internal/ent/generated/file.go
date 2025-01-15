@@ -66,6 +66,8 @@ type File struct {
 	// The values are being populated by the FileQuery when eager-loading is set.
 	Edges        FileEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	PresignedURL string `json:"presignedURL,omitempty"`
 }
 
 // FileEdges holds the relations/edges for other nodes in the graph.

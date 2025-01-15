@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -137,14 +138,21 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 	// delete said org
 	(&OrganizationCleanup{client: suite.client, ID: orgToDelete.ID}).MustDelete(testUser1.UserCtx, t)
 
+	// avatar file setup
+	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	require.NoError(t, err)
+
+	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	require.NoError(t, err)
+
 	testCases := []struct {
 		name                     string
 		orgName                  string
 		displayName              string
 		orgDescription           string
 		parentOrgID              string
+		avatarFile               *graphql.Upload
 		settings                 *openlaneclient.CreateOrganizationSettingInput
-		listOrgs                 bool
 		client                   *openlaneclient.OpenlaneClient
 		ctx                      context.Context
 		expectedDefaultOrgUpdate bool
@@ -155,18 +163,22 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgName:                  gofakeit.Name(),
 			displayName:              gofakeit.LetterN(50),
 			orgDescription:           gofakeit.HipsterSentence(10),
-			listOrgs:                 true,
 			expectedDefaultOrgUpdate: true, // only the first org created should update the default org
 			parentOrgID:              "",   // root org
 			client:                   suite.client.api,
 			ctx:                      testUser1.UserCtx,
 		},
 		{
-			name:           "happy path organization with settings",
+			name:           "happy path organization with settings and avatar",
 			orgName:        gofakeit.Name(),
 			displayName:    gofakeit.LetterN(50),
 			orgDescription: gofakeit.HipsterSentence(10),
-			listOrgs:       true,
+			avatarFile: &graphql.Upload{
+				File:        avatarFile.File,
+				Filename:    avatarFile.Filename,
+				Size:        avatarFile.Size,
+				ContentType: avatarFile.ContentType,
+			},
 			settings: &openlaneclient.CreateOrganizationSettingInput{
 				Domains: []string{"meow.theopenlane.io"},
 				BillingAddress: &models.Address{
@@ -185,7 +197,6 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "happy path organization with parent org",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			listOrgs:       true,
 			parentOrgID:    testUser1.OrganizationID,
 			client:         suite.client.api,
 			ctx:            testUser1.UserCtx,
@@ -194,7 +205,6 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "happy path organization with parent org using personal access token",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			listOrgs:       true,
 			parentOrgID:    testUser1.OrganizationID,
 			client:         suite.client.apiWithPAT,
 			ctx:            context.Background(),
@@ -203,7 +213,6 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "organization with parent personal org",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			listOrgs:       true,
 			parentOrgID:    testUser1.PersonalOrgID,
 			errorMsg:       "personal organizations are not allowed to have child organizations",
 			client:         suite.client.api,
@@ -229,7 +238,6 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "organization with no description",
 			orgName:        gofakeit.Name(),
 			orgDescription: "",
-			listOrgs:       true,
 			parentOrgID:    testUser1.OrganizationID,
 			client:         suite.client.api,
 			ctx:            testUser1.UserCtx,
@@ -246,7 +254,6 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "duplicate organization name, but other was deleted, should pass",
 			orgName:        orgToDelete.Name,
 			orgDescription: gofakeit.HipsterSentence(10),
-			listOrgs:       true,
 			errorMsg:       "",
 			client:         suite.client.api,
 			ctx:            testUser1.UserCtx,
@@ -255,7 +262,6 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "duplicate display name, should be allowed",
 			orgName:        gofakeit.LetterN(80),
 			displayName:    parentOrg.Organization.DisplayName,
-			listOrgs:       true,
 			orgDescription: gofakeit.HipsterSentence(10),
 			client:         suite.client.api,
 			ctx:            testUser1.UserCtx,
@@ -265,14 +271,34 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgName:        gofakeit.Name(),
 			displayName:    gofakeit.Sentence(3),
 			orgDescription: gofakeit.HipsterSentence(10),
-			listOrgs:       true,
 			client:         suite.client.api,
 			ctx:            testUser1.UserCtx,
+		},
+		{
+			name:    "invalid avatar file",
+			orgName: gofakeit.Name(),
+			avatarFile: &graphql.Upload{
+				File:        invalidAvatarFile.File,
+				Filename:    invalidAvatarFile.Filename,
+				Size:        invalidAvatarFile.Size,
+				ContentType: invalidAvatarFile.ContentType,
+			},
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "unsupported mime type uploaded: text/plain",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if tc.avatarFile != nil {
+				if tc.errorMsg == "" {
+					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+				} else {
+					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+				}
+			}
+
 			input := openlaneclient.CreateOrganizationInput{
 				Name:        tc.orgName,
 				Description: &tc.orgDescription,
@@ -290,7 +316,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 				input.CreateOrgSettings = tc.settings
 			}
 
-			resp, err := tc.client.CreateOrganization(tc.ctx, input)
+			resp, err := tc.client.CreateOrganization(tc.ctx, input, tc.avatarFile)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -320,6 +346,12 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 
 			// Ensure display name is not empty
 			assert.NotEmpty(t, resp.CreateOrganization.Organization.DisplayName)
+
+			// Ensure avatar file is not empty
+			if tc.avatarFile != nil {
+				assert.NotNil(t, resp.CreateOrganization.Organization.AvatarLocalFileID)
+				assert.NotNil(t, resp.CreateOrganization.Organization.AvatarFile.PresignedURL)
+			}
 
 			if tc.settings != nil {
 				assert.Len(t, resp.CreateOrganization.Organization.Setting.Domains, 1)
@@ -399,10 +431,18 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 	reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
 	require.NoError(t, err)
 
+	// avatar file setup
+	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	require.NoError(t, err)
+
+	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	require.NoError(t, err)
+
 	testCases := []struct {
 		name        string
 		orgID       string
 		updateInput openlaneclient.UpdateOrganizationInput
+		avatarFile  *graphql.Upload
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedRes openlaneclient.UpdateOrganization_UpdateOrganization_Organization
@@ -450,10 +490,16 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 		},
 		{
-			name:  "update description, happy path",
+			name:  "update description and avatar file, happy path",
 			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				Description: &descriptionUpdate,
+			},
+			avatarFile: &graphql.Upload{
+				File:        avatarFile.File,
+				Filename:    avatarFile.Filename,
+				Size:        avatarFile.Size,
+				ContentType: avatarFile.ContentType,
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
@@ -498,6 +544,19 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 		},
 		{
+			name:  "update avatar, invalid file",
+			orgID: org.ID,
+			avatarFile: &graphql.Upload{
+				File:        invalidAvatarFile.File,
+				Filename:    invalidAvatarFile.Filename,
+				Size:        invalidAvatarFile.Size,
+				ContentType: invalidAvatarFile.ContentType,
+			},
+			client:   suite.client.api,
+			ctx:      reqCtx,
+			errorMsg: "unsupported mime type uploaded: text/plain",
+		},
+		{
 			name:  "update name, too long",
 			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
@@ -531,7 +590,15 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateOrganization(tc.ctx, tc.orgID, tc.updateInput)
+			if tc.avatarFile != nil {
+				if tc.errorMsg == "" {
+					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+				} else {
+					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+				}
+			}
+
+			resp, err := tc.client.UpdateOrganization(tc.ctx, tc.orgID, tc.updateInput, tc.avatarFile)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -561,6 +628,11 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 
 			if tc.updateInput.UpdateOrgSettings != nil {
 				assert.Len(t, updatedOrg.GetSetting().Domains, 2)
+			}
+
+			if tc.avatarFile != nil {
+				assert.NotNil(t, updatedOrg.AvatarLocalFileID)
+				assert.NotNil(t, updatedOrg.AvatarFile.PresignedURL)
 			}
 		})
 	}

@@ -228,26 +228,6 @@ func (uu *UserUpdate) ClearAvatarRemoteURL() *UserUpdate {
 	return uu
 }
 
-// SetAvatarLocalFile sets the "avatar_local_file" field.
-func (uu *UserUpdate) SetAvatarLocalFile(s string) *UserUpdate {
-	uu.mutation.SetAvatarLocalFile(s)
-	return uu
-}
-
-// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableAvatarLocalFile(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetAvatarLocalFile(*s)
-	}
-	return uu
-}
-
-// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
-func (uu *UserUpdate) ClearAvatarLocalFile() *UserUpdate {
-	uu.mutation.ClearAvatarLocalFile()
-	return uu
-}
-
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
 func (uu *UserUpdate) SetAvatarLocalFileID(s string) *UserUpdate {
 	uu.mutation.SetAvatarLocalFileID(s)
@@ -497,23 +477,23 @@ func (uu *UserUpdate) AddFiles(f ...*File) *UserUpdate {
 	return uu.AddFileIDs(ids...)
 }
 
-// SetFileID sets the "file" edge to the File entity by ID.
-func (uu *UserUpdate) SetFileID(id string) *UserUpdate {
-	uu.mutation.SetFileID(id)
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (uu *UserUpdate) SetAvatarFileID(id string) *UserUpdate {
+	uu.mutation.SetAvatarFileID(id)
 	return uu
 }
 
-// SetNillableFileID sets the "file" edge to the File entity by ID if the given value is not nil.
-func (uu *UserUpdate) SetNillableFileID(id *string) *UserUpdate {
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (uu *UserUpdate) SetNillableAvatarFileID(id *string) *UserUpdate {
 	if id != nil {
-		uu = uu.SetFileID(*id)
+		uu = uu.SetAvatarFileID(*id)
 	}
 	return uu
 }
 
-// SetFile sets the "file" edge to the File entity.
-func (uu *UserUpdate) SetFile(f *File) *UserUpdate {
-	return uu.SetFileID(f.ID)
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (uu *UserUpdate) SetAvatarFile(f *File) *UserUpdate {
+	return uu.SetAvatarFileID(f.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -830,9 +810,9 @@ func (uu *UserUpdate) RemoveFiles(f ...*File) *UserUpdate {
 	return uu.RemoveFileIDs(ids...)
 }
 
-// ClearFile clears the "file" edge to the File entity.
-func (uu *UserUpdate) ClearFile() *UserUpdate {
-	uu.mutation.ClearFile()
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (uu *UserUpdate) ClearAvatarFile() *UserUpdate {
+	uu.mutation.ClearAvatarFile()
 	return uu
 }
 
@@ -1108,11 +1088,6 @@ func (uu *UserUpdate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "User.avatar_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.AvatarLocalFile(); ok {
-		if err := user.AvatarLocalFileValidator(v); err != nil {
-			return &ValidationError{Name: "avatar_local_file", err: fmt.Errorf(`generated: validator failed for field "User.avatar_local_file": %w`, err)}
-		}
-	}
 	if v, ok := uu.mutation.AuthProvider(); ok {
 		if err := user.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "User.auth_provider": %w`, err)}
@@ -1211,12 +1186,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(user.FieldAvatarRemoteURL, field.TypeString)
-	}
-	if value, ok := uu.mutation.AvatarLocalFile(); ok {
-		_spec.SetField(user.FieldAvatarLocalFile, field.TypeString, value)
-	}
-	if uu.mutation.AvatarLocalFileCleared() {
-		_spec.ClearField(user.FieldAvatarLocalFile, field.TypeString)
 	}
 	if value, ok := uu.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(user.FieldAvatarUpdatedAt, field.TypeTime, value)
@@ -1708,12 +1677,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uu.mutation.FileCleared() {
+	if uu.mutation.AvatarFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   user.FileTable,
-			Columns: []string{user.FileColumn},
+			Table:   user.AvatarFileTable,
+			Columns: []string{user.AvatarFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -1722,12 +1691,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = uu.schemaConfig.User
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.AvatarFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   user.FileTable,
-			Columns: []string{user.FileColumn},
+			Table:   user.AvatarFileTable,
+			Columns: []string{user.AvatarFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -2394,26 +2363,6 @@ func (uuo *UserUpdateOne) ClearAvatarRemoteURL() *UserUpdateOne {
 	return uuo
 }
 
-// SetAvatarLocalFile sets the "avatar_local_file" field.
-func (uuo *UserUpdateOne) SetAvatarLocalFile(s string) *UserUpdateOne {
-	uuo.mutation.SetAvatarLocalFile(s)
-	return uuo
-}
-
-// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableAvatarLocalFile(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetAvatarLocalFile(*s)
-	}
-	return uuo
-}
-
-// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
-func (uuo *UserUpdateOne) ClearAvatarLocalFile() *UserUpdateOne {
-	uuo.mutation.ClearAvatarLocalFile()
-	return uuo
-}
-
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
 func (uuo *UserUpdateOne) SetAvatarLocalFileID(s string) *UserUpdateOne {
 	uuo.mutation.SetAvatarLocalFileID(s)
@@ -2663,23 +2612,23 @@ func (uuo *UserUpdateOne) AddFiles(f ...*File) *UserUpdateOne {
 	return uuo.AddFileIDs(ids...)
 }
 
-// SetFileID sets the "file" edge to the File entity by ID.
-func (uuo *UserUpdateOne) SetFileID(id string) *UserUpdateOne {
-	uuo.mutation.SetFileID(id)
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (uuo *UserUpdateOne) SetAvatarFileID(id string) *UserUpdateOne {
+	uuo.mutation.SetAvatarFileID(id)
 	return uuo
 }
 
-// SetNillableFileID sets the "file" edge to the File entity by ID if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableFileID(id *string) *UserUpdateOne {
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableAvatarFileID(id *string) *UserUpdateOne {
 	if id != nil {
-		uuo = uuo.SetFileID(*id)
+		uuo = uuo.SetAvatarFileID(*id)
 	}
 	return uuo
 }
 
-// SetFile sets the "file" edge to the File entity.
-func (uuo *UserUpdateOne) SetFile(f *File) *UserUpdateOne {
-	return uuo.SetFileID(f.ID)
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (uuo *UserUpdateOne) SetAvatarFile(f *File) *UserUpdateOne {
+	return uuo.SetAvatarFileID(f.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -2996,9 +2945,9 @@ func (uuo *UserUpdateOne) RemoveFiles(f ...*File) *UserUpdateOne {
 	return uuo.RemoveFileIDs(ids...)
 }
 
-// ClearFile clears the "file" edge to the File entity.
-func (uuo *UserUpdateOne) ClearFile() *UserUpdateOne {
-	uuo.mutation.ClearFile()
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (uuo *UserUpdateOne) ClearAvatarFile() *UserUpdateOne {
+	uuo.mutation.ClearAvatarFile()
 	return uuo
 }
 
@@ -3287,11 +3236,6 @@ func (uuo *UserUpdateOne) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "User.avatar_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.AvatarLocalFile(); ok {
-		if err := user.AvatarLocalFileValidator(v); err != nil {
-			return &ValidationError{Name: "avatar_local_file", err: fmt.Errorf(`generated: validator failed for field "User.avatar_local_file": %w`, err)}
-		}
-	}
 	if v, ok := uuo.mutation.AuthProvider(); ok {
 		if err := user.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "User.auth_provider": %w`, err)}
@@ -3407,12 +3351,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(user.FieldAvatarRemoteURL, field.TypeString)
-	}
-	if value, ok := uuo.mutation.AvatarLocalFile(); ok {
-		_spec.SetField(user.FieldAvatarLocalFile, field.TypeString, value)
-	}
-	if uuo.mutation.AvatarLocalFileCleared() {
-		_spec.ClearField(user.FieldAvatarLocalFile, field.TypeString)
 	}
 	if value, ok := uuo.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(user.FieldAvatarUpdatedAt, field.TypeTime, value)
@@ -3904,12 +3842,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uuo.mutation.FileCleared() {
+	if uuo.mutation.AvatarFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   user.FileTable,
-			Columns: []string{user.FileColumn},
+			Table:   user.AvatarFileTable,
+			Columns: []string{user.AvatarFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -3918,12 +3856,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge.Schema = uuo.schemaConfig.User
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.AvatarFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   user.FileTable,
-			Columns: []string{user.FileColumn},
+			Table:   user.AvatarFileTable,
+			Columns: []string{user.AvatarFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),

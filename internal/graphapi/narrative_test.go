@@ -297,7 +297,7 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
 						AddNarrativeCreatorIDs: []string{viewOnlyUser.GroupID},
-					})
+					}, nil)
 				require.NoError(t, err)
 			}
 

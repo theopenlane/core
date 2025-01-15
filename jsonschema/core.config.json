@@ -591,6 +591,9 @@
         "defaultBucket": {
           "type": "string"
         },
+        "localURL": {
+          "type": "string"
+        },
         "keys": {
           "$ref": "#/$defs/[]string"
         }

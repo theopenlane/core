@@ -43,6 +43,10 @@ const (
 	FieldPersonalOrg = "personal_org"
 	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
 	FieldAvatarRemoteURL = "avatar_remote_url"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
+	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
+	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldDedicatedDb holds the string denoting the dedicated_db field in the database.
 	FieldDedicatedDb = "dedicated_db"
 	// EdgeControlCreators holds the string denoting the control_creators edge name in mutations.
@@ -95,6 +99,8 @@ const (
 	EdgeSecrets = "secrets"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
+	EdgeAvatarFile = "avatar_file"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
 	// EdgeEntityTypes holds the string denoting the entity_types edge name in mutations.
@@ -266,6 +272,13 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// AvatarFileTable is the table that holds the avatar_file relation/edge.
+	AvatarFileTable = "organizations"
+	// AvatarFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	AvatarFileInverseTable = "files"
+	// AvatarFileColumn is the table column denoting the avatar_file relation/edge.
+	AvatarFileColumn = "avatar_local_file_id"
 	// EntitiesTable is the table that holds the entities relation/edge.
 	EntitiesTable = "entities"
 	// EntitiesInverseTable is the table name for the Entity entity.
@@ -381,6 +394,8 @@ var Columns = []string{
 	FieldParentOrganizationID,
 	FieldPersonalOrg,
 	FieldAvatarRemoteURL,
+	FieldAvatarLocalFileID,
+	FieldAvatarUpdatedAt,
 	FieldDedicatedDb,
 }
 
@@ -471,6 +486,10 @@ var (
 	DefaultPersonalOrg bool
 	// AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
 	AvatarRemoteURLValidator func(string) error
+	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
+	DefaultAvatarUpdatedAt func() time.Time
+	// UpdateDefaultAvatarUpdatedAt holds the default value on update for the "avatar_updated_at" field.
+	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// DefaultDedicatedDb holds the default value on creation for the "dedicated_db" field.
 	DefaultDedicatedDb bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -548,6 +567,16 @@ func ByPersonalOrg(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatarRemoteURL orders the results by the avatar_remote_url field.
 func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
+}
+
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
+}
+
+// ByAvatarUpdatedAt orders the results by the avatar_updated_at field.
+func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarUpdatedAt, opts...).ToFunc()
 }
 
 // ByDedicatedDb orders the results by the dedicated_db field.
@@ -888,6 +917,13 @@ func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAvatarFileField orders the results by avatar_file field.
+func ByAvatarFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAvatarFileStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1259,6 +1295,13 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newAvatarFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AvatarFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AvatarFileTable, AvatarFileColumn),
 	)
 }
 func newEntitiesStep() *sqlgraph.Step {

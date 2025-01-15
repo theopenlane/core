@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -20,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 // OrganizationCreationContextKey is the context key name for the organization creation context
@@ -53,6 +55,22 @@ func HookOrganization() ent.Hook {
 
 			// set default display name and avatar if not provided
 			setDefaultsOnMutations(m)
+
+			// check for uploaded files (e.g. avatar image)
+			fileIDs := objects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) > 0 {
+				ctx, err := checkAvatarFile(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				ec, err := echocontext.EchoContextFromContext(ctx)
+				if err == nil {
+					ec.SetRequest(ec.Request().WithContext(ctx))
+				}
+
+				m.AddFileIDs(fileIDs...)
+			}
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -106,7 +124,7 @@ func HookOrganization() ent.Hook {
 
 			return v, err
 		})
-	}, ent.OpCreate|ent.OpUpdateOne)
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
 // HookOrganizationDelete runs on org delete mutations to ensure the org can be deleted

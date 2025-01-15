@@ -1435,6 +1435,12 @@ func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	if !reflect.DeepEqual(oh.AvatarRemoteURL, new.AvatarRemoteURL) {
 		changes = append(changes, NewChange(organizationhistory.FieldAvatarRemoteURL, oh.AvatarRemoteURL, new.AvatarRemoteURL))
 	}
+	if !reflect.DeepEqual(oh.AvatarLocalFileID, new.AvatarLocalFileID) {
+		changes = append(changes, NewChange(organizationhistory.FieldAvatarLocalFileID, oh.AvatarLocalFileID, new.AvatarLocalFileID))
+	}
+	if !reflect.DeepEqual(oh.AvatarUpdatedAt, new.AvatarUpdatedAt) {
+		changes = append(changes, NewChange(organizationhistory.FieldAvatarUpdatedAt, oh.AvatarUpdatedAt, new.AvatarUpdatedAt))
+	}
 	if !reflect.DeepEqual(oh.DedicatedDb, new.DedicatedDb) {
 		changes = append(changes, NewChange(organizationhistory.FieldDedicatedDb, oh.DedicatedDb, new.DedicatedDb))
 	}
@@ -2202,9 +2208,6 @@ func (uh *UserHistory) changes(new *UserHistory) []Change {
 	}
 	if !reflect.DeepEqual(uh.AvatarRemoteURL, new.AvatarRemoteURL) {
 		changes = append(changes, NewChange(userhistory.FieldAvatarRemoteURL, uh.AvatarRemoteURL, new.AvatarRemoteURL))
-	}
-	if !reflect.DeepEqual(uh.AvatarLocalFile, new.AvatarLocalFile) {
-		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFile, uh.AvatarLocalFile, new.AvatarLocalFile))
 	}
 	if !reflect.DeepEqual(uh.AvatarLocalFileID, new.AvatarLocalFileID) {
 		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFileID, uh.AvatarLocalFileID, new.AvatarLocalFileID))

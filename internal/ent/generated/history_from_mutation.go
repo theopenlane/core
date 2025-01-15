@@ -4705,6 +4705,14 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
 	}
 
+	if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+		create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+	}
+
+	if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
+		create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
+	}
+
 	if dedicatedDb, exists := m.DedicatedDb(); exists {
 		create = create.SetDedicatedDb(dedicatedDb)
 	}
@@ -4823,6 +4831,18 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetNillableAvatarRemoteURL(organization.AvatarRemoteURL)
 		}
 
+		if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+			create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+		} else {
+			create = create.SetNillableAvatarLocalFileID(organization.AvatarLocalFileID)
+		}
+
+		if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
+			create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
+		} else {
+			create = create.SetNillableAvatarUpdatedAt(organization.AvatarUpdatedAt)
+		}
+
 		if dedicatedDb, exists := m.DedicatedDb(); exists {
 			create = create.SetDedicatedDb(dedicatedDb)
 		} else {
@@ -4875,6 +4895,8 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetParentOrganizationID(organization.ParentOrganizationID).
 			SetPersonalOrg(organization.PersonalOrg).
 			SetNillableAvatarRemoteURL(organization.AvatarRemoteURL).
+			SetNillableAvatarLocalFileID(organization.AvatarLocalFileID).
+			SetNillableAvatarUpdatedAt(organization.AvatarUpdatedAt).
 			SetDedicatedDb(organization.DedicatedDb).
 			Save(ctx)
 		if err != nil {
@@ -7398,10 +7420,6 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
 	}
 
-	if avatarLocalFile, exists := m.AvatarLocalFile(); exists {
-		create = create.SetNillableAvatarLocalFile(&avatarLocalFile)
-	}
-
 	if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
 		create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
 	}
@@ -7538,12 +7556,6 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableAvatarRemoteURL(user.AvatarRemoteURL)
 		}
 
-		if avatarLocalFile, exists := m.AvatarLocalFile(); exists {
-			create = create.SetNillableAvatarLocalFile(&avatarLocalFile)
-		} else {
-			create = create.SetNillableAvatarLocalFile(user.AvatarLocalFile)
-		}
-
 		if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
 			create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
 		} else {
@@ -7631,7 +7643,6 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetLastName(user.LastName).
 			SetDisplayName(user.DisplayName).
 			SetNillableAvatarRemoteURL(user.AvatarRemoteURL).
-			SetNillableAvatarLocalFile(user.AvatarLocalFile).
 			SetNillableAvatarLocalFileID(user.AvatarLocalFileID).
 			SetNillableAvatarUpdatedAt(user.AvatarUpdatedAt).
 			SetNillableLastSeen(user.LastSeen).

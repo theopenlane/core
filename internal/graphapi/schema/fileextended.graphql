@@ -1,0 +1,3 @@
+extend type File {
+    presignedURL: String
+}

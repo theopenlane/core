@@ -104,10 +104,10 @@ type MutationResolver interface {
 	CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkCreatePayload, error)
 	UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*model.NarrativeUpdatePayload, error)
 	DeleteNarrative(ctx context.Context, id string) (*model.NarrativeDeletePayload, error)
-	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput) (*model.OrganizationCreatePayload, error)
+	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error)
 	CreateBulkOrganization(ctx context.Context, input []*generated.CreateOrganizationInput) (*model.OrganizationBulkCreatePayload, error)
 	CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload) (*model.OrganizationBulkCreatePayload, error)
-	UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput) (*model.OrganizationUpdatePayload, error)
+	UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error)
 	DeleteOrganization(ctx context.Context, id string) (*model.OrganizationDeletePayload, error)
 	CreateOrganizationSetting(ctx context.Context, input generated.CreateOrganizationSettingInput) (*model.OrganizationSettingCreatePayload, error)
 	CreateBulkOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error)
@@ -2519,6 +2519,11 @@ func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.C
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := ec.field_Mutation_createOrganization_argsAvatarFile(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFile"] = arg1
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_createOrganization_argsInput(
@@ -2536,6 +2541,24 @@ func (ec *executionContext) field_Mutation_createOrganization_argsInput(
 	}
 
 	var zeroVal generated.CreateOrganizationInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createOrganization_argsAvatarFile(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*graphql.Upload, error) {
+	if _, ok := rawArgs["avatarFile"]; !ok {
+		var zeroVal *graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
+	if tmp, ok := rawArgs["avatarFile"]; ok {
+		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
+	}
+
+	var zeroVal *graphql.Upload
 	return zeroVal, nil
 }
 
@@ -4855,6 +4878,11 @@ func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.C
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := ec.field_Mutation_updateOrganization_argsAvatarFile(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFile"] = arg2
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_updateOrganization_argsID(
@@ -4890,6 +4918,24 @@ func (ec *executionContext) field_Mutation_updateOrganization_argsInput(
 	}
 
 	var zeroVal generated.UpdateOrganizationInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateOrganization_argsAvatarFile(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*graphql.Upload, error) {
+	if _, ok := rawArgs["avatarFile"]; !ok {
+		var zeroVal *graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
+	if tmp, ok := rawArgs["avatarFile"]; ok {
+		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
+	}
+
+	var zeroVal *graphql.Upload
 	return zeroVal, nil
 }
 
@@ -10951,7 +10997,7 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateOrganization(rctx, fc.Args["input"].(generated.CreateOrganizationInput))
+		return ec.resolvers.Mutation().CreateOrganization(rctx, fc.Args["input"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11128,7 +11174,7 @@ func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateOrganization(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationInput))
+		return ec.resolvers.Mutation().UpdateOrganization(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

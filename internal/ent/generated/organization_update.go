@@ -218,6 +218,38 @@ func (ou *OrganizationUpdate) ClearAvatarRemoteURL() *OrganizationUpdate {
 	return ou
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (ou *OrganizationUpdate) SetAvatarLocalFileID(s string) *OrganizationUpdate {
+	ou.mutation.SetAvatarLocalFileID(s)
+	return ou
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableAvatarLocalFileID(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetAvatarLocalFileID(*s)
+	}
+	return ou
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (ou *OrganizationUpdate) ClearAvatarLocalFileID() *OrganizationUpdate {
+	ou.mutation.ClearAvatarLocalFileID()
+	return ou
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (ou *OrganizationUpdate) SetAvatarUpdatedAt(t time.Time) *OrganizationUpdate {
+	ou.mutation.SetAvatarUpdatedAt(t)
+	return ou
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (ou *OrganizationUpdate) ClearAvatarUpdatedAt() *OrganizationUpdate {
+	ou.mutation.ClearAvatarUpdatedAt()
+	return ou
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ou *OrganizationUpdate) SetDedicatedDb(b bool) *OrganizationUpdate {
 	ou.mutation.SetDedicatedDb(b)
@@ -594,6 +626,25 @@ func (ou *OrganizationUpdate) AddFiles(f ...*File) *OrganizationUpdate {
 		ids[i] = f[i].ID
 	}
 	return ou.AddFileIDs(ids...)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (ou *OrganizationUpdate) SetAvatarFileID(id string) *OrganizationUpdate {
+	ou.mutation.SetAvatarFileID(id)
+	return ou
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableAvatarFileID(id *string) *OrganizationUpdate {
+	if id != nil {
+		ou = ou.SetAvatarFileID(*id)
+	}
+	return ou
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (ou *OrganizationUpdate) SetAvatarFile(f *File) *OrganizationUpdate {
+	return ou.SetAvatarFileID(f.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
@@ -1300,6 +1351,12 @@ func (ou *OrganizationUpdate) RemoveFiles(f ...*File) *OrganizationUpdate {
 	return ou.RemoveFileIDs(ids...)
 }
 
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (ou *OrganizationUpdate) ClearAvatarFile() *OrganizationUpdate {
+	ou.mutation.ClearAvatarFile()
+	return ou
+}
+
 // ClearEntities clears all "entities" edges to the Entity entity.
 func (ou *OrganizationUpdate) ClearEntities() *OrganizationUpdate {
 	ou.mutation.ClearEntities()
@@ -1633,6 +1690,13 @@ func (ou *OrganizationUpdate) defaults() error {
 		v := organization.UpdateDefaultUpdatedAt()
 		ou.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ou.mutation.AvatarUpdatedAt(); !ok && !ou.mutation.AvatarUpdatedAtCleared() {
+		if organization.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := organization.UpdateDefaultAvatarUpdatedAt()
+		ou.mutation.SetAvatarUpdatedAt(v)
+	}
 	return nil
 }
 
@@ -1735,6 +1799,12 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organization.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ou.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(organization.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if ou.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(organization.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := ou.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
@@ -2895,6 +2965,37 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.AvatarFileTable,
+			Columns: []string{organization.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Organization
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.AvatarFileTable,
+			Columns: []string{organization.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3749,6 +3850,38 @@ func (ouo *OrganizationUpdateOne) ClearAvatarRemoteURL() *OrganizationUpdateOne 
 	return ouo
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (ouo *OrganizationUpdateOne) SetAvatarLocalFileID(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetAvatarLocalFileID(s)
+	return ouo
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableAvatarLocalFileID(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetAvatarLocalFileID(*s)
+	}
+	return ouo
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (ouo *OrganizationUpdateOne) ClearAvatarLocalFileID() *OrganizationUpdateOne {
+	ouo.mutation.ClearAvatarLocalFileID()
+	return ouo
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (ouo *OrganizationUpdateOne) SetAvatarUpdatedAt(t time.Time) *OrganizationUpdateOne {
+	ouo.mutation.SetAvatarUpdatedAt(t)
+	return ouo
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (ouo *OrganizationUpdateOne) ClearAvatarUpdatedAt() *OrganizationUpdateOne {
+	ouo.mutation.ClearAvatarUpdatedAt()
+	return ouo
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ouo *OrganizationUpdateOne) SetDedicatedDb(b bool) *OrganizationUpdateOne {
 	ouo.mutation.SetDedicatedDb(b)
@@ -4125,6 +4258,25 @@ func (ouo *OrganizationUpdateOne) AddFiles(f ...*File) *OrganizationUpdateOne {
 		ids[i] = f[i].ID
 	}
 	return ouo.AddFileIDs(ids...)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (ouo *OrganizationUpdateOne) SetAvatarFileID(id string) *OrganizationUpdateOne {
+	ouo.mutation.SetAvatarFileID(id)
+	return ouo
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableAvatarFileID(id *string) *OrganizationUpdateOne {
+	if id != nil {
+		ouo = ouo.SetAvatarFileID(*id)
+	}
+	return ouo
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (ouo *OrganizationUpdateOne) SetAvatarFile(f *File) *OrganizationUpdateOne {
+	return ouo.SetAvatarFileID(f.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
@@ -4831,6 +4983,12 @@ func (ouo *OrganizationUpdateOne) RemoveFiles(f ...*File) *OrganizationUpdateOne
 	return ouo.RemoveFileIDs(ids...)
 }
 
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (ouo *OrganizationUpdateOne) ClearAvatarFile() *OrganizationUpdateOne {
+	ouo.mutation.ClearAvatarFile()
+	return ouo
+}
+
 // ClearEntities clears all "entities" edges to the Entity entity.
 func (ouo *OrganizationUpdateOne) ClearEntities() *OrganizationUpdateOne {
 	ouo.mutation.ClearEntities()
@@ -5177,6 +5335,13 @@ func (ouo *OrganizationUpdateOne) defaults() error {
 		v := organization.UpdateDefaultUpdatedAt()
 		ouo.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ouo.mutation.AvatarUpdatedAt(); !ok && !ouo.mutation.AvatarUpdatedAtCleared() {
+		if organization.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := organization.UpdateDefaultAvatarUpdatedAt()
+		ouo.mutation.SetAvatarUpdatedAt(v)
+	}
 	return nil
 }
 
@@ -5296,6 +5461,12 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organization.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ouo.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(organization.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if ouo.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(organization.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := ouo.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
@@ -6451,6 +6622,37 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.OrganizationFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.AvatarFileTable,
+			Columns: []string{organization.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Organization
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.AvatarFileTable,
+			Columns: []string{organization.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

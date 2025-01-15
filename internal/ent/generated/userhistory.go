@@ -52,9 +52,7 @@ type UserHistory struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
-	// The user's local avatar file
-	AvatarLocalFile *string `json:"avatar_local_file,omitempty"`
-	// The user's local avatar file id
+	// The user's local avatar file id, takes precedence over the avatar remote URL
 	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
@@ -80,7 +78,7 @@ func (*UserHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case userhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldMappingID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFile, userhistory.FieldAvatarLocalFileID, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
+		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldMappingID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFileID, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
 			values[i] = new(sql.NullString)
 		case userhistory.FieldHistoryTime, userhistory.FieldCreatedAt, userhistory.FieldUpdatedAt, userhistory.FieldDeletedAt, userhistory.FieldAvatarUpdatedAt, userhistory.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -203,13 +201,6 @@ func (uh *UserHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				uh.AvatarRemoteURL = new(string)
 				*uh.AvatarRemoteURL = value.String
-			}
-		case userhistory.FieldAvatarLocalFile:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field avatar_local_file", values[i])
-			} else if value.Valid {
-				uh.AvatarLocalFile = new(string)
-				*uh.AvatarLocalFile = value.String
 			}
 		case userhistory.FieldAvatarLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -340,11 +331,6 @@ func (uh *UserHistory) String() string {
 	builder.WriteString(", ")
 	if v := uh.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := uh.AvatarLocalFile; v != nil {
-		builder.WriteString("avatar_local_file=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

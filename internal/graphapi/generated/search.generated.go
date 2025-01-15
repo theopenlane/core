@@ -900,6 +900,8 @@ func (ec *executionContext) fieldContext_FileSearchResult_files(_ context.Contex
 				return ec.fieldContext_File_events(ctx, field)
 			case "program":
 				return ec.fieldContext_File_program(ctx, field)
+			case "presignedURL":
+				return ec.fieldContext_File_presignedURL(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type File", field.Name)
 		},
@@ -1523,6 +1525,10 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_personalOrg(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Organization_avatarLocalFileID(ctx, field)
+			case "avatarUpdatedAt":
+				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "controlCreators":
@@ -1575,6 +1581,8 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_secrets(ctx, field)
 			case "files":
 				return ec.fieldContext_Organization_files(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Organization_avatarFile(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":
@@ -2785,8 +2793,6 @@ func (ec *executionContext) fieldContext_UserSearchResult_users(_ context.Contex
 				return ec.fieldContext_User_displayName(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_User_avatarRemoteURL(ctx, field)
-			case "avatarLocalFile":
-				return ec.fieldContext_User_avatarLocalFile(ctx, field)
 			case "avatarLocalFileID":
 				return ec.fieldContext_User_avatarLocalFileID(ctx, field)
 			case "avatarUpdatedAt":
@@ -2811,8 +2817,8 @@ func (ec *executionContext) fieldContext_UserSearchResult_users(_ context.Contex
 				return ec.fieldContext_User_organizations(ctx, field)
 			case "files":
 				return ec.fieldContext_User_files(ctx, field)
-			case "file":
-				return ec.fieldContext_User_file(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_User_avatarFile(ctx, field)
 			case "events":
 				return ec.fieldContext_User_events(ctx, field)
 			case "actionPlans":

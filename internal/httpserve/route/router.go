@@ -22,10 +22,11 @@ var (
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
 type Router struct {
-	Echo        *echo.Echo
-	OAS         *openapi3.T
-	Handler     *handlers.Handler
-	StartConfig *echo.StartConfig
+	Echo          *echo.Echo
+	OAS           *openapi3.T
+	Handler       *handlers.Handler
+	StartConfig   *echo.StartConfig
+	LocalFilePath string
 }
 
 type RouterOption func(*Router)
@@ -41,6 +42,13 @@ func WithHandler(h *handlers.Handler) RouterOption {
 func WithEcho(e *echo.Echo) RouterOption {
 	return func(r *Router) {
 		r.Echo = e
+	}
+}
+
+// WithLocalFiles is a RouterOption that allows the local files to be set on the router
+func WithLocalFiles(lf string) RouterOption {
+	return func(r *Router) {
+		r.LocalFilePath = lf
 	}
 }
 
@@ -202,6 +210,10 @@ func RegisterRoutes(router *Router) error {
 		registerAccountRolesOrganizationHandler,
 		registerAppleMerchantHandler,
 		registerWebhookHandler,
+	}
+
+	if router.LocalFilePath != "" {
+		routeHandlers = append(routeHandlers, registerUploadsHandler)
 	}
 
 	for _, route := range routeHandlers {

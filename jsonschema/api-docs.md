@@ -633,6 +633,7 @@ Config defines the configuration settings for the default rate limiter
 |**secretKey**|`string`|||
 |**credentialsJSON**|`string`|||
 |**defaultBucket**|`string`|||
+|**localURL**|`string`|||
 |[**keys**](#objectstoragekeys)|`string[]`|||
 
 **Additional Properties:** not allowed  

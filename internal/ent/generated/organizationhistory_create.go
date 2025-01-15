@@ -235,6 +235,34 @@ func (ohc *OrganizationHistoryCreate) SetNillableAvatarRemoteURL(s *string) *Org
 	return ohc
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (ohc *OrganizationHistoryCreate) SetAvatarLocalFileID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetAvatarLocalFileID(s)
+	return ohc
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableAvatarLocalFileID(s *string) *OrganizationHistoryCreate {
+	if s != nil {
+		ohc.SetAvatarLocalFileID(*s)
+	}
+	return ohc
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (ohc *OrganizationHistoryCreate) SetAvatarUpdatedAt(t time.Time) *OrganizationHistoryCreate {
+	ohc.mutation.SetAvatarUpdatedAt(t)
+	return ohc
+}
+
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableAvatarUpdatedAt(t *time.Time) *OrganizationHistoryCreate {
+	if t != nil {
+		ohc.SetAvatarUpdatedAt(*t)
+	}
+	return ohc
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ohc *OrganizationHistoryCreate) SetDedicatedDb(b bool) *OrganizationHistoryCreate {
 	ohc.mutation.SetDedicatedDb(b)
@@ -325,6 +353,10 @@ func (ohc *OrganizationHistoryCreate) defaults() {
 	if _, ok := ohc.mutation.PersonalOrg(); !ok {
 		v := organizationhistory.DefaultPersonalOrg
 		ohc.mutation.SetPersonalOrg(v)
+	}
+	if _, ok := ohc.mutation.AvatarUpdatedAt(); !ok {
+		v := organizationhistory.DefaultAvatarUpdatedAt()
+		ohc.mutation.SetAvatarUpdatedAt(v)
 	}
 	if _, ok := ohc.mutation.DedicatedDb(); !ok {
 		v := organizationhistory.DefaultDedicatedDb
@@ -464,6 +496,14 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 	if value, ok := ohc.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
+	}
+	if value, ok := ohc.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarLocalFileID, field.TypeString, value)
+		_node.AvatarLocalFileID = &value
+	}
+	if value, ok := ohc.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
+		_node.AvatarUpdatedAt = &value
 	}
 	if value, ok := ohc.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)

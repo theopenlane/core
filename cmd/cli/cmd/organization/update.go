@@ -3,9 +3,11 @@ package org
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -28,10 +30,10 @@ func init() {
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (id string, input openlaneclient.UpdateOrganizationInput, err error) {
+func updateValidation() (id string, input openlaneclient.UpdateOrganizationInput, avatarFile *graphql.Upload, err error) {
 	id = cmd.Config.String("id")
 	if id == "" {
-		return id, input, cmd.NewRequiredFieldMissingError("organization id")
+		return id, input, nil, cmd.NewRequiredFieldMissingError("organization id")
 	}
 
 	name := cmd.Config.String("name")
@@ -49,7 +51,22 @@ func updateValidation() (id string, input openlaneclient.UpdateOrganizationInput
 		input.Description = &description
 	}
 
-	return id, input, nil
+	avatarFileLoc := cmd.Config.String("avatar-file")
+	if avatarFileLoc != "" {
+		file, err := objects.NewUploadFile(avatarFileLoc)
+		if err != nil {
+			return id, input, nil, err
+		}
+
+		avatarFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
+	return id, input, avatarFile, nil
 }
 
 // update an existing organization in the platform
@@ -63,10 +80,10 @@ func update(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, input, err := updateValidation()
+	id, input, avatarFile, err := updateValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.UpdateOrganization(ctx, id, input)
+	o, err := client.UpdateOrganization(ctx, id, input, avatarFile)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

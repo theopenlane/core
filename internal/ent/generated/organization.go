@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 )
@@ -47,6 +48,10 @@ type Organization struct {
 	PersonalOrg bool `json:"personal_org,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	// The organizations's local avatar file id, takes precedence over the avatar remote URL
+	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
+	// The time the user's (local) avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicated_db,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -107,6 +112,8 @@ type OrganizationEdges struct {
 	Secrets []*Hush `json:"secrets,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// AvatarFile holds the value of the avatar_file edge.
+	AvatarFile *File `json:"avatar_file,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
 	// EntityTypes holds the value of the entity_types edge.
@@ -137,9 +144,9 @@ type OrganizationEdges struct {
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [39]bool
+	loadedTypes [40]bool
 	// totalCount holds the count of the edges above.
-	totalCount [39]map[string]int
+	totalCount [40]map[string]int
 
 	namedControlCreators          map[string][]*Group
 	namedControlObjectiveCreators map[string][]*Group
@@ -409,10 +416,21 @@ func (e OrganizationEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// AvatarFileOrErr returns the AvatarFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrganizationEdges) AvatarFileOrErr() (*File, error) {
+	if e.AvatarFile != nil {
+		return e.AvatarFile, nil
+	} else if e.loadedTypes[25] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "avatar_file"}
+}
+
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -421,7 +439,7 @@ func (e OrganizationEdges) EntitiesOrErr() ([]*Entity, error) {
 // EntityTypesOrErr returns the EntityTypes value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) EntityTypesOrErr() ([]*EntityType, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.EntityTypes, nil
 	}
 	return nil, &NotLoadedError{edge: "entity_types"}
@@ -430,7 +448,7 @@ func (e OrganizationEdges) EntityTypesOrErr() ([]*EntityType, error) {
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -439,7 +457,7 @@ func (e OrganizationEdges) ContactsOrErr() ([]*Contact, error) {
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[29] {
 		return e.Notes, nil
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -448,7 +466,7 @@ func (e OrganizationEdges) NotesOrErr() ([]*Note, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[30] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -457,7 +475,7 @@ func (e OrganizationEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[31] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -466,7 +484,7 @@ func (e OrganizationEdges) ProgramsOrErr() ([]*Program, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -475,7 +493,7 @@ func (e OrganizationEdges) ProceduresOrErr() ([]*Procedure, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[33] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -484,7 +502,7 @@ func (e OrganizationEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[34] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -493,7 +511,7 @@ func (e OrganizationEdges) RisksOrErr() ([]*Risk, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[35] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -502,7 +520,7 @@ func (e OrganizationEdges) ControlObjectivesOrErr() ([]*ControlObjective, error)
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[36] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -511,7 +529,7 @@ func (e OrganizationEdges) NarrativesOrErr() ([]*Narrative, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[37] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -520,7 +538,7 @@ func (e OrganizationEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[38] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -529,7 +547,7 @@ func (e OrganizationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[38] {
+	if e.loadedTypes[39] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -544,9 +562,9 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organization.FieldPersonalOrg, organization.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organization.FieldID, organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldMappingID, organization.FieldDeletedBy, organization.FieldName, organization.FieldDisplayName, organization.FieldDescription, organization.FieldParentOrganizationID, organization.FieldAvatarRemoteURL:
+		case organization.FieldID, organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldMappingID, organization.FieldDeletedBy, organization.FieldName, organization.FieldDisplayName, organization.FieldDescription, organization.FieldParentOrganizationID, organization.FieldAvatarRemoteURL, organization.FieldAvatarLocalFileID:
 			values[i] = new(sql.NullString)
-		case organization.FieldCreatedAt, organization.FieldUpdatedAt, organization.FieldDeletedAt:
+		case organization.FieldCreatedAt, organization.FieldUpdatedAt, organization.FieldDeletedAt, organization.FieldAvatarUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -655,6 +673,20 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				o.AvatarRemoteURL = new(string)
 				*o.AvatarRemoteURL = value.String
+			}
+		case organization.FieldAvatarLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
+			} else if value.Valid {
+				o.AvatarLocalFileID = new(string)
+				*o.AvatarLocalFileID = value.String
+			}
+		case organization.FieldAvatarUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
+			} else if value.Valid {
+				o.AvatarUpdatedAt = new(time.Time)
+				*o.AvatarUpdatedAt = value.Time
 			}
 		case organization.FieldDedicatedDb:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -800,6 +832,11 @@ func (o *Organization) QueryFiles() *FileQuery {
 	return NewOrganizationClient(o.config).QueryFiles(o)
 }
 
+// QueryAvatarFile queries the "avatar_file" edge of the Organization entity.
+func (o *Organization) QueryAvatarFile() *FileQuery {
+	return NewOrganizationClient(o.config).QueryAvatarFile(o)
+}
+
 // QueryEntities queries the "entities" edge of the Organization entity.
 func (o *Organization) QueryEntities() *EntityQuery {
 	return NewOrganizationClient(o.config).QueryEntities(o)
@@ -935,6 +972,16 @@ func (o *Organization) String() string {
 	if v := o.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
 		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := o.AvatarLocalFileID; v != nil {
+		builder.WriteString("avatar_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := o.AvatarUpdatedAt; v != nil {
+		builder.WriteString("avatar_updated_at=")
+		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("dedicated_db=")

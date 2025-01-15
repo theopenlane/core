@@ -112,6 +112,7 @@ objectStorage:
     enabled: true
     keys:
         - uploadFile
+    localURL: http://localhost:17608/files/
     provider: ""
     region: ""
     secretKey: ""

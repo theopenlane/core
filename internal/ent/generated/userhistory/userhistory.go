@@ -50,8 +50,6 @@ const (
 	FieldDisplayName = "display_name"
 	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
 	FieldAvatarRemoteURL = "avatar_remote_url"
-	// FieldAvatarLocalFile holds the string denoting the avatar_local_file field in the database.
-	FieldAvatarLocalFile = "avatar_local_file"
 	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
 	FieldAvatarLocalFileID = "avatar_local_file_id"
 	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
@@ -89,7 +87,6 @@ var Columns = []string{
 	FieldLastName,
 	FieldDisplayName,
 	FieldAvatarRemoteURL,
-	FieldAvatarLocalFile,
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldLastSeen,
@@ -128,6 +125,8 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
+	DefaultAvatarUpdatedAt func() time.Time
 	// UpdateDefaultAvatarUpdatedAt holds the default value on update for the "avatar_updated_at" field.
 	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// UpdateDefaultLastSeen holds the default value on update for the "last_seen" field.
@@ -251,11 +250,6 @@ func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatarRemoteURL orders the results by the avatar_remote_url field.
 func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
-}
-
-// ByAvatarLocalFile orders the results by the avatar_local_file field.
-func ByAvatarLocalFile(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAvatarLocalFile, opts...).ToFunc()
 }
 
 // ByAvatarLocalFileID orders the results by the avatar_local_file_id field.

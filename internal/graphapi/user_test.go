@@ -333,6 +333,7 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 
 			if tc.avatarFile != nil {
 				assert.NotNil(t, updatedUser.AvatarLocalFileID)
+				assert.NotNil(t, updatedUser.AvatarFile.PresignedURL)
 			}
 		})
 	}

@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -116,6 +117,13 @@ func (File) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
+	}
+}
+
+// Interceptors of the File
+func (File) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorPresignedURL(),
 	}
 }
 

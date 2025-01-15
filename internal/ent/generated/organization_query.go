@@ -79,6 +79,7 @@ type OrganizationQuery struct {
 	withEvents                        *EventQuery
 	withSecrets                       *HushQuery
 	withFiles                         *FileQuery
+	withAvatarFile                    *FileQuery
 	withEntities                      *EntityQuery
 	withEntityTypes                   *EntityTypeQuery
 	withContacts                      *ContactQuery
@@ -793,6 +794,31 @@ func (oq *OrganizationQuery) QueryFiles() *FileQuery {
 	return query
 }
 
+// QueryAvatarFile chains the current query on the "avatar_file" edge.
+func (oq *OrganizationQuery) QueryAvatarFile() *FileQuery {
+	query := (&FileClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.AvatarFileTable, organization.AvatarFileColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Organization
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEntities chains the current query on the "entities" edge.
 func (oq *OrganizationQuery) QueryEntities() *EntityQuery {
 	query := (&EntityClient{config: oq.config}).Query()
@@ -1360,6 +1386,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withEvents:                   oq.withEvents.Clone(),
 		withSecrets:                  oq.withSecrets.Clone(),
 		withFiles:                    oq.withFiles.Clone(),
+		withAvatarFile:               oq.withAvatarFile.Clone(),
 		withEntities:                 oq.withEntities.Clone(),
 		withEntityTypes:              oq.withEntityTypes.Clone(),
 		withContacts:                 oq.withContacts.Clone(),
@@ -1656,6 +1683,17 @@ func (oq *OrganizationQuery) WithFiles(opts ...func(*FileQuery)) *OrganizationQu
 	return oq
 }
 
+// WithAvatarFile tells the query-builder to eager-load the nodes that are connected to
+// the "avatar_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithAvatarFile(opts ...func(*FileQuery)) *OrganizationQuery {
+	query := (&FileClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withAvatarFile = query
+	return oq
+}
+
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithEntities(opts ...func(*EntityQuery)) *OrganizationQuery {
@@ -1894,7 +1932,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [39]bool{
+		loadedTypes = [40]bool{
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -1920,6 +1958,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withEvents != nil,
 			oq.withSecrets != nil,
 			oq.withFiles != nil,
+			oq.withAvatarFile != nil,
 			oq.withEntities != nil,
 			oq.withEntityTypes != nil,
 			oq.withContacts != nil,
@@ -2137,6 +2176,12 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadFiles(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Files = []*File{} },
 			func(n *Organization, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withAvatarFile; query != nil {
+		if err := oq.loadAvatarFile(ctx, query, nodes, nil,
+			func(n *Organization, e *File) { n.Edges.AvatarFile = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -3704,6 +3749,38 @@ func (oq *OrganizationQuery) loadFiles(ctx context.Context, query *FileQuery, no
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadAvatarFile(ctx context.Context, query *FileQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Organization)
+	for i := range nodes {
+		if nodes[i].AvatarLocalFileID == nil {
+			continue
+		}
+		fk := *nodes[i].AvatarLocalFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "avatar_local_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Entity)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -4196,6 +4273,9 @@ func (oq *OrganizationQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if oq.withParent != nil {
 			_spec.Node.AddColumnOnce(organization.FieldParentOrganizationID)
+		}
+		if oq.withAvatarFile != nil {
+			_spec.Node.AddColumnOnce(organization.FieldAvatarLocalFileID)
 		}
 	}
 	if ps := oq.predicates; len(ps) > 0 {

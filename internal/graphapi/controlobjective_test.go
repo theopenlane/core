@@ -304,7 +304,7 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
 						AddControlObjectiveCreatorIDs: []string{viewOnlyUser.GroupID},
-					})
+					}, nil)
 				require.NoError(t, err)
 			}
 

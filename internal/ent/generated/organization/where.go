@@ -132,6 +132,16 @@ func AvatarRemoteURL(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldAvatarRemoteURL, v))
 }
 
+// AvatarLocalFileID applies equality check predicate on the "avatar_local_file_id" field. It's identical to AvatarLocalFileIDEQ.
+func AvatarLocalFileID(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAt applies equality check predicate on the "avatar_updated_at" field. It's identical to AvatarUpdatedAtEQ.
+func AvatarUpdatedAt(v time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldAvatarUpdatedAt, v))
+}
+
 // DedicatedDb applies equality check predicate on the "dedicated_db" field. It's identical to DedicatedDbEQ.
 func DedicatedDb(v bool) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldDedicatedDb, v))
@@ -962,6 +972,131 @@ func AvatarRemoteURLContainsFold(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldContainsFold(FieldAvatarRemoteURL, v))
 }
 
+// AvatarLocalFileIDEQ applies the EQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDNEQ applies the NEQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIn applies the In predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDNotIn applies the NotIn predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDGT applies the GT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDGTE applies the GTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLT applies the LT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLTE applies the LTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContains applies the Contains predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasPrefix applies the HasPrefix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasSuffix applies the HasSuffix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIsNil applies the IsNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDNotNil applies the NotNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDEqualFold applies the EqualFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContainsFold applies the ContainsFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAtEQ applies the EQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtEQ(v time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtNEQ applies the NEQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNEQ(v time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIn applies the In predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIn(vs ...time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtNotIn applies the NotIn predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotIn(vs ...time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtGT applies the GT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGT(v time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtGTE applies the GTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGTE(v time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLT applies the LT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLT(v time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLTE applies the LTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLTE(v time.Time) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIsNil applies the IsNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldAvatarUpdatedAt))
+}
+
+// AvatarUpdatedAtNotNil applies the NotNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldAvatarUpdatedAt))
+}
+
 // DedicatedDbEQ applies the EQ predicate on the "dedicated_db" field.
 func DedicatedDbEQ(v bool) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldDedicatedDb, v))
@@ -1689,6 +1824,35 @@ func HasFilesWith(preds ...predicate.File) predicate.Organization {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.OrganizationFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAvatarFile applies the HasEdge predicate on the "avatar_file" edge.
+func HasAvatarFile() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AvatarFileTable, AvatarFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Organization
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAvatarFileWith applies the HasEdge predicate on the "avatar_file" edge with a given conditions (other predicates).
+func HasAvatarFileWith(preds ...predicate.File) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newAvatarFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Organization
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

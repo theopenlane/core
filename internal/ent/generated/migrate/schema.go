@@ -1495,8 +1495,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationsTable holds the schema information for the "organizations" table.
 	OrganizationsTable = &schema.Table{
@@ -1506,8 +1508,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[15]},
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organizations_files_avatar_file",
+				Columns:    []*schema.Column{OrganizationsColumns[17]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1542,6 +1550,8 @@ var (
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
 	}
 	// OrganizationHistoryTable holds the schema information for the "organization_history" table.
@@ -2448,7 +2458,6 @@ var (
 		{Name: "last_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "display_name", Type: field.TypeString, Size: 64},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
 		{Name: "password", Type: field.TypeString, Nullable: true},
@@ -2464,8 +2473,8 @@ var (
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "users_files_file",
-				Columns:    []*schema.Column{UsersColumns[21]},
+				Symbol:     "users_files_avatar_file",
+				Columns:    []*schema.Column{UsersColumns[20]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2479,7 +2488,7 @@ var (
 			{
 				Name:    "user_email_auth_provider",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[9], UsersColumns[19]},
+				Columns: []*schema.Column{UsersColumns[9], UsersColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2505,7 +2514,6 @@ var (
 		{Name: "last_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "display_name", Type: field.TypeString, Size: 64},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
@@ -5117,6 +5125,7 @@ func init() {
 		Table: "org_subscription_history",
 	}
 	OrganizationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationsTable.ForeignKeys[1].RefTable = FilesTable
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_history",
 	}

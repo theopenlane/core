@@ -8009,6 +8009,21 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "avatarFile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			o.withAvatarFile = query
+			if _, ok := fieldSeen[organization.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldAvatarLocalFileID)
+				fieldSeen[organization.FieldAvatarLocalFileID] = struct{}{}
+			}
+
 		case "entities":
 			var (
 				alias = field.Alias
@@ -8250,6 +8265,16 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, organization.FieldAvatarRemoteURL)
 				fieldSeen[organization.FieldAvatarRemoteURL] = struct{}{}
 			}
+		case "avatarLocalFileID":
+			if _, ok := fieldSeen[organization.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldAvatarLocalFileID)
+				fieldSeen[organization.FieldAvatarLocalFileID] = struct{}{}
+			}
+		case "avatarUpdatedAt":
+			if _, ok := fieldSeen[organization.FieldAvatarUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, organization.FieldAvatarUpdatedAt)
+				fieldSeen[organization.FieldAvatarUpdatedAt] = struct{}{}
+			}
 		case "dedicatedDb":
 			if _, ok := fieldSeen[organization.FieldDedicatedDb]; !ok {
 				selectedFields = append(selectedFields, organization.FieldDedicatedDb)
@@ -8413,6 +8438,16 @@ func (oh *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationhistory.FieldAvatarRemoteURL]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldAvatarRemoteURL)
 				fieldSeen[organizationhistory.FieldAvatarRemoteURL] = struct{}{}
+			}
+		case "avatarLocalFileID":
+			if _, ok := fieldSeen[organizationhistory.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldAvatarLocalFileID)
+				fieldSeen[organizationhistory.FieldAvatarLocalFileID] = struct{}{}
+			}
+		case "avatarUpdatedAt":
+			if _, ok := fieldSeen[organizationhistory.FieldAvatarUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldAvatarUpdatedAt)
+				fieldSeen[organizationhistory.FieldAvatarUpdatedAt] = struct{}{}
 			}
 		case "dedicatedDb":
 			if _, ok := fieldSeen[organizationhistory.FieldDedicatedDb]; !ok {
@@ -12589,7 +12624,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "file":
+		case "avatarFile":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -12598,7 +12633,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			u.withFile = query
+			u.withAvatarFile = query
 			if _, ok := fieldSeen[user.FieldAvatarLocalFileID]; !ok {
 				selectedFields = append(selectedFields, user.FieldAvatarLocalFileID)
 				fieldSeen[user.FieldAvatarLocalFileID] = struct{}{}
@@ -12779,11 +12814,6 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[user.FieldAvatarRemoteURL]; !ok {
 				selectedFields = append(selectedFields, user.FieldAvatarRemoteURL)
 				fieldSeen[user.FieldAvatarRemoteURL] = struct{}{}
-			}
-		case "avatarLocalFile":
-			if _, ok := fieldSeen[user.FieldAvatarLocalFile]; !ok {
-				selectedFields = append(selectedFields, user.FieldAvatarLocalFile)
-				fieldSeen[user.FieldAvatarLocalFile] = struct{}{}
 			}
 		case "avatarLocalFileID":
 			if _, ok := fieldSeen[user.FieldAvatarLocalFileID]; !ok {
@@ -12973,11 +13003,6 @@ func (uh *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[userhistory.FieldAvatarRemoteURL]; !ok {
 				selectedFields = append(selectedFields, userhistory.FieldAvatarRemoteURL)
 				fieldSeen[userhistory.FieldAvatarRemoteURL] = struct{}{}
-			}
-		case "avatarLocalFile":
-			if _, ok := fieldSeen[userhistory.FieldAvatarLocalFile]; !ok {
-				selectedFields = append(selectedFields, userhistory.FieldAvatarLocalFile)
-				fieldSeen[userhistory.FieldAvatarLocalFile] = struct{}{}
 			}
 		case "avatarLocalFileID":
 			if _, ok := fieldSeen[userhistory.FieldAvatarLocalFileID]; !ok {
