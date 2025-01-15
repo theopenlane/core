@@ -11,7 +11,7 @@ import (
 
 // registerUploadsHandler serves up static files from the upload directory
 // this is used for development without saving files to S3
-// it is *ONLY* registered with the disk mode object storage is used
+// it is *ONLY* registered when the disk mode object storage is used
 func registerUploadsHandler(router *Router) (err error) {
 	path := "/files/:name"
 	method := http.MethodGet

@@ -6,7 +6,7 @@ type DiskOptions struct {
 	Bucket string
 	Key    string
 	// LocalURL is the URL to use for the "presigned" URL for the file
-	// e.g for local development, this can be http://localhost:17608/static/files/
+	// e.g for local development, this can be http://localhost:17608/files/
 	LocalURL string
 }
 
