@@ -3,13 +3,13 @@ mutation CreateBulkCSVEntityType($input: Upload!) {
   createBulkCSVEntityType(input: $input) {
     entityTypes {
       createdAt
-      createdBy
+      createdByID
       id
       name
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -18,13 +18,13 @@ mutation CreateBulkEntityType($input: [CreateEntityTypeInput!]) {
   createBulkEntityType(input: $input) {
     entityTypes {
       createdAt
-      createdBy
+      createdByID
       id
       name
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -33,13 +33,13 @@ mutation CreateEntityType($input: CreateEntityTypeInput!) {
   createEntityType(input: $input) {
     entityType {
       createdAt
-      createdBy
+      createdByID
       id
       name
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -55,13 +55,13 @@ query GetAllEntityTypes {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         id
         name
         ownerID
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -70,13 +70,13 @@ query GetAllEntityTypes {
 query GetEntityTypeByID($entityTypeId: ID!) {
   entityType(id: $entityTypeId) {
     createdAt
-    createdBy
+    createdByID
     id
     name
     ownerID
     tags
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -85,13 +85,13 @@ query GetEntityTypes($where: EntityTypeWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         id
         name
         ownerID
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -100,13 +100,13 @@ mutation UpdateEntityType($updateEntityTypeId: ID!, $input: UpdateEntityTypeInpu
   updateEntityType(id: $updateEntityTypeId, input: $input) {
     entityType {
       createdAt
-      createdBy
+      createdByID
       id
       name
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }

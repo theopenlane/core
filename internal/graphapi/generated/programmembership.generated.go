@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_prog
 				return ec.fieldContext_ProgramMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ProgramMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ProgramMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ProgramMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ProgramMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ProgramMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_ProgramMembership_role(ctx, field)
 			case "programID":
@@ -89,6 +89,10 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_prog
 				return ec.fieldContext_ProgramMembership_program(ctx, field)
 			case "user":
 				return ec.fieldContext_ProgramMembership_user(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProgramMembership", field.Name)
 		},
@@ -141,14 +145,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programM
 				return ec.fieldContext_ProgramMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ProgramMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ProgramMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ProgramMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ProgramMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ProgramMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_ProgramMembership_role(ctx, field)
 			case "programID":
@@ -159,6 +163,10 @@ func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programM
 				return ec.fieldContext_ProgramMembership_program(ctx, field)
 			case "user":
 				return ec.fieldContext_ProgramMembership_user(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProgramMembership", field.Name)
 		},
@@ -255,14 +263,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programM
 				return ec.fieldContext_ProgramMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ProgramMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ProgramMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ProgramMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ProgramMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ProgramMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_ProgramMembership_role(ctx, field)
 			case "programID":
@@ -273,6 +281,10 @@ func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programM
 				return ec.fieldContext_ProgramMembership_program(ctx, field)
 			case "user":
 				return ec.fieldContext_ProgramMembership_user(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProgramMembership", field.Name)
 		},

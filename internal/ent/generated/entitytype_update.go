@@ -46,23 +46,23 @@ func (etu *EntityTypeUpdate) ClearUpdatedAt() *EntityTypeUpdate {
 	return etu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (etu *EntityTypeUpdate) SetUpdatedBy(s string) *EntityTypeUpdate {
-	etu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (etu *EntityTypeUpdate) SetUpdatedByID(s string) *EntityTypeUpdate {
+	etu.mutation.SetUpdatedByID(s)
 	return etu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (etu *EntityTypeUpdate) SetNillableUpdatedBy(s *string) *EntityTypeUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (etu *EntityTypeUpdate) SetNillableUpdatedByID(s *string) *EntityTypeUpdate {
 	if s != nil {
-		etu.SetUpdatedBy(*s)
+		etu.SetUpdatedByID(*s)
 	}
 	return etu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (etu *EntityTypeUpdate) ClearUpdatedBy() *EntityTypeUpdate {
-	etu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (etu *EntityTypeUpdate) ClearUpdatedByID() *EntityTypeUpdate {
+	etu.mutation.ClearUpdatedByID()
 	return etu
 }
 
@@ -86,23 +86,23 @@ func (etu *EntityTypeUpdate) ClearDeletedAt() *EntityTypeUpdate {
 	return etu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (etu *EntityTypeUpdate) SetDeletedBy(s string) *EntityTypeUpdate {
-	etu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (etu *EntityTypeUpdate) SetDeletedByID(s string) *EntityTypeUpdate {
+	etu.mutation.SetDeletedByID(s)
 	return etu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (etu *EntityTypeUpdate) SetNillableDeletedBy(s *string) *EntityTypeUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (etu *EntityTypeUpdate) SetNillableDeletedByID(s *string) *EntityTypeUpdate {
 	if s != nil {
-		etu.SetDeletedBy(*s)
+		etu.SetDeletedByID(*s)
 	}
 	return etu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (etu *EntityTypeUpdate) ClearDeletedBy() *EntityTypeUpdate {
-	etu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (etu *EntityTypeUpdate) ClearDeletedByID() *EntityTypeUpdate {
+	etu.mutation.ClearDeletedByID()
 	return etu
 }
 
@@ -294,14 +294,14 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if etu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedAt, field.TypeTime)
 	}
-	if etu.mutation.CreatedByCleared() {
-		_spec.ClearField(entitytype.FieldCreatedBy, field.TypeString)
+	if etu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := etu.mutation.UpdatedBy(); ok {
-		_spec.SetField(entitytype.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := etu.mutation.UpdatedByID(); ok {
+		_spec.SetField(entitytype.FieldUpdatedByID, field.TypeString, value)
 	}
-	if etu.mutation.UpdatedByCleared() {
-		_spec.ClearField(entitytype.FieldUpdatedBy, field.TypeString)
+	if etu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := etu.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)
@@ -309,11 +309,11 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if etu.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytype.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := etu.mutation.DeletedBy(); ok {
-		_spec.SetField(entitytype.FieldDeletedBy, field.TypeString, value)
+	if value, ok := etu.mutation.DeletedByID(); ok {
+		_spec.SetField(entitytype.FieldDeletedByID, field.TypeString, value)
 	}
-	if etu.mutation.DeletedByCleared() {
-		_spec.ClearField(entitytype.FieldDeletedBy, field.TypeString)
+	if etu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(entitytype.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := etu.mutation.Tags(); ok {
 		_spec.SetField(entitytype.FieldTags, field.TypeJSON, value)
@@ -444,23 +444,23 @@ func (etuo *EntityTypeUpdateOne) ClearUpdatedAt() *EntityTypeUpdateOne {
 	return etuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (etuo *EntityTypeUpdateOne) SetUpdatedBy(s string) *EntityTypeUpdateOne {
-	etuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (etuo *EntityTypeUpdateOne) SetUpdatedByID(s string) *EntityTypeUpdateOne {
+	etuo.mutation.SetUpdatedByID(s)
 	return etuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (etuo *EntityTypeUpdateOne) SetNillableUpdatedBy(s *string) *EntityTypeUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (etuo *EntityTypeUpdateOne) SetNillableUpdatedByID(s *string) *EntityTypeUpdateOne {
 	if s != nil {
-		etuo.SetUpdatedBy(*s)
+		etuo.SetUpdatedByID(*s)
 	}
 	return etuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (etuo *EntityTypeUpdateOne) ClearUpdatedBy() *EntityTypeUpdateOne {
-	etuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (etuo *EntityTypeUpdateOne) ClearUpdatedByID() *EntityTypeUpdateOne {
+	etuo.mutation.ClearUpdatedByID()
 	return etuo
 }
 
@@ -484,23 +484,23 @@ func (etuo *EntityTypeUpdateOne) ClearDeletedAt() *EntityTypeUpdateOne {
 	return etuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (etuo *EntityTypeUpdateOne) SetDeletedBy(s string) *EntityTypeUpdateOne {
-	etuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (etuo *EntityTypeUpdateOne) SetDeletedByID(s string) *EntityTypeUpdateOne {
+	etuo.mutation.SetDeletedByID(s)
 	return etuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (etuo *EntityTypeUpdateOne) SetNillableDeletedBy(s *string) *EntityTypeUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (etuo *EntityTypeUpdateOne) SetNillableDeletedByID(s *string) *EntityTypeUpdateOne {
 	if s != nil {
-		etuo.SetDeletedBy(*s)
+		etuo.SetDeletedByID(*s)
 	}
 	return etuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (etuo *EntityTypeUpdateOne) ClearDeletedBy() *EntityTypeUpdateOne {
-	etuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (etuo *EntityTypeUpdateOne) ClearDeletedByID() *EntityTypeUpdateOne {
+	etuo.mutation.ClearDeletedByID()
 	return etuo
 }
 
@@ -722,14 +722,14 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 	if etuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedAt, field.TypeTime)
 	}
-	if etuo.mutation.CreatedByCleared() {
-		_spec.ClearField(entitytype.FieldCreatedBy, field.TypeString)
+	if etuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := etuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(entitytype.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := etuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(entitytype.FieldUpdatedByID, field.TypeString, value)
 	}
-	if etuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(entitytype.FieldUpdatedBy, field.TypeString)
+	if etuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := etuo.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)
@@ -737,11 +737,11 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 	if etuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytype.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := etuo.mutation.DeletedBy(); ok {
-		_spec.SetField(entitytype.FieldDeletedBy, field.TypeString, value)
+	if value, ok := etuo.mutation.DeletedByID(); ok {
+		_spec.SetField(entitytype.FieldDeletedByID, field.TypeString, value)
 	}
-	if etuo.mutation.DeletedByCleared() {
-		_spec.ClearField(entitytype.FieldDeletedBy, field.TypeString)
+	if etuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(entitytype.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := etuo.mutation.Tags(); ok {
 		_spec.SetField(entitytype.FieldTags, field.TypeJSON, value)

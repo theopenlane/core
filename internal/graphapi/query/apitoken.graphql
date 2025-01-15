@@ -9,8 +9,8 @@ mutation CreateAPIToken($input: CreateAPITokenInput!) {
       }
       createdAt
       updatedAt
-      createdBy
-      updatedBy
+      createdByID
+      updatedByID
       name
       expiresAt
       description
@@ -30,8 +30,8 @@ mutation UpdateAPIToken($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
       }
       createdAt
       updatedAt
-      createdBy
-      updatedBy
+      createdByID
+      updatedByID
       name
       expiresAt
       description
@@ -52,8 +52,8 @@ query GetAllAPITokens {
         }
         createdAt
         updatedAt
-        createdBy
-        updatedBy
+        createdByID
+        updatedByID
         name
         expiresAt
         description
@@ -73,8 +73,8 @@ query GetAPITokenByID($apiTokenId: ID!) {
     }
     createdAt
     updatedAt
-    createdBy
-    updatedBy
+    createdByID
+    updatedByID
     name
     expiresAt
     description

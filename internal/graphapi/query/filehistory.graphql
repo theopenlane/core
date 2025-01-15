@@ -1,12 +1,10 @@
-
-
 query GetAllFileHistories {
   fileHistories {
     edges {
       node {
         categoryType
         createdAt
-        createdBy
+        createdByID
         detectedContentType
         detectedMimeType
         historyTime
@@ -24,7 +22,7 @@ query GetAllFileHistories {
         storeKey
         tags
         updatedAt
-        updatedBy
+        updatedByID
         uri
       }
     }
@@ -37,7 +35,7 @@ query GetFileHistories($where: FileHistoryWhereInput) {
       node {
         categoryType
         createdAt
-        createdBy
+        createdByID
         detectedContentType
         detectedMimeType
         historyTime
@@ -55,7 +53,7 @@ query GetFileHistories($where: FileHistoryWhereInput) {
         storeKey
         tags
         updatedAt
-        updatedBy
+        updatedByID
         uri
       }
     }

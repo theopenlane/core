@@ -55,6 +55,20 @@ func (nhc *NoteHistoryCreate) SetOperation(ht history.OpType) *NoteHistoryCreate
 	return nhc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (nhc *NoteHistoryCreate) SetUpdatedBy(s string) *NoteHistoryCreate {
+	nhc.mutation.SetUpdatedBy(s)
+	return nhc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableUpdatedBy(s *string) *NoteHistoryCreate {
+	if s != nil {
+		nhc.SetUpdatedBy(*s)
+	}
+	return nhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (nhc *NoteHistoryCreate) SetCreatedAt(t time.Time) *NoteHistoryCreate {
 	nhc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (nhc *NoteHistoryCreate) SetNillableUpdatedAt(t *time.Time) *NoteHistoryCre
 	return nhc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (nhc *NoteHistoryCreate) SetCreatedBy(s string) *NoteHistoryCreate {
-	nhc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (nhc *NoteHistoryCreate) SetCreatedByID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetCreatedByID(s)
 	return nhc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (nhc *NoteHistoryCreate) SetNillableCreatedBy(s *string) *NoteHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableCreatedByID(s *string) *NoteHistoryCreate {
 	if s != nil {
-		nhc.SetCreatedBy(*s)
+		nhc.SetCreatedByID(*s)
 	}
 	return nhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nhc *NoteHistoryCreate) SetUpdatedBy(s string) *NoteHistoryCreate {
-	nhc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nhc *NoteHistoryCreate) SetUpdatedByID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetUpdatedByID(s)
 	return nhc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhc *NoteHistoryCreate) SetNillableUpdatedBy(s *string) *NoteHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableUpdatedByID(s *string) *NoteHistoryCreate {
 	if s != nil {
-		nhc.SetUpdatedBy(*s)
+		nhc.SetUpdatedByID(*s)
 	}
 	return nhc
 }
@@ -139,16 +153,16 @@ func (nhc *NoteHistoryCreate) SetNillableDeletedAt(t *time.Time) *NoteHistoryCre
 	return nhc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (nhc *NoteHistoryCreate) SetDeletedBy(s string) *NoteHistoryCreate {
-	nhc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (nhc *NoteHistoryCreate) SetDeletedByID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetDeletedByID(s)
 	return nhc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhc *NoteHistoryCreate) SetNillableDeletedBy(s *string) *NoteHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableDeletedByID(s *string) *NoteHistoryCreate {
 	if s != nil {
-		nhc.SetDeletedBy(*s)
+		nhc.SetDeletedByID(*s)
 	}
 	return nhc
 }
@@ -339,6 +353,10 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(notehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := nhc.mutation.UpdatedBy(); ok {
+		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := nhc.mutation.CreatedAt(); ok {
 		_spec.SetField(notehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -347,13 +365,13 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(notehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := nhc.mutation.CreatedBy(); ok {
-		_spec.SetField(notehistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := nhc.mutation.CreatedByID(); ok {
+		_spec.SetField(notehistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := nhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := nhc.mutation.UpdatedByID(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := nhc.mutation.MappingID(); ok {
 		_spec.SetField(notehistory.FieldMappingID, field.TypeString, value)
@@ -363,9 +381,9 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := nhc.mutation.DeletedBy(); ok {
-		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := nhc.mutation.DeletedByID(); ok {
+		_spec.SetField(notehistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := nhc.mutation.Tags(); ok {
 		_spec.SetField(notehistory.FieldTags, field.TypeJSON, value)

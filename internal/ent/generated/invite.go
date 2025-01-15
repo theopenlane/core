@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Invite is the model entity for the Invite schema.
@@ -23,16 +24,16 @@ type Invite struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the invitation token sent to the user via email which should only be provided to the /verify endpoint + handler
@@ -55,6 +56,11 @@ type Invite struct {
 	// The values are being populated by the InviteQuery when eager-loading is set.
 	Edges        InviteEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // InviteEdges holds the relations/edges for other nodes in the graph.
@@ -101,7 +107,7 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case invite.FieldSendAttempts:
 			values[i] = new(sql.NullInt64)
-		case invite.FieldID, invite.FieldCreatedBy, invite.FieldUpdatedBy, invite.FieldMappingID, invite.FieldDeletedBy, invite.FieldOwnerID, invite.FieldToken, invite.FieldRecipient, invite.FieldStatus, invite.FieldRole, invite.FieldRequestorID:
+		case invite.FieldID, invite.FieldCreatedByID, invite.FieldUpdatedByID, invite.FieldMappingID, invite.FieldDeletedByID, invite.FieldOwnerID, invite.FieldToken, invite.FieldRecipient, invite.FieldStatus, invite.FieldRole, invite.FieldRequestorID:
 			values[i] = new(sql.NullString)
 		case invite.FieldCreatedAt, invite.FieldUpdatedAt, invite.FieldDeletedAt, invite.FieldExpires:
 			values[i] = new(sql.NullTime)
@@ -138,17 +144,17 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				i.UpdatedAt = value.Time
 			}
-		case invite.FieldCreatedBy:
+		case invite.FieldCreatedByID:
 			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[j])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[j])
 			} else if value.Valid {
-				i.CreatedBy = value.String
+				i.CreatedByID = value.String
 			}
-		case invite.FieldUpdatedBy:
+		case invite.FieldUpdatedByID:
 			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[j])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[j])
 			} else if value.Valid {
-				i.UpdatedBy = value.String
+				i.UpdatedByID = value.String
 			}
 		case invite.FieldMappingID:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -162,11 +168,11 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				i.DeletedAt = value.Time
 			}
-		case invite.FieldDeletedBy:
+		case invite.FieldDeletedByID:
 			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[j])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[j])
 			} else if value.Valid {
-				i.DeletedBy = value.String
+				i.DeletedByID = value.String
 			}
 		case invite.FieldOwnerID:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -274,11 +280,11 @@ func (i *Invite) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(i.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(i.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(i.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(i.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(i.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(i.MappingID)
@@ -286,8 +292,8 @@ func (i *Invite) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(i.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(i.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(i.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(i.OwnerID)

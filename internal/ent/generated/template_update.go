@@ -49,23 +49,23 @@ func (tu *TemplateUpdate) ClearUpdatedAt() *TemplateUpdate {
 	return tu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tu *TemplateUpdate) SetUpdatedBy(s string) *TemplateUpdate {
-	tu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tu *TemplateUpdate) SetUpdatedByID(s string) *TemplateUpdate {
+	tu.mutation.SetUpdatedByID(s)
 	return tu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tu *TemplateUpdate) SetNillableUpdatedBy(s *string) *TemplateUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tu *TemplateUpdate) SetNillableUpdatedByID(s *string) *TemplateUpdate {
 	if s != nil {
-		tu.SetUpdatedBy(*s)
+		tu.SetUpdatedByID(*s)
 	}
 	return tu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tu *TemplateUpdate) ClearUpdatedBy() *TemplateUpdate {
-	tu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tu *TemplateUpdate) ClearUpdatedByID() *TemplateUpdate {
+	tu.mutation.ClearUpdatedByID()
 	return tu
 }
 
@@ -89,23 +89,23 @@ func (tu *TemplateUpdate) ClearDeletedAt() *TemplateUpdate {
 	return tu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tu *TemplateUpdate) SetDeletedBy(s string) *TemplateUpdate {
-	tu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tu *TemplateUpdate) SetDeletedByID(s string) *TemplateUpdate {
+	tu.mutation.SetDeletedByID(s)
 	return tu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tu *TemplateUpdate) SetNillableDeletedBy(s *string) *TemplateUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tu *TemplateUpdate) SetNillableDeletedByID(s *string) *TemplateUpdate {
 	if s != nil {
-		tu.SetDeletedBy(*s)
+		tu.SetDeletedByID(*s)
 	}
 	return tu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tu *TemplateUpdate) ClearDeletedBy() *TemplateUpdate {
-	tu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (tu *TemplateUpdate) ClearDeletedByID() *TemplateUpdate {
+	tu.mutation.ClearDeletedByID()
 	return tu
 }
 
@@ -390,14 +390,14 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(template.FieldUpdatedAt, field.TypeTime)
 	}
-	if tu.mutation.CreatedByCleared() {
-		_spec.ClearField(template.FieldCreatedBy, field.TypeString)
+	if tu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(template.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := tu.mutation.UpdatedBy(); ok {
-		_spec.SetField(template.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := tu.mutation.UpdatedByID(); ok {
+		_spec.SetField(template.FieldUpdatedByID, field.TypeString, value)
 	}
-	if tu.mutation.UpdatedByCleared() {
-		_spec.ClearField(template.FieldUpdatedBy, field.TypeString)
+	if tu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(template.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := tu.mutation.DeletedAt(); ok {
 		_spec.SetField(template.FieldDeletedAt, field.TypeTime, value)
@@ -405,11 +405,11 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.DeletedAtCleared() {
 		_spec.ClearField(template.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tu.mutation.DeletedBy(); ok {
-		_spec.SetField(template.FieldDeletedBy, field.TypeString, value)
+	if value, ok := tu.mutation.DeletedByID(); ok {
+		_spec.SetField(template.FieldDeletedByID, field.TypeString, value)
 	}
-	if tu.mutation.DeletedByCleared() {
-		_spec.ClearField(template.FieldDeletedBy, field.TypeString)
+	if tu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(template.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tu.mutation.Tags(); ok {
 		_spec.SetField(template.FieldTags, field.TypeJSON, value)
@@ -606,23 +606,23 @@ func (tuo *TemplateUpdateOne) ClearUpdatedAt() *TemplateUpdateOne {
 	return tuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tuo *TemplateUpdateOne) SetUpdatedBy(s string) *TemplateUpdateOne {
-	tuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tuo *TemplateUpdateOne) SetUpdatedByID(s string) *TemplateUpdateOne {
+	tuo.mutation.SetUpdatedByID(s)
 	return tuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tuo *TemplateUpdateOne) SetNillableUpdatedBy(s *string) *TemplateUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tuo *TemplateUpdateOne) SetNillableUpdatedByID(s *string) *TemplateUpdateOne {
 	if s != nil {
-		tuo.SetUpdatedBy(*s)
+		tuo.SetUpdatedByID(*s)
 	}
 	return tuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tuo *TemplateUpdateOne) ClearUpdatedBy() *TemplateUpdateOne {
-	tuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tuo *TemplateUpdateOne) ClearUpdatedByID() *TemplateUpdateOne {
+	tuo.mutation.ClearUpdatedByID()
 	return tuo
 }
 
@@ -646,23 +646,23 @@ func (tuo *TemplateUpdateOne) ClearDeletedAt() *TemplateUpdateOne {
 	return tuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tuo *TemplateUpdateOne) SetDeletedBy(s string) *TemplateUpdateOne {
-	tuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tuo *TemplateUpdateOne) SetDeletedByID(s string) *TemplateUpdateOne {
+	tuo.mutation.SetDeletedByID(s)
 	return tuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tuo *TemplateUpdateOne) SetNillableDeletedBy(s *string) *TemplateUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tuo *TemplateUpdateOne) SetNillableDeletedByID(s *string) *TemplateUpdateOne {
 	if s != nil {
-		tuo.SetDeletedBy(*s)
+		tuo.SetDeletedByID(*s)
 	}
 	return tuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tuo *TemplateUpdateOne) ClearDeletedBy() *TemplateUpdateOne {
-	tuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (tuo *TemplateUpdateOne) ClearDeletedByID() *TemplateUpdateOne {
+	tuo.mutation.ClearDeletedByID()
 	return tuo
 }
 
@@ -977,14 +977,14 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 	if tuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(template.FieldUpdatedAt, field.TypeTime)
 	}
-	if tuo.mutation.CreatedByCleared() {
-		_spec.ClearField(template.FieldCreatedBy, field.TypeString)
+	if tuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(template.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := tuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(template.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := tuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(template.FieldUpdatedByID, field.TypeString, value)
 	}
-	if tuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(template.FieldUpdatedBy, field.TypeString)
+	if tuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(template.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := tuo.mutation.DeletedAt(); ok {
 		_spec.SetField(template.FieldDeletedAt, field.TypeTime, value)
@@ -992,11 +992,11 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 	if tuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(template.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.DeletedBy(); ok {
-		_spec.SetField(template.FieldDeletedBy, field.TypeString, value)
+	if value, ok := tuo.mutation.DeletedByID(); ok {
+		_spec.SetField(template.FieldDeletedByID, field.TypeString, value)
 	}
-	if tuo.mutation.DeletedByCleared() {
-		_spec.ClearField(template.FieldDeletedBy, field.TypeString)
+	if tuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(template.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Tags(); ok {
 		_spec.SetField(template.FieldTags, field.TypeJSON, value)

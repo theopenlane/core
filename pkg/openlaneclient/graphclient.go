@@ -337,7 +337,7 @@ func NewClient(cli clientv2.HttpClient, baseURL string, options *clientv2.Option
 
 type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -348,7 +348,7 @@ type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreatedAt() *time.Time {
@@ -357,11 +357,11 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreated
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreatedBy() *string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDescription() *string {
 	if t == nil {
@@ -423,11 +423,11 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetUpdated
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetUpdatedBy() *string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan struct {
@@ -443,7 +443,7 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan) GetActionPlans() []*Cr
 
 type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -454,7 +454,7 @@ type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedAt() *time.Time {
@@ -463,11 +463,11 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedAt() *
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedBy() *string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDescription() *string {
 	if t == nil {
@@ -529,11 +529,11 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetUpdatedAt() *
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetUpdatedBy() *string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkActionPlan_CreateBulkActionPlan struct {
@@ -549,7 +549,7 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan) GetActionPlans() []*CreateBu
 
 type CreateActionPlan_CreateActionPlan_ActionPlan struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -560,7 +560,7 @@ type CreateActionPlan_CreateActionPlan_ActionPlan struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedAt() *time.Time {
@@ -569,11 +569,11 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedBy() *string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDescription() *string {
 	if t == nil {
@@ -635,11 +635,11 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetUpdatedBy() *string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateActionPlan_CreateActionPlan struct {
@@ -666,7 +666,7 @@ func (t *DeleteActionPlan_DeleteActionPlan) GetDeletedID() string {
 
 type GetAllActionPlans_ActionPlans_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -677,7 +677,7 @@ type GetAllActionPlans_ActionPlans_Edges_Node struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
@@ -686,11 +686,11 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -752,11 +752,11 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllActionPlans_ActionPlans_Edges struct {
@@ -783,7 +783,7 @@ func (t *GetAllActionPlans_ActionPlans) GetEdges() []*GetAllActionPlans_ActionPl
 
 type GetActionPlanByID_ActionPlan struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -794,7 +794,7 @@ type GetActionPlanByID_ActionPlan struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetActionPlanByID_ActionPlan) GetCreatedAt() *time.Time {
@@ -803,11 +803,11 @@ func (t *GetActionPlanByID_ActionPlan) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetActionPlanByID_ActionPlan) GetCreatedBy() *string {
+func (t *GetActionPlanByID_ActionPlan) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetActionPlanByID_ActionPlan) GetDescription() *string {
 	if t == nil {
@@ -869,16 +869,16 @@ func (t *GetActionPlanByID_ActionPlan) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetActionPlanByID_ActionPlan) GetUpdatedBy() *string {
+func (t *GetActionPlanByID_ActionPlan) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetActionPlans_ActionPlans_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -889,7 +889,7 @@ type GetActionPlans_ActionPlans_Edges_Node struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
@@ -898,11 +898,11 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedBy() *string {
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -964,11 +964,11 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetUpdatedBy() *string {
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetActionPlans_ActionPlans_Edges struct {
@@ -995,7 +995,7 @@ func (t *GetActionPlans_ActionPlans) GetEdges() []*GetActionPlans_ActionPlans_Ed
 
 type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -1006,7 +1006,7 @@ type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedAt() *time.Time {
@@ -1015,11 +1015,11 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedBy() *string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDescription() *string {
 	if t == nil {
@@ -1081,11 +1081,11 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetUpdatedBy() *string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateActionPlan_UpdateActionPlan struct {
@@ -1101,7 +1101,7 @@ func (t *UpdateActionPlan_UpdateActionPlan) GetActionPlan() *UpdateActionPlan_Up
 
 type GetAllActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -1115,7 +1115,7 @@ type GetAllActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -1124,11 +1124,11 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt(
 	}
 	return t.CreatedAt
 }
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -1208,11 +1208,11 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetUpdatedAt(
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllActionPlanHistories_ActionPlanHistories_Edges struct {
@@ -1239,7 +1239,7 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories) GetEdges() []*GetAllActi
 
 type GetActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
@@ -1253,7 +1253,7 @@ type GetActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -1262,11 +1262,11 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt() *
 	}
 	return t.CreatedAt
 }
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -1346,11 +1346,11 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetUpdatedAt() *
 	}
 	return t.UpdatedAt
 }
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetActionPlanHistories_ActionPlanHistories_Edges struct {
@@ -1376,19 +1376,19 @@ func (t *GetActionPlanHistories_ActionPlanHistories) GetEdges() []*GetActionPlan
 }
 
 type AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Scopes      []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetID() string {
 	if t == nil {
@@ -1433,7 +1433,7 @@ func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult) GetAPITokens() []*A
 }
 
 type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans struct {
-	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -1444,11 +1444,11 @@ type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans struct {
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDescription() *string {
 	if t == nil {
@@ -1513,7 +1513,7 @@ func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult) GetActionPlans() 
 type AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts struct {
 	Address     *string  "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string  "json:\"company,omitempty\" graphql:\"company\""
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Email       *string  "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string   "json:\"fullName\" graphql:\"fullName\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -1535,11 +1535,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetCompany(
 	}
 	return t.Company
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetEmail() *string {
 	if t == nil {
@@ -1599,7 +1599,7 @@ type AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls struct {
 	Class            *string        "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string        "json:\"controlType,omitempty\" graphql:\"controlType\""
-	DeletedBy        *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID      *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -1632,11 +1632,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetControlT
 	}
 	return t.ControlType
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDescription() *string {
 	if t == nil {
@@ -1726,7 +1726,7 @@ type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjective
 	Class                *string        "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string        "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
-	DeletedBy            *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID          *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -1758,11 +1758,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjec
 	}
 	return t.ControlObjectiveType
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDescription() *string {
 	if t == nil {
@@ -1843,12 +1843,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult) GetControlO
 }
 
 type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData struct {
-	Data       json.RawMessage "json:\"data\" graphql:\"data\""
-	DeletedBy  *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID         string          "json:\"id\" graphql:\"id\""
-	OwnerID    *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags       []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID string          "json:\"templateID\" graphql:\"templateID\""
+	Data        json.RawMessage "json:\"data\" graphql:\"data\""
+	DeletedByID *string         "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetData() *json.RawMessage {
@@ -1857,11 +1857,11 @@ func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) Ge
 	}
 	return &t.Data
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetID() string {
 	if t == nil {
@@ -1900,7 +1900,7 @@ func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult) GetDocumentData
 }
 
 type AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities struct {
-	DeletedBy    *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID  *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description  *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName  *string  "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains      []string "json:\"domains,omitempty\" graphql:\"domains\""
@@ -1912,11 +1912,11 @@ type AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities struct {
 	Tags         []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDescription() *string {
 	if t == nil {
@@ -1985,18 +1985,18 @@ func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult) GetEntities() []*Admi
 }
 
 type AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetID() string {
 	if t == nil {
@@ -2093,7 +2093,7 @@ func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult) GetEvents() []*AdminSe
 
 type AdminSearch_AdminSearch_Nodes_FileSearchResult_Files struct {
 	CategoryType          *string  "json:\"categoryType,omitempty\" graphql:\"categoryType\""
-	DeletedBy             *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID           *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	DetectedContentType   string   "json:\"detectedContentType\" graphql:\"detectedContentType\""
 	DetectedMimeType      *string  "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	ID                    string   "json:\"id\" graphql:\"id\""
@@ -2114,11 +2114,11 @@ func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetCategoryType()
 	}
 	return t.CategoryType
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDetectedContentType() string {
 	if t == nil {
@@ -2205,7 +2205,7 @@ func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult) GetFiles() []*AdminSear
 }
 
 type AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
@@ -2213,11 +2213,11 @@ type AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
 	if t == nil {
@@ -2262,17 +2262,17 @@ func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult) GetGroups() []*AdminSe
 }
 
 type AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	GroupID   *string  "json:\"groupID,omitempty\" graphql:\"groupID\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
+	GroupID     *string  "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetGroupID() *string {
 	if t == nil {
@@ -2305,19 +2305,19 @@ func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult) GetGroupSetting
 }
 
 type AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Kind      *string  "json:\"kind,omitempty\" graphql:\"kind\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Kind        *string  "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetID() string {
 	if t == nil {
@@ -2363,7 +2363,7 @@ func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult) GetIntegrations(
 
 type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	DeletedBy       *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID     *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -2382,11 +2382,11 @@ func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolici
 	}
 	return t.Background
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -2461,7 +2461,7 @@ func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult) GetInternalPo
 }
 
 type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives struct {
-	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -2471,11 +2471,11 @@ type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives struct {
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDescription() *string {
 	if t == nil {
@@ -2532,7 +2532,7 @@ func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult) GetNarratives() []
 }
 
 type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions struct {
-	DeletedBy                *string       "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID              *string       "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
@@ -2546,11 +2546,11 @@ type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions 
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetFeatureLookupKeys() []string {
 	if t == nil {
@@ -2632,7 +2632,7 @@ func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult) GetOrgSubscr
 
 type AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations struct {
 	AvatarRemoteURL *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DeletedBy       *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID     *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	DisplayName     string   "json:\"displayName\" graphql:\"displayName\""
 	ID              string   "json:\"id\" graphql:\"id\""
 	Name            string   "json:\"name\" graphql:\"name\""
@@ -2645,11 +2645,11 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) G
 	}
 	return t.AvatarRemoteURL
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
 	if t == nil {
@@ -2692,7 +2692,7 @@ type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationS
 	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	DeletedBy      *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID    *string         "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	ID             string          "json:\"id\" graphql:\"id\""
 	OrganizationID *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
@@ -2724,11 +2724,11 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_Organizat
 	}
 	return t.BillingPhone
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetDomains() []string {
 	if t == nil {
@@ -2773,18 +2773,18 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult) GetOrgan
 }
 
 type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	Scopes      []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetID() string {
 	if t == nil {
@@ -2824,7 +2824,7 @@ func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult) GetPerso
 
 type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	DeletedBy       *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID     *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -2844,11 +2844,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetBack
 	}
 	return t.Background
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDescription() *string {
 	if t == nil {
@@ -2929,7 +2929,7 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult) GetProcedures() []
 }
 
 type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
@@ -2937,11 +2937,11 @@ type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDescription() *string {
 	if t == nil {
@@ -2987,7 +2987,7 @@ func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult) GetPrograms() []*Adm
 
 type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
 	BusinessCosts *string        "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	DeletedBy     *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID   *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description   *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID            string         "json:\"id\" graphql:\"id\""
@@ -3006,11 +3006,11 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetBusinessCosts(
 	}
 	return t.BusinessCosts
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDescription() *string {
 	if t == nil {
@@ -3086,7 +3086,7 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult) GetRisks() []*AdminSear
 
 type AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	DeletedBy       *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID     *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -3106,11 +3106,11 @@ func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetBackgr
 	}
 	return t.Background
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDescription() *string {
 	if t == nil {
@@ -3192,7 +3192,7 @@ func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult) GetStandards() []*A
 
 type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols struct {
 	Class                      *string        "json:\"class,omitempty\" graphql:\"class\""
-	DeletedBy                  *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID                *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description                *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                    map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family                     *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -3217,11 +3217,11 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetCl
 	}
 	return t.Class
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDescription() *string {
 	if t == nil {
@@ -3332,7 +3332,7 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult) GetSubcontrols() 
 }
 
 type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Email       string   "json:\"email\" graphql:\"email\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -3340,11 +3340,11 @@ type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
 	if t == nil {
@@ -3389,18 +3389,18 @@ func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult) GetSubscribers() 
 }
 
 type AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings struct {
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID   *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	ID            string   "json:\"id\" graphql:\"id\""
 	RecoveryCodes []string "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 	TfaSecret     *string  "json:\"tfaSecret,omitempty\" graphql:\"tfaSecret\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetID() string {
 	if t == nil {
@@ -3439,7 +3439,7 @@ func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult) GetTFASettings() 
 }
 
 type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
-	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string        "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -3447,11 +3447,11 @@ type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
 	Title       string         "json:\"title\" graphql:\"title\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDescription() *string {
 	if t == nil {
@@ -3496,7 +3496,7 @@ func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult) GetTasks() []*AdminSear
 }
 
 type AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates struct {
-	DeletedBy   *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID *string         "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	Description *string         "json:\"description,omitempty\" graphql:\"description\""
 	ID          string          "json:\"id\" graphql:\"id\""
 	Jsonconfig  json.RawMessage "json:\"jsonconfig\" graphql:\"jsonconfig\""
@@ -3506,11 +3506,11 @@ type AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates struct {
 	Uischema    json.RawMessage "json:\"uischema,omitempty\" graphql:\"uischema\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetDescription() *string {
 	if t == nil {
@@ -3570,7 +3570,7 @@ type AdminSearch_AdminSearch_Nodes_UserSearchResult_Users struct {
 	AvatarLocalFile   *string  "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
 	AvatarLocalFileID *string  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DeletedBy         *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID       *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	DisplayName       string   "json:\"displayName\" graphql:\"displayName\""
 	Email             string   "json:\"email\" graphql:\"email\""
 	FirstName         *string  "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -3598,11 +3598,11 @@ func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetAvatarRemoteUR
 	}
 	return t.AvatarRemoteURL
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDisplayName() string {
 	if t == nil {
@@ -3659,17 +3659,17 @@ func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult) GetUsers() []*AdminSear
 }
 
 type AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
-	UserID    *string  "json:\"userID,omitempty\" graphql:\"userID\""
+	DeletedByID *string  "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	UserID      *string  "json:\"userID,omitempty\" graphql:\"userID\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetDeletedByID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetID() string {
 	if t == nil {
@@ -3939,7 +3939,7 @@ func (t *CreateAPIToken_CreateAPIToken_APIToken_Owner) GetID() string {
 
 type CreateAPIToken_CreateAPIToken_APIToken struct {
 	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt   *time.Time                                    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID          string                                        "json:\"id\" graphql:\"id\""
@@ -3949,7 +3949,7 @@ type CreateAPIToken_CreateAPIToken_APIToken struct {
 	Scopes      []string                                      "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token       string                                        "json:\"token\" graphql:\"token\""
 	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateAPIToken_CreateAPIToken_APIToken) GetCreatedAt() *time.Time {
@@ -3958,11 +3958,11 @@ func (t *CreateAPIToken_CreateAPIToken_APIToken) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateAPIToken_CreateAPIToken_APIToken) GetCreatedBy() *string {
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateAPIToken_CreateAPIToken_APIToken{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateAPIToken_CreateAPIToken_APIToken) GetDescription() *string {
 	if t == nil {
@@ -4018,11 +4018,11 @@ func (t *CreateAPIToken_CreateAPIToken_APIToken) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateAPIToken_CreateAPIToken_APIToken) GetUpdatedBy() *string {
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateAPIToken_CreateAPIToken_APIToken{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateAPIToken_CreateAPIToken struct {
@@ -4049,7 +4049,7 @@ func (t *UpdateAPIToken_UpdateAPIToken_APIToken_Owner) GetID() string {
 
 type UpdateAPIToken_UpdateAPIToken_APIToken struct {
 	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt   *time.Time                                    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID          string                                        "json:\"id\" graphql:\"id\""
@@ -4059,7 +4059,7 @@ type UpdateAPIToken_UpdateAPIToken_APIToken struct {
 	Scopes      []string                                      "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token       string                                        "json:\"token\" graphql:\"token\""
 	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedAt() *time.Time {
@@ -4068,11 +4068,11 @@ func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedBy() *string {
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetDescription() *string {
 	if t == nil {
@@ -4128,11 +4128,11 @@ func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetUpdatedBy() *string {
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateAPIToken_UpdateAPIToken struct {
@@ -4159,7 +4159,7 @@ func (t *GetAllAPITokens_APITokens_Edges_Node_Owner) GetID() string {
 
 type GetAllAPITokens_APITokens_Edges_Node struct {
 	CreatedAt   *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt   *time.Time                                  "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID          string                                      "json:\"id\" graphql:\"id\""
@@ -4169,7 +4169,7 @@ type GetAllAPITokens_APITokens_Edges_Node struct {
 	Scopes      []string                                    "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token       string                                      "json:\"token\" graphql:\"token\""
 	UpdatedAt   *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllAPITokens_APITokens_Edges_Node) GetCreatedAt() *time.Time {
@@ -4178,11 +4178,11 @@ func (t *GetAllAPITokens_APITokens_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllAPITokens_APITokens_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllAPITokens_APITokens_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllAPITokens_APITokens_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -4238,11 +4238,11 @@ func (t *GetAllAPITokens_APITokens_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllAPITokens_APITokens_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllAPITokens_APITokens_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllAPITokens_APITokens_Edges struct {
@@ -4280,7 +4280,7 @@ func (t *GetAPITokenByID_APIToken_Owner) GetID() string {
 
 type GetAPITokenByID_APIToken struct {
 	CreatedAt   *time.Time                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                         "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt   *time.Time                      "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID          string                          "json:\"id\" graphql:\"id\""
@@ -4290,7 +4290,7 @@ type GetAPITokenByID_APIToken struct {
 	Scopes      []string                        "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token       string                          "json:\"token\" graphql:\"token\""
 	UpdatedAt   *time.Time                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAPITokenByID_APIToken) GetCreatedAt() *time.Time {
@@ -4299,11 +4299,11 @@ func (t *GetAPITokenByID_APIToken) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAPITokenByID_APIToken) GetCreatedBy() *string {
+func (t *GetAPITokenByID_APIToken) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAPITokenByID_APIToken{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAPITokenByID_APIToken) GetDescription() *string {
 	if t == nil {
@@ -4359,11 +4359,11 @@ func (t *GetAPITokenByID_APIToken) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAPITokenByID_APIToken) GetUpdatedBy() *string {
+func (t *GetAPITokenByID_APIToken) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAPITokenByID_APIToken{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type DeleteAPIToken_DeleteAPIToken struct {
@@ -4381,7 +4381,7 @@ type CreateBulkContact_CreateBulkContact_Contacts struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	ID          string           "json:\"id\" graphql:\"id\""
@@ -4391,7 +4391,7 @@ type CreateBulkContact_CreateBulkContact_Contacts struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkContact_CreateBulkContact_Contacts) GetAddress() *string {
@@ -4412,11 +4412,11 @@ func (t *CreateBulkContact_CreateBulkContact_Contacts) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkContact_CreateBulkContact_Contacts) GetCreatedBy() *string {
+func (t *CreateBulkContact_CreateBulkContact_Contacts) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkContact_CreateBulkContact_Contacts{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkContact_CreateBulkContact_Contacts) GetEmail() *string {
 	if t == nil {
@@ -4472,11 +4472,11 @@ func (t *CreateBulkContact_CreateBulkContact_Contacts) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkContact_CreateBulkContact_Contacts) GetUpdatedBy() *string {
+func (t *CreateBulkContact_CreateBulkContact_Contacts) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkContact_CreateBulkContact_Contacts{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkContact_CreateBulkContact struct {
@@ -4494,7 +4494,7 @@ type CreateBulkCSVContact_CreateBulkCSVContact_Contacts struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	ID          string           "json:\"id\" graphql:\"id\""
@@ -4504,7 +4504,7 @@ type CreateBulkCSVContact_CreateBulkCSVContact_Contacts struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetAddress() *string {
@@ -4525,11 +4525,11 @@ func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCreatedBy() *string {
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetEmail() *string {
 	if t == nil {
@@ -4585,11 +4585,11 @@ func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetUpdatedBy() *string {
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVContact_CreateBulkCSVContact struct {
@@ -4607,7 +4607,7 @@ type CreateContact_CreateContact_Contact struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	ID          string           "json:\"id\" graphql:\"id\""
@@ -4617,7 +4617,7 @@ type CreateContact_CreateContact_Contact struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateContact_CreateContact_Contact) GetAddress() *string {
@@ -4638,11 +4638,11 @@ func (t *CreateContact_CreateContact_Contact) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateContact_CreateContact_Contact) GetCreatedBy() *string {
+func (t *CreateContact_CreateContact_Contact) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateContact_CreateContact_Contact{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateContact_CreateContact_Contact) GetEmail() *string {
 	if t == nil {
@@ -4698,11 +4698,11 @@ func (t *CreateContact_CreateContact_Contact) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateContact_CreateContact_Contact) GetUpdatedBy() *string {
+func (t *CreateContact_CreateContact_Contact) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateContact_CreateContact_Contact{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateContact_CreateContact struct {
@@ -4731,7 +4731,7 @@ type GetAllContacts_Contacts_Edges_Node struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	ID          string           "json:\"id\" graphql:\"id\""
@@ -4741,7 +4741,7 @@ type GetAllContacts_Contacts_Edges_Node struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllContacts_Contacts_Edges_Node) GetAddress() *string {
@@ -4762,11 +4762,11 @@ func (t *GetAllContacts_Contacts_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllContacts_Contacts_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllContacts_Contacts_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllContacts_Contacts_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllContacts_Contacts_Edges_Node) GetEmail() *string {
 	if t == nil {
@@ -4822,11 +4822,11 @@ func (t *GetAllContacts_Contacts_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllContacts_Contacts_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllContacts_Contacts_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllContacts_Contacts_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllContacts_Contacts_Edges struct {
@@ -4855,7 +4855,7 @@ type GetContactByID_Contact struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	ID          string           "json:\"id\" graphql:\"id\""
@@ -4865,7 +4865,7 @@ type GetContactByID_Contact struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetContactByID_Contact) GetAddress() *string {
@@ -4886,11 +4886,11 @@ func (t *GetContactByID_Contact) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetContactByID_Contact) GetCreatedBy() *string {
+func (t *GetContactByID_Contact) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetContactByID_Contact{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetContactByID_Contact) GetEmail() *string {
 	if t == nil {
@@ -4946,18 +4946,18 @@ func (t *GetContactByID_Contact) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetContactByID_Contact) GetUpdatedBy() *string {
+func (t *GetContactByID_Contact) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetContactByID_Contact{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetContacts_Contacts_Edges_Node struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	ID          string           "json:\"id\" graphql:\"id\""
@@ -4967,7 +4967,7 @@ type GetContacts_Contacts_Edges_Node struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetContacts_Contacts_Edges_Node) GetAddress() *string {
@@ -4988,11 +4988,11 @@ func (t *GetContacts_Contacts_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetContacts_Contacts_Edges_Node) GetCreatedBy() *string {
+func (t *GetContacts_Contacts_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetContacts_Contacts_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetContacts_Contacts_Edges_Node) GetEmail() *string {
 	if t == nil {
@@ -5048,11 +5048,11 @@ func (t *GetContacts_Contacts_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetContacts_Contacts_Edges_Node) GetUpdatedBy() *string {
+func (t *GetContacts_Contacts_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetContacts_Contacts_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetContacts_Contacts_Edges struct {
@@ -5081,7 +5081,7 @@ type UpdateContact_UpdateContact_Contact struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	ID          string           "json:\"id\" graphql:\"id\""
@@ -5091,7 +5091,7 @@ type UpdateContact_UpdateContact_Contact struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateContact_UpdateContact_Contact) GetAddress() *string {
@@ -5112,11 +5112,11 @@ func (t *UpdateContact_UpdateContact_Contact) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateContact_UpdateContact_Contact) GetCreatedBy() *string {
+func (t *UpdateContact_UpdateContact_Contact) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateContact_UpdateContact_Contact{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateContact_UpdateContact_Contact) GetEmail() *string {
 	if t == nil {
@@ -5172,11 +5172,11 @@ func (t *UpdateContact_UpdateContact_Contact) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateContact_UpdateContact_Contact) GetUpdatedBy() *string {
+func (t *UpdateContact_UpdateContact_Contact) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateContact_UpdateContact_Contact{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateContact_UpdateContact struct {
@@ -5194,7 +5194,7 @@ type GetAllContactHistories_ContactHistories_Edges_Node struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
@@ -5207,7 +5207,7 @@ type GetAllContactHistories_ContactHistories_Edges_Node struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetAddress() *string {
@@ -5228,11 +5228,11 @@ func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllContactHistories_ContactHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetEmail() *string {
 	if t == nil {
@@ -5306,11 +5306,11 @@ func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllContactHistories_ContactHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllContactHistories_ContactHistories_Edges struct {
@@ -5339,7 +5339,7 @@ type GetContactHistories_ContactHistories_Edges_Node struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string           "json:\"fullName\" graphql:\"fullName\""
 	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
@@ -5352,7 +5352,7 @@ type GetContactHistories_ContactHistories_Edges_Node struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetContactHistories_ContactHistories_Edges_Node) GetAddress() *string {
@@ -5373,11 +5373,11 @@ func (t *GetContactHistories_ContactHistories_Edges_Node) GetCreatedAt() *time.T
 	}
 	return t.CreatedAt
 }
-func (t *GetContactHistories_ContactHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetContactHistories_ContactHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetContactHistories_ContactHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetContactHistories_ContactHistories_Edges_Node) GetEmail() *string {
 	if t == nil {
@@ -5451,11 +5451,11 @@ func (t *GetContactHistories_ContactHistories_Edges_Node) GetUpdatedAt() *time.T
 	}
 	return t.UpdatedAt
 }
-func (t *GetContactHistories_ContactHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetContactHistories_ContactHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetContactHistories_ContactHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetContactHistories_ContactHistories_Edges struct {
@@ -5485,7 +5485,7 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	ControlNumber    *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string        "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -5497,7 +5497,7 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	Status           *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags             []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -5525,11 +5525,11 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCreatedBy() *string {
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDescription() *string {
 	if t == nil {
@@ -5597,11 +5597,11 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedBy() *string {
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetVersion() *string {
 	if t == nil {
@@ -5626,7 +5626,7 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	ControlNumber    *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string        "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -5638,7 +5638,7 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	Status           *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags             []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -5666,11 +5666,11 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkControl_CreateBulkControl_Controls) GetCreatedBy() *string {
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetDescription() *string {
 	if t == nil {
@@ -5738,11 +5738,11 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkControl_CreateBulkControl_Controls) GetUpdatedBy() *string {
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetVersion() *string {
 	if t == nil {
@@ -5858,7 +5858,7 @@ type CreateControl_CreateControl_Control struct {
 	ControlNumber    *string                                              "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                                              "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string                                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
 	Editors          []*CreateControl_CreateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -5873,7 +5873,7 @@ type CreateControl_CreateControl_Control struct {
 	Subcontrols      []*CreateControl_CreateControl_Control_Subcontrols   "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags             []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string                                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string                                              "json:\"version,omitempty\" graphql:\"version\""
 	Viewers          []*CreateControl_CreateControl_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -5908,11 +5908,11 @@ func (t *CreateControl_CreateControl_Control) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateControl_CreateControl_Control) GetCreatedBy() *string {
+func (t *CreateControl_CreateControl_Control) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateControl_CreateControl_Control) GetDescription() *string {
 	if t == nil {
@@ -5998,11 +5998,11 @@ func (t *CreateControl_CreateControl_Control) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateControl_CreateControl_Control) GetUpdatedBy() *string {
+func (t *CreateControl_CreateControl_Control) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateControl_CreateControl_Control) GetVersion() *string {
 	if t == nil {
@@ -6135,7 +6135,7 @@ type GetAllControls_Controls_Edges_Node struct {
 	ControlNumber    *string                                             "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                                             "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string                                             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string                                             "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                      "json:\"details,omitempty\" graphql:\"details\""
 	Editors          []*GetAllControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -6150,7 +6150,7 @@ type GetAllControls_Controls_Edges_Node struct {
 	Subcontrols      []*GetAllControls_Controls_Edges_Node_Subcontrols   "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags             []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string                                             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string                                             "json:\"version,omitempty\" graphql:\"version\""
 	Viewers          []*GetAllControls_Controls_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -6185,11 +6185,11 @@ func (t *GetAllControls_Controls_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllControls_Controls_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllControls_Controls_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllControls_Controls_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -6275,11 +6275,11 @@ func (t *GetAllControls_Controls_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllControls_Controls_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllControls_Controls_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllControls_Controls_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -6412,7 +6412,7 @@ type GetControlByID_Control struct {
 	ControlNumber    *string                                 "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                                 "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string                                 "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string                                 "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                          "json:\"details,omitempty\" graphql:\"details\""
 	Editors          []*GetControlByID_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -6427,7 +6427,7 @@ type GetControlByID_Control struct {
 	Subcontrols      []*GetControlByID_Control_Subcontrols   "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags             []string                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string                                 "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string                                 "json:\"version,omitempty\" graphql:\"version\""
 	Viewers          []*GetControlByID_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -6462,11 +6462,11 @@ func (t *GetControlByID_Control) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetControlByID_Control) GetCreatedBy() *string {
+func (t *GetControlByID_Control) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetControlByID_Control{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetControlByID_Control) GetDescription() *string {
 	if t == nil {
@@ -6552,11 +6552,11 @@ func (t *GetControlByID_Control) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetControlByID_Control) GetUpdatedBy() *string {
+func (t *GetControlByID_Control) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetControlByID_Control{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetControlByID_Control) GetVersion() *string {
 	if t == nil {
@@ -6667,7 +6667,7 @@ type GetControls_Controls_Edges_Node struct {
 	ControlNumber    *string                                          "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                                          "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string                                          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string                                          "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                   "json:\"details,omitempty\" graphql:\"details\""
 	Editors          []*GetControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -6682,7 +6682,7 @@ type GetControls_Controls_Edges_Node struct {
 	Subcontrols      []*GetControls_Controls_Edges_Node_Subcontrols   "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags             []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string                                          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string                                          "json:\"version,omitempty\" graphql:\"version\""
 	Viewers          []*GetControls_Controls_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -6717,11 +6717,11 @@ func (t *GetControls_Controls_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetControls_Controls_Edges_Node) GetCreatedBy() *string {
+func (t *GetControls_Controls_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetControls_Controls_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -6807,11 +6807,11 @@ func (t *GetControls_Controls_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetControls_Controls_Edges_Node) GetUpdatedBy() *string {
+func (t *GetControls_Controls_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetControls_Controls_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -6944,7 +6944,7 @@ type UpdateControl_UpdateControl_Control struct {
 	ControlNumber    *string                                              "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                                              "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string                                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
 	Editors          []*UpdateControl_UpdateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -6959,7 +6959,7 @@ type UpdateControl_UpdateControl_Control struct {
 	Subcontrols      []*UpdateControl_UpdateControl_Control_Subcontrols   "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags             []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string                                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string                                              "json:\"version,omitempty\" graphql:\"version\""
 	Viewers          []*UpdateControl_UpdateControl_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -6994,11 +6994,11 @@ func (t *UpdateControl_UpdateControl_Control) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateControl_UpdateControl_Control) GetCreatedBy() *string {
+func (t *UpdateControl_UpdateControl_Control) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateControl_UpdateControl_Control) GetDescription() *string {
 	if t == nil {
@@ -7084,11 +7084,11 @@ func (t *UpdateControl_UpdateControl_Control) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateControl_UpdateControl_Control) GetUpdatedBy() *string {
+func (t *UpdateControl_UpdateControl_Control) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateControl_UpdateControl_Control) GetVersion() *string {
 	if t == nil {
@@ -7119,7 +7119,7 @@ type GetAllControlHistories_ControlHistories_Edges_Node struct {
 	ControlNumber    *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string        "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -7134,7 +7134,7 @@ type GetAllControlHistories_ControlHistories_Edges_Node struct {
 	Status           *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags             []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -7162,11 +7162,11 @@ func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -7252,11 +7252,11 @@ func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -7292,7 +7292,7 @@ type GetControlHistories_ControlHistories_Edges_Node struct {
 	ControlNumber    *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string        "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID      *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -7307,7 +7307,7 @@ type GetControlHistories_ControlHistories_Edges_Node struct {
 	Status           *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags             []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID      *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version          *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -7335,11 +7335,11 @@ func (t *GetControlHistories_ControlHistories_Edges_Node) GetCreatedAt() *time.T
 	}
 	return t.CreatedAt
 }
-func (t *GetControlHistories_ControlHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetControlHistories_ControlHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetControlHistories_ControlHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetControlHistories_ControlHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -7425,11 +7425,11 @@ func (t *GetControlHistories_ControlHistories_Edges_Node) GetUpdatedAt() *time.T
 	}
 	return t.UpdatedAt
 }
-func (t *GetControlHistories_ControlHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetControlHistories_ControlHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetControlHistories_ControlHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetControlHistories_ControlHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -7465,7 +7465,7 @@ type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectiv
 	ControlNumber        *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string        "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -7476,7 +7476,7 @@ type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectiv
 	Status               *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -7504,11 +7504,11 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCreatedBy() *string {
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetDescription() *string {
 	if t == nil {
@@ -7570,11 +7570,11 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetUpdatedBy() *string {
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetVersion() *string {
 	if t == nil {
@@ -7599,7 +7599,7 @@ type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives str
 	ControlNumber        *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string        "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -7610,7 +7610,7 @@ type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives str
 	Status               *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -7638,11 +7638,11 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetCreatedBy() *string {
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetDescription() *string {
 	if t == nil {
@@ -7704,11 +7704,11 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetUpdatedBy() *string {
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetVersion() *string {
 	if t == nil {
@@ -7806,7 +7806,7 @@ type CreateControlObjective_CreateControlObjective_ControlObjective struct {
 	ControlNumber        *string                                                                         "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                                                                         "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time                                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                                         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                                         "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                                  "json:\"details,omitempty\" graphql:\"details\""
 	Editors              []*CreateControlObjective_CreateControlObjective_ControlObjective_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -7819,7 +7819,7 @@ type CreateControlObjective_CreateControlObjective_ControlObjective struct {
 	Status               *string                                                                         "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string                                                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                                         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string                                                                         "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*CreateControlObjective_CreateControlObjective_ControlObjective_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -7854,11 +7854,11 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetCrea
 	}
 	return t.CreatedAt
 }
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetCreatedBy() *string {
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetDescription() *string {
 	if t == nil {
@@ -7932,11 +7932,11 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetUpda
 	}
 	return t.UpdatedAt
 }
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetUpdatedBy() *string {
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetVersion() *string {
 	if t == nil {
@@ -8051,7 +8051,7 @@ type GetAllControlObjectives_ControlObjectives_Edges_Node struct {
 	ControlNumber        *string                                                               "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                                                               "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                               "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                        "json:\"details,omitempty\" graphql:\"details\""
 	Editors              []*GetAllControlObjectives_ControlObjectives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -8064,7 +8064,7 @@ type GetAllControlObjectives_ControlObjectives_Edges_Node struct {
 	Status               *string                                                               "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string                                                               "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*GetAllControlObjectives_ControlObjectives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -8099,11 +8099,11 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetCreatedAt() *t
 	}
 	return t.CreatedAt
 }
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -8177,11 +8177,11 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetUpdatedAt() *t
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -8296,7 +8296,7 @@ type GetControlObjectiveByID_ControlObjective struct {
 	ControlNumber        *string                                                   "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                                                   "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                   "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                   "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                            "json:\"details,omitempty\" graphql:\"details\""
 	Editors              []*GetControlObjectiveByID_ControlObjective_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -8309,7 +8309,7 @@ type GetControlObjectiveByID_ControlObjective struct {
 	Status               *string                                                   "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                   "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string                                                   "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*GetControlObjectiveByID_ControlObjective_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -8344,11 +8344,11 @@ func (t *GetControlObjectiveByID_ControlObjective) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetControlObjectiveByID_ControlObjective) GetCreatedBy() *string {
+func (t *GetControlObjectiveByID_ControlObjective) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetDescription() *string {
 	if t == nil {
@@ -8422,11 +8422,11 @@ func (t *GetControlObjectiveByID_ControlObjective) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetControlObjectiveByID_ControlObjective) GetUpdatedBy() *string {
+func (t *GetControlObjectiveByID_ControlObjective) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetVersion() *string {
 	if t == nil {
@@ -8519,7 +8519,7 @@ type GetControlObjectives_ControlObjectives_Edges_Node struct {
 	ControlNumber        *string                                                            "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                                                            "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                            "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                            "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                     "json:\"details,omitempty\" graphql:\"details\""
 	Editors              []*GetControlObjectives_ControlObjectives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -8532,7 +8532,7 @@ type GetControlObjectives_ControlObjectives_Edges_Node struct {
 	Status               *string                                                            "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string                                                           "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                            "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string                                                            "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*GetControlObjectives_ControlObjectives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -8567,11 +8567,11 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetCreatedAt() *time
 	}
 	return t.CreatedAt
 }
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetCreatedBy() *string {
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -8645,11 +8645,11 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetUpdatedAt() *time
 	}
 	return t.UpdatedAt
 }
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetUpdatedBy() *string {
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -8764,7 +8764,7 @@ type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
 	ControlNumber        *string                                                                         "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                                                                         "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time                                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                                         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                                         "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                                  "json:\"details,omitempty\" graphql:\"details\""
 	Editors              []*UpdateControlObjective_UpdateControlObjective_ControlObjective_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -8777,7 +8777,7 @@ type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
 	Status               *string                                                                         "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string                                                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                                         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string                                                                         "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*UpdateControlObjective_UpdateControlObjective_ControlObjective_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
@@ -8812,11 +8812,11 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetCrea
 	}
 	return t.CreatedAt
 }
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetCreatedBy() *string {
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetDescription() *string {
 	if t == nil {
@@ -8890,11 +8890,11 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetUpda
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetUpdatedBy() *string {
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetVersion() *string {
 	if t == nil {
@@ -8925,7 +8925,7 @@ type GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct
 	ControlNumber        *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string        "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -8939,7 +8939,7 @@ type GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct
 	Status               *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -8967,11 +8967,11 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 	}
 	return t.CreatedAt
 }
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -9051,11 +9051,11 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -9091,7 +9091,7 @@ type GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
 	ControlNumber        *string        "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string        "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -9105,7 +9105,7 @@ type GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
 	Status               *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version              *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -9133,11 +9133,11 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetC
 	}
 	return t.CreatedAt
 }
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -9217,11 +9217,11 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetU
 	}
 	return t.UpdatedAt
 }
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -9253,13 +9253,13 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateDocumentData_CreateDocumentData_DocumentData struct {
-	CreatedAt  *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Data       json.RawMessage "json:\"data\" graphql:\"data\""
-	ID         string          "json:\"id\" graphql:\"id\""
-	TemplateID string          "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt  *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	Data        json.RawMessage "json:\"data\" graphql:\"data\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetCreatedAt() *time.Time {
@@ -9268,11 +9268,11 @@ func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetCreatedBy() *string {
+func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateDocumentData_CreateDocumentData_DocumentData{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetData() *json.RawMessage {
 	if t == nil {
@@ -9298,11 +9298,11 @@ func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetUpdatedBy() *string {
+func (t *CreateDocumentData_CreateDocumentData_DocumentData) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateDocumentData_CreateDocumentData_DocumentData{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateDocumentData_CreateDocumentData struct {
@@ -9328,13 +9328,13 @@ func (t *DeleteDocumentData_DeleteDocumentData) GetDeletedID() string {
 }
 
 type GetDocumentDataByID_DocumentData struct {
-	CreatedAt  *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Data       json.RawMessage "json:\"data\" graphql:\"data\""
-	ID         string          "json:\"id\" graphql:\"id\""
-	TemplateID string          "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt  *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	Data        json.RawMessage "json:\"data\" graphql:\"data\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetDocumentDataByID_DocumentData) GetCreatedAt() *time.Time {
@@ -9343,11 +9343,11 @@ func (t *GetDocumentDataByID_DocumentData) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetDocumentDataByID_DocumentData) GetCreatedBy() *string {
+func (t *GetDocumentDataByID_DocumentData) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetDocumentDataByID_DocumentData{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetDocumentDataByID_DocumentData) GetData() *json.RawMessage {
 	if t == nil {
@@ -9373,21 +9373,21 @@ func (t *GetDocumentDataByID_DocumentData) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetDocumentDataByID_DocumentData) GetUpdatedBy() *string {
+func (t *GetDocumentDataByID_DocumentData) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetDocumentDataByID_DocumentData{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateDocumentData_UpdateDocumentData_DocumentData struct {
-	CreatedAt  *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Data       json.RawMessage "json:\"data\" graphql:\"data\""
-	ID         string          "json:\"id\" graphql:\"id\""
-	TemplateID string          "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt  *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	Data        json.RawMessage "json:\"data\" graphql:\"data\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetCreatedAt() *time.Time {
@@ -9396,11 +9396,11 @@ func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetCreatedBy() *string {
+func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateDocumentData_UpdateDocumentData_DocumentData{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetData() *json.RawMessage {
 	if t == nil {
@@ -9426,11 +9426,11 @@ func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetUpdatedBy() *string {
+func (t *UpdateDocumentData_UpdateDocumentData_DocumentData) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateDocumentData_UpdateDocumentData_DocumentData{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateDocumentData_UpdateDocumentData struct {
@@ -9446,7 +9446,7 @@ func (t *UpdateDocumentData_UpdateDocumentData) GetDocumentData() *UpdateDocumen
 
 type GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Data        json.RawMessage "json:\"data\" graphql:\"data\""
 	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string          "json:\"id\" graphql:\"id\""
@@ -9456,7 +9456,7 @@ type GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
 	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -9465,11 +9465,11 @@ func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreate
 	}
 	return t.CreatedAt
 }
-func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetData() *json.RawMessage {
 	if t == nil {
@@ -9525,11 +9525,11 @@ func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetUpdate
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllDocumentDataHistories_DocumentDataHistories_Edges struct {
@@ -9556,7 +9556,7 @@ func (t *GetAllDocumentDataHistories_DocumentDataHistories) GetEdges() []*GetAll
 
 type GetDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Data        json.RawMessage "json:\"data\" graphql:\"data\""
 	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string          "json:\"id\" graphql:\"id\""
@@ -9566,7 +9566,7 @@ type GetDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
 	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -9575,11 +9575,11 @@ func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedAt
 	}
 	return t.CreatedAt
 }
-func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetData() *json.RawMessage {
 	if t == nil {
@@ -9635,11 +9635,11 @@ func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetUpdatedAt
 	}
 	return t.UpdatedAt
 }
-func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetDocumentDataHistories_DocumentDataHistories_Edges struct {
@@ -9665,9 +9665,9 @@ func (t *GetDocumentDataHistories_DocumentDataHistories) GetEdges() []*GetDocume
 }
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes struct {
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Text        string     "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes) GetText() string {
@@ -9682,11 +9682,11 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes) GetUpdatedAt() 
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes) GetUpdatedBy() *string {
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_EntityType struct {
@@ -9702,7 +9702,7 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_EntityType) GetName() 
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities struct {
 	CreatedAt   *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                                      "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                                      "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string                                                      "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains     []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
@@ -9714,7 +9714,7 @@ type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities struct {
 	Status      *string                                                      "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                                      "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetCreatedAt() *time.Time {
@@ -9723,11 +9723,11 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetCreatedAt() *time.
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetCreatedBy() *string {
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetDescription() *string {
 	if t == nil {
@@ -9795,11 +9795,11 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetUpdatedAt() *time.
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetUpdatedBy() *string {
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity struct {
@@ -9814,9 +9814,9 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity) GetEntities() []*CreateBulkCSV
 }
 
 type CreateBulkEntity_CreateBulkEntity_Entities_Notes struct {
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Text        string     "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes) GetText() string {
@@ -9831,11 +9831,11 @@ func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes) GetUpdatedAt() *time.
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes) GetUpdatedBy() *string {
+func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities_Notes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkEntity_CreateBulkEntity_Entities_EntityType struct {
@@ -9851,7 +9851,7 @@ func (t *CreateBulkEntity_CreateBulkEntity_Entities_EntityType) GetName() string
 
 type CreateBulkEntity_CreateBulkEntity_Entities struct {
 	CreatedAt   *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                                "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                                "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string                                                "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains     []string                                               "json:\"domains,omitempty\" graphql:\"domains\""
@@ -9863,7 +9863,7 @@ type CreateBulkEntity_CreateBulkEntity_Entities struct {
 	Status      *string                                                "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                                "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetCreatedAt() *time.Time {
@@ -9872,11 +9872,11 @@ func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetCreatedBy() *string {
+func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetDescription() *string {
 	if t == nil {
@@ -9944,11 +9944,11 @@ func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetUpdatedBy() *string {
+func (t *CreateBulkEntity_CreateBulkEntity_Entities) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkEntity_CreateBulkEntity struct {
@@ -9963,9 +9963,9 @@ func (t *CreateBulkEntity_CreateBulkEntity) GetEntities() []*CreateBulkEntity_Cr
 }
 
 type CreateEntity_CreateEntity_Entity_Notes struct {
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Text        string     "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateEntity_CreateEntity_Entity_Notes) GetText() string {
@@ -9980,11 +9980,11 @@ func (t *CreateEntity_CreateEntity_Entity_Notes) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateEntity_CreateEntity_Entity_Notes) GetUpdatedBy() *string {
+func (t *CreateEntity_CreateEntity_Entity_Notes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity_Notes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateEntity_CreateEntity_Entity_EntityType struct {
@@ -10000,7 +10000,7 @@ func (t *CreateEntity_CreateEntity_Entity_EntityType) GetName() string {
 
 type CreateEntity_CreateEntity_Entity struct {
 	CreatedAt   *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                      "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                      "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string                                      "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains     []string                                     "json:\"domains,omitempty\" graphql:\"domains\""
@@ -10012,7 +10012,7 @@ type CreateEntity_CreateEntity_Entity struct {
 	Status      *string                                      "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                      "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateEntity_CreateEntity_Entity) GetCreatedAt() *time.Time {
@@ -10021,11 +10021,11 @@ func (t *CreateEntity_CreateEntity_Entity) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateEntity_CreateEntity_Entity) GetCreatedBy() *string {
+func (t *CreateEntity_CreateEntity_Entity) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateEntity_CreateEntity_Entity) GetDescription() *string {
 	if t == nil {
@@ -10093,11 +10093,11 @@ func (t *CreateEntity_CreateEntity_Entity) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateEntity_CreateEntity_Entity) GetUpdatedBy() *string {
+func (t *CreateEntity_CreateEntity_Entity) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateEntity_CreateEntity struct {
@@ -10123,9 +10123,9 @@ func (t *DeleteEntity_DeleteEntity) GetDeletedID() string {
 }
 
 type GetAllEntities_Entities_Edges_Node_Notes struct {
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Text        string     "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllEntities_Entities_Edges_Node_Notes) GetText() string {
@@ -10140,11 +10140,11 @@ func (t *GetAllEntities_Entities_Edges_Node_Notes) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllEntities_Entities_Edges_Node_Notes) GetUpdatedBy() *string {
+func (t *GetAllEntities_Entities_Edges_Node_Notes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllEntities_Entities_Edges_Node_Notes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllEntities_Entities_Edges_Node_EntityType struct {
@@ -10160,7 +10160,7 @@ func (t *GetAllEntities_Entities_Edges_Node_EntityType) GetName() string {
 
 type GetAllEntities_Entities_Edges_Node struct {
 	CreatedAt   *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                        "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string                                        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains     []string                                       "json:\"domains,omitempty\" graphql:\"domains\""
@@ -10172,7 +10172,7 @@ type GetAllEntities_Entities_Edges_Node struct {
 	Status      *string                                        "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllEntities_Entities_Edges_Node) GetCreatedAt() *time.Time {
@@ -10181,11 +10181,11 @@ func (t *GetAllEntities_Entities_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllEntities_Entities_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllEntities_Entities_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllEntities_Entities_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllEntities_Entities_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -10253,11 +10253,11 @@ func (t *GetAllEntities_Entities_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllEntities_Entities_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllEntities_Entities_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllEntities_Entities_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllEntities_Entities_Edges struct {
@@ -10283,9 +10283,9 @@ func (t *GetAllEntities_Entities) GetEdges() []*GetAllEntities_Entities_Edges {
 }
 
 type GetEntities_Entities_Edges_Node_Notes struct {
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Text        string     "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntities_Entities_Edges_Node_Notes) GetText() string {
@@ -10300,11 +10300,11 @@ func (t *GetEntities_Entities_Edges_Node_Notes) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntities_Entities_Edges_Node_Notes) GetUpdatedBy() *string {
+func (t *GetEntities_Entities_Edges_Node_Notes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntities_Entities_Edges_Node_Notes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEntities_Entities_Edges_Node_EntityType struct {
@@ -10320,7 +10320,7 @@ func (t *GetEntities_Entities_Edges_Node_EntityType) GetName() string {
 
 type GetEntities_Entities_Edges_Node struct {
 	CreatedAt   *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string                                     "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains     []string                                    "json:\"domains,omitempty\" graphql:\"domains\""
@@ -10332,7 +10332,7 @@ type GetEntities_Entities_Edges_Node struct {
 	Status      *string                                     "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntities_Entities_Edges_Node) GetCreatedAt() *time.Time {
@@ -10341,11 +10341,11 @@ func (t *GetEntities_Entities_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetEntities_Entities_Edges_Node) GetCreatedBy() *string {
+func (t *GetEntities_Entities_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEntities_Entities_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEntities_Entities_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -10413,11 +10413,11 @@ func (t *GetEntities_Entities_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntities_Entities_Edges_Node) GetUpdatedBy() *string {
+func (t *GetEntities_Entities_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntities_Entities_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEntities_Entities_Edges struct {
@@ -10443,9 +10443,9 @@ func (t *GetEntities_Entities) GetEdges() []*GetEntities_Entities_Edges {
 }
 
 type GetEntityByID_Entity_Notes struct {
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Text        string     "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntityByID_Entity_Notes) GetText() string {
@@ -10460,11 +10460,11 @@ func (t *GetEntityByID_Entity_Notes) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntityByID_Entity_Notes) GetUpdatedBy() *string {
+func (t *GetEntityByID_Entity_Notes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntityByID_Entity_Notes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEntityByID_Entity_EntityType struct {
@@ -10534,7 +10534,7 @@ func (t *GetEntityByID_Entity_Contacts) GetTitle() *string {
 type GetEntityByID_Entity struct {
 	Contacts    []*GetEntityByID_Entity_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
 	CreatedAt   *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                          "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string                          "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains     []string                         "json:\"domains,omitempty\" graphql:\"domains\""
@@ -10546,7 +10546,7 @@ type GetEntityByID_Entity struct {
 	Status      *string                          "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntityByID_Entity) GetContacts() []*GetEntityByID_Entity_Contacts {
@@ -10561,11 +10561,11 @@ func (t *GetEntityByID_Entity) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetEntityByID_Entity) GetCreatedBy() *string {
+func (t *GetEntityByID_Entity) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEntityByID_Entity{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEntityByID_Entity) GetDescription() *string {
 	if t == nil {
@@ -10633,17 +10633,17 @@ func (t *GetEntityByID_Entity) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntityByID_Entity) GetUpdatedBy() *string {
+func (t *GetEntityByID_Entity) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntityByID_Entity{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateEntity_UpdateEntity_Entity_Notes struct {
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Text        string     "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateEntity_UpdateEntity_Entity_Notes) GetText() string {
@@ -10658,11 +10658,11 @@ func (t *UpdateEntity_UpdateEntity_Entity_Notes) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateEntity_UpdateEntity_Entity_Notes) GetUpdatedBy() *string {
+func (t *UpdateEntity_UpdateEntity_Entity_Notes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity_Notes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateEntity_UpdateEntity_Entity_EntityType struct {
@@ -10678,7 +10678,7 @@ func (t *UpdateEntity_UpdateEntity_Entity_EntityType) GetName() string {
 
 type UpdateEntity_UpdateEntity_Entity struct {
 	CreatedAt   *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                      "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                      "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string                                      "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains     []string                                     "json:\"domains,omitempty\" graphql:\"domains\""
@@ -10690,7 +10690,7 @@ type UpdateEntity_UpdateEntity_Entity struct {
 	Status      *string                                      "json:\"status,omitempty\" graphql:\"status\""
 	Tags        []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                      "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateEntity_UpdateEntity_Entity) GetCreatedAt() *time.Time {
@@ -10699,11 +10699,11 @@ func (t *UpdateEntity_UpdateEntity_Entity) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateEntity_UpdateEntity_Entity) GetCreatedBy() *string {
+func (t *UpdateEntity_UpdateEntity_Entity) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateEntity_UpdateEntity_Entity) GetDescription() *string {
 	if t == nil {
@@ -10771,11 +10771,11 @@ func (t *UpdateEntity_UpdateEntity_Entity) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateEntity_UpdateEntity_Entity) GetUpdatedBy() *string {
+func (t *UpdateEntity_UpdateEntity_Entity) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateEntity_UpdateEntity struct {
@@ -10791,7 +10791,7 @@ func (t *UpdateEntity_UpdateEntity) GetEntity() *UpdateEntity_UpdateEntity_Entit
 
 type GetAllEntityHistories_EntityHistories_Edges_Node struct {
 	CreatedAt    *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string        "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName  *string        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains      []string       "json:\"domains,omitempty\" graphql:\"domains\""
@@ -10805,7 +10805,7 @@ type GetAllEntityHistories_EntityHistories_Edges_Node struct {
 	Status       *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags         []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -10814,11 +10814,11 @@ func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetCreatedAt() *time.
 	}
 	return t.CreatedAt
 }
-func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllEntityHistories_EntityHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -10898,11 +10898,11 @@ func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetUpdatedAt() *time.
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllEntityHistories_EntityHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllEntityHistories_EntityHistories_Edges struct {
@@ -10929,7 +10929,7 @@ func (t *GetAllEntityHistories_EntityHistories) GetEdges() []*GetAllEntityHistor
 
 type GetEntityHistories_EntityHistories_Edges_Node struct {
 	CreatedAt    *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string        "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName  *string        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains      []string       "json:\"domains,omitempty\" graphql:\"domains\""
@@ -10943,7 +10943,7 @@ type GetEntityHistories_EntityHistories_Edges_Node struct {
 	Status       *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags         []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntityHistories_EntityHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -10952,11 +10952,11 @@ func (t *GetEntityHistories_EntityHistories_Edges_Node) GetCreatedAt() *time.Tim
 	}
 	return t.CreatedAt
 }
-func (t *GetEntityHistories_EntityHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetEntityHistories_EntityHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEntityHistories_EntityHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEntityHistories_EntityHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -11036,11 +11036,11 @@ func (t *GetEntityHistories_EntityHistories_Edges_Node) GetUpdatedAt() *time.Tim
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntityHistories_EntityHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetEntityHistories_EntityHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntityHistories_EntityHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEntityHistories_EntityHistories_Edges struct {
@@ -11066,14 +11066,14 @@ func (t *GetEntityHistories_EntityHistories) GetEdges() []*GetEntityHistories_En
 }
 
 type CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Name      string     "json:\"name\" graphql:\"name\""
-	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetCreatedAt() *time.Time {
@@ -11082,11 +11082,11 @@ func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetCreated
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetCreatedBy() *string {
+func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetID() string {
 	if t == nil {
@@ -11118,11 +11118,11 @@ func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetUpdated
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetUpdatedBy() *string {
+func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVEntityType_CreateBulkCSVEntityType struct {
@@ -11137,14 +11137,14 @@ func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType) GetEntityTypes() []*Cr
 }
 
 type CreateBulkEntityType_CreateBulkEntityType_EntityTypes struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Name      string     "json:\"name\" graphql:\"name\""
-	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetCreatedAt() *time.Time {
@@ -11153,11 +11153,11 @@ func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetCreatedAt() *
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetCreatedBy() *string {
+func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkEntityType_CreateBulkEntityType_EntityTypes{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetID() string {
 	if t == nil {
@@ -11189,11 +11189,11 @@ func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetUpdatedAt() *
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetUpdatedBy() *string {
+func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkEntityType_CreateBulkEntityType_EntityTypes{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkEntityType_CreateBulkEntityType struct {
@@ -11208,14 +11208,14 @@ func (t *CreateBulkEntityType_CreateBulkEntityType) GetEntityTypes() []*CreateBu
 }
 
 type CreateEntityType_CreateEntityType_EntityType struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Name      string     "json:\"name\" graphql:\"name\""
-	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateEntityType_CreateEntityType_EntityType) GetCreatedAt() *time.Time {
@@ -11224,11 +11224,11 @@ func (t *CreateEntityType_CreateEntityType_EntityType) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *CreateEntityType_CreateEntityType_EntityType) GetCreatedBy() *string {
+func (t *CreateEntityType_CreateEntityType_EntityType) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateEntityType_CreateEntityType_EntityType{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateEntityType_CreateEntityType_EntityType) GetID() string {
 	if t == nil {
@@ -11260,11 +11260,11 @@ func (t *CreateEntityType_CreateEntityType_EntityType) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *CreateEntityType_CreateEntityType_EntityType) GetUpdatedBy() *string {
+func (t *CreateEntityType_CreateEntityType_EntityType) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateEntityType_CreateEntityType_EntityType{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateEntityType_CreateEntityType struct {
@@ -11290,14 +11290,14 @@ func (t *DeleteEntityType_DeleteEntityType) GetDeletedID() string {
 }
 
 type GetAllEntityTypes_EntityTypes_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Name      string     "json:\"name\" graphql:\"name\""
-	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetCreatedAt() *time.Time {
@@ -11306,11 +11306,11 @@ func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllEntityTypes_EntityTypes_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetID() string {
 	if t == nil {
@@ -11342,11 +11342,11 @@ func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllEntityTypes_EntityTypes_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllEntityTypes_EntityTypes_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllEntityTypes_EntityTypes_Edges struct {
@@ -11372,14 +11372,14 @@ func (t *GetAllEntityTypes_EntityTypes) GetEdges() []*GetAllEntityTypes_EntityTy
 }
 
 type GetEntityTypeByID_EntityType struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Name      string     "json:\"name\" graphql:\"name\""
-	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntityTypeByID_EntityType) GetCreatedAt() *time.Time {
@@ -11388,11 +11388,11 @@ func (t *GetEntityTypeByID_EntityType) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetEntityTypeByID_EntityType) GetCreatedBy() *string {
+func (t *GetEntityTypeByID_EntityType) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEntityTypeByID_EntityType{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEntityTypeByID_EntityType) GetID() string {
 	if t == nil {
@@ -11424,22 +11424,22 @@ func (t *GetEntityTypeByID_EntityType) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntityTypeByID_EntityType) GetUpdatedBy() *string {
+func (t *GetEntityTypeByID_EntityType) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntityTypeByID_EntityType{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEntityTypes_EntityTypes_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Name      string     "json:\"name\" graphql:\"name\""
-	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntityTypes_EntityTypes_Edges_Node) GetCreatedAt() *time.Time {
@@ -11448,11 +11448,11 @@ func (t *GetEntityTypes_EntityTypes_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetEntityTypes_EntityTypes_Edges_Node) GetCreatedBy() *string {
+func (t *GetEntityTypes_EntityTypes_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEntityTypes_EntityTypes_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEntityTypes_EntityTypes_Edges_Node) GetID() string {
 	if t == nil {
@@ -11484,11 +11484,11 @@ func (t *GetEntityTypes_EntityTypes_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntityTypes_EntityTypes_Edges_Node) GetUpdatedBy() *string {
+func (t *GetEntityTypes_EntityTypes_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntityTypes_EntityTypes_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEntityTypes_EntityTypes_Edges struct {
@@ -11514,14 +11514,14 @@ func (t *GetEntityTypes_EntityTypes) GetEdges() []*GetEntityTypes_EntityTypes_Ed
 }
 
 type UpdateEntityType_UpdateEntityType_EntityType struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Name      string     "json:\"name\" graphql:\"name\""
-	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateEntityType_UpdateEntityType_EntityType) GetCreatedAt() *time.Time {
@@ -11530,11 +11530,11 @@ func (t *UpdateEntityType_UpdateEntityType_EntityType) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *UpdateEntityType_UpdateEntityType_EntityType) GetCreatedBy() *string {
+func (t *UpdateEntityType_UpdateEntityType_EntityType) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateEntityType_UpdateEntityType_EntityType{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateEntityType_UpdateEntityType_EntityType) GetID() string {
 	if t == nil {
@@ -11566,11 +11566,11 @@ func (t *UpdateEntityType_UpdateEntityType_EntityType) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateEntityType_UpdateEntityType_EntityType) GetUpdatedBy() *string {
+func (t *UpdateEntityType_UpdateEntityType_EntityType) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateEntityType_UpdateEntityType_EntityType{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateEntityType_UpdateEntityType struct {
@@ -11586,7 +11586,7 @@ func (t *UpdateEntityType_UpdateEntityType) GetEntityType() *UpdateEntityType_Up
 
 type GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Name        string         "json:\"name\" graphql:\"name\""
@@ -11595,7 +11595,7 @@ type GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -11604,11 +11604,11 @@ func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedAt(
 	}
 	return t.CreatedAt
 }
-func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -11658,11 +11658,11 @@ func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetUpdatedAt(
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllEntityTypeHistories_EntityTypeHistories_Edges struct {
@@ -11689,7 +11689,7 @@ func (t *GetAllEntityTypeHistories_EntityTypeHistories) GetEdges() []*GetAllEnti
 
 type GetEntityTypeHistories_EntityTypeHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Name        string         "json:\"name\" graphql:\"name\""
@@ -11698,7 +11698,7 @@ type GetEntityTypeHistories_EntityTypeHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -11707,11 +11707,11 @@ func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedAt() *
 	}
 	return t.CreatedAt
 }
-func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEntityTypeHistories_EntityTypeHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -11761,11 +11761,11 @@ func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetUpdatedAt() *
 	}
 	return t.UpdatedAt
 }
-func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEntityTypeHistories_EntityTypeHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEntityTypeHistories_EntityTypeHistories_Edges struct {
@@ -12539,7 +12539,7 @@ func (t *GetAllEvents_Events_Edges_Node_Groupmembership) GetID() string {
 type GetAllEvents_Events_Edges_Node struct {
 	CorrelationID       *string                                               "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt           *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID         *string                                               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	EventID             *string                                               "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType           string                                                "json:\"eventType\" graphql:\"eventType\""
 	Group               []*GetAllEvents_Events_Edges_Node_Group               "json:\"group,omitempty\" graphql:\"group\""
@@ -12553,7 +12553,7 @@ type GetAllEvents_Events_Edges_Node struct {
 	Orgmembership       []*GetAllEvents_Events_Edges_Node_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	PersonalAccessToken []*GetAllEvents_Events_Edges_Node_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
 	UpdatedAt           *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID         *string                                               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	User                []*GetAllEvents_Events_Edges_Node_User                "json:\"user,omitempty\" graphql:\"user\""
 }
 
@@ -12569,11 +12569,11 @@ func (t *GetAllEvents_Events_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllEvents_Events_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllEvents_Events_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllEvents_Events_Edges_Node) GetEventID() *string {
 	if t == nil {
@@ -12653,11 +12653,11 @@ func (t *GetAllEvents_Events_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllEvents_Events_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllEvents_Events_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllEvents_Events_Edges_Node) GetUser() []*GetAllEvents_Events_Edges_Node_User {
 	if t == nil {
@@ -12790,7 +12790,7 @@ func (t *GetEventByID_Event_Groupmembership) GetID() string {
 type GetEventByID_Event struct {
 	CorrelationID       *string                                   "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt           *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID         *string                                   "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	EventID             *string                                   "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType           string                                    "json:\"eventType\" graphql:\"eventType\""
 	Group               []*GetEventByID_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
@@ -12804,7 +12804,7 @@ type GetEventByID_Event struct {
 	Orgmembership       []*GetEventByID_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	PersonalAccessToken []*GetEventByID_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
 	UpdatedAt           *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID         *string                                   "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	User                []*GetEventByID_Event_User                "json:\"user,omitempty\" graphql:\"user\""
 }
 
@@ -12820,11 +12820,11 @@ func (t *GetEventByID_Event) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetEventByID_Event) GetCreatedBy() *string {
+func (t *GetEventByID_Event) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEventByID_Event{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEventByID_Event) GetEventID() *string {
 	if t == nil {
@@ -12904,11 +12904,11 @@ func (t *GetEventByID_Event) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetEventByID_Event) GetUpdatedBy() *string {
+func (t *GetEventByID_Event) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEventByID_Event{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetEventByID_Event) GetUser() []*GetEventByID_Event_User {
 	if t == nil {
@@ -13080,7 +13080,7 @@ func (t *UpdateEvent_UpdateEvent_Event_Groupmembership) GetID() string {
 type UpdateEvent_UpdateEvent_Event struct {
 	CorrelationID       *string                                              "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt           *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID         *string                                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	EventID             *string                                              "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType           string                                               "json:\"eventType\" graphql:\"eventType\""
 	Group               []*UpdateEvent_UpdateEvent_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
@@ -13094,7 +13094,7 @@ type UpdateEvent_UpdateEvent_Event struct {
 	Orgmembership       []*UpdateEvent_UpdateEvent_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	PersonalAccessToken []*UpdateEvent_UpdateEvent_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
 	UpdatedAt           *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID         *string                                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	User                []*UpdateEvent_UpdateEvent_Event_User                "json:\"user,omitempty\" graphql:\"user\""
 }
 
@@ -13110,11 +13110,11 @@ func (t *UpdateEvent_UpdateEvent_Event) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateEvent_UpdateEvent_Event) GetCreatedBy() *string {
+func (t *UpdateEvent_UpdateEvent_Event) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateEvent_UpdateEvent_Event{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateEvent_UpdateEvent_Event) GetEventID() *string {
 	if t == nil {
@@ -13194,11 +13194,11 @@ func (t *UpdateEvent_UpdateEvent_Event) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateEvent_UpdateEvent_Event) GetUpdatedBy() *string {
+func (t *UpdateEvent_UpdateEvent_Event) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateEvent_UpdateEvent_Event{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateEvent_UpdateEvent_Event) GetUser() []*UpdateEvent_UpdateEvent_Event_User {
 	if t == nil {
@@ -13221,7 +13221,7 @@ func (t *UpdateEvent_UpdateEvent) GetEvent() *UpdateEvent_UpdateEvent_Event {
 type GetAllEventHistories_EventHistories_Edges_Node struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType     string         "json:\"eventType\" graphql:\"eventType\""
 	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -13231,7 +13231,7 @@ type GetAllEventHistories_EventHistories_Edges_Node struct {
 	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCorrelationID() *string {
@@ -13246,11 +13246,11 @@ func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCreatedAt() *time.Ti
 	}
 	return t.CreatedAt
 }
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllEventHistories_EventHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllEventHistories_EventHistories_Edges_Node) GetEventID() *string {
 	if t == nil {
@@ -13306,11 +13306,11 @@ func (t *GetAllEventHistories_EventHistories_Edges_Node) GetUpdatedAt() *time.Ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllEventHistories_EventHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllEventHistories_EventHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllEventHistories_EventHistories_Edges struct {
@@ -13338,7 +13338,7 @@ func (t *GetAllEventHistories_EventHistories) GetEdges() []*GetAllEventHistories
 type GetEventHistories_EventHistories_Edges_Node struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType     string         "json:\"eventType\" graphql:\"eventType\""
 	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -13348,7 +13348,7 @@ type GetEventHistories_EventHistories_Edges_Node struct {
 	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetEventHistories_EventHistories_Edges_Node) GetCorrelationID() *string {
@@ -13363,11 +13363,11 @@ func (t *GetEventHistories_EventHistories_Edges_Node) GetCreatedAt() *time.Time 
 	}
 	return t.CreatedAt
 }
-func (t *GetEventHistories_EventHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetEventHistories_EventHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetEventHistories_EventHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetEventHistories_EventHistories_Edges_Node) GetEventID() *string {
 	if t == nil {
@@ -13423,11 +13423,11 @@ func (t *GetEventHistories_EventHistories_Edges_Node) GetUpdatedAt() *time.Time 
 	}
 	return t.UpdatedAt
 }
-func (t *GetEventHistories_EventHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetEventHistories_EventHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetEventHistories_EventHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetEventHistories_EventHistories_Edges struct {
@@ -13466,7 +13466,7 @@ func (t *DeleteFile_DeleteFile) GetDeletedID() string {
 type GetAllFiles_Files_Edges_Node struct {
 	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID           *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
 	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	ID                    string     "json:\"id\" graphql:\"id\""
@@ -13481,7 +13481,7 @@ type GetAllFiles_Files_Edges_Node struct {
 	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
 	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID           *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
@@ -13497,11 +13497,11 @@ func (t *GetAllFiles_Files_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllFiles_Files_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllFiles_Files_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllFiles_Files_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
@@ -13587,11 +13587,11 @@ func (t *GetAllFiles_Files_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllFiles_Files_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllFiles_Files_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllFiles_Files_Edges_Node) GetURI() *string {
 	if t == nil {
@@ -13625,7 +13625,7 @@ func (t *GetAllFiles_Files) GetEdges() []*GetAllFiles_Files_Edges {
 type GetFileByID_File struct {
 	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID           *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
 	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	ID                    string     "json:\"id\" graphql:\"id\""
@@ -13640,7 +13640,7 @@ type GetFileByID_File struct {
 	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
 	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID           *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
@@ -13656,11 +13656,11 @@ func (t *GetFileByID_File) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetFileByID_File) GetCreatedBy() *string {
+func (t *GetFileByID_File) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetFileByID_File{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetFileByID_File) GetDetectedContentType() string {
 	if t == nil {
@@ -13746,11 +13746,11 @@ func (t *GetFileByID_File) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetFileByID_File) GetUpdatedBy() *string {
+func (t *GetFileByID_File) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetFileByID_File{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetFileByID_File) GetURI() *string {
 	if t == nil {
@@ -13762,7 +13762,7 @@ func (t *GetFileByID_File) GetURI() *string {
 type GetFiles_Files_Edges_Node struct {
 	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID           *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
 	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	ID                    string     "json:\"id\" graphql:\"id\""
@@ -13777,7 +13777,7 @@ type GetFiles_Files_Edges_Node struct {
 	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
 	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID           *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
@@ -13793,11 +13793,11 @@ func (t *GetFiles_Files_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetFiles_Files_Edges_Node) GetCreatedBy() *string {
+func (t *GetFiles_Files_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetFiles_Files_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
@@ -13883,11 +13883,11 @@ func (t *GetFiles_Files_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetFiles_Files_Edges_Node) GetUpdatedBy() *string {
+func (t *GetFiles_Files_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetFiles_Files_Edges_Node) GetURI() *string {
 	if t == nil {
@@ -13921,7 +13921,7 @@ func (t *GetFiles_Files) GetEdges() []*GetFiles_Files_Edges {
 type GetAllFileHistories_FileHistories_Edges_Node struct {
 	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID           *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
 	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	HistoryTime           time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -13939,7 +13939,7 @@ type GetAllFileHistories_FileHistories_Edges_Node struct {
 	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
 	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID           *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
@@ -13955,11 +13955,11 @@ func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllFileHistories_FileHistories_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
@@ -14063,11 +14063,11 @@ func (t *GetAllFileHistories_FileHistories_Edges_Node) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllFileHistories_FileHistories_Edges_Node) GetURI() *string {
 	if t == nil {
@@ -14101,7 +14101,7 @@ func (t *GetAllFileHistories_FileHistories) GetEdges() []*GetAllFileHistories_Fi
 type GetFileHistories_FileHistories_Edges_Node struct {
 	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID           *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
 	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	HistoryTime           time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -14119,7 +14119,7 @@ type GetFileHistories_FileHistories_Edges_Node struct {
 	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
 	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID           *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
@@ -14135,11 +14135,11 @@ func (t *GetFileHistories_FileHistories_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetFileHistories_FileHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetFileHistories_FileHistories_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
@@ -14243,11 +14243,11 @@ func (t *GetFileHistories_FileHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetFileHistories_FileHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetFileHistories_FileHistories_Edges_Node) GetURI() *string {
 	if t == nil {
@@ -14885,14 +14885,14 @@ func (t *GetAllGroups_Groups_Edges_Node_Owner) GetID() string {
 
 type GetAllGroups_Groups_Edges_Node_Setting struct {
 	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ID           string           "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -14902,11 +14902,11 @@ func (t *GetAllGroups_Groups_Edges_Node_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllGroups_Groups_Edges_Node_Setting) GetCreatedBy() *string {
+func (t *GetAllGroups_Groups_Edges_Node_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllGroups_Groups_Edges_Node_Setting) GetID() string {
 	if t == nil {
@@ -14944,11 +14944,11 @@ func (t *GetAllGroups_Groups_Edges_Node_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllGroups_Groups_Edges_Node_Setting) GetUpdatedBy() *string {
+func (t *GetAllGroups_Groups_Edges_Node_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllGroups_Groups_Edges_Node_Setting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -15009,7 +15009,7 @@ func (t *GetAllGroups_Groups_Edges_Node_Members) GetUser() *GetAllGroups_Groups_
 
 type GetAllGroups_Groups_Edges_Node struct {
 	CreatedAt   *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                   "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                   "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string                                    "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                    "json:\"id\" graphql:\"id\""
@@ -15020,7 +15020,7 @@ type GetAllGroups_Groups_Edges_Node struct {
 	Setting     GetAllGroups_Groups_Edges_Node_Setting    "json:\"setting\" graphql:\"setting\""
 	Tags        []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                   "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllGroups_Groups_Edges_Node) GetCreatedAt() *time.Time {
@@ -15029,11 +15029,11 @@ func (t *GetAllGroups_Groups_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllGroups_Groups_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllGroups_Groups_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllGroups_Groups_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -15095,11 +15095,11 @@ func (t *GetAllGroups_Groups_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllGroups_Groups_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllGroups_Groups_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllGroups_Groups_Edges struct {
@@ -15144,14 +15144,14 @@ func (t *GetGroupByID_Group_Owner) GetID() string {
 
 type GetGroupByID_Group_Setting struct {
 	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ID           string           "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -15161,11 +15161,11 @@ func (t *GetGroupByID_Group_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetGroupByID_Group_Setting) GetCreatedBy() *string {
+func (t *GetGroupByID_Group_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroupByID_Group_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroupByID_Group_Setting) GetID() string {
 	if t == nil {
@@ -15203,11 +15203,11 @@ func (t *GetGroupByID_Group_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroupByID_Group_Setting) GetUpdatedBy() *string {
+func (t *GetGroupByID_Group_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroupByID_Group_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetGroupByID_Group_Setting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -15268,7 +15268,7 @@ func (t *GetGroupByID_Group_Members) GetUser() *GetGroupByID_Group_Members_User 
 
 type GetGroupByID_Group struct {
 	CreatedAt   *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                       "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string                        "json:\"displayName\" graphql:\"displayName\""
 	ID          string                        "json:\"id\" graphql:\"id\""
@@ -15279,7 +15279,7 @@ type GetGroupByID_Group struct {
 	Setting     GetGroupByID_Group_Setting    "json:\"setting\" graphql:\"setting\""
 	Tags        []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetGroupByID_Group) GetCreatedAt() *time.Time {
@@ -15288,11 +15288,11 @@ func (t *GetGroupByID_Group) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetGroupByID_Group) GetCreatedBy() *string {
+func (t *GetGroupByID_Group) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroupByID_Group{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroupByID_Group) GetDescription() *string {
 	if t == nil {
@@ -15354,11 +15354,11 @@ func (t *GetGroupByID_Group) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroupByID_Group) GetUpdatedBy() *string {
+func (t *GetGroupByID_Group) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroupByID_Group{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetGroups_Groups_Edges_Node_Owner struct {
@@ -15381,14 +15381,14 @@ func (t *GetGroups_Groups_Edges_Node_Owner) GetID() string {
 
 type GetGroups_Groups_Edges_Node_Setting struct {
 	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ID           string           "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -15398,11 +15398,11 @@ func (t *GetGroups_Groups_Edges_Node_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetGroups_Groups_Edges_Node_Setting) GetCreatedBy() *string {
+func (t *GetGroups_Groups_Edges_Node_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroups_Groups_Edges_Node_Setting) GetID() string {
 	if t == nil {
@@ -15440,11 +15440,11 @@ func (t *GetGroups_Groups_Edges_Node_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroups_Groups_Edges_Node_Setting) GetUpdatedBy() *string {
+func (t *GetGroups_Groups_Edges_Node_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetGroups_Groups_Edges_Node_Setting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -15505,7 +15505,7 @@ func (t *GetGroups_Groups_Edges_Node_Members) GetUser() *GetGroups_Groups_Edges_
 
 type GetGroups_Groups_Edges_Node struct {
 	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string                                 "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                 "json:\"id\" graphql:\"id\""
@@ -15516,7 +15516,7 @@ type GetGroups_Groups_Edges_Node struct {
 	Setting     GetGroups_Groups_Edges_Node_Setting    "json:\"setting\" graphql:\"setting\""
 	Tags        []string                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetGroups_Groups_Edges_Node) GetCreatedAt() *time.Time {
@@ -15525,11 +15525,11 @@ func (t *GetGroups_Groups_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetGroups_Groups_Edges_Node) GetCreatedBy() *string {
+func (t *GetGroups_Groups_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroups_Groups_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -15591,11 +15591,11 @@ func (t *GetGroups_Groups_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroups_Groups_Edges_Node) GetUpdatedBy() *string {
+func (t *GetGroups_Groups_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetGroups_Groups_Edges struct {
@@ -15640,14 +15640,14 @@ func (t *UpdateGroup_UpdateGroup_Group_Owner) GetID() string {
 
 type UpdateGroup_UpdateGroup_Group_Setting struct {
 	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ID           string           "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -15657,11 +15657,11 @@ func (t *UpdateGroup_UpdateGroup_Group_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateGroup_UpdateGroup_Group_Setting) GetCreatedBy() *string {
+func (t *UpdateGroup_UpdateGroup_Group_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateGroup_UpdateGroup_Group_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateGroup_UpdateGroup_Group_Setting) GetID() string {
 	if t == nil {
@@ -15699,11 +15699,11 @@ func (t *UpdateGroup_UpdateGroup_Group_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateGroup_UpdateGroup_Group_Setting) GetUpdatedBy() *string {
+func (t *UpdateGroup_UpdateGroup_Group_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateGroup_UpdateGroup_Group_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateGroup_UpdateGroup_Group_Setting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -15842,7 +15842,7 @@ func (t *UpdateGroup_UpdateGroup) GetGroup() *UpdateGroup_UpdateGroup_Group {
 
 type GetAllGroupHistories_GroupHistories_Edges_Node struct {
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
 	GravatarLogoURL *string        "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
@@ -15855,7 +15855,7 @@ type GetAllGroupHistories_GroupHistories_Edges_Node struct {
 	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -15864,11 +15864,11 @@ func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetCreatedAt() *time.Ti
 	}
 	return t.CreatedAt
 }
-func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupHistories_GroupHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -15942,11 +15942,11 @@ func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetUpdatedAt() *time.Ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupHistories_GroupHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllGroupHistories_GroupHistories_Edges struct {
@@ -15973,7 +15973,7 @@ func (t *GetAllGroupHistories_GroupHistories) GetEdges() []*GetAllGroupHistories
 
 type GetGroupHistories_GroupHistories_Edges_Node struct {
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
 	GravatarLogoURL *string        "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
@@ -15986,7 +15986,7 @@ type GetGroupHistories_GroupHistories_Edges_Node struct {
 	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetGroupHistories_GroupHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -15995,11 +15995,11 @@ func (t *GetGroupHistories_GroupHistories_Edges_Node) GetCreatedAt() *time.Time 
 	}
 	return t.CreatedAt
 }
-func (t *GetGroupHistories_GroupHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetGroupHistories_GroupHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroupHistories_GroupHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroupHistories_GroupHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -16073,11 +16073,11 @@ func (t *GetGroupHistories_GroupHistories_Edges_Node) GetUpdatedAt() *time.Time 
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroupHistories_GroupHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetGroupHistories_GroupHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroupHistories_GroupHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetGroupHistories_GroupHistories_Edges struct {
@@ -16696,7 +16696,7 @@ func (t *UpdateUserRoleInGroup_UpdateGroupMembership) GetGroupMembership() *Upda
 
 type GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	GroupID     string         "json:\"groupID\" graphql:\"groupID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -16704,7 +16704,7 @@ type GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Role        enums.Role     "json:\"role\" graphql:\"role\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID      string         "json:\"userID\" graphql:\"userID\""
 }
 
@@ -16714,11 +16714,11 @@ func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) Get
 	}
 	return t.CreatedAt
 }
-func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetGroupID() string {
 	if t == nil {
@@ -16762,11 +16762,11 @@ func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) Get
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -16799,7 +16799,7 @@ func (t *GetAllGroupMembershipHistories_GroupMembershipHistories) GetEdges() []*
 
 type GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	GroupID     string         "json:\"groupID\" graphql:\"groupID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -16807,7 +16807,7 @@ type GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Role        enums.Role     "json:\"role\" graphql:\"role\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID      string         "json:\"userID\" graphql:\"userID\""
 }
 
@@ -16817,11 +16817,11 @@ func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetCre
 	}
 	return t.CreatedAt
 }
-func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetGroupID() string {
 	if t == nil {
@@ -16865,11 +16865,11 @@ func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetUpd
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -16920,7 +16920,7 @@ func (t *GetAllGroupSettings_GroupSettings_Edges_Node_Group) GetName() string {
 
 type GetAllGroupSettings_GroupSettings_Edges_Node struct {
 	CreatedAt    *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                                             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Group        *GetAllGroupSettings_GroupSettings_Edges_Node_Group "json:\"group,omitempty\" graphql:\"group\""
 	ID           string                                              "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy                                    "json:\"joinPolicy\" graphql:\"joinPolicy\""
@@ -16928,7 +16928,7 @@ type GetAllGroupSettings_GroupSettings_Edges_Node struct {
 	SyncToSlack  *bool                                               "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                                             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility                                    "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -16938,11 +16938,11 @@ func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupSettings_GroupSettings_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetGroup() *GetAllGroupSettings_GroupSettings_Edges_Node_Group {
 	if t == nil {
@@ -16986,11 +16986,11 @@ func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupSettings_GroupSettings_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -17041,7 +17041,7 @@ func (t *GetGroupSettingByID_GroupSetting_Group) GetName() string {
 
 type GetGroupSettingByID_GroupSetting struct {
 	CreatedAt    *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                                 "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Group        *GetGroupSettingByID_GroupSetting_Group "json:\"group,omitempty\" graphql:\"group\""
 	ID           string                                  "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy                        "json:\"joinPolicy\" graphql:\"joinPolicy\""
@@ -17049,7 +17049,7 @@ type GetGroupSettingByID_GroupSetting struct {
 	SyncToSlack  *bool                                   "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                                 "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility                        "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -17059,11 +17059,11 @@ func (t *GetGroupSettingByID_GroupSetting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetGroupSettingByID_GroupSetting) GetCreatedBy() *string {
+func (t *GetGroupSettingByID_GroupSetting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroupSettingByID_GroupSetting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroupSettingByID_GroupSetting) GetGroup() *GetGroupSettingByID_GroupSetting_Group {
 	if t == nil {
@@ -17107,11 +17107,11 @@ func (t *GetGroupSettingByID_GroupSetting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroupSettingByID_GroupSetting) GetUpdatedBy() *string {
+func (t *GetGroupSettingByID_GroupSetting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroupSettingByID_GroupSetting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetGroupSettingByID_GroupSetting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -17140,7 +17140,7 @@ func (t *GetGroupSettings_GroupSettings_Edges_Node_Group) GetName() string {
 
 type GetGroupSettings_GroupSettings_Edges_Node struct {
 	CreatedAt    *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                                          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Group        *GetGroupSettings_GroupSettings_Edges_Node_Group "json:\"group,omitempty\" graphql:\"group\""
 	ID           string                                           "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy                                 "json:\"joinPolicy\" graphql:\"joinPolicy\""
@@ -17148,7 +17148,7 @@ type GetGroupSettings_GroupSettings_Edges_Node struct {
 	SyncToSlack  *bool                                            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                                          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility                                 "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -17158,11 +17158,11 @@ func (t *GetGroupSettings_GroupSettings_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetGroupSettings_GroupSettings_Edges_Node) GetCreatedBy() *string {
+func (t *GetGroupSettings_GroupSettings_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroupSettings_GroupSettings_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroupSettings_GroupSettings_Edges_Node) GetGroup() *GetGroupSettings_GroupSettings_Edges_Node_Group {
 	if t == nil {
@@ -17206,11 +17206,11 @@ func (t *GetGroupSettings_GroupSettings_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroupSettings_GroupSettings_Edges_Node) GetUpdatedBy() *string {
+func (t *GetGroupSettings_GroupSettings_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroupSettings_GroupSettings_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetGroupSettings_GroupSettings_Edges_Node) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -17261,7 +17261,7 @@ func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_Group) GetName() str
 
 type UpdateGroupSetting_UpdateGroupSetting_GroupSetting struct {
 	CreatedAt    *time.Time                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                                                   "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Group        *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_Group "json:\"group,omitempty\" graphql:\"group\""
 	ID           string                                                    "json:\"id\" graphql:\"id\""
 	JoinPolicy   enums.JoinPolicy                                          "json:\"joinPolicy\" graphql:\"joinPolicy\""
@@ -17269,7 +17269,7 @@ type UpdateGroupSetting_UpdateGroupSetting_GroupSetting struct {
 	SyncToSlack  *bool                                                     "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                                                   "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility                                          "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -17279,11 +17279,11 @@ func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetCreatedBy() *string {
+func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateGroupSetting_UpdateGroupSetting_GroupSetting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetGroup() *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_Group {
 	if t == nil {
@@ -17327,11 +17327,11 @@ func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetUpdatedBy() *string {
+func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateGroupSetting_UpdateGroupSetting_GroupSetting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -17353,7 +17353,7 @@ func (t *UpdateGroupSetting_UpdateGroupSetting) GetGroupSetting() *UpdateGroupSe
 
 type GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
 	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	GroupID      *string          "json:\"groupID,omitempty\" graphql:\"groupID\""
 	HistoryTime  time.Time        "json:\"historyTime\" graphql:\"historyTime\""
 	ID           string           "json:\"id\" graphql:\"id\""
@@ -17364,7 +17364,7 @@ type GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -17374,11 +17374,11 @@ func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreate
 	}
 	return t.CreatedAt
 }
-func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetGroupID() *string {
 	if t == nil {
@@ -17440,11 +17440,11 @@ func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdate
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -17477,7 +17477,7 @@ func (t *GetAllGroupSettingHistories_GroupSettingHistories) GetEdges() []*GetAll
 
 type GetGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
 	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	GroupID      *string          "json:\"groupID,omitempty\" graphql:\"groupID\""
 	HistoryTime  time.Time        "json:\"historyTime\" graphql:\"historyTime\""
 	ID           string           "json:\"id\" graphql:\"id\""
@@ -17488,7 +17488,7 @@ type GetGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
 	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -17498,11 +17498,11 @@ func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreatedAt
 	}
 	return t.CreatedAt
 }
-func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetGroupSettingHistories_GroupSettingHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetGroupID() *string {
 	if t == nil {
@@ -17564,11 +17564,11 @@ func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdatedAt
 	}
 	return t.UpdatedAt
 }
-func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetGroupSettingHistories_GroupSettingHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -17946,7 +17946,7 @@ func (t *GetAllHushes_Hushes_Edges_Node_Events) GetID() string {
 
 type GetAllHushes_Hushes_Edges_Node struct {
 	CreatedAt    *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                                        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string                                        "json:\"description,omitempty\" graphql:\"description\""
 	Events       []*GetAllHushes_Hushes_Edges_Node_Events       "json:\"events,omitempty\" graphql:\"events\""
 	ID           string                                         "json:\"id\" graphql:\"id\""
@@ -17956,7 +17956,7 @@ type GetAllHushes_Hushes_Edges_Node struct {
 	Organization []*GetAllHushes_Hushes_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
 	SecretName   *string                                        "json:\"secretName,omitempty\" graphql:\"secretName\""
 	UpdatedAt    *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                                        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllHushes_Hushes_Edges_Node) GetCreatedAt() *time.Time {
@@ -17965,11 +17965,11 @@ func (t *GetAllHushes_Hushes_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllHushes_Hushes_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllHushes_Hushes_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllHushes_Hushes_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllHushes_Hushes_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -18025,11 +18025,11 @@ func (t *GetAllHushes_Hushes_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllHushes_Hushes_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllHushes_Hushes_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllHushes_Hushes_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllHushes_Hushes_Edges struct {
@@ -18089,7 +18089,7 @@ func (t *GetHushByID_Hush_Events) GetID() string {
 
 type GetHushByID_Hush struct {
 	CreatedAt    *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string                          "json:\"description,omitempty\" graphql:\"description\""
 	Events       []*GetHushByID_Hush_Events       "json:\"events,omitempty\" graphql:\"events\""
 	ID           string                           "json:\"id\" graphql:\"id\""
@@ -18099,7 +18099,7 @@ type GetHushByID_Hush struct {
 	Organization []*GetHushByID_Hush_Organization "json:\"organization,omitempty\" graphql:\"organization\""
 	SecretName   *string                          "json:\"secretName,omitempty\" graphql:\"secretName\""
 	UpdatedAt    *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetHushByID_Hush) GetCreatedAt() *time.Time {
@@ -18108,11 +18108,11 @@ func (t *GetHushByID_Hush) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetHushByID_Hush) GetCreatedBy() *string {
+func (t *GetHushByID_Hush) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetHushByID_Hush{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetHushByID_Hush) GetDescription() *string {
 	if t == nil {
@@ -18168,11 +18168,11 @@ func (t *GetHushByID_Hush) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetHushByID_Hush) GetUpdatedBy() *string {
+func (t *GetHushByID_Hush) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetHushByID_Hush{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetHushes_Hushes_Edges_Node_Integrations struct {
@@ -18210,7 +18210,7 @@ func (t *GetHushes_Hushes_Edges_Node_Events) GetID() string {
 
 type GetHushes_Hushes_Edges_Node struct {
 	CreatedAt    *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Events       []*GetHushes_Hushes_Edges_Node_Events       "json:\"events,omitempty\" graphql:\"events\""
 	ID           string                                      "json:\"id\" graphql:\"id\""
@@ -18220,7 +18220,7 @@ type GetHushes_Hushes_Edges_Node struct {
 	Organization []*GetHushes_Hushes_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
 	SecretName   *string                                     "json:\"secretName,omitempty\" graphql:\"secretName\""
 	UpdatedAt    *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetHushes_Hushes_Edges_Node) GetCreatedAt() *time.Time {
@@ -18229,11 +18229,11 @@ func (t *GetHushes_Hushes_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetHushes_Hushes_Edges_Node) GetCreatedBy() *string {
+func (t *GetHushes_Hushes_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetHushes_Hushes_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetHushes_Hushes_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -18289,11 +18289,11 @@ func (t *GetHushes_Hushes_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetHushes_Hushes_Edges_Node) GetUpdatedBy() *string {
+func (t *GetHushes_Hushes_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetHushes_Hushes_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetHushes_Hushes_Edges struct {
@@ -18424,7 +18424,7 @@ func (t *UpdateHush_UpdateHush) GetHush() *UpdateHush_UpdateHush_Hush {
 
 type GetAllHushHistories_HushHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -18434,7 +18434,7 @@ type GetAllHushHistories_HushHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	SecretName  *string        "json:\"secretName,omitempty\" graphql:\"secretName\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllHushHistories_HushHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -18443,11 +18443,11 @@ func (t *GetAllHushHistories_HushHistories_Edges_Node) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *GetAllHushHistories_HushHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllHushHistories_HushHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllHushHistories_HushHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllHushHistories_HushHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -18503,11 +18503,11 @@ func (t *GetAllHushHistories_HushHistories_Edges_Node) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllHushHistories_HushHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllHushHistories_HushHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllHushHistories_HushHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllHushHistories_HushHistories_Edges struct {
@@ -18534,7 +18534,7 @@ func (t *GetAllHushHistories_HushHistories) GetEdges() []*GetAllHushHistories_Hu
 
 type GetHushHistories_HushHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -18544,7 +18544,7 @@ type GetHushHistories_HushHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	SecretName  *string        "json:\"secretName,omitempty\" graphql:\"secretName\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetHushHistories_HushHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -18553,11 +18553,11 @@ func (t *GetHushHistories_HushHistories_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetHushHistories_HushHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetHushHistories_HushHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetHushHistories_HushHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetHushHistories_HushHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -18613,11 +18613,11 @@ func (t *GetHushHistories_HushHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetHushHistories_HushHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetHushHistories_HushHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetHushHistories_HushHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetHushHistories_HushHistories_Edges struct {
@@ -19000,7 +19000,7 @@ func (t *GetAllIntegrations_Integrations_Edges_Node_Events) GetID() string {
 
 type GetAllIntegrations_Integrations_Edges_Node struct {
 	CreatedAt   *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                               "json:\"description,omitempty\" graphql:\"description\""
 	Events      []*GetAllIntegrations_Integrations_Edges_Node_Events  "json:\"events,omitempty\" graphql:\"events\""
 	ID          string                                                "json:\"id\" graphql:\"id\""
@@ -19010,7 +19010,7 @@ type GetAllIntegrations_Integrations_Edges_Node struct {
 	OwnerID     *string                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Secrets     []*GetAllIntegrations_Integrations_Edges_Node_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
 	UpdatedAt   *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
@@ -19019,11 +19019,11 @@ func (t *GetAllIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllIntegrations_Integrations_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllIntegrations_Integrations_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllIntegrations_Integrations_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -19079,11 +19079,11 @@ func (t *GetAllIntegrations_Integrations_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllIntegrations_Integrations_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllIntegrations_Integrations_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllIntegrations_Integrations_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllIntegrations_Integrations_Edges struct {
@@ -19143,7 +19143,7 @@ func (t *GetIntegrationByID_Integration_Events) GetID() string {
 
 type GetIntegrationByID_Integration struct {
 	CreatedAt   *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                   "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                   "json:\"description,omitempty\" graphql:\"description\""
 	Events      []*GetIntegrationByID_Integration_Events  "json:\"events,omitempty\" graphql:\"events\""
 	ID          string                                    "json:\"id\" graphql:\"id\""
@@ -19153,7 +19153,7 @@ type GetIntegrationByID_Integration struct {
 	OwnerID     *string                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Secrets     []*GetIntegrationByID_Integration_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
 	UpdatedAt   *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                   "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetIntegrationByID_Integration) GetCreatedAt() *time.Time {
@@ -19162,11 +19162,11 @@ func (t *GetIntegrationByID_Integration) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetIntegrationByID_Integration) GetCreatedBy() *string {
+func (t *GetIntegrationByID_Integration) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetIntegrationByID_Integration{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetIntegrationByID_Integration) GetDescription() *string {
 	if t == nil {
@@ -19222,11 +19222,11 @@ func (t *GetIntegrationByID_Integration) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetIntegrationByID_Integration) GetUpdatedBy() *string {
+func (t *GetIntegrationByID_Integration) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetIntegrationByID_Integration{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetIntegrations_Integrations_Edges_Node_Owner struct {
@@ -19264,7 +19264,7 @@ func (t *GetIntegrations_Integrations_Edges_Node_Events) GetID() string {
 
 type GetIntegrations_Integrations_Edges_Node struct {
 	CreatedAt   *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                            "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                            "json:\"description,omitempty\" graphql:\"description\""
 	Events      []*GetIntegrations_Integrations_Edges_Node_Events  "json:\"events,omitempty\" graphql:\"events\""
 	ID          string                                             "json:\"id\" graphql:\"id\""
@@ -19274,7 +19274,7 @@ type GetIntegrations_Integrations_Edges_Node struct {
 	OwnerID     *string                                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Secrets     []*GetIntegrations_Integrations_Edges_Node_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
 	UpdatedAt   *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                            "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
@@ -19283,11 +19283,11 @@ func (t *GetIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetIntegrations_Integrations_Edges_Node) GetCreatedBy() *string {
+func (t *GetIntegrations_Integrations_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetIntegrations_Integrations_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetIntegrations_Integrations_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -19343,11 +19343,11 @@ func (t *GetIntegrations_Integrations_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetIntegrations_Integrations_Edges_Node) GetUpdatedBy() *string {
+func (t *GetIntegrations_Integrations_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetIntegrations_Integrations_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetIntegrations_Integrations_Edges struct {
@@ -19478,7 +19478,7 @@ func (t *UpdateIntegration_UpdateIntegration) GetIntegration() *UpdateIntegratio
 
 type GetAllIntegrationHistories_IntegrationHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -19489,7 +19489,7 @@ type GetAllIntegrationHistories_IntegrationHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -19498,11 +19498,11 @@ func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedA
 	}
 	return t.CreatedAt
 }
-func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllIntegrationHistories_IntegrationHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -19564,11 +19564,11 @@ func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetUpdatedA
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllIntegrationHistories_IntegrationHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllIntegrationHistories_IntegrationHistories_Edges struct {
@@ -19595,7 +19595,7 @@ func (t *GetAllIntegrationHistories_IntegrationHistories) GetEdges() []*GetAllIn
 
 type GetIntegrationHistories_IntegrationHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -19606,7 +19606,7 @@ type GetIntegrationHistories_IntegrationHistories_Edges_Node struct {
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -19615,11 +19615,11 @@ func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedAt()
 	}
 	return t.CreatedAt
 }
-func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetIntegrationHistories_IntegrationHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -19681,11 +19681,11 @@ func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetUpdatedAt()
 	}
 	return t.UpdatedAt
 }
-func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetIntegrationHistories_IntegrationHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetIntegrationHistories_IntegrationHistories_Edges struct {
@@ -19713,7 +19713,7 @@ func (t *GetIntegrationHistories_IntegrationHistories) GetEdges() []*GetIntegrat
 type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -19723,7 +19723,7 @@ type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies st
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -19739,11 +19739,11 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetCreatedBy() *string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -19799,11 +19799,11 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetUpdatedBy() *string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetVersion() *string {
 	if t == nil {
@@ -19826,7 +19826,7 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy) GetInternalPol
 type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -19836,7 +19836,7 @@ type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -19852,11 +19852,11 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetCreatedBy() *string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -19912,11 +19912,11 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetUpdatedBy() *string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetVersion() *string {
 	if t == nil {
@@ -19976,7 +19976,7 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	Background      *string                                                                   "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                                                   "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                            "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -19987,7 +19987,7 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	Status          *string                                                                   "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                                                   "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                                                   "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -20009,11 +20009,11 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetCreatedAt(
 	}
 	return t.CreatedAt
 }
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetCreatedBy() *string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDescription() *string {
 	if t == nil {
@@ -20075,11 +20075,11 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetUpdatedAt(
 	}
 	return t.UpdatedAt
 }
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetUpdatedBy() *string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetVersion() *string {
 	if t == nil {
@@ -20150,7 +20150,7 @@ type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
 	Background      *string                                                             "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                                             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                                             "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                      "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -20161,7 +20161,7 @@ type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
 	Status          *string                                                             "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                                             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                                             "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -20183,11 +20183,11 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -20249,11 +20249,11 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -20324,7 +20324,7 @@ type GetInternalPolicies_InternalPolicies_Edges_Node struct {
 	Background      *string                                                          "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                                          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                                          "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                   "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -20335,7 +20335,7 @@ type GetInternalPolicies_InternalPolicies_Edges_Node struct {
 	Status          *string                                                          "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                                          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                                          "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -20357,11 +20357,11 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedAt() *time.T
 	}
 	return t.CreatedAt
 }
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedBy() *string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -20423,11 +20423,11 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedAt() *time.T
 	}
 	return t.UpdatedAt
 }
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedBy() *string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -20498,7 +20498,7 @@ type GetInternalPolicyByID_InternalPolicy struct {
 	Background      *string                                               "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*GetInternalPolicyByID_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                               "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                        "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*GetInternalPolicyByID_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -20509,7 +20509,7 @@ type GetInternalPolicyByID_InternalPolicy struct {
 	Status          *string                                               "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                               "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -20531,11 +20531,11 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedBy() *string {
+func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetInternalPolicyByID_InternalPolicy) GetDescription() *string {
 	if t == nil {
@@ -20597,11 +20597,11 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedBy() *string {
+func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetInternalPolicyByID_InternalPolicy) GetVersion() *string {
 	if t == nil {
@@ -20650,7 +20650,7 @@ type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
 	Background      *string                                                                   "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                                                   "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                            "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -20661,7 +20661,7 @@ type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
 	Status          *string                                                                   "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                                                   "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                                                   "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -20683,11 +20683,11 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetCreatedAt(
 	}
 	return t.CreatedAt
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetCreatedBy() *string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDescription() *string {
 	if t == nil {
@@ -20749,11 +20749,11 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetUpdatedAt(
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetUpdatedBy() *string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetVersion() *string {
 	if t == nil {
@@ -20776,7 +20776,7 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy) GetInternalPolicy() *UpdateI
 type GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -20789,7 +20789,7 @@ type GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -20805,11 +20805,11 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCr
 	}
 	return t.CreatedAt
 }
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -20883,11 +20883,11 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUp
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -20921,7 +20921,7 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories) GetEdges() []*Ge
 type GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -20934,7 +20934,7 @@ type GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -20950,11 +20950,11 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreat
 	}
 	return t.CreatedAt
 }
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -21028,11 +21028,11 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUpdat
 	}
 	return t.UpdatedAt
 }
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -21365,7 +21365,7 @@ func (t *GetInviteByID_Invite_Owner) GetName() string {
 
 type GetInviteByID_Invite struct {
 	CreatedAt    *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Expires      *time.Time                  "json:\"expires,omitempty\" graphql:\"expires\""
 	ID           string                      "json:\"id\" graphql:\"id\""
 	Owner        *GetInviteByID_Invite_Owner "json:\"owner,omitempty\" graphql:\"owner\""
@@ -21375,7 +21375,7 @@ type GetInviteByID_Invite struct {
 	SendAttempts int64                       "json:\"sendAttempts\" graphql:\"sendAttempts\""
 	Status       enums.InviteStatus          "json:\"status\" graphql:\"status\""
 	UpdatedAt    *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetInviteByID_Invite) GetCreatedAt() *time.Time {
@@ -21384,11 +21384,11 @@ func (t *GetInviteByID_Invite) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetInviteByID_Invite) GetCreatedBy() *string {
+func (t *GetInviteByID_Invite) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetInviteByID_Invite{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetInviteByID_Invite) GetExpires() *time.Time {
 	if t == nil {
@@ -21444,11 +21444,11 @@ func (t *GetInviteByID_Invite) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetInviteByID_Invite) GetUpdatedBy() *string {
+func (t *GetInviteByID_Invite) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetInviteByID_Invite{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type InvitesByOrgID_Invites_Edges_Node_Owner_Invites struct {
@@ -21543,7 +21543,7 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 
 type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -21551,7 +21551,7 @@ type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives struct {
 	Satisfies   *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetCreatedAt() *time.Time {
@@ -21560,11 +21560,11 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetCreatedAt(
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetCreatedBy() *string {
+func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetDescription() *string {
 	if t == nil {
@@ -21608,11 +21608,11 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetUpdatedAt(
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetUpdatedBy() *string {
+func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVNarrative_CreateBulkCSVNarrative struct {
@@ -21628,7 +21628,7 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative) GetNarratives() []*Creat
 
 type CreateBulkNarrative_CreateBulkNarrative_Narratives struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -21636,7 +21636,7 @@ type CreateBulkNarrative_CreateBulkNarrative_Narratives struct {
 	Satisfies   *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetCreatedAt() *time.Time {
@@ -21645,11 +21645,11 @@ func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetCreatedBy() *string {
+func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetDescription() *string {
 	if t == nil {
@@ -21693,11 +21693,11 @@ func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetUpdatedBy() *string {
+func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkNarrative_CreateBulkNarrative struct {
@@ -21786,7 +21786,7 @@ func (t *CreateNarrative_CreateNarrative_Narrative_BlockedGroups) GetName() stri
 type CreateNarrative_CreateNarrative_Narrative struct {
 	BlockedGroups []*CreateNarrative_CreateNarrative_Narrative_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt     *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*CreateNarrative_CreateNarrative_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -21796,7 +21796,7 @@ type CreateNarrative_CreateNarrative_Narrative struct {
 	Satisfies     *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags          []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*CreateNarrative_CreateNarrative_Narrative_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -21812,11 +21812,11 @@ func (t *CreateNarrative_CreateNarrative_Narrative) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateNarrative_CreateNarrative_Narrative) GetCreatedBy() *string {
+func (t *CreateNarrative_CreateNarrative_Narrative) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateNarrative_CreateNarrative_Narrative{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateNarrative_CreateNarrative_Narrative) GetDescription() *string {
 	if t == nil {
@@ -21872,11 +21872,11 @@ func (t *CreateNarrative_CreateNarrative_Narrative) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateNarrative_CreateNarrative_Narrative) GetUpdatedBy() *string {
+func (t *CreateNarrative_CreateNarrative_Narrative) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateNarrative_CreateNarrative_Narrative{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateNarrative_CreateNarrative_Narrative) GetViewers() []*CreateNarrative_CreateNarrative_Narrative_Viewers {
 	if t == nil {
@@ -21982,7 +21982,7 @@ func (t *GetAllNarratives_Narratives_Edges_Node_BlockedGroups) GetName() string 
 type GetAllNarratives_Narratives_Edges_Node struct {
 	BlockedGroups []*GetAllNarratives_Narratives_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt     *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                                 "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                                 "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                          "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*GetAllNarratives_Narratives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -21992,7 +21992,7 @@ type GetAllNarratives_Narratives_Edges_Node struct {
 	Satisfies     *string                                                 "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags          []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                 "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*GetAllNarratives_Narratives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -22008,11 +22008,11 @@ func (t *GetAllNarratives_Narratives_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllNarratives_Narratives_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllNarratives_Narratives_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllNarratives_Narratives_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllNarratives_Narratives_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -22068,11 +22068,11 @@ func (t *GetAllNarratives_Narratives_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllNarratives_Narratives_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllNarratives_Narratives_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllNarratives_Narratives_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllNarratives_Narratives_Edges_Node) GetViewers() []*GetAllNarratives_Narratives_Edges_Node_Viewers {
 	if t == nil {
@@ -22178,7 +22178,7 @@ func (t *GetNarrativeByID_Narrative_BlockedGroups) GetName() string {
 type GetNarrativeByID_Narrative struct {
 	BlockedGroups []*GetNarrativeByID_Narrative_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*GetNarrativeByID_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -22188,7 +22188,7 @@ type GetNarrativeByID_Narrative struct {
 	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*GetNarrativeByID_Narrative_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -22204,11 +22204,11 @@ func (t *GetNarrativeByID_Narrative) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetNarrativeByID_Narrative) GetCreatedBy() *string {
+func (t *GetNarrativeByID_Narrative) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetNarrativeByID_Narrative{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetNarrativeByID_Narrative) GetDescription() *string {
 	if t == nil {
@@ -22264,11 +22264,11 @@ func (t *GetNarrativeByID_Narrative) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetNarrativeByID_Narrative) GetUpdatedBy() *string {
+func (t *GetNarrativeByID_Narrative) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetNarrativeByID_Narrative{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetNarrativeByID_Narrative) GetViewers() []*GetNarrativeByID_Narrative_Viewers {
 	if t == nil {
@@ -22352,7 +22352,7 @@ func (t *GetNarratives_Narratives_Edges_Node_BlockedGroups) GetName() string {
 type GetNarratives_Narratives_Edges_Node struct {
 	BlockedGroups []*GetNarratives_Narratives_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt     *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*GetNarratives_Narratives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -22362,7 +22362,7 @@ type GetNarratives_Narratives_Edges_Node struct {
 	Satisfies     *string                                              "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags          []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*GetNarratives_Narratives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -22378,11 +22378,11 @@ func (t *GetNarratives_Narratives_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetNarratives_Narratives_Edges_Node) GetCreatedBy() *string {
+func (t *GetNarratives_Narratives_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetNarratives_Narratives_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetNarratives_Narratives_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -22438,11 +22438,11 @@ func (t *GetNarratives_Narratives_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetNarratives_Narratives_Edges_Node) GetUpdatedBy() *string {
+func (t *GetNarratives_Narratives_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetNarratives_Narratives_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetNarratives_Narratives_Edges_Node) GetViewers() []*GetNarratives_Narratives_Edges_Node_Viewers {
 	if t == nil {
@@ -22548,7 +22548,7 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups) GetName() stri
 type UpdateNarrative_UpdateNarrative_Narrative struct {
 	BlockedGroups []*UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt     *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*UpdateNarrative_UpdateNarrative_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -22558,7 +22558,7 @@ type UpdateNarrative_UpdateNarrative_Narrative struct {
 	Satisfies     *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags          []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*UpdateNarrative_UpdateNarrative_Narrative_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -22574,11 +22574,11 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateNarrative_UpdateNarrative_Narrative) GetCreatedBy() *string {
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateNarrative_UpdateNarrative_Narrative{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateNarrative_UpdateNarrative_Narrative) GetDescription() *string {
 	if t == nil {
@@ -22634,11 +22634,11 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateNarrative_UpdateNarrative_Narrative) GetUpdatedBy() *string {
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateNarrative_UpdateNarrative_Narrative{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateNarrative_UpdateNarrative_Narrative) GetViewers() []*UpdateNarrative_UpdateNarrative_Narrative_Viewers {
 	if t == nil {
@@ -22660,7 +22660,7 @@ func (t *UpdateNarrative_UpdateNarrative) GetNarrative() *UpdateNarrative_Update
 
 type GetAllNarrativeHistories_NarrativeHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -22671,7 +22671,7 @@ type GetAllNarrativeHistories_NarrativeHistories_Edges_Node struct {
 	Satisfies   *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -22680,11 +22680,11 @@ func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedAt() 
 	}
 	return t.CreatedAt
 }
-func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllNarrativeHistories_NarrativeHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -22746,11 +22746,11 @@ func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetUpdatedAt() 
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllNarrativeHistories_NarrativeHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllNarrativeHistories_NarrativeHistories_Edges struct {
@@ -22777,7 +22777,7 @@ func (t *GetAllNarrativeHistories_NarrativeHistories) GetEdges() []*GetAllNarrat
 
 type GetNarrativeHistories_NarrativeHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -22788,7 +22788,7 @@ type GetNarrativeHistories_NarrativeHistories_Edges_Node struct {
 	Satisfies   *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -22797,11 +22797,11 @@ func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedAt() *ti
 	}
 	return t.CreatedAt
 }
-func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetNarrativeHistories_NarrativeHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -22863,11 +22863,11 @@ func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetUpdatedAt() *ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetNarrativeHistories_NarrativeHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetNarrativeHistories_NarrativeHistories_Edges struct {
@@ -22894,7 +22894,7 @@ func (t *GetNarrativeHistories_NarrativeHistories) GetEdges() []*GetNarrativeHis
 
 type GetAllNoteHistories_NoteHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
@@ -22903,7 +22903,7 @@ type GetAllNoteHistories_NoteHistories_Edges_Node struct {
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	Text        string         "json:\"text\" graphql:\"text\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -22912,11 +22912,11 @@ func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllNoteHistories_NoteHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -22966,11 +22966,11 @@ func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllNoteHistories_NoteHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllNoteHistories_NoteHistories_Edges struct {
@@ -22997,7 +22997,7 @@ func (t *GetAllNoteHistories_NoteHistories) GetEdges() []*GetAllNoteHistories_No
 
 type GetNoteHistories_NoteHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
@@ -23006,7 +23006,7 @@ type GetNoteHistories_NoteHistories_Edges_Node struct {
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	Text        string         "json:\"text\" graphql:\"text\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetNoteHistories_NoteHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -23015,11 +23015,11 @@ func (t *GetNoteHistories_NoteHistories_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetNoteHistories_NoteHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetNoteHistories_NoteHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetNoteHistories_NoteHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetNoteHistories_NoteHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -23069,11 +23069,11 @@ func (t *GetNoteHistories_NoteHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetNoteHistories_NoteHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetNoteHistories_NoteHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetNoteHistories_NoteHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetNoteHistories_NoteHistories_Edges struct {
@@ -23218,14 +23218,14 @@ type CreateOrganization_CreateOrganization_Organization_Setting struct {
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetBillingAddress() *models.Address {
@@ -23258,11 +23258,11 @@ func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetCreatedA
 	}
 	return t.CreatedAt
 }
-func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetCreatedBy() *string {
+func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetDomains() []string {
 	if t == nil {
@@ -23300,11 +23300,11 @@ func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetUpdatedA
 	}
 	return t.UpdatedAt
 }
-func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetUpdatedBy() *string {
+func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateOrganization_CreateOrganization_Organization_Parent struct {
@@ -23610,14 +23610,14 @@ type GetAllOrganizations_Organizations_Edges_Node_Setting struct {
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetBillingAddress() *models.Address {
@@ -23650,11 +23650,11 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetCreatedAt() *t
 	}
 	return t.CreatedAt
 }
-func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetCreatedBy() *string {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizations_Organizations_Edges_Node_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetDomains() []string {
 	if t == nil {
@@ -23692,11 +23692,11 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetUpdatedAt() *t
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetUpdatedBy() *string {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizations_Organizations_Edges_Node_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllOrganizations_Organizations_Edges_Node struct {
@@ -23937,14 +23937,14 @@ type GetOrganizationByID_Organization_Setting struct {
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrganizationByID_Organization_Setting) GetBillingAddress() *models.Address {
@@ -23977,11 +23977,11 @@ func (t *GetOrganizationByID_Organization_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetOrganizationByID_Organization_Setting) GetCreatedBy() *string {
+func (t *GetOrganizationByID_Organization_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationByID_Organization_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrganizationByID_Organization_Setting) GetDomains() []string {
 	if t == nil {
@@ -24019,17 +24019,17 @@ func (t *GetOrganizationByID_Organization_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrganizationByID_Organization_Setting) GetUpdatedBy() *string {
+func (t *GetOrganizationByID_Organization_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationByID_Organization_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrganizationByID_Organization struct {
 	Children    GetOrganizationByID_Organization_Children   "json:\"children\" graphql:\"children\""
 	CreatedAt   *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string                                      "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                      "json:\"id\" graphql:\"id\""
@@ -24040,7 +24040,7 @@ type GetOrganizationByID_Organization struct {
 	Setting     *GetOrganizationByID_Organization_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrganizationByID_Organization) GetChildren() *GetOrganizationByID_Organization_Children {
@@ -24055,11 +24055,11 @@ func (t *GetOrganizationByID_Organization) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetOrganizationByID_Organization) GetCreatedBy() *string {
+func (t *GetOrganizationByID_Organization) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationByID_Organization{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrganizationByID_Organization) GetDescription() *string {
 	if t == nil {
@@ -24121,11 +24121,11 @@ func (t *GetOrganizationByID_Organization) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrganizationByID_Organization) GetUpdatedBy() *string {
+func (t *GetOrganizationByID_Organization) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationByID_Organization{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrganizations_Organizations_Edges_Node_Parent struct {
@@ -24256,14 +24256,14 @@ type GetOrganizations_Organizations_Edges_Node_Setting struct {
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetBillingAddress() *models.Address {
@@ -24296,11 +24296,11 @@ func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetCreatedAt() *time
 	}
 	return t.CreatedAt
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetCreatedBy() *string {
+func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetDomains() []string {
 	if t == nil {
@@ -24338,11 +24338,11 @@ func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetUpdatedAt() *time
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetUpdatedBy() *string {
+func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrganizations_Organizations_Edges_Node struct {
@@ -24486,14 +24486,14 @@ type UpdateOrganization_UpdateOrganization_Organization_Setting struct {
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetBillingAddress() *models.Address {
@@ -24526,11 +24526,11 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetCreatedA
 	}
 	return t.CreatedAt
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetCreatedBy() *string {
+func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetDomains() []string {
 	if t == nil {
@@ -24568,11 +24568,11 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetUpdatedA
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetUpdatedBy() *string {
+func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateOrganization_UpdateOrganization_Organization struct {
@@ -24649,7 +24649,7 @@ func (t *UpdateOrganization_UpdateOrganization) GetOrganization() *UpdateOrganiz
 type GetAllOrganizationHistories_OrganizationHistories_Edges_Node struct {
 	AvatarRemoteURL *string        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DedicatedDb     bool           "json:\"dedicatedDb\" graphql:\"dedicatedDb\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
@@ -24661,7 +24661,7 @@ type GetAllOrganizationHistories_OrganizationHistories_Edges_Node struct {
 	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetAvatarRemoteURL() *string {
@@ -24676,11 +24676,11 @@ func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetCreate
 	}
 	return t.CreatedAt
 }
-func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizationHistories_OrganizationHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetDedicatedDb() bool {
 	if t == nil {
@@ -24748,11 +24748,11 @@ func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetUpdate
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizationHistories_OrganizationHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllOrganizationHistories_OrganizationHistories_Edges struct {
@@ -24780,7 +24780,7 @@ func (t *GetAllOrganizationHistories_OrganizationHistories) GetEdges() []*GetAll
 type GetOrganizationHistories_OrganizationHistories_Edges_Node struct {
 	AvatarRemoteURL *string        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DedicatedDb     bool           "json:\"dedicatedDb\" graphql:\"dedicatedDb\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
@@ -24792,7 +24792,7 @@ type GetOrganizationHistories_OrganizationHistories_Edges_Node struct {
 	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetAvatarRemoteURL() *string {
@@ -24807,11 +24807,11 @@ func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetCreatedAt
 	}
 	return t.CreatedAt
 }
-func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationHistories_OrganizationHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetDedicatedDb() bool {
 	if t == nil {
@@ -24879,11 +24879,11 @@ func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetUpdatedAt
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationHistories_OrganizationHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrganizationHistories_OrganizationHistories_Edges struct {
@@ -24932,7 +24932,7 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	BillingEmail   *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                                                  "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                                   "json:\"id\" graphql:\"id\""
@@ -24940,7 +24940,7 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	Tags           []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                                                  "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingAddress() *models.Address {
@@ -24973,11 +24973,11 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedA
 	}
 	return t.CreatedAt
 }
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetDomains() []string {
 	if t == nil {
@@ -25021,11 +25021,11 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetUpdatedA
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges struct {
@@ -25074,7 +25074,7 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	BillingEmail   *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                                      "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                       "json:\"id\" graphql:\"id\""
@@ -25082,7 +25082,7 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	Tags           []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                                      "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetBillingAddress() *models.Address {
@@ -25115,11 +25115,11 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetCreatedAt() *time.Ti
 	}
 	return t.CreatedAt
 }
-func (t *GetOrganizationSettingByID_OrganizationSetting) GetCreatedBy() *string {
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetDomains() []string {
 	if t == nil {
@@ -25163,11 +25163,11 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetUpdatedAt() *time.Ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrganizationSettingByID_OrganizationSetting) GetUpdatedBy() *string {
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization struct {
@@ -25194,7 +25194,7 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	BillingEmail   *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                                               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                                "json:\"id\" graphql:\"id\""
@@ -25202,7 +25202,7 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	Tags           []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                                               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingAddress() *models.Address {
@@ -25235,11 +25235,11 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedAt()
 	}
 	return t.CreatedAt
 }
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedBy() *string {
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetDomains() []string {
 	if t == nil {
@@ -25283,11 +25283,11 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetUpdatedAt()
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetUpdatedBy() *string {
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges struct {
@@ -25336,7 +25336,7 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	BillingEmail   *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                                                               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                                                "json:\"id\" graphql:\"id\""
@@ -25344,7 +25344,7 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	Tags           []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                                                               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetBillingAddress() *models.Address {
@@ -25377,11 +25377,11 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 	}
 	return t.CreatedAt
 }
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetCreatedBy() *string {
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetDomains() []string {
 	if t == nil {
@@ -25425,11 +25425,11 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetUpdatedBy() *string {
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting struct {
@@ -25449,7 +25449,7 @@ type GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node 
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	HistoryTime    time.Time       "json:\"historyTime\" graphql:\"historyTime\""
@@ -25460,7 +25460,7 @@ type GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node 
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetBillingAddress() *models.Address {
@@ -25493,11 +25493,11 @@ func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_N
 	}
 	return t.CreatedAt
 }
-func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetDomains() []string {
 	if t == nil {
@@ -25559,11 +25559,11 @@ func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_N
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges struct {
@@ -25594,7 +25594,7 @@ type GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node str
 	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
 	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	HistoryTime    time.Time       "json:\"historyTime\" graphql:\"historyTime\""
@@ -25605,7 +25605,7 @@ type GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node str
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetBillingAddress() *models.Address {
@@ -25638,11 +25638,11 @@ func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node
 	}
 	return t.CreatedAt
 }
-func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetDomains() []string {
 	if t == nil {
@@ -25704,11 +25704,11 @@ func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrganizationSettingHistories_OrganizationSettingHistories_Edges struct {
@@ -26018,7 +26018,7 @@ func (t *UpdateUserRoleInOrg_UpdateOrgMembership) GetOrgMembership() *UpdateUser
 
 type GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node struct {
 	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID             string         "json:\"id\" graphql:\"id\""
 	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
@@ -26026,7 +26026,7 @@ type GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node struct {
 	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Role           enums.Role     "json:\"role\" graphql:\"role\""
 	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID         string         "json:\"userID\" graphql:\"userID\""
 }
 
@@ -26036,11 +26036,11 @@ func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCrea
 	}
 	return t.CreatedAt
 }
-func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -26084,11 +26084,11 @@ func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUpda
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -26121,7 +26121,7 @@ func (t *GetAllOrgMembershipHistories_OrgMembershipHistories) GetEdges() []*GetA
 
 type GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node struct {
 	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID             string         "json:\"id\" graphql:\"id\""
 	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
@@ -26129,7 +26129,7 @@ type GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node struct {
 	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Role           enums.Role     "json:\"role\" graphql:\"role\""
 	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID         string         "json:\"userID\" graphql:\"userID\""
 }
 
@@ -26139,11 +26139,11 @@ func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCreated
 	}
 	return t.CreatedAt
 }
-func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -26187,11 +26187,11 @@ func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUpdated
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -26225,7 +26225,7 @@ func (t *GetOrgMembershipHistories_OrgMembershipHistories) GetEdges() []*GetOrgM
 type GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	Active                   bool          "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                *string       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID              *string       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ExpiresAt                *time.Time    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
@@ -26238,7 +26238,7 @@ type GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                *time.Time    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                *string       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID              *string       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetActive() bool {
@@ -26253,11 +26253,11 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetExpiresAt() *time.Time {
 	if t == nil {
@@ -26331,11 +26331,11 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllOrgSubscriptions_OrgSubscriptions_Edges struct {
@@ -26363,7 +26363,7 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions) GetEdges() []*GetAllOrgSubscri
 type GetOrgSubscriptionByID_OrgSubscription struct {
 	Active                   bool          "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                *string       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID              *string       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ExpiresAt                *time.Time    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
@@ -26376,7 +26376,7 @@ type GetOrgSubscriptionByID_OrgSubscription struct {
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                *time.Time    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                *string       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID              *string       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetActive() bool {
@@ -26391,11 +26391,11 @@ func (t *GetOrgSubscriptionByID_OrgSubscription) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetOrgSubscriptionByID_OrgSubscription) GetCreatedBy() *string {
+func (t *GetOrgSubscriptionByID_OrgSubscription) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrgSubscriptionByID_OrgSubscription{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetExpiresAt() *time.Time {
 	if t == nil {
@@ -26469,17 +26469,17 @@ func (t *GetOrgSubscriptionByID_OrgSubscription) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrgSubscriptionByID_OrgSubscription) GetUpdatedBy() *string {
+func (t *GetOrgSubscriptionByID_OrgSubscription) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrgSubscriptionByID_OrgSubscription{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	Active                   bool          "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                *string       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID              *string       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ExpiresAt                *time.Time    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
@@ -26492,7 +26492,7 @@ type GetOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                *time.Time    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                *string       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID              *string       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetActive() bool {
@@ -26507,11 +26507,11 @@ func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedAt() *time.T
 	}
 	return t.CreatedAt
 }
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedBy() *string {
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetExpiresAt() *time.Time {
 	if t == nil {
@@ -26585,11 +26585,11 @@ func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedAt() *time.T
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedBy() *string {
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrgSubscriptions_OrgSubscriptions_Edges struct {
@@ -26617,7 +26617,7 @@ func (t *GetOrgSubscriptions_OrgSubscriptions) GetEdges() []*GetOrgSubscriptions
 type GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node struct {
 	Active                   bool           "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID              *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ExpiresAt                *time.Time     "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	Features                 []string       "json:\"features,omitempty\" graphql:\"features\""
 	HistoryTime              time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -26632,7 +26632,7 @@ type GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node struct {
 	StripeSubscriptionStatus *string        "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID              *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetActive() bool {
@@ -26647,11 +26647,11 @@ func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) Get
 	}
 	return t.CreatedAt
 }
-func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetExpiresAt() *time.Time {
 	if t == nil {
@@ -26737,11 +26737,11 @@ func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) Get
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges struct {
@@ -26769,7 +26769,7 @@ func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories) GetEdges() []*
 type GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node struct {
 	Active                   bool           "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID              *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	ExpiresAt                *time.Time     "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	Features                 []string       "json:\"features,omitempty\" graphql:\"features\""
 	HistoryTime              time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -26784,7 +26784,7 @@ type GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node struct {
 	StripeSubscriptionStatus *string        "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID              *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetActive() bool {
@@ -26799,11 +26799,11 @@ func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetCre
 	}
 	return t.CreatedAt
 }
-func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetExpiresAt() *time.Time {
 	if t == nil {
@@ -26889,11 +26889,11 @@ func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetUpd
 	}
 	return t.UpdatedAt
 }
-func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges struct {
@@ -26946,7 +26946,7 @@ type CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalA
 	Scopes        []string                                                                                                "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token         string                                                                                                  "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                                                                 "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetDescription() *string {
@@ -27003,11 +27003,11 @@ func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_Perso
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetUpdatedBy() *string {
+func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken struct {
@@ -27049,7 +27049,7 @@ type CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessT
 	Scopes        []string                                                                                          "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token         string                                                                                            "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                                                           "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetDescription() *string {
@@ -27106,11 +27106,11 @@ func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAcc
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetUpdatedBy() *string {
+func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken struct {
@@ -27164,7 +27164,7 @@ type CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken str
 	Scopes        []string                                                                                 "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token         string                                                                                   "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                                                  "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetDescription() *string {
@@ -27227,11 +27227,11 @@ func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken
 	}
 	return t.UpdatedAt
 }
-func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetUpdatedBy() *string {
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreatePersonalAccessToken_CreatePersonalAccessToken struct {
@@ -27284,7 +27284,7 @@ type GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node struct {
 	Scopes        []string                                                                    "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token         string                                                                      "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetDescription() *string {
@@ -27341,11 +27341,11 @@ func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetUpdatedA
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllPersonalAccessTokens_PersonalAccessTokens_Edges struct {
@@ -27398,7 +27398,7 @@ type GetPersonalAccessTokenByID_PersonalAccessToken struct {
 	Scopes        []string                                                        "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token         string                                                          "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetDescription() *string {
@@ -27455,11 +27455,11 @@ func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetUpdatedAt() *time.Ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetUpdatedBy() *string {
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken_Organizations struct {
@@ -27502,7 +27502,7 @@ type UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken str
 	Scopes        []string                                                                                 "json:\"scopes,omitempty\" graphql:\"scopes\""
 	Token         string                                                                                   "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                                                                  "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetDescription() *string {
@@ -27565,11 +27565,11 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken
 	}
 	return t.UpdatedAt
 }
-func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetUpdatedBy() *string {
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdatePersonalAccessToken_UpdatePersonalAccessToken struct {
@@ -27586,7 +27586,7 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -27597,7 +27597,7 @@ type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -27613,11 +27613,11 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetCreatedAt(
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetCreatedBy() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDescription() *string {
 	if t == nil {
@@ -27679,11 +27679,11 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetUpdatedAt(
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetUpdatedBy() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetVersion() *string {
 	if t == nil {
@@ -27706,7 +27706,7 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure) GetProcedures() []*Creat
 type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -27717,7 +27717,7 @@ type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -27733,11 +27733,11 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetCreatedBy() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDescription() *string {
 	if t == nil {
@@ -27799,11 +27799,11 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetUpdatedBy() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetVersion() *string {
 	if t == nil {
@@ -27863,7 +27863,7 @@ type CreateProcedure_CreateProcedure_Procedure struct {
 	Background      *string                                                    "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*CreateProcedure_CreateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*CreateProcedure_CreateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -27875,7 +27875,7 @@ type CreateProcedure_CreateProcedure_Procedure struct {
 	Status          *string                                                    "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                                    "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -27897,11 +27897,11 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateProcedure_CreateProcedure_Procedure) GetCreatedBy() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetDescription() *string {
 	if t == nil {
@@ -27969,11 +27969,11 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateProcedure_CreateProcedure_Procedure) GetUpdatedBy() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetVersion() *string {
 	if t == nil {
@@ -28044,7 +28044,7 @@ type GetAllProcedures_Procedures_Edges_Node struct {
 	Background      *string                                                 "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*GetAllProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                                 "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                                 "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                          "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*GetAllProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -28056,7 +28056,7 @@ type GetAllProcedures_Procedures_Edges_Node struct {
 	Status          *string                                                 "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                                 "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                                 "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -28078,11 +28078,11 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllProcedures_Procedures_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllProcedures_Procedures_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -28150,11 +28150,11 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllProcedures_Procedures_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllProcedures_Procedures_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -28225,7 +28225,7 @@ type GetProcedureByID_Procedure struct {
 	Background      *string                                     "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*GetProcedureByID_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*GetProcedureByID_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -28237,7 +28237,7 @@ type GetProcedureByID_Procedure struct {
 	Status          *string                                     "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                     "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -28259,11 +28259,11 @@ func (t *GetProcedureByID_Procedure) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetProcedureByID_Procedure) GetCreatedBy() *string {
+func (t *GetProcedureByID_Procedure) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProcedureByID_Procedure) GetDescription() *string {
 	if t == nil {
@@ -28331,11 +28331,11 @@ func (t *GetProcedureByID_Procedure) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetProcedureByID_Procedure) GetUpdatedBy() *string {
+func (t *GetProcedureByID_Procedure) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProcedureByID_Procedure) GetVersion() *string {
 	if t == nil {
@@ -28384,7 +28384,7 @@ type GetProcedures_Procedures_Edges_Node struct {
 	Background      *string                                              "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*GetProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*GetProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -28396,7 +28396,7 @@ type GetProcedures_Procedures_Edges_Node struct {
 	Status          *string                                              "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                              "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -28418,11 +28418,11 @@ func (t *GetProcedures_Procedures_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetProcedures_Procedures_Edges_Node) GetCreatedBy() *string {
+func (t *GetProcedures_Procedures_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProcedures_Procedures_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -28490,11 +28490,11 @@ func (t *GetProcedures_Procedures_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetProcedures_Procedures_Edges_Node) GetUpdatedBy() *string {
+func (t *GetProcedures_Procedures_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProcedures_Procedures_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -28565,7 +28565,7 @@ type UpdateProcedure_UpdateProcedure_Procedure struct {
 	Background      *string                                                    "json:\"background,omitempty\" graphql:\"background\""
 	BlockedGroups   []*UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt       *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string                                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
 	Editors         []*UpdateProcedure_UpdateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -28577,7 +28577,7 @@ type UpdateProcedure_UpdateProcedure_Procedure struct {
 	Status          *string                                                    "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string                                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string                                                    "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -28599,11 +28599,11 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetCreatedBy() *string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDescription() *string {
 	if t == nil {
@@ -28671,11 +28671,11 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetUpdatedBy() *string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetVersion() *string {
 	if t == nil {
@@ -28698,7 +28698,7 @@ func (t *UpdateProcedure_UpdateProcedure) GetProcedure() *UpdateProcedure_Update
 type GetAllProcedureHistories_ProcedureHistories_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -28712,7 +28712,7 @@ type GetAllProcedureHistories_ProcedureHistories_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -28728,11 +28728,11 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedAt() 
 	}
 	return t.CreatedAt
 }
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -28812,11 +28812,11 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedAt() 
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -28850,7 +28850,7 @@ func (t *GetAllProcedureHistories_ProcedureHistories) GetEdges() []*GetAllProced
 type GetProcedureHistories_ProcedureHistories_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
@@ -28864,7 +28864,7 @@ type GetProcedureHistories_ProcedureHistories_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -28880,11 +28880,11 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedAt() *ti
 	}
 	return t.CreatedAt
 }
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -28964,11 +28964,11 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedAt() *ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -29004,7 +29004,7 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
@@ -29014,7 +29014,7 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditorReadComments() bool {
@@ -29041,11 +29041,11 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetCreatedBy() *string {
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetDescription() *string {
 	if t == nil {
@@ -29101,11 +29101,11 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetUpdatedBy() *string {
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVProgram_CreateBulkCSVProgram struct {
@@ -29124,7 +29124,7 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
@@ -29134,7 +29134,7 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditorReadComments() bool {
@@ -29161,11 +29161,11 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetCreatedBy() *string {
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetDescription() *string {
 	if t == nil {
@@ -29221,11 +29221,11 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetUpdatedBy() *string {
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkProgram_CreateBulkProgram struct {
@@ -29493,7 +29493,7 @@ func (t *CreateFullProgram_CreateFullProgram) GetProgram() *CreateFullProgram_Cr
 type CreateProgram_CreateProgram_Program_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -29504,7 +29504,7 @@ type CreateProgram_CreateProgram_Program_Procedures struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -29520,11 +29520,11 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetCreatedAt() *time.Ti
 	}
 	return t.CreatedAt
 }
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetCreatedBy() *string {
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateProgram_CreateProgram_Program_Procedures) GetDescription() *string {
 	if t == nil {
@@ -29586,11 +29586,11 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetUpdatedAt() *time.Ti
 	}
 	return t.UpdatedAt
 }
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetUpdatedBy() *string {
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateProgram_CreateProgram_Program_Procedures) GetVersion() *string {
 	if t == nil {
@@ -29602,7 +29602,7 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetVersion() *string {
 type CreateProgram_CreateProgram_Program_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -29612,7 +29612,7 @@ type CreateProgram_CreateProgram_Program_InternalPolicies struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -29628,11 +29628,11 @@ func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetCreatedAt() *t
 	}
 	return t.CreatedAt
 }
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetCreatedBy() *string {
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -29688,11 +29688,11 @@ func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetUpdatedAt() *t
 	}
 	return t.UpdatedAt
 }
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetUpdatedBy() *string {
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetVersion() *string {
 	if t == nil {
@@ -29761,7 +29761,7 @@ type CreateProgram_CreateProgram_Program struct {
 	AuditorWriteComments bool                                                    "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	BlockedGroups        []*CreateProgram_CreateProgram_Program_BlockedGroups    "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt            *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                 "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                 "json:\"description,omitempty\" graphql:\"description\""
 	Editors              []*CreateProgram_CreateProgram_Program_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                              "json:\"endDate,omitempty\" graphql:\"endDate\""
@@ -29774,7 +29774,7 @@ type CreateProgram_CreateProgram_Program struct {
 	Status               enums.ProgramStatus                                     "json:\"status\" graphql:\"status\""
 	Tags                 []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                 "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers              []*CreateProgram_CreateProgram_Program_Viewers          "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -29808,11 +29808,11 @@ func (t *CreateProgram_CreateProgram_Program) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateProgram_CreateProgram_Program) GetCreatedBy() *string {
+func (t *CreateProgram_CreateProgram_Program) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateProgram_CreateProgram_Program) GetDescription() *string {
 	if t == nil {
@@ -29886,11 +29886,11 @@ func (t *CreateProgram_CreateProgram_Program) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateProgram_CreateProgram_Program) GetUpdatedBy() *string {
+func (t *CreateProgram_CreateProgram_Program) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateProgram_CreateProgram_Program) GetViewers() []*CreateProgram_CreateProgram_Program_Viewers {
 	if t == nil {
@@ -30003,7 +30003,7 @@ func (t *DeleteProgram_DeleteProgram) GetDeletedID() string {
 type GetAllPrograms_Programs_Edges_Node_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -30014,7 +30014,7 @@ type GetAllPrograms_Programs_Edges_Node_Procedures struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -30030,11 +30030,11 @@ func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetCreatedAt() *time.Tim
 	}
 	return t.CreatedAt
 }
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetCreatedBy() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDescription() *string {
 	if t == nil {
@@ -30096,11 +30096,11 @@ func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetUpdatedAt() *time.Tim
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetUpdatedBy() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
 	if t == nil {
@@ -30112,7 +30112,7 @@ func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
 type GetAllPrograms_Programs_Edges_Node_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -30122,7 +30122,7 @@ type GetAllPrograms_Programs_Edges_Node_InternalPolicies struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -30138,11 +30138,11 @@ func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedAt() *ti
 	}
 	return t.CreatedAt
 }
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedBy() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -30198,11 +30198,11 @@ func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedAt() *ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedBy() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetVersion() *string {
 	if t == nil {
@@ -30271,7 +30271,7 @@ type GetAllPrograms_Programs_Edges_Node struct {
 	AuditorWriteComments bool                                                   "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	BlockedGroups        []*GetAllPrograms_Programs_Edges_Node_BlockedGroups    "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt            *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                "json:\"description,omitempty\" graphql:\"description\""
 	Editors              []*GetAllPrograms_Programs_Edges_Node_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                             "json:\"endDate,omitempty\" graphql:\"endDate\""
@@ -30284,7 +30284,7 @@ type GetAllPrograms_Programs_Edges_Node struct {
 	Status               enums.ProgramStatus                                    "json:\"status\" graphql:\"status\""
 	Tags                 []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers              []*GetAllPrograms_Programs_Edges_Node_Viewers          "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -30318,11 +30318,11 @@ func (t *GetAllPrograms_Programs_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllPrograms_Programs_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllPrograms_Programs_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllPrograms_Programs_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -30396,11 +30396,11 @@ func (t *GetAllPrograms_Programs_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllPrograms_Programs_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllPrograms_Programs_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllPrograms_Programs_Edges_Node) GetViewers() []*GetAllPrograms_Programs_Edges_Node_Viewers {
 	if t == nil {
@@ -30434,7 +30434,7 @@ func (t *GetAllPrograms_Programs) GetEdges() []*GetAllPrograms_Programs_Edges {
 type GetProgramByID_Program_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -30445,7 +30445,7 @@ type GetProgramByID_Program_Procedures struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -30461,11 +30461,11 @@ func (t *GetProgramByID_Program_Procedures) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetProgramByID_Program_Procedures) GetCreatedBy() *string {
+func (t *GetProgramByID_Program_Procedures) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProgramByID_Program_Procedures) GetDescription() *string {
 	if t == nil {
@@ -30527,11 +30527,11 @@ func (t *GetProgramByID_Program_Procedures) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetProgramByID_Program_Procedures) GetUpdatedBy() *string {
+func (t *GetProgramByID_Program_Procedures) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProgramByID_Program_Procedures) GetVersion() *string {
 	if t == nil {
@@ -30543,7 +30543,7 @@ func (t *GetProgramByID_Program_Procedures) GetVersion() *string {
 type GetProgramByID_Program_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -30553,7 +30553,7 @@ type GetProgramByID_Program_InternalPolicies struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -30569,11 +30569,11 @@ func (t *GetProgramByID_Program_InternalPolicies) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetProgramByID_Program_InternalPolicies) GetCreatedBy() *string {
+func (t *GetProgramByID_Program_InternalPolicies) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProgramByID_Program_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -30629,11 +30629,11 @@ func (t *GetProgramByID_Program_InternalPolicies) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetProgramByID_Program_InternalPolicies) GetUpdatedBy() *string {
+func (t *GetProgramByID_Program_InternalPolicies) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProgramByID_Program_InternalPolicies) GetVersion() *string {
 	if t == nil {
@@ -30702,7 +30702,7 @@ type GetProgramByID_Program struct {
 	AuditorWriteComments bool                                       "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	BlockedGroups        []*GetProgramByID_Program_BlockedGroups    "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt            *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                    "json:\"description,omitempty\" graphql:\"description\""
 	Editors              []*GetProgramByID_Program_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                 "json:\"endDate,omitempty\" graphql:\"endDate\""
@@ -30715,7 +30715,7 @@ type GetProgramByID_Program struct {
 	Status               enums.ProgramStatus                        "json:\"status\" graphql:\"status\""
 	Tags                 []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers              []*GetProgramByID_Program_Viewers          "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -30749,11 +30749,11 @@ func (t *GetProgramByID_Program) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetProgramByID_Program) GetCreatedBy() *string {
+func (t *GetProgramByID_Program) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProgramByID_Program{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProgramByID_Program) GetDescription() *string {
 	if t == nil {
@@ -30827,11 +30827,11 @@ func (t *GetProgramByID_Program) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetProgramByID_Program) GetUpdatedBy() *string {
+func (t *GetProgramByID_Program) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProgramByID_Program{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProgramByID_Program) GetViewers() []*GetProgramByID_Program_Viewers {
 	if t == nil {
@@ -30843,7 +30843,7 @@ func (t *GetProgramByID_Program) GetViewers() []*GetProgramByID_Program_Viewers 
 type GetPrograms_Programs_Edges_Node_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -30854,7 +30854,7 @@ type GetPrograms_Programs_Edges_Node_Procedures struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -30870,11 +30870,11 @@ func (t *GetPrograms_Programs_Edges_Node_Procedures) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetCreatedBy() *string {
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_Procedures{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDescription() *string {
 	if t == nil {
@@ -30936,11 +30936,11 @@ func (t *GetPrograms_Programs_Edges_Node_Procedures) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetUpdatedBy() *string {
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_Procedures{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
 	if t == nil {
@@ -30952,7 +30952,7 @@ func (t *GetPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
 type GetPrograms_Programs_Edges_Node_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -30962,7 +30962,7 @@ type GetPrograms_Programs_Edges_Node_InternalPolicies struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -30978,11 +30978,11 @@ func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedAt() *time.
 	}
 	return t.CreatedAt
 }
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedBy() *string {
+func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -31038,11 +31038,11 @@ func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedAt() *time.
 	}
 	return t.UpdatedAt
 }
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedBy() *string {
+func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetVersion() *string {
 	if t == nil {
@@ -31111,7 +31111,7 @@ type GetPrograms_Programs_Edges_Node struct {
 	AuditorWriteComments bool                                                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	BlockedGroups        []*GetPrograms_Programs_Edges_Node_BlockedGroups    "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt            *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                             "json:\"description,omitempty\" graphql:\"description\""
 	Editors              []*GetPrograms_Programs_Edges_Node_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                          "json:\"endDate,omitempty\" graphql:\"endDate\""
@@ -31124,7 +31124,7 @@ type GetPrograms_Programs_Edges_Node struct {
 	Status               enums.ProgramStatus                                 "json:\"status\" graphql:\"status\""
 	Tags                 []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers              []*GetPrograms_Programs_Edges_Node_Viewers          "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -31158,11 +31158,11 @@ func (t *GetPrograms_Programs_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetPrograms_Programs_Edges_Node) GetCreatedBy() *string {
+func (t *GetPrograms_Programs_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetPrograms_Programs_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -31236,11 +31236,11 @@ func (t *GetPrograms_Programs_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetPrograms_Programs_Edges_Node) GetUpdatedBy() *string {
+func (t *GetPrograms_Programs_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetPrograms_Programs_Edges_Node) GetViewers() []*GetPrograms_Programs_Edges_Node_Viewers {
 	if t == nil {
@@ -31274,7 +31274,7 @@ func (t *GetPrograms_Programs) GetEdges() []*GetPrograms_Programs_Edges {
 type UpdateProgram_UpdateProgram_Program_Procedures struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -31285,7 +31285,7 @@ type UpdateProgram_UpdateProgram_Program_Procedures struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -31301,11 +31301,11 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetCreatedAt() *time.Ti
 	}
 	return t.CreatedAt
 }
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetCreatedBy() *string {
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetDescription() *string {
 	if t == nil {
@@ -31367,11 +31367,11 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetUpdatedAt() *time.Ti
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetUpdatedBy() *string {
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetVersion() *string {
 	if t == nil {
@@ -31383,7 +31383,7 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetVersion() *string {
 type UpdateProgram_UpdateProgram_Program_InternalPolicies struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	ID              string         "json:\"id\" graphql:\"id\""
@@ -31393,7 +31393,7 @@ type UpdateProgram_UpdateProgram_Program_InternalPolicies struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -31409,11 +31409,11 @@ func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetCreatedAt() *t
 	}
 	return t.CreatedAt
 }
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetCreatedBy() *string {
+func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetDescription() *string {
 	if t == nil {
@@ -31469,11 +31469,11 @@ func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetUpdatedAt() *t
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetUpdatedBy() *string {
+func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetVersion() *string {
 	if t == nil {
@@ -31542,7 +31542,7 @@ type UpdateProgram_UpdateProgram_Program struct {
 	AuditorWriteComments bool                                                    "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	BlockedGroups        []*UpdateProgram_UpdateProgram_Program_BlockedGroups    "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	CreatedAt            *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string                                                 "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string                                                 "json:\"description,omitempty\" graphql:\"description\""
 	Editors              []*UpdateProgram_UpdateProgram_Program_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                              "json:\"endDate,omitempty\" graphql:\"endDate\""
@@ -31555,7 +31555,7 @@ type UpdateProgram_UpdateProgram_Program struct {
 	Status               enums.ProgramStatus                                     "json:\"status\" graphql:\"status\""
 	Tags                 []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string                                                 "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers              []*UpdateProgram_UpdateProgram_Program_Viewers          "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -31589,11 +31589,11 @@ func (t *UpdateProgram_UpdateProgram_Program) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateProgram_UpdateProgram_Program) GetCreatedBy() *string {
+func (t *UpdateProgram_UpdateProgram_Program) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateProgram_UpdateProgram_Program) GetDescription() *string {
 	if t == nil {
@@ -31667,11 +31667,11 @@ func (t *UpdateProgram_UpdateProgram_Program) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateProgram_UpdateProgram_Program) GetUpdatedBy() *string {
+func (t *UpdateProgram_UpdateProgram_Program) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateProgram_UpdateProgram_Program) GetViewers() []*UpdateProgram_UpdateProgram_Program_Viewers {
 	if t == nil {
@@ -32288,7 +32288,7 @@ type GetAllProgramHistories_ProgramHistories_Edges_Node struct {
 	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	HistoryTime          time.Time           "json:\"historyTime\" graphql:\"historyTime\""
@@ -32301,7 +32301,7 @@ type GetAllProgramHistories_ProgramHistories_Edges_Node struct {
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetAuditorReadComments() bool {
@@ -32328,11 +32328,11 @@ func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetCreatedAt() *tim
 	}
 	return t.CreatedAt
 }
-func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -32406,11 +32406,11 @@ func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetUpdatedAt() *tim
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllProgramHistories_ProgramHistories_Edges struct {
@@ -32440,7 +32440,7 @@ type GetProgramHistories_ProgramHistories_Edges_Node struct {
 	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
 	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID          *string             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	HistoryTime          time.Time           "json:\"historyTime\" graphql:\"historyTime\""
@@ -32453,7 +32453,7 @@ type GetProgramHistories_ProgramHistories_Edges_Node struct {
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID          *string             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetAuditorReadComments() bool {
@@ -32480,11 +32480,11 @@ func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetCreatedAt() *time.T
 	}
 	return t.CreatedAt
 }
-func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -32558,11 +32558,11 @@ func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetUpdatedAt() *time.T
 	}
 	return t.UpdatedAt
 }
-func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetProgramHistories_ProgramHistories_Edges struct {
@@ -32588,14 +32588,14 @@ func (t *GetProgramHistories_ProgramHistories) GetEdges() []*GetProgramHistories
 }
 
 type CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	ProgramID string     "json:\"programID\" graphql:\"programID\""
-	Role      enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID    string     "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	ProgramID   string     "json:\"programID\" graphql:\"programID\""
+	Role        enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
+	UserID      string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetCreatedAt() *time.Time {
@@ -32604,11 +32604,11 @@ func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMe
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetCreatedBy() *string {
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetID() string {
 	if t == nil {
@@ -32634,11 +32634,11 @@ func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMe
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetUpdatedBy() *string {
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetUserID() string {
 	if t == nil {
@@ -32659,14 +32659,14 @@ func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership) GetProgr
 }
 
 type CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	ProgramID string     "json:\"programID\" graphql:\"programID\""
-	Role      enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID    string     "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	ProgramID   string     "json:\"programID\" graphql:\"programID\""
+	Role        enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
+	UserID      string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetCreatedAt() *time.Time {
@@ -32675,11 +32675,11 @@ func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMembersh
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetCreatedBy() *string {
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetID() string {
 	if t == nil {
@@ -32705,11 +32705,11 @@ func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMembersh
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetUpdatedBy() *string {
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetUserID() string {
 	if t == nil {
@@ -32730,14 +32730,14 @@ func (t *CreateBulkProgramMembership_CreateBulkProgramMembership) GetProgramMemb
 }
 
 type CreateProgramMembership_CreateProgramMembership_ProgramMembership struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	ProgramID string     "json:\"programID\" graphql:\"programID\""
-	Role      enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID    string     "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	ProgramID   string     "json:\"programID\" graphql:\"programID\""
+	Role        enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
+	UserID      string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetCreatedAt() *time.Time {
@@ -32746,11 +32746,11 @@ func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetC
 	}
 	return t.CreatedAt
 }
-func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetCreatedBy() *string {
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetID() string {
 	if t == nil {
@@ -32776,11 +32776,11 @@ func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetU
 	}
 	return t.UpdatedAt
 }
-func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetUpdatedBy() *string {
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetUserID() string {
 	if t == nil {
@@ -32812,14 +32812,14 @@ func (t *DeleteProgramMembership_DeleteProgramMembership) GetDeletedID() string 
 }
 
 type GetAllProgramMemberships_ProgramMemberships_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	ProgramID string     "json:\"programID\" graphql:\"programID\""
-	Role      enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID    string     "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	ProgramID   string     "json:\"programID\" graphql:\"programID\""
+	Role        enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
+	UserID      string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedAt() *time.Time {
@@ -32828,11 +32828,11 @@ func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedAt() 
 	}
 	return t.CreatedAt
 }
-func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetID() string {
 	if t == nil {
@@ -32858,11 +32858,11 @@ func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedAt() 
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -32894,14 +32894,14 @@ func (t *GetAllProgramMemberships_ProgramMemberships) GetEdges() []*GetAllProgra
 }
 
 type GetProgramMembershipByID_ProgramMembership struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	ProgramID string     "json:\"programID\" graphql:\"programID\""
-	Role      enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID    string     "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	ProgramID   string     "json:\"programID\" graphql:\"programID\""
+	Role        enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
+	UserID      string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetProgramMembershipByID_ProgramMembership) GetCreatedAt() *time.Time {
@@ -32910,11 +32910,11 @@ func (t *GetProgramMembershipByID_ProgramMembership) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetProgramMembershipByID_ProgramMembership) GetCreatedBy() *string {
+func (t *GetProgramMembershipByID_ProgramMembership) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProgramMembershipByID_ProgramMembership{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProgramMembershipByID_ProgramMembership) GetID() string {
 	if t == nil {
@@ -32940,11 +32940,11 @@ func (t *GetProgramMembershipByID_ProgramMembership) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetProgramMembershipByID_ProgramMembership) GetUpdatedBy() *string {
+func (t *GetProgramMembershipByID_ProgramMembership) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProgramMembershipByID_ProgramMembership{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProgramMembershipByID_ProgramMembership) GetUserID() string {
 	if t == nil {
@@ -32954,14 +32954,14 @@ func (t *GetProgramMembershipByID_ProgramMembership) GetUserID() string {
 }
 
 type GetProgramMemberships_ProgramMemberships_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	ProgramID string     "json:\"programID\" graphql:\"programID\""
-	Role      enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID    string     "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	ProgramID   string     "json:\"programID\" graphql:\"programID\""
+	Role        enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
+	UserID      string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedAt() *time.Time {
@@ -32970,11 +32970,11 @@ func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedAt() *ti
 	}
 	return t.CreatedAt
 }
-func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedBy() *string {
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetID() string {
 	if t == nil {
@@ -33000,11 +33000,11 @@ func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedAt() *ti
 	}
 	return t.UpdatedAt
 }
-func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedBy() *string {
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -33036,14 +33036,14 @@ func (t *GetProgramMemberships_ProgramMemberships) GetEdges() []*GetProgramMembe
 }
 
 type UpdateProgramMembership_UpdateProgramMembership_ProgramMembership struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	ProgramID string     "json:\"programID\" graphql:\"programID\""
-	Role      enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID    string     "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedByID *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	ProgramID   string     "json:\"programID\" graphql:\"programID\""
+	Role        enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedByID *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
+	UserID      string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetCreatedAt() *time.Time {
@@ -33052,11 +33052,11 @@ func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetC
 	}
 	return t.CreatedAt
 }
-func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetCreatedBy() *string {
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetID() string {
 	if t == nil {
@@ -33082,11 +33082,11 @@ func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetU
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetUpdatedBy() *string {
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetUserID() string {
 	if t == nil {
@@ -33108,7 +33108,7 @@ func (t *UpdateProgramMembership_UpdateProgramMembership) GetProgramMembership()
 
 type GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
@@ -33116,7 +33116,7 @@ type GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node stru
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Role        enums.Role     "json:\"role\" graphql:\"role\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID      string         "json:\"userID\" graphql:\"userID\""
 }
 
@@ -33126,11 +33126,11 @@ func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node)
 	}
 	return t.CreatedAt
 }
-func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -33174,11 +33174,11 @@ func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node)
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -33211,7 +33211,7 @@ func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories) GetEdges()
 
 type GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node struct {
 	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
@@ -33219,7 +33219,7 @@ type GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node struct 
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
 	Role        enums.Role     "json:\"role\" graphql:\"role\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID      string         "json:\"userID\" graphql:\"userID\""
 }
 
@@ -33229,11 +33229,11 @@ func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) Ge
 	}
 	return t.CreatedAt
 }
-func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -33277,11 +33277,11 @@ func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) Ge
 	}
 	return t.UpdatedAt
 }
-func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUserID() string {
 	if t == nil {
@@ -33315,7 +33315,7 @@ func (t *GetProgramMembershipHistories_ProgramMembershipHistories) GetEdges() []
 type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                "json:\"id\" graphql:\"id\""
@@ -33328,7 +33328,7 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetBusinessCosts() *string {
@@ -33343,11 +33343,11 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetCreatedBy() *string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDescription() *string {
 	if t == nil {
@@ -33421,11 +33421,11 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetUpdatedBy() *string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVRisk_CreateBulkCSVRisk struct {
@@ -33442,7 +33442,7 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk) GetRisks() []*CreateBulkCSVRisk_Cr
 type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                "json:\"id\" graphql:\"id\""
@@ -33455,7 +33455,7 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetBusinessCosts() *string {
@@ -33470,11 +33470,11 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetCreatedBy() *string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDescription() *string {
 	if t == nil {
@@ -33548,11 +33548,11 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetUpdatedBy() *string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkRisk_CreateBulkRisk struct {
@@ -33642,7 +33642,7 @@ type CreateRisk_CreateRisk_Risk struct {
 	BlockedGroups []*CreateRisk_CreateRisk_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*CreateRisk_CreateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -33657,7 +33657,7 @@ type CreateRisk_CreateRisk_Risk struct {
 	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*CreateRisk_CreateRisk_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -33679,11 +33679,11 @@ func (t *CreateRisk_CreateRisk_Risk) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateRisk_CreateRisk_Risk) GetCreatedBy() *string {
+func (t *CreateRisk_CreateRisk_Risk) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateRisk_CreateRisk_Risk) GetDescription() *string {
 	if t == nil {
@@ -33769,11 +33769,11 @@ func (t *CreateRisk_CreateRisk_Risk) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateRisk_CreateRisk_Risk) GetUpdatedBy() *string {
+func (t *CreateRisk_CreateRisk_Risk) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateRisk_CreateRisk_Risk) GetViewers() []*CreateRisk_CreateRisk_Risk_Viewers {
 	if t == nil {
@@ -33880,7 +33880,7 @@ type GetAllRisks_Risks_Edges_Node struct {
 	BlockedGroups []*GetAllRisks_Risks_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	BusinessCosts *string                                       "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*GetAllRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -33895,7 +33895,7 @@ type GetAllRisks_Risks_Edges_Node struct {
 	Status        *string                                       "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*GetAllRisks_Risks_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -33917,11 +33917,11 @@ func (t *GetAllRisks_Risks_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllRisks_Risks_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -34007,11 +34007,11 @@ func (t *GetAllRisks_Risks_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllRisks_Risks_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetViewers() []*GetAllRisks_Risks_Edges_Node_Viewers {
 	if t == nil {
@@ -34118,7 +34118,7 @@ type GetRiskByID_Risk struct {
 	BlockedGroups []*GetRiskByID_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	BusinessCosts *string                           "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                           "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                           "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                    "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*GetRiskByID_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -34133,7 +34133,7 @@ type GetRiskByID_Risk struct {
 	Status        *string                           "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                           "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*GetRiskByID_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -34155,11 +34155,11 @@ func (t *GetRiskByID_Risk) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetRiskByID_Risk) GetCreatedBy() *string {
+func (t *GetRiskByID_Risk) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetRiskByID_Risk) GetDescription() *string {
 	if t == nil {
@@ -34245,11 +34245,11 @@ func (t *GetRiskByID_Risk) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetRiskByID_Risk) GetUpdatedBy() *string {
+func (t *GetRiskByID_Risk) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetRiskByID_Risk) GetViewers() []*GetRiskByID_Risk_Viewers {
 	if t == nil {
@@ -34334,7 +34334,7 @@ type GetRisks_Risks_Edges_Node struct {
 	BlockedGroups []*GetRisks_Risks_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	BusinessCosts *string                                    "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                             "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*GetRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -34349,7 +34349,7 @@ type GetRisks_Risks_Edges_Node struct {
 	Status        *string                                    "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*GetRisks_Risks_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -34371,11 +34371,11 @@ func (t *GetRisks_Risks_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetRisks_Risks_Edges_Node) GetCreatedBy() *string {
+func (t *GetRisks_Risks_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetRisks_Risks_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -34461,11 +34461,11 @@ func (t *GetRisks_Risks_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetRisks_Risks_Edges_Node) GetUpdatedBy() *string {
+func (t *GetRisks_Risks_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetRisks_Risks_Edges_Node) GetViewers() []*GetRisks_Risks_Edges_Node_Viewers {
 	if t == nil {
@@ -34572,7 +34572,7 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	BlockedGroups []*UpdateRisk_UpdateRisk_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
 	Editors       []*UpdateRisk_UpdateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
@@ -34587,7 +34587,7 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Viewers       []*UpdateRisk_UpdateRisk_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -34609,11 +34609,11 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetCreatedBy() *string {
+func (t *UpdateRisk_UpdateRisk_Risk) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateRisk_UpdateRisk_Risk) GetDescription() *string {
 	if t == nil {
@@ -34699,11 +34699,11 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetUpdatedBy() *string {
+func (t *UpdateRisk_UpdateRisk_Risk) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateRisk_UpdateRisk_Risk) GetViewers() []*UpdateRisk_UpdateRisk_Risk_Viewers {
 	if t == nil {
@@ -34726,7 +34726,7 @@ func (t *UpdateRisk_UpdateRisk) GetRisk() *UpdateRisk_UpdateRisk_Risk {
 type GetAllRiskHistories_RiskHistories_Edges_Node struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime   time.Time             "json:\"historyTime\" graphql:\"historyTime\""
@@ -34742,7 +34742,7 @@ type GetAllRiskHistories_RiskHistories_Edges_Node struct {
 	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetBusinessCosts() *string {
@@ -34757,11 +34757,11 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -34853,11 +34853,11 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllRiskHistories_RiskHistories_Edges struct {
@@ -34885,7 +34885,7 @@ func (t *GetAllRiskHistories_RiskHistories) GetEdges() []*GetAllRiskHistories_Ri
 type GetRiskHistories_RiskHistories_Edges_Node struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string               "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime   time.Time             "json:\"historyTime\" graphql:\"historyTime\""
@@ -34901,7 +34901,7 @@ type GetRiskHistories_RiskHistories_Edges_Node struct {
 	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string               "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetRiskHistories_RiskHistories_Edges_Node) GetBusinessCosts() *string {
@@ -34916,11 +34916,11 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetRiskHistories_RiskHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -35012,11 +35012,11 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetRiskHistories_RiskHistories_Edges struct {
@@ -36377,7 +36377,7 @@ func (t *GlobalSearch_Search) GetNodes() []*GlobalSearch_Search_Nodes {
 type CreateBulkCSVStandard_CreateBulkCSVStandard_Standards struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -36389,7 +36389,7 @@ type CreateBulkCSVStandard_CreateBulkCSVStandard_Standards struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -36405,11 +36405,11 @@ func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetCreatedAt() *
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetCreatedBy() *string {
+func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetDescription() *string {
 	if t == nil {
@@ -36477,11 +36477,11 @@ func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetUpdatedAt() *
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetUpdatedBy() *string {
+func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetVersion() *string {
 	if t == nil {
@@ -36504,7 +36504,7 @@ func (t *CreateBulkCSVStandard_CreateBulkCSVStandard) GetStandards() []*CreateBu
 type CreateBulkStandard_CreateBulkStandard_Standards struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -36516,7 +36516,7 @@ type CreateBulkStandard_CreateBulkStandard_Standards struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -36532,11 +36532,11 @@ func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetCreatedAt() *time.T
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetCreatedBy() *string {
+func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkStandard_CreateBulkStandard_Standards{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetDescription() *string {
 	if t == nil {
@@ -36604,11 +36604,11 @@ func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetUpdatedAt() *time.T
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetUpdatedBy() *string {
+func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkStandard_CreateBulkStandard_Standards{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetVersion() *string {
 	if t == nil {
@@ -36631,7 +36631,7 @@ func (t *CreateBulkStandard_CreateBulkStandard) GetStandards() []*CreateBulkStan
 type CreateStandard_CreateStandard_Standard struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -36643,7 +36643,7 @@ type CreateStandard_CreateStandard_Standard struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -36659,11 +36659,11 @@ func (t *CreateStandard_CreateStandard_Standard) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateStandard_CreateStandard_Standard) GetCreatedBy() *string {
+func (t *CreateStandard_CreateStandard_Standard) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateStandard_CreateStandard_Standard{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateStandard_CreateStandard_Standard) GetDescription() *string {
 	if t == nil {
@@ -36731,11 +36731,11 @@ func (t *CreateStandard_CreateStandard_Standard) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateStandard_CreateStandard_Standard) GetUpdatedBy() *string {
+func (t *CreateStandard_CreateStandard_Standard) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateStandard_CreateStandard_Standard{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateStandard_CreateStandard_Standard) GetVersion() *string {
 	if t == nil {
@@ -36769,7 +36769,7 @@ func (t *DeleteStandard_DeleteStandard) GetDeletedID() string {
 type GetAllStandards_Standards_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -36781,7 +36781,7 @@ type GetAllStandards_Standards_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -36797,11 +36797,11 @@ func (t *GetAllStandards_Standards_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllStandards_Standards_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllStandards_Standards_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllStandards_Standards_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllStandards_Standards_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -36869,11 +36869,11 @@ func (t *GetAllStandards_Standards_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllStandards_Standards_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllStandards_Standards_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllStandards_Standards_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllStandards_Standards_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -36907,7 +36907,7 @@ func (t *GetAllStandards_Standards) GetEdges() []*GetAllStandards_Standards_Edge
 type GetStandardByID_Standard struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -36919,7 +36919,7 @@ type GetStandardByID_Standard struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -36935,11 +36935,11 @@ func (t *GetStandardByID_Standard) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetStandardByID_Standard) GetCreatedBy() *string {
+func (t *GetStandardByID_Standard) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetStandardByID_Standard{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetStandardByID_Standard) GetDescription() *string {
 	if t == nil {
@@ -37007,11 +37007,11 @@ func (t *GetStandardByID_Standard) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetStandardByID_Standard) GetUpdatedBy() *string {
+func (t *GetStandardByID_Standard) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetStandardByID_Standard{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetStandardByID_Standard) GetVersion() *string {
 	if t == nil {
@@ -37023,7 +37023,7 @@ func (t *GetStandardByID_Standard) GetVersion() *string {
 type GetStandards_Standards_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -37035,7 +37035,7 @@ type GetStandards_Standards_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -37051,11 +37051,11 @@ func (t *GetStandards_Standards_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetStandards_Standards_Edges_Node) GetCreatedBy() *string {
+func (t *GetStandards_Standards_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetStandards_Standards_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetStandards_Standards_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -37123,11 +37123,11 @@ func (t *GetStandards_Standards_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetStandards_Standards_Edges_Node) GetUpdatedBy() *string {
+func (t *GetStandards_Standards_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetStandards_Standards_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetStandards_Standards_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -37161,7 +37161,7 @@ func (t *GetStandards_Standards) GetEdges() []*GetStandards_Standards_Edges {
 type UpdateStandard_UpdateStandard_Standard struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -37173,7 +37173,7 @@ type UpdateStandard_UpdateStandard_Standard struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -37189,11 +37189,11 @@ func (t *UpdateStandard_UpdateStandard_Standard) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateStandard_UpdateStandard_Standard) GetCreatedBy() *string {
+func (t *UpdateStandard_UpdateStandard_Standard) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateStandard_UpdateStandard_Standard{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateStandard_UpdateStandard_Standard) GetDescription() *string {
 	if t == nil {
@@ -37261,11 +37261,11 @@ func (t *UpdateStandard_UpdateStandard_Standard) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateStandard_UpdateStandard_Standard) GetUpdatedBy() *string {
+func (t *UpdateStandard_UpdateStandard_Standard) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateStandard_UpdateStandard_Standard{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateStandard_UpdateStandard_Standard) GetVersion() *string {
 	if t == nil {
@@ -37288,7 +37288,7 @@ func (t *UpdateStandard_UpdateStandard) GetStandard() *UpdateStandard_UpdateStan
 type GetAllStandardHistories_StandardHistories_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -37303,7 +37303,7 @@ type GetAllStandardHistories_StandardHistories_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -37319,11 +37319,11 @@ func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetCreatedAt() *t
 	}
 	return t.CreatedAt
 }
-func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllStandardHistories_StandardHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -37409,11 +37409,11 @@ func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetUpdatedAt() *t
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllStandardHistories_StandardHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -37447,7 +37447,7 @@ func (t *GetAllStandardHistories_StandardHistories) GetEdges() []*GetAllStandard
 type GetStandardHistories_StandardHistories_Edges_Node struct {
 	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -37462,7 +37462,7 @@ type GetStandardHistories_StandardHistories_Edges_Node struct {
 	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
 	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -37478,11 +37478,11 @@ func (t *GetStandardHistories_StandardHistories_Edges_Node) GetCreatedAt() *time
 	}
 	return t.CreatedAt
 }
-func (t *GetStandardHistories_StandardHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetStandardHistories_StandardHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetStandardHistories_StandardHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetStandardHistories_StandardHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -37568,11 +37568,11 @@ func (t *GetStandardHistories_StandardHistories_Edges_Node) GetUpdatedAt() *time
 	}
 	return t.UpdatedAt
 }
-func (t *GetStandardHistories_StandardHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetStandardHistories_StandardHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetStandardHistories_StandardHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetStandardHistories_StandardHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -37606,7 +37606,7 @@ func (t *GetStandardHistories_StandardHistories) GetEdges() []*GetStandardHistor
 type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	Class                          *string        "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -37624,7 +37624,7 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	SubcontrolType                 *string        "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -37640,11 +37640,11 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetCreated
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetCreatedBy() *string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetDescription() *string {
 	if t == nil {
@@ -37748,11 +37748,11 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetUpdated
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetUpdatedBy() *string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetVersion() *string {
 	if t == nil {
@@ -37775,7 +37775,7 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol) GetSubcontrols() []*Cr
 type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	Class                          *string        "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -37793,7 +37793,7 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	SubcontrolType                 *string        "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -37809,11 +37809,11 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetCreatedAt() *
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetCreatedBy() *string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetDescription() *string {
 	if t == nil {
@@ -37917,11 +37917,11 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetUpdatedAt() *
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetUpdatedBy() *string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetVersion() *string {
 	if t == nil {
@@ -37963,7 +37963,7 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	Class                          *string                                                  "json:\"class,omitempty\" graphql:\"class\""
 	Controls                       []*CreateSubcontrol_CreateSubcontrol_Subcontrol_Controls "json:\"controls\" graphql:\"controls\""
 	CreatedAt                      *time.Time                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string                                                  "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string                                                  "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                           "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string                                                  "json:\"family,omitempty\" graphql:\"family\""
@@ -37981,7 +37981,7 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	SubcontrolType                 *string                                                  "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string                                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string                                                  "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string                                                  "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -38003,11 +38003,11 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetCreatedBy() *string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetDescription() *string {
 	if t == nil {
@@ -38111,11 +38111,11 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetUpdatedBy() *string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetVersion() *string {
 	if t == nil {
@@ -38168,7 +38168,7 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	Class                          *string                                              "json:\"class,omitempty\" graphql:\"class\""
 	Controls                       []*GetAllSubcontrols_Subcontrols_Edges_Node_Controls "json:\"controls\" graphql:\"controls\""
 	CreatedAt                      *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string                                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string                                              "json:\"family,omitempty\" graphql:\"family\""
@@ -38186,7 +38186,7 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	SubcontrolType                 *string                                              "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string                                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string                                              "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -38208,11 +38208,11 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -38316,11 +38316,11 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -38373,7 +38373,7 @@ type GetSubcontrolByID_Subcontrol struct {
 	Class                          *string                                  "json:\"class,omitempty\" graphql:\"class\""
 	Controls                       []*GetSubcontrolByID_Subcontrol_Controls "json:\"controls\" graphql:\"controls\""
 	CreatedAt                      *time.Time                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string                                  "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string                                  "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                           "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string                                  "json:\"family,omitempty\" graphql:\"family\""
@@ -38391,7 +38391,7 @@ type GetSubcontrolByID_Subcontrol struct {
 	SubcontrolType                 *string                                  "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string                                  "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string                                  "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -38413,11 +38413,11 @@ func (t *GetSubcontrolByID_Subcontrol) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetSubcontrolByID_Subcontrol) GetCreatedBy() *string {
+func (t *GetSubcontrolByID_Subcontrol) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetSubcontrolByID_Subcontrol) GetDescription() *string {
 	if t == nil {
@@ -38521,11 +38521,11 @@ func (t *GetSubcontrolByID_Subcontrol) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetSubcontrolByID_Subcontrol) GetUpdatedBy() *string {
+func (t *GetSubcontrolByID_Subcontrol) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetSubcontrolByID_Subcontrol) GetVersion() *string {
 	if t == nil {
@@ -38556,7 +38556,7 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	Class                          *string                                           "json:\"class,omitempty\" graphql:\"class\""
 	Controls                       []*GetSubcontrols_Subcontrols_Edges_Node_Controls "json:\"controls\" graphql:\"controls\""
 	CreatedAt                      *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string                                           "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string                                           "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                    "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string                                           "json:\"family,omitempty\" graphql:\"family\""
@@ -38574,7 +38574,7 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	SubcontrolType                 *string                                           "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string                                           "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string                                           "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -38596,11 +38596,11 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetCreatedBy() *string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -38704,11 +38704,11 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetUpdatedBy() *string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -38761,7 +38761,7 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	Class                          *string                                                  "json:\"class,omitempty\" graphql:\"class\""
 	Controls                       []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Controls "json:\"controls\" graphql:\"controls\""
 	CreatedAt                      *time.Time                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string                                                  "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string                                                  "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                           "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string                                                  "json:\"family,omitempty\" graphql:\"family\""
@@ -38779,7 +38779,7 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	SubcontrolType                 *string                                                  "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string                                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string                                                  "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string                                                  "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -38801,11 +38801,11 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetCreatedBy() *string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetDescription() *string {
 	if t == nil {
@@ -38909,11 +38909,11 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetUpdatedBy() *string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetVersion() *string {
 	if t == nil {
@@ -38936,7 +38936,7 @@ func (t *UpdateSubcontrol_UpdateSubcontrol) GetSubcontrol() *UpdateSubcontrol_Up
 type GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	Class                          *string        "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -38957,7 +38957,7 @@ type GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	SubcontrolType                 *string        "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -38973,11 +38973,11 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedAt(
 	}
 	return t.CreatedAt
 }
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -39099,11 +39099,11 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetUpdatedAt(
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -39137,7 +39137,7 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories) GetEdges() []*GetAllSubc
 type GetSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	Class                          *string        "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID                    *string        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description                    *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any "json:\"details,omitempty\" graphql:\"details\""
 	Family                         *string        "json:\"family,omitempty\" graphql:\"family\""
@@ -39158,7 +39158,7 @@ type GetSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	SubcontrolType                 *string        "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID                    *string        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	Version                        *string        "json:\"version,omitempty\" graphql:\"version\""
 }
 
@@ -39174,11 +39174,11 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedAt() *
 	}
 	return t.CreatedAt
 }
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -39300,11 +39300,11 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetUpdatedAt() *
 	}
 	return t.UpdatedAt
 }
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetVersion() *string {
 	if t == nil {
@@ -39424,11 +39424,11 @@ func (t *CreateBulkSubscriber_CreateBulkSubscriber) GetSubscribers() []*CreateBu
 type CreateSubscriber_CreateSubscriber_Subscriber struct {
 	Active        bool       "json:\"active\" graphql:\"active\""
 	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email         string     "json:\"email\" graphql:\"email\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	VerifiedEmail bool       "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
 
@@ -39444,11 +39444,11 @@ func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetCreatedBy() *string {
+func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateSubscriber_CreateSubscriber_Subscriber{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetEmail() string {
 	if t == nil {
@@ -39468,11 +39468,11 @@ func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetUpdatedBy() *string {
+func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateSubscriber_CreateSubscriber_Subscriber{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetVerifiedEmail() bool {
 	if t == nil {
@@ -39667,12 +39667,12 @@ func (t *GetSubscribers_Subscribers) GetEdges() []*GetSubscribers_Subscribers_Ed
 type UpdateSubscriber_UpdateSubscriber_Subscriber struct {
 	Active        bool       "json:\"active\" graphql:\"active\""
 	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID   *string    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Email         string     "json:\"email\" graphql:\"email\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	PhoneNumber   *string    "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
 	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID   *string    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	VerifiedEmail bool       "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 	VerifiedPhone bool       "json:\"verifiedPhone\" graphql:\"verifiedPhone\""
 }
@@ -39689,11 +39689,11 @@ func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetCreatedBy() *string {
+func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateSubscriber_UpdateSubscriber_Subscriber{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetEmail() string {
 	if t == nil {
@@ -39719,11 +39719,11 @@ func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetUpdatedBy() *string {
+func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateSubscriber_UpdateSubscriber_Subscriber{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetVerifiedEmail() bool {
 	if t == nil {
@@ -39804,7 +39804,7 @@ type CreateBulkCSVTask_CreateBulkCSVTask_Tasks struct {
 	Assigner    CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner  "json:\"assigner\" graphql:\"assigner\""
 	Completed   *time.Time                                          "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                             "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                                      "json:\"details,omitempty\" graphql:\"details\""
 	Due         *time.Time                                          "json:\"due,omitempty\" graphql:\"due\""
@@ -39813,7 +39813,7 @@ type CreateBulkCSVTask_CreateBulkCSVTask_Tasks struct {
 	Tags        []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                                              "json:\"title\" graphql:\"title\""
 	UpdatedAt   *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetAssignee() *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee {
@@ -39840,11 +39840,11 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCreatedBy() *string {
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDescription() *string {
 	if t == nil {
@@ -39894,11 +39894,11 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetUpdatedBy() *string {
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkCSVTask_CreateBulkCSVTask struct {
@@ -39967,7 +39967,7 @@ type CreateBulkTask_CreateBulkTask_Tasks struct {
 	Assigner    CreateBulkTask_CreateBulkTask_Tasks_Assigner  "json:\"assigner\" graphql:\"assigner\""
 	Completed   *time.Time                                    "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                                "json:\"details,omitempty\" graphql:\"details\""
 	Due         *time.Time                                    "json:\"due,omitempty\" graphql:\"due\""
@@ -39976,7 +39976,7 @@ type CreateBulkTask_CreateBulkTask_Tasks struct {
 	Tags        []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                                        "json:\"title\" graphql:\"title\""
 	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateBulkTask_CreateBulkTask_Tasks) GetAssignee() *CreateBulkTask_CreateBulkTask_Tasks_Assignee {
@@ -40003,11 +40003,11 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCreatedBy() *string {
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDescription() *string {
 	if t == nil {
@@ -40057,11 +40057,11 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateBulkTask_CreateBulkTask_Tasks) GetUpdatedBy() *string {
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateBulkTask_CreateBulkTask struct {
@@ -40130,7 +40130,7 @@ type CreateTask_CreateTask_Task struct {
 	Assigner    CreateTask_CreateTask_Task_Assigner  "json:\"assigner\" graphql:\"assigner\""
 	Completed   *time.Time                           "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                       "json:\"details,omitempty\" graphql:\"details\""
 	Due         *time.Time                           "json:\"due,omitempty\" graphql:\"due\""
@@ -40139,7 +40139,7 @@ type CreateTask_CreateTask_Task struct {
 	Tags        []string                             "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                               "json:\"title\" graphql:\"title\""
 	UpdatedAt   *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateTask_CreateTask_Task) GetAssignee() *CreateTask_CreateTask_Task_Assignee {
@@ -40166,11 +40166,11 @@ func (t *CreateTask_CreateTask_Task) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateTask_CreateTask_Task) GetCreatedBy() *string {
+func (t *CreateTask_CreateTask_Task) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateTask_CreateTask_Task{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateTask_CreateTask_Task) GetDescription() *string {
 	if t == nil {
@@ -40220,11 +40220,11 @@ func (t *CreateTask_CreateTask_Task) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateTask_CreateTask_Task) GetUpdatedBy() *string {
+func (t *CreateTask_CreateTask_Task) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateTask_CreateTask_Task{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateTask_CreateTask struct {
@@ -40322,7 +40322,7 @@ type GetAllTasks_Tasks_Edges_Node struct {
 	Assigner     GetAllTasks_Tasks_Edges_Node_Assigner        "json:\"assigner\" graphql:\"assigner\""
 	Completed    *time.Time                                   "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt    *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                                      "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string                                      "json:\"description,omitempty\" graphql:\"description\""
 	Details      map[string]any                               "json:\"details,omitempty\" graphql:\"details\""
 	Due          *time.Time                                   "json:\"due,omitempty\" graphql:\"due\""
@@ -40332,7 +40332,7 @@ type GetAllTasks_Tasks_Edges_Node struct {
 	Tags         []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	Title        string                                       "json:\"title\" graphql:\"title\""
 	UpdatedAt    *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                                      "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllTasks_Tasks_Edges_Node) GetAssignee() *GetAllTasks_Tasks_Edges_Node_Assignee {
@@ -40359,11 +40359,11 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllTasks_Tasks_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllTasks_Tasks_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllTasks_Tasks_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -40419,11 +40419,11 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllTasks_Tasks_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllTasks_Tasks_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllTasks_Tasks_Edges struct {
@@ -40521,7 +40521,7 @@ type GetTaskByID_Task struct {
 	Assigner     GetTaskByID_Task_Assigner        "json:\"assigner\" graphql:\"assigner\""
 	Completed    *time.Time                       "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt    *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string                          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string                          "json:\"description,omitempty\" graphql:\"description\""
 	Details      map[string]any                   "json:\"details,omitempty\" graphql:\"details\""
 	Due          *time.Time                       "json:\"due,omitempty\" graphql:\"due\""
@@ -40531,7 +40531,7 @@ type GetTaskByID_Task struct {
 	Tags         []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title        string                           "json:\"title\" graphql:\"title\""
 	UpdatedAt    *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string                          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetTaskByID_Task) GetAssignee() *GetTaskByID_Task_Assignee {
@@ -40558,11 +40558,11 @@ func (t *GetTaskByID_Task) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetTaskByID_Task) GetCreatedBy() *string {
+func (t *GetTaskByID_Task) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetTaskByID_Task{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetTaskByID_Task) GetDescription() *string {
 	if t == nil {
@@ -40618,11 +40618,11 @@ func (t *GetTaskByID_Task) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetTaskByID_Task) GetUpdatedBy() *string {
+func (t *GetTaskByID_Task) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetTaskByID_Task{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetTasks_Tasks_Edges_Node_Assignee struct {
@@ -40680,7 +40680,7 @@ type GetTasks_Tasks_Edges_Node struct {
 	Assigner    GetTasks_Tasks_Edges_Node_Assigner  "json:\"assigner\" graphql:\"assigner\""
 	Completed   *time.Time                          "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                             "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                      "json:\"details,omitempty\" graphql:\"details\""
 	Due         *time.Time                          "json:\"due,omitempty\" graphql:\"due\""
@@ -40689,7 +40689,7 @@ type GetTasks_Tasks_Edges_Node struct {
 	Tags        []string                            "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                              "json:\"title\" graphql:\"title\""
 	UpdatedAt   *time.Time                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetTasks_Tasks_Edges_Node) GetAssignee() *GetTasks_Tasks_Edges_Node_Assignee {
@@ -40716,11 +40716,11 @@ func (t *GetTasks_Tasks_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetTasks_Tasks_Edges_Node) GetCreatedBy() *string {
+func (t *GetTasks_Tasks_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetTasks_Tasks_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -40770,11 +40770,11 @@ func (t *GetTasks_Tasks_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetTasks_Tasks_Edges_Node) GetUpdatedBy() *string {
+func (t *GetTasks_Tasks_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetTasks_Tasks_Edges struct {
@@ -40854,7 +40854,7 @@ type UpdateTask_UpdateTask_Task struct {
 	Assigner    UpdateTask_UpdateTask_Task_Assigner  "json:\"assigner\" graphql:\"assigner\""
 	Completed   *time.Time                           "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                       "json:\"details,omitempty\" graphql:\"details\""
 	Due         *time.Time                           "json:\"due,omitempty\" graphql:\"due\""
@@ -40863,7 +40863,7 @@ type UpdateTask_UpdateTask_Task struct {
 	Tags        []string                             "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                               "json:\"title\" graphql:\"title\""
 	UpdatedAt   *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateTask_UpdateTask_Task) GetAssignee() *UpdateTask_UpdateTask_Task_Assignee {
@@ -40890,11 +40890,11 @@ func (t *UpdateTask_UpdateTask_Task) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateTask_UpdateTask_Task) GetCreatedBy() *string {
+func (t *UpdateTask_UpdateTask_Task) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateTask_UpdateTask_Task) GetDescription() *string {
 	if t == nil {
@@ -40944,11 +40944,11 @@ func (t *UpdateTask_UpdateTask_Task) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateTask_UpdateTask_Task) GetUpdatedBy() *string {
+func (t *UpdateTask_UpdateTask_Task) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateTask_UpdateTask struct {
@@ -40965,7 +40965,7 @@ func (t *UpdateTask_UpdateTask) GetTask() *UpdateTask_UpdateTask_Task {
 type GetAllTaskHistories_TaskHistories_Edges_Node struct {
 	Completed   *time.Time       "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string          "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any   "json:\"details,omitempty\" graphql:\"details\""
 	Due         *time.Time       "json:\"due,omitempty\" graphql:\"due\""
@@ -40977,7 +40977,7 @@ type GetAllTaskHistories_TaskHistories_Edges_Node struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string           "json:\"title\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCompleted() *time.Time {
@@ -40992,11 +40992,11 @@ func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -41064,11 +41064,11 @@ func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllTaskHistories_TaskHistories_Edges struct {
@@ -41096,7 +41096,7 @@ func (t *GetAllTaskHistories_TaskHistories) GetEdges() []*GetAllTaskHistories_Ta
 type GetTaskHistories_TaskHistories_Edges_Node struct {
 	Completed   *time.Time       "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string          "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any   "json:\"details,omitempty\" graphql:\"details\""
 	Due         *time.Time       "json:\"due,omitempty\" graphql:\"due\""
@@ -41108,7 +41108,7 @@ type GetTaskHistories_TaskHistories_Edges_Node struct {
 	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string           "json:\"title\" graphql:\"title\""
 	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCompleted() *time.Time {
@@ -41123,11 +41123,11 @@ func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetTaskHistories_TaskHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetTaskHistories_TaskHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -41195,11 +41195,11 @@ func (t *GetTaskHistories_TaskHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetTaskHistories_TaskHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetTaskHistories_TaskHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetTaskHistories_TaskHistories_Edges struct {
@@ -41441,7 +41441,7 @@ func (t *GetAllTemplates_Templates_Edges_Node_Owner) GetID() string {
 
 type GetAllTemplates_Templates_Edges_Node struct {
 	CreatedAt   *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	ID          string                                      "json:\"id\" graphql:\"id\""
 	Jsonconfig  json.RawMessage                             "json:\"jsonconfig\" graphql:\"jsonconfig\""
@@ -41449,7 +41449,7 @@ type GetAllTemplates_Templates_Edges_Node struct {
 	Owner       *GetAllTemplates_Templates_Edges_Node_Owner "json:\"owner,omitempty\" graphql:\"owner\""
 	Uischema    json.RawMessage                             "json:\"uischema,omitempty\" graphql:\"uischema\""
 	UpdatedAt   *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllTemplates_Templates_Edges_Node) GetCreatedAt() *time.Time {
@@ -41458,11 +41458,11 @@ func (t *GetAllTemplates_Templates_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllTemplates_Templates_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllTemplates_Templates_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllTemplates_Templates_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllTemplates_Templates_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -41506,11 +41506,11 @@ func (t *GetAllTemplates_Templates_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllTemplates_Templates_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllTemplates_Templates_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllTemplates_Templates_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllTemplates_Templates_Edges struct {
@@ -41548,7 +41548,7 @@ func (t *GetTemplateByID_Template_Owner) GetID() string {
 
 type GetTemplateByID_Template struct {
 	CreatedAt   *time.Time                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                         "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                         "json:\"description,omitempty\" graphql:\"description\""
 	ID          string                          "json:\"id\" graphql:\"id\""
 	Jsonconfig  json.RawMessage                 "json:\"jsonconfig\" graphql:\"jsonconfig\""
@@ -41556,7 +41556,7 @@ type GetTemplateByID_Template struct {
 	Owner       *GetTemplateByID_Template_Owner "json:\"owner,omitempty\" graphql:\"owner\""
 	Uischema    json.RawMessage                 "json:\"uischema,omitempty\" graphql:\"uischema\""
 	UpdatedAt   *time.Time                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                         "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetTemplateByID_Template) GetCreatedAt() *time.Time {
@@ -41565,11 +41565,11 @@ func (t *GetTemplateByID_Template) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetTemplateByID_Template) GetCreatedBy() *string {
+func (t *GetTemplateByID_Template) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetTemplateByID_Template{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetTemplateByID_Template) GetDescription() *string {
 	if t == nil {
@@ -41613,11 +41613,11 @@ func (t *GetTemplateByID_Template) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetTemplateByID_Template) GetUpdatedBy() *string {
+func (t *GetTemplateByID_Template) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetTemplateByID_Template{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateTemplate_UpdateTemplate_Template_Owner struct {
@@ -41633,7 +41633,7 @@ func (t *UpdateTemplate_UpdateTemplate_Template_Owner) GetID() string {
 
 type UpdateTemplate_UpdateTemplate_Template struct {
 	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID *string                                       "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	ID          string                                        "json:\"id\" graphql:\"id\""
 	Jsonconfig  json.RawMessage                               "json:\"jsonconfig\" graphql:\"jsonconfig\""
@@ -41641,7 +41641,7 @@ type UpdateTemplate_UpdateTemplate_Template struct {
 	Owner       *UpdateTemplate_UpdateTemplate_Template_Owner "json:\"owner,omitempty\" graphql:\"owner\""
 	Uischema    json.RawMessage                               "json:\"uischema,omitempty\" graphql:\"uischema\""
 	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID *string                                       "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateTemplate_UpdateTemplate_Template) GetCreatedAt() *time.Time {
@@ -41650,11 +41650,11 @@ func (t *UpdateTemplate_UpdateTemplate_Template) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateTemplate_UpdateTemplate_Template) GetCreatedBy() *string {
+func (t *UpdateTemplate_UpdateTemplate_Template) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateTemplate_UpdateTemplate_Template{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateTemplate_UpdateTemplate_Template) GetDescription() *string {
 	if t == nil {
@@ -41698,11 +41698,11 @@ func (t *UpdateTemplate_UpdateTemplate_Template) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateTemplate_UpdateTemplate_Template) GetUpdatedBy() *string {
+func (t *UpdateTemplate_UpdateTemplate_Template) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateTemplate_UpdateTemplate_Template{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateTemplate_UpdateTemplate struct {
@@ -41718,7 +41718,7 @@ func (t *UpdateTemplate_UpdateTemplate) GetTemplate() *UpdateTemplate_UpdateTemp
 
 type GetAllTemplateHistories_TemplateHistories_Edges_Node struct {
 	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string            "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
 	HistoryTime  time.Time          "json:\"historyTime\" graphql:\"historyTime\""
 	ID           string             "json:\"id\" graphql:\"id\""
@@ -41731,7 +41731,7 @@ type GetAllTemplateHistories_TemplateHistories_Edges_Node struct {
 	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
 	Uischema     json.RawMessage    "json:\"uischema,omitempty\" graphql:\"uischema\""
 	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string            "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -41740,11 +41740,11 @@ func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetCreatedAt() *t
 	}
 	return t.CreatedAt
 }
-func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllTemplateHistories_TemplateHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -41818,11 +41818,11 @@ func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetUpdatedAt() *t
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllTemplateHistories_TemplateHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllTemplateHistories_TemplateHistories_Edges struct {
@@ -41849,7 +41849,7 @@ func (t *GetAllTemplateHistories_TemplateHistories) GetEdges() []*GetAllTemplate
 
 type GetTemplateHistories_TemplateHistories_Edges_Node struct {
 	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID  *string            "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
 	HistoryTime  time.Time          "json:\"historyTime\" graphql:\"historyTime\""
 	ID           string             "json:\"id\" graphql:\"id\""
@@ -41862,7 +41862,7 @@ type GetTemplateHistories_TemplateHistories_Edges_Node struct {
 	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
 	Uischema     json.RawMessage    "json:\"uischema,omitempty\" graphql:\"uischema\""
 	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID  *string            "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -41871,11 +41871,11 @@ func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetCreatedAt() *time
 	}
 	return t.CreatedAt
 }
-func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetTemplateHistories_TemplateHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -41949,11 +41949,11 @@ func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetUpdatedAt() *time
 	}
 	return t.UpdatedAt
 }
-func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetTemplateHistories_TemplateHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetTemplateHistories_TemplateHistories_Edges struct {
@@ -42239,7 +42239,7 @@ func (t *CreateUser_CreateUser_User_Setting_DefaultOrg) GetPersonalOrg() *bool {
 
 type CreateUser_CreateUser_User_Setting struct {
 	CreatedAt      *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *CreateUser_CreateUser_User_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	EmailConfirmed bool                                           "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	Locked         bool                                           "json:\"locked\" graphql:\"locked\""
@@ -42248,7 +42248,7 @@ type CreateUser_CreateUser_User_Setting struct {
 	SuspendedAt    *time.Time                                     "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
 	Tags           []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *CreateUser_CreateUser_User_Setting) GetCreatedAt() *time.Time {
@@ -42257,11 +42257,11 @@ func (t *CreateUser_CreateUser_User_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *CreateUser_CreateUser_User_Setting) GetCreatedBy() *string {
+func (t *CreateUser_CreateUser_User_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &CreateUser_CreateUser_User_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *CreateUser_CreateUser_User_Setting) GetDefaultOrg() *CreateUser_CreateUser_User_Setting_DefaultOrg {
 	if t == nil {
@@ -42311,11 +42311,11 @@ func (t *CreateUser_CreateUser_User_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *CreateUser_CreateUser_User_Setting) GetUpdatedBy() *string {
+func (t *CreateUser_CreateUser_User_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &CreateUser_CreateUser_User_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type CreateUser_CreateUser_User struct {
@@ -42469,7 +42469,7 @@ func (t *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg) GetPersonalOrg() *bool
 
 type GetAllUsers_Users_Edges_Node_Setting struct {
 	CreatedAt      *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	EmailConfirmed bool                                             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	Locked         bool                                             "json:\"locked\" graphql:\"locked\""
@@ -42478,7 +42478,7 @@ type GetAllUsers_Users_Edges_Node_Setting struct {
 	SuspendedAt    *time.Time                                       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
 	Tags           []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllUsers_Users_Edges_Node_Setting) GetCreatedAt() *time.Time {
@@ -42487,11 +42487,11 @@ func (t *GetAllUsers_Users_Edges_Node_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetCreatedBy() *string {
+func (t *GetAllUsers_Users_Edges_Node_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllUsers_Users_Edges_Node_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllUsers_Users_Edges_Node_Setting) GetDefaultOrg() *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg {
 	if t == nil {
@@ -42541,11 +42541,11 @@ func (t *GetAllUsers_Users_Edges_Node_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetUpdatedBy() *string {
+func (t *GetAllUsers_Users_Edges_Node_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllUsers_Users_Edges_Node_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllUsers_Users_Edges_Node struct {
@@ -42554,7 +42554,7 @@ type GetAllUsers_Users_Edges_Node struct {
 	AvatarLocalFileID *string                              "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                              "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID       *string                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DisplayName       string                               "json:\"displayName\" graphql:\"displayName\""
 	Email             string                               "json:\"email\" graphql:\"email\""
 	FirstName         *string                              "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -42565,7 +42565,7 @@ type GetAllUsers_Users_Edges_Node struct {
 	Sub               *string                              "json:\"sub,omitempty\" graphql:\"sub\""
 	Tags              []string                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt         *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID       *string                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllUsers_Users_Edges_Node) GetAuthProvider() *enums.AuthProvider {
@@ -42598,11 +42598,11 @@ func (t *GetAllUsers_Users_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllUsers_Users_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllUsers_Users_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllUsers_Users_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllUsers_Users_Edges_Node) GetDisplayName() string {
 	if t == nil {
@@ -42664,11 +42664,11 @@ func (t *GetAllUsers_Users_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllUsers_Users_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllUsers_Users_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllUsers_Users_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllUsers_Users_Edges struct {
@@ -42720,7 +42720,7 @@ func (t *GetUserByID_User_Setting_DefaultOrg) GetPersonalOrg() *bool {
 
 type GetUserByID_User_Setting struct {
 	CreatedAt      *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                              "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *GetUserByID_User_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	EmailConfirmed bool                                 "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	Locked         bool                                 "json:\"locked\" graphql:\"locked\""
@@ -42729,7 +42729,7 @@ type GetUserByID_User_Setting struct {
 	SuspendedAt    *time.Time                           "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
 	Tags           []string                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                              "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetUserByID_User_Setting) GetCreatedAt() *time.Time {
@@ -42738,11 +42738,11 @@ func (t *GetUserByID_User_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetUserByID_User_Setting) GetCreatedBy() *string {
+func (t *GetUserByID_User_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserByID_User_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserByID_User_Setting) GetDefaultOrg() *GetUserByID_User_Setting_DefaultOrg {
 	if t == nil {
@@ -42792,11 +42792,11 @@ func (t *GetUserByID_User_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserByID_User_Setting) GetUpdatedBy() *string {
+func (t *GetUserByID_User_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserByID_User_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetUserByID_User_Organizations_Members struct {
@@ -42855,7 +42855,7 @@ type GetUserByID_User struct {
 	AvatarLocalFileID *string                           "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                           "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID       *string                           "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DisplayName       string                            "json:\"displayName\" graphql:\"displayName\""
 	Email             string                            "json:\"email\" graphql:\"email\""
 	FirstName         *string                           "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -42867,7 +42867,7 @@ type GetUserByID_User struct {
 	Sub               *string                           "json:\"sub,omitempty\" graphql:\"sub\""
 	Tags              []string                          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt         *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID       *string                           "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetUserByID_User) GetAuthProvider() *enums.AuthProvider {
@@ -42900,11 +42900,11 @@ func (t *GetUserByID_User) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetUserByID_User) GetCreatedBy() *string {
+func (t *GetUserByID_User) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserByID_User{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserByID_User) GetDisplayName() string {
 	if t == nil {
@@ -42972,11 +42972,11 @@ func (t *GetUserByID_User) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserByID_User) GetUpdatedBy() *string {
+func (t *GetUserByID_User) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserByID_User{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetUserByIDWithOrgs_User_Setting_DefaultOrg struct {
@@ -43006,7 +43006,7 @@ func (t *GetUserByIDWithOrgs_User_Setting_DefaultOrg) GetPersonalOrg() *bool {
 
 type GetUserByIDWithOrgs_User_Setting struct {
 	CreatedAt      *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                      "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *GetUserByIDWithOrgs_User_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	EmailConfirmed bool                                         "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	Locked         bool                                         "json:\"locked\" graphql:\"locked\""
@@ -43015,7 +43015,7 @@ type GetUserByIDWithOrgs_User_Setting struct {
 	SuspendedAt    *time.Time                                   "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
 	Tags           []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                      "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetUserByIDWithOrgs_User_Setting) GetCreatedAt() *time.Time {
@@ -43024,11 +43024,11 @@ func (t *GetUserByIDWithOrgs_User_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetUserByIDWithOrgs_User_Setting) GetCreatedBy() *string {
+func (t *GetUserByIDWithOrgs_User_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserByIDWithOrgs_User_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserByIDWithOrgs_User_Setting) GetDefaultOrg() *GetUserByIDWithOrgs_User_Setting_DefaultOrg {
 	if t == nil {
@@ -43078,11 +43078,11 @@ func (t *GetUserByIDWithOrgs_User_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserByIDWithOrgs_User_Setting) GetUpdatedBy() *string {
+func (t *GetUserByIDWithOrgs_User_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserByIDWithOrgs_User_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetUserByIDWithOrgs_User_OrgMemberships_User struct {
@@ -43134,7 +43134,7 @@ type GetUserByIDWithOrgs_User struct {
 	AvatarLocalFileID *string                                    "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                                    "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID       *string                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DisplayName       string                                     "json:\"displayName\" graphql:\"displayName\""
 	Email             string                                     "json:\"email\" graphql:\"email\""
 	FirstName         *string                                    "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -43146,7 +43146,7 @@ type GetUserByIDWithOrgs_User struct {
 	Sub               *string                                    "json:\"sub,omitempty\" graphql:\"sub\""
 	Tags              []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt         *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID       *string                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetUserByIDWithOrgs_User) GetAuthProvider() *enums.AuthProvider {
@@ -43179,11 +43179,11 @@ func (t *GetUserByIDWithOrgs_User) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetUserByIDWithOrgs_User) GetCreatedBy() *string {
+func (t *GetUserByIDWithOrgs_User) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserByIDWithOrgs_User{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserByIDWithOrgs_User) GetDisplayName() string {
 	if t == nil {
@@ -43251,11 +43251,11 @@ func (t *GetUserByIDWithOrgs_User) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserByIDWithOrgs_User) GetUpdatedBy() *string {
+func (t *GetUserByIDWithOrgs_User) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserByIDWithOrgs_User{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateUser_UpdateUser_User_GroupMemberships struct {
@@ -43307,7 +43307,7 @@ func (t *UpdateUser_UpdateUser_User_Setting_DefaultOrg) GetPersonalOrg() *bool {
 
 type UpdateUser_UpdateUser_User_Setting struct {
 	CreatedAt      *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                        "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *UpdateUser_UpdateUser_User_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	EmailConfirmed bool                                           "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	Locked         bool                                           "json:\"locked\" graphql:\"locked\""
@@ -43316,7 +43316,7 @@ type UpdateUser_UpdateUser_User_Setting struct {
 	SuspendedAt    *time.Time                                     "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
 	Tags           []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                        "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateUser_UpdateUser_User_Setting) GetCreatedAt() *time.Time {
@@ -43325,11 +43325,11 @@ func (t *UpdateUser_UpdateUser_User_Setting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *UpdateUser_UpdateUser_User_Setting) GetCreatedBy() *string {
+func (t *UpdateUser_UpdateUser_User_Setting) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateUser_UpdateUser_User_Setting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateUser_UpdateUser_User_Setting) GetDefaultOrg() *UpdateUser_UpdateUser_User_Setting_DefaultOrg {
 	if t == nil {
@@ -43379,11 +43379,11 @@ func (t *UpdateUser_UpdateUser_User_Setting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateUser_UpdateUser_User_Setting) GetUpdatedBy() *string {
+func (t *UpdateUser_UpdateUser_User_Setting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateUser_UpdateUser_User_Setting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateUser_UpdateUser_User struct {
@@ -43505,7 +43505,7 @@ type GetAllUserHistories_UserHistories_Edges_Node struct {
 	AvatarRemoteURL *string            "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	AvatarUpdatedAt *time.Time         "json:\"avatarUpdatedAt,omitempty\" graphql:\"avatarUpdatedAt\""
 	CreatedAt       *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string            "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DisplayName     string             "json:\"displayName\" graphql:\"displayName\""
 	Email           string             "json:\"email\" graphql:\"email\""
 	FirstName       *string            "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -43519,7 +43519,7 @@ type GetAllUserHistories_UserHistories_Edges_Node struct {
 	Sub             *string            "json:\"sub,omitempty\" graphql:\"sub\""
 	Tags            []string           "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string            "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllUserHistories_UserHistories_Edges_Node) GetAuthProvider() *enums.AuthProvider {
@@ -43552,11 +43552,11 @@ func (t *GetAllUserHistories_UserHistories_Edges_Node) GetCreatedAt() *time.Time
 	}
 	return t.CreatedAt
 }
-func (t *GetAllUserHistories_UserHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllUserHistories_UserHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllUserHistories_UserHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllUserHistories_UserHistories_Edges_Node) GetDisplayName() string {
 	if t == nil {
@@ -43636,11 +43636,11 @@ func (t *GetAllUserHistories_UserHistories_Edges_Node) GetUpdatedAt() *time.Time
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllUserHistories_UserHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllUserHistories_UserHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllUserHistories_UserHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllUserHistories_UserHistories_Edges struct {
@@ -43671,7 +43671,7 @@ type GetUserHistories_UserHistories_Edges_Node struct {
 	AvatarRemoteURL *string            "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	AvatarUpdatedAt *time.Time         "json:\"avatarUpdatedAt,omitempty\" graphql:\"avatarUpdatedAt\""
 	CreatedAt       *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID     *string            "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DisplayName     string             "json:\"displayName\" graphql:\"displayName\""
 	Email           string             "json:\"email\" graphql:\"email\""
 	FirstName       *string            "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -43685,7 +43685,7 @@ type GetUserHistories_UserHistories_Edges_Node struct {
 	Sub             *string            "json:\"sub,omitempty\" graphql:\"sub\""
 	Tags            []string           "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt       *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID     *string            "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetUserHistories_UserHistories_Edges_Node) GetAuthProvider() *enums.AuthProvider {
@@ -43718,11 +43718,11 @@ func (t *GetUserHistories_UserHistories_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetUserHistories_UserHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetUserHistories_UserHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserHistories_UserHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserHistories_UserHistories_Edges_Node) GetDisplayName() string {
 	if t == nil {
@@ -43802,11 +43802,11 @@ func (t *GetUserHistories_UserHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserHistories_UserHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetUserHistories_UserHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserHistories_UserHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetUserHistories_UserHistories_Edges struct {
@@ -43858,10 +43858,10 @@ func (t *GetAllUserSettings_UserSettings_Edges_Node_DefaultOrg) GetPersonalOrg()
 
 type GetAllUserSettings_UserSettings_Edges_Node struct {
 	CreatedAt      *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                                "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *GetAllUserSettings_UserSettings_Edges_Node_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	DeletedAt      *time.Time                                             "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID    *string                                                "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	EmailConfirmed bool                                                   "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                                 "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                                  "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -43870,7 +43870,7 @@ type GetAllUserSettings_UserSettings_Edges_Node struct {
 	Status         enums.UserStatus                                       "json:\"status\" graphql:\"status\""
 	Tags           []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                                "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetAllUserSettings_UserSettings_Edges_Node) GetCreatedAt() *time.Time {
@@ -43879,11 +43879,11 @@ func (t *GetAllUserSettings_UserSettings_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetAllUserSettings_UserSettings_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllUserSettings_UserSettings_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllUserSettings_UserSettings_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllUserSettings_UserSettings_Edges_Node) GetDefaultOrg() *GetAllUserSettings_UserSettings_Edges_Node_DefaultOrg {
 	if t == nil {
@@ -43897,11 +43897,11 @@ func (t *GetAllUserSettings_UserSettings_Edges_Node) GetDeletedAt() *time.Time {
 	}
 	return t.DeletedAt
 }
-func (t *GetAllUserSettings_UserSettings_Edges_Node) GetDeletedBy() *string {
+func (t *GetAllUserSettings_UserSettings_Edges_Node) GetDeletedByID() *string {
 	if t == nil {
 		t = &GetAllUserSettings_UserSettings_Edges_Node{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *GetAllUserSettings_UserSettings_Edges_Node) GetEmailConfirmed() bool {
 	if t == nil {
@@ -43951,11 +43951,11 @@ func (t *GetAllUserSettings_UserSettings_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllUserSettings_UserSettings_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllUserSettings_UserSettings_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllUserSettings_UserSettings_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetAllUserSettings_UserSettings_Edges struct {
@@ -44007,10 +44007,10 @@ func (t *GetUserSettingByID_UserSetting_DefaultOrg) GetPersonalOrg() *bool {
 
 type GetUserSettingByID_UserSetting struct {
 	CreatedAt      *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                    "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *GetUserSettingByID_UserSetting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	DeletedAt      *time.Time                                 "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                    "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID    *string                                    "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	EmailConfirmed bool                                       "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                     "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                      "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -44019,7 +44019,7 @@ type GetUserSettingByID_UserSetting struct {
 	Status         enums.UserStatus                           "json:\"status\" graphql:\"status\""
 	Tags           []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                    "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetUserSettingByID_UserSetting) GetCreatedAt() *time.Time {
@@ -44028,11 +44028,11 @@ func (t *GetUserSettingByID_UserSetting) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetUserSettingByID_UserSetting) GetCreatedBy() *string {
+func (t *GetUserSettingByID_UserSetting) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserSettingByID_UserSetting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserSettingByID_UserSetting) GetDefaultOrg() *GetUserSettingByID_UserSetting_DefaultOrg {
 	if t == nil {
@@ -44046,11 +44046,11 @@ func (t *GetUserSettingByID_UserSetting) GetDeletedAt() *time.Time {
 	}
 	return t.DeletedAt
 }
-func (t *GetUserSettingByID_UserSetting) GetDeletedBy() *string {
+func (t *GetUserSettingByID_UserSetting) GetDeletedByID() *string {
 	if t == nil {
 		t = &GetUserSettingByID_UserSetting{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *GetUserSettingByID_UserSetting) GetEmailConfirmed() bool {
 	if t == nil {
@@ -44100,11 +44100,11 @@ func (t *GetUserSettingByID_UserSetting) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserSettingByID_UserSetting) GetUpdatedBy() *string {
+func (t *GetUserSettingByID_UserSetting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserSettingByID_UserSetting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetUserSettings_UserSettings_Edges_Node_DefaultOrg struct {
@@ -44134,10 +44134,10 @@ func (t *GetUserSettings_UserSettings_Edges_Node_DefaultOrg) GetPersonalOrg() *b
 
 type GetUserSettings_UserSettings_Edges_Node struct {
 	CreatedAt      *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                             "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *GetUserSettings_UserSettings_Edges_Node_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	DeletedAt      *time.Time                                          "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                             "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID    *string                                             "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	EmailConfirmed bool                                                "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                              "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                               "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -44146,7 +44146,7 @@ type GetUserSettings_UserSettings_Edges_Node struct {
 	Status         enums.UserStatus                                    "json:\"status\" graphql:\"status\""
 	Tags           []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                             "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *GetUserSettings_UserSettings_Edges_Node) GetCreatedAt() *time.Time {
@@ -44155,11 +44155,11 @@ func (t *GetUserSettings_UserSettings_Edges_Node) GetCreatedAt() *time.Time {
 	}
 	return t.CreatedAt
 }
-func (t *GetUserSettings_UserSettings_Edges_Node) GetCreatedBy() *string {
+func (t *GetUserSettings_UserSettings_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserSettings_UserSettings_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserSettings_UserSettings_Edges_Node) GetDefaultOrg() *GetUserSettings_UserSettings_Edges_Node_DefaultOrg {
 	if t == nil {
@@ -44173,11 +44173,11 @@ func (t *GetUserSettings_UserSettings_Edges_Node) GetDeletedAt() *time.Time {
 	}
 	return t.DeletedAt
 }
-func (t *GetUserSettings_UserSettings_Edges_Node) GetDeletedBy() *string {
+func (t *GetUserSettings_UserSettings_Edges_Node) GetDeletedByID() *string {
 	if t == nil {
 		t = &GetUserSettings_UserSettings_Edges_Node{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *GetUserSettings_UserSettings_Edges_Node) GetEmailConfirmed() bool {
 	if t == nil {
@@ -44227,11 +44227,11 @@ func (t *GetUserSettings_UserSettings_Edges_Node) GetUpdatedAt() *time.Time {
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserSettings_UserSettings_Edges_Node) GetUpdatedBy() *string {
+func (t *GetUserSettings_UserSettings_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserSettings_UserSettings_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type GetUserSettings_UserSettings_Edges struct {
@@ -44283,10 +44283,10 @@ func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg) GetPersonal
 
 type UpdateUserSetting_UpdateUserSetting_UserSetting struct {
 	CreatedAt      *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID    *string                                                     "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	DefaultOrg     *UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
 	DeletedAt      *time.Time                                                  "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                                     "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DeletedByID    *string                                                     "json:\"deletedByID,omitempty\" graphql:\"deletedByID\""
 	EmailConfirmed bool                                                        "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                                      "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                                       "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -44295,7 +44295,7 @@ type UpdateUserSetting_UpdateUserSetting_UserSetting struct {
 	Status         enums.UserStatus                                            "json:\"status\" graphql:\"status\""
 	Tags           []string                                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt      *time.Time                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID    *string                                                     "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 }
 
 func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetCreatedAt() *time.Time {
@@ -44304,11 +44304,11 @@ func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetCreatedAt() *time.T
 	}
 	return t.CreatedAt
 }
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetCreatedBy() *string {
+func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetCreatedByID() *string {
 	if t == nil {
 		t = &UpdateUserSetting_UpdateUserSetting_UserSetting{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetDefaultOrg() *UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg {
 	if t == nil {
@@ -44322,11 +44322,11 @@ func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetDeletedAt() *time.T
 	}
 	return t.DeletedAt
 }
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetDeletedBy() *string {
+func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetDeletedByID() *string {
 	if t == nil {
 		t = &UpdateUserSetting_UpdateUserSetting_UserSetting{}
 	}
-	return t.DeletedBy
+	return t.DeletedByID
 }
 func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetEmailConfirmed() bool {
 	if t == nil {
@@ -44376,11 +44376,11 @@ func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetUpdatedAt() *time.T
 	}
 	return t.UpdatedAt
 }
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetUpdatedBy() *string {
+func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetUpdatedByID() *string {
 	if t == nil {
 		t = &UpdateUserSetting_UpdateUserSetting_UserSetting{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 
 type UpdateUserSetting_UpdateUserSetting struct {
@@ -44396,7 +44396,7 @@ func (t *UpdateUserSetting_UpdateUserSetting) GetUserSetting() *UpdateUserSettin
 
 type GetAllUserSettingHistories_UserSettingHistories_Edges_Node struct {
 	CreatedAt         *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID       *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	EmailConfirmed    bool             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	HistoryTime       time.Time        "json:\"historyTime\" graphql:\"historyTime\""
 	ID                string           "json:\"id\" graphql:\"id\""
@@ -44410,7 +44410,7 @@ type GetAllUserSettingHistories_UserSettingHistories_Edges_Node struct {
 	SuspendedAt       *time.Time       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
 	Tags              []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt         *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID       *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID            *string          "json:\"userID,omitempty\" graphql:\"userID\""
 }
 
@@ -44420,11 +44420,11 @@ func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedA
 	}
 	return t.CreatedAt
 }
-func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetAllUserSettingHistories_UserSettingHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetEmailConfirmed() bool {
 	if t == nil {
@@ -44504,11 +44504,11 @@ func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetUpdatedA
 	}
 	return t.UpdatedAt
 }
-func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetAllUserSettingHistories_UserSettingHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetUserID() *string {
 	if t == nil {
@@ -44541,7 +44541,7 @@ func (t *GetAllUserSettingHistories_UserSettingHistories) GetEdges() []*GetAllUs
 
 type GetUserSettingHistories_UserSettingHistories_Edges_Node struct {
 	CreatedAt         *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreatedByID       *string          "json:\"createdByID,omitempty\" graphql:\"createdByID\""
 	EmailConfirmed    bool             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	HistoryTime       time.Time        "json:\"historyTime\" graphql:\"historyTime\""
 	ID                string           "json:\"id\" graphql:\"id\""
@@ -44555,7 +44555,7 @@ type GetUserSettingHistories_UserSettingHistories_Edges_Node struct {
 	SuspendedAt       *time.Time       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
 	Tags              []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt         *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByID       *string          "json:\"updatedByID,omitempty\" graphql:\"updatedByID\""
 	UserID            *string          "json:\"userID,omitempty\" graphql:\"userID\""
 }
 
@@ -44565,11 +44565,11 @@ func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedAt()
 	}
 	return t.CreatedAt
 }
-func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedBy() *string {
+func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedByID() *string {
 	if t == nil {
 		t = &GetUserSettingHistories_UserSettingHistories_Edges_Node{}
 	}
-	return t.CreatedBy
+	return t.CreatedByID
 }
 func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetEmailConfirmed() bool {
 	if t == nil {
@@ -44649,11 +44649,11 @@ func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetUpdatedAt()
 	}
 	return t.UpdatedAt
 }
-func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetUpdatedBy() *string {
+func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetUpdatedByID() *string {
 	if t == nil {
 		t = &GetUserSettingHistories_UserSettingHistories_Edges_Node{}
 	}
-	return t.UpdatedBy
+	return t.UpdatedByID
 }
 func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetUserID() *string {
 	if t == nil {
@@ -48098,7 +48098,7 @@ const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($inpu
 	createBulkCSVActionPlan(input: $input) {
 		actionPlans {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			dueDate
@@ -48109,7 +48109,7 @@ const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($inpu
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -48136,7 +48136,7 @@ const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [Cr
 	createBulkActionPlan(input: $input) {
 		actionPlans {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			dueDate
@@ -48147,7 +48147,7 @@ const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [Cr
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -48174,7 +48174,7 @@ const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActio
 	createActionPlan(input: $input) {
 		actionPlan {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			dueDate
@@ -48185,7 +48185,7 @@ const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActio
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -48237,7 +48237,7 @@ const GetAllActionPlansDocument = `query GetAllActionPlans {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				dueDate
@@ -48248,7 +48248,7 @@ const GetAllActionPlansDocument = `query GetAllActionPlans {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -48273,7 +48273,7 @@ func (c *Client) GetAllActionPlans(ctx context.Context, interceptors ...clientv2
 const GetActionPlanByIDDocument = `query GetActionPlanByID ($actionPlanId: ID!) {
 	actionPlan(id: $actionPlanId) {
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		dueDate
@@ -48284,7 +48284,7 @@ const GetActionPlanByIDDocument = `query GetActionPlanByID ($actionPlanId: ID!) 
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -48311,7 +48311,7 @@ const GetActionPlansDocument = `query GetActionPlans ($where: ActionPlanWhereInp
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				dueDate
@@ -48322,7 +48322,7 @@ const GetActionPlansDocument = `query GetActionPlans ($where: ActionPlanWhereInp
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -48350,7 +48350,7 @@ const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId
 	updateActionPlan(id: $updateActionPlanId, input: $input) {
 		actionPlan {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			dueDate
@@ -48361,7 +48361,7 @@ const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -48390,7 +48390,7 @@ const GetAllActionPlanHistoriesDocument = `query GetAllActionPlanHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				dueDate
@@ -48404,7 +48404,7 @@ const GetAllActionPlanHistoriesDocument = `query GetAllActionPlanHistories {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -48431,7 +48431,7 @@ const GetActionPlanHistoriesDocument = `query GetActionPlanHistories ($where: Ac
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				dueDate
@@ -48445,7 +48445,7 @@ const GetActionPlanHistoriesDocument = `query GetActionPlanHistories ($where: Ac
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -48474,7 +48474,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 		nodes {
 			... on APITokenSearchResult {
 				apiTokens {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48484,7 +48484,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on ActionPlanSearchResult {
 				actionPlans {
-					deletedBy
+					deletedByID
 					id
 					tags
 					name
@@ -48498,7 +48498,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on ContactSearchResult {
 				contacts {
 					id
-					deletedBy
+					deletedByID
 					tags
 					ownerID
 					fullName
@@ -48511,7 +48511,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on ControlSearchResult {
 				controls {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48531,7 +48531,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on ControlObjectiveSearchResult {
 				controlObjectives {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48552,7 +48552,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				documentData {
 					id
 					tags
-					deletedBy
+					deletedByID
 					ownerID
 					templateID
 					data
@@ -48561,7 +48561,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on EntitySearchResult {
 				entities {
 					id
-					deletedBy
+					deletedByID
 					tags
 					ownerID
 					name
@@ -48575,7 +48575,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on EntityTypeSearchResult {
 				entityTypes {
 					id
-					deletedBy
+					deletedByID
 					tags
 					ownerID
 					name
@@ -48593,7 +48593,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on FileSearchResult {
 				files {
-					deletedBy
+					deletedByID
 					id
 					tags
 					providedFileName
@@ -48611,7 +48611,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on GroupSearchResult {
 				groups {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48623,7 +48623,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				groupSettings {
 					id
 					tags
-					deletedBy
+					deletedByID
 					groupID
 				}
 			}
@@ -48631,7 +48631,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				integrations {
 					id
 					tags
-					deletedBy
+					deletedByID
 					ownerID
 					name
 					kind
@@ -48639,7 +48639,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on InternalPolicySearchResult {
 				internalPolicies {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48655,7 +48655,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on NarrativeSearchResult {
 				narratives {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48669,7 +48669,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				orgSubscriptions {
 					id
 					tags
-					deletedBy
+					deletedByID
 					ownerID
 					stripeSubscriptionID
 					productTier
@@ -48685,7 +48685,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				organizations {
 					id
 					tags
-					deletedBy
+					deletedByID
 					name
 					displayName
 					avatarRemoteURL
@@ -48695,7 +48695,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				organizationSettings {
 					id
 					tags
-					deletedBy
+					deletedByID
 					domains
 					billingContact
 					billingEmail
@@ -48707,7 +48707,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on PersonalAccessTokenSearchResult {
 				personalAccessTokens {
-					deletedBy
+					deletedByID
 					id
 					tags
 					name
@@ -48716,7 +48716,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on ProcedureSearchResult {
 				procedures {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48734,7 +48734,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on ProgramSearchResult {
 				programs {
 					id
-					deletedBy
+					deletedByID
 					tags
 					ownerID
 					name
@@ -48743,7 +48743,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on RiskSearchResult {
 				risks {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48759,7 +48759,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on StandardSearchResult {
 				standards {
-					deletedBy
+					deletedByID
 					id
 					tags
 					name
@@ -48776,7 +48776,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on SubcontrolSearchResult {
 				subcontrols {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48800,7 +48800,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				subscribers {
 					id
 					tags
-					deletedBy
+					deletedByID
 					ownerID
 					email
 					phoneNumber
@@ -48809,7 +48809,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on TFASettingSearchResult {
 				tFASettings {
 					id
-					deletedBy
+					deletedByID
 					tags
 					tfaSecret
 					recoveryCodes
@@ -48818,7 +48818,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on TaskSearchResult {
 				tasks {
 					id
-					deletedBy
+					deletedByID
 					tags
 					title
 					description
@@ -48827,7 +48827,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on TemplateSearchResult {
 				templates {
-					deletedBy
+					deletedByID
 					id
 					tags
 					ownerID
@@ -48839,7 +48839,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on UserSearchResult {
 				users {
-					deletedBy
+					deletedByID
 					id
 					tags
 					email
@@ -48856,7 +48856,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				userSettings {
 					id
 					tags
-					deletedBy
+					deletedByID
 					userID
 				}
 			}
@@ -48893,8 +48893,8 @@ const CreateAPITokenDocument = `mutation CreateAPIToken ($input: CreateAPITokenI
 			}
 			createdAt
 			updatedAt
-			createdBy
-			updatedBy
+			createdByID
+			updatedByID
 			name
 			expiresAt
 			description
@@ -48932,8 +48932,8 @@ const UpdateAPITokenDocument = `mutation UpdateAPIToken ($updateAPITokenId: ID!,
 			}
 			createdAt
 			updatedAt
-			createdBy
-			updatedBy
+			createdByID
+			updatedByID
 			name
 			expiresAt
 			description
@@ -48973,8 +48973,8 @@ const GetAllAPITokensDocument = `query GetAllAPITokens {
 				}
 				createdAt
 				updatedAt
-				createdBy
-				updatedBy
+				createdByID
+				updatedByID
 				name
 				expiresAt
 				description
@@ -49010,8 +49010,8 @@ const GetAPITokenByIDDocument = `query GetAPITokenByID ($apiTokenId: ID!) {
 		}
 		createdAt
 		updatedAt
-		createdBy
-		updatedBy
+		createdByID
+		updatedByID
 		name
 		expiresAt
 		description
@@ -49067,7 +49067,7 @@ const CreateBulkContactDocument = `mutation CreateBulkContact ($input: [CreateCo
 			address
 			company
 			createdAt
-			createdBy
+			createdByID
 			email
 			fullName
 			id
@@ -49077,7 +49077,7 @@ const CreateBulkContactDocument = `mutation CreateBulkContact ($input: [CreateCo
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -49106,7 +49106,7 @@ const CreateBulkCSVContactDocument = `mutation CreateBulkCSVContact ($input: Upl
 			address
 			company
 			createdAt
-			createdBy
+			createdByID
 			email
 			fullName
 			id
@@ -49116,7 +49116,7 @@ const CreateBulkCSVContactDocument = `mutation CreateBulkCSVContact ($input: Upl
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -49145,7 +49145,7 @@ const CreateContactDocument = `mutation CreateContact ($input: CreateContactInpu
 			address
 			company
 			createdAt
-			createdBy
+			createdByID
 			email
 			fullName
 			id
@@ -49155,7 +49155,7 @@ const CreateContactDocument = `mutation CreateContact ($input: CreateContactInpu
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -49209,7 +49209,7 @@ const GetAllContactsDocument = `query GetAllContacts {
 				address
 				company
 				createdAt
-				createdBy
+				createdByID
 				email
 				fullName
 				id
@@ -49219,7 +49219,7 @@ const GetAllContactsDocument = `query GetAllContacts {
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -49246,7 +49246,7 @@ const GetContactByIDDocument = `query GetContactByID ($contactId: ID!) {
 		address
 		company
 		createdAt
-		createdBy
+		createdByID
 		email
 		fullName
 		id
@@ -49256,7 +49256,7 @@ const GetContactByIDDocument = `query GetContactByID ($contactId: ID!) {
 		tags
 		title
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -49285,7 +49285,7 @@ const GetContactsDocument = `query GetContacts ($where: ContactWhereInput) {
 				address
 				company
 				createdAt
-				createdBy
+				createdByID
 				email
 				fullName
 				id
@@ -49295,7 +49295,7 @@ const GetContactsDocument = `query GetContacts ($where: ContactWhereInput) {
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -49325,7 +49325,7 @@ const UpdateContactDocument = `mutation UpdateContact ($updateContactId: ID!, $i
 			address
 			company
 			createdAt
-			createdBy
+			createdByID
 			email
 			fullName
 			id
@@ -49335,7 +49335,7 @@ const UpdateContactDocument = `mutation UpdateContact ($updateContactId: ID!, $i
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -49366,7 +49366,7 @@ const GetAllContactHistoriesDocument = `query GetAllContactHistories {
 				address
 				company
 				createdAt
-				createdBy
+				createdByID
 				email
 				fullName
 				historyTime
@@ -49379,7 +49379,7 @@ const GetAllContactHistoriesDocument = `query GetAllContactHistories {
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -49408,7 +49408,7 @@ const GetContactHistoriesDocument = `query GetContactHistories ($where: ContactH
 				address
 				company
 				createdAt
-				createdBy
+				createdByID
 				email
 				fullName
 				historyTime
@@ -49421,7 +49421,7 @@ const GetContactHistoriesDocument = `query GetContactHistories ($where: ContactH
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -49452,7 +49452,7 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			controlNumber
 			controlType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -49464,7 +49464,7 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -49495,7 +49495,7 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			controlNumber
 			controlType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -49507,7 +49507,7 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -49538,7 +49538,7 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			controlNumber
 			controlType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -49550,7 +49550,7 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			subcontrols {
 				id
@@ -49626,7 +49626,7 @@ const GetAllControlsDocument = `query GetAllControls {
 				controlNumber
 				controlType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -49638,7 +49638,7 @@ const GetAllControlsDocument = `query GetAllControls {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				subcontrols {
 					id
@@ -49687,7 +49687,7 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		controlNumber
 		controlType
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		family
@@ -49699,7 +49699,7 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		version
 		subcontrols {
 			id
@@ -49750,7 +49750,7 @@ const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
 				controlNumber
 				controlType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -49762,7 +49762,7 @@ const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				subcontrols {
 					id
@@ -49814,7 +49814,7 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			controlNumber
 			controlType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -49826,7 +49826,7 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			subcontrols {
 				id
@@ -49879,7 +49879,7 @@ const GetAllControlHistoriesDocument = `query GetAllControlHistories {
 				controlNumber
 				controlType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -49894,7 +49894,7 @@ const GetAllControlHistoriesDocument = `query GetAllControlHistories {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -49925,7 +49925,7 @@ const GetControlHistoriesDocument = `query GetControlHistories ($where: ControlH
 				controlNumber
 				controlType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -49940,7 +49940,7 @@ const GetControlHistoriesDocument = `query GetControlHistories ($where: ControlH
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -49972,7 +49972,7 @@ const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObje
 			controlNumber
 			controlObjectiveType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -49983,7 +49983,7 @@ const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObje
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -50014,7 +50014,7 @@ const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective 
 			controlNumber
 			controlObjectiveType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -50025,7 +50025,7 @@ const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective 
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -50056,7 +50056,7 @@ const CreateControlObjectiveDocument = `mutation CreateControlObjective ($input:
 			controlNumber
 			controlObjectiveType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -50067,7 +50067,7 @@ const CreateControlObjectiveDocument = `mutation CreateControlObjective ($input:
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			programs {
 				id
@@ -50139,7 +50139,7 @@ const GetAllControlObjectivesDocument = `query GetAllControlObjectives {
 				controlNumber
 				controlObjectiveType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -50150,7 +50150,7 @@ const GetAllControlObjectivesDocument = `query GetAllControlObjectives {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				programs {
 					id
@@ -50195,7 +50195,7 @@ const GetControlObjectiveByIDDocument = `query GetControlObjectiveByID ($control
 		controlNumber
 		controlObjectiveType
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		family
@@ -50206,7 +50206,7 @@ const GetControlObjectiveByIDDocument = `query GetControlObjectiveByID ($control
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		version
 		programs {
 			id
@@ -50253,7 +50253,7 @@ const GetControlObjectivesDocument = `query GetControlObjectives ($where: Contro
 				controlNumber
 				controlObjectiveType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -50264,7 +50264,7 @@ const GetControlObjectivesDocument = `query GetControlObjectives ($where: Contro
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				programs {
 					id
@@ -50312,7 +50312,7 @@ const UpdateControlObjectiveDocument = `mutation UpdateControlObjective ($update
 			controlNumber
 			controlObjectiveType
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -50323,7 +50323,7 @@ const UpdateControlObjectiveDocument = `mutation UpdateControlObjective ($update
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			programs {
 				id
@@ -50372,7 +50372,7 @@ const GetAllControlObjectiveHistoriesDocument = `query GetAllControlObjectiveHis
 				controlNumber
 				controlObjectiveType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -50386,7 +50386,7 @@ const GetAllControlObjectiveHistoriesDocument = `query GetAllControlObjectiveHis
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -50417,7 +50417,7 @@ const GetControlObjectiveHistoriesDocument = `query GetControlObjectiveHistories
 				controlNumber
 				controlObjectiveType
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -50431,7 +50431,7 @@ const GetControlObjectiveHistoriesDocument = `query GetControlObjectiveHistories
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -50463,9 +50463,9 @@ const CreateDocumentDataDocument = `mutation CreateDocumentData ($input: CreateD
 			templateID
 			data
 			createdAt
-			createdBy
+			createdByID
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -50518,9 +50518,9 @@ const GetDocumentDataByIDDocument = `query GetDocumentDataByID ($documentDataId:
 		templateID
 		data
 		createdAt
-		createdBy
+		createdByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -50549,9 +50549,9 @@ const UpdateDocumentDataDocument = `mutation UpdateDocumentData ($updateDocument
 			templateID
 			data
 			createdAt
-			createdBy
+			createdByID
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -50580,7 +50580,7 @@ const GetAllDocumentDataHistoriesDocument = `query GetAllDocumentDataHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				data
 				historyTime
 				id
@@ -50590,7 +50590,7 @@ const GetAllDocumentDataHistoriesDocument = `query GetAllDocumentDataHistories {
 				tags
 				templateID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -50617,7 +50617,7 @@ const GetDocumentDataHistoriesDocument = `query GetDocumentDataHistories ($where
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				data
 				historyTime
 				id
@@ -50627,7 +50627,7 @@ const GetDocumentDataHistoriesDocument = `query GetDocumentDataHistories ($where
 				tags
 				templateID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -50655,7 +50655,7 @@ const CreateBulkCSVEntityDocument = `mutation CreateBulkCSVEntity ($input: Uploa
 	createBulkCSVEntity(input: $input) {
 		entities {
 			createdAt
-			createdBy
+			createdByID
 			description
 			displayName
 			status
@@ -50663,7 +50663,7 @@ const CreateBulkCSVEntityDocument = `mutation CreateBulkCSVEntity ($input: Uploa
 			notes {
 				text
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 			entityType {
 				name
@@ -50673,7 +50673,7 @@ const CreateBulkCSVEntityDocument = `mutation CreateBulkCSVEntity ($input: Uploa
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -50700,7 +50700,7 @@ const CreateBulkEntityDocument = `mutation CreateBulkEntity ($input: [CreateEnti
 	createBulkEntity(input: $input) {
 		entities {
 			createdAt
-			createdBy
+			createdByID
 			description
 			displayName
 			status
@@ -50708,7 +50708,7 @@ const CreateBulkEntityDocument = `mutation CreateBulkEntity ($input: [CreateEnti
 			notes {
 				text
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 			entityType {
 				name
@@ -50718,7 +50718,7 @@ const CreateBulkEntityDocument = `mutation CreateBulkEntity ($input: [CreateEnti
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -50745,7 +50745,7 @@ const CreateEntityDocument = `mutation CreateEntity ($input: CreateEntityInput!)
 	createEntity(input: $input) {
 		entity {
 			createdAt
-			createdBy
+			createdByID
 			description
 			displayName
 			status
@@ -50753,7 +50753,7 @@ const CreateEntityDocument = `mutation CreateEntity ($input: CreateEntityInput!)
 			notes {
 				text
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 			entityType {
 				name
@@ -50763,7 +50763,7 @@ const CreateEntityDocument = `mutation CreateEntity ($input: CreateEntityInput!)
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -50815,7 +50815,7 @@ const GetAllEntitiesDocument = `query GetAllEntities {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				displayName
 				status
@@ -50823,7 +50823,7 @@ const GetAllEntitiesDocument = `query GetAllEntities {
 				notes {
 					text
 					updatedAt
-					updatedBy
+					updatedByID
 				}
 				entityType {
 					name
@@ -50833,7 +50833,7 @@ const GetAllEntitiesDocument = `query GetAllEntities {
 				ownerID
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -50860,7 +50860,7 @@ const GetEntitiesDocument = `query GetEntities ($where: EntityWhereInput) {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				displayName
 				status
@@ -50868,7 +50868,7 @@ const GetEntitiesDocument = `query GetEntities ($where: EntityWhereInput) {
 				notes {
 					text
 					updatedAt
-					updatedBy
+					updatedByID
 				}
 				entityType {
 					name
@@ -50878,7 +50878,7 @@ const GetEntitiesDocument = `query GetEntities ($where: EntityWhereInput) {
 				ownerID
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -50905,7 +50905,7 @@ func (c *Client) GetEntities(ctx context.Context, where *EntityWhereInput, inter
 const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 	entity(id: $entityId) {
 		createdAt
-		createdBy
+		createdByID
 		description
 		displayName
 		status
@@ -50913,7 +50913,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		notes {
 			text
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 		entityType {
 			name
@@ -50932,7 +50932,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		}
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -50958,7 +50958,7 @@ const UpdateEntityDocument = `mutation UpdateEntity ($updateEntityId: ID!, $inpu
 	updateEntity(id: $updateEntityId, input: $input) {
 		entity {
 			createdAt
-			createdBy
+			createdByID
 			description
 			displayName
 			status
@@ -50966,7 +50966,7 @@ const UpdateEntityDocument = `mutation UpdateEntity ($updateEntityId: ID!, $inpu
 			notes {
 				text
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 			entityType {
 				name
@@ -50976,7 +50976,7 @@ const UpdateEntityDocument = `mutation UpdateEntity ($updateEntityId: ID!, $inpu
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -51005,7 +51005,7 @@ const GetAllEntityHistoriesDocument = `query GetAllEntityHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				displayName
 				domains
@@ -51019,7 +51019,7 @@ const GetAllEntityHistoriesDocument = `query GetAllEntityHistories {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51046,7 +51046,7 @@ const GetEntityHistoriesDocument = `query GetEntityHistories ($where: EntityHist
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				displayName
 				domains
@@ -51060,7 +51060,7 @@ const GetEntityHistoriesDocument = `query GetEntityHistories ($where: EntityHist
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51088,13 +51088,13 @@ const CreateBulkCSVEntityTypeDocument = `mutation CreateBulkCSVEntityType ($inpu
 	createBulkCSVEntityType(input: $input) {
 		entityTypes {
 			createdAt
-			createdBy
+			createdByID
 			id
 			name
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -51121,13 +51121,13 @@ const CreateBulkEntityTypeDocument = `mutation CreateBulkEntityType ($input: [Cr
 	createBulkEntityType(input: $input) {
 		entityTypes {
 			createdAt
-			createdBy
+			createdByID
 			id
 			name
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -51154,13 +51154,13 @@ const CreateEntityTypeDocument = `mutation CreateEntityType ($input: CreateEntit
 	createEntityType(input: $input) {
 		entityType {
 			createdAt
-			createdBy
+			createdByID
 			id
 			name
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -51212,13 +51212,13 @@ const GetAllEntityTypesDocument = `query GetAllEntityTypes {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				id
 				name
 				ownerID
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51243,13 +51243,13 @@ func (c *Client) GetAllEntityTypes(ctx context.Context, interceptors ...clientv2
 const GetEntityTypeByIDDocument = `query GetEntityTypeByID ($entityTypeId: ID!) {
 	entityType(id: $entityTypeId) {
 		createdAt
-		createdBy
+		createdByID
 		id
 		name
 		ownerID
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -51276,13 +51276,13 @@ const GetEntityTypesDocument = `query GetEntityTypes ($where: EntityTypeWhereInp
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				id
 				name
 				ownerID
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51310,13 +51310,13 @@ const UpdateEntityTypeDocument = `mutation UpdateEntityType ($updateEntityTypeId
 	updateEntityType(id: $updateEntityTypeId, input: $input) {
 		entityType {
 			createdAt
-			createdBy
+			createdByID
 			id
 			name
 			ownerID
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -51345,7 +51345,7 @@ const GetAllEntityTypeHistoriesDocument = `query GetAllEntityTypeHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				name
@@ -51354,7 +51354,7 @@ const GetAllEntityTypeHistoriesDocument = `query GetAllEntityTypeHistories {
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51381,7 +51381,7 @@ const GetEntityTypeHistoriesDocument = `query GetEntityTypeHistories ($where: En
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				name
@@ -51390,7 +51390,7 @@ const GetEntityTypeHistoriesDocument = `query GetEntityTypeHistories ($where: En
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51616,8 +51616,8 @@ const GetAllEventsDocument = `query GetAllEvents {
 				id
 				createdAt
 				updatedAt
-				createdBy
-				updatedBy
+				createdByID
+				updatedByID
 				eventID
 				correlationID
 				eventType
@@ -51675,8 +51675,8 @@ const GetEventByIDDocument = `query GetEventByID ($eventId: ID!) {
 		id
 		createdAt
 		updatedAt
-		createdBy
-		updatedBy
+		createdByID
+		updatedByID
 		eventID
 		correlationID
 		eventType
@@ -51767,8 +51767,8 @@ const UpdateEventDocument = `mutation UpdateEvent ($updateEventId: ID!, $input: 
 			id
 			createdAt
 			updatedAt
-			createdBy
-			updatedBy
+			createdByID
+			updatedByID
 			eventID
 			correlationID
 			eventType
@@ -51829,7 +51829,7 @@ const GetAllEventHistoriesDocument = `query GetAllEventHistories {
 			node {
 				correlationID
 				createdAt
-				createdBy
+				createdByID
 				eventID
 				eventType
 				historyTime
@@ -51839,7 +51839,7 @@ const GetAllEventHistoriesDocument = `query GetAllEventHistories {
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51867,7 +51867,7 @@ const GetEventHistoriesDocument = `query GetEventHistories ($where: EventHistory
 			node {
 				correlationID
 				createdAt
-				createdBy
+				createdByID
 				eventID
 				eventType
 				historyTime
@@ -51877,7 +51877,7 @@ const GetEventHistoriesDocument = `query GetEventHistories ($where: EventHistory
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -51931,7 +51931,7 @@ const GetAllFilesDocument = `query GetAllFiles {
 			node {
 				categoryType
 				createdAt
-				createdBy
+				createdByID
 				detectedContentType
 				detectedMimeType
 				id
@@ -51946,7 +51946,7 @@ const GetAllFilesDocument = `query GetAllFiles {
 				storeKey
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				uri
 			}
 		}
@@ -51973,7 +51973,7 @@ const GetFileByIDDocument = `query GetFileByID ($fileId: ID!) {
 	file(id: $fileId) {
 		categoryType
 		createdAt
-		createdBy
+		createdByID
 		detectedContentType
 		detectedMimeType
 		id
@@ -51988,7 +51988,7 @@ const GetFileByIDDocument = `query GetFileByID ($fileId: ID!) {
 		storeKey
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		uri
 	}
 }
@@ -52017,7 +52017,7 @@ const GetFilesDocument = `query GetFiles ($where: FileWhereInput) {
 			node {
 				categoryType
 				createdAt
-				createdBy
+				createdByID
 				detectedContentType
 				detectedMimeType
 				id
@@ -52032,7 +52032,7 @@ const GetFilesDocument = `query GetFiles ($where: FileWhereInput) {
 				storeKey
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				uri
 			}
 		}
@@ -52063,7 +52063,7 @@ const GetAllFileHistoriesDocument = `query GetAllFileHistories {
 			node {
 				categoryType
 				createdAt
-				createdBy
+				createdByID
 				detectedContentType
 				detectedMimeType
 				historyTime
@@ -52081,7 +52081,7 @@ const GetAllFileHistoriesDocument = `query GetAllFileHistories {
 				storeKey
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				uri
 			}
 		}
@@ -52110,7 +52110,7 @@ const GetFileHistoriesDocument = `query GetFileHistories ($where: FileHistoryWhe
 			node {
 				categoryType
 				createdAt
-				createdBy
+				createdByID
 				detectedContentType
 				detectedMimeType
 				historyTime
@@ -52128,7 +52128,7 @@ const GetFileHistoriesDocument = `query GetFileHistories ($where: FileHistoryWhe
 				storeKey
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				uri
 			}
 		}
@@ -52349,14 +52349,14 @@ const GetAllGroupsDocument = `query GetAllGroups {
 				}
 				setting {
 					createdAt
-					createdBy
+					createdByID
 					id
 					joinPolicy
 					syncToGithub
 					syncToSlack
 					tags
 					updatedAt
-					updatedBy
+					updatedByID
 					visibility
 				}
 				members {
@@ -52369,9 +52369,9 @@ const GetAllGroupsDocument = `query GetAllGroups {
 					}
 				}
 				createdAt
-				createdBy
+				createdByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -52407,14 +52407,14 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 		}
 		setting {
 			createdAt
-			createdBy
+			createdByID
 			id
 			joinPolicy
 			syncToGithub
 			syncToSlack
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			visibility
 		}
 		members {
@@ -52427,9 +52427,9 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 			}
 		}
 		createdAt
-		createdBy
+		createdByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -52467,14 +52467,14 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 				}
 				setting {
 					createdAt
-					createdBy
+					createdByID
 					id
 					joinPolicy
 					syncToGithub
 					syncToSlack
 					tags
 					updatedAt
-					updatedBy
+					updatedByID
 					visibility
 				}
 				members {
@@ -52487,9 +52487,9 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 					}
 				}
 				createdAt
-				createdBy
+				createdByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -52528,14 +52528,14 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 			}
 			setting {
 				createdAt
-				createdBy
+				createdByID
 				id
 				joinPolicy
 				syncToGithub
 				syncToSlack
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				visibility
 			}
 			members {
@@ -52575,7 +52575,7 @@ const GetAllGroupHistoriesDocument = `query GetAllGroupHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				displayName
 				gravatarLogoURL
@@ -52588,7 +52588,7 @@ const GetAllGroupHistoriesDocument = `query GetAllGroupHistories {
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -52615,7 +52615,7 @@ const GetGroupHistoriesDocument = `query GetGroupHistories ($where: GroupHistory
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				displayName
 				gravatarLogoURL
@@ -52628,7 +52628,7 @@ const GetGroupHistoriesDocument = `query GetGroupHistories ($where: GroupHistory
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -52884,7 +52884,7 @@ const GetAllGroupMembershipHistoriesDocument = `query GetAllGroupMembershipHisto
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				groupID
 				historyTime
 				id
@@ -52892,7 +52892,7 @@ const GetAllGroupMembershipHistoriesDocument = `query GetAllGroupMembershipHisto
 				ref
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -52920,7 +52920,7 @@ const GetGroupMembershipHistoriesDocument = `query GetGroupMembershipHistories (
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				groupID
 				historyTime
 				id
@@ -52928,7 +52928,7 @@ const GetGroupMembershipHistoriesDocument = `query GetGroupMembershipHistories (
 				ref
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -52968,9 +52968,9 @@ const GetAllGroupSettingsDocument = `query GetAllGroupSettings {
 					name
 				}
 				createdAt
-				createdBy
+				createdByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53005,9 +53005,9 @@ const GetGroupSettingByIDDocument = `query GetGroupSettingByID ($groupSettingId:
 			name
 		}
 		createdAt
-		createdBy
+		createdByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -53044,9 +53044,9 @@ const GetGroupSettingsDocument = `query GetGroupSettings ($where: GroupSettingWh
 					name
 				}
 				createdAt
-				createdBy
+				createdByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53084,9 +53084,9 @@ const UpdateGroupSettingDocument = `mutation UpdateGroupSetting ($updateGroupSet
 				name
 			}
 			createdAt
-			createdBy
+			createdByID
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -53115,7 +53115,7 @@ const GetAllGroupSettingHistoriesDocument = `query GetAllGroupSettingHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				groupID
 				historyTime
 				id
@@ -53126,7 +53126,7 @@ const GetAllGroupSettingHistoriesDocument = `query GetAllGroupSettingHistories {
 				syncToSlack
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				visibility
 			}
 		}
@@ -53154,7 +53154,7 @@ const GetGroupSettingHistoriesDocument = `query GetGroupSettingHistories ($where
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				groupID
 				historyTime
 				id
@@ -53165,7 +53165,7 @@ const GetGroupSettingHistoriesDocument = `query GetGroupSettingHistories ($where
 				syncToSlack
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				visibility
 			}
 		}
@@ -53327,8 +53327,8 @@ const GetAllHushesDocument = `query GetAllHushes {
 				}
 				createdAt
 				updatedAt
-				createdBy
-				updatedBy
+				createdByID
+				updatedByID
 			}
 		}
 	}
@@ -53368,8 +53368,8 @@ const GetHushByIDDocument = `query GetHushByID ($hushId: ID!) {
 		}
 		createdAt
 		updatedAt
-		createdBy
-		updatedBy
+		createdByID
+		updatedByID
 	}
 }
 `
@@ -53411,8 +53411,8 @@ const GetHushesDocument = `query GetHushes ($where: HushWhereInput) {
 				}
 				createdAt
 				updatedAt
-				createdBy
-				updatedBy
+				createdByID
+				updatedByID
 			}
 		}
 	}
@@ -53481,7 +53481,7 @@ const GetAllHushHistoriesDocument = `query GetAllHushHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				historyTime
 				id
@@ -53491,7 +53491,7 @@ const GetAllHushHistoriesDocument = `query GetAllHushHistories {
 				ref
 				secretName
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53518,7 +53518,7 @@ const GetHushHistoriesDocument = `query GetHushHistories ($where: HushHistoryWhe
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				historyTime
 				id
@@ -53528,7 +53528,7 @@ const GetHushHistoriesDocument = `query GetHushHistories ($where: HushHistoryWhe
 				ref
 				secretName
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53712,9 +53712,9 @@ const GetAllIntegrationsDocument = `query GetAllIntegrations {
 					id
 				}
 				createdAt
-				createdBy
+				createdByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53753,9 +53753,9 @@ const GetIntegrationByIDDocument = `query GetIntegrationByID ($integrationId: ID
 			id
 		}
 		createdAt
-		createdBy
+		createdByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -53796,9 +53796,9 @@ const GetIntegrationsDocument = `query GetIntegrations ($where: IntegrationWhere
 					id
 				}
 				createdAt
-				createdBy
+				createdByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53867,7 +53867,7 @@ const GetAllIntegrationHistoriesDocument = `query GetAllIntegrationHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				historyTime
 				id
@@ -53878,7 +53878,7 @@ const GetAllIntegrationHistoriesDocument = `query GetAllIntegrationHistories {
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53905,7 +53905,7 @@ const GetIntegrationHistoriesDocument = `query GetIntegrationHistories ($where: 
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				historyTime
 				id
@@ -53916,7 +53916,7 @@ const GetIntegrationHistoriesDocument = `query GetIntegrationHistories ($where: 
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -53945,7 +53945,7 @@ const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolic
 		internalPolicies {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -53955,7 +53955,7 @@ const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolic
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -53984,7 +53984,7 @@ const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($in
 		internalPolicies {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -53994,7 +53994,7 @@ const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($in
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -54023,7 +54023,7 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 		internalPolicy {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -54033,7 +54033,7 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			editors {
 				id
@@ -54095,7 +54095,7 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -54105,7 +54105,7 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				editors {
 					id
@@ -54142,7 +54142,7 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -54152,7 +54152,7 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				editors {
 					id
@@ -54189,7 +54189,7 @@ const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPol
 	internalPolicy(id: $internalPolicyId) {
 		background
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		id
@@ -54199,7 +54199,7 @@ const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPol
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		version
 		editors {
 			id
@@ -54235,7 +54235,7 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 		internalPolicy {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -54245,7 +54245,7 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			editors {
 				id
@@ -54284,7 +54284,7 @@ const GetAllInternalPolicyHistoriesDocument = `query GetAllInternalPolicyHistori
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -54297,7 +54297,7 @@ const GetAllInternalPolicyHistoriesDocument = `query GetAllInternalPolicyHistori
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -54326,7 +54326,7 @@ const GetInternalPolicyHistoriesDocument = `query GetInternalPolicyHistories ($w
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -54339,7 +54339,7 @@ const GetInternalPolicyHistoriesDocument = `query GetInternalPolicyHistories ($w
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -54531,9 +54531,9 @@ const GetInviteByIDDocument = `query GetInviteByID ($inviteId: ID!) {
 			name
 		}
 		createdAt
-		createdBy
+		createdByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -54596,7 +54596,7 @@ const CreateBulkCSVNarrativeDocument = `mutation CreateBulkCSVNarrative ($input:
 	createBulkCSVNarrative(input: $input) {
 		narratives {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -54604,7 +54604,7 @@ const CreateBulkCSVNarrativeDocument = `mutation CreateBulkCSVNarrative ($input:
 			satisfies
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -54631,7 +54631,7 @@ const CreateBulkNarrativeDocument = `mutation CreateBulkNarrative ($input: [Crea
 	createBulkNarrative(input: $input) {
 		narratives {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -54639,7 +54639,7 @@ const CreateBulkNarrativeDocument = `mutation CreateBulkNarrative ($input: [Crea
 			satisfies
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -54666,7 +54666,7 @@ const CreateNarrativeDocument = `mutation CreateNarrative ($input: CreateNarrati
 	createNarrative(input: $input) {
 		narrative {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -54674,7 +54674,7 @@ const CreateNarrativeDocument = `mutation CreateNarrative ($input: CreateNarrati
 			satisfies
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			programs {
 				id
 				name
@@ -54742,7 +54742,7 @@ const GetAllNarrativesDocument = `query GetAllNarratives {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -54750,7 +54750,7 @@ const GetAllNarrativesDocument = `query GetAllNarratives {
 				satisfies
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				programs {
 					id
 					name
@@ -54791,7 +54791,7 @@ func (c *Client) GetAllNarratives(ctx context.Context, interceptors ...clientv2.
 const GetNarrativeByIDDocument = `query GetNarrativeByID ($narrativeId: ID!) {
 	narrative(id: $narrativeId) {
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		id
@@ -54799,7 +54799,7 @@ const GetNarrativeByIDDocument = `query GetNarrativeByID ($narrativeId: ID!) {
 		satisfies
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		programs {
 			id
 			name
@@ -54842,7 +54842,7 @@ const GetNarrativesDocument = `query GetNarratives ($where: NarrativeWhereInput)
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -54850,7 +54850,7 @@ const GetNarrativesDocument = `query GetNarratives ($where: NarrativeWhereInput)
 				satisfies
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				programs {
 					id
 					name
@@ -54894,7 +54894,7 @@ const UpdateNarrativeDocument = `mutation UpdateNarrative ($updateNarrativeId: I
 	updateNarrative(id: $updateNarrativeId, input: $input) {
 		narrative {
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -54902,7 +54902,7 @@ const UpdateNarrativeDocument = `mutation UpdateNarrative ($updateNarrativeId: I
 			satisfies
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			programs {
 				id
 				name
@@ -54947,7 +54947,7 @@ const GetAllNarrativeHistoriesDocument = `query GetAllNarrativeHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -54958,7 +54958,7 @@ const GetAllNarrativeHistoriesDocument = `query GetAllNarrativeHistories {
 				satisfies
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -54985,7 +54985,7 @@ const GetNarrativeHistoriesDocument = `query GetNarrativeHistories ($where: Narr
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -54996,7 +54996,7 @@ const GetNarrativeHistoriesDocument = `query GetNarrativeHistories ($where: Narr
 				satisfies
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -55025,7 +55025,7 @@ const GetAllNoteHistoriesDocument = `query GetAllNoteHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				operation
@@ -55034,7 +55034,7 @@ const GetAllNoteHistoriesDocument = `query GetAllNoteHistories {
 				tags
 				text
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -55061,7 +55061,7 @@ const GetNoteHistoriesDocument = `query GetNoteHistories ($where: NoteHistoryWhe
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				operation
@@ -55070,7 +55070,7 @@ const GetNoteHistoriesDocument = `query GetNoteHistories ($where: NoteHistoryWhe
 				tags
 				text
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -55171,8 +55171,8 @@ const CreateOrganizationDocument = `mutation CreateOrganization ($input: CreateO
 				id
 				createdAt
 				updatedAt
-				createdBy
-				updatedBy
+				createdByID
+				updatedByID
 				domains
 				billingContact
 				billingEmail
@@ -55279,8 +55279,8 @@ const GetAllOrganizationsDocument = `query GetAllOrganizations {
 					id
 					createdAt
 					updatedAt
-					createdBy
-					updatedBy
+					createdByID
+					updatedByID
 					domains
 					billingContact
 					billingEmail
@@ -55348,8 +55348,8 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 			id
 			createdAt
 			updatedAt
-			createdBy
-			updatedBy
+			createdByID
+			updatedByID
 			domains
 			billingContact
 			billingEmail
@@ -55360,9 +55360,9 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 			tags
 		}
 		createdAt
-		createdBy
+		createdByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -55421,8 +55421,8 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 					id
 					createdAt
 					updatedAt
-					createdBy
-					updatedBy
+					createdByID
+					updatedByID
 					domains
 					billingContact
 					billingEmail
@@ -55475,8 +55475,8 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 				id
 				createdAt
 				updatedAt
-				createdBy
-				updatedBy
+				createdByID
+				updatedByID
 				domains
 				billingContact
 				billingEmail
@@ -55515,7 +55515,7 @@ const GetAllOrganizationHistoriesDocument = `query GetAllOrganizationHistories {
 			node {
 				avatarRemoteURL
 				createdAt
-				createdBy
+				createdByID
 				dedicatedDb
 				description
 				displayName
@@ -55527,7 +55527,7 @@ const GetAllOrganizationHistoriesDocument = `query GetAllOrganizationHistories {
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -55555,7 +55555,7 @@ const GetOrganizationHistoriesDocument = `query GetOrganizationHistories ($where
 			node {
 				avatarRemoteURL
 				createdAt
-				createdBy
+				createdByID
 				dedicatedDb
 				description
 				displayName
@@ -55567,7 +55567,7 @@ const GetOrganizationHistoriesDocument = `query GetOrganizationHistories ($where
 				ref
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -55600,14 +55600,14 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				billingEmail
 				billingPhone
 				createdAt
-				createdBy
+				createdByID
 				domains
 				geoLocation
 				id
 				tags
 				taxIdentifier
 				updatedAt
-				updatedBy
+				updatedByID
 				organization {
 					id
 					name
@@ -55640,14 +55640,14 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		billingEmail
 		billingPhone
 		createdAt
-		createdBy
+		createdByID
 		domains
 		geoLocation
 		id
 		tags
 		taxIdentifier
 		updatedAt
-		updatedBy
+		updatedByID
 		organization {
 			id
 			name
@@ -55682,14 +55682,14 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				billingEmail
 				billingPhone
 				createdAt
-				createdBy
+				createdByID
 				domains
 				geoLocation
 				id
 				tags
 				taxIdentifier
 				updatedAt
-				updatedBy
+				updatedByID
 				organization {
 					id
 					name
@@ -55725,14 +55725,14 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			billingEmail
 			billingPhone
 			createdAt
-			createdBy
+			createdByID
 			domains
 			geoLocation
 			id
 			tags
 			taxIdentifier
 			updatedAt
-			updatedBy
+			updatedByID
 			organization {
 				id
 				name
@@ -55769,7 +55769,7 @@ const GetAllOrganizationSettingHistoriesDocument = `query GetAllOrganizationSett
 				billingEmail
 				billingPhone
 				createdAt
-				createdBy
+				createdByID
 				domains
 				geoLocation
 				historyTime
@@ -55780,7 +55780,7 @@ const GetAllOrganizationSettingHistoriesDocument = `query GetAllOrganizationSett
 				tags
 				taxIdentifier
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -55811,7 +55811,7 @@ const GetOrganizationSettingHistoriesDocument = `query GetOrganizationSettingHis
 				billingEmail
 				billingPhone
 				createdAt
-				createdBy
+				createdByID
 				domains
 				geoLocation
 				historyTime
@@ -55822,7 +55822,7 @@ const GetOrganizationSettingHistoriesDocument = `query GetOrganizationSettingHis
 				tags
 				taxIdentifier
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -56030,7 +56030,7 @@ const GetAllOrgMembershipHistoriesDocument = `query GetAllOrgMembershipHistories
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				operation
@@ -56038,7 +56038,7 @@ const GetAllOrgMembershipHistoriesDocument = `query GetAllOrgMembershipHistories
 				ref
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -56066,7 +56066,7 @@ const GetOrgMembershipHistoriesDocument = `query GetOrgMembershipHistories ($whe
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				operation
@@ -56074,7 +56074,7 @@ const GetOrgMembershipHistoriesDocument = `query GetOrgMembershipHistories ($whe
 				ref
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -56105,7 +56105,7 @@ const GetAllOrgSubscriptionsDocument = `query GetAllOrgSubscriptions {
 			node {
 				active
 				createdAt
-				createdBy
+				createdByID
 				expiresAt
 				features
 				id
@@ -56118,7 +56118,7 @@ const GetAllOrgSubscriptionsDocument = `query GetAllOrgSubscriptions {
 				productPrice
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -56144,7 +56144,7 @@ const GetOrgSubscriptionByIDDocument = `query GetOrgSubscriptionByID ($orgSubscr
 	orgSubscription(id: $orgSubscriptionId) {
 		active
 		createdAt
-		createdBy
+		createdByID
 		expiresAt
 		features
 		id
@@ -56157,7 +56157,7 @@ const GetOrgSubscriptionByIDDocument = `query GetOrgSubscriptionByID ($orgSubscr
 		productPrice
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -56185,7 +56185,7 @@ const GetOrgSubscriptionsDocument = `query GetOrgSubscriptions ($where: OrgSubsc
 			node {
 				active
 				createdAt
-				createdBy
+				createdByID
 				expiresAt
 				features
 				id
@@ -56198,7 +56198,7 @@ const GetOrgSubscriptionsDocument = `query GetOrgSubscriptions ($where: OrgSubsc
 				productPrice
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -56228,7 +56228,7 @@ const GetAllOrgSubscriptionHistoriesDocument = `query GetAllOrgSubscriptionHisto
 			node {
 				active
 				createdAt
-				createdBy
+				createdByID
 				expiresAt
 				features
 				historyTime
@@ -56243,7 +56243,7 @@ const GetAllOrgSubscriptionHistoriesDocument = `query GetAllOrgSubscriptionHisto
 				stripeSubscriptionStatus
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -56271,7 +56271,7 @@ const GetOrgSubscriptionHistoriesDocument = `query GetOrgSubscriptionHistories (
 			node {
 				active
 				createdAt
-				createdBy
+				createdByID
 				expiresAt
 				features
 				historyTime
@@ -56286,7 +56286,7 @@ const GetOrgSubscriptionHistoriesDocument = `query GetOrgSubscriptionHistories (
 				stripeSubscriptionStatus
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -56321,7 +56321,7 @@ const CreateBulkCSVPersonalAccessTokenDocument = `mutation CreateBulkCSVPersonal
 			scopes
 			token
 			updatedAt
-			updatedBy
+			updatedByID
 			organizations {
 				id
 				name
@@ -56359,7 +56359,7 @@ const CreateBulkPersonalAccessTokenDocument = `mutation CreateBulkPersonalAccess
 			scopes
 			token
 			updatedAt
-			updatedBy
+			updatedByID
 			organizations {
 				id
 				name
@@ -56397,7 +56397,7 @@ const CreatePersonalAccessTokenDocument = `mutation CreatePersonalAccessToken ($
 			scopes
 			token
 			updatedAt
-			updatedBy
+			updatedByID
 			organizations {
 				id
 				name
@@ -56463,7 +56463,7 @@ const GetAllPersonalAccessTokensDocument = `query GetAllPersonalAccessTokens {
 				scopes
 				token
 				updatedAt
-				updatedBy
+				updatedByID
 				organizations {
 					id
 					name
@@ -56499,7 +56499,7 @@ const GetPersonalAccessTokenByIDDocument = `query GetPersonalAccessTokenByID ($p
 		scopes
 		token
 		updatedAt
-		updatedBy
+		updatedByID
 		organizations {
 			id
 			name
@@ -56536,7 +56536,7 @@ const UpdatePersonalAccessTokenDocument = `mutation UpdatePersonalAccessToken ($
 			scopes
 			token
 			updatedAt
-			updatedBy
+			updatedByID
 			organizations {
 				id
 				name
@@ -56572,7 +56572,7 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 		procedures {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -56583,7 +56583,7 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -56612,7 +56612,7 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 		procedures {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -56623,7 +56623,7 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -56652,7 +56652,7 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 		procedure {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -56663,7 +56663,7 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			editors {
 				id
@@ -56725,7 +56725,7 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -56736,7 +56736,7 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				editors {
 					id
@@ -56771,7 +56771,7 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 	procedure(id: $procedureId) {
 		background
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		id
@@ -56782,7 +56782,7 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		version
 		editors {
 			id
@@ -56819,7 +56819,7 @@ const GetProceduresDocument = `query GetProcedures ($where: ProcedureWhereInput)
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -56830,7 +56830,7 @@ const GetProceduresDocument = `query GetProcedures ($where: ProcedureWhereInput)
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				editors {
 					id
@@ -56868,7 +56868,7 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 		procedure {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -56879,7 +56879,7 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			editors {
 				id
@@ -56918,7 +56918,7 @@ const GetAllProcedureHistoriesDocument = `query GetAllProcedureHistories {
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -56932,7 +56932,7 @@ const GetAllProcedureHistoriesDocument = `query GetAllProcedureHistories {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -56961,7 +56961,7 @@ const GetProcedureHistoriesDocument = `query GetProcedureHistories ($where: Proc
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -56975,7 +56975,7 @@ const GetProcedureHistoriesDocument = `query GetProcedureHistories ($where: Proc
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -57007,7 +57007,7 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			auditorReady
 			auditorWriteComments
 			createdAt
-			createdBy
+			createdByID
 			description
 			endDate
 			id
@@ -57017,7 +57017,7 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -57047,7 +57047,7 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			auditorReady
 			auditorWriteComments
 			createdAt
-			createdBy
+			createdByID
 			description
 			endDate
 			id
@@ -57057,7 +57057,7 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -57172,7 +57172,7 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			auditorReady
 			auditorWriteComments
 			createdAt
-			createdBy
+			createdByID
 			description
 			endDate
 			id
@@ -57182,11 +57182,11 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			procedures {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -57197,13 +57197,13 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 			internalPolicies {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -57213,7 +57213,7 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 			editors {
@@ -57317,7 +57317,7 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				auditorReady
 				auditorWriteComments
 				createdAt
-				createdBy
+				createdByID
 				description
 				endDate
 				id
@@ -57327,11 +57327,11 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				procedures {
 					background
 					createdAt
-					createdBy
+					createdByID
 					description
 					details
 					id
@@ -57342,13 +57342,13 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 					status
 					tags
 					updatedAt
-					updatedBy
+					updatedByID
 					version
 				}
 				internalPolicies {
 					background
 					createdAt
-					createdBy
+					createdByID
 					description
 					details
 					id
@@ -57358,7 +57358,7 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 					status
 					tags
 					updatedAt
-					updatedBy
+					updatedByID
 					version
 				}
 				editors {
@@ -57400,7 +57400,7 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		auditorReady
 		auditorWriteComments
 		createdAt
-		createdBy
+		createdByID
 		description
 		endDate
 		id
@@ -57410,11 +57410,11 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		procedures {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -57425,13 +57425,13 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 		internalPolicies {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -57441,7 +57441,7 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 		editors {
@@ -57485,7 +57485,7 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				auditorReady
 				auditorWriteComments
 				createdAt
-				createdBy
+				createdByID
 				description
 				endDate
 				id
@@ -57495,11 +57495,11 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				procedures {
 					background
 					createdAt
-					createdBy
+					createdByID
 					description
 					details
 					id
@@ -57510,13 +57510,13 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 					status
 					tags
 					updatedAt
-					updatedBy
+					updatedByID
 					version
 				}
 				internalPolicies {
 					background
 					createdAt
-					createdBy
+					createdByID
 					description
 					details
 					id
@@ -57526,7 +57526,7 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 					status
 					tags
 					updatedAt
-					updatedBy
+					updatedByID
 					version
 				}
 				editors {
@@ -57571,7 +57571,7 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			auditorReady
 			auditorWriteComments
 			createdAt
-			createdBy
+			createdByID
 			description
 			endDate
 			id
@@ -57581,11 +57581,11 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			procedures {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -57596,13 +57596,13 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 			internalPolicies {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -57612,7 +57612,7 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 			editors {
@@ -57885,7 +57885,7 @@ const GetAllProgramHistoriesDocument = `query GetAllProgramHistories {
 				auditorReady
 				auditorWriteComments
 				createdAt
-				createdBy
+				createdByID
 				description
 				endDate
 				historyTime
@@ -57898,7 +57898,7 @@ const GetAllProgramHistoriesDocument = `query GetAllProgramHistories {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -57928,7 +57928,7 @@ const GetProgramHistoriesDocument = `query GetProgramHistories ($where: ProgramH
 				auditorReady
 				auditorWriteComments
 				createdAt
-				createdBy
+				createdByID
 				description
 				endDate
 				historyTime
@@ -57941,7 +57941,7 @@ const GetProgramHistoriesDocument = `query GetProgramHistories ($where: ProgramH
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -57969,12 +57969,12 @@ const CreateBulkCSVProgramMembershipDocument = `mutation CreateBulkCSVProgramMem
 	createBulkCSVProgramMembership(input: $input) {
 		programMemberships {
 			createdAt
-			createdBy
+			createdByID
 			id
 			programID
 			role
 			updatedAt
-			updatedBy
+			updatedByID
 			userID
 		}
 	}
@@ -58002,12 +58002,12 @@ const CreateBulkProgramMembershipDocument = `mutation CreateBulkProgramMembershi
 	createBulkProgramMembership(input: $input) {
 		programMemberships {
 			createdAt
-			createdBy
+			createdByID
 			id
 			programID
 			role
 			updatedAt
-			updatedBy
+			updatedByID
 			userID
 		}
 	}
@@ -58035,12 +58035,12 @@ const CreateProgramMembershipDocument = `mutation CreateProgramMembership ($inpu
 	createProgramMembership(input: $input) {
 		programMembership {
 			createdAt
-			createdBy
+			createdByID
 			id
 			programID
 			role
 			updatedAt
-			updatedBy
+			updatedByID
 			userID
 		}
 	}
@@ -58093,12 +58093,12 @@ const GetAllProgramMembershipsDocument = `query GetAllProgramMemberships {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				id
 				programID
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -58124,12 +58124,12 @@ func (c *Client) GetAllProgramMemberships(ctx context.Context, interceptors ...c
 const GetProgramMembershipByIDDocument = `query GetProgramMembershipByID ($programMembershipId: ID!) {
 	programMembership(id: $programMembershipId) {
 		createdAt
-		createdBy
+		createdByID
 		id
 		programID
 		role
 		updatedAt
-		updatedBy
+		updatedByID
 		userID
 	}
 }
@@ -58157,12 +58157,12 @@ const GetProgramMembershipsDocument = `query GetProgramMemberships ($where: Prog
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				id
 				programID
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -58191,12 +58191,12 @@ const UpdateProgramMembershipDocument = `mutation UpdateProgramMembership ($upda
 	updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
 		programMembership {
 			createdAt
-			createdBy
+			createdByID
 			id
 			programID
 			role
 			updatedAt
-			updatedBy
+			updatedByID
 			userID
 		}
 	}
@@ -58226,7 +58226,7 @@ const GetAllProgramMembershipHistoriesDocument = `query GetAllProgramMembershipH
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				operation
@@ -58234,7 +58234,7 @@ const GetAllProgramMembershipHistoriesDocument = `query GetAllProgramMembershipH
 				ref
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -58262,7 +58262,7 @@ const GetProgramMembershipHistoriesDocument = `query GetProgramMembershipHistori
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				historyTime
 				id
 				operation
@@ -58270,7 +58270,7 @@ const GetProgramMembershipHistoriesDocument = `query GetProgramMembershipHistori
 				ref
 				role
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -58300,7 +58300,7 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 		risks {
 			businessCosts
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -58313,7 +58313,7 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -58341,7 +58341,7 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 		risks {
 			businessCosts
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -58354,7 +58354,7 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -58382,7 +58382,7 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 		risk {
 			businessCosts
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -58395,7 +58395,7 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			programs {
 				id
 				name
@@ -58464,7 +58464,7 @@ const GetAllRisksDocument = `query GetAllRisks {
 			node {
 				businessCosts
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -58477,7 +58477,7 @@ const GetAllRisksDocument = `query GetAllRisks {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				programs {
 					id
 					name
@@ -58519,7 +58519,7 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 	risk(id: $riskId) {
 		businessCosts
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		id
@@ -58532,7 +58532,7 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		programs {
 			id
 			name
@@ -58576,7 +58576,7 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 			node {
 				businessCosts
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				id
@@ -58589,7 +58589,7 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				programs {
 					id
 					name
@@ -58634,7 +58634,7 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 		risk {
 			businessCosts
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			id
@@ -58647,7 +58647,7 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			programs {
 				id
 				name
@@ -58693,7 +58693,7 @@ const GetAllRiskHistoriesDocument = `query GetAllRiskHistories {
 			node {
 				businessCosts
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -58709,7 +58709,7 @@ const GetAllRiskHistoriesDocument = `query GetAllRiskHistories {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -58737,7 +58737,7 @@ const GetRiskHistoriesDocument = `query GetRiskHistories ($where: RiskHistoryWhe
 			node {
 				businessCosts
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				historyTime
@@ -58753,7 +58753,7 @@ const GetRiskHistoriesDocument = `query GetRiskHistories ($where: RiskHistoryWhe
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -59021,7 +59021,7 @@ const CreateBulkCSVStandardDocument = `mutation CreateBulkCSVStandard ($input: U
 		standards {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59033,7 +59033,7 @@ const CreateBulkCSVStandardDocument = `mutation CreateBulkCSVStandard ($input: U
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -59062,7 +59062,7 @@ const CreateBulkStandardDocument = `mutation CreateBulkStandard ($input: [Create
 		standards {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59074,7 +59074,7 @@ const CreateBulkStandardDocument = `mutation CreateBulkStandard ($input: [Create
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -59103,7 +59103,7 @@ const CreateStandardDocument = `mutation CreateStandard ($input: CreateStandardI
 		standard {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59115,7 +59115,7 @@ const CreateStandardDocument = `mutation CreateStandard ($input: CreateStandardI
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -59169,7 +59169,7 @@ const GetAllStandardsDocument = `query GetAllStandards {
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59181,7 +59181,7 @@ const GetAllStandardsDocument = `query GetAllStandards {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -59208,7 +59208,7 @@ const GetStandardByIDDocument = `query GetStandardByID ($standardId: ID!) {
 	standard(id: $standardId) {
 		background
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		family
@@ -59220,7 +59220,7 @@ const GetStandardByIDDocument = `query GetStandardByID ($standardId: ID!) {
 		status
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		version
 	}
 }
@@ -59249,7 +59249,7 @@ const GetStandardsDocument = `query GetStandards ($where: StandardWhereInput) {
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59261,7 +59261,7 @@ const GetStandardsDocument = `query GetStandards ($where: StandardWhereInput) {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -59291,7 +59291,7 @@ const UpdateStandardDocument = `mutation UpdateStandard ($updateStandardId: ID!,
 		standard {
 			background
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59303,7 +59303,7 @@ const UpdateStandardDocument = `mutation UpdateStandard ($updateStandardId: ID!,
 			status
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -59334,7 +59334,7 @@ const GetAllStandardHistoriesDocument = `query GetAllStandardHistories {
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59349,7 +59349,7 @@ const GetAllStandardHistoriesDocument = `query GetAllStandardHistories {
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -59378,7 +59378,7 @@ const GetStandardHistoriesDocument = `query GetStandardHistories ($where: Standa
 			node {
 				background
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59393,7 +59393,7 @@ const GetStandardHistoriesDocument = `query GetStandardHistories ($where: Standa
 				status
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -59423,7 +59423,7 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 		subcontrols {
 			class
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59441,7 +59441,7 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 			subcontrolType
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -59470,7 +59470,7 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 		subcontrols {
 			class
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59488,7 +59488,7 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 			subcontrolType
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 		}
 	}
@@ -59517,7 +59517,7 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 		subcontrol {
 			class
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59535,7 +59535,7 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			subcontrolType
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			controls {
 				id
@@ -59593,7 +59593,7 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 			node {
 				class
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59611,7 +59611,7 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 				subcontrolType
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				controls {
 					id
@@ -59642,7 +59642,7 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 	subcontrol(id: $subcontrolId) {
 		class
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		family
@@ -59660,7 +59660,7 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 		subcontrolType
 		tags
 		updatedAt
-		updatedBy
+		updatedByID
 		version
 		controls {
 			id
@@ -59693,7 +59693,7 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInp
 			node {
 				class
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59711,7 +59711,7 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInp
 				subcontrolType
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 				controls {
 					id
@@ -59745,7 +59745,7 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 		subcontrol {
 			class
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			family
@@ -59763,7 +59763,7 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			subcontrolType
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 			version
 			controls {
 				id
@@ -59798,7 +59798,7 @@ const GetAllSubcontrolHistoriesDocument = `query GetAllSubcontrolHistories {
 			node {
 				class
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59819,7 +59819,7 @@ const GetAllSubcontrolHistoriesDocument = `query GetAllSubcontrolHistories {
 				subcontrolType
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -59848,7 +59848,7 @@ const GetSubcontrolHistoriesDocument = `query GetSubcontrolHistories ($where: Su
 			node {
 				class
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				family
@@ -59869,7 +59869,7 @@ const GetSubcontrolHistoriesDocument = `query GetSubcontrolHistories ($where: Su
 				subcontrolType
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				version
 			}
 		}
@@ -59957,11 +59957,11 @@ const CreateSubscriberDocument = `mutation CreateSubscriber ($input: CreateSubsc
 		subscriber {
 			active
 			createdAt
-			createdBy
+			createdByID
 			email
 			id
 			updatedAt
-			updatedBy
+			updatedByID
 			verifiedEmail
 		}
 	}
@@ -60105,12 +60105,12 @@ const UpdateSubscriberDocument = `mutation UpdateSubscriber ($email: String!, $i
 		subscriber {
 			active
 			createdAt
-			createdBy
+			createdByID
 			email
 			id
 			phoneNumber
 			updatedAt
-			updatedBy
+			updatedByID
 			verifiedEmail
 			verifiedPhone
 		}
@@ -60151,7 +60151,7 @@ const CreateBulkCSVTaskDocument = `mutation CreateBulkCSVTask ($input: Upload!) 
 			}
 			completed
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			due
@@ -60160,7 +60160,7 @@ const CreateBulkCSVTaskDocument = `mutation CreateBulkCSVTask ($input: Upload!) 
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -60198,7 +60198,7 @@ const CreateBulkTaskDocument = `mutation CreateBulkTask ($input: [CreateTaskInpu
 			}
 			completed
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			due
@@ -60207,7 +60207,7 @@ const CreateBulkTaskDocument = `mutation CreateBulkTask ($input: [CreateTaskInpu
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -60245,7 +60245,7 @@ const CreateTaskDocument = `mutation CreateTask ($input: CreateTaskInput!) {
 			}
 			completed
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			due
@@ -60254,7 +60254,7 @@ const CreateTaskDocument = `mutation CreateTask ($input: CreateTaskInput!) {
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -60321,7 +60321,7 @@ const GetAllTasksDocument = `query GetAllTasks {
 				}
 				completed
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				due
@@ -60330,7 +60330,7 @@ const GetAllTasksDocument = `query GetAllTasks {
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -60370,7 +60370,7 @@ const GetTaskByIDDocument = `query GetTaskByID ($taskId: ID!) {
 		}
 		completed
 		createdAt
-		createdBy
+		createdByID
 		description
 		details
 		due
@@ -60379,7 +60379,7 @@ const GetTaskByIDDocument = `query GetTaskByID ($taskId: ID!) {
 		tags
 		title
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -60417,7 +60417,7 @@ const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
 				}
 				completed
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				due
@@ -60426,7 +60426,7 @@ const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -60465,7 +60465,7 @@ const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: Upd
 			}
 			completed
 			createdAt
-			createdBy
+			createdByID
 			description
 			details
 			due
@@ -60474,7 +60474,7 @@ const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: Upd
 			tags
 			title
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -60504,7 +60504,7 @@ const GetAllTaskHistoriesDocument = `query GetAllTaskHistories {
 			node {
 				completed
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				due
@@ -60516,7 +60516,7 @@ const GetAllTaskHistoriesDocument = `query GetAllTaskHistories {
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -60544,7 +60544,7 @@ const GetTaskHistoriesDocument = `query GetTaskHistories ($where: TaskHistoryWhe
 			node {
 				completed
 				createdAt
-				createdBy
+				createdByID
 				description
 				details
 				due
@@ -60556,7 +60556,7 @@ const GetTaskHistoriesDocument = `query GetTaskHistories ($where: TaskHistoryWhe
 				tags
 				title
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -60684,14 +60684,14 @@ const GetAllTemplatesDocument = `query GetAllTemplates {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				id
 				jsonconfig
 				name
 				uischema
 				updatedAt
-				updatedBy
+				updatedByID
 				owner {
 					id
 				}
@@ -60719,14 +60719,14 @@ func (c *Client) GetAllTemplates(ctx context.Context, interceptors ...clientv2.R
 const GetTemplateByIDDocument = `query GetTemplateByID ($getTemplateId: ID!) {
 	template(id: $getTemplateId) {
 		createdAt
-		createdBy
+		createdByID
 		description
 		id
 		jsonconfig
 		name
 		uischema
 		updatedAt
-		updatedBy
+		updatedByID
 		owner {
 			id
 		}
@@ -60755,14 +60755,14 @@ const UpdateTemplateDocument = `mutation UpdateTemplate ($updateTemplateId: ID!,
 	updateTemplate(id: $updateTemplateId, input: $input) {
 		template {
 			createdAt
-			createdBy
+			createdByID
 			description
 			id
 			jsonconfig
 			name
 			uischema
 			updatedAt
-			updatedBy
+			updatedByID
 			owner {
 				id
 			}
@@ -60794,7 +60794,7 @@ const GetAllTemplateHistoriesDocument = `query GetAllTemplateHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				historyTime
 				id
@@ -60807,7 +60807,7 @@ const GetAllTemplateHistoriesDocument = `query GetAllTemplateHistories {
 				templateType
 				uischema
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -60834,7 +60834,7 @@ const GetTemplateHistoriesDocument = `query GetTemplateHistories ($where: Templa
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				description
 				historyTime
 				id
@@ -60847,7 +60847,7 @@ const GetTemplateHistoriesDocument = `query GetTemplateHistories ($where: Templa
 				templateType
 				uischema
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61017,7 +61017,7 @@ const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avat
 					personalOrg
 				}
 				createdAt
-				createdBy
+				createdByID
 				emailConfirmed
 				locked
 				silencedAt
@@ -61025,7 +61025,7 @@ const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avat
 				suspendedAt
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61097,7 +61097,7 @@ const GetAllUsersDocument = `query GetAllUsers {
 						personalOrg
 					}
 					createdAt
-					createdBy
+					createdByID
 					emailConfirmed
 					locked
 					silencedAt
@@ -61105,12 +61105,12 @@ const GetAllUsersDocument = `query GetAllUsers {
 					suspendedAt
 					tags
 					updatedAt
-					updatedBy
+					updatedByID
 				}
 				createdAt
-				createdBy
+				createdByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61153,7 +61153,7 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 				personalOrg
 			}
 			createdAt
-			createdBy
+			createdByID
 			emailConfirmed
 			locked
 			silencedAt
@@ -61161,7 +61161,7 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 			suspendedAt
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 		organizations {
 			id
@@ -61173,9 +61173,9 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 			}
 		}
 		updatedAt
-		updatedBy
+		updatedByID
 		createdAt
-		createdBy
+		createdByID
 	}
 }
 `
@@ -61218,7 +61218,7 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 				personalOrg
 			}
 			createdAt
-			createdBy
+			createdByID
 			emailConfirmed
 			locked
 			silencedAt
@@ -61226,7 +61226,7 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 			suspendedAt
 			tags
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 		orgMemberships {
 			id
@@ -61237,9 +61237,9 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 			}
 		}
 		createdAt
-		createdBy
+		createdByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -61288,7 +61288,7 @@ const UpdateUserDocument = `mutation UpdateUser ($updateUserId: ID!, $input: Upd
 					personalOrg
 				}
 				createdAt
-				createdBy
+				createdByID
 				emailConfirmed
 				locked
 				silencedAt
@@ -61296,7 +61296,7 @@ const UpdateUserDocument = `mutation UpdateUser ($updateUserId: ID!, $input: Upd
 				suspendedAt
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61331,7 +61331,7 @@ const GetAllUserHistoriesDocument = `query GetAllUserHistories {
 				avatarRemoteURL
 				avatarUpdatedAt
 				createdAt
-				createdBy
+				createdByID
 				displayName
 				email
 				firstName
@@ -61345,7 +61345,7 @@ const GetAllUserHistoriesDocument = `query GetAllUserHistories {
 				sub
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61376,7 +61376,7 @@ const GetUserHistoriesDocument = `query GetUserHistories ($where: UserHistoryWhe
 				avatarRemoteURL
 				avatarUpdatedAt
 				createdAt
-				createdBy
+				createdByID
 				displayName
 				email
 				firstName
@@ -61390,7 +61390,7 @@ const GetUserHistoriesDocument = `query GetUserHistories ($where: UserHistoryWhe
 				sub
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61431,11 +61431,11 @@ const GetAllUserSettingsDocument = `query GetAllUserSettings {
 				isTfaEnabled
 				emailConfirmed
 				createdAt
-				createdBy
+				createdByID
 				deletedAt
-				deletedBy
+				deletedByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61472,11 +61472,11 @@ const GetUserSettingByIDDocument = `query GetUserSettingByID ($userSettingId: ID
 		isTfaEnabled
 		emailConfirmed
 		createdAt
-		createdBy
+		createdByID
 		deletedAt
-		deletedBy
+		deletedByID
 		updatedAt
-		updatedBy
+		updatedByID
 	}
 }
 `
@@ -61515,11 +61515,11 @@ const GetUserSettingsDocument = `query GetUserSettings ($where: UserSettingWhere
 				isTfaEnabled
 				emailConfirmed
 				createdAt
-				createdBy
+				createdByID
 				deletedAt
-				deletedBy
+				deletedByID
 				updatedAt
-				updatedBy
+				updatedByID
 			}
 		}
 	}
@@ -61559,11 +61559,11 @@ const UpdateUserSettingDocument = `mutation UpdateUserSetting ($updateUserSettin
 			isTfaEnabled
 			emailConfirmed
 			createdAt
-			createdBy
+			createdByID
 			deletedAt
-			deletedBy
+			deletedByID
 			updatedAt
-			updatedBy
+			updatedByID
 		}
 	}
 }
@@ -61592,7 +61592,7 @@ const GetAllUserSettingHistoriesDocument = `query GetAllUserSettingHistories {
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				emailConfirmed
 				historyTime
 				id
@@ -61606,7 +61606,7 @@ const GetAllUserSettingHistoriesDocument = `query GetAllUserSettingHistories {
 				suspendedAt
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}
@@ -61634,7 +61634,7 @@ const GetUserSettingHistoriesDocument = `query GetUserSettingHistories ($where: 
 		edges {
 			node {
 				createdAt
-				createdBy
+				createdByID
 				emailConfirmed
 				historyTime
 				id
@@ -61648,7 +61648,7 @@ const GetUserSettingHistoriesDocument = `query GetUserSettingHistories ($where: 
 				suspendedAt
 				tags
 				updatedAt
-				updatedBy
+				updatedByID
 				userID
 			}
 		}

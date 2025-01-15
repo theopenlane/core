@@ -56,7 +56,7 @@ func (ProgramMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.MembershipChecks("program"),
 	}
 }
@@ -72,7 +72,7 @@ func (ProgramMembership) Indexes() []ent.Index {
 // Mixin of the ProgramMembership
 func (ProgramMembership) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 	}

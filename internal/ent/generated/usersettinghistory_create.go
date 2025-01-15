@@ -56,6 +56,20 @@ func (ushc *UserSettingHistoryCreate) SetOperation(ht history.OpType) *UserSetti
 	return ushc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (ushc *UserSettingHistoryCreate) SetUpdatedBy(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetUpdatedBy(s)
+	return ushc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableUpdatedBy(s *string) *UserSettingHistoryCreate {
+	if s != nil {
+		ushc.SetUpdatedBy(*s)
+	}
+	return ushc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (ushc *UserSettingHistoryCreate) SetCreatedAt(t time.Time) *UserSettingHistoryCreate {
 	ushc.mutation.SetCreatedAt(t)
@@ -84,30 +98,30 @@ func (ushc *UserSettingHistoryCreate) SetNillableUpdatedAt(t *time.Time) *UserSe
 	return ushc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ushc *UserSettingHistoryCreate) SetCreatedBy(s string) *UserSettingHistoryCreate {
-	ushc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ushc *UserSettingHistoryCreate) SetCreatedByID(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetCreatedByID(s)
 	return ushc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ushc *UserSettingHistoryCreate) SetNillableCreatedBy(s *string) *UserSettingHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableCreatedByID(s *string) *UserSettingHistoryCreate {
 	if s != nil {
-		ushc.SetCreatedBy(*s)
+		ushc.SetCreatedByID(*s)
 	}
 	return ushc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ushc *UserSettingHistoryCreate) SetUpdatedBy(s string) *UserSettingHistoryCreate {
-	ushc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ushc *UserSettingHistoryCreate) SetUpdatedByID(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetUpdatedByID(s)
 	return ushc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ushc *UserSettingHistoryCreate) SetNillableUpdatedBy(s *string) *UserSettingHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableUpdatedByID(s *string) *UserSettingHistoryCreate {
 	if s != nil {
-		ushc.SetUpdatedBy(*s)
+		ushc.SetUpdatedByID(*s)
 	}
 	return ushc
 }
@@ -146,16 +160,16 @@ func (ushc *UserSettingHistoryCreate) SetNillableDeletedAt(t *time.Time) *UserSe
 	return ushc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ushc *UserSettingHistoryCreate) SetDeletedBy(s string) *UserSettingHistoryCreate {
-	ushc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ushc *UserSettingHistoryCreate) SetDeletedByID(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetDeletedByID(s)
 	return ushc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ushc *UserSettingHistoryCreate) SetNillableDeletedBy(s *string) *UserSettingHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableDeletedByID(s *string) *UserSettingHistoryCreate {
 	if s != nil {
-		ushc.SetDeletedBy(*s)
+		ushc.SetDeletedByID(*s)
 	}
 	return ushc
 }
@@ -459,6 +473,10 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 		_spec.SetField(usersettinghistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := ushc.mutation.UpdatedBy(); ok {
+		_spec.SetField(usersettinghistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := ushc.mutation.CreatedAt(); ok {
 		_spec.SetField(usersettinghistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -467,13 +485,13 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 		_spec.SetField(usersettinghistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ushc.mutation.CreatedBy(); ok {
-		_spec.SetField(usersettinghistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ushc.mutation.CreatedByID(); ok {
+		_spec.SetField(usersettinghistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ushc.mutation.UpdatedBy(); ok {
-		_spec.SetField(usersettinghistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ushc.mutation.UpdatedByID(); ok {
+		_spec.SetField(usersettinghistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ushc.mutation.MappingID(); ok {
 		_spec.SetField(usersettinghistory.FieldMappingID, field.TypeString, value)
@@ -487,9 +505,9 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 		_spec.SetField(usersettinghistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ushc.mutation.DeletedBy(); ok {
-		_spec.SetField(usersettinghistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ushc.mutation.DeletedByID(); ok {
+		_spec.SetField(usersettinghistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ushc.mutation.UserID(); ok {
 		_spec.SetField(usersettinghistory.FieldUserID, field.TypeString, value)

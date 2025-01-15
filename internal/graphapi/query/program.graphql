@@ -5,7 +5,7 @@ mutation CreateBulkCSVProgram($input: Upload!) {
       auditorReady
       auditorWriteComments
       createdAt
-      createdBy
+      createdByID
       description
       endDate
       id
@@ -15,7 +15,7 @@ mutation CreateBulkCSVProgram($input: Upload!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -27,7 +27,7 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
       auditorReady
       auditorWriteComments
       createdAt
-      createdBy
+      createdByID
       description
       endDate
       id
@@ -37,7 +37,7 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -98,7 +98,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
       auditorReady
       auditorWriteComments
       createdAt
-      createdBy
+      createdByID
       description
       endDate
       id
@@ -108,11 +108,11 @@ mutation CreateProgram($input: CreateProgramInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       procedures {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -123,13 +123,13 @@ mutation CreateProgram($input: CreateProgramInput!) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
       internalPolicies {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -139,7 +139,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
       editors {
@@ -189,7 +189,7 @@ query GetAllPrograms {
         auditorReady
         auditorWriteComments
         createdAt
-        createdBy
+        createdByID
         description
         endDate
         id
@@ -199,11 +199,11 @@ query GetAllPrograms {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         procedures {
           background
           createdAt
-          createdBy
+          createdByID
           description
           details
           id
@@ -214,13 +214,13 @@ query GetAllPrograms {
           status
           tags
           updatedAt
-          updatedBy
+          updatedByID
           version
         }
         internalPolicies {
           background
           createdAt
-          createdBy
+          createdByID
           description
           details
           id
@@ -230,7 +230,7 @@ query GetAllPrograms {
           status
           tags
           updatedAt
-          updatedBy
+          updatedByID
           version
         }
         editors {
@@ -256,7 +256,7 @@ query GetProgramByID($programId: ID!) {
     auditorReady
     auditorWriteComments
     createdAt
-    createdBy
+    createdByID
     description
     endDate
     id
@@ -266,11 +266,11 @@ query GetProgramByID($programId: ID!) {
     status
     tags
     updatedAt
-    updatedBy
+    updatedByID
     procedures {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -281,13 +281,13 @@ query GetProgramByID($programId: ID!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
     internalPolicies {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -297,7 +297,7 @@ query GetProgramByID($programId: ID!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
     editors {
@@ -323,7 +323,7 @@ query GetPrograms($where: ProgramWhereInput) {
         auditorReady
         auditorWriteComments
         createdAt
-        createdBy
+        createdByID
         description
         endDate
         id
@@ -333,11 +333,11 @@ query GetPrograms($where: ProgramWhereInput) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         procedures {
           background
           createdAt
-          createdBy
+          createdByID
           description
           details
           id
@@ -348,13 +348,13 @@ query GetPrograms($where: ProgramWhereInput) {
           status
           tags
           updatedAt
-          updatedBy
+          updatedByID
           version
         }
         internalPolicies {
           background
           createdAt
-          createdBy
+          createdByID
           description
           details
           id
@@ -364,7 +364,7 @@ query GetPrograms($where: ProgramWhereInput) {
           status
           tags
           updatedAt
-          updatedBy
+          updatedByID
           version
         }
         editors {
@@ -391,7 +391,7 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       auditorReady
       auditorWriteComments
       createdAt
-      createdBy
+      createdByID
       description
       endDate
       id
@@ -401,11 +401,11 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       procedures {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -416,13 +416,13 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
       internalPolicies {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -432,7 +432,7 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
       editors {

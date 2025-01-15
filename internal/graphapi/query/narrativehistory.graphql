@@ -1,11 +1,9 @@
-
-
 query GetAllNarrativeHistories {
   narrativeHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -16,7 +14,7 @@ query GetAllNarrativeHistories {
         satisfies
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -27,7 +25,7 @@ query GetNarrativeHistories($where: NarrativeHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -38,7 +36,7 @@ query GetNarrativeHistories($where: NarrativeHistoryWhereInput) {
         satisfies
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

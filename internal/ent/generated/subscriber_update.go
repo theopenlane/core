@@ -46,23 +46,23 @@ func (su *SubscriberUpdate) ClearUpdatedAt() *SubscriberUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (su *SubscriberUpdate) SetUpdatedBy(s string) *SubscriberUpdate {
-	su.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (su *SubscriberUpdate) SetUpdatedByID(s string) *SubscriberUpdate {
+	su.mutation.SetUpdatedByID(s)
 	return su
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableUpdatedBy(s *string) *SubscriberUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (su *SubscriberUpdate) SetNillableUpdatedByID(s *string) *SubscriberUpdate {
 	if s != nil {
-		su.SetUpdatedBy(*s)
+		su.SetUpdatedByID(*s)
 	}
 	return su
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *SubscriberUpdate) ClearUpdatedBy() *SubscriberUpdate {
-	su.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (su *SubscriberUpdate) ClearUpdatedByID() *SubscriberUpdate {
+	su.mutation.ClearUpdatedByID()
 	return su
 }
 
@@ -104,23 +104,23 @@ func (su *SubscriberUpdate) ClearDeletedAt() *SubscriberUpdate {
 	return su
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (su *SubscriberUpdate) SetDeletedBy(s string) *SubscriberUpdate {
-	su.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (su *SubscriberUpdate) SetDeletedByID(s string) *SubscriberUpdate {
+	su.mutation.SetDeletedByID(s)
 	return su
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableDeletedBy(s *string) *SubscriberUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (su *SubscriberUpdate) SetNillableDeletedByID(s *string) *SubscriberUpdate {
 	if s != nil {
-		su.SetDeletedBy(*s)
+		su.SetDeletedByID(*s)
 	}
 	return su
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *SubscriberUpdate) ClearDeletedBy() *SubscriberUpdate {
-	su.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (su *SubscriberUpdate) ClearDeletedByID() *SubscriberUpdate {
+	su.mutation.ClearDeletedByID()
 	return su
 }
 
@@ -405,14 +405,14 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
-		_spec.ClearField(subscriber.FieldCreatedBy, field.TypeString)
+	if su.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subscriber.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
-		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := su.mutation.UpdatedByID(); ok {
+		_spec.SetField(subscriber.FieldUpdatedByID, field.TypeString, value)
 	}
-	if su.mutation.UpdatedByCleared() {
-		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
+	if su.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subscriber.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := su.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
@@ -431,11 +431,11 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DeletedAtCleared() {
 		_spec.ClearField(subscriber.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
-		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
+	if value, ok := su.mutation.DeletedByID(); ok {
+		_spec.SetField(subscriber.FieldDeletedByID, field.TypeString, value)
 	}
-	if su.mutation.DeletedByCleared() {
-		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
+	if su.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subscriber.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := su.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
@@ -579,23 +579,23 @@ func (suo *SubscriberUpdateOne) ClearUpdatedAt() *SubscriberUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (suo *SubscriberUpdateOne) SetUpdatedBy(s string) *SubscriberUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (suo *SubscriberUpdateOne) SetUpdatedByID(s string) *SubscriberUpdateOne {
+	suo.mutation.SetUpdatedByID(s)
 	return suo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableUpdatedBy(s *string) *SubscriberUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (suo *SubscriberUpdateOne) SetNillableUpdatedByID(s *string) *SubscriberUpdateOne {
 	if s != nil {
-		suo.SetUpdatedBy(*s)
+		suo.SetUpdatedByID(*s)
 	}
 	return suo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *SubscriberUpdateOne) ClearUpdatedBy() *SubscriberUpdateOne {
-	suo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (suo *SubscriberUpdateOne) ClearUpdatedByID() *SubscriberUpdateOne {
+	suo.mutation.ClearUpdatedByID()
 	return suo
 }
 
@@ -637,23 +637,23 @@ func (suo *SubscriberUpdateOne) ClearDeletedAt() *SubscriberUpdateOne {
 	return suo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (suo *SubscriberUpdateOne) SetDeletedBy(s string) *SubscriberUpdateOne {
-	suo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (suo *SubscriberUpdateOne) SetDeletedByID(s string) *SubscriberUpdateOne {
+	suo.mutation.SetDeletedByID(s)
 	return suo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableDeletedBy(s *string) *SubscriberUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (suo *SubscriberUpdateOne) SetNillableDeletedByID(s *string) *SubscriberUpdateOne {
 	if s != nil {
-		suo.SetDeletedBy(*s)
+		suo.SetDeletedByID(*s)
 	}
 	return suo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *SubscriberUpdateOne) ClearDeletedBy() *SubscriberUpdateOne {
-	suo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (suo *SubscriberUpdateOne) ClearDeletedByID() *SubscriberUpdateOne {
+	suo.mutation.ClearDeletedByID()
 	return suo
 }
 
@@ -968,14 +968,14 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	if suo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
-		_spec.ClearField(subscriber.FieldCreatedBy, field.TypeString)
+	if suo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subscriber.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
-		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := suo.mutation.UpdatedByID(); ok {
+		_spec.SetField(subscriber.FieldUpdatedByID, field.TypeString, value)
 	}
-	if suo.mutation.UpdatedByCleared() {
-		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
+	if suo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subscriber.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := suo.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
@@ -994,11 +994,11 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	if suo.mutation.DeletedAtCleared() {
 		_spec.ClearField(subscriber.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
-		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
+	if value, ok := suo.mutation.DeletedByID(); ok {
+		_spec.SetField(subscriber.FieldDeletedByID, field.TypeString, value)
 	}
-	if suo.mutation.DeletedByCleared() {
-		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
+	if suo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subscriber.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := suo.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)

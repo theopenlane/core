@@ -9,7 +9,7 @@ mutation CreateBulkCSVPersonalAccessToken($input: Upload!) {
       scopes
       token
       updatedAt
-      updatedBy
+      updatedByID
       organizations {
         id
         name
@@ -29,7 +29,7 @@ mutation CreateBulkPersonalAccessToken($input: [CreatePersonalAccessTokenInput!]
       scopes
       token
       updatedAt
-      updatedBy
+      updatedByID
       organizations {
         id
         name
@@ -49,7 +49,7 @@ mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
       scopes
       token
       updatedAt
-      updatedBy
+      updatedByID
       organizations {
         id
         name
@@ -79,7 +79,7 @@ query GetAllPersonalAccessTokens {
         scopes
         token
         updatedAt
-        updatedBy
+        updatedByID
         organizations {
           id
           name
@@ -99,7 +99,7 @@ query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
     scopes
     token
     updatedAt
-    updatedBy
+    updatedByID
     organizations {
       id
       name
@@ -118,7 +118,7 @@ mutation UpdatePersonalAccessToken($updatePersonalAccessTokenId: ID!, $input: Up
       scopes
       token
       updatedAt
-      updatedBy
+      updatedByID
       organizations {
         id
         name

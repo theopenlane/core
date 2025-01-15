@@ -49,23 +49,23 @@ func (ddu *DocumentDataUpdate) ClearUpdatedAt() *DocumentDataUpdate {
 	return ddu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ddu *DocumentDataUpdate) SetUpdatedBy(s string) *DocumentDataUpdate {
-	ddu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ddu *DocumentDataUpdate) SetUpdatedByID(s string) *DocumentDataUpdate {
+	ddu.mutation.SetUpdatedByID(s)
 	return ddu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableUpdatedBy(s *string) *DocumentDataUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ddu *DocumentDataUpdate) SetNillableUpdatedByID(s *string) *DocumentDataUpdate {
 	if s != nil {
-		ddu.SetUpdatedBy(*s)
+		ddu.SetUpdatedByID(*s)
 	}
 	return ddu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ddu *DocumentDataUpdate) ClearUpdatedBy() *DocumentDataUpdate {
-	ddu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ddu *DocumentDataUpdate) ClearUpdatedByID() *DocumentDataUpdate {
+	ddu.mutation.ClearUpdatedByID()
 	return ddu
 }
 
@@ -107,23 +107,23 @@ func (ddu *DocumentDataUpdate) ClearDeletedAt() *DocumentDataUpdate {
 	return ddu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ddu *DocumentDataUpdate) SetDeletedBy(s string) *DocumentDataUpdate {
-	ddu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ddu *DocumentDataUpdate) SetDeletedByID(s string) *DocumentDataUpdate {
+	ddu.mutation.SetDeletedByID(s)
 	return ddu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableDeletedBy(s *string) *DocumentDataUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ddu *DocumentDataUpdate) SetNillableDeletedByID(s *string) *DocumentDataUpdate {
 	if s != nil {
-		ddu.SetDeletedBy(*s)
+		ddu.SetDeletedByID(*s)
 	}
 	return ddu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ddu *DocumentDataUpdate) ClearDeletedBy() *DocumentDataUpdate {
-	ddu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (ddu *DocumentDataUpdate) ClearDeletedByID() *DocumentDataUpdate {
+	ddu.mutation.ClearDeletedByID()
 	return ddu
 }
 
@@ -348,14 +348,14 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ddu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedAt, field.TypeTime)
 	}
-	if ddu.mutation.CreatedByCleared() {
-		_spec.ClearField(documentdata.FieldCreatedBy, field.TypeString)
+	if ddu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(documentdata.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ddu.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ddu.mutation.UpdatedByID(); ok {
+		_spec.SetField(documentdata.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ddu.mutation.UpdatedByCleared() {
-		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
+	if ddu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(documentdata.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ddu.mutation.Tags(); ok {
 		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
@@ -374,11 +374,11 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ddu.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdata.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ddu.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
+	if value, ok := ddu.mutation.DeletedByID(); ok {
+		_spec.SetField(documentdata.FieldDeletedByID, field.TypeString, value)
 	}
-	if ddu.mutation.DeletedByCleared() {
-		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
+	if ddu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(documentdata.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ddu.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
@@ -577,23 +577,23 @@ func (dduo *DocumentDataUpdateOne) ClearUpdatedAt() *DocumentDataUpdateOne {
 	return dduo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (dduo *DocumentDataUpdateOne) SetUpdatedBy(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (dduo *DocumentDataUpdateOne) SetUpdatedByID(s string) *DocumentDataUpdateOne {
+	dduo.mutation.SetUpdatedByID(s)
 	return dduo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableUpdatedBy(s *string) *DocumentDataUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (dduo *DocumentDataUpdateOne) SetNillableUpdatedByID(s *string) *DocumentDataUpdateOne {
 	if s != nil {
-		dduo.SetUpdatedBy(*s)
+		dduo.SetUpdatedByID(*s)
 	}
 	return dduo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (dduo *DocumentDataUpdateOne) ClearUpdatedBy() *DocumentDataUpdateOne {
-	dduo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (dduo *DocumentDataUpdateOne) ClearUpdatedByID() *DocumentDataUpdateOne {
+	dduo.mutation.ClearUpdatedByID()
 	return dduo
 }
 
@@ -635,23 +635,23 @@ func (dduo *DocumentDataUpdateOne) ClearDeletedAt() *DocumentDataUpdateOne {
 	return dduo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (dduo *DocumentDataUpdateOne) SetDeletedBy(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (dduo *DocumentDataUpdateOne) SetDeletedByID(s string) *DocumentDataUpdateOne {
+	dduo.mutation.SetDeletedByID(s)
 	return dduo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableDeletedBy(s *string) *DocumentDataUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (dduo *DocumentDataUpdateOne) SetNillableDeletedByID(s *string) *DocumentDataUpdateOne {
 	if s != nil {
-		dduo.SetDeletedBy(*s)
+		dduo.SetDeletedByID(*s)
 	}
 	return dduo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (dduo *DocumentDataUpdateOne) ClearDeletedBy() *DocumentDataUpdateOne {
-	dduo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (dduo *DocumentDataUpdateOne) ClearDeletedByID() *DocumentDataUpdateOne {
+	dduo.mutation.ClearDeletedByID()
 	return dduo
 }
 
@@ -906,14 +906,14 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	if dduo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedAt, field.TypeTime)
 	}
-	if dduo.mutation.CreatedByCleared() {
-		_spec.ClearField(documentdata.FieldCreatedBy, field.TypeString)
+	if dduo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(documentdata.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := dduo.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := dduo.mutation.UpdatedByID(); ok {
+		_spec.SetField(documentdata.FieldUpdatedByID, field.TypeString, value)
 	}
-	if dduo.mutation.UpdatedByCleared() {
-		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
+	if dduo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(documentdata.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := dduo.mutation.Tags(); ok {
 		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
@@ -932,11 +932,11 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	if dduo.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdata.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := dduo.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
+	if value, ok := dduo.mutation.DeletedByID(); ok {
+		_spec.SetField(documentdata.FieldDeletedByID, field.TypeString, value)
 	}
-	if dduo.mutation.DeletedByCleared() {
-		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
+	if dduo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(documentdata.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := dduo.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)

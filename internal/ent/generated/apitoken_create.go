@@ -49,30 +49,30 @@ func (atc *APITokenCreate) SetNillableUpdatedAt(t *time.Time) *APITokenCreate {
 	return atc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (atc *APITokenCreate) SetCreatedBy(s string) *APITokenCreate {
-	atc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (atc *APITokenCreate) SetCreatedByID(s string) *APITokenCreate {
+	atc.mutation.SetCreatedByID(s)
 	return atc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (atc *APITokenCreate) SetNillableCreatedBy(s *string) *APITokenCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableCreatedByID(s *string) *APITokenCreate {
 	if s != nil {
-		atc.SetCreatedBy(*s)
+		atc.SetCreatedByID(*s)
 	}
 	return atc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (atc *APITokenCreate) SetUpdatedBy(s string) *APITokenCreate {
-	atc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (atc *APITokenCreate) SetUpdatedByID(s string) *APITokenCreate {
+	atc.mutation.SetUpdatedByID(s)
 	return atc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (atc *APITokenCreate) SetNillableUpdatedBy(s *string) *APITokenCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableUpdatedByID(s *string) *APITokenCreate {
 	if s != nil {
-		atc.SetUpdatedBy(*s)
+		atc.SetUpdatedByID(*s)
 	}
 	return atc
 }
@@ -91,16 +91,16 @@ func (atc *APITokenCreate) SetNillableDeletedAt(t *time.Time) *APITokenCreate {
 	return atc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (atc *APITokenCreate) SetDeletedBy(s string) *APITokenCreate {
-	atc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (atc *APITokenCreate) SetDeletedByID(s string) *APITokenCreate {
+	atc.mutation.SetDeletedByID(s)
 	return atc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (atc *APITokenCreate) SetNillableDeletedBy(s *string) *APITokenCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableDeletedByID(s *string) *APITokenCreate {
 	if s != nil {
-		atc.SetDeletedBy(*s)
+		atc.SetDeletedByID(*s)
 	}
 	return atc
 }
@@ -370,21 +370,21 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 		_spec.SetField(apitoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := atc.mutation.CreatedBy(); ok {
-		_spec.SetField(apitoken.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := atc.mutation.CreatedByID(); ok {
+		_spec.SetField(apitoken.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := atc.mutation.UpdatedBy(); ok {
-		_spec.SetField(apitoken.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := atc.mutation.UpdatedByID(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := atc.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := atc.mutation.DeletedBy(); ok {
-		_spec.SetField(apitoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := atc.mutation.DeletedByID(); ok {
+		_spec.SetField(apitoken.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := atc.mutation.MappingID(); ok {
 		_spec.SetField(apitoken.FieldMappingID, field.TypeString, value)

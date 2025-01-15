@@ -77,14 +77,14 @@ func UpdatedAt(v time.Time) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
-func CreatedBy(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByID applies equality check predicate on the "created_by_id" field. It's identical to CreatedByIDEQ.
+func CreatedByID(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByID applies equality check predicate on the "updated_by_id" field. It's identical to UpdatedByIDEQ.
+func UpdatedByID(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
 // MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
@@ -97,9 +97,9 @@ func DeletedAt(v time.Time) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldDeletedAt, v))
 }
 
-// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
-func DeletedBy(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldDeletedBy, v))
+// DeletedByID applies equality check predicate on the "deleted_by_id" field. It's identical to DeletedByIDEQ.
+func DeletedByID(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldDeletedByID, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -237,154 +237,154 @@ func UpdatedAtNotNil() predicate.Organization {
 	return predicate.Organization(sql.FieldNotNull(FieldUpdatedAt))
 }
 
-// CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByIDEQ applies the EQ predicate on the "created_by_id" field.
+func CreatedByIDEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldCreatedBy, v))
+// CreatedByIDNEQ applies the NEQ predicate on the "created_by_id" field.
+func CreatedByIDNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldCreatedByID, v))
 }
 
-// CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldIn(FieldCreatedBy, vs...))
+// CreatedByIDIn applies the In predicate on the "created_by_id" field.
+func CreatedByIDIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldNotIn(FieldCreatedBy, vs...))
+// CreatedByIDNotIn applies the NotIn predicate on the "created_by_id" field.
+func CreatedByIDNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGT(FieldCreatedBy, v))
+// CreatedByIDGT applies the GT predicate on the "created_by_id" field.
+func CreatedByIDGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldCreatedByID, v))
 }
 
-// CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGTE(FieldCreatedBy, v))
+// CreatedByIDGTE applies the GTE predicate on the "created_by_id" field.
+func CreatedByIDGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldCreatedByID, v))
 }
 
-// CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLT(FieldCreatedBy, v))
+// CreatedByIDLT applies the LT predicate on the "created_by_id" field.
+func CreatedByIDLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldCreatedByID, v))
 }
 
-// CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLTE(FieldCreatedBy, v))
+// CreatedByIDLTE applies the LTE predicate on the "created_by_id" field.
+func CreatedByIDLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldCreatedByID, v))
 }
 
-// CreatedByContains applies the Contains predicate on the "created_by" field.
-func CreatedByContains(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContains(FieldCreatedBy, v))
+// CreatedByIDContains applies the Contains predicate on the "created_by_id" field.
+func CreatedByIDContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldCreatedByID, v))
 }
 
-// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
-func CreatedByHasPrefix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasPrefix(FieldCreatedBy, v))
+// CreatedByIDHasPrefix applies the HasPrefix predicate on the "created_by_id" field.
+func CreatedByIDHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldCreatedByID, v))
 }
 
-// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
-func CreatedByHasSuffix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasSuffix(FieldCreatedBy, v))
+// CreatedByIDHasSuffix applies the HasSuffix predicate on the "created_by_id" field.
+func CreatedByIDHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldCreatedByID, v))
 }
 
-// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
-func CreatedByIsNil() predicate.Organization {
-	return predicate.Organization(sql.FieldIsNull(FieldCreatedBy))
+// CreatedByIDIsNil applies the IsNil predicate on the "created_by_id" field.
+func CreatedByIDIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldCreatedByID))
 }
 
-// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
-func CreatedByNotNil() predicate.Organization {
-	return predicate.Organization(sql.FieldNotNull(FieldCreatedBy))
+// CreatedByIDNotNil applies the NotNil predicate on the "created_by_id" field.
+func CreatedByIDNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldCreatedByID))
 }
 
-// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
-func CreatedByEqualFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEqualFold(FieldCreatedBy, v))
+// CreatedByIDEqualFold applies the EqualFold predicate on the "created_by_id" field.
+func CreatedByIDEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldCreatedByID, v))
 }
 
-// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
-func CreatedByContainsFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContainsFold(FieldCreatedBy, v))
+// CreatedByIDContainsFold applies the ContainsFold predicate on the "created_by_id" field.
+func CreatedByIDContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldCreatedByID, v))
 }
 
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByIDEQ applies the EQ predicate on the "updated_by_id" field.
+func UpdatedByIDEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldUpdatedBy, v))
+// UpdatedByIDNEQ applies the NEQ predicate on the "updated_by_id" field.
+func UpdatedByIDNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldIn(FieldUpdatedBy, vs...))
+// UpdatedByIDIn applies the In predicate on the "updated_by_id" field.
+func UpdatedByIDIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldNotIn(FieldUpdatedBy, vs...))
+// UpdatedByIDNotIn applies the NotIn predicate on the "updated_by_id" field.
+func UpdatedByIDNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGT(FieldUpdatedBy, v))
+// UpdatedByIDGT applies the GT predicate on the "updated_by_id" field.
+func UpdatedByIDGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldUpdatedByID, v))
 }
 
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGTE(FieldUpdatedBy, v))
+// UpdatedByIDGTE applies the GTE predicate on the "updated_by_id" field.
+func UpdatedByIDGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLT(FieldUpdatedBy, v))
+// UpdatedByIDLT applies the LT predicate on the "updated_by_id" field.
+func UpdatedByIDLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldUpdatedByID, v))
 }
 
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLTE(FieldUpdatedBy, v))
+// UpdatedByIDLTE applies the LTE predicate on the "updated_by_id" field.
+func UpdatedByIDLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByContains applies the Contains predicate on the "updated_by" field.
-func UpdatedByContains(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContains(FieldUpdatedBy, v))
+// UpdatedByIDContains applies the Contains predicate on the "updated_by_id" field.
+func UpdatedByIDContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
-func UpdatedByHasPrefix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasPrefix(FieldUpdatedBy, v))
+// UpdatedByIDHasPrefix applies the HasPrefix predicate on the "updated_by_id" field.
+func UpdatedByIDHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
-func UpdatedByHasSuffix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasSuffix(FieldUpdatedBy, v))
+// UpdatedByIDHasSuffix applies the HasSuffix predicate on the "updated_by_id" field.
+func UpdatedByIDHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldUpdatedByID, v))
 }
 
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.Organization {
-	return predicate.Organization(sql.FieldIsNull(FieldUpdatedBy))
+// UpdatedByIDIsNil applies the IsNil predicate on the "updated_by_id" field.
+func UpdatedByIDIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldUpdatedByID))
 }
 
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.Organization {
-	return predicate.Organization(sql.FieldNotNull(FieldUpdatedBy))
+// UpdatedByIDNotNil applies the NotNil predicate on the "updated_by_id" field.
+func UpdatedByIDNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldUpdatedByID))
 }
 
-// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
-func UpdatedByEqualFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEqualFold(FieldUpdatedBy, v))
+// UpdatedByIDEqualFold applies the EqualFold predicate on the "updated_by_id" field.
+func UpdatedByIDEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldUpdatedByID, v))
 }
 
-// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
-func UpdatedByContainsFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContainsFold(FieldUpdatedBy, v))
+// UpdatedByIDContainsFold applies the ContainsFold predicate on the "updated_by_id" field.
+func UpdatedByIDContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldUpdatedByID, v))
 }
 
 // MappingIDEQ applies the EQ predicate on the "mapping_id" field.
@@ -512,79 +512,79 @@ func DeletedAtNotNil() predicate.Organization {
 	return predicate.Organization(sql.FieldNotNull(FieldDeletedAt))
 }
 
-// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
-func DeletedByEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldDeletedBy, v))
+// DeletedByIDEQ applies the EQ predicate on the "deleted_by_id" field.
+func DeletedByIDEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldDeletedByID, v))
 }
 
-// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
-func DeletedByNEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldDeletedBy, v))
+// DeletedByIDNEQ applies the NEQ predicate on the "deleted_by_id" field.
+func DeletedByIDNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldDeletedByID, v))
 }
 
-// DeletedByIn applies the In predicate on the "deleted_by" field.
-func DeletedByIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldIn(FieldDeletedBy, vs...))
+// DeletedByIDIn applies the In predicate on the "deleted_by_id" field.
+func DeletedByIDIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldDeletedByID, vs...))
 }
 
-// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
-func DeletedByNotIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldNotIn(FieldDeletedBy, vs...))
+// DeletedByIDNotIn applies the NotIn predicate on the "deleted_by_id" field.
+func DeletedByIDNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldDeletedByID, vs...))
 }
 
-// DeletedByGT applies the GT predicate on the "deleted_by" field.
-func DeletedByGT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGT(FieldDeletedBy, v))
+// DeletedByIDGT applies the GT predicate on the "deleted_by_id" field.
+func DeletedByIDGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldDeletedByID, v))
 }
 
-// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
-func DeletedByGTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGTE(FieldDeletedBy, v))
+// DeletedByIDGTE applies the GTE predicate on the "deleted_by_id" field.
+func DeletedByIDGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldDeletedByID, v))
 }
 
-// DeletedByLT applies the LT predicate on the "deleted_by" field.
-func DeletedByLT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLT(FieldDeletedBy, v))
+// DeletedByIDLT applies the LT predicate on the "deleted_by_id" field.
+func DeletedByIDLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldDeletedByID, v))
 }
 
-// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
-func DeletedByLTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLTE(FieldDeletedBy, v))
+// DeletedByIDLTE applies the LTE predicate on the "deleted_by_id" field.
+func DeletedByIDLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldDeletedByID, v))
 }
 
-// DeletedByContains applies the Contains predicate on the "deleted_by" field.
-func DeletedByContains(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContains(FieldDeletedBy, v))
+// DeletedByIDContains applies the Contains predicate on the "deleted_by_id" field.
+func DeletedByIDContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldDeletedByID, v))
 }
 
-// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
-func DeletedByHasPrefix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasPrefix(FieldDeletedBy, v))
+// DeletedByIDHasPrefix applies the HasPrefix predicate on the "deleted_by_id" field.
+func DeletedByIDHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldDeletedByID, v))
 }
 
-// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
-func DeletedByHasSuffix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasSuffix(FieldDeletedBy, v))
+// DeletedByIDHasSuffix applies the HasSuffix predicate on the "deleted_by_id" field.
+func DeletedByIDHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldDeletedByID, v))
 }
 
-// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
-func DeletedByIsNil() predicate.Organization {
-	return predicate.Organization(sql.FieldIsNull(FieldDeletedBy))
+// DeletedByIDIsNil applies the IsNil predicate on the "deleted_by_id" field.
+func DeletedByIDIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldDeletedByID))
 }
 
-// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
-func DeletedByNotNil() predicate.Organization {
-	return predicate.Organization(sql.FieldNotNull(FieldDeletedBy))
+// DeletedByIDNotNil applies the NotNil predicate on the "deleted_by_id" field.
+func DeletedByIDNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldDeletedByID))
 }
 
-// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
-func DeletedByEqualFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEqualFold(FieldDeletedBy, v))
+// DeletedByIDEqualFold applies the EqualFold predicate on the "deleted_by_id" field.
+func DeletedByIDEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldDeletedByID, v))
 }
 
-// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
-func DeletedByContainsFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContainsFold(FieldDeletedBy, v))
+// DeletedByIDContainsFold applies the ContainsFold predicate on the "deleted_by_id" field.
+func DeletedByIDContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldDeletedByID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

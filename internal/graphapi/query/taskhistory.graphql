@@ -6,7 +6,7 @@ query GetAllTaskHistories {
       node {
         completed
         createdAt
-        createdBy
+        createdByID
         description
         details
         due
@@ -18,7 +18,7 @@ query GetAllTaskHistories {
         tags
         title
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -30,7 +30,7 @@ query GetTaskHistories($where: TaskHistoryWhereInput) {
       node {
         completed
         createdAt
-        createdBy
+        createdByID
         description
         details
         due
@@ -42,7 +42,7 @@ query GetTaskHistories($where: TaskHistoryWhereInput) {
         tags
         title
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

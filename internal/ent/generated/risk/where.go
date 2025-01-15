@@ -78,14 +78,14 @@ func UpdatedAt(v time.Time) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
-func CreatedBy(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByID applies equality check predicate on the "created_by_id" field. It's identical to CreatedByIDEQ.
+func CreatedByID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByID applies equality check predicate on the "updated_by_id" field. It's identical to UpdatedByIDEQ.
+func UpdatedByID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
@@ -93,9 +93,9 @@ func DeletedAt(v time.Time) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldDeletedAt, v))
 }
 
-// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
-func DeletedBy(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldDeletedBy, v))
+// DeletedByID applies equality check predicate on the "deleted_by_id" field. It's identical to DeletedByIDEQ.
+func DeletedByID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDeletedByID, v))
 }
 
 // MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
@@ -243,154 +243,154 @@ func UpdatedAtNotNil() predicate.Risk {
 	return predicate.Risk(sql.FieldNotNull(FieldUpdatedAt))
 }
 
-// CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByIDEQ applies the EQ predicate on the "created_by_id" field.
+func CreatedByIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldNEQ(FieldCreatedBy, v))
+// CreatedByIDNEQ applies the NEQ predicate on the "created_by_id" field.
+func CreatedByIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldCreatedByID, v))
 }
 
-// CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldIn(FieldCreatedBy, vs...))
+// CreatedByIDIn applies the In predicate on the "created_by_id" field.
+func CreatedByIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldNotIn(FieldCreatedBy, vs...))
+// CreatedByIDNotIn applies the NotIn predicate on the "created_by_id" field.
+func CreatedByIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGT(FieldCreatedBy, v))
+// CreatedByIDGT applies the GT predicate on the "created_by_id" field.
+func CreatedByIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldCreatedByID, v))
 }
 
-// CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGTE(FieldCreatedBy, v))
+// CreatedByIDGTE applies the GTE predicate on the "created_by_id" field.
+func CreatedByIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldCreatedByID, v))
 }
 
-// CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLT(FieldCreatedBy, v))
+// CreatedByIDLT applies the LT predicate on the "created_by_id" field.
+func CreatedByIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldCreatedByID, v))
 }
 
-// CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLTE(FieldCreatedBy, v))
+// CreatedByIDLTE applies the LTE predicate on the "created_by_id" field.
+func CreatedByIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldCreatedByID, v))
 }
 
-// CreatedByContains applies the Contains predicate on the "created_by" field.
-func CreatedByContains(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContains(FieldCreatedBy, v))
+// CreatedByIDContains applies the Contains predicate on the "created_by_id" field.
+func CreatedByIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldCreatedByID, v))
 }
 
-// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
-func CreatedByHasPrefix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasPrefix(FieldCreatedBy, v))
+// CreatedByIDHasPrefix applies the HasPrefix predicate on the "created_by_id" field.
+func CreatedByIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldCreatedByID, v))
 }
 
-// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
-func CreatedByHasSuffix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasSuffix(FieldCreatedBy, v))
+// CreatedByIDHasSuffix applies the HasSuffix predicate on the "created_by_id" field.
+func CreatedByIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldCreatedByID, v))
 }
 
-// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
-func CreatedByIsNil() predicate.Risk {
-	return predicate.Risk(sql.FieldIsNull(FieldCreatedBy))
+// CreatedByIDIsNil applies the IsNil predicate on the "created_by_id" field.
+func CreatedByIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldCreatedByID))
 }
 
-// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
-func CreatedByNotNil() predicate.Risk {
-	return predicate.Risk(sql.FieldNotNull(FieldCreatedBy))
+// CreatedByIDNotNil applies the NotNil predicate on the "created_by_id" field.
+func CreatedByIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldCreatedByID))
 }
 
-// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
-func CreatedByEqualFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEqualFold(FieldCreatedBy, v))
+// CreatedByIDEqualFold applies the EqualFold predicate on the "created_by_id" field.
+func CreatedByIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldCreatedByID, v))
 }
 
-// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
-func CreatedByContainsFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContainsFold(FieldCreatedBy, v))
+// CreatedByIDContainsFold applies the ContainsFold predicate on the "created_by_id" field.
+func CreatedByIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldCreatedByID, v))
 }
 
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByIDEQ applies the EQ predicate on the "updated_by_id" field.
+func UpdatedByIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldNEQ(FieldUpdatedBy, v))
+// UpdatedByIDNEQ applies the NEQ predicate on the "updated_by_id" field.
+func UpdatedByIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldIn(FieldUpdatedBy, vs...))
+// UpdatedByIDIn applies the In predicate on the "updated_by_id" field.
+func UpdatedByIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldNotIn(FieldUpdatedBy, vs...))
+// UpdatedByIDNotIn applies the NotIn predicate on the "updated_by_id" field.
+func UpdatedByIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGT(FieldUpdatedBy, v))
+// UpdatedByIDGT applies the GT predicate on the "updated_by_id" field.
+func UpdatedByIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldUpdatedByID, v))
 }
 
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGTE(FieldUpdatedBy, v))
+// UpdatedByIDGTE applies the GTE predicate on the "updated_by_id" field.
+func UpdatedByIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLT(FieldUpdatedBy, v))
+// UpdatedByIDLT applies the LT predicate on the "updated_by_id" field.
+func UpdatedByIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldUpdatedByID, v))
 }
 
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLTE(FieldUpdatedBy, v))
+// UpdatedByIDLTE applies the LTE predicate on the "updated_by_id" field.
+func UpdatedByIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByContains applies the Contains predicate on the "updated_by" field.
-func UpdatedByContains(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContains(FieldUpdatedBy, v))
+// UpdatedByIDContains applies the Contains predicate on the "updated_by_id" field.
+func UpdatedByIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
-func UpdatedByHasPrefix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasPrefix(FieldUpdatedBy, v))
+// UpdatedByIDHasPrefix applies the HasPrefix predicate on the "updated_by_id" field.
+func UpdatedByIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
-func UpdatedByHasSuffix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasSuffix(FieldUpdatedBy, v))
+// UpdatedByIDHasSuffix applies the HasSuffix predicate on the "updated_by_id" field.
+func UpdatedByIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldUpdatedByID, v))
 }
 
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.Risk {
-	return predicate.Risk(sql.FieldIsNull(FieldUpdatedBy))
+// UpdatedByIDIsNil applies the IsNil predicate on the "updated_by_id" field.
+func UpdatedByIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldUpdatedByID))
 }
 
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.Risk {
-	return predicate.Risk(sql.FieldNotNull(FieldUpdatedBy))
+// UpdatedByIDNotNil applies the NotNil predicate on the "updated_by_id" field.
+func UpdatedByIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldUpdatedByID))
 }
 
-// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
-func UpdatedByEqualFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEqualFold(FieldUpdatedBy, v))
+// UpdatedByIDEqualFold applies the EqualFold predicate on the "updated_by_id" field.
+func UpdatedByIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldUpdatedByID, v))
 }
 
-// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
-func UpdatedByContainsFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContainsFold(FieldUpdatedBy, v))
+// UpdatedByIDContainsFold applies the ContainsFold predicate on the "updated_by_id" field.
+func UpdatedByIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldUpdatedByID, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
@@ -443,79 +443,79 @@ func DeletedAtNotNil() predicate.Risk {
 	return predicate.Risk(sql.FieldNotNull(FieldDeletedAt))
 }
 
-// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
-func DeletedByEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldDeletedBy, v))
+// DeletedByIDEQ applies the EQ predicate on the "deleted_by_id" field.
+func DeletedByIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDeletedByID, v))
 }
 
-// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
-func DeletedByNEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldNEQ(FieldDeletedBy, v))
+// DeletedByIDNEQ applies the NEQ predicate on the "deleted_by_id" field.
+func DeletedByIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldDeletedByID, v))
 }
 
-// DeletedByIn applies the In predicate on the "deleted_by" field.
-func DeletedByIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldIn(FieldDeletedBy, vs...))
+// DeletedByIDIn applies the In predicate on the "deleted_by_id" field.
+func DeletedByIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldDeletedByID, vs...))
 }
 
-// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
-func DeletedByNotIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldNotIn(FieldDeletedBy, vs...))
+// DeletedByIDNotIn applies the NotIn predicate on the "deleted_by_id" field.
+func DeletedByIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldDeletedByID, vs...))
 }
 
-// DeletedByGT applies the GT predicate on the "deleted_by" field.
-func DeletedByGT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGT(FieldDeletedBy, v))
+// DeletedByIDGT applies the GT predicate on the "deleted_by_id" field.
+func DeletedByIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldDeletedByID, v))
 }
 
-// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
-func DeletedByGTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGTE(FieldDeletedBy, v))
+// DeletedByIDGTE applies the GTE predicate on the "deleted_by_id" field.
+func DeletedByIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldDeletedByID, v))
 }
 
-// DeletedByLT applies the LT predicate on the "deleted_by" field.
-func DeletedByLT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLT(FieldDeletedBy, v))
+// DeletedByIDLT applies the LT predicate on the "deleted_by_id" field.
+func DeletedByIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldDeletedByID, v))
 }
 
-// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
-func DeletedByLTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLTE(FieldDeletedBy, v))
+// DeletedByIDLTE applies the LTE predicate on the "deleted_by_id" field.
+func DeletedByIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldDeletedByID, v))
 }
 
-// DeletedByContains applies the Contains predicate on the "deleted_by" field.
-func DeletedByContains(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContains(FieldDeletedBy, v))
+// DeletedByIDContains applies the Contains predicate on the "deleted_by_id" field.
+func DeletedByIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldDeletedByID, v))
 }
 
-// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
-func DeletedByHasPrefix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasPrefix(FieldDeletedBy, v))
+// DeletedByIDHasPrefix applies the HasPrefix predicate on the "deleted_by_id" field.
+func DeletedByIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldDeletedByID, v))
 }
 
-// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
-func DeletedByHasSuffix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasSuffix(FieldDeletedBy, v))
+// DeletedByIDHasSuffix applies the HasSuffix predicate on the "deleted_by_id" field.
+func DeletedByIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldDeletedByID, v))
 }
 
-// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
-func DeletedByIsNil() predicate.Risk {
-	return predicate.Risk(sql.FieldIsNull(FieldDeletedBy))
+// DeletedByIDIsNil applies the IsNil predicate on the "deleted_by_id" field.
+func DeletedByIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldDeletedByID))
 }
 
-// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
-func DeletedByNotNil() predicate.Risk {
-	return predicate.Risk(sql.FieldNotNull(FieldDeletedBy))
+// DeletedByIDNotNil applies the NotNil predicate on the "deleted_by_id" field.
+func DeletedByIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldDeletedByID))
 }
 
-// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
-func DeletedByEqualFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEqualFold(FieldDeletedBy, v))
+// DeletedByIDEqualFold applies the EqualFold predicate on the "deleted_by_id" field.
+func DeletedByIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldDeletedByID, v))
 }
 
-// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
-func DeletedByContainsFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContainsFold(FieldDeletedBy, v))
+// DeletedByIDContainsFold applies the ContainsFold predicate on the "deleted_by_id" field.
+func DeletedByIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldDeletedByID, v))
 }
 
 // MappingIDEQ applies the EQ predicate on the "mapping_id" field.

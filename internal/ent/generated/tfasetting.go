@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // TFASetting is the model entity for the TFASetting schema.
@@ -23,16 +24,16 @@ type TFASetting struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The user id that owns the object
@@ -53,6 +54,11 @@ type TFASetting struct {
 	// The values are being populated by the TFASettingQuery when eager-loading is set.
 	Edges        TFASettingEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // TFASettingEdges holds the relations/edges for other nodes in the graph.
@@ -86,7 +92,7 @@ func (*TFASetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case tfasetting.FieldVerified, tfasetting.FieldPhoneOtpAllowed, tfasetting.FieldEmailOtpAllowed, tfasetting.FieldTotpAllowed:
 			values[i] = new(sql.NullBool)
-		case tfasetting.FieldID, tfasetting.FieldCreatedBy, tfasetting.FieldUpdatedBy, tfasetting.FieldMappingID, tfasetting.FieldDeletedBy, tfasetting.FieldOwnerID, tfasetting.FieldTfaSecret:
+		case tfasetting.FieldID, tfasetting.FieldCreatedByID, tfasetting.FieldUpdatedByID, tfasetting.FieldMappingID, tfasetting.FieldDeletedByID, tfasetting.FieldOwnerID, tfasetting.FieldTfaSecret:
 			values[i] = new(sql.NullString)
 		case tfasetting.FieldCreatedAt, tfasetting.FieldUpdatedAt, tfasetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -123,17 +129,17 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ts.UpdatedAt = value.Time
 			}
-		case tfasetting.FieldCreatedBy:
+		case tfasetting.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ts.CreatedBy = value.String
+				ts.CreatedByID = value.String
 			}
-		case tfasetting.FieldUpdatedBy:
+		case tfasetting.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ts.UpdatedBy = value.String
+				ts.UpdatedByID = value.String
 			}
 		case tfasetting.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -147,11 +153,11 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ts.DeletedAt = value.Time
 			}
-		case tfasetting.FieldDeletedBy:
+		case tfasetting.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ts.DeletedBy = value.String
+				ts.DeletedByID = value.String
 			}
 		case tfasetting.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -253,11 +259,11 @@ func (ts *TFASetting) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(ts.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ts.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ts.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ts.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ts.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ts.MappingID)
@@ -265,8 +271,8 @@ func (ts *TFASetting) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ts.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ts.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ts.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ts.Tags))

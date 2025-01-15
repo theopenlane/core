@@ -57,6 +57,20 @@ func (thc *TemplateHistoryCreate) SetOperation(ht history.OpType) *TemplateHisto
 	return thc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (thc *TemplateHistoryCreate) SetUpdatedBy(s string) *TemplateHistoryCreate {
+	thc.mutation.SetUpdatedBy(s)
+	return thc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (thc *TemplateHistoryCreate) SetNillableUpdatedBy(s *string) *TemplateHistoryCreate {
+	if s != nil {
+		thc.SetUpdatedBy(*s)
+	}
+	return thc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (thc *TemplateHistoryCreate) SetCreatedAt(t time.Time) *TemplateHistoryCreate {
 	thc.mutation.SetCreatedAt(t)
@@ -85,30 +99,30 @@ func (thc *TemplateHistoryCreate) SetNillableUpdatedAt(t *time.Time) *TemplateHi
 	return thc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (thc *TemplateHistoryCreate) SetCreatedBy(s string) *TemplateHistoryCreate {
-	thc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (thc *TemplateHistoryCreate) SetCreatedByID(s string) *TemplateHistoryCreate {
+	thc.mutation.SetCreatedByID(s)
 	return thc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (thc *TemplateHistoryCreate) SetNillableCreatedBy(s *string) *TemplateHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (thc *TemplateHistoryCreate) SetNillableCreatedByID(s *string) *TemplateHistoryCreate {
 	if s != nil {
-		thc.SetCreatedBy(*s)
+		thc.SetCreatedByID(*s)
 	}
 	return thc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (thc *TemplateHistoryCreate) SetUpdatedBy(s string) *TemplateHistoryCreate {
-	thc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (thc *TemplateHistoryCreate) SetUpdatedByID(s string) *TemplateHistoryCreate {
+	thc.mutation.SetUpdatedByID(s)
 	return thc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thc *TemplateHistoryCreate) SetNillableUpdatedBy(s *string) *TemplateHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (thc *TemplateHistoryCreate) SetNillableUpdatedByID(s *string) *TemplateHistoryCreate {
 	if s != nil {
-		thc.SetUpdatedBy(*s)
+		thc.SetUpdatedByID(*s)
 	}
 	return thc
 }
@@ -127,16 +141,16 @@ func (thc *TemplateHistoryCreate) SetNillableDeletedAt(t *time.Time) *TemplateHi
 	return thc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (thc *TemplateHistoryCreate) SetDeletedBy(s string) *TemplateHistoryCreate {
-	thc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (thc *TemplateHistoryCreate) SetDeletedByID(s string) *TemplateHistoryCreate {
+	thc.mutation.SetDeletedByID(s)
 	return thc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thc *TemplateHistoryCreate) SetNillableDeletedBy(s *string) *TemplateHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (thc *TemplateHistoryCreate) SetNillableDeletedByID(s *string) *TemplateHistoryCreate {
 	if s != nil {
-		thc.SetDeletedBy(*s)
+		thc.SetDeletedByID(*s)
 	}
 	return thc
 }
@@ -396,6 +410,10 @@ func (thc *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Crea
 		_spec.SetField(templatehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := thc.mutation.UpdatedBy(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := thc.mutation.CreatedAt(); ok {
 		_spec.SetField(templatehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -404,21 +422,21 @@ func (thc *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Crea
 		_spec.SetField(templatehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := thc.mutation.CreatedBy(); ok {
-		_spec.SetField(templatehistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := thc.mutation.CreatedByID(); ok {
+		_spec.SetField(templatehistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := thc.mutation.UpdatedBy(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := thc.mutation.UpdatedByID(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := thc.mutation.DeletedAt(); ok {
 		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := thc.mutation.DeletedBy(); ok {
-		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := thc.mutation.DeletedByID(); ok {
+		_spec.SetField(templatehistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := thc.mutation.MappingID(); ok {
 		_spec.SetField(templatehistory.FieldMappingID, field.TypeString, value)

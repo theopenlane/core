@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Subcontrol_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Subcontrol_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
@@ -127,6 +127,10 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -179,14 +183,14 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Subcontrol_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Subcontrol_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
@@ -235,6 +239,10 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -331,14 +339,14 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Subcontrol_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Subcontrol_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
@@ -387,6 +395,10 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},

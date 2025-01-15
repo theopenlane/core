@@ -49,23 +49,23 @@ func (su *StandardUpdate) ClearUpdatedAt() *StandardUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (su *StandardUpdate) SetUpdatedBy(s string) *StandardUpdate {
-	su.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (su *StandardUpdate) SetUpdatedByID(s string) *StandardUpdate {
+	su.mutation.SetUpdatedByID(s)
 	return su
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableUpdatedBy(s *string) *StandardUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableUpdatedByID(s *string) *StandardUpdate {
 	if s != nil {
-		su.SetUpdatedBy(*s)
+		su.SetUpdatedByID(*s)
 	}
 	return su
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *StandardUpdate) ClearUpdatedBy() *StandardUpdate {
-	su.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (su *StandardUpdate) ClearUpdatedByID() *StandardUpdate {
+	su.mutation.ClearUpdatedByID()
 	return su
 }
 
@@ -89,23 +89,23 @@ func (su *StandardUpdate) ClearDeletedAt() *StandardUpdate {
 	return su
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (su *StandardUpdate) SetDeletedBy(s string) *StandardUpdate {
-	su.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (su *StandardUpdate) SetDeletedByID(s string) *StandardUpdate {
+	su.mutation.SetDeletedByID(s)
 	return su
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableDeletedBy(s *string) *StandardUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableDeletedByID(s *string) *StandardUpdate {
 	if s != nil {
-		su.SetDeletedBy(*s)
+		su.SetDeletedByID(*s)
 	}
 	return su
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *StandardUpdate) ClearDeletedBy() *StandardUpdate {
-	su.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (su *StandardUpdate) ClearDeletedByID() *StandardUpdate {
+	su.mutation.ClearDeletedByID()
 	return su
 }
 
@@ -577,14 +577,14 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standard.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
-		_spec.ClearField(standard.FieldCreatedBy, field.TypeString)
+	if su.mutation.CreatedByIDCleared() {
+		_spec.ClearField(standard.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
-		_spec.SetField(standard.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := su.mutation.UpdatedByID(); ok {
+		_spec.SetField(standard.FieldUpdatedByID, field.TypeString, value)
 	}
-	if su.mutation.UpdatedByCleared() {
-		_spec.ClearField(standard.FieldUpdatedBy, field.TypeString)
+	if su.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(standard.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := su.mutation.DeletedAt(); ok {
 		_spec.SetField(standard.FieldDeletedAt, field.TypeTime, value)
@@ -592,11 +592,11 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DeletedAtCleared() {
 		_spec.ClearField(standard.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
-		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
+	if value, ok := su.mutation.DeletedByID(); ok {
+		_spec.SetField(standard.FieldDeletedByID, field.TypeString, value)
 	}
-	if su.mutation.DeletedByCleared() {
-		_spec.ClearField(standard.FieldDeletedBy, field.TypeString)
+	if su.mutation.DeletedByIDCleared() {
+		_spec.ClearField(standard.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := su.mutation.Tags(); ok {
 		_spec.SetField(standard.FieldTags, field.TypeJSON, value)
@@ -942,23 +942,23 @@ func (suo *StandardUpdateOne) ClearUpdatedAt() *StandardUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (suo *StandardUpdateOne) SetUpdatedBy(s string) *StandardUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (suo *StandardUpdateOne) SetUpdatedByID(s string) *StandardUpdateOne {
+	suo.mutation.SetUpdatedByID(s)
 	return suo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableUpdatedBy(s *string) *StandardUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableUpdatedByID(s *string) *StandardUpdateOne {
 	if s != nil {
-		suo.SetUpdatedBy(*s)
+		suo.SetUpdatedByID(*s)
 	}
 	return suo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *StandardUpdateOne) ClearUpdatedBy() *StandardUpdateOne {
-	suo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (suo *StandardUpdateOne) ClearUpdatedByID() *StandardUpdateOne {
+	suo.mutation.ClearUpdatedByID()
 	return suo
 }
 
@@ -982,23 +982,23 @@ func (suo *StandardUpdateOne) ClearDeletedAt() *StandardUpdateOne {
 	return suo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (suo *StandardUpdateOne) SetDeletedBy(s string) *StandardUpdateOne {
-	suo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (suo *StandardUpdateOne) SetDeletedByID(s string) *StandardUpdateOne {
+	suo.mutation.SetDeletedByID(s)
 	return suo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableDeletedBy(s *string) *StandardUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableDeletedByID(s *string) *StandardUpdateOne {
 	if s != nil {
-		suo.SetDeletedBy(*s)
+		suo.SetDeletedByID(*s)
 	}
 	return suo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *StandardUpdateOne) ClearDeletedBy() *StandardUpdateOne {
-	suo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (suo *StandardUpdateOne) ClearDeletedByID() *StandardUpdateOne {
+	suo.mutation.ClearDeletedByID()
 	return suo
 }
 
@@ -1500,14 +1500,14 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standard.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
-		_spec.ClearField(standard.FieldCreatedBy, field.TypeString)
+	if suo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(standard.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
-		_spec.SetField(standard.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := suo.mutation.UpdatedByID(); ok {
+		_spec.SetField(standard.FieldUpdatedByID, field.TypeString, value)
 	}
-	if suo.mutation.UpdatedByCleared() {
-		_spec.ClearField(standard.FieldUpdatedBy, field.TypeString)
+	if suo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(standard.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := suo.mutation.DeletedAt(); ok {
 		_spec.SetField(standard.FieldDeletedAt, field.TypeTime, value)
@@ -1515,11 +1515,11 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.DeletedAtCleared() {
 		_spec.ClearField(standard.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
-		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
+	if value, ok := suo.mutation.DeletedByID(); ok {
+		_spec.SetField(standard.FieldDeletedByID, field.TypeString, value)
 	}
-	if suo.mutation.DeletedByCleared() {
-		_spec.ClearField(standard.FieldDeletedBy, field.TypeString)
+	if suo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(standard.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := suo.mutation.Tags(); ok {
 		_spec.SetField(standard.FieldTags, field.TypeJSON, value)

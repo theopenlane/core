@@ -55,23 +55,23 @@ func (cou *ControlObjectiveUpdate) ClearUpdatedAt() *ControlObjectiveUpdate {
 	return cou
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cou *ControlObjectiveUpdate) SetUpdatedBy(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cou *ControlObjectiveUpdate) SetUpdatedByID(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetUpdatedByID(s)
 	return cou
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableUpdatedBy(s *string) *ControlObjectiveUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableUpdatedByID(s *string) *ControlObjectiveUpdate {
 	if s != nil {
-		cou.SetUpdatedBy(*s)
+		cou.SetUpdatedByID(*s)
 	}
 	return cou
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cou *ControlObjectiveUpdate) ClearUpdatedBy() *ControlObjectiveUpdate {
-	cou.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cou *ControlObjectiveUpdate) ClearUpdatedByID() *ControlObjectiveUpdate {
+	cou.mutation.ClearUpdatedByID()
 	return cou
 }
 
@@ -95,23 +95,23 @@ func (cou *ControlObjectiveUpdate) ClearDeletedAt() *ControlObjectiveUpdate {
 	return cou
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cou *ControlObjectiveUpdate) SetDeletedBy(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cou *ControlObjectiveUpdate) SetDeletedByID(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetDeletedByID(s)
 	return cou
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableDeletedBy(s *string) *ControlObjectiveUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableDeletedByID(s *string) *ControlObjectiveUpdate {
 	if s != nil {
-		cou.SetDeletedBy(*s)
+		cou.SetDeletedByID(*s)
 	}
 	return cou
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cou *ControlObjectiveUpdate) ClearDeletedBy() *ControlObjectiveUpdate {
-	cou.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (cou *ControlObjectiveUpdate) ClearDeletedByID() *ControlObjectiveUpdate {
+	cou.mutation.ClearDeletedByID()
 	return cou
 }
 
@@ -888,14 +888,14 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if cou.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlobjective.FieldUpdatedAt, field.TypeTime)
 	}
-	if cou.mutation.CreatedByCleared() {
-		_spec.ClearField(controlobjective.FieldCreatedBy, field.TypeString)
+	if cou.mutation.CreatedByIDCleared() {
+		_spec.ClearField(controlobjective.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := cou.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlobjective.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := cou.mutation.UpdatedByID(); ok {
+		_spec.SetField(controlobjective.FieldUpdatedByID, field.TypeString, value)
 	}
-	if cou.mutation.UpdatedByCleared() {
-		_spec.ClearField(controlobjective.FieldUpdatedBy, field.TypeString)
+	if cou.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(controlobjective.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := cou.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjective.FieldDeletedAt, field.TypeTime, value)
@@ -903,11 +903,11 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if cou.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlobjective.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cou.mutation.DeletedBy(); ok {
-		_spec.SetField(controlobjective.FieldDeletedBy, field.TypeString, value)
+	if value, ok := cou.mutation.DeletedByID(); ok {
+		_spec.SetField(controlobjective.FieldDeletedByID, field.TypeString, value)
 	}
-	if cou.mutation.DeletedByCleared() {
-		_spec.ClearField(controlobjective.FieldDeletedBy, field.TypeString)
+	if cou.mutation.DeletedByIDCleared() {
+		_spec.ClearField(controlobjective.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cou.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)
@@ -1626,23 +1626,23 @@ func (couo *ControlObjectiveUpdateOne) ClearUpdatedAt() *ControlObjectiveUpdateO
 	return couo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (couo *ControlObjectiveUpdateOne) SetUpdatedBy(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (couo *ControlObjectiveUpdateOne) SetUpdatedByID(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetUpdatedByID(s)
 	return couo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableUpdatedBy(s *string) *ControlObjectiveUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableUpdatedByID(s *string) *ControlObjectiveUpdateOne {
 	if s != nil {
-		couo.SetUpdatedBy(*s)
+		couo.SetUpdatedByID(*s)
 	}
 	return couo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (couo *ControlObjectiveUpdateOne) ClearUpdatedBy() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (couo *ControlObjectiveUpdateOne) ClearUpdatedByID() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearUpdatedByID()
 	return couo
 }
 
@@ -1666,23 +1666,23 @@ func (couo *ControlObjectiveUpdateOne) ClearDeletedAt() *ControlObjectiveUpdateO
 	return couo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (couo *ControlObjectiveUpdateOne) SetDeletedBy(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (couo *ControlObjectiveUpdateOne) SetDeletedByID(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetDeletedByID(s)
 	return couo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableDeletedBy(s *string) *ControlObjectiveUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableDeletedByID(s *string) *ControlObjectiveUpdateOne {
 	if s != nil {
-		couo.SetDeletedBy(*s)
+		couo.SetDeletedByID(*s)
 	}
 	return couo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (couo *ControlObjectiveUpdateOne) ClearDeletedBy() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (couo *ControlObjectiveUpdateOne) ClearDeletedByID() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearDeletedByID()
 	return couo
 }
 
@@ -2489,14 +2489,14 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if couo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlobjective.FieldUpdatedAt, field.TypeTime)
 	}
-	if couo.mutation.CreatedByCleared() {
-		_spec.ClearField(controlobjective.FieldCreatedBy, field.TypeString)
+	if couo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(controlobjective.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := couo.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlobjective.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := couo.mutation.UpdatedByID(); ok {
+		_spec.SetField(controlobjective.FieldUpdatedByID, field.TypeString, value)
 	}
-	if couo.mutation.UpdatedByCleared() {
-		_spec.ClearField(controlobjective.FieldUpdatedBy, field.TypeString)
+	if couo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(controlobjective.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := couo.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjective.FieldDeletedAt, field.TypeTime, value)
@@ -2504,11 +2504,11 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if couo.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlobjective.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := couo.mutation.DeletedBy(); ok {
-		_spec.SetField(controlobjective.FieldDeletedBy, field.TypeString, value)
+	if value, ok := couo.mutation.DeletedByID(); ok {
+		_spec.SetField(controlobjective.FieldDeletedByID, field.TypeString, value)
 	}
-	if couo.mutation.DeletedByCleared() {
-		_spec.ClearField(controlobjective.FieldDeletedBy, field.TypeString)
+	if couo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(controlobjective.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := couo.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)

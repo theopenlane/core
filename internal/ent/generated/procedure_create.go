@@ -56,30 +56,30 @@ func (pc *ProcedureCreate) SetNillableUpdatedAt(t *time.Time) *ProcedureCreate {
 	return pc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (pc *ProcedureCreate) SetCreatedBy(s string) *ProcedureCreate {
-	pc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (pc *ProcedureCreate) SetCreatedByID(s string) *ProcedureCreate {
+	pc.mutation.SetCreatedByID(s)
 	return pc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableCreatedBy(s *string) *ProcedureCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableCreatedByID(s *string) *ProcedureCreate {
 	if s != nil {
-		pc.SetCreatedBy(*s)
+		pc.SetCreatedByID(*s)
 	}
 	return pc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (pc *ProcedureCreate) SetUpdatedBy(s string) *ProcedureCreate {
-	pc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (pc *ProcedureCreate) SetUpdatedByID(s string) *ProcedureCreate {
+	pc.mutation.SetUpdatedByID(s)
 	return pc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableUpdatedBy(s *string) *ProcedureCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableUpdatedByID(s *string) *ProcedureCreate {
 	if s != nil {
-		pc.SetUpdatedBy(*s)
+		pc.SetUpdatedByID(*s)
 	}
 	return pc
 }
@@ -98,16 +98,16 @@ func (pc *ProcedureCreate) SetNillableDeletedAt(t *time.Time) *ProcedureCreate {
 	return pc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (pc *ProcedureCreate) SetDeletedBy(s string) *ProcedureCreate {
-	pc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (pc *ProcedureCreate) SetDeletedByID(s string) *ProcedureCreate {
+	pc.mutation.SetDeletedByID(s)
 	return pc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableDeletedBy(s *string) *ProcedureCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableDeletedByID(s *string) *ProcedureCreate {
 	if s != nil {
-		pc.SetDeletedBy(*s)
+		pc.SetDeletedByID(*s)
 	}
 	return pc
 }
@@ -529,21 +529,21 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pc.mutation.CreatedBy(); ok {
-		_spec.SetField(procedure.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := pc.mutation.CreatedByID(); ok {
+		_spec.SetField(procedure.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := pc.mutation.UpdatedBy(); ok {
-		_spec.SetField(procedure.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := pc.mutation.UpdatedByID(); ok {
+		_spec.SetField(procedure.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := pc.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := pc.mutation.DeletedBy(); ok {
-		_spec.SetField(procedure.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := pc.mutation.DeletedByID(); ok {
+		_spec.SetField(procedure.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := pc.mutation.MappingID(); ok {
 		_spec.SetField(procedure.FieldMappingID, field.TypeString, value)

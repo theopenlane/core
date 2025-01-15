@@ -79,14 +79,17 @@ func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(aph.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(actionplanhistory.FieldUpdatedAt, aph.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(aph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(actionplanhistory.FieldCreatedBy, aph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(aph.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldCreatedByID, aph.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(aph.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldUpdatedByID, aph.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(aph.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDeletedAt, aph.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(aph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDeletedBy, aph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(aph.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDeletedByID, aph.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(aph.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldMappingID, aph.MappingID, new.MappingID))
@@ -151,8 +154,11 @@ func (ch *ContactHistory) changes(new *ContactHistory) []Change {
 	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(contacthistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ch.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(contacthistory.FieldCreatedBy, ch.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(ch.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(contacthistory.FieldCreatedByID, ch.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(ch.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(contacthistory.FieldUpdatedByID, ch.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(ch.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(contacthistory.FieldMappingID, ch.MappingID, new.MappingID))
@@ -160,8 +166,8 @@ func (ch *ContactHistory) changes(new *ContactHistory) []Change {
 	if !reflect.DeepEqual(ch.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(contacthistory.FieldDeletedAt, ch.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ch.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(contacthistory.FieldDeletedBy, ch.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(ch.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(contacthistory.FieldDeletedByID, ch.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(ch.Tags, new.Tags) {
 		changes = append(changes, NewChange(contacthistory.FieldTags, ch.Tags, new.Tags))
@@ -226,14 +232,17 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(controlhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ch.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(controlhistory.FieldCreatedBy, ch.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(ch.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(controlhistory.FieldCreatedByID, ch.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(ch.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(controlhistory.FieldUpdatedByID, ch.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(ch.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(controlhistory.FieldDeletedAt, ch.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ch.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(controlhistory.FieldDeletedBy, ch.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(ch.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(controlhistory.FieldDeletedByID, ch.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(ch.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(controlhistory.FieldMappingID, ch.MappingID, new.MappingID))
@@ -316,14 +325,17 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 	if !reflect.DeepEqual(coh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldUpdatedAt, coh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(coh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldCreatedBy, coh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(coh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldCreatedByID, coh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(coh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldUpdatedByID, coh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(coh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldDeletedAt, coh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(coh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldDeletedBy, coh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(coh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDeletedByID, coh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(coh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldMappingID, coh.MappingID, new.MappingID))
@@ -403,8 +415,11 @@ func (ddh *DocumentDataHistory) changes(new *DocumentDataHistory) []Change {
 	if !reflect.DeepEqual(ddh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(documentdatahistory.FieldUpdatedAt, ddh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ddh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(documentdatahistory.FieldCreatedBy, ddh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(ddh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(documentdatahistory.FieldCreatedByID, ddh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(ddh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(documentdatahistory.FieldUpdatedByID, ddh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(ddh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(documentdatahistory.FieldMappingID, ddh.MappingID, new.MappingID))
@@ -415,8 +430,8 @@ func (ddh *DocumentDataHistory) changes(new *DocumentDataHistory) []Change {
 	if !reflect.DeepEqual(ddh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(documentdatahistory.FieldDeletedAt, ddh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ddh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(documentdatahistory.FieldDeletedBy, ddh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(ddh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(documentdatahistory.FieldDeletedByID, ddh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(ddh.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(documentdatahistory.FieldOwnerID, ddh.OwnerID, new.OwnerID))
@@ -463,8 +478,11 @@ func (eh *EntityHistory) changes(new *EntityHistory) []Change {
 	if !reflect.DeepEqual(eh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(entityhistory.FieldUpdatedAt, eh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(eh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(entityhistory.FieldCreatedBy, eh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(eh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(entityhistory.FieldCreatedByID, eh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(eh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(entityhistory.FieldUpdatedByID, eh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(eh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(entityhistory.FieldMappingID, eh.MappingID, new.MappingID))
@@ -472,8 +490,8 @@ func (eh *EntityHistory) changes(new *EntityHistory) []Change {
 	if !reflect.DeepEqual(eh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(entityhistory.FieldDeletedAt, eh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(eh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(entityhistory.FieldDeletedBy, eh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(eh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(entityhistory.FieldDeletedByID, eh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(eh.Tags, new.Tags) {
 		changes = append(changes, NewChange(entityhistory.FieldTags, eh.Tags, new.Tags))
@@ -535,8 +553,11 @@ func (eth *EntityTypeHistory) changes(new *EntityTypeHistory) []Change {
 	if !reflect.DeepEqual(eth.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(entitytypehistory.FieldUpdatedAt, eth.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(eth.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(entitytypehistory.FieldCreatedBy, eth.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(eth.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(entitytypehistory.FieldCreatedByID, eth.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(eth.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(entitytypehistory.FieldUpdatedByID, eth.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(eth.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(entitytypehistory.FieldMappingID, eth.MappingID, new.MappingID))
@@ -544,8 +565,8 @@ func (eth *EntityTypeHistory) changes(new *EntityTypeHistory) []Change {
 	if !reflect.DeepEqual(eth.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(entitytypehistory.FieldDeletedAt, eth.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(eth.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(entitytypehistory.FieldDeletedBy, eth.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(eth.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(entitytypehistory.FieldDeletedByID, eth.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(eth.Tags, new.Tags) {
 		changes = append(changes, NewChange(entitytypehistory.FieldTags, eth.Tags, new.Tags))
@@ -592,8 +613,11 @@ func (eh *EventHistory) changes(new *EventHistory) []Change {
 	if !reflect.DeepEqual(eh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(eventhistory.FieldUpdatedAt, eh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(eh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(eventhistory.FieldCreatedBy, eh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(eh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(eventhistory.FieldCreatedByID, eh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(eh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(eventhistory.FieldUpdatedByID, eh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(eh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(eventhistory.FieldMappingID, eh.MappingID, new.MappingID))
@@ -649,14 +673,17 @@ func (fh *FileHistory) changes(new *FileHistory) []Change {
 	if !reflect.DeepEqual(fh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(filehistory.FieldUpdatedAt, fh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(fh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(filehistory.FieldCreatedBy, fh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(fh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(filehistory.FieldCreatedByID, fh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(fh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(filehistory.FieldUpdatedByID, fh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(fh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(filehistory.FieldDeletedAt, fh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(fh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(filehistory.FieldDeletedBy, fh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(fh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(filehistory.FieldDeletedByID, fh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(fh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(filehistory.FieldMappingID, fh.MappingID, new.MappingID))
@@ -742,14 +769,17 @@ func (gh *GroupHistory) changes(new *GroupHistory) []Change {
 	if !reflect.DeepEqual(gh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(grouphistory.FieldUpdatedAt, gh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(gh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(grouphistory.FieldCreatedBy, gh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(gh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(grouphistory.FieldCreatedByID, gh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(gh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(grouphistory.FieldUpdatedByID, gh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(gh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(grouphistory.FieldDeletedAt, gh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(gh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(grouphistory.FieldDeletedBy, gh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(gh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(grouphistory.FieldDeletedByID, gh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(gh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(grouphistory.FieldMappingID, gh.MappingID, new.MappingID))
@@ -811,8 +841,11 @@ func (gmh *GroupMembershipHistory) changes(new *GroupMembershipHistory) []Change
 	if !reflect.DeepEqual(gmh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(groupmembershiphistory.FieldUpdatedAt, gmh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(gmh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldCreatedBy, gmh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(gmh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldCreatedByID, gmh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(gmh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldUpdatedByID, gmh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(gmh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(groupmembershiphistory.FieldMappingID, gmh.MappingID, new.MappingID))
@@ -820,8 +853,8 @@ func (gmh *GroupMembershipHistory) changes(new *GroupMembershipHistory) []Change
 	if !reflect.DeepEqual(gmh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(groupmembershiphistory.FieldDeletedAt, gmh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(gmh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldDeletedBy, gmh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(gmh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldDeletedByID, gmh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(gmh.Role, new.Role) {
 		changes = append(changes, NewChange(groupmembershiphistory.FieldRole, gmh.Role, new.Role))
@@ -868,8 +901,11 @@ func (gsh *GroupSettingHistory) changes(new *GroupSettingHistory) []Change {
 	if !reflect.DeepEqual(gsh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(groupsettinghistory.FieldUpdatedAt, gsh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(gsh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldCreatedBy, gsh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(gsh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldCreatedByID, gsh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(gsh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldUpdatedByID, gsh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(gsh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(groupsettinghistory.FieldMappingID, gsh.MappingID, new.MappingID))
@@ -880,8 +916,8 @@ func (gsh *GroupSettingHistory) changes(new *GroupSettingHistory) []Change {
 	if !reflect.DeepEqual(gsh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedAt, gsh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(gsh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedBy, gsh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(gsh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedByID, gsh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(gsh.Visibility, new.Visibility) {
 		changes = append(changes, NewChange(groupsettinghistory.FieldVisibility, gsh.Visibility, new.Visibility))
@@ -934,8 +970,11 @@ func (hh *HushHistory) changes(new *HushHistory) []Change {
 	if !reflect.DeepEqual(hh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(hushhistory.FieldUpdatedAt, hh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(hh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(hushhistory.FieldCreatedBy, hh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(hh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(hushhistory.FieldCreatedByID, hh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(hh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(hushhistory.FieldUpdatedByID, hh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(hh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(hushhistory.FieldMappingID, hh.MappingID, new.MappingID))
@@ -943,8 +982,8 @@ func (hh *HushHistory) changes(new *HushHistory) []Change {
 	if !reflect.DeepEqual(hh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(hushhistory.FieldDeletedAt, hh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(hh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(hushhistory.FieldDeletedBy, hh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(hh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(hushhistory.FieldDeletedByID, hh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(hh.Name, new.Name) {
 		changes = append(changes, NewChange(hushhistory.FieldName, hh.Name, new.Name))
@@ -997,8 +1036,11 @@ func (ih *IntegrationHistory) changes(new *IntegrationHistory) []Change {
 	if !reflect.DeepEqual(ih.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(integrationhistory.FieldUpdatedAt, ih.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ih.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(integrationhistory.FieldCreatedBy, ih.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(ih.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(integrationhistory.FieldCreatedByID, ih.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(ih.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(integrationhistory.FieldUpdatedByID, ih.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(ih.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(integrationhistory.FieldMappingID, ih.MappingID, new.MappingID))
@@ -1009,8 +1051,8 @@ func (ih *IntegrationHistory) changes(new *IntegrationHistory) []Change {
 	if !reflect.DeepEqual(ih.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(integrationhistory.FieldDeletedAt, ih.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ih.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(integrationhistory.FieldDeletedBy, ih.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(ih.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(integrationhistory.FieldDeletedByID, ih.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(ih.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(integrationhistory.FieldOwnerID, ih.OwnerID, new.OwnerID))
@@ -1060,14 +1102,17 @@ func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(iph.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldUpdatedAt, iph.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(iph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldCreatedBy, iph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(iph.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldCreatedByID, iph.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(iph.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldUpdatedByID, iph.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(iph.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldDeletedAt, iph.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(iph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDeletedBy, iph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(iph.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDeletedByID, iph.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(iph.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldMappingID, iph.MappingID, new.MappingID))
@@ -1138,14 +1183,17 @@ func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 	if !reflect.DeepEqual(nh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(narrativehistory.FieldUpdatedAt, nh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(nh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(narrativehistory.FieldCreatedBy, nh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(nh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(narrativehistory.FieldCreatedByID, nh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(nh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(narrativehistory.FieldUpdatedByID, nh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(nh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(narrativehistory.FieldDeletedAt, nh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(nh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(narrativehistory.FieldDeletedBy, nh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(nh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(narrativehistory.FieldDeletedByID, nh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(nh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(narrativehistory.FieldMappingID, nh.MappingID, new.MappingID))
@@ -1204,8 +1252,11 @@ func (nh *NoteHistory) changes(new *NoteHistory) []Change {
 	if !reflect.DeepEqual(nh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(notehistory.FieldUpdatedAt, nh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(nh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(notehistory.FieldCreatedBy, nh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(nh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(notehistory.FieldCreatedByID, nh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(nh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(notehistory.FieldUpdatedByID, nh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(nh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(notehistory.FieldMappingID, nh.MappingID, new.MappingID))
@@ -1213,8 +1264,8 @@ func (nh *NoteHistory) changes(new *NoteHistory) []Change {
 	if !reflect.DeepEqual(nh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(notehistory.FieldDeletedAt, nh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(nh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(notehistory.FieldDeletedBy, nh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(nh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(notehistory.FieldDeletedByID, nh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(nh.Tags, new.Tags) {
 		changes = append(changes, NewChange(notehistory.FieldTags, nh.Tags, new.Tags))
@@ -1261,8 +1312,11 @@ func (omh *OrgMembershipHistory) changes(new *OrgMembershipHistory) []Change {
 	if !reflect.DeepEqual(omh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(orgmembershiphistory.FieldUpdatedAt, omh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(omh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldCreatedBy, omh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(omh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldCreatedByID, omh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(omh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldUpdatedByID, omh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(omh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(orgmembershiphistory.FieldMappingID, omh.MappingID, new.MappingID))
@@ -1270,8 +1324,8 @@ func (omh *OrgMembershipHistory) changes(new *OrgMembershipHistory) []Change {
 	if !reflect.DeepEqual(omh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(orgmembershiphistory.FieldDeletedAt, omh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(omh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldDeletedBy, omh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(omh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldDeletedByID, omh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(omh.Role, new.Role) {
 		changes = append(changes, NewChange(orgmembershiphistory.FieldRole, omh.Role, new.Role))
@@ -1318,8 +1372,11 @@ func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change
 	if !reflect.DeepEqual(osh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldUpdatedAt, osh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(osh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedBy, osh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(osh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedByID, osh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(osh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldUpdatedByID, osh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(osh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldMappingID, osh.MappingID, new.MappingID))
@@ -1330,8 +1387,8 @@ func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change
 	if !reflect.DeepEqual(osh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedAt, osh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(osh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedBy, osh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(osh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedByID, osh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(osh.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldOwnerID, osh.OwnerID, new.OwnerID))
@@ -1402,8 +1459,11 @@ func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	if !reflect.DeepEqual(oh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(organizationhistory.FieldUpdatedAt, oh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(oh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(organizationhistory.FieldCreatedBy, oh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(oh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(organizationhistory.FieldCreatedByID, oh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(oh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(organizationhistory.FieldUpdatedByID, oh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(oh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(organizationhistory.FieldMappingID, oh.MappingID, new.MappingID))
@@ -1414,8 +1474,8 @@ func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	if !reflect.DeepEqual(oh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(organizationhistory.FieldDeletedAt, oh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(oh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(organizationhistory.FieldDeletedBy, oh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(oh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(organizationhistory.FieldDeletedByID, oh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(oh.Name, new.Name) {
 		changes = append(changes, NewChange(organizationhistory.FieldName, oh.Name, new.Name))
@@ -1474,8 +1534,11 @@ func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) 
 	if !reflect.DeepEqual(osh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldUpdatedAt, osh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(osh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldCreatedBy, osh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(osh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldCreatedByID, osh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(osh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldUpdatedByID, osh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(osh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldMappingID, osh.MappingID, new.MappingID))
@@ -1486,8 +1549,8 @@ func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) 
 	if !reflect.DeepEqual(osh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldDeletedAt, osh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(osh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldDeletedBy, osh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(osh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldDeletedByID, osh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(osh.Domains, new.Domains) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldDomains, osh.Domains, new.Domains))
@@ -1552,14 +1615,17 @@ func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	if !reflect.DeepEqual(ph.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(procedurehistory.FieldUpdatedAt, ph.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(procedurehistory.FieldCreatedBy, ph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(ph.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(procedurehistory.FieldCreatedByID, ph.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(ph.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(procedurehistory.FieldUpdatedByID, ph.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(ph.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(procedurehistory.FieldDeletedAt, ph.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(procedurehistory.FieldDeletedBy, ph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(ph.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(procedurehistory.FieldDeletedByID, ph.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(ph.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(procedurehistory.FieldMappingID, ph.MappingID, new.MappingID))
@@ -1633,8 +1699,11 @@ func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
 	if !reflect.DeepEqual(ph.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(programhistory.FieldUpdatedAt, ph.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(programhistory.FieldCreatedBy, ph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(ph.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(programhistory.FieldCreatedByID, ph.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(ph.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(programhistory.FieldUpdatedByID, ph.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(ph.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(programhistory.FieldMappingID, ph.MappingID, new.MappingID))
@@ -1642,8 +1711,8 @@ func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
 	if !reflect.DeepEqual(ph.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(programhistory.FieldDeletedAt, ph.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(programhistory.FieldDeletedBy, ph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(ph.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(programhistory.FieldDeletedByID, ph.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(ph.Tags, new.Tags) {
 		changes = append(changes, NewChange(programhistory.FieldTags, ph.Tags, new.Tags))
@@ -1711,8 +1780,11 @@ func (pmh *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Ch
 	if !reflect.DeepEqual(pmh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(programmembershiphistory.FieldUpdatedAt, pmh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(pmh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedBy, pmh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(pmh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedByID, pmh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(pmh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldUpdatedByID, pmh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(pmh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(programmembershiphistory.FieldMappingID, pmh.MappingID, new.MappingID))
@@ -1720,8 +1792,8 @@ func (pmh *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Ch
 	if !reflect.DeepEqual(pmh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(programmembershiphistory.FieldDeletedAt, pmh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(pmh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldDeletedBy, pmh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(pmh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldDeletedByID, pmh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(pmh.Role, new.Role) {
 		changes = append(changes, NewChange(programmembershiphistory.FieldRole, pmh.Role, new.Role))
@@ -1768,14 +1840,17 @@ func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 	if !reflect.DeepEqual(rh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(riskhistory.FieldUpdatedAt, rh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(rh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(riskhistory.FieldCreatedBy, rh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(rh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(riskhistory.FieldCreatedByID, rh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(rh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(riskhistory.FieldUpdatedByID, rh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(rh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(riskhistory.FieldDeletedAt, rh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(rh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(riskhistory.FieldDeletedBy, rh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(rh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(riskhistory.FieldDeletedByID, rh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(rh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(riskhistory.FieldMappingID, rh.MappingID, new.MappingID))
@@ -1852,14 +1927,17 @@ func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(standardhistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(standardhistory.FieldCreatedBy, sh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(sh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(standardhistory.FieldCreatedByID, sh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(sh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(standardhistory.FieldUpdatedByID, sh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(sh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(standardhistory.FieldDeletedAt, sh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(sh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(standardhistory.FieldDeletedBy, sh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(sh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(standardhistory.FieldDeletedByID, sh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(sh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(standardhistory.FieldMappingID, sh.MappingID, new.MappingID))
@@ -1933,14 +2011,17 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldCreatedBy, sh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(sh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldCreatedByID, sh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(sh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldUpdatedByID, sh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(sh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDeletedAt, sh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(sh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldDeletedBy, sh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(sh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDeletedByID, sh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(sh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldMappingID, sh.MappingID, new.MappingID))
@@ -2035,8 +2116,11 @@ func (th *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(th.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(taskhistory.FieldUpdatedAt, th.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(th.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(taskhistory.FieldCreatedBy, th.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(th.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(taskhistory.FieldCreatedByID, th.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(th.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(taskhistory.FieldUpdatedByID, th.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(th.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(taskhistory.FieldMappingID, th.MappingID, new.MappingID))
@@ -2044,8 +2128,8 @@ func (th *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(th.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(taskhistory.FieldDeletedAt, th.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(th.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(taskhistory.FieldDeletedBy, th.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(th.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(taskhistory.FieldDeletedByID, th.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(th.Tags, new.Tags) {
 		changes = append(changes, NewChange(taskhistory.FieldTags, th.Tags, new.Tags))
@@ -2104,14 +2188,17 @@ func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
 	if !reflect.DeepEqual(th.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(templatehistory.FieldUpdatedAt, th.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(th.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(templatehistory.FieldCreatedBy, th.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(th.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(templatehistory.FieldCreatedByID, th.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(th.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(templatehistory.FieldUpdatedByID, th.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(th.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(templatehistory.FieldDeletedAt, th.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(th.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(templatehistory.FieldDeletedBy, th.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(th.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(templatehistory.FieldDeletedByID, th.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(th.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(templatehistory.FieldMappingID, th.MappingID, new.MappingID))
@@ -2173,14 +2260,17 @@ func (uh *UserHistory) changes(new *UserHistory) []Change {
 	if !reflect.DeepEqual(uh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(userhistory.FieldUpdatedAt, uh.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(uh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(userhistory.FieldCreatedBy, uh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(uh.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(userhistory.FieldCreatedByID, uh.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(uh.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(userhistory.FieldUpdatedByID, uh.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(uh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(userhistory.FieldDeletedAt, uh.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(uh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(userhistory.FieldDeletedBy, uh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(uh.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(userhistory.FieldDeletedByID, uh.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(uh.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(userhistory.FieldMappingID, uh.MappingID, new.MappingID))
@@ -2263,8 +2353,11 @@ func (ush *UserSettingHistory) changes(new *UserSettingHistory) []Change {
 	if !reflect.DeepEqual(ush.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(usersettinghistory.FieldUpdatedAt, ush.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ush.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(usersettinghistory.FieldCreatedBy, ush.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(ush.CreatedByID, new.CreatedByID) {
+		changes = append(changes, NewChange(usersettinghistory.FieldCreatedByID, ush.CreatedByID, new.CreatedByID))
+	}
+	if !reflect.DeepEqual(ush.UpdatedByID, new.UpdatedByID) {
+		changes = append(changes, NewChange(usersettinghistory.FieldUpdatedByID, ush.UpdatedByID, new.UpdatedByID))
 	}
 	if !reflect.DeepEqual(ush.MappingID, new.MappingID) {
 		changes = append(changes, NewChange(usersettinghistory.FieldMappingID, ush.MappingID, new.MappingID))
@@ -2275,8 +2368,8 @@ func (ush *UserSettingHistory) changes(new *UserSettingHistory) []Change {
 	if !reflect.DeepEqual(ush.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(usersettinghistory.FieldDeletedAt, ush.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ush.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(usersettinghistory.FieldDeletedBy, ush.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(ush.DeletedByID, new.DeletedByID) {
+		changes = append(changes, NewChange(usersettinghistory.FieldDeletedByID, ush.DeletedByID, new.DeletedByID))
 	}
 	if !reflect.DeepEqual(ush.UserID, new.UserID) {
 		changes = append(changes, NewChange(usersettinghistory.FieldUserID, ush.UserID, new.UserID))
@@ -2851,7 +2944,7 @@ type record struct {
 	HistoryTime time.Time
 	Operation   history.OpType
 	Changes     []Change
-	UpdatedBy   string
+	UpdatedBy   *string
 }
 
 func (r *record) toRow() []string {
@@ -2868,8 +2961,8 @@ func (r *record) toRow() []string {
 		}
 		row[4] = fmt.Sprintf("%s\n%s", row[4], change.String(r.Operation))
 	}
-	if r.UpdatedBy != "" {
-		row[5] = fmt.Sprintf("%v", r.UpdatedBy)
+	if r.UpdatedBy != nil {
+		row[5] = fmt.Sprintf("%v", *r.UpdatedBy)
 	}
 	return row
 }

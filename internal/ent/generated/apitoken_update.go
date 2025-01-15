@@ -45,23 +45,23 @@ func (atu *APITokenUpdate) ClearUpdatedAt() *APITokenUpdate {
 	return atu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (atu *APITokenUpdate) SetUpdatedBy(s string) *APITokenUpdate {
-	atu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (atu *APITokenUpdate) SetUpdatedByID(s string) *APITokenUpdate {
+	atu.mutation.SetUpdatedByID(s)
 	return atu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableUpdatedBy(s *string) *APITokenUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableUpdatedByID(s *string) *APITokenUpdate {
 	if s != nil {
-		atu.SetUpdatedBy(*s)
+		atu.SetUpdatedByID(*s)
 	}
 	return atu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (atu *APITokenUpdate) ClearUpdatedBy() *APITokenUpdate {
-	atu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (atu *APITokenUpdate) ClearUpdatedByID() *APITokenUpdate {
+	atu.mutation.ClearUpdatedByID()
 	return atu
 }
 
@@ -85,23 +85,23 @@ func (atu *APITokenUpdate) ClearDeletedAt() *APITokenUpdate {
 	return atu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (atu *APITokenUpdate) SetDeletedBy(s string) *APITokenUpdate {
-	atu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (atu *APITokenUpdate) SetDeletedByID(s string) *APITokenUpdate {
+	atu.mutation.SetDeletedByID(s)
 	return atu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableDeletedBy(s *string) *APITokenUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableDeletedByID(s *string) *APITokenUpdate {
 	if s != nil {
-		atu.SetDeletedBy(*s)
+		atu.SetDeletedByID(*s)
 	}
 	return atu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (atu *APITokenUpdate) ClearDeletedBy() *APITokenUpdate {
-	atu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (atu *APITokenUpdate) ClearDeletedByID() *APITokenUpdate {
+	atu.mutation.ClearDeletedByID()
 	return atu
 }
 
@@ -335,14 +335,14 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if atu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if atu.mutation.CreatedByCleared() {
-		_spec.ClearField(apitoken.FieldCreatedBy, field.TypeString)
+	if atu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := atu.mutation.UpdatedBy(); ok {
-		_spec.SetField(apitoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := atu.mutation.UpdatedByID(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if atu.mutation.UpdatedByCleared() {
-		_spec.ClearField(apitoken.FieldUpdatedBy, field.TypeString)
+	if atu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := atu.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
@@ -350,11 +350,11 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if atu.mutation.DeletedAtCleared() {
 		_spec.ClearField(apitoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := atu.mutation.DeletedBy(); ok {
-		_spec.SetField(apitoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := atu.mutation.DeletedByID(); ok {
+		_spec.SetField(apitoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if atu.mutation.DeletedByCleared() {
-		_spec.ClearField(apitoken.FieldDeletedBy, field.TypeString)
+	if atu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(apitoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := atu.mutation.Tags(); ok {
 		_spec.SetField(apitoken.FieldTags, field.TypeJSON, value)
@@ -466,23 +466,23 @@ func (atuo *APITokenUpdateOne) ClearUpdatedAt() *APITokenUpdateOne {
 	return atuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (atuo *APITokenUpdateOne) SetUpdatedBy(s string) *APITokenUpdateOne {
-	atuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (atuo *APITokenUpdateOne) SetUpdatedByID(s string) *APITokenUpdateOne {
+	atuo.mutation.SetUpdatedByID(s)
 	return atuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableUpdatedBy(s *string) *APITokenUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableUpdatedByID(s *string) *APITokenUpdateOne {
 	if s != nil {
-		atuo.SetUpdatedBy(*s)
+		atuo.SetUpdatedByID(*s)
 	}
 	return atuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (atuo *APITokenUpdateOne) ClearUpdatedBy() *APITokenUpdateOne {
-	atuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (atuo *APITokenUpdateOne) ClearUpdatedByID() *APITokenUpdateOne {
+	atuo.mutation.ClearUpdatedByID()
 	return atuo
 }
 
@@ -506,23 +506,23 @@ func (atuo *APITokenUpdateOne) ClearDeletedAt() *APITokenUpdateOne {
 	return atuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (atuo *APITokenUpdateOne) SetDeletedBy(s string) *APITokenUpdateOne {
-	atuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (atuo *APITokenUpdateOne) SetDeletedByID(s string) *APITokenUpdateOne {
+	atuo.mutation.SetDeletedByID(s)
 	return atuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableDeletedBy(s *string) *APITokenUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableDeletedByID(s *string) *APITokenUpdateOne {
 	if s != nil {
-		atuo.SetDeletedBy(*s)
+		atuo.SetDeletedByID(*s)
 	}
 	return atuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (atuo *APITokenUpdateOne) ClearDeletedBy() *APITokenUpdateOne {
-	atuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (atuo *APITokenUpdateOne) ClearDeletedByID() *APITokenUpdateOne {
+	atuo.mutation.ClearDeletedByID()
 	return atuo
 }
 
@@ -786,14 +786,14 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 	if atuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if atuo.mutation.CreatedByCleared() {
-		_spec.ClearField(apitoken.FieldCreatedBy, field.TypeString)
+	if atuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := atuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(apitoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := atuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if atuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(apitoken.FieldUpdatedBy, field.TypeString)
+	if atuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := atuo.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
@@ -801,11 +801,11 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 	if atuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(apitoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := atuo.mutation.DeletedBy(); ok {
-		_spec.SetField(apitoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := atuo.mutation.DeletedByID(); ok {
+		_spec.SetField(apitoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if atuo.mutation.DeletedByCleared() {
-		_spec.ClearField(apitoken.FieldDeletedBy, field.TypeString)
+	if atuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(apitoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := atuo.mutation.Tags(); ok {
 		_spec.SetField(apitoken.FieldTags, field.TypeJSON, value)

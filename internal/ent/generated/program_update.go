@@ -61,23 +61,23 @@ func (pu *ProgramUpdate) ClearUpdatedAt() *ProgramUpdate {
 	return pu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (pu *ProgramUpdate) SetUpdatedBy(s string) *ProgramUpdate {
-	pu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (pu *ProgramUpdate) SetUpdatedByID(s string) *ProgramUpdate {
+	pu.mutation.SetUpdatedByID(s)
 	return pu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableUpdatedBy(s *string) *ProgramUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableUpdatedByID(s *string) *ProgramUpdate {
 	if s != nil {
-		pu.SetUpdatedBy(*s)
+		pu.SetUpdatedByID(*s)
 	}
 	return pu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (pu *ProgramUpdate) ClearUpdatedBy() *ProgramUpdate {
-	pu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (pu *ProgramUpdate) ClearUpdatedByID() *ProgramUpdate {
+	pu.mutation.ClearUpdatedByID()
 	return pu
 }
 
@@ -101,23 +101,23 @@ func (pu *ProgramUpdate) ClearDeletedAt() *ProgramUpdate {
 	return pu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (pu *ProgramUpdate) SetDeletedBy(s string) *ProgramUpdate {
-	pu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (pu *ProgramUpdate) SetDeletedByID(s string) *ProgramUpdate {
+	pu.mutation.SetDeletedByID(s)
 	return pu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableDeletedBy(s *string) *ProgramUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableDeletedByID(s *string) *ProgramUpdate {
 	if s != nil {
-		pu.SetDeletedBy(*s)
+		pu.SetDeletedByID(*s)
 	}
 	return pu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pu *ProgramUpdate) ClearDeletedBy() *ProgramUpdate {
-	pu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (pu *ProgramUpdate) ClearDeletedByID() *ProgramUpdate {
+	pu.mutation.ClearDeletedByID()
 	return pu
 }
 
@@ -1006,14 +1006,14 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
-	if pu.mutation.CreatedByCleared() {
-		_spec.ClearField(program.FieldCreatedBy, field.TypeString)
+	if pu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(program.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := pu.mutation.UpdatedBy(); ok {
-		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := pu.mutation.UpdatedByID(); ok {
+		_spec.SetField(program.FieldUpdatedByID, field.TypeString, value)
 	}
-	if pu.mutation.UpdatedByCleared() {
-		_spec.ClearField(program.FieldUpdatedBy, field.TypeString)
+	if pu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(program.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := pu.mutation.DeletedAt(); ok {
 		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
@@ -1021,11 +1021,11 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := pu.mutation.DeletedBy(); ok {
-		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
+	if value, ok := pu.mutation.DeletedByID(); ok {
+		_spec.SetField(program.FieldDeletedByID, field.TypeString, value)
 	}
-	if pu.mutation.DeletedByCleared() {
-		_spec.ClearField(program.FieldDeletedBy, field.TypeString)
+	if pu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(program.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := pu.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)
@@ -1975,23 +1975,23 @@ func (puo *ProgramUpdateOne) ClearUpdatedAt() *ProgramUpdateOne {
 	return puo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (puo *ProgramUpdateOne) SetUpdatedBy(s string) *ProgramUpdateOne {
-	puo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (puo *ProgramUpdateOne) SetUpdatedByID(s string) *ProgramUpdateOne {
+	puo.mutation.SetUpdatedByID(s)
 	return puo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableUpdatedBy(s *string) *ProgramUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableUpdatedByID(s *string) *ProgramUpdateOne {
 	if s != nil {
-		puo.SetUpdatedBy(*s)
+		puo.SetUpdatedByID(*s)
 	}
 	return puo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (puo *ProgramUpdateOne) ClearUpdatedBy() *ProgramUpdateOne {
-	puo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (puo *ProgramUpdateOne) ClearUpdatedByID() *ProgramUpdateOne {
+	puo.mutation.ClearUpdatedByID()
 	return puo
 }
 
@@ -2015,23 +2015,23 @@ func (puo *ProgramUpdateOne) ClearDeletedAt() *ProgramUpdateOne {
 	return puo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (puo *ProgramUpdateOne) SetDeletedBy(s string) *ProgramUpdateOne {
-	puo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (puo *ProgramUpdateOne) SetDeletedByID(s string) *ProgramUpdateOne {
+	puo.mutation.SetDeletedByID(s)
 	return puo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableDeletedBy(s *string) *ProgramUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableDeletedByID(s *string) *ProgramUpdateOne {
 	if s != nil {
-		puo.SetDeletedBy(*s)
+		puo.SetDeletedByID(*s)
 	}
 	return puo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (puo *ProgramUpdateOne) ClearDeletedBy() *ProgramUpdateOne {
-	puo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (puo *ProgramUpdateOne) ClearDeletedByID() *ProgramUpdateOne {
+	puo.mutation.ClearDeletedByID()
 	return puo
 }
 
@@ -2950,14 +2950,14 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	if puo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
-	if puo.mutation.CreatedByCleared() {
-		_spec.ClearField(program.FieldCreatedBy, field.TypeString)
+	if puo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(program.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := puo.mutation.UpdatedBy(); ok {
-		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := puo.mutation.UpdatedByID(); ok {
+		_spec.SetField(program.FieldUpdatedByID, field.TypeString, value)
 	}
-	if puo.mutation.UpdatedByCleared() {
-		_spec.ClearField(program.FieldUpdatedBy, field.TypeString)
+	if puo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(program.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := puo.mutation.DeletedAt(); ok {
 		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
@@ -2965,11 +2965,11 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	if puo.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := puo.mutation.DeletedBy(); ok {
-		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
+	if value, ok := puo.mutation.DeletedByID(); ok {
+		_spec.SetField(program.FieldDeletedByID, field.TypeString, value)
 	}
-	if puo.mutation.DeletedByCleared() {
-		_spec.ClearField(program.FieldDeletedBy, field.TypeString)
+	if puo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(program.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := puo.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)

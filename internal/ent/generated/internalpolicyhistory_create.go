@@ -55,6 +55,20 @@ func (iphc *InternalPolicyHistoryCreate) SetOperation(ht history.OpType) *Intern
 	return iphc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (iphc *InternalPolicyHistoryCreate) SetUpdatedBy(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetUpdatedBy(s)
+	return iphc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableUpdatedBy(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetUpdatedBy(*s)
+	}
+	return iphc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (iphc *InternalPolicyHistoryCreate) SetCreatedAt(t time.Time) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Int
 	return iphc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (iphc *InternalPolicyHistoryCreate) SetCreatedBy(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (iphc *InternalPolicyHistoryCreate) SetCreatedByID(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetCreatedByID(s)
 	return iphc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableCreatedBy(s *string) *InternalPolicyHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableCreatedByID(s *string) *InternalPolicyHistoryCreate {
 	if s != nil {
-		iphc.SetCreatedBy(*s)
+		iphc.SetCreatedByID(*s)
 	}
 	return iphc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iphc *InternalPolicyHistoryCreate) SetUpdatedBy(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iphc *InternalPolicyHistoryCreate) SetUpdatedByID(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetUpdatedByID(s)
 	return iphc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableUpdatedBy(s *string) *InternalPolicyHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableUpdatedByID(s *string) *InternalPolicyHistoryCreate {
 	if s != nil {
-		iphc.SetUpdatedBy(*s)
+		iphc.SetUpdatedByID(*s)
 	}
 	return iphc
 }
@@ -125,16 +139,16 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableDeletedAt(t *time.Time) *Int
 	return iphc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (iphc *InternalPolicyHistoryCreate) SetDeletedBy(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (iphc *InternalPolicyHistoryCreate) SetDeletedByID(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDeletedByID(s)
 	return iphc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableDeletedBy(s *string) *InternalPolicyHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableDeletedByID(s *string) *InternalPolicyHistoryCreate {
 	if s != nil {
-		iphc.SetDeletedBy(*s)
+		iphc.SetDeletedByID(*s)
 	}
 	return iphc
 }
@@ -429,6 +443,10 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := iphc.mutation.UpdatedBy(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := iphc.mutation.CreatedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -437,21 +455,21 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := iphc.mutation.CreatedBy(); ok {
-		_spec.SetField(internalpolicyhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := iphc.mutation.CreatedByID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := iphc.mutation.UpdatedBy(); ok {
-		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := iphc.mutation.UpdatedByID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := iphc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := iphc.mutation.DeletedBy(); ok {
-		_spec.SetField(internalpolicyhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := iphc.mutation.DeletedByID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := iphc.mutation.MappingID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldMappingID, field.TypeString, value)

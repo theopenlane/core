@@ -25,20 +25,22 @@ type EntityTypeHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -57,7 +59,7 @@ func (*EntityTypeHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case entitytypehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case entitytypehistory.FieldID, entitytypehistory.FieldRef, entitytypehistory.FieldCreatedBy, entitytypehistory.FieldUpdatedBy, entitytypehistory.FieldMappingID, entitytypehistory.FieldDeletedBy, entitytypehistory.FieldOwnerID, entitytypehistory.FieldName:
+		case entitytypehistory.FieldID, entitytypehistory.FieldRef, entitytypehistory.FieldUpdatedBy, entitytypehistory.FieldCreatedByID, entitytypehistory.FieldUpdatedByID, entitytypehistory.FieldMappingID, entitytypehistory.FieldDeletedByID, entitytypehistory.FieldOwnerID, entitytypehistory.FieldName:
 			values[i] = new(sql.NullString)
 		case entitytypehistory.FieldHistoryTime, entitytypehistory.FieldCreatedAt, entitytypehistory.FieldUpdatedAt, entitytypehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -100,6 +102,13 @@ func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error
 			} else if value != nil {
 				eth.Operation = *value
 			}
+		case entitytypehistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				eth.UpdatedBy = new(string)
+				*eth.UpdatedBy = value.String
+			}
 		case entitytypehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -112,17 +121,17 @@ func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				eth.UpdatedAt = value.Time
 			}
-		case entitytypehistory.FieldCreatedBy:
+		case entitytypehistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				eth.CreatedBy = value.String
+				eth.CreatedByID = value.String
 			}
-		case entitytypehistory.FieldUpdatedBy:
+		case entitytypehistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				eth.UpdatedBy = value.String
+				eth.UpdatedByID = value.String
 			}
 		case entitytypehistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -136,11 +145,11 @@ func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				eth.DeletedAt = value.Time
 			}
-		case entitytypehistory.FieldDeletedBy:
+		case entitytypehistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				eth.DeletedBy = value.String
+				eth.DeletedByID = value.String
 			}
 		case entitytypehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -207,17 +216,22 @@ func (eth *EntityTypeHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", eth.Operation))
 	builder.WriteString(", ")
+	if v := eth.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(eth.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(eth.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(eth.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(eth.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(eth.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(eth.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(eth.MappingID)
@@ -225,8 +239,8 @@ func (eth *EntityTypeHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(eth.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(eth.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(eth.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", eth.Tags))

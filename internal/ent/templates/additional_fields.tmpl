@@ -1,0 +1,12 @@
+{{ define "model/fields/additional" }}
+    {{- if eq $.Name "OrgSubscription" }}
+        SubscriptionURL string `json:"subscriptionURL,omitempty"`
+    {{- end }}
+
+    {{- if not (hasSuffix $.Name "History") }}
+        // CreatedBy includes the details about the user or service that created the object
+        CreatedBy models.Actor `json:"createdBy,omitempty"`
+        // UpdatedBy includes the details about the user or service that last updated the object
+        UpdatedBy models.Actor `json:"updatedBy,omitempty"`
+    {{- end }}
+{{ end }}

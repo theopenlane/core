@@ -44,23 +44,23 @@ func (fhu *FileHistoryUpdate) ClearUpdatedAt() *FileHistoryUpdate {
 	return fhu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fhu *FileHistoryUpdate) SetUpdatedBy(s string) *FileHistoryUpdate {
-	fhu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fhu *FileHistoryUpdate) SetUpdatedByID(s string) *FileHistoryUpdate {
+	fhu.mutation.SetUpdatedByID(s)
 	return fhu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableUpdatedBy(s *string) *FileHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableUpdatedByID(s *string) *FileHistoryUpdate {
 	if s != nil {
-		fhu.SetUpdatedBy(*s)
+		fhu.SetUpdatedByID(*s)
 	}
 	return fhu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fhu *FileHistoryUpdate) ClearUpdatedBy() *FileHistoryUpdate {
-	fhu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (fhu *FileHistoryUpdate) ClearUpdatedByID() *FileHistoryUpdate {
+	fhu.mutation.ClearUpdatedByID()
 	return fhu
 }
 
@@ -84,23 +84,23 @@ func (fhu *FileHistoryUpdate) ClearDeletedAt() *FileHistoryUpdate {
 	return fhu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (fhu *FileHistoryUpdate) SetDeletedBy(s string) *FileHistoryUpdate {
-	fhu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (fhu *FileHistoryUpdate) SetDeletedByID(s string) *FileHistoryUpdate {
+	fhu.mutation.SetDeletedByID(s)
 	return fhu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableDeletedBy(s *string) *FileHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableDeletedByID(s *string) *FileHistoryUpdate {
 	if s != nil {
-		fhu.SetDeletedBy(*s)
+		fhu.SetDeletedByID(*s)
 	}
 	return fhu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (fhu *FileHistoryUpdate) ClearDeletedBy() *FileHistoryUpdate {
-	fhu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (fhu *FileHistoryUpdate) ClearDeletedByID() *FileHistoryUpdate {
+	fhu.mutation.ClearDeletedByID()
 	return fhu
 }
 
@@ -455,6 +455,9 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fhu.mutation.RefCleared() {
 		_spec.ClearField(filehistory.FieldRef, field.TypeString)
 	}
+	if fhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if fhu.mutation.CreatedAtCleared() {
 		_spec.ClearField(filehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -464,14 +467,14 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fhu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(filehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if fhu.mutation.CreatedByCleared() {
-		_spec.ClearField(filehistory.FieldCreatedBy, field.TypeString)
+	if fhu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(filehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := fhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(filehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := fhu.mutation.UpdatedByID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if fhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(filehistory.FieldUpdatedBy, field.TypeString)
+	if fhu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := fhu.mutation.DeletedAt(); ok {
 		_spec.SetField(filehistory.FieldDeletedAt, field.TypeTime, value)
@@ -479,11 +482,11 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(filehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := fhu.mutation.DeletedBy(); ok {
-		_spec.SetField(filehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := fhu.mutation.DeletedByID(); ok {
+		_spec.SetField(filehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if fhu.mutation.DeletedByCleared() {
-		_spec.ClearField(filehistory.FieldDeletedBy, field.TypeString)
+	if fhu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(filehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := fhu.mutation.Tags(); ok {
 		_spec.SetField(filehistory.FieldTags, field.TypeJSON, value)
@@ -613,23 +616,23 @@ func (fhuo *FileHistoryUpdateOne) ClearUpdatedAt() *FileHistoryUpdateOne {
 	return fhuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fhuo *FileHistoryUpdateOne) SetUpdatedBy(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fhuo *FileHistoryUpdateOne) SetUpdatedByID(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetUpdatedByID(s)
 	return fhuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableUpdatedBy(s *string) *FileHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableUpdatedByID(s *string) *FileHistoryUpdateOne {
 	if s != nil {
-		fhuo.SetUpdatedBy(*s)
+		fhuo.SetUpdatedByID(*s)
 	}
 	return fhuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fhuo *FileHistoryUpdateOne) ClearUpdatedBy() *FileHistoryUpdateOne {
-	fhuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (fhuo *FileHistoryUpdateOne) ClearUpdatedByID() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearUpdatedByID()
 	return fhuo
 }
 
@@ -653,23 +656,23 @@ func (fhuo *FileHistoryUpdateOne) ClearDeletedAt() *FileHistoryUpdateOne {
 	return fhuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (fhuo *FileHistoryUpdateOne) SetDeletedBy(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (fhuo *FileHistoryUpdateOne) SetDeletedByID(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetDeletedByID(s)
 	return fhuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableDeletedBy(s *string) *FileHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableDeletedByID(s *string) *FileHistoryUpdateOne {
 	if s != nil {
-		fhuo.SetDeletedBy(*s)
+		fhuo.SetDeletedByID(*s)
 	}
 	return fhuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (fhuo *FileHistoryUpdateOne) ClearDeletedBy() *FileHistoryUpdateOne {
-	fhuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (fhuo *FileHistoryUpdateOne) ClearDeletedByID() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearDeletedByID()
 	return fhuo
 }
 
@@ -1054,6 +1057,9 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	if fhuo.mutation.RefCleared() {
 		_spec.ClearField(filehistory.FieldRef, field.TypeString)
 	}
+	if fhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if fhuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(filehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -1063,14 +1069,14 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	if fhuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(filehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if fhuo.mutation.CreatedByCleared() {
-		_spec.ClearField(filehistory.FieldCreatedBy, field.TypeString)
+	if fhuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(filehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := fhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(filehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := fhuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if fhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(filehistory.FieldUpdatedBy, field.TypeString)
+	if fhuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := fhuo.mutation.DeletedAt(); ok {
 		_spec.SetField(filehistory.FieldDeletedAt, field.TypeTime, value)
@@ -1078,11 +1084,11 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	if fhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(filehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := fhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(filehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := fhuo.mutation.DeletedByID(); ok {
+		_spec.SetField(filehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if fhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(filehistory.FieldDeletedBy, field.TypeString)
+	if fhuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(filehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := fhuo.mutation.Tags(); ok {
 		_spec.SetField(filehistory.FieldTags, field.TypeJSON, value)

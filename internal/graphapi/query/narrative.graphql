@@ -3,7 +3,7 @@ mutation CreateBulkCSVNarrative($input: Upload!) {
   createBulkCSVNarrative(input: $input) {
     narratives {
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -11,7 +11,7 @@ mutation CreateBulkCSVNarrative($input: Upload!) {
       satisfies
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -20,7 +20,7 @@ mutation CreateBulkNarrative($input: [CreateNarrativeInput!]) {
   createBulkNarrative(input: $input) {
     narratives {
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -28,7 +28,7 @@ mutation CreateBulkNarrative($input: [CreateNarrativeInput!]) {
       satisfies
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -37,7 +37,7 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
   createNarrative(input: $input) {
     narrative {
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -45,7 +45,7 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
       satisfies
       tags
       updatedAt
-      updatedBy
+      updatedByID
       programs {
         id
         name
@@ -77,7 +77,7 @@ query GetAllNarratives {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -85,7 +85,7 @@ query GetAllNarratives {
         satisfies
         tags
         updatedAt
-        updatedBy
+        updatedByID
         programs {
           id
           name
@@ -109,7 +109,7 @@ query GetAllNarratives {
 query GetNarrativeByID($narrativeId: ID!) {
   narrative(id: $narrativeId) {
     createdAt
-    createdBy
+    createdByID
     description
     details
     id
@@ -117,7 +117,7 @@ query GetNarrativeByID($narrativeId: ID!) {
     satisfies
     tags
     updatedAt
-    updatedBy
+    updatedByID
     programs {
       id
       name
@@ -142,7 +142,7 @@ query GetNarratives($where: NarrativeWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -150,7 +150,7 @@ query GetNarratives($where: NarrativeWhereInput) {
         satisfies
         tags
         updatedAt
-        updatedBy
+        updatedByID
         programs {
           id
           name
@@ -175,7 +175,7 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
   updateNarrative(id: $updateNarrativeId, input: $input) {
     narrative {
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -183,7 +183,7 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
       satisfies
       tags
       updatedAt
-      updatedBy
+      updatedByID
       programs {
         id
         name

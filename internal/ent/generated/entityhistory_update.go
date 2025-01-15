@@ -44,23 +44,23 @@ func (ehu *EntityHistoryUpdate) ClearUpdatedAt() *EntityHistoryUpdate {
 	return ehu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ehu *EntityHistoryUpdate) SetUpdatedBy(s string) *EntityHistoryUpdate {
-	ehu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ehu *EntityHistoryUpdate) SetUpdatedByID(s string) *EntityHistoryUpdate {
+	ehu.mutation.SetUpdatedByID(s)
 	return ehu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ehu *EntityHistoryUpdate) SetNillableUpdatedBy(s *string) *EntityHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ehu *EntityHistoryUpdate) SetNillableUpdatedByID(s *string) *EntityHistoryUpdate {
 	if s != nil {
-		ehu.SetUpdatedBy(*s)
+		ehu.SetUpdatedByID(*s)
 	}
 	return ehu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ehu *EntityHistoryUpdate) ClearUpdatedBy() *EntityHistoryUpdate {
-	ehu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ehu *EntityHistoryUpdate) ClearUpdatedByID() *EntityHistoryUpdate {
+	ehu.mutation.ClearUpdatedByID()
 	return ehu
 }
 
@@ -84,23 +84,23 @@ func (ehu *EntityHistoryUpdate) ClearDeletedAt() *EntityHistoryUpdate {
 	return ehu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ehu *EntityHistoryUpdate) SetDeletedBy(s string) *EntityHistoryUpdate {
-	ehu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ehu *EntityHistoryUpdate) SetDeletedByID(s string) *EntityHistoryUpdate {
+	ehu.mutation.SetDeletedByID(s)
 	return ehu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ehu *EntityHistoryUpdate) SetNillableDeletedBy(s *string) *EntityHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ehu *EntityHistoryUpdate) SetNillableDeletedByID(s *string) *EntityHistoryUpdate {
 	if s != nil {
-		ehu.SetDeletedBy(*s)
+		ehu.SetDeletedByID(*s)
 	}
 	return ehu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ehu *EntityHistoryUpdate) ClearDeletedBy() *EntityHistoryUpdate {
-	ehu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (ehu *EntityHistoryUpdate) ClearDeletedByID() *EntityHistoryUpdate {
+	ehu.mutation.ClearDeletedByID()
 	return ehu
 }
 
@@ -325,6 +325,9 @@ func (ehu *EntityHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if ehu.mutation.RefCleared() {
 		_spec.ClearField(entityhistory.FieldRef, field.TypeString)
 	}
+	if ehu.mutation.UpdatedByCleared() {
+		_spec.ClearField(entityhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ehu.mutation.CreatedAtCleared() {
 		_spec.ClearField(entityhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -334,14 +337,14 @@ func (ehu *EntityHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if ehu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entityhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ehu.mutation.CreatedByCleared() {
-		_spec.ClearField(entityhistory.FieldCreatedBy, field.TypeString)
+	if ehu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(entityhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ehu.mutation.UpdatedBy(); ok {
-		_spec.SetField(entityhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ehu.mutation.UpdatedByID(); ok {
+		_spec.SetField(entityhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ehu.mutation.UpdatedByCleared() {
-		_spec.ClearField(entityhistory.FieldUpdatedBy, field.TypeString)
+	if ehu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(entityhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ehu.mutation.DeletedAt(); ok {
 		_spec.SetField(entityhistory.FieldDeletedAt, field.TypeTime, value)
@@ -349,11 +352,11 @@ func (ehu *EntityHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if ehu.mutation.DeletedAtCleared() {
 		_spec.ClearField(entityhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ehu.mutation.DeletedBy(); ok {
-		_spec.SetField(entityhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := ehu.mutation.DeletedByID(); ok {
+		_spec.SetField(entityhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if ehu.mutation.DeletedByCleared() {
-		_spec.ClearField(entityhistory.FieldDeletedBy, field.TypeString)
+	if ehu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(entityhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ehu.mutation.Tags(); ok {
 		_spec.SetField(entityhistory.FieldTags, field.TypeJSON, value)
@@ -449,23 +452,23 @@ func (ehuo *EntityHistoryUpdateOne) ClearUpdatedAt() *EntityHistoryUpdateOne {
 	return ehuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ehuo *EntityHistoryUpdateOne) SetUpdatedBy(s string) *EntityHistoryUpdateOne {
-	ehuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ehuo *EntityHistoryUpdateOne) SetUpdatedByID(s string) *EntityHistoryUpdateOne {
+	ehuo.mutation.SetUpdatedByID(s)
 	return ehuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ehuo *EntityHistoryUpdateOne) SetNillableUpdatedBy(s *string) *EntityHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ehuo *EntityHistoryUpdateOne) SetNillableUpdatedByID(s *string) *EntityHistoryUpdateOne {
 	if s != nil {
-		ehuo.SetUpdatedBy(*s)
+		ehuo.SetUpdatedByID(*s)
 	}
 	return ehuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ehuo *EntityHistoryUpdateOne) ClearUpdatedBy() *EntityHistoryUpdateOne {
-	ehuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ehuo *EntityHistoryUpdateOne) ClearUpdatedByID() *EntityHistoryUpdateOne {
+	ehuo.mutation.ClearUpdatedByID()
 	return ehuo
 }
 
@@ -489,23 +492,23 @@ func (ehuo *EntityHistoryUpdateOne) ClearDeletedAt() *EntityHistoryUpdateOne {
 	return ehuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ehuo *EntityHistoryUpdateOne) SetDeletedBy(s string) *EntityHistoryUpdateOne {
-	ehuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ehuo *EntityHistoryUpdateOne) SetDeletedByID(s string) *EntityHistoryUpdateOne {
+	ehuo.mutation.SetDeletedByID(s)
 	return ehuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ehuo *EntityHistoryUpdateOne) SetNillableDeletedBy(s *string) *EntityHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ehuo *EntityHistoryUpdateOne) SetNillableDeletedByID(s *string) *EntityHistoryUpdateOne {
 	if s != nil {
-		ehuo.SetDeletedBy(*s)
+		ehuo.SetDeletedByID(*s)
 	}
 	return ehuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ehuo *EntityHistoryUpdateOne) ClearDeletedBy() *EntityHistoryUpdateOne {
-	ehuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (ehuo *EntityHistoryUpdateOne) ClearDeletedByID() *EntityHistoryUpdateOne {
+	ehuo.mutation.ClearDeletedByID()
 	return ehuo
 }
 
@@ -760,6 +763,9 @@ func (ehuo *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityH
 	if ehuo.mutation.RefCleared() {
 		_spec.ClearField(entityhistory.FieldRef, field.TypeString)
 	}
+	if ehuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(entityhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ehuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(entityhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -769,14 +775,14 @@ func (ehuo *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityH
 	if ehuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entityhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ehuo.mutation.CreatedByCleared() {
-		_spec.ClearField(entityhistory.FieldCreatedBy, field.TypeString)
+	if ehuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(entityhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(entityhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ehuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(entityhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ehuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(entityhistory.FieldUpdatedBy, field.TypeString)
+	if ehuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(entityhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ehuo.mutation.DeletedAt(); ok {
 		_spec.SetField(entityhistory.FieldDeletedAt, field.TypeTime, value)
@@ -784,11 +790,11 @@ func (ehuo *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityH
 	if ehuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(entityhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ehuo.mutation.DeletedBy(); ok {
-		_spec.SetField(entityhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := ehuo.mutation.DeletedByID(); ok {
+		_spec.SetField(entityhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if ehuo.mutation.DeletedByCleared() {
-		_spec.ClearField(entityhistory.FieldDeletedBy, field.TypeString)
+	if ehuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(entityhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ehuo.mutation.Tags(); ok {
 		_spec.SetField(entityhistory.FieldTags, field.TypeJSON, value)

@@ -81,8 +81,8 @@ query GetAllHushes {
         }
         createdAt
         updatedAt
-        createdBy
-        updatedBy
+        createdByID
+        updatedByID
       }
     }
   }
@@ -106,8 +106,8 @@ query GetHushByID($hushId: ID!) {
     }
     createdAt
     updatedAt
-    createdBy
-    updatedBy
+    createdByID
+    updatedByID
   }
 }
 
@@ -131,8 +131,8 @@ query GetHushes($where: HushWhereInput) {
         }
         createdAt
         updatedAt
-        createdBy
-        updatedBy
+        createdByID
+        updatedByID
       }
     }
   }

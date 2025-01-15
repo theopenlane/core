@@ -53,30 +53,30 @@ func (sc *StandardCreate) SetNillableUpdatedAt(t *time.Time) *StandardCreate {
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (sc *StandardCreate) SetCreatedBy(s string) *StandardCreate {
-	sc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (sc *StandardCreate) SetCreatedByID(s string) *StandardCreate {
+	sc.mutation.SetCreatedByID(s)
 	return sc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableCreatedBy(s *string) *StandardCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableCreatedByID(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetCreatedBy(*s)
+		sc.SetCreatedByID(*s)
 	}
 	return sc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (sc *StandardCreate) SetUpdatedBy(s string) *StandardCreate {
-	sc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (sc *StandardCreate) SetUpdatedByID(s string) *StandardCreate {
+	sc.mutation.SetUpdatedByID(s)
 	return sc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableUpdatedBy(s *string) *StandardCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableUpdatedByID(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetUpdatedBy(*s)
+		sc.SetUpdatedByID(*s)
 	}
 	return sc
 }
@@ -95,16 +95,16 @@ func (sc *StandardCreate) SetNillableDeletedAt(t *time.Time) *StandardCreate {
 	return sc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (sc *StandardCreate) SetDeletedBy(s string) *StandardCreate {
-	sc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (sc *StandardCreate) SetDeletedByID(s string) *StandardCreate {
+	sc.mutation.SetDeletedByID(s)
 	return sc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableDeletedBy(s *string) *StandardCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableDeletedByID(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetDeletedBy(*s)
+		sc.SetDeletedByID(*s)
 	}
 	return sc
 }
@@ -471,21 +471,21 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
-		_spec.SetField(standard.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := sc.mutation.CreatedByID(); ok {
+		_spec.SetField(standard.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
-		_spec.SetField(standard.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := sc.mutation.UpdatedByID(); ok {
+		_spec.SetField(standard.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := sc.mutation.DeletedAt(); ok {
 		_spec.SetField(standard.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
-		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := sc.mutation.DeletedByID(); ok {
+		_spec.SetField(standard.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := sc.mutation.MappingID(); ok {
 		_spec.SetField(standard.FieldMappingID, field.TypeString, value)

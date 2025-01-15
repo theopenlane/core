@@ -49,30 +49,30 @@ func (evtc *EmailVerificationTokenCreate) SetNillableUpdatedAt(t *time.Time) *Em
 	return evtc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (evtc *EmailVerificationTokenCreate) SetCreatedBy(s string) *EmailVerificationTokenCreate {
-	evtc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (evtc *EmailVerificationTokenCreate) SetCreatedByID(s string) *EmailVerificationTokenCreate {
+	evtc.mutation.SetCreatedByID(s)
 	return evtc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (evtc *EmailVerificationTokenCreate) SetNillableCreatedBy(s *string) *EmailVerificationTokenCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (evtc *EmailVerificationTokenCreate) SetNillableCreatedByID(s *string) *EmailVerificationTokenCreate {
 	if s != nil {
-		evtc.SetCreatedBy(*s)
+		evtc.SetCreatedByID(*s)
 	}
 	return evtc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (evtc *EmailVerificationTokenCreate) SetUpdatedBy(s string) *EmailVerificationTokenCreate {
-	evtc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (evtc *EmailVerificationTokenCreate) SetUpdatedByID(s string) *EmailVerificationTokenCreate {
+	evtc.mutation.SetUpdatedByID(s)
 	return evtc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (evtc *EmailVerificationTokenCreate) SetNillableUpdatedBy(s *string) *EmailVerificationTokenCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (evtc *EmailVerificationTokenCreate) SetNillableUpdatedByID(s *string) *EmailVerificationTokenCreate {
 	if s != nil {
-		evtc.SetUpdatedBy(*s)
+		evtc.SetUpdatedByID(*s)
 	}
 	return evtc
 }
@@ -105,16 +105,16 @@ func (evtc *EmailVerificationTokenCreate) SetNillableDeletedAt(t *time.Time) *Em
 	return evtc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (evtc *EmailVerificationTokenCreate) SetDeletedBy(s string) *EmailVerificationTokenCreate {
-	evtc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (evtc *EmailVerificationTokenCreate) SetDeletedByID(s string) *EmailVerificationTokenCreate {
+	evtc.mutation.SetDeletedByID(s)
 	return evtc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (evtc *EmailVerificationTokenCreate) SetNillableDeletedBy(s *string) *EmailVerificationTokenCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (evtc *EmailVerificationTokenCreate) SetNillableDeletedByID(s *string) *EmailVerificationTokenCreate {
 	if s != nil {
-		evtc.SetDeletedBy(*s)
+		evtc.SetDeletedByID(*s)
 	}
 	return evtc
 }
@@ -318,13 +318,13 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 		_spec.SetField(emailverificationtoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := evtc.mutation.CreatedBy(); ok {
-		_spec.SetField(emailverificationtoken.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := evtc.mutation.CreatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := evtc.mutation.UpdatedBy(); ok {
-		_spec.SetField(emailverificationtoken.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := evtc.mutation.UpdatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := evtc.mutation.MappingID(); ok {
 		_spec.SetField(emailverificationtoken.FieldMappingID, field.TypeString, value)
@@ -334,9 +334,9 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 		_spec.SetField(emailverificationtoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := evtc.mutation.DeletedBy(); ok {
-		_spec.SetField(emailverificationtoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := evtc.mutation.DeletedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := evtc.mutation.Token(); ok {
 		_spec.SetField(emailverificationtoken.FieldToken, field.TypeString, value)

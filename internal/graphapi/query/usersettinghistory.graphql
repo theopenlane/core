@@ -3,7 +3,7 @@ query GetAllUserSettingHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         emailConfirmed
         historyTime
         id
@@ -17,7 +17,7 @@ query GetAllUserSettingHistories {
         suspendedAt
         tags
         updatedAt
-        updatedBy
+        updatedByID
         userID
       }
     }
@@ -29,7 +29,7 @@ query GetUserSettingHistories($where: UserSettingHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         emailConfirmed
         historyTime
         id
@@ -43,7 +43,7 @@ query GetUserSettingHistories($where: UserSettingHistoryWhereInput) {
         suspendedAt
         tags
         updatedAt
-        updatedBy
+        updatedByID
         userID
       }
     }

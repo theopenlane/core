@@ -48,23 +48,23 @@ func (cu *ContactUpdate) ClearUpdatedAt() *ContactUpdate {
 	return cu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cu *ContactUpdate) SetUpdatedBy(s string) *ContactUpdate {
-	cu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cu *ContactUpdate) SetUpdatedByID(s string) *ContactUpdate {
+	cu.mutation.SetUpdatedByID(s)
 	return cu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableUpdatedBy(s *string) *ContactUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableUpdatedByID(s *string) *ContactUpdate {
 	if s != nil {
-		cu.SetUpdatedBy(*s)
+		cu.SetUpdatedByID(*s)
 	}
 	return cu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cu *ContactUpdate) ClearUpdatedBy() *ContactUpdate {
-	cu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cu *ContactUpdate) ClearUpdatedByID() *ContactUpdate {
+	cu.mutation.ClearUpdatedByID()
 	return cu
 }
 
@@ -88,23 +88,23 @@ func (cu *ContactUpdate) ClearDeletedAt() *ContactUpdate {
 	return cu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cu *ContactUpdate) SetDeletedBy(s string) *ContactUpdate {
-	cu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cu *ContactUpdate) SetDeletedByID(s string) *ContactUpdate {
+	cu.mutation.SetDeletedByID(s)
 	return cu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableDeletedBy(s *string) *ContactUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableDeletedByID(s *string) *ContactUpdate {
 	if s != nil {
-		cu.SetDeletedBy(*s)
+		cu.SetDeletedByID(*s)
 	}
 	return cu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cu *ContactUpdate) ClearDeletedBy() *ContactUpdate {
-	cu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (cu *ContactUpdate) ClearDeletedByID() *ContactUpdate {
+	cu.mutation.ClearDeletedByID()
 	return cu
 }
 
@@ -461,14 +461,14 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
-	if cu.mutation.CreatedByCleared() {
-		_spec.ClearField(contact.FieldCreatedBy, field.TypeString)
+	if cu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(contact.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := cu.mutation.UpdatedBy(); ok {
-		_spec.SetField(contact.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := cu.mutation.UpdatedByID(); ok {
+		_spec.SetField(contact.FieldUpdatedByID, field.TypeString, value)
 	}
-	if cu.mutation.UpdatedByCleared() {
-		_spec.ClearField(contact.FieldUpdatedBy, field.TypeString)
+	if cu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(contact.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := cu.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
@@ -476,11 +476,11 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.DeletedAtCleared() {
 		_spec.ClearField(contact.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cu.mutation.DeletedBy(); ok {
-		_spec.SetField(contact.FieldDeletedBy, field.TypeString, value)
+	if value, ok := cu.mutation.DeletedByID(); ok {
+		_spec.SetField(contact.FieldDeletedByID, field.TypeString, value)
 	}
-	if cu.mutation.DeletedByCleared() {
-		_spec.ClearField(contact.FieldDeletedBy, field.TypeString)
+	if cu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(contact.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cu.mutation.Tags(); ok {
 		_spec.SetField(contact.FieldTags, field.TypeJSON, value)
@@ -692,23 +692,23 @@ func (cuo *ContactUpdateOne) ClearUpdatedAt() *ContactUpdateOne {
 	return cuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cuo *ContactUpdateOne) SetUpdatedBy(s string) *ContactUpdateOne {
-	cuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cuo *ContactUpdateOne) SetUpdatedByID(s string) *ContactUpdateOne {
+	cuo.mutation.SetUpdatedByID(s)
 	return cuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableUpdatedBy(s *string) *ContactUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableUpdatedByID(s *string) *ContactUpdateOne {
 	if s != nil {
-		cuo.SetUpdatedBy(*s)
+		cuo.SetUpdatedByID(*s)
 	}
 	return cuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cuo *ContactUpdateOne) ClearUpdatedBy() *ContactUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cuo *ContactUpdateOne) ClearUpdatedByID() *ContactUpdateOne {
+	cuo.mutation.ClearUpdatedByID()
 	return cuo
 }
 
@@ -732,23 +732,23 @@ func (cuo *ContactUpdateOne) ClearDeletedAt() *ContactUpdateOne {
 	return cuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cuo *ContactUpdateOne) SetDeletedBy(s string) *ContactUpdateOne {
-	cuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cuo *ContactUpdateOne) SetDeletedByID(s string) *ContactUpdateOne {
+	cuo.mutation.SetDeletedByID(s)
 	return cuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableDeletedBy(s *string) *ContactUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableDeletedByID(s *string) *ContactUpdateOne {
 	if s != nil {
-		cuo.SetDeletedBy(*s)
+		cuo.SetDeletedByID(*s)
 	}
 	return cuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cuo *ContactUpdateOne) ClearDeletedBy() *ContactUpdateOne {
-	cuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (cuo *ContactUpdateOne) ClearDeletedByID() *ContactUpdateOne {
+	cuo.mutation.ClearDeletedByID()
 	return cuo
 }
 
@@ -1135,14 +1135,14 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 	if cuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
-	if cuo.mutation.CreatedByCleared() {
-		_spec.ClearField(contact.FieldCreatedBy, field.TypeString)
+	if cuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(contact.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := cuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(contact.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := cuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(contact.FieldUpdatedByID, field.TypeString, value)
 	}
-	if cuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(contact.FieldUpdatedBy, field.TypeString)
+	if cuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(contact.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := cuo.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
@@ -1150,11 +1150,11 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 	if cuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(contact.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cuo.mutation.DeletedBy(); ok {
-		_spec.SetField(contact.FieldDeletedBy, field.TypeString, value)
+	if value, ok := cuo.mutation.DeletedByID(); ok {
+		_spec.SetField(contact.FieldDeletedByID, field.TypeString, value)
 	}
-	if cuo.mutation.DeletedByCleared() {
-		_spec.ClearField(contact.FieldDeletedBy, field.TypeString)
+	if cuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(contact.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Tags(); ok {
 		_spec.SetField(contact.FieldTags, field.TypeJSON, value)

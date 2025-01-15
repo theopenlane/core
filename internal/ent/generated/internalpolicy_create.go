@@ -56,30 +56,30 @@ func (ipc *InternalPolicyCreate) SetNillableUpdatedAt(t *time.Time) *InternalPol
 	return ipc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ipc *InternalPolicyCreate) SetCreatedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ipc *InternalPolicyCreate) SetCreatedByID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetCreatedByID(s)
 	return ipc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableCreatedBy(s *string) *InternalPolicyCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableCreatedByID(s *string) *InternalPolicyCreate {
 	if s != nil {
-		ipc.SetCreatedBy(*s)
+		ipc.SetCreatedByID(*s)
 	}
 	return ipc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ipc *InternalPolicyCreate) SetUpdatedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ipc *InternalPolicyCreate) SetUpdatedByID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetUpdatedByID(s)
 	return ipc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableUpdatedBy(s *string) *InternalPolicyCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableUpdatedByID(s *string) *InternalPolicyCreate {
 	if s != nil {
-		ipc.SetUpdatedBy(*s)
+		ipc.SetUpdatedByID(*s)
 	}
 	return ipc
 }
@@ -98,16 +98,16 @@ func (ipc *InternalPolicyCreate) SetNillableDeletedAt(t *time.Time) *InternalPol
 	return ipc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ipc *InternalPolicyCreate) SetDeletedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ipc *InternalPolicyCreate) SetDeletedByID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetDeletedByID(s)
 	return ipc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDeletedBy(s *string) *InternalPolicyCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableDeletedByID(s *string) *InternalPolicyCreate {
 	if s != nil {
-		ipc.SetDeletedBy(*s)
+		ipc.SetDeletedByID(*s)
 	}
 	return ipc
 }
@@ -515,21 +515,21 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ipc.mutation.CreatedBy(); ok {
-		_spec.SetField(internalpolicy.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ipc.mutation.CreatedByID(); ok {
+		_spec.SetField(internalpolicy.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ipc.mutation.UpdatedBy(); ok {
-		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ipc.mutation.UpdatedByID(); ok {
+		_spec.SetField(internalpolicy.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ipc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ipc.mutation.DeletedBy(); ok {
-		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ipc.mutation.DeletedByID(); ok {
+		_spec.SetField(internalpolicy.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ipc.mutation.MappingID(); ok {
 		_spec.SetField(internalpolicy.FieldMappingID, field.TypeString, value)

@@ -3,7 +3,7 @@ mutation CreateBulkCSVRisk($input: Upload!) {
     risks {
       businessCosts
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -16,7 +16,7 @@ mutation CreateBulkCSVRisk($input: Upload!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -26,7 +26,7 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
     risks {
       businessCosts
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -39,7 +39,7 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -49,7 +49,7 @@ mutation CreateRisk($input: CreateRiskInput!) {
     risk {
       businessCosts
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -62,7 +62,7 @@ mutation CreateRisk($input: CreateRiskInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       programs {
         id
         name
@@ -95,7 +95,7 @@ query GetAllRisks {
       node {
         businessCosts
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -108,7 +108,7 @@ query GetAllRisks {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         programs {
           id
           name
@@ -134,7 +134,7 @@ query GetRiskByID($riskId: ID!) {
   risk(id: $riskId) {
     businessCosts
     createdAt
-    createdBy
+    createdByID
     description
     details
     id
@@ -147,7 +147,7 @@ query GetRiskByID($riskId: ID!) {
     status
     tags
     updatedAt
-    updatedBy
+    updatedByID
     programs {
       id
       name
@@ -173,7 +173,7 @@ query GetRisks($where: RiskWhereInput) {
       node {
         businessCosts
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -186,7 +186,7 @@ query GetRisks($where: RiskWhereInput) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         programs {
           id
           name
@@ -213,7 +213,7 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
     risk {
       businessCosts
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -226,7 +226,7 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       programs {
         id
         name

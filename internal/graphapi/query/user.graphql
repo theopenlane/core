@@ -27,7 +27,7 @@ mutation CreateUser($input: CreateUserInput!, $avatarFile: Upload) {
           personalOrg
         }
         createdAt
-        createdBy
+        createdByID
         emailConfirmed
         locked
         silencedAt
@@ -35,7 +35,7 @@ mutation CreateUser($input: CreateUserInput!, $avatarFile: Upload) {
         suspendedAt
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -70,7 +70,7 @@ query GetAllUsers {
             personalOrg
           }
           createdAt
-          createdBy
+          createdByID
           emailConfirmed
           locked
           silencedAt
@@ -78,12 +78,12 @@ query GetAllUsers {
           suspendedAt
           tags
           updatedAt
-          updatedBy
+          updatedByID
         }
         createdAt
-        createdBy
+        createdByID
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -110,7 +110,7 @@ query GetUserByID($userId: ID!) {
         personalOrg
       }
       createdAt
-      createdBy
+      createdByID
       emailConfirmed
       locked
       silencedAt
@@ -118,7 +118,7 @@ query GetUserByID($userId: ID!) {
       suspendedAt
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
     organizations {
       id
@@ -130,9 +130,9 @@ query GetUserByID($userId: ID!) {
       }
     }
     updatedAt
-    updatedBy
+    updatedByID
     createdAt
-    createdBy
+    createdByID
   }
 }
 
@@ -157,7 +157,7 @@ query GetUserByIDWithOrgs($userId: ID!) {
         personalOrg
       }
       createdAt
-      createdBy
+      createdByID
       emailConfirmed
       locked
       silencedAt
@@ -165,7 +165,7 @@ query GetUserByIDWithOrgs($userId: ID!) {
       suspendedAt
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
     orgMemberships {
       id
@@ -176,9 +176,9 @@ query GetUserByIDWithOrgs($userId: ID!) {
       }
     }
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -209,7 +209,7 @@ mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: U
           personalOrg
         }
         createdAt
-        createdBy
+        createdByID
         emailConfirmed
         locked
         silencedAt
@@ -217,7 +217,7 @@ mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: U
         suspendedAt
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

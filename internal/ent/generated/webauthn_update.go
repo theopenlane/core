@@ -45,23 +45,23 @@ func (wu *WebauthnUpdate) ClearUpdatedAt() *WebauthnUpdate {
 	return wu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (wu *WebauthnUpdate) SetUpdatedBy(s string) *WebauthnUpdate {
-	wu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (wu *WebauthnUpdate) SetUpdatedByID(s string) *WebauthnUpdate {
+	wu.mutation.SetUpdatedByID(s)
 	return wu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableUpdatedBy(s *string) *WebauthnUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (wu *WebauthnUpdate) SetNillableUpdatedByID(s *string) *WebauthnUpdate {
 	if s != nil {
-		wu.SetUpdatedBy(*s)
+		wu.SetUpdatedByID(*s)
 	}
 	return wu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (wu *WebauthnUpdate) ClearUpdatedBy() *WebauthnUpdate {
-	wu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (wu *WebauthnUpdate) ClearUpdatedByID() *WebauthnUpdate {
+	wu.mutation.ClearUpdatedByID()
 	return wu
 }
 
@@ -309,14 +309,14 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if wu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedAt, field.TypeTime)
 	}
-	if wu.mutation.CreatedByCleared() {
-		_spec.ClearField(webauthn.FieldCreatedBy, field.TypeString)
+	if wu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(webauthn.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := wu.mutation.UpdatedBy(); ok {
-		_spec.SetField(webauthn.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := wu.mutation.UpdatedByID(); ok {
+		_spec.SetField(webauthn.FieldUpdatedByID, field.TypeString, value)
 	}
-	if wu.mutation.UpdatedByCleared() {
-		_spec.ClearField(webauthn.FieldUpdatedBy, field.TypeString)
+	if wu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(webauthn.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := wu.mutation.Tags(); ok {
 		_spec.SetField(webauthn.FieldTags, field.TypeJSON, value)
@@ -437,23 +437,23 @@ func (wuo *WebauthnUpdateOne) ClearUpdatedAt() *WebauthnUpdateOne {
 	return wuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (wuo *WebauthnUpdateOne) SetUpdatedBy(s string) *WebauthnUpdateOne {
-	wuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (wuo *WebauthnUpdateOne) SetUpdatedByID(s string) *WebauthnUpdateOne {
+	wuo.mutation.SetUpdatedByID(s)
 	return wuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableUpdatedBy(s *string) *WebauthnUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (wuo *WebauthnUpdateOne) SetNillableUpdatedByID(s *string) *WebauthnUpdateOne {
 	if s != nil {
-		wuo.SetUpdatedBy(*s)
+		wuo.SetUpdatedByID(*s)
 	}
 	return wuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (wuo *WebauthnUpdateOne) ClearUpdatedBy() *WebauthnUpdateOne {
-	wuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (wuo *WebauthnUpdateOne) ClearUpdatedByID() *WebauthnUpdateOne {
+	wuo.mutation.ClearUpdatedByID()
 	return wuo
 }
 
@@ -731,14 +731,14 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 	if wuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedAt, field.TypeTime)
 	}
-	if wuo.mutation.CreatedByCleared() {
-		_spec.ClearField(webauthn.FieldCreatedBy, field.TypeString)
+	if wuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(webauthn.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := wuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(webauthn.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := wuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(webauthn.FieldUpdatedByID, field.TypeString, value)
 	}
-	if wuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(webauthn.FieldUpdatedBy, field.TypeString)
+	if wuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(webauthn.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := wuo.mutation.Tags(); ok {
 		_spec.SetField(webauthn.FieldTags, field.TypeJSON, value)

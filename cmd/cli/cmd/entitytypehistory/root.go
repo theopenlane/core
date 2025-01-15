@@ -81,7 +81,7 @@ func tableOutput(out []openlaneclient.EntityTypeHistory) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Ref", "Operation", "UpdatedAt", "UpdatedBy")
 	for _, i := range out {
-		writer.AddRow(i.ID, *i.Ref, i.Operation, *i.UpdatedAt, *i.UpdatedBy)
+		writer.AddRow(i.ID, *i.Ref, i.Operation, *i.UpdatedAt, *i.UpdatedByID)
 	}
 
 	writer.Render()

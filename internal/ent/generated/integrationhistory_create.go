@@ -55,6 +55,20 @@ func (ihc *IntegrationHistoryCreate) SetOperation(ht history.OpType) *Integratio
 	return ihc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (ihc *IntegrationHistoryCreate) SetUpdatedBy(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetUpdatedBy(s)
+	return ihc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableUpdatedBy(s *string) *IntegrationHistoryCreate {
+	if s != nil {
+		ihc.SetUpdatedBy(*s)
+	}
+	return ihc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (ihc *IntegrationHistoryCreate) SetCreatedAt(t time.Time) *IntegrationHistoryCreate {
 	ihc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (ihc *IntegrationHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Integra
 	return ihc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ihc *IntegrationHistoryCreate) SetCreatedBy(s string) *IntegrationHistoryCreate {
-	ihc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ihc *IntegrationHistoryCreate) SetCreatedByID(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetCreatedByID(s)
 	return ihc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ihc *IntegrationHistoryCreate) SetNillableCreatedBy(s *string) *IntegrationHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableCreatedByID(s *string) *IntegrationHistoryCreate {
 	if s != nil {
-		ihc.SetCreatedBy(*s)
+		ihc.SetCreatedByID(*s)
 	}
 	return ihc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ihc *IntegrationHistoryCreate) SetUpdatedBy(s string) *IntegrationHistoryCreate {
-	ihc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ihc *IntegrationHistoryCreate) SetUpdatedByID(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetUpdatedByID(s)
 	return ihc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ihc *IntegrationHistoryCreate) SetNillableUpdatedBy(s *string) *IntegrationHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableUpdatedByID(s *string) *IntegrationHistoryCreate {
 	if s != nil {
-		ihc.SetUpdatedBy(*s)
+		ihc.SetUpdatedByID(*s)
 	}
 	return ihc
 }
@@ -145,16 +159,16 @@ func (ihc *IntegrationHistoryCreate) SetNillableDeletedAt(t *time.Time) *Integra
 	return ihc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ihc *IntegrationHistoryCreate) SetDeletedBy(s string) *IntegrationHistoryCreate {
-	ihc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ihc *IntegrationHistoryCreate) SetDeletedByID(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetDeletedByID(s)
 	return ihc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ihc *IntegrationHistoryCreate) SetNillableDeletedBy(s *string) *IntegrationHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableDeletedByID(s *string) *IntegrationHistoryCreate {
 	if s != nil {
-		ihc.SetDeletedBy(*s)
+		ihc.SetDeletedByID(*s)
 	}
 	return ihc
 }
@@ -367,6 +381,10 @@ func (ihc *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgrap
 		_spec.SetField(integrationhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := ihc.mutation.UpdatedBy(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := ihc.mutation.CreatedAt(); ok {
 		_spec.SetField(integrationhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -375,13 +393,13 @@ func (ihc *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgrap
 		_spec.SetField(integrationhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ihc.mutation.CreatedBy(); ok {
-		_spec.SetField(integrationhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ihc.mutation.CreatedByID(); ok {
+		_spec.SetField(integrationhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ihc.mutation.UpdatedBy(); ok {
-		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ihc.mutation.UpdatedByID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ihc.mutation.MappingID(); ok {
 		_spec.SetField(integrationhistory.FieldMappingID, field.TypeString, value)
@@ -395,9 +413,9 @@ func (ihc *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgrap
 		_spec.SetField(integrationhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ihc.mutation.DeletedBy(); ok {
-		_spec.SetField(integrationhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ihc.mutation.DeletedByID(); ok {
+		_spec.SetField(integrationhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ihc.mutation.OwnerID(); ok {
 		_spec.SetField(integrationhistory.FieldOwnerID, field.TypeString, value)

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // DocumentData is the model entity for the DocumentData schema.
@@ -25,18 +26,18 @@ type DocumentData struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the template id of the document
@@ -47,6 +48,11 @@ type DocumentData struct {
 	// The values are being populated by the DocumentDataQuery when eager-loading is set.
 	Edges        DocumentDataEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // DocumentDataEdges holds the relations/edges for other nodes in the graph.
@@ -116,7 +122,7 @@ func (*DocumentData) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case documentdata.FieldTags, documentdata.FieldData:
 			values[i] = new([]byte)
-		case documentdata.FieldID, documentdata.FieldCreatedBy, documentdata.FieldUpdatedBy, documentdata.FieldMappingID, documentdata.FieldDeletedBy, documentdata.FieldOwnerID, documentdata.FieldTemplateID:
+		case documentdata.FieldID, documentdata.FieldCreatedByID, documentdata.FieldUpdatedByID, documentdata.FieldMappingID, documentdata.FieldDeletedByID, documentdata.FieldOwnerID, documentdata.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdata.FieldCreatedAt, documentdata.FieldUpdatedAt, documentdata.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -153,17 +159,17 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				dd.UpdatedAt = value.Time
 			}
-		case documentdata.FieldCreatedBy:
+		case documentdata.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				dd.CreatedBy = value.String
+				dd.CreatedByID = value.String
 			}
-		case documentdata.FieldUpdatedBy:
+		case documentdata.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				dd.UpdatedBy = value.String
+				dd.UpdatedByID = value.String
 			}
 		case documentdata.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -185,11 +191,11 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				dd.DeletedAt = value.Time
 			}
-		case documentdata.FieldDeletedBy:
+		case documentdata.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				dd.DeletedBy = value.String
+				dd.DeletedByID = value.String
 			}
 		case documentdata.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -273,11 +279,11 @@ func (dd *DocumentData) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(dd.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(dd.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(dd.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(dd.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(dd.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(dd.MappingID)
@@ -288,8 +294,8 @@ func (dd *DocumentData) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(dd.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(dd.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(dd.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(dd.OwnerID)

@@ -3,7 +3,7 @@ query GetAllEntityTypeHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         historyTime
         id
         name
@@ -12,7 +12,7 @@ query GetAllEntityTypeHistories {
         ref
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -23,7 +23,7 @@ query GetEntityTypeHistories($where: EntityTypeHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         historyTime
         id
         name
@@ -32,7 +32,7 @@ query GetEntityTypeHistories($where: EntityTypeHistoryWhereInput) {
         ref
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

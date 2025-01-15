@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrgMembership is the model entity for the OrgMembership schema.
@@ -24,16 +25,16 @@ type OrgMembership struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// OrganizationID holds the value of the "organization_id" field.
@@ -44,6 +45,11 @@ type OrgMembership struct {
 	// The values are being populated by the OrgMembershipQuery when eager-loading is set.
 	Edges        OrgMembershipEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // OrgMembershipEdges holds the relations/edges for other nodes in the graph.
@@ -99,7 +105,7 @@ func (*OrgMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orgmembership.FieldID, orgmembership.FieldCreatedBy, orgmembership.FieldUpdatedBy, orgmembership.FieldMappingID, orgmembership.FieldDeletedBy, orgmembership.FieldRole, orgmembership.FieldOrganizationID, orgmembership.FieldUserID:
+		case orgmembership.FieldID, orgmembership.FieldCreatedByID, orgmembership.FieldUpdatedByID, orgmembership.FieldMappingID, orgmembership.FieldDeletedByID, orgmembership.FieldRole, orgmembership.FieldOrganizationID, orgmembership.FieldUserID:
 			values[i] = new(sql.NullString)
 		case orgmembership.FieldCreatedAt, orgmembership.FieldUpdatedAt, orgmembership.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -136,17 +142,17 @@ func (om *OrgMembership) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				om.UpdatedAt = value.Time
 			}
-		case orgmembership.FieldCreatedBy:
+		case orgmembership.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				om.CreatedBy = value.String
+				om.CreatedByID = value.String
 			}
-		case orgmembership.FieldUpdatedBy:
+		case orgmembership.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				om.UpdatedBy = value.String
+				om.UpdatedByID = value.String
 			}
 		case orgmembership.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -160,11 +166,11 @@ func (om *OrgMembership) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				om.DeletedAt = value.Time
 			}
-		case orgmembership.FieldDeletedBy:
+		case orgmembership.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				om.DeletedBy = value.String
+				om.DeletedByID = value.String
 			}
 		case orgmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -241,11 +247,11 @@ func (om *OrgMembership) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(om.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(om.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(om.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(om.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(om.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(om.MappingID)
@@ -253,8 +259,8 @@ func (om *OrgMembership) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(om.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(om.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(om.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", om.Role))

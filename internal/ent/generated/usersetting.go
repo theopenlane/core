@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // UserSetting is the model entity for the UserSetting schema.
@@ -25,18 +26,18 @@ type UserSetting struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
@@ -60,6 +61,11 @@ type UserSetting struct {
 	Edges                    UserSettingEdges `json:"edges"`
 	user_setting_default_org *string
 	selectValues             sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // UserSettingEdges holds the relations/edges for other nodes in the graph.
@@ -119,7 +125,7 @@ func (*UserSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case usersetting.FieldLocked, usersetting.FieldEmailConfirmed, usersetting.FieldIsWebauthnAllowed, usersetting.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
-		case usersetting.FieldID, usersetting.FieldCreatedBy, usersetting.FieldUpdatedBy, usersetting.FieldMappingID, usersetting.FieldDeletedBy, usersetting.FieldUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
+		case usersetting.FieldID, usersetting.FieldCreatedByID, usersetting.FieldUpdatedByID, usersetting.FieldMappingID, usersetting.FieldDeletedByID, usersetting.FieldUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case usersetting.FieldCreatedAt, usersetting.FieldUpdatedAt, usersetting.FieldDeletedAt, usersetting.FieldSilencedAt, usersetting.FieldSuspendedAt:
 			values[i] = new(sql.NullTime)
@@ -158,17 +164,17 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				us.UpdatedAt = value.Time
 			}
-		case usersetting.FieldCreatedBy:
+		case usersetting.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				us.CreatedBy = value.String
+				us.CreatedByID = value.String
 			}
-		case usersetting.FieldUpdatedBy:
+		case usersetting.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				us.UpdatedBy = value.String
+				us.UpdatedByID = value.String
 			}
 		case usersetting.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -190,11 +196,11 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				us.DeletedAt = value.Time
 			}
-		case usersetting.FieldDeletedBy:
+		case usersetting.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				us.DeletedBy = value.String
+				us.DeletedByID = value.String
 			}
 		case usersetting.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -317,11 +323,11 @@ func (us *UserSetting) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(us.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(us.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(us.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(us.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(us.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(us.MappingID)
@@ -332,8 +338,8 @@ func (us *UserSetting) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(us.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(us.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(us.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(us.UserID)

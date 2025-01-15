@@ -17,8 +17,8 @@ func isDeleteOp(ctx context.Context, m ent.Mutation) bool {
 	return entx.CheckIsSoftDelete(ctx) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
 }
 
-// transactionFromContext returns the transaction from the context if it exists
-func transactionFromContext(ctx context.Context) *generated.Tx {
+// TransactionFromContext returns the transaction from the context if it exists
+func TransactionFromContext(ctx context.Context) *generated.Tx {
 	// check if the transaction is in the context
 	// this is returned from all graphql requests
 	tx := generated.TxFromContext(ctx)

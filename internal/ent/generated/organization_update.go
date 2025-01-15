@@ -72,23 +72,23 @@ func (ou *OrganizationUpdate) ClearUpdatedAt() *OrganizationUpdate {
 	return ou
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ou *OrganizationUpdate) SetUpdatedBy(s string) *OrganizationUpdate {
-	ou.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ou *OrganizationUpdate) SetUpdatedByID(s string) *OrganizationUpdate {
+	ou.mutation.SetUpdatedByID(s)
 	return ou
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableUpdatedBy(s *string) *OrganizationUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableUpdatedByID(s *string) *OrganizationUpdate {
 	if s != nil {
-		ou.SetUpdatedBy(*s)
+		ou.SetUpdatedByID(*s)
 	}
 	return ou
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
-	ou.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ou *OrganizationUpdate) ClearUpdatedByID() *OrganizationUpdate {
+	ou.mutation.ClearUpdatedByID()
 	return ou
 }
 
@@ -130,23 +130,23 @@ func (ou *OrganizationUpdate) ClearDeletedAt() *OrganizationUpdate {
 	return ou
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ou *OrganizationUpdate) SetDeletedBy(s string) *OrganizationUpdate {
-	ou.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ou *OrganizationUpdate) SetDeletedByID(s string) *OrganizationUpdate {
+	ou.mutation.SetDeletedByID(s)
 	return ou
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableDeletedBy(s *string) *OrganizationUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableDeletedByID(s *string) *OrganizationUpdate {
 	if s != nil {
-		ou.SetDeletedBy(*s)
+		ou.SetDeletedByID(*s)
 	}
 	return ou
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ou *OrganizationUpdate) ClearDeletedBy() *OrganizationUpdate {
-	ou.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (ou *OrganizationUpdate) ClearDeletedByID() *OrganizationUpdate {
+	ou.mutation.ClearDeletedByID()
 	return ou
 }
 
@@ -1683,14 +1683,14 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organization.FieldUpdatedAt, field.TypeTime)
 	}
-	if ou.mutation.CreatedByCleared() {
-		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	if ou.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organization.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ou.mutation.UpdatedBy(); ok {
-		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ou.mutation.UpdatedByID(); ok {
+		_spec.SetField(organization.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ou.mutation.UpdatedByCleared() {
-		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	if ou.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organization.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ou.mutation.Tags(); ok {
 		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
@@ -1709,11 +1709,11 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.DeletedAtCleared() {
 		_spec.ClearField(organization.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ou.mutation.DeletedBy(); ok {
-		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
+	if value, ok := ou.mutation.DeletedByID(); ok {
+		_spec.SetField(organization.FieldDeletedByID, field.TypeString, value)
 	}
-	if ou.mutation.DeletedByCleared() {
-		_spec.ClearField(organization.FieldDeletedBy, field.TypeString)
+	if ou.mutation.DeletedByIDCleared() {
+		_spec.ClearField(organization.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ou.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
@@ -3603,23 +3603,23 @@ func (ouo *OrganizationUpdateOne) ClearUpdatedAt() *OrganizationUpdateOne {
 	return ouo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ouo *OrganizationUpdateOne) SetUpdatedBy(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ouo *OrganizationUpdateOne) SetUpdatedByID(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetUpdatedByID(s)
 	return ouo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableUpdatedByID(s *string) *OrganizationUpdateOne {
 	if s != nil {
-		ouo.SetUpdatedBy(*s)
+		ouo.SetUpdatedByID(*s)
 	}
 	return ouo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
-	ouo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ouo *OrganizationUpdateOne) ClearUpdatedByID() *OrganizationUpdateOne {
+	ouo.mutation.ClearUpdatedByID()
 	return ouo
 }
 
@@ -3661,23 +3661,23 @@ func (ouo *OrganizationUpdateOne) ClearDeletedAt() *OrganizationUpdateOne {
 	return ouo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ouo *OrganizationUpdateOne) SetDeletedBy(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ouo *OrganizationUpdateOne) SetDeletedByID(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetDeletedByID(s)
 	return ouo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableDeletedBy(s *string) *OrganizationUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableDeletedByID(s *string) *OrganizationUpdateOne {
 	if s != nil {
-		ouo.SetDeletedBy(*s)
+		ouo.SetDeletedByID(*s)
 	}
 	return ouo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ouo *OrganizationUpdateOne) ClearDeletedBy() *OrganizationUpdateOne {
-	ouo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (ouo *OrganizationUpdateOne) ClearDeletedByID() *OrganizationUpdateOne {
+	ouo.mutation.ClearDeletedByID()
 	return ouo
 }
 
@@ -5244,14 +5244,14 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if ouo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organization.FieldUpdatedAt, field.TypeTime)
 	}
-	if ouo.mutation.CreatedByCleared() {
-		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	if ouo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organization.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ouo.mutation.UpdatedBy(); ok {
-		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ouo.mutation.UpdatedByID(); ok {
+		_spec.SetField(organization.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ouo.mutation.UpdatedByCleared() {
-		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	if ouo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organization.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ouo.mutation.Tags(); ok {
 		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
@@ -5270,11 +5270,11 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if ouo.mutation.DeletedAtCleared() {
 		_spec.ClearField(organization.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ouo.mutation.DeletedBy(); ok {
-		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
+	if value, ok := ouo.mutation.DeletedByID(); ok {
+		_spec.SetField(organization.FieldDeletedByID, field.TypeString, value)
 	}
-	if ouo.mutation.DeletedByCleared() {
-		_spec.ClearField(organization.FieldDeletedBy, field.TypeString)
+	if ouo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(organization.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ouo.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)

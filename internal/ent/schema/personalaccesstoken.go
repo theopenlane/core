@@ -84,7 +84,7 @@ func (PersonalAccessToken) Indexes() []ent.Index {
 // Mixin of the PersonalAccessToken
 func (PersonalAccessToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
@@ -103,7 +103,7 @@ func (PersonalAccessToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		history.Annotations{
 			Exclude: true,
 		},

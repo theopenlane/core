@@ -66,7 +66,7 @@ func (TFASetting) Fields() []ent.Field {
 // Mixin of the TFASetting
 func (TFASetting) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
@@ -91,7 +91,7 @@ func (TFASetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		history.Annotations{
 			Exclude: true,
 		},

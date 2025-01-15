@@ -44,23 +44,23 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearUpdatedAt() *ControlObjectiveHis
 	return cohu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetUpdatedBy(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetUpdatedByID(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetUpdatedByID(s)
 	return cohu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableUpdatedBy(s *string) *ControlObjectiveHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableUpdatedByID(s *string) *ControlObjectiveHistoryUpdate {
 	if s != nil {
-		cohu.SetUpdatedBy(*s)
+		cohu.SetUpdatedByID(*s)
 	}
 	return cohu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearUpdatedBy() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearUpdatedByID() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearUpdatedByID()
 	return cohu
 }
 
@@ -84,23 +84,23 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearDeletedAt() *ControlObjectiveHis
 	return cohu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetDeletedBy(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetDeletedByID(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetDeletedByID(s)
 	return cohu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableDeletedBy(s *string) *ControlObjectiveHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableDeletedByID(s *string) *ControlObjectiveHistoryUpdate {
 	if s != nil {
-		cohu.SetDeletedBy(*s)
+		cohu.SetDeletedByID(*s)
 	}
 	return cohu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearDeletedBy() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearDeletedByID() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearDeletedByID()
 	return cohu
 }
 
@@ -407,6 +407,9 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.RefCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldRef, field.TypeString)
 	}
+	if cohu.mutation.UpdatedByCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if cohu.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -416,14 +419,14 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if cohu.mutation.CreatedByCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldCreatedBy, field.TypeString)
+	if cohu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := cohu.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlobjectivehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := cohu.mutation.UpdatedByID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if cohu.mutation.UpdatedByCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldUpdatedBy, field.TypeString)
+	if cohu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := cohu.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjectivehistory.FieldDeletedAt, field.TypeTime, value)
@@ -431,11 +434,11 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cohu.mutation.DeletedBy(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := cohu.mutation.DeletedByID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if cohu.mutation.DeletedByCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldDeletedBy, field.TypeString)
+	if cohu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cohu.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)
@@ -550,23 +553,23 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearUpdatedAt() *ControlObjectiv
 	return cohuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetUpdatedBy(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetUpdatedByID(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetUpdatedByID(s)
 	return cohuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ControlObjectiveHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableUpdatedByID(s *string) *ControlObjectiveHistoryUpdateOne {
 	if s != nil {
-		cohuo.SetUpdatedBy(*s)
+		cohuo.SetUpdatedByID(*s)
 	}
 	return cohuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearUpdatedBy() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearUpdatedByID() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearUpdatedByID()
 	return cohuo
 }
 
@@ -590,23 +593,23 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDeletedAt() *ControlObjectiv
 	return cohuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetDeletedBy(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetDeletedByID(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetDeletedByID(s)
 	return cohuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableDeletedBy(s *string) *ControlObjectiveHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableDeletedByID(s *string) *ControlObjectiveHistoryUpdateOne {
 	if s != nil {
-		cohuo.SetDeletedBy(*s)
+		cohuo.SetDeletedByID(*s)
 	}
 	return cohuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDeletedBy() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDeletedByID() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearDeletedByID()
 	return cohuo
 }
 
@@ -943,6 +946,9 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.RefCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldRef, field.TypeString)
 	}
+	if cohuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if cohuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -952,14 +958,14 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if cohuo.mutation.CreatedByCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldCreatedBy, field.TypeString)
+	if cohuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlobjectivehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := cohuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if cohuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldUpdatedBy, field.TypeString)
+	if cohuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := cohuo.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjectivehistory.FieldDeletedAt, field.TypeTime, value)
@@ -967,11 +973,11 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cohuo.mutation.DeletedBy(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := cohuo.mutation.DeletedByID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if cohuo.mutation.DeletedByCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldDeletedBy, field.TypeString)
+	if cohuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cohuo.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)

@@ -48,23 +48,23 @@ func (nu *NoteUpdate) ClearUpdatedAt() *NoteUpdate {
 	return nu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nu *NoteUpdate) SetUpdatedBy(s string) *NoteUpdate {
-	nu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nu *NoteUpdate) SetUpdatedByID(s string) *NoteUpdate {
+	nu.mutation.SetUpdatedByID(s)
 	return nu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableUpdatedBy(s *string) *NoteUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nu *NoteUpdate) SetNillableUpdatedByID(s *string) *NoteUpdate {
 	if s != nil {
-		nu.SetUpdatedBy(*s)
+		nu.SetUpdatedByID(*s)
 	}
 	return nu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nu *NoteUpdate) ClearUpdatedBy() *NoteUpdate {
-	nu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nu *NoteUpdate) ClearUpdatedByID() *NoteUpdate {
+	nu.mutation.ClearUpdatedByID()
 	return nu
 }
 
@@ -88,23 +88,23 @@ func (nu *NoteUpdate) ClearDeletedAt() *NoteUpdate {
 	return nu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (nu *NoteUpdate) SetDeletedBy(s string) *NoteUpdate {
-	nu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (nu *NoteUpdate) SetDeletedByID(s string) *NoteUpdate {
+	nu.mutation.SetDeletedByID(s)
 	return nu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableDeletedBy(s *string) *NoteUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (nu *NoteUpdate) SetNillableDeletedByID(s *string) *NoteUpdate {
 	if s != nil {
-		nu.SetDeletedBy(*s)
+		nu.SetDeletedByID(*s)
 	}
 	return nu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nu *NoteUpdate) ClearDeletedBy() *NoteUpdate {
-	nu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (nu *NoteUpdate) ClearDeletedByID() *NoteUpdate {
+	nu.mutation.ClearDeletedByID()
 	return nu
 }
 
@@ -357,14 +357,14 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(note.FieldUpdatedAt, field.TypeTime)
 	}
-	if nu.mutation.CreatedByCleared() {
-		_spec.ClearField(note.FieldCreatedBy, field.TypeString)
+	if nu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(note.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := nu.mutation.UpdatedBy(); ok {
-		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := nu.mutation.UpdatedByID(); ok {
+		_spec.SetField(note.FieldUpdatedByID, field.TypeString, value)
 	}
-	if nu.mutation.UpdatedByCleared() {
-		_spec.ClearField(note.FieldUpdatedBy, field.TypeString)
+	if nu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(note.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := nu.mutation.DeletedAt(); ok {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
@@ -372,11 +372,11 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nu.mutation.DeletedAtCleared() {
 		_spec.ClearField(note.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nu.mutation.DeletedBy(); ok {
-		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
+	if value, ok := nu.mutation.DeletedByID(); ok {
+		_spec.SetField(note.FieldDeletedByID, field.TypeString, value)
 	}
-	if nu.mutation.DeletedByCleared() {
-		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
+	if nu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(note.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nu.mutation.Tags(); ok {
 		_spec.SetField(note.FieldTags, field.TypeJSON, value)
@@ -586,23 +586,23 @@ func (nuo *NoteUpdateOne) ClearUpdatedAt() *NoteUpdateOne {
 	return nuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nuo *NoteUpdateOne) SetUpdatedBy(s string) *NoteUpdateOne {
-	nuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nuo *NoteUpdateOne) SetUpdatedByID(s string) *NoteUpdateOne {
+	nuo.mutation.SetUpdatedByID(s)
 	return nuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableUpdatedBy(s *string) *NoteUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nuo *NoteUpdateOne) SetNillableUpdatedByID(s *string) *NoteUpdateOne {
 	if s != nil {
-		nuo.SetUpdatedBy(*s)
+		nuo.SetUpdatedByID(*s)
 	}
 	return nuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nuo *NoteUpdateOne) ClearUpdatedBy() *NoteUpdateOne {
-	nuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nuo *NoteUpdateOne) ClearUpdatedByID() *NoteUpdateOne {
+	nuo.mutation.ClearUpdatedByID()
 	return nuo
 }
 
@@ -626,23 +626,23 @@ func (nuo *NoteUpdateOne) ClearDeletedAt() *NoteUpdateOne {
 	return nuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (nuo *NoteUpdateOne) SetDeletedBy(s string) *NoteUpdateOne {
-	nuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (nuo *NoteUpdateOne) SetDeletedByID(s string) *NoteUpdateOne {
+	nuo.mutation.SetDeletedByID(s)
 	return nuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableDeletedBy(s *string) *NoteUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (nuo *NoteUpdateOne) SetNillableDeletedByID(s *string) *NoteUpdateOne {
 	if s != nil {
-		nuo.SetDeletedBy(*s)
+		nuo.SetDeletedByID(*s)
 	}
 	return nuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nuo *NoteUpdateOne) ClearDeletedBy() *NoteUpdateOne {
-	nuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (nuo *NoteUpdateOne) ClearDeletedByID() *NoteUpdateOne {
+	nuo.mutation.ClearDeletedByID()
 	return nuo
 }
 
@@ -925,14 +925,14 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 	if nuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(note.FieldUpdatedAt, field.TypeTime)
 	}
-	if nuo.mutation.CreatedByCleared() {
-		_spec.ClearField(note.FieldCreatedBy, field.TypeString)
+	if nuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(note.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := nuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := nuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(note.FieldUpdatedByID, field.TypeString, value)
 	}
-	if nuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(note.FieldUpdatedBy, field.TypeString)
+	if nuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(note.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := nuo.mutation.DeletedAt(); ok {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
@@ -940,11 +940,11 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 	if nuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(note.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nuo.mutation.DeletedBy(); ok {
-		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
+	if value, ok := nuo.mutation.DeletedByID(); ok {
+		_spec.SetField(note.FieldDeletedByID, field.TypeString, value)
 	}
-	if nuo.mutation.DeletedByCleared() {
-		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
+	if nuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(note.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nuo.mutation.Tags(); ok {
 		_spec.SetField(note.FieldTags, field.TypeJSON, value)

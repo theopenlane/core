@@ -53,30 +53,30 @@ func (ddc *DocumentDataCreate) SetNillableUpdatedAt(t *time.Time) *DocumentDataC
 	return ddc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ddc *DocumentDataCreate) SetCreatedBy(s string) *DocumentDataCreate {
-	ddc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ddc *DocumentDataCreate) SetCreatedByID(s string) *DocumentDataCreate {
+	ddc.mutation.SetCreatedByID(s)
 	return ddc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ddc *DocumentDataCreate) SetNillableCreatedBy(s *string) *DocumentDataCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ddc *DocumentDataCreate) SetNillableCreatedByID(s *string) *DocumentDataCreate {
 	if s != nil {
-		ddc.SetCreatedBy(*s)
+		ddc.SetCreatedByID(*s)
 	}
 	return ddc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ddc *DocumentDataCreate) SetUpdatedBy(s string) *DocumentDataCreate {
-	ddc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ddc *DocumentDataCreate) SetUpdatedByID(s string) *DocumentDataCreate {
+	ddc.mutation.SetUpdatedByID(s)
 	return ddc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ddc *DocumentDataCreate) SetNillableUpdatedBy(s *string) *DocumentDataCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ddc *DocumentDataCreate) SetNillableUpdatedByID(s *string) *DocumentDataCreate {
 	if s != nil {
-		ddc.SetUpdatedBy(*s)
+		ddc.SetUpdatedByID(*s)
 	}
 	return ddc
 }
@@ -115,16 +115,16 @@ func (ddc *DocumentDataCreate) SetNillableDeletedAt(t *time.Time) *DocumentDataC
 	return ddc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ddc *DocumentDataCreate) SetDeletedBy(s string) *DocumentDataCreate {
-	ddc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ddc *DocumentDataCreate) SetDeletedByID(s string) *DocumentDataCreate {
+	ddc.mutation.SetDeletedByID(s)
 	return ddc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ddc *DocumentDataCreate) SetNillableDeletedBy(s *string) *DocumentDataCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ddc *DocumentDataCreate) SetNillableDeletedByID(s *string) *DocumentDataCreate {
 	if s != nil {
-		ddc.SetDeletedBy(*s)
+		ddc.SetDeletedByID(*s)
 	}
 	return ddc
 }
@@ -344,13 +344,13 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 		_spec.SetField(documentdata.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ddc.mutation.CreatedBy(); ok {
-		_spec.SetField(documentdata.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ddc.mutation.CreatedByID(); ok {
+		_spec.SetField(documentdata.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ddc.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ddc.mutation.UpdatedByID(); ok {
+		_spec.SetField(documentdata.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ddc.mutation.MappingID(); ok {
 		_spec.SetField(documentdata.FieldMappingID, field.TypeString, value)
@@ -364,9 +364,9 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ddc.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ddc.mutation.DeletedByID(); ok {
+		_spec.SetField(documentdata.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ddc.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)

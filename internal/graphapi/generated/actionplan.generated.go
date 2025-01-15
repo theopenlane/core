@@ -5606,14 +5606,14 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ActionPlan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ActionPlan_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
@@ -5640,6 +5640,10 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_user(ctx, field)
 			case "program":
 				return ec.fieldContext_ActionPlan_program(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -5692,14 +5696,14 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ActionPlan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ActionPlan_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
@@ -5726,6 +5730,10 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_user(ctx, field)
 			case "program":
 				return ec.fieldContext_ActionPlan_program(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -5822,14 +5830,14 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ActionPlan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ActionPlan_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
@@ -5856,6 +5864,10 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_user(ctx, field)
 			case "program":
 				return ec.fieldContext_ActionPlan_program(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},

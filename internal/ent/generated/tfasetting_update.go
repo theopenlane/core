@@ -45,23 +45,23 @@ func (tsu *TFASettingUpdate) ClearUpdatedAt() *TFASettingUpdate {
 	return tsu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tsu *TFASettingUpdate) SetUpdatedBy(s string) *TFASettingUpdate {
-	tsu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tsu *TFASettingUpdate) SetUpdatedByID(s string) *TFASettingUpdate {
+	tsu.mutation.SetUpdatedByID(s)
 	return tsu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tsu *TFASettingUpdate) SetNillableUpdatedBy(s *string) *TFASettingUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tsu *TFASettingUpdate) SetNillableUpdatedByID(s *string) *TFASettingUpdate {
 	if s != nil {
-		tsu.SetUpdatedBy(*s)
+		tsu.SetUpdatedByID(*s)
 	}
 	return tsu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tsu *TFASettingUpdate) ClearUpdatedBy() *TFASettingUpdate {
-	tsu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tsu *TFASettingUpdate) ClearUpdatedByID() *TFASettingUpdate {
+	tsu.mutation.ClearUpdatedByID()
 	return tsu
 }
 
@@ -85,23 +85,23 @@ func (tsu *TFASettingUpdate) ClearDeletedAt() *TFASettingUpdate {
 	return tsu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tsu *TFASettingUpdate) SetDeletedBy(s string) *TFASettingUpdate {
-	tsu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tsu *TFASettingUpdate) SetDeletedByID(s string) *TFASettingUpdate {
+	tsu.mutation.SetDeletedByID(s)
 	return tsu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tsu *TFASettingUpdate) SetNillableDeletedBy(s *string) *TFASettingUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tsu *TFASettingUpdate) SetNillableDeletedByID(s *string) *TFASettingUpdate {
 	if s != nil {
-		tsu.SetDeletedBy(*s)
+		tsu.SetDeletedByID(*s)
 	}
 	return tsu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tsu *TFASettingUpdate) ClearDeletedBy() *TFASettingUpdate {
-	tsu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (tsu *TFASettingUpdate) ClearDeletedByID() *TFASettingUpdate {
+	tsu.mutation.ClearDeletedByID()
 	return tsu
 }
 
@@ -337,14 +337,14 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tsu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if tsu.mutation.CreatedByCleared() {
-		_spec.ClearField(tfasetting.FieldCreatedBy, field.TypeString)
+	if tsu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := tsu.mutation.UpdatedBy(); ok {
-		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := tsu.mutation.UpdatedByID(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByID, field.TypeString, value)
 	}
-	if tsu.mutation.UpdatedByCleared() {
-		_spec.ClearField(tfasetting.FieldUpdatedBy, field.TypeString)
+	if tsu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := tsu.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
@@ -352,11 +352,11 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tsu.mutation.DeletedAtCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tsu.mutation.DeletedBy(); ok {
-		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
+	if value, ok := tsu.mutation.DeletedByID(); ok {
+		_spec.SetField(tfasetting.FieldDeletedByID, field.TypeString, value)
 	}
-	if tsu.mutation.DeletedByCleared() {
-		_spec.ClearField(tfasetting.FieldDeletedBy, field.TypeString)
+	if tsu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tsu.mutation.Tags(); ok {
 		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)
@@ -474,23 +474,23 @@ func (tsuo *TFASettingUpdateOne) ClearUpdatedAt() *TFASettingUpdateOne {
 	return tsuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tsuo *TFASettingUpdateOne) SetUpdatedBy(s string) *TFASettingUpdateOne {
-	tsuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tsuo *TFASettingUpdateOne) SetUpdatedByID(s string) *TFASettingUpdateOne {
+	tsuo.mutation.SetUpdatedByID(s)
 	return tsuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tsuo *TFASettingUpdateOne) SetNillableUpdatedBy(s *string) *TFASettingUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tsuo *TFASettingUpdateOne) SetNillableUpdatedByID(s *string) *TFASettingUpdateOne {
 	if s != nil {
-		tsuo.SetUpdatedBy(*s)
+		tsuo.SetUpdatedByID(*s)
 	}
 	return tsuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tsuo *TFASettingUpdateOne) ClearUpdatedBy() *TFASettingUpdateOne {
-	tsuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tsuo *TFASettingUpdateOne) ClearUpdatedByID() *TFASettingUpdateOne {
+	tsuo.mutation.ClearUpdatedByID()
 	return tsuo
 }
 
@@ -514,23 +514,23 @@ func (tsuo *TFASettingUpdateOne) ClearDeletedAt() *TFASettingUpdateOne {
 	return tsuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tsuo *TFASettingUpdateOne) SetDeletedBy(s string) *TFASettingUpdateOne {
-	tsuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tsuo *TFASettingUpdateOne) SetDeletedByID(s string) *TFASettingUpdateOne {
+	tsuo.mutation.SetDeletedByID(s)
 	return tsuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tsuo *TFASettingUpdateOne) SetNillableDeletedBy(s *string) *TFASettingUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tsuo *TFASettingUpdateOne) SetNillableDeletedByID(s *string) *TFASettingUpdateOne {
 	if s != nil {
-		tsuo.SetDeletedBy(*s)
+		tsuo.SetDeletedByID(*s)
 	}
 	return tsuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tsuo *TFASettingUpdateOne) ClearDeletedBy() *TFASettingUpdateOne {
-	tsuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (tsuo *TFASettingUpdateOne) ClearDeletedByID() *TFASettingUpdateOne {
+	tsuo.mutation.ClearDeletedByID()
 	return tsuo
 }
 
@@ -796,14 +796,14 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	if tsuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if tsuo.mutation.CreatedByCleared() {
-		_spec.ClearField(tfasetting.FieldCreatedBy, field.TypeString)
+	if tsuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := tsuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := tsuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByID, field.TypeString, value)
 	}
-	if tsuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(tfasetting.FieldUpdatedBy, field.TypeString)
+	if tsuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := tsuo.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
@@ -811,11 +811,11 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	if tsuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tsuo.mutation.DeletedBy(); ok {
-		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
+	if value, ok := tsuo.mutation.DeletedByID(); ok {
+		_spec.SetField(tfasetting.FieldDeletedByID, field.TypeString, value)
 	}
-	if tsuo.mutation.DeletedByCleared() {
-		_spec.ClearField(tfasetting.FieldDeletedBy, field.TypeString)
+	if tsuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tsuo.mutation.Tags(); ok {
 		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)

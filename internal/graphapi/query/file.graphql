@@ -10,7 +10,7 @@ query GetAllFiles {
       node {
         categoryType
         createdAt
-        createdBy
+        createdByID
         detectedContentType
         detectedMimeType
         id
@@ -25,7 +25,7 @@ query GetAllFiles {
         storeKey
         tags
         updatedAt
-        updatedBy
+        updatedByID
         uri
       }
     }
@@ -36,7 +36,7 @@ query GetFileByID($fileId: ID!) {
   file(id: $fileId) {
     categoryType
     createdAt
-    createdBy
+    createdByID
     detectedContentType
     detectedMimeType
     id
@@ -51,7 +51,7 @@ query GetFileByID($fileId: ID!) {
     storeKey
     tags
     updatedAt
-    updatedBy
+    updatedByID
     uri
   }
 }
@@ -62,7 +62,7 @@ query GetFiles($where: FileWhereInput) {
       node {
         categoryType
         createdAt
-        createdBy
+        createdByID
         detectedContentType
         detectedMimeType
         id
@@ -77,7 +77,7 @@ query GetFiles($where: FileWhereInput) {
         storeKey
         tags
         updatedAt
-        updatedBy
+        updatedByID
         uri
       }
     }

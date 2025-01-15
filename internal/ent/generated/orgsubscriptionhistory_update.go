@@ -45,23 +45,23 @@ func (oshu *OrgSubscriptionHistoryUpdate) ClearUpdatedAt() *OrgSubscriptionHisto
 	return oshu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (oshu *OrgSubscriptionHistoryUpdate) SetUpdatedBy(s string) *OrgSubscriptionHistoryUpdate {
-	oshu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetUpdatedByID(s string) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetUpdatedByID(s)
 	return oshu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oshu *OrgSubscriptionHistoryUpdate) SetNillableUpdatedBy(s *string) *OrgSubscriptionHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (oshu *OrgSubscriptionHistoryUpdate) SetNillableUpdatedByID(s *string) *OrgSubscriptionHistoryUpdate {
 	if s != nil {
-		oshu.SetUpdatedBy(*s)
+		oshu.SetUpdatedByID(*s)
 	}
 	return oshu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (oshu *OrgSubscriptionHistoryUpdate) ClearUpdatedBy() *OrgSubscriptionHistoryUpdate {
-	oshu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearUpdatedByID() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearUpdatedByID()
 	return oshu
 }
 
@@ -103,23 +103,23 @@ func (oshu *OrgSubscriptionHistoryUpdate) ClearDeletedAt() *OrgSubscriptionHisto
 	return oshu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (oshu *OrgSubscriptionHistoryUpdate) SetDeletedBy(s string) *OrgSubscriptionHistoryUpdate {
-	oshu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetDeletedByID(s string) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetDeletedByID(s)
 	return oshu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oshu *OrgSubscriptionHistoryUpdate) SetNillableDeletedBy(s *string) *OrgSubscriptionHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (oshu *OrgSubscriptionHistoryUpdate) SetNillableDeletedByID(s *string) *OrgSubscriptionHistoryUpdate {
 	if s != nil {
-		oshu.SetDeletedBy(*s)
+		oshu.SetDeletedByID(*s)
 	}
 	return oshu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (oshu *OrgSubscriptionHistoryUpdate) ClearDeletedBy() *OrgSubscriptionHistoryUpdate {
-	oshu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearDeletedByID() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearDeletedByID()
 	return oshu
 }
 
@@ -392,6 +392,9 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	if oshu.mutation.RefCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldRef, field.TypeString)
 	}
+	if oshu.mutation.UpdatedByCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if oshu.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -401,14 +404,14 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	if oshu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if oshu.mutation.CreatedByCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldCreatedBy, field.TypeString)
+	if oshu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := oshu.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := oshu.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if oshu.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString)
+	if oshu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := oshu.mutation.Tags(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
@@ -427,11 +430,11 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	if oshu.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := oshu.mutation.DeletedBy(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := oshu.mutation.DeletedByID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if oshu.mutation.DeletedByCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString)
+	if oshu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := oshu.mutation.OwnerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOwnerID, field.TypeString, value)
@@ -542,23 +545,23 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearUpdatedAt() *OrgSubscriptionH
 	return oshuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) SetUpdatedBy(s string) *OrgSubscriptionHistoryUpdateOne {
-	oshuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetUpdatedByID(s string) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetUpdatedByID(s)
 	return oshuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableUpdatedBy(s *string) *OrgSubscriptionHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableUpdatedByID(s *string) *OrgSubscriptionHistoryUpdateOne {
 	if s != nil {
-		oshuo.SetUpdatedBy(*s)
+		oshuo.SetUpdatedByID(*s)
 	}
 	return oshuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearUpdatedBy() *OrgSubscriptionHistoryUpdateOne {
-	oshuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearUpdatedByID() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearUpdatedByID()
 	return oshuo
 }
 
@@ -600,23 +603,23 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearDeletedAt() *OrgSubscriptionH
 	return oshuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) SetDeletedBy(s string) *OrgSubscriptionHistoryUpdateOne {
-	oshuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetDeletedByID(s string) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetDeletedByID(s)
 	return oshuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableDeletedBy(s *string) *OrgSubscriptionHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableDeletedByID(s *string) *OrgSubscriptionHistoryUpdateOne {
 	if s != nil {
-		oshuo.SetDeletedBy(*s)
+		oshuo.SetDeletedByID(*s)
 	}
 	return oshuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearDeletedBy() *OrgSubscriptionHistoryUpdateOne {
-	oshuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearDeletedByID() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearDeletedByID()
 	return oshuo
 }
 
@@ -919,6 +922,9 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if oshuo.mutation.RefCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldRef, field.TypeString)
 	}
+	if oshuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if oshuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -928,14 +934,14 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if oshuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if oshuo.mutation.CreatedByCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldCreatedBy, field.TypeString)
+	if oshuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := oshuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if oshuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString)
+	if oshuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := oshuo.mutation.Tags(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
@@ -954,11 +960,11 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if oshuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := oshuo.mutation.DeletedBy(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := oshuo.mutation.DeletedByID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if oshuo.mutation.DeletedByCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString)
+	if oshuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := oshuo.mutation.OwnerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOwnerID, field.TypeString, value)

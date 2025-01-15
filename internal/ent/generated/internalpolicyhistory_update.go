@@ -44,23 +44,23 @@ func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedAt() *InternalPolicyHistory
 	return iphu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iphu *InternalPolicyHistoryUpdate) SetUpdatedBy(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iphu *InternalPolicyHistoryUpdate) SetUpdatedByID(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetUpdatedByID(s)
 	return iphu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableUpdatedBy(s *string) *InternalPolicyHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableUpdatedByID(s *string) *InternalPolicyHistoryUpdate {
 	if s != nil {
-		iphu.SetUpdatedBy(*s)
+		iphu.SetUpdatedByID(*s)
 	}
 	return iphu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedBy() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedByID() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearUpdatedByID()
 	return iphu
 }
 
@@ -84,23 +84,23 @@ func (iphu *InternalPolicyHistoryUpdate) ClearDeletedAt() *InternalPolicyHistory
 	return iphu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDeletedBy(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (iphu *InternalPolicyHistoryUpdate) SetDeletedByID(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetDeletedByID(s)
 	return iphu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableDeletedBy(s *string) *InternalPolicyHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableDeletedByID(s *string) *InternalPolicyHistoryUpdate {
 	if s != nil {
-		iphu.SetDeletedBy(*s)
+		iphu.SetDeletedByID(*s)
 	}
 	return iphu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDeletedBy() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearDeletedByID() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearDeletedByID()
 	return iphu
 }
 
@@ -353,6 +353,9 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if iphu.mutation.RefCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRef, field.TypeString)
 	}
+	if iphu.mutation.UpdatedByCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if iphu.mutation.CreatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -362,14 +365,14 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if iphu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if iphu.mutation.CreatedByCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldCreatedBy, field.TypeString)
+	if iphu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := iphu.mutation.UpdatedBy(); ok {
-		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := iphu.mutation.UpdatedByID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if iphu.mutation.UpdatedByCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldUpdatedBy, field.TypeString)
+	if iphu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := iphu.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedAt, field.TypeTime, value)
@@ -377,11 +380,11 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if iphu.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iphu.mutation.DeletedBy(); ok {
-		_spec.SetField(internalpolicyhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := iphu.mutation.DeletedByID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if iphu.mutation.DeletedByCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldDeletedBy, field.TypeString)
+	if iphu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iphu.mutation.Tags(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
@@ -481,23 +484,23 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedAt() *InternalPolicyHis
 	return iphuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetUpdatedBy(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetUpdatedByID(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetUpdatedByID(s)
 	return iphuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableUpdatedBy(s *string) *InternalPolicyHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableUpdatedByID(s *string) *InternalPolicyHistoryUpdateOne {
 	if s != nil {
-		iphuo.SetUpdatedBy(*s)
+		iphuo.SetUpdatedByID(*s)
 	}
 	return iphuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedBy() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedByID() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearUpdatedByID()
 	return iphuo
 }
 
@@ -521,23 +524,23 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ClearDeletedAt() *InternalPolicyHis
 	return iphuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDeletedBy(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetDeletedByID(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetDeletedByID(s)
 	return iphuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDeletedBy(s *string) *InternalPolicyHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDeletedByID(s *string) *InternalPolicyHistoryUpdateOne {
 	if s != nil {
-		iphuo.SetDeletedBy(*s)
+		iphuo.SetDeletedByID(*s)
 	}
 	return iphuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDeletedBy() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearDeletedByID() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearDeletedByID()
 	return iphuo
 }
 
@@ -820,6 +823,9 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if iphuo.mutation.RefCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRef, field.TypeString)
 	}
+	if iphuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if iphuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -829,14 +835,14 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if iphuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if iphuo.mutation.CreatedByCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldCreatedBy, field.TypeString)
+	if iphuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := iphuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if iphuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldUpdatedBy, field.TypeString)
+	if iphuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := iphuo.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedAt, field.TypeTime, value)
@@ -844,11 +850,11 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if iphuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iphuo.mutation.DeletedBy(); ok {
-		_spec.SetField(internalpolicyhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := iphuo.mutation.DeletedByID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if iphuo.mutation.DeletedByCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldDeletedBy, field.TypeString)
+	if iphuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iphuo.mutation.Tags(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)

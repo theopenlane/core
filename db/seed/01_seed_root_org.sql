@@ -9,8 +9,8 @@ INSERT INTO
         description,
         created_at,
         updated_at,
-        created_by,
-        updated_by
+        created_by_id,
+        updated_by_id
     )
 VALUES (
         '01101101011010010111010001100010',
@@ -32,8 +32,8 @@ INSERT INTO
         mapping_id,
         created_at,
         updated_at,
-        created_by,
-        updated_by
+        created_by_id,
+        updated_by_id
     )
 VALUES (
         '01101101011001010110111101110111',

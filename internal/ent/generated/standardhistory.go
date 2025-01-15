@@ -25,18 +25,20 @@ type StandardHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -73,7 +75,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case standardhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldMappingID, standardhistory.FieldName, standardhistory.FieldDescription, standardhistory.FieldFamily, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldPurposeAndScope, standardhistory.FieldBackground, standardhistory.FieldSatisfies:
+		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldUpdatedBy, standardhistory.FieldCreatedByID, standardhistory.FieldUpdatedByID, standardhistory.FieldDeletedByID, standardhistory.FieldMappingID, standardhistory.FieldName, standardhistory.FieldDescription, standardhistory.FieldFamily, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldPurposeAndScope, standardhistory.FieldBackground, standardhistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case standardhistory.FieldHistoryTime, standardhistory.FieldCreatedAt, standardhistory.FieldUpdatedAt, standardhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -116,6 +118,13 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				sh.Operation = *value
 			}
+		case standardhistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				sh.UpdatedBy = new(string)
+				*sh.UpdatedBy = value.String
+			}
 		case standardhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -128,17 +137,17 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.UpdatedAt = value.Time
 			}
-		case standardhistory.FieldCreatedBy:
+		case standardhistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				sh.CreatedBy = value.String
+				sh.CreatedByID = value.String
 			}
-		case standardhistory.FieldUpdatedBy:
+		case standardhistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				sh.UpdatedBy = value.String
+				sh.UpdatedByID = value.String
 			}
 		case standardhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -146,11 +155,11 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.DeletedAt = value.Time
 			}
-		case standardhistory.FieldDeletedBy:
+		case standardhistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				sh.DeletedBy = value.String
+				sh.DeletedByID = value.String
 			}
 		case standardhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -273,23 +282,28 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Operation))
 	builder.WriteString(", ")
+	if v := sh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(sh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(sh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(sh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(sh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(sh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(sh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(sh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(sh.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(sh.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(sh.MappingID)

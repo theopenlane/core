@@ -71,16 +71,16 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Organization_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Organization_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Organization_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -171,6 +171,10 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
@@ -223,16 +227,16 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Organization_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Organization_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Organization_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -323,6 +327,10 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
@@ -419,16 +427,16 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Organization_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Organization_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Organization_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -519,6 +527,10 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},

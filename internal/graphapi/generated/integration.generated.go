@@ -71,16 +71,16 @@ func (ec *executionContext) fieldContext_IntegrationBulkCreatePayload_integratio
 				return ec.fieldContext_Integration_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Integration_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Integration_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Integration_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Integration_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Integration_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Integration_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Integration_ownerID(ctx, field)
 			case "name":
@@ -95,6 +95,10 @@ func (ec *executionContext) fieldContext_IntegrationBulkCreatePayload_integratio
 				return ec.fieldContext_Integration_secrets(ctx, field)
 			case "events":
 				return ec.fieldContext_Integration_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Integration_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Integration_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Integration", field.Name)
 		},
@@ -147,16 +151,16 @@ func (ec *executionContext) fieldContext_IntegrationCreatePayload_integration(_ 
 				return ec.fieldContext_Integration_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Integration_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Integration_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Integration_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Integration_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Integration_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Integration_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Integration_ownerID(ctx, field)
 			case "name":
@@ -171,6 +175,10 @@ func (ec *executionContext) fieldContext_IntegrationCreatePayload_integration(_ 
 				return ec.fieldContext_Integration_secrets(ctx, field)
 			case "events":
 				return ec.fieldContext_Integration_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Integration_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Integration_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Integration", field.Name)
 		},
@@ -267,16 +275,16 @@ func (ec *executionContext) fieldContext_IntegrationUpdatePayload_integration(_ 
 				return ec.fieldContext_Integration_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Integration_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Integration_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Integration_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Integration_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Integration_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Integration_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Integration_ownerID(ctx, field)
 			case "name":
@@ -291,6 +299,10 @@ func (ec *executionContext) fieldContext_IntegrationUpdatePayload_integration(_ 
 				return ec.fieldContext_Integration_secrets(ctx, field)
 			case "events":
 				return ec.fieldContext_Integration_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Integration_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Integration_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Integration", field.Name)
 		},

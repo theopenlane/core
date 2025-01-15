@@ -58,30 +58,30 @@ func (tc *TaskCreate) SetNillableUpdatedAt(t *time.Time) *TaskCreate {
 	return tc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (tc *TaskCreate) SetCreatedBy(s string) *TaskCreate {
-	tc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (tc *TaskCreate) SetCreatedByID(s string) *TaskCreate {
+	tc.mutation.SetCreatedByID(s)
 	return tc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCreatedBy(s *string) *TaskCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableCreatedByID(s *string) *TaskCreate {
 	if s != nil {
-		tc.SetCreatedBy(*s)
+		tc.SetCreatedByID(*s)
 	}
 	return tc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tc *TaskCreate) SetUpdatedBy(s string) *TaskCreate {
-	tc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tc *TaskCreate) SetUpdatedByID(s string) *TaskCreate {
+	tc.mutation.SetUpdatedByID(s)
 	return tc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableUpdatedBy(s *string) *TaskCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableUpdatedByID(s *string) *TaskCreate {
 	if s != nil {
-		tc.SetUpdatedBy(*s)
+		tc.SetUpdatedByID(*s)
 	}
 	return tc
 }
@@ -114,16 +114,16 @@ func (tc *TaskCreate) SetNillableDeletedAt(t *time.Time) *TaskCreate {
 	return tc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tc *TaskCreate) SetDeletedBy(s string) *TaskCreate {
-	tc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tc *TaskCreate) SetDeletedByID(s string) *TaskCreate {
+	tc.mutation.SetDeletedByID(s)
 	return tc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDeletedBy(s *string) *TaskCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableDeletedByID(s *string) *TaskCreate {
 	if s != nil {
-		tc.SetDeletedBy(*s)
+		tc.SetDeletedByID(*s)
 	}
 	return tc
 }
@@ -510,13 +510,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tc.mutation.CreatedBy(); ok {
-		_spec.SetField(task.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := tc.mutation.CreatedByID(); ok {
+		_spec.SetField(task.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := tc.mutation.UpdatedBy(); ok {
-		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := tc.mutation.UpdatedByID(); ok {
+		_spec.SetField(task.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := tc.mutation.MappingID(); ok {
 		_spec.SetField(task.FieldMappingID, field.TypeString, value)
@@ -526,9 +526,9 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tc.mutation.DeletedBy(); ok {
-		_spec.SetField(task.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := tc.mutation.DeletedByID(); ok {
+		_spec.SetField(task.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := tc.mutation.Tags(); ok {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)

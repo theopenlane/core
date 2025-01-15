@@ -87,7 +87,9 @@ models:
   Address:
     model:
       - github.com/theopenlane/core/pkg/models.Address
+  Actor:
+    model:
+      - github.com/theopenlane/core/pkg/models.Actor
   Price:
     model:
       - github.com/theopenlane/core/pkg/models.Price
-

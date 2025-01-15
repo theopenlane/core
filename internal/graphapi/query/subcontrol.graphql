@@ -1,10 +1,9 @@
-
 mutation CreateBulkCSVSubcontrol($input: Upload!) {
   createBulkCSVSubcontrol(input: $input) {
     subcontrols {
       class
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -22,7 +21,7 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
       subcontrolType
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -33,7 +32,7 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
     subcontrols {
       class
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -51,7 +50,7 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
       subcontrolType
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -62,7 +61,7 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
     subcontrol {
       class
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -80,7 +79,7 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
       subcontrolType
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       controls {
         id
@@ -102,7 +101,7 @@ query GetAllSubcontrols {
       node {
         class
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -120,7 +119,7 @@ query GetAllSubcontrols {
         subcontrolType
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
         controls {
           id
@@ -130,11 +129,12 @@ query GetAllSubcontrols {
     }
   }
 }
+
 query GetSubcontrolByID($subcontrolId: ID!) {
   subcontrol(id: $subcontrolId) {
     class
     createdAt
-    createdBy
+    createdByID
     description
     details
     family
@@ -152,7 +152,7 @@ query GetSubcontrolByID($subcontrolId: ID!) {
     subcontrolType
     tags
     updatedAt
-    updatedBy
+    updatedByID
     version
     controls {
       id
@@ -167,7 +167,7 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
       node {
         class
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -185,7 +185,7 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
         subcontrolType
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
         controls {
           id
@@ -195,12 +195,13 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
     }
   }
 }
+
 mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
   updateSubcontrol(id: $updateSubcontrolId, input: $input) {
     subcontrol {
       class
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -218,7 +219,7 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       subcontrolType
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       controls {
         id

@@ -25,14 +25,16 @@ type EventHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -57,7 +59,7 @@ func (*EventHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case eventhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldCreatedBy, eventhistory.FieldUpdatedBy, eventhistory.FieldMappingID, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType:
+		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldUpdatedBy, eventhistory.FieldCreatedByID, eventhistory.FieldUpdatedByID, eventhistory.FieldMappingID, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType:
 			values[i] = new(sql.NullString)
 		case eventhistory.FieldHistoryTime, eventhistory.FieldCreatedAt, eventhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -100,6 +102,13 @@ func (eh *EventHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				eh.Operation = *value
 			}
+		case eventhistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				eh.UpdatedBy = new(string)
+				*eh.UpdatedBy = value.String
+			}
 		case eventhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -112,17 +121,17 @@ func (eh *EventHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				eh.UpdatedAt = value.Time
 			}
-		case eventhistory.FieldCreatedBy:
+		case eventhistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				eh.CreatedBy = value.String
+				eh.CreatedByID = value.String
 			}
-		case eventhistory.FieldUpdatedBy:
+		case eventhistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				eh.UpdatedBy = value.String
+				eh.UpdatedByID = value.String
 			}
 		case eventhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -209,17 +218,22 @@ func (eh *EventHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", eh.Operation))
 	builder.WriteString(", ")
+	if v := eh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(eh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(eh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(eh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(eh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(eh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(eh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(eh.MappingID)

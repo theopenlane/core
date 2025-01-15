@@ -96,7 +96,7 @@ func tableOutput(out []openlaneclient.{{ .Name | ToUpperCamel }}) {
 	{{- end }}
 	for _, i := range out {
 		{{- if .HistoryCmd }}
-		writer.AddRow(i.ID, *i.Ref, i.Operation, *i.UpdatedAt, *i.UpdatedBy)
+		writer.AddRow(i.ID, *i.Ref, i.Operation, *i.UpdatedAt, *i.UpdatedByID)
 		{{- else }}
 		writer.AddRow(i.ID)
 		{{- end }}

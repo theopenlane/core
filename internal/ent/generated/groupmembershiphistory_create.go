@@ -56,6 +56,20 @@ func (gmhc *GroupMembershipHistoryCreate) SetOperation(ht history.OpType) *Group
 	return gmhc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (gmhc *GroupMembershipHistoryCreate) SetUpdatedBy(s string) *GroupMembershipHistoryCreate {
+	gmhc.mutation.SetUpdatedBy(s)
+	return gmhc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *GroupMembershipHistoryCreate {
+	if s != nil {
+		gmhc.SetUpdatedBy(*s)
+	}
+	return gmhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (gmhc *GroupMembershipHistoryCreate) SetCreatedAt(t time.Time) *GroupMembershipHistoryCreate {
 	gmhc.mutation.SetCreatedAt(t)
@@ -84,30 +98,30 @@ func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Gr
 	return gmhc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (gmhc *GroupMembershipHistoryCreate) SetCreatedBy(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (gmhc *GroupMembershipHistoryCreate) SetCreatedByID(s string) *GroupMembershipHistoryCreate {
+	gmhc.mutation.SetCreatedByID(s)
 	return gmhc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableCreatedBy(s *string) *GroupMembershipHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (gmhc *GroupMembershipHistoryCreate) SetNillableCreatedByID(s *string) *GroupMembershipHistoryCreate {
 	if s != nil {
-		gmhc.SetCreatedBy(*s)
+		gmhc.SetCreatedByID(*s)
 	}
 	return gmhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gmhc *GroupMembershipHistoryCreate) SetUpdatedBy(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gmhc *GroupMembershipHistoryCreate) SetUpdatedByID(s string) *GroupMembershipHistoryCreate {
+	gmhc.mutation.SetUpdatedByID(s)
 	return gmhc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *GroupMembershipHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedByID(s *string) *GroupMembershipHistoryCreate {
 	if s != nil {
-		gmhc.SetUpdatedBy(*s)
+		gmhc.SetUpdatedByID(*s)
 	}
 	return gmhc
 }
@@ -140,16 +154,16 @@ func (gmhc *GroupMembershipHistoryCreate) SetNillableDeletedAt(t *time.Time) *Gr
 	return gmhc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (gmhc *GroupMembershipHistoryCreate) SetDeletedBy(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (gmhc *GroupMembershipHistoryCreate) SetDeletedByID(s string) *GroupMembershipHistoryCreate {
+	gmhc.mutation.SetDeletedByID(s)
 	return gmhc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableDeletedBy(s *string) *GroupMembershipHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (gmhc *GroupMembershipHistoryCreate) SetNillableDeletedByID(s *string) *GroupMembershipHistoryCreate {
 	if s != nil {
-		gmhc.SetDeletedBy(*s)
+		gmhc.SetDeletedByID(*s)
 	}
 	return gmhc
 }
@@ -351,6 +365,10 @@ func (gmhc *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory,
 		_spec.SetField(groupmembershiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := gmhc.mutation.UpdatedBy(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := gmhc.mutation.CreatedAt(); ok {
 		_spec.SetField(groupmembershiphistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -359,13 +377,13 @@ func (gmhc *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory,
 		_spec.SetField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gmhc.mutation.CreatedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := gmhc.mutation.CreatedByID(); ok {
+		_spec.SetField(groupmembershiphistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := gmhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := gmhc.mutation.UpdatedByID(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := gmhc.mutation.MappingID(); ok {
 		_spec.SetField(groupmembershiphistory.FieldMappingID, field.TypeString, value)
@@ -375,9 +393,9 @@ func (gmhc *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory,
 		_spec.SetField(groupmembershiphistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := gmhc.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := gmhc.mutation.DeletedByID(); ok {
+		_spec.SetField(groupmembershiphistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := gmhc.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)

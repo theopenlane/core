@@ -3,7 +3,7 @@ query GetAllNoteHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         historyTime
         id
         operation
@@ -12,7 +12,7 @@ query GetAllNoteHistories {
         tags
         text
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -23,7 +23,7 @@ query GetNoteHistories($where: NoteHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         historyTime
         id
         operation
@@ -32,7 +32,7 @@ query GetNoteHistories($where: NoteHistoryWhereInput) {
         tags
         text
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

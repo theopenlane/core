@@ -86,9 +86,9 @@ query GetAllIntegrations {
           id
         }
         createdAt
-        createdBy
+        createdByID
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -111,9 +111,9 @@ query GetIntegrationByID($integrationId: ID!) {
       id
     }
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -136,9 +136,9 @@ query GetIntegrations($where: IntegrationWhereInput) {
           id
         }
         createdAt
-        createdBy
+        createdByID
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

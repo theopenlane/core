@@ -26,22 +26,24 @@ type DocumentDataHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the template id of the document
@@ -60,7 +62,7 @@ func (*DocumentDataHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case documentdatahistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case documentdatahistory.FieldID, documentdatahistory.FieldRef, documentdatahistory.FieldCreatedBy, documentdatahistory.FieldUpdatedBy, documentdatahistory.FieldMappingID, documentdatahistory.FieldDeletedBy, documentdatahistory.FieldOwnerID, documentdatahistory.FieldTemplateID:
+		case documentdatahistory.FieldID, documentdatahistory.FieldRef, documentdatahistory.FieldUpdatedBy, documentdatahistory.FieldCreatedByID, documentdatahistory.FieldUpdatedByID, documentdatahistory.FieldMappingID, documentdatahistory.FieldDeletedByID, documentdatahistory.FieldOwnerID, documentdatahistory.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdatahistory.FieldHistoryTime, documentdatahistory.FieldCreatedAt, documentdatahistory.FieldUpdatedAt, documentdatahistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -103,6 +105,13 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 			} else if value != nil {
 				ddh.Operation = *value
 			}
+		case documentdatahistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				ddh.UpdatedBy = new(string)
+				*ddh.UpdatedBy = value.String
+			}
 		case documentdatahistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -115,17 +124,17 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				ddh.UpdatedAt = value.Time
 			}
-		case documentdatahistory.FieldCreatedBy:
+		case documentdatahistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ddh.CreatedBy = value.String
+				ddh.CreatedByID = value.String
 			}
-		case documentdatahistory.FieldUpdatedBy:
+		case documentdatahistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ddh.UpdatedBy = value.String
+				ddh.UpdatedByID = value.String
 			}
 		case documentdatahistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -147,11 +156,11 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				ddh.DeletedAt = value.Time
 			}
-		case documentdatahistory.FieldDeletedBy:
+		case documentdatahistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ddh.DeletedBy = value.String
+				ddh.DeletedByID = value.String
 			}
 		case documentdatahistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -218,17 +227,22 @@ func (ddh *DocumentDataHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", ddh.Operation))
 	builder.WriteString(", ")
+	if v := ddh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(ddh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(ddh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ddh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ddh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ddh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ddh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ddh.MappingID)
@@ -239,8 +253,8 @@ func (ddh *DocumentDataHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ddh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ddh.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ddh.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ddh.OwnerID)

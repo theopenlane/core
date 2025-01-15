@@ -58,7 +58,7 @@ func (GroupSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.SettingsChecks("group"),
 	}
 }
@@ -66,7 +66,7 @@ func (GroupSetting) Annotations() []schema.Annotation {
 // Mixin of the GroupSetting
 func (GroupSetting) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

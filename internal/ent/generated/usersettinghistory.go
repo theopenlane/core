@@ -26,22 +26,24 @@ type UserSettingHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
@@ -74,7 +76,7 @@ func (*UserSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case usersettinghistory.FieldLocked, usersettinghistory.FieldEmailConfirmed, usersettinghistory.FieldIsWebauthnAllowed, usersettinghistory.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
-		case usersettinghistory.FieldID, usersettinghistory.FieldRef, usersettinghistory.FieldCreatedBy, usersettinghistory.FieldUpdatedBy, usersettinghistory.FieldMappingID, usersettinghistory.FieldDeletedBy, usersettinghistory.FieldUserID, usersettinghistory.FieldStatus, usersettinghistory.FieldPhoneNumber:
+		case usersettinghistory.FieldID, usersettinghistory.FieldRef, usersettinghistory.FieldUpdatedBy, usersettinghistory.FieldCreatedByID, usersettinghistory.FieldUpdatedByID, usersettinghistory.FieldMappingID, usersettinghistory.FieldDeletedByID, usersettinghistory.FieldUserID, usersettinghistory.FieldStatus, usersettinghistory.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case usersettinghistory.FieldHistoryTime, usersettinghistory.FieldCreatedAt, usersettinghistory.FieldUpdatedAt, usersettinghistory.FieldDeletedAt, usersettinghistory.FieldSilencedAt, usersettinghistory.FieldSuspendedAt:
 			values[i] = new(sql.NullTime)
@@ -117,6 +119,13 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 			} else if value != nil {
 				ush.Operation = *value
 			}
+		case usersettinghistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				ush.UpdatedBy = new(string)
+				*ush.UpdatedBy = value.String
+			}
 		case usersettinghistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -129,17 +138,17 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				ush.UpdatedAt = value.Time
 			}
-		case usersettinghistory.FieldCreatedBy:
+		case usersettinghistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ush.CreatedBy = value.String
+				ush.CreatedByID = value.String
 			}
-		case usersettinghistory.FieldUpdatedBy:
+		case usersettinghistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ush.UpdatedBy = value.String
+				ush.UpdatedByID = value.String
 			}
 		case usersettinghistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -161,11 +170,11 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				ush.DeletedAt = value.Time
 			}
-		case usersettinghistory.FieldDeletedBy:
+		case usersettinghistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ush.DeletedBy = value.String
+				ush.DeletedByID = value.String
 			}
 		case usersettinghistory.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -269,17 +278,22 @@ func (ush *UserSettingHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", ush.Operation))
 	builder.WriteString(", ")
+	if v := ush.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(ush.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(ush.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ush.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ush.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ush.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ush.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ush.MappingID)
@@ -290,8 +304,8 @@ func (ush *UserSettingHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ush.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ush.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ush.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(ush.UserID)

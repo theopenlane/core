@@ -63,30 +63,30 @@ func (gc *GroupCreate) SetNillableUpdatedAt(t *time.Time) *GroupCreate {
 	return gc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (gc *GroupCreate) SetCreatedBy(s string) *GroupCreate {
-	gc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (gc *GroupCreate) SetCreatedByID(s string) *GroupCreate {
+	gc.mutation.SetCreatedByID(s)
 	return gc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableCreatedBy(s *string) *GroupCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableCreatedByID(s *string) *GroupCreate {
 	if s != nil {
-		gc.SetCreatedBy(*s)
+		gc.SetCreatedByID(*s)
 	}
 	return gc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gc *GroupCreate) SetUpdatedBy(s string) *GroupCreate {
-	gc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gc *GroupCreate) SetUpdatedByID(s string) *GroupCreate {
+	gc.mutation.SetUpdatedByID(s)
 	return gc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableUpdatedBy(s *string) *GroupCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableUpdatedByID(s *string) *GroupCreate {
 	if s != nil {
-		gc.SetUpdatedBy(*s)
+		gc.SetUpdatedByID(*s)
 	}
 	return gc
 }
@@ -105,16 +105,16 @@ func (gc *GroupCreate) SetNillableDeletedAt(t *time.Time) *GroupCreate {
 	return gc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (gc *GroupCreate) SetDeletedBy(s string) *GroupCreate {
-	gc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (gc *GroupCreate) SetDeletedByID(s string) *GroupCreate {
+	gc.mutation.SetDeletedByID(s)
 	return gc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableDeletedBy(s *string) *GroupCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableDeletedByID(s *string) *GroupCreate {
 	if s != nil {
-		gc.SetDeletedBy(*s)
+		gc.SetDeletedByID(*s)
 	}
 	return gc
 }
@@ -904,21 +904,21 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		_spec.SetField(group.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gc.mutation.CreatedBy(); ok {
-		_spec.SetField(group.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := gc.mutation.CreatedByID(); ok {
+		_spec.SetField(group.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := gc.mutation.UpdatedBy(); ok {
-		_spec.SetField(group.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := gc.mutation.UpdatedByID(); ok {
+		_spec.SetField(group.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := gc.mutation.DeletedAt(); ok {
 		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := gc.mutation.DeletedBy(); ok {
-		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := gc.mutation.DeletedByID(); ok {
+		_spec.SetField(group.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := gc.mutation.MappingID(); ok {
 		_spec.SetField(group.FieldMappingID, field.TypeString, value)

@@ -4,7 +4,7 @@ query GetAllOrgSubscriptions {
       node {
         active
         createdAt
-        createdBy
+        createdByID
         expiresAt
         features
         id
@@ -17,7 +17,7 @@ query GetAllOrgSubscriptions {
         productPrice
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -27,7 +27,7 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
   orgSubscription(id: $orgSubscriptionId) {
     active
     createdAt
-    createdBy
+    createdByID
     expiresAt
     features
     id
@@ -40,7 +40,7 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
     productPrice
     tags
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -50,7 +50,7 @@ query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
       node {
         active
         createdAt
-        createdBy
+        createdByID
         expiresAt
         features
         id
@@ -63,7 +63,7 @@ query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
         productPrice
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

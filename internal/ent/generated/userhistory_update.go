@@ -45,23 +45,23 @@ func (uhu *UserHistoryUpdate) ClearUpdatedAt() *UserHistoryUpdate {
 	return uhu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (uhu *UserHistoryUpdate) SetUpdatedBy(s string) *UserHistoryUpdate {
-	uhu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (uhu *UserHistoryUpdate) SetUpdatedByID(s string) *UserHistoryUpdate {
+	uhu.mutation.SetUpdatedByID(s)
 	return uhu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableUpdatedBy(s *string) *UserHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (uhu *UserHistoryUpdate) SetNillableUpdatedByID(s *string) *UserHistoryUpdate {
 	if s != nil {
-		uhu.SetUpdatedBy(*s)
+		uhu.SetUpdatedByID(*s)
 	}
 	return uhu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (uhu *UserHistoryUpdate) ClearUpdatedBy() *UserHistoryUpdate {
-	uhu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (uhu *UserHistoryUpdate) ClearUpdatedByID() *UserHistoryUpdate {
+	uhu.mutation.ClearUpdatedByID()
 	return uhu
 }
 
@@ -85,23 +85,23 @@ func (uhu *UserHistoryUpdate) ClearDeletedAt() *UserHistoryUpdate {
 	return uhu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (uhu *UserHistoryUpdate) SetDeletedBy(s string) *UserHistoryUpdate {
-	uhu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (uhu *UserHistoryUpdate) SetDeletedByID(s string) *UserHistoryUpdate {
+	uhu.mutation.SetDeletedByID(s)
 	return uhu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableDeletedBy(s *string) *UserHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (uhu *UserHistoryUpdate) SetNillableDeletedByID(s *string) *UserHistoryUpdate {
 	if s != nil {
-		uhu.SetDeletedBy(*s)
+		uhu.SetDeletedByID(*s)
 	}
 	return uhu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (uhu *UserHistoryUpdate) ClearDeletedBy() *UserHistoryUpdate {
-	uhu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (uhu *UserHistoryUpdate) ClearDeletedByID() *UserHistoryUpdate {
+	uhu.mutation.ClearDeletedByID()
 	return uhu
 }
 
@@ -434,6 +434,9 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uhu.mutation.RefCleared() {
 		_spec.ClearField(userhistory.FieldRef, field.TypeString)
 	}
+	if uhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if uhu.mutation.CreatedAtCleared() {
 		_spec.ClearField(userhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -443,14 +446,14 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uhu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(userhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if uhu.mutation.CreatedByCleared() {
-		_spec.ClearField(userhistory.FieldCreatedBy, field.TypeString)
+	if uhu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(userhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := uhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := uhu.mutation.UpdatedByID(); ok {
+		_spec.SetField(userhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if uhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
+	if uhu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(userhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := uhu.mutation.DeletedAt(); ok {
 		_spec.SetField(userhistory.FieldDeletedAt, field.TypeTime, value)
@@ -458,11 +461,11 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(userhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := uhu.mutation.DeletedBy(); ok {
-		_spec.SetField(userhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := uhu.mutation.DeletedByID(); ok {
+		_spec.SetField(userhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if uhu.mutation.DeletedByCleared() {
-		_spec.ClearField(userhistory.FieldDeletedBy, field.TypeString)
+	if uhu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(userhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := uhu.mutation.Tags(); ok {
 		_spec.SetField(userhistory.FieldTags, field.TypeJSON, value)
@@ -580,23 +583,23 @@ func (uhuo *UserHistoryUpdateOne) ClearUpdatedAt() *UserHistoryUpdateOne {
 	return uhuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (uhuo *UserHistoryUpdateOne) SetUpdatedBy(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (uhuo *UserHistoryUpdateOne) SetUpdatedByID(s string) *UserHistoryUpdateOne {
+	uhuo.mutation.SetUpdatedByID(s)
 	return uhuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableUpdatedBy(s *string) *UserHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (uhuo *UserHistoryUpdateOne) SetNillableUpdatedByID(s *string) *UserHistoryUpdateOne {
 	if s != nil {
-		uhuo.SetUpdatedBy(*s)
+		uhuo.SetUpdatedByID(*s)
 	}
 	return uhuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (uhuo *UserHistoryUpdateOne) ClearUpdatedBy() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (uhuo *UserHistoryUpdateOne) ClearUpdatedByID() *UserHistoryUpdateOne {
+	uhuo.mutation.ClearUpdatedByID()
 	return uhuo
 }
 
@@ -620,23 +623,23 @@ func (uhuo *UserHistoryUpdateOne) ClearDeletedAt() *UserHistoryUpdateOne {
 	return uhuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (uhuo *UserHistoryUpdateOne) SetDeletedBy(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (uhuo *UserHistoryUpdateOne) SetDeletedByID(s string) *UserHistoryUpdateOne {
+	uhuo.mutation.SetDeletedByID(s)
 	return uhuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableDeletedBy(s *string) *UserHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (uhuo *UserHistoryUpdateOne) SetNillableDeletedByID(s *string) *UserHistoryUpdateOne {
 	if s != nil {
-		uhuo.SetDeletedBy(*s)
+		uhuo.SetDeletedByID(*s)
 	}
 	return uhuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (uhuo *UserHistoryUpdateOne) ClearDeletedBy() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (uhuo *UserHistoryUpdateOne) ClearDeletedByID() *UserHistoryUpdateOne {
+	uhuo.mutation.ClearDeletedByID()
 	return uhuo
 }
 
@@ -999,6 +1002,9 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	if uhuo.mutation.RefCleared() {
 		_spec.ClearField(userhistory.FieldRef, field.TypeString)
 	}
+	if uhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if uhuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(userhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -1008,14 +1014,14 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	if uhuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(userhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if uhuo.mutation.CreatedByCleared() {
-		_spec.ClearField(userhistory.FieldCreatedBy, field.TypeString)
+	if uhuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(userhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := uhuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(userhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if uhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
+	if uhuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(userhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := uhuo.mutation.DeletedAt(); ok {
 		_spec.SetField(userhistory.FieldDeletedAt, field.TypeTime, value)
@@ -1023,11 +1029,11 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	if uhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(userhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := uhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(userhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := uhuo.mutation.DeletedByID(); ok {
+		_spec.SetField(userhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if uhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(userhistory.FieldDeletedBy, field.TypeString)
+	if uhuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(userhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := uhuo.mutation.Tags(); ok {
 		_spec.SetField(userhistory.FieldTags, field.TypeJSON, value)

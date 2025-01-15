@@ -86,7 +86,7 @@ func (Invite) Fields() []ent.Field {
 // Mixin of the Invite
 func (Invite) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		NewOrgOwnedMixin(
@@ -119,7 +119,7 @@ func (Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.OrganizationInheritedChecks(),
 		history.Annotations{
 			Exclude: true,

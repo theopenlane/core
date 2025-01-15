@@ -37,7 +37,7 @@ func (DocumentData) Fields() []ent.Field {
 // Mixin of the DocumentData
 func (DocumentData) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
@@ -64,7 +64,7 @@ func (DocumentData) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.OrganizationInheritedChecks(), // TODO(sfunk): update to template checks instead of org checks
 	}
 }

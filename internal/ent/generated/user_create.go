@@ -66,30 +66,30 @@ func (uc *UserCreate) SetNillableUpdatedAt(t *time.Time) *UserCreate {
 	return uc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (uc *UserCreate) SetCreatedBy(s string) *UserCreate {
-	uc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (uc *UserCreate) SetCreatedByID(s string) *UserCreate {
+	uc.mutation.SetCreatedByID(s)
 	return uc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (uc *UserCreate) SetNillableCreatedBy(s *string) *UserCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCreatedByID(s *string) *UserCreate {
 	if s != nil {
-		uc.SetCreatedBy(*s)
+		uc.SetCreatedByID(*s)
 	}
 	return uc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (uc *UserCreate) SetUpdatedBy(s string) *UserCreate {
-	uc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (uc *UserCreate) SetUpdatedByID(s string) *UserCreate {
+	uc.mutation.SetUpdatedByID(s)
 	return uc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uc *UserCreate) SetNillableUpdatedBy(s *string) *UserCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableUpdatedByID(s *string) *UserCreate {
 	if s != nil {
-		uc.SetUpdatedBy(*s)
+		uc.SetUpdatedByID(*s)
 	}
 	return uc
 }
@@ -108,16 +108,16 @@ func (uc *UserCreate) SetNillableDeletedAt(t *time.Time) *UserCreate {
 	return uc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (uc *UserCreate) SetDeletedBy(s string) *UserCreate {
-	uc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (uc *UserCreate) SetDeletedByID(s string) *UserCreate {
+	uc.mutation.SetDeletedByID(s)
 	return uc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uc *UserCreate) SetNillableDeletedBy(s *string) *UserCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableDeletedByID(s *string) *UserCreate {
 	if s != nil {
-		uc.SetDeletedBy(*s)
+		uc.SetDeletedByID(*s)
 	}
 	return uc
 }
@@ -788,21 +788,21 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := uc.mutation.CreatedBy(); ok {
-		_spec.SetField(user.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := uc.mutation.CreatedByID(); ok {
+		_spec.SetField(user.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := uc.mutation.UpdatedBy(); ok {
-		_spec.SetField(user.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := uc.mutation.UpdatedByID(); ok {
+		_spec.SetField(user.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := uc.mutation.DeletedAt(); ok {
 		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := uc.mutation.DeletedBy(); ok {
-		_spec.SetField(user.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := uc.mutation.DeletedByID(); ok {
+		_spec.SetField(user.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := uc.mutation.MappingID(); ok {
 		_spec.SetField(user.FieldMappingID, field.TypeString, value)

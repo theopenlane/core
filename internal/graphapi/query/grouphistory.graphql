@@ -3,7 +3,7 @@ query GetAllGroupHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         displayName
         gravatarLogoURL
@@ -16,7 +16,7 @@ query GetAllGroupHistories {
         ref
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -27,7 +27,7 @@ query GetGroupHistories($where: GroupHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         displayName
         gravatarLogoURL
@@ -40,7 +40,7 @@ query GetGroupHistories($where: GroupHistoryWhereInput) {
         ref
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

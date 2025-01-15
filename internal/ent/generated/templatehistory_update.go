@@ -46,23 +46,23 @@ func (thu *TemplateHistoryUpdate) ClearUpdatedAt() *TemplateHistoryUpdate {
 	return thu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (thu *TemplateHistoryUpdate) SetUpdatedBy(s string) *TemplateHistoryUpdate {
-	thu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (thu *TemplateHistoryUpdate) SetUpdatedByID(s string) *TemplateHistoryUpdate {
+	thu.mutation.SetUpdatedByID(s)
 	return thu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableUpdatedBy(s *string) *TemplateHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (thu *TemplateHistoryUpdate) SetNillableUpdatedByID(s *string) *TemplateHistoryUpdate {
 	if s != nil {
-		thu.SetUpdatedBy(*s)
+		thu.SetUpdatedByID(*s)
 	}
 	return thu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (thu *TemplateHistoryUpdate) ClearUpdatedBy() *TemplateHistoryUpdate {
-	thu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (thu *TemplateHistoryUpdate) ClearUpdatedByID() *TemplateHistoryUpdate {
+	thu.mutation.ClearUpdatedByID()
 	return thu
 }
 
@@ -86,23 +86,23 @@ func (thu *TemplateHistoryUpdate) ClearDeletedAt() *TemplateHistoryUpdate {
 	return thu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (thu *TemplateHistoryUpdate) SetDeletedBy(s string) *TemplateHistoryUpdate {
-	thu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (thu *TemplateHistoryUpdate) SetDeletedByID(s string) *TemplateHistoryUpdate {
+	thu.mutation.SetDeletedByID(s)
 	return thu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableDeletedBy(s *string) *TemplateHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (thu *TemplateHistoryUpdate) SetNillableDeletedByID(s *string) *TemplateHistoryUpdate {
 	if s != nil {
-		thu.SetDeletedBy(*s)
+		thu.SetDeletedByID(*s)
 	}
 	return thu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (thu *TemplateHistoryUpdate) ClearDeletedBy() *TemplateHistoryUpdate {
-	thu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (thu *TemplateHistoryUpdate) ClearDeletedByID() *TemplateHistoryUpdate {
+	thu.mutation.ClearDeletedByID()
 	return thu
 }
 
@@ -288,6 +288,9 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if thu.mutation.RefCleared() {
 		_spec.ClearField(templatehistory.FieldRef, field.TypeString)
 	}
+	if thu.mutation.UpdatedByCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if thu.mutation.CreatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -297,14 +300,14 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if thu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if thu.mutation.CreatedByCleared() {
-		_spec.ClearField(templatehistory.FieldCreatedBy, field.TypeString)
+	if thu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(templatehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := thu.mutation.UpdatedBy(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := thu.mutation.UpdatedByID(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if thu.mutation.UpdatedByCleared() {
-		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
+	if thu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := thu.mutation.DeletedAt(); ok {
 		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
@@ -312,11 +315,11 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if thu.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := thu.mutation.DeletedBy(); ok {
-		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := thu.mutation.DeletedByID(); ok {
+		_spec.SetField(templatehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if thu.mutation.DeletedByCleared() {
-		_spec.ClearField(templatehistory.FieldDeletedBy, field.TypeString)
+	if thu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(templatehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := thu.mutation.Tags(); ok {
 		_spec.SetField(templatehistory.FieldTags, field.TypeJSON, value)
@@ -392,23 +395,23 @@ func (thuo *TemplateHistoryUpdateOne) ClearUpdatedAt() *TemplateHistoryUpdateOne
 	return thuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (thuo *TemplateHistoryUpdateOne) SetUpdatedBy(s string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (thuo *TemplateHistoryUpdateOne) SetUpdatedByID(s string) *TemplateHistoryUpdateOne {
+	thuo.mutation.SetUpdatedByID(s)
 	return thuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableUpdatedBy(s *string) *TemplateHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (thuo *TemplateHistoryUpdateOne) SetNillableUpdatedByID(s *string) *TemplateHistoryUpdateOne {
 	if s != nil {
-		thuo.SetUpdatedBy(*s)
+		thuo.SetUpdatedByID(*s)
 	}
 	return thuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (thuo *TemplateHistoryUpdateOne) ClearUpdatedBy() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (thuo *TemplateHistoryUpdateOne) ClearUpdatedByID() *TemplateHistoryUpdateOne {
+	thuo.mutation.ClearUpdatedByID()
 	return thuo
 }
 
@@ -432,23 +435,23 @@ func (thuo *TemplateHistoryUpdateOne) ClearDeletedAt() *TemplateHistoryUpdateOne
 	return thuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (thuo *TemplateHistoryUpdateOne) SetDeletedBy(s string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (thuo *TemplateHistoryUpdateOne) SetDeletedByID(s string) *TemplateHistoryUpdateOne {
+	thuo.mutation.SetDeletedByID(s)
 	return thuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableDeletedBy(s *string) *TemplateHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (thuo *TemplateHistoryUpdateOne) SetNillableDeletedByID(s *string) *TemplateHistoryUpdateOne {
 	if s != nil {
-		thuo.SetDeletedBy(*s)
+		thuo.SetDeletedByID(*s)
 	}
 	return thuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (thuo *TemplateHistoryUpdateOne) ClearDeletedBy() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (thuo *TemplateHistoryUpdateOne) ClearDeletedByID() *TemplateHistoryUpdateOne {
+	thuo.mutation.ClearDeletedByID()
 	return thuo
 }
 
@@ -664,6 +667,9 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 	if thuo.mutation.RefCleared() {
 		_spec.ClearField(templatehistory.FieldRef, field.TypeString)
 	}
+	if thuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if thuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -673,14 +679,14 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 	if thuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if thuo.mutation.CreatedByCleared() {
-		_spec.ClearField(templatehistory.FieldCreatedBy, field.TypeString)
+	if thuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(templatehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := thuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := thuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if thuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
+	if thuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := thuo.mutation.DeletedAt(); ok {
 		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
@@ -688,11 +694,11 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 	if thuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := thuo.mutation.DeletedBy(); ok {
-		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := thuo.mutation.DeletedByID(); ok {
+		_spec.SetField(templatehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if thuo.mutation.DeletedByCleared() {
-		_spec.ClearField(templatehistory.FieldDeletedBy, field.TypeString)
+	if thuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(templatehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := thuo.mutation.Tags(); ok {
 		_spec.SetField(templatehistory.FieldTags, field.TypeJSON, value)

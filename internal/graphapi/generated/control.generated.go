@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Control_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Control_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Control_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
@@ -133,6 +133,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Control_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Control_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -185,14 +189,14 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Control_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Control_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Control_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
@@ -247,6 +251,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Control_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Control_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -343,14 +351,14 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Control_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Control_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Control_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
@@ -405,6 +413,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Control_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Control_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},

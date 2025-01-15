@@ -25,18 +25,20 @@ type ControlObjectiveHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -77,7 +79,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldMappingID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldCreatedByID, controlobjectivehistory.FieldUpdatedByID, controlobjectivehistory.FieldDeletedByID, controlobjectivehistory.FieldMappingID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -120,6 +122,13 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value != nil {
 				coh.Operation = *value
 			}
+		case controlobjectivehistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				coh.UpdatedBy = new(string)
+				*coh.UpdatedBy = value.String
+			}
 		case controlobjectivehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -132,17 +141,17 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.UpdatedAt = value.Time
 			}
-		case controlobjectivehistory.FieldCreatedBy:
+		case controlobjectivehistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				coh.CreatedBy = value.String
+				coh.CreatedByID = value.String
 			}
-		case controlobjectivehistory.FieldUpdatedBy:
+		case controlobjectivehistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				coh.UpdatedBy = value.String
+				coh.UpdatedByID = value.String
 			}
 		case controlobjectivehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -150,11 +159,11 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.DeletedAt = value.Time
 			}
-		case controlobjectivehistory.FieldDeletedBy:
+		case controlobjectivehistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				coh.DeletedBy = value.String
+				coh.DeletedByID = value.String
 			}
 		case controlobjectivehistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -289,23 +298,28 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", coh.Operation))
 	builder.WriteString(", ")
+	if v := coh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(coh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(coh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(coh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(coh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(coh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(coh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(coh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(coh.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(coh.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(coh.MappingID)
