@@ -355,9 +355,6 @@ func (ohc *OrganizationHistoryCreate) defaults() {
 		ohc.mutation.SetPersonalOrg(v)
 	}
 	if _, ok := ohc.mutation.AvatarUpdatedAt(); !ok {
-		if organizationhistory.DefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := organizationhistory.DefaultAvatarUpdatedAt()
 		ohc.mutation.SetAvatarUpdatedAt(v)
 	}

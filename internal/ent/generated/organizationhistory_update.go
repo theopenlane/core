@@ -276,13 +276,9 @@ func (ohu *OrganizationHistoryUpdate) defaults() {
 		ohu.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ohu.mutation.AvatarUpdatedAt(); !ok && !ohu.mutation.AvatarUpdatedAtCleared() {
-		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
 		ohu.mutation.SetAvatarUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -664,13 +660,9 @@ func (ohuo *OrganizationHistoryUpdateOne) defaults() {
 		ohuo.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ohuo.mutation.AvatarUpdatedAt(); !ok && !ohuo.mutation.AvatarUpdatedAtCleared() {
-		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
 		ohuo.mutation.SetAvatarUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
