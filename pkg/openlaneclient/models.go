@@ -11599,7 +11599,7 @@ type Organization struct {
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
-	// The organizations's local avatar file id, takes precedence over the remote URL
+	// The organizations's local avatar file id, takes precedence over the avatar remote URL
 	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
@@ -11717,7 +11717,7 @@ type OrganizationHistory struct {
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
-	// The organizations's local avatar file id, takes precedence over the remote URL
+	// The organizations's local avatar file id, takes precedence over the avatar remote URL
 	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`

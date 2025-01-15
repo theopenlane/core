@@ -187,7 +187,6 @@ func expectUpload(t *testing.T, mockStore objects.Storage, expectedUploads []gra
 		ms.EXPECT().Upload(mock.Anything, mock.Anything, mock.Anything).Return(&objects.UploadedFileMetadata{
 			Size: upload.Size,
 		}, nil).Times(1)
-		ms.EXPECT().GetPresignedURL(mock.Anything, mock.Anything, mock.Anything).Return("https://presigned.url/my-file", nil).Times(1)
 	}
 }
 

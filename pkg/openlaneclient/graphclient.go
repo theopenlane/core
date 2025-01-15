@@ -23212,6 +23212,17 @@ func (t *CreateBulkOrganization_CreateBulkOrganization) GetOrganizations() []*Cr
 	return t.Organizations
 }
 
+type CreateOrganization_CreateOrganization_Organization_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateOrganization_CreateOrganization_Organization_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateOrganization_CreateOrganization_Organization_AvatarFile{}
+	}
+	return t.PresignedURL
+}
+
 type CreateOrganization_CreateOrganization_Organization_Setting struct {
 	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -23380,21 +23391,28 @@ func (t *CreateOrganization_CreateOrganization_Organization_Children) GetEdges()
 }
 
 type CreateOrganization_CreateOrganization_Organization struct {
-	AvatarLocalFileID *string                                                     "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	AvatarRemoteURL   *string                                                     "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	Children          CreateOrganization_CreateOrganization_Organization_Children "json:\"children\" graphql:\"children\""
-	CreatedAt         *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	Description       *string                                                     "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName       string                                                      "json:\"displayName\" graphql:\"displayName\""
-	ID                string                                                      "json:\"id\" graphql:\"id\""
-	Name              string                                                      "json:\"name\" graphql:\"name\""
-	Parent            *CreateOrganization_CreateOrganization_Organization_Parent  "json:\"parent,omitempty\" graphql:\"parent\""
-	PersonalOrg       *bool                                                       "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	Setting           *CreateOrganization_CreateOrganization_Organization_Setting "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags              []string                                                    "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt         *time.Time                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	AvatarFile        *CreateOrganization_CreateOrganization_Organization_AvatarFile "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
+	AvatarLocalFileID *string                                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	AvatarRemoteURL   *string                                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	Children          CreateOrganization_CreateOrganization_Organization_Children    "json:\"children\" graphql:\"children\""
+	CreatedAt         *time.Time                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	Description       *string                                                        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName       string                                                         "json:\"displayName\" graphql:\"displayName\""
+	ID                string                                                         "json:\"id\" graphql:\"id\""
+	Name              string                                                         "json:\"name\" graphql:\"name\""
+	Parent            *CreateOrganization_CreateOrganization_Organization_Parent     "json:\"parent,omitempty\" graphql:\"parent\""
+	PersonalOrg       *bool                                                          "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	Setting           *CreateOrganization_CreateOrganization_Organization_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags              []string                                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 }
 
+func (t *CreateOrganization_CreateOrganization_Organization) GetAvatarFile() *CreateOrganization_CreateOrganization_Organization_AvatarFile {
+	if t == nil {
+		t = &CreateOrganization_CreateOrganization_Organization{}
+	}
+	return t.AvatarFile
+}
 func (t *CreateOrganization_CreateOrganization_Organization) GetAvatarLocalFileID() *string {
 	if t == nil {
 		t = &CreateOrganization_CreateOrganization_Organization{}
@@ -24483,6 +24501,17 @@ func (t *GetOrganizations_Organizations) GetEdges() []*GetOrganizations_Organiza
 	return t.Edges
 }
 
+type UpdateOrganization_UpdateOrganization_Organization_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_AvatarFile{}
+	}
+	return t.PresignedURL
+}
+
 type UpdateOrganization_UpdateOrganization_Organization_Members struct {
 	ID     string     "json:\"id\" graphql:\"id\""
 	Role   enums.Role "json:\"role\" graphql:\"role\""
@@ -24604,18 +24633,25 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetUpdatedB
 }
 
 type UpdateOrganization_UpdateOrganization_Organization struct {
-	AvatarLocalFileID *string                                                       "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	AvatarRemoteURL   *string                                                       "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	Description       *string                                                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName       string                                                        "json:\"displayName\" graphql:\"displayName\""
-	ID                string                                                        "json:\"id\" graphql:\"id\""
-	Members           []*UpdateOrganization_UpdateOrganization_Organization_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name              string                                                        "json:\"name\" graphql:\"name\""
-	PersonalOrg       *bool                                                         "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	Setting           *UpdateOrganization_UpdateOrganization_Organization_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags              []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	AvatarFile        *UpdateOrganization_UpdateOrganization_Organization_AvatarFile "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
+	AvatarLocalFileID *string                                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	AvatarRemoteURL   *string                                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	Description       *string                                                        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName       string                                                         "json:\"displayName\" graphql:\"displayName\""
+	ID                string                                                         "json:\"id\" graphql:\"id\""
+	Members           []*UpdateOrganization_UpdateOrganization_Organization_Members  "json:\"members,omitempty\" graphql:\"members\""
+	Name              string                                                         "json:\"name\" graphql:\"name\""
+	PersonalOrg       *bool                                                          "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	Setting           *UpdateOrganization_UpdateOrganization_Organization_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags              []string                                                       "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *UpdateOrganization_UpdateOrganization_Organization) GetAvatarFile() *UpdateOrganization_UpdateOrganization_Organization_AvatarFile {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization{}
+	}
+	return t.AvatarFile
+}
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetAvatarLocalFileID() *string {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
@@ -42218,6 +42254,17 @@ func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_Up
 	return &t.TfaSetting
 }
 
+type CreateUser_CreateUser_User_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateUser_CreateUser_User_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateUser_CreateUser_User_AvatarFile{}
+	}
+	return t.PresignedURL
+}
+
 type CreateUser_CreateUser_User_OrgMemberships struct {
 	ID             string "json:\"id\" graphql:\"id\""
 	OrganizationID string "json:\"organizationID\" graphql:\"organizationID\""
@@ -42362,6 +42409,7 @@ func (t *CreateUser_CreateUser_User_Setting) GetUpdatedBy() *string {
 
 type CreateUser_CreateUser_User struct {
 	AuthProvider      enums.AuthProvider                             "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarFile        *CreateUser_CreateUser_User_AvatarFile         "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
 	AvatarLocalFileID *string                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	DisplayName       string                                         "json:\"displayName\" graphql:\"displayName\""
@@ -42381,6 +42429,12 @@ func (t *CreateUser_CreateUser_User) GetAuthProvider() *enums.AuthProvider {
 		t = &CreateUser_CreateUser_User{}
 	}
 	return &t.AuthProvider
+}
+func (t *CreateUser_CreateUser_User) GetAvatarFile() *CreateUser_CreateUser_User_AvatarFile {
+	if t == nil {
+		t = &CreateUser_CreateUser_User{}
+	}
+	return t.AvatarFile
 }
 func (t *CreateUser_CreateUser_User) GetAvatarLocalFileID() *string {
 	if t == nil {
@@ -42475,6 +42529,17 @@ func (t *DeleteUser_DeleteUser) GetDeletedID() string {
 		t = &DeleteUser_DeleteUser{}
 	}
 	return t.DeletedID
+}
+
+type GetAllUsers_Users_Edges_Node_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllUsers_Users_Edges_Node_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllUsers_Users_Edges_Node_AvatarFile{}
+	}
+	return t.PresignedURL
 }
 
 type GetAllUsers_Users_Edges_Node_Setting_DefaultOrg struct {
@@ -42584,22 +42649,23 @@ func (t *GetAllUsers_Users_Edges_Node_Setting) GetUpdatedBy() *string {
 }
 
 type GetAllUsers_Users_Edges_Node struct {
-	AuthProvider      enums.AuthProvider                   "json:\"authProvider\" graphql:\"authProvider\""
-	AvatarLocalFileID *string                              "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	AvatarRemoteURL   *string                              "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	CreatedAt         *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayName       string                               "json:\"displayName\" graphql:\"displayName\""
-	Email             string                               "json:\"email\" graphql:\"email\""
-	FirstName         *string                              "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID                string                               "json:\"id\" graphql:\"id\""
-	LastName          *string                              "json:\"lastName,omitempty\" graphql:\"lastName\""
-	LastSeen          *time.Time                           "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Setting           GetAllUsers_Users_Edges_Node_Setting "json:\"setting\" graphql:\"setting\""
-	Sub               *string                              "json:\"sub,omitempty\" graphql:\"sub\""
-	Tags              []string                             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt         *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuthProvider      enums.AuthProvider                       "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarFile        *GetAllUsers_Users_Edges_Node_AvatarFile "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
+	AvatarLocalFileID *string                                  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	AvatarRemoteURL   *string                                  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	CreatedAt         *time.Time                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName       string                                   "json:\"displayName\" graphql:\"displayName\""
+	Email             string                                   "json:\"email\" graphql:\"email\""
+	FirstName         *string                                  "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID                string                                   "json:\"id\" graphql:\"id\""
+	LastName          *string                                  "json:\"lastName,omitempty\" graphql:\"lastName\""
+	LastSeen          *time.Time                               "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
+	Setting           GetAllUsers_Users_Edges_Node_Setting     "json:\"setting\" graphql:\"setting\""
+	Sub               *string                                  "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags              []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllUsers_Users_Edges_Node) GetAuthProvider() *enums.AuthProvider {
@@ -42607,6 +42673,12 @@ func (t *GetAllUsers_Users_Edges_Node) GetAuthProvider() *enums.AuthProvider {
 		t = &GetAllUsers_Users_Edges_Node{}
 	}
 	return &t.AuthProvider
+}
+func (t *GetAllUsers_Users_Edges_Node) GetAvatarFile() *GetAllUsers_Users_Edges_Node_AvatarFile {
+	if t == nil {
+		t = &GetAllUsers_Users_Edges_Node{}
+	}
+	return t.AvatarFile
 }
 func (t *GetAllUsers_Users_Edges_Node) GetAvatarLocalFileID() *string {
 	if t == nil {
@@ -42719,6 +42791,17 @@ func (t *GetAllUsers_Users) GetEdges() []*GetAllUsers_Users_Edges {
 		t = &GetAllUsers_Users{}
 	}
 	return t.Edges
+}
+
+type GetUserByID_User_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetUserByID_User_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetUserByID_User_AvatarFile{}
+	}
+	return t.PresignedURL
 }
 
 type GetUserByID_User_Setting_DefaultOrg struct {
@@ -42879,6 +42962,7 @@ func (t *GetUserByID_User_Organizations) GetPersonalOrg() *bool {
 
 type GetUserByID_User struct {
 	AuthProvider      enums.AuthProvider                "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarFile        *GetUserByID_User_AvatarFile      "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
 	AvatarLocalFileID *string                           "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                           "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -42902,6 +42986,12 @@ func (t *GetUserByID_User) GetAuthProvider() *enums.AuthProvider {
 		t = &GetUserByID_User{}
 	}
 	return &t.AuthProvider
+}
+func (t *GetUserByID_User) GetAvatarFile() *GetUserByID_User_AvatarFile {
+	if t == nil {
+		t = &GetUserByID_User{}
+	}
+	return t.AvatarFile
 }
 func (t *GetUserByID_User) GetAvatarLocalFileID() *string {
 	if t == nil {
@@ -42998,6 +43088,17 @@ func (t *GetUserByID_User) GetUpdatedBy() *string {
 		t = &GetUserByID_User{}
 	}
 	return t.UpdatedBy
+}
+
+type GetUserByIDWithOrgs_User_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetUserByIDWithOrgs_User_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetUserByIDWithOrgs_User_AvatarFile{}
+	}
+	return t.PresignedURL
 }
 
 type GetUserByIDWithOrgs_User_Setting_DefaultOrg struct {
@@ -43151,6 +43252,7 @@ func (t *GetUserByIDWithOrgs_User_OrgMemberships) GetUser() *GetUserByIDWithOrgs
 
 type GetUserByIDWithOrgs_User struct {
 	AuthProvider      enums.AuthProvider                         "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarFile        *GetUserByIDWithOrgs_User_AvatarFile       "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
 	AvatarLocalFileID *string                                    "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                                    "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -43174,6 +43276,12 @@ func (t *GetUserByIDWithOrgs_User) GetAuthProvider() *enums.AuthProvider {
 		t = &GetUserByIDWithOrgs_User{}
 	}
 	return &t.AuthProvider
+}
+func (t *GetUserByIDWithOrgs_User) GetAvatarFile() *GetUserByIDWithOrgs_User_AvatarFile {
+	if t == nil {
+		t = &GetUserByIDWithOrgs_User{}
+	}
+	return t.AvatarFile
 }
 func (t *GetUserByIDWithOrgs_User) GetAvatarLocalFileID() *string {
 	if t == nil {
@@ -43270,6 +43378,17 @@ func (t *GetUserByIDWithOrgs_User) GetUpdatedBy() *string {
 		t = &GetUserByIDWithOrgs_User{}
 	}
 	return t.UpdatedBy
+}
+
+type UpdateUser_UpdateUser_User_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateUser_UpdateUser_User_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateUser_UpdateUser_User_AvatarFile{}
+	}
+	return t.PresignedURL
 }
 
 type UpdateUser_UpdateUser_User_GroupMemberships struct {
@@ -43402,6 +43521,7 @@ func (t *UpdateUser_UpdateUser_User_Setting) GetUpdatedBy() *string {
 
 type UpdateUser_UpdateUser_User struct {
 	AuthProvider      enums.AuthProvider                             "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarFile        *UpdateUser_UpdateUser_User_AvatarFile         "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
 	AvatarLocalFileID *string                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	DisplayName       string                                         "json:\"displayName\" graphql:\"displayName\""
@@ -43421,6 +43541,12 @@ func (t *UpdateUser_UpdateUser_User) GetAuthProvider() *enums.AuthProvider {
 		t = &UpdateUser_UpdateUser_User{}
 	}
 	return &t.AuthProvider
+}
+func (t *UpdateUser_UpdateUser_User) GetAvatarFile() *UpdateUser_UpdateUser_User_AvatarFile {
+	if t == nil {
+		t = &UpdateUser_UpdateUser_User{}
+	}
+	return t.AvatarFile
 }
 func (t *UpdateUser_UpdateUser_User) GetAvatarLocalFileID() *string {
 	if t == nil {
@@ -55174,6 +55300,9 @@ const CreateOrganizationDocument = `mutation CreateOrganization ($input: CreateO
 			tags
 			avatarRemoteURL
 			avatarLocalFileID
+			avatarFile {
+				presignedURL
+			}
 			createdAt
 			updatedAt
 			setting {
@@ -55479,6 +55608,9 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 			personalOrg
 			avatarLocalFileID
 			avatarRemoteURL
+			avatarFile {
+				presignedURL
+			}
 			tags
 			members {
 				id
@@ -61009,6 +61141,9 @@ const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avat
 			authProvider
 			avatarRemoteURL
 			avatarLocalFileID
+			avatarFile {
+				presignedURL
+			}
 			displayName
 			email
 			firstName
@@ -61095,6 +61230,9 @@ const GetAllUsersDocument = `query GetAllUsers {
 				authProvider
 				avatarRemoteURL
 				avatarLocalFileID
+				avatarFile {
+					presignedURL
+				}
 				displayName
 				email
 				firstName
@@ -61150,6 +61288,9 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 		authProvider
 		avatarRemoteURL
 		avatarLocalFileID
+		avatarFile {
+			presignedURL
+		}
 		displayName
 		email
 		firstName
@@ -61214,6 +61355,9 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 		authProvider
 		avatarRemoteURL
 		avatarLocalFileID
+		avatarFile {
+			presignedURL
+		}
 		displayName
 		email
 		firstName
@@ -61278,6 +61422,9 @@ const UpdateUserDocument = `mutation UpdateUser ($updateUserId: ID!, $input: Upd
 			authProvider
 			avatarRemoteURL
 			avatarLocalFileID
+			avatarFile {
+				presignedURL
+			}
 			displayName
 			email
 			firstName

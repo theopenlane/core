@@ -36011,7 +36011,7 @@ type Organization implements Node {
   """
   avatarRemoteURL: String
   """
-  The organizations's local avatar file id, takes precedence over the remote URL
+  The organizations's local avatar file id, takes precedence over the avatar remote URL
   """
   avatarLocalFileID: ID
   """
@@ -36186,7 +36186,7 @@ type OrganizationHistory implements Node {
   """
   avatarRemoteURL: String
   """
-  The organizations's local avatar file id, takes precedence over the remote URL
+  The organizations's local avatar file id, takes precedence over the avatar remote URL
   """
   avatarLocalFileID: String
   """

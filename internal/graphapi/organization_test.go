@@ -350,6 +350,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			// Ensure avatar file is not empty
 			if tc.avatarFile != nil {
 				assert.NotNil(t, resp.CreateOrganization.Organization.AvatarLocalFileID)
+				assert.NotNil(t, resp.CreateOrganization.Organization.AvatarFile.PresignedURL)
 			}
 
 			if tc.settings != nil {
@@ -631,6 +632,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 
 			if tc.avatarFile != nil {
 				assert.NotNil(t, updatedOrg.AvatarLocalFileID)
+				assert.NotNil(t, updatedOrg.AvatarFile.PresignedURL)
 			}
 		})
 	}
