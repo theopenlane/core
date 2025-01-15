@@ -201,9 +201,7 @@ func (omhc *OrgMembershipHistoryCreate) Mutation() *OrgMembershipHistoryMutation
 
 // Save creates the OrgMembershipHistory in the database.
 func (omhc *OrgMembershipHistoryCreate) Save(ctx context.Context) (*OrgMembershipHistory, error) {
-	if err := omhc.defaults(); err != nil {
-		return nil, err
-	}
+	omhc.defaults()
 	return withHooks(ctx, omhc.sqlSave, omhc.mutation, omhc.hooks)
 }
 
@@ -230,32 +228,20 @@ func (omhc *OrgMembershipHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (omhc *OrgMembershipHistoryCreate) defaults() error {
+func (omhc *OrgMembershipHistoryCreate) defaults() {
 	if _, ok := omhc.mutation.HistoryTime(); !ok {
-		if orgmembershiphistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := orgmembershiphistory.DefaultHistoryTime()
 		omhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := omhc.mutation.CreatedAt(); !ok {
-		if orgmembershiphistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := orgmembershiphistory.DefaultCreatedAt()
 		omhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := omhc.mutation.UpdatedAt(); !ok {
-		if orgmembershiphistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := orgmembershiphistory.DefaultUpdatedAt()
 		omhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := omhc.mutation.MappingID(); !ok {
-		if orgmembershiphistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := orgmembershiphistory.DefaultMappingID()
 		omhc.mutation.SetMappingID(v)
 	}
@@ -264,13 +250,9 @@ func (omhc *OrgMembershipHistoryCreate) defaults() error {
 		omhc.mutation.SetRole(v)
 	}
 	if _, ok := omhc.mutation.ID(); !ok {
-		if orgmembershiphistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := orgmembershiphistory.DefaultID()
 		omhc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -19,6 +19,9 @@ tuples:
     object: organization:openlane
   # setup audit log viewer
   - user: user:ulid-of-audit-log-viewer
+    relation: member
+    object: organization:openlane
+  - user: user:ulid-of-audit-log-viewer
     relation: audit_log_viewer
     object: organization:openlane
   # setup service user
@@ -116,14 +119,14 @@ tests:
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         assertions:
-          member: false
+          member: true
           admin: false
           owner: false
           can_delete: false
           can_edit: false
-          can_view: false
+          can_view: true
           audit_log_viewer: true
-          can_invite_members: false
+          can_invite_members: true
           can_invite_admins: false
       - user: user:ulid-of-owner
         object: organization:foo #child org
@@ -222,6 +225,9 @@ tests:
         relation: member
         object: group:cat-lovers
       # add audit log viewer
+      - user: user:ulid-of-audit-log-viewer
+        relation: member
+        object: group:cat-lovers
       - user: user:ulid-of-audit-log-viewer
         relation: audit_log_viewer
         object: group:cat-lovers

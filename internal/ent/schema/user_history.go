@@ -93,6 +93,6 @@ func (UserHistory) Indexes() []ent.Index {
 // Interceptors of the UserHistory
 func (UserHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false),
+		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}
 }

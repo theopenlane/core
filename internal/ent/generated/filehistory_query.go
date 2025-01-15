@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (fhq *FileHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		fhq.sql = prev
-	}
-	if filehistory.Policy == nil {
-		return errors.New("generated: uninitialized filehistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := filehistory.Policy.EvalQuery(ctx, fhq); err != nil {
-		return err
 	}
 	return nil
 }

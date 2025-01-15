@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (iphq *InternalPolicyHistoryQuery) prepareQuery(ctx context.Context) error 
 			return err
 		}
 		iphq.sql = prev
-	}
-	if internalpolicyhistory.Policy == nil {
-		return errors.New("generated: uninitialized internalpolicyhistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := internalpolicyhistory.Policy.EvalQuery(ctx, iphq); err != nil {
-		return err
 	}
 	return nil
 }

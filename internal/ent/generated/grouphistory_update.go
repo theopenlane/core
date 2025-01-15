@@ -237,9 +237,7 @@ func (ghu *GroupHistoryUpdate) Mutation() *GroupHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ghu *GroupHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := ghu.defaults(); err != nil {
-		return 0, err
-	}
+	ghu.defaults()
 	return withHooks(ctx, ghu.sqlSave, ghu.mutation, ghu.hooks)
 }
 
@@ -266,15 +264,11 @@ func (ghu *GroupHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ghu *GroupHistoryUpdate) defaults() error {
+func (ghu *GroupHistoryUpdate) defaults() {
 	if _, ok := ghu.mutation.UpdatedAt(); !ok && !ghu.mutation.UpdatedAtCleared() {
-		if grouphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized grouphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := grouphistory.UpdateDefaultUpdatedAt()
 		ghu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -608,9 +602,7 @@ func (ghuo *GroupHistoryUpdateOne) Select(field string, fields ...string) *Group
 
 // Save executes the query and returns the updated GroupHistory entity.
 func (ghuo *GroupHistoryUpdateOne) Save(ctx context.Context) (*GroupHistory, error) {
-	if err := ghuo.defaults(); err != nil {
-		return nil, err
-	}
+	ghuo.defaults()
 	return withHooks(ctx, ghuo.sqlSave, ghuo.mutation, ghuo.hooks)
 }
 
@@ -637,15 +629,11 @@ func (ghuo *GroupHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ghuo *GroupHistoryUpdateOne) defaults() error {
+func (ghuo *GroupHistoryUpdateOne) defaults() {
 	if _, ok := ghuo.mutation.UpdatedAt(); !ok && !ghuo.mutation.UpdatedAtCleared() {
-		if grouphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized grouphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := grouphistory.UpdateDefaultUpdatedAt()
 		ghuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

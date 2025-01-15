@@ -290,9 +290,7 @@ func (iphc *InternalPolicyHistoryCreate) Mutation() *InternalPolicyHistoryMutati
 
 // Save creates the InternalPolicyHistory in the database.
 func (iphc *InternalPolicyHistoryCreate) Save(ctx context.Context) (*InternalPolicyHistory, error) {
-	if err := iphc.defaults(); err != nil {
-		return nil, err
-	}
+	iphc.defaults()
 	return withHooks(ctx, iphc.sqlSave, iphc.mutation, iphc.hooks)
 }
 
@@ -319,32 +317,20 @@ func (iphc *InternalPolicyHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (iphc *InternalPolicyHistoryCreate) defaults() error {
+func (iphc *InternalPolicyHistoryCreate) defaults() {
 	if _, ok := iphc.mutation.HistoryTime(); !ok {
-		if internalpolicyhistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := internalpolicyhistory.DefaultHistoryTime()
 		iphc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := iphc.mutation.CreatedAt(); !ok {
-		if internalpolicyhistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := internalpolicyhistory.DefaultCreatedAt()
 		iphc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := iphc.mutation.UpdatedAt(); !ok {
-		if internalpolicyhistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := internalpolicyhistory.DefaultUpdatedAt()
 		iphc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := iphc.mutation.MappingID(); !ok {
-		if internalpolicyhistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := internalpolicyhistory.DefaultMappingID()
 		iphc.mutation.SetMappingID(v)
 	}
@@ -353,13 +339,9 @@ func (iphc *InternalPolicyHistoryCreate) defaults() error {
 		iphc.mutation.SetTags(v)
 	}
 	if _, ok := iphc.mutation.ID(); !ok {
-		if internalpolicyhistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := internalpolicyhistory.DefaultID()
 		iphc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -228,9 +228,7 @@ func (ihc *IntegrationHistoryCreate) Mutation() *IntegrationHistoryMutation {
 
 // Save creates the IntegrationHistory in the database.
 func (ihc *IntegrationHistoryCreate) Save(ctx context.Context) (*IntegrationHistory, error) {
-	if err := ihc.defaults(); err != nil {
-		return nil, err
-	}
+	ihc.defaults()
 	return withHooks(ctx, ihc.sqlSave, ihc.mutation, ihc.hooks)
 }
 
@@ -257,32 +255,20 @@ func (ihc *IntegrationHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ihc *IntegrationHistoryCreate) defaults() error {
+func (ihc *IntegrationHistoryCreate) defaults() {
 	if _, ok := ihc.mutation.HistoryTime(); !ok {
-		if integrationhistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized integrationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := integrationhistory.DefaultHistoryTime()
 		ihc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ihc.mutation.CreatedAt(); !ok {
-		if integrationhistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized integrationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := integrationhistory.DefaultCreatedAt()
 		ihc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ihc.mutation.UpdatedAt(); !ok {
-		if integrationhistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized integrationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := integrationhistory.DefaultUpdatedAt()
 		ihc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ihc.mutation.MappingID(); !ok {
-		if integrationhistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized integrationhistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := integrationhistory.DefaultMappingID()
 		ihc.mutation.SetMappingID(v)
 	}
@@ -291,13 +277,9 @@ func (ihc *IntegrationHistoryCreate) defaults() error {
 		ihc.mutation.SetTags(v)
 	}
 	if _, ok := ihc.mutation.ID(); !ok {
-		if integrationhistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized integrationhistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := integrationhistory.DefaultID()
 		ihc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

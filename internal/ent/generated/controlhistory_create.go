@@ -338,9 +338,7 @@ func (chc *ControlHistoryCreate) Mutation() *ControlHistoryMutation {
 
 // Save creates the ControlHistory in the database.
 func (chc *ControlHistoryCreate) Save(ctx context.Context) (*ControlHistory, error) {
-	if err := chc.defaults(); err != nil {
-		return nil, err
-	}
+	chc.defaults()
 	return withHooks(ctx, chc.sqlSave, chc.mutation, chc.hooks)
 }
 
@@ -367,32 +365,20 @@ func (chc *ControlHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chc *ControlHistoryCreate) defaults() error {
+func (chc *ControlHistoryCreate) defaults() {
 	if _, ok := chc.mutation.HistoryTime(); !ok {
-		if controlhistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized controlhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := controlhistory.DefaultHistoryTime()
 		chc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := chc.mutation.CreatedAt(); !ok {
-		if controlhistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlhistory.DefaultCreatedAt()
 		chc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := chc.mutation.UpdatedAt(); !ok {
-		if controlhistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlhistory.DefaultUpdatedAt()
 		chc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := chc.mutation.MappingID(); !ok {
-		if controlhistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized controlhistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := controlhistory.DefaultMappingID()
 		chc.mutation.SetMappingID(v)
 	}
@@ -401,13 +387,9 @@ func (chc *ControlHistoryCreate) defaults() error {
 		chc.mutation.SetTags(v)
 	}
 	if _, ok := chc.mutation.ID(); !ok {
-		if controlhistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized controlhistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := controlhistory.DefaultID()
 		chc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -315,9 +315,7 @@ func (phu *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (phu *ProcedureHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := phu.defaults(); err != nil {
-		return 0, err
-	}
+	phu.defaults()
 	return withHooks(ctx, phu.sqlSave, phu.mutation, phu.hooks)
 }
 
@@ -344,15 +342,11 @@ func (phu *ProcedureHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phu *ProcedureHistoryUpdate) defaults() error {
+func (phu *ProcedureHistoryUpdate) defaults() {
 	if _, ok := phu.mutation.UpdatedAt(); !ok && !phu.mutation.UpdatedAtCleared() {
-		if procedurehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := procedurehistory.UpdateDefaultUpdatedAt()
 		phu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -791,9 +785,7 @@ func (phuo *ProcedureHistoryUpdateOne) Select(field string, fields ...string) *P
 
 // Save executes the query and returns the updated ProcedureHistory entity.
 func (phuo *ProcedureHistoryUpdateOne) Save(ctx context.Context) (*ProcedureHistory, error) {
-	if err := phuo.defaults(); err != nil {
-		return nil, err
-	}
+	phuo.defaults()
 	return withHooks(ctx, phuo.sqlSave, phuo.mutation, phuo.hooks)
 }
 
@@ -820,15 +812,11 @@ func (phuo *ProcedureHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phuo *ProcedureHistoryUpdateOne) defaults() error {
+func (phuo *ProcedureHistoryUpdateOne) defaults() {
 	if _, ok := phuo.mutation.UpdatedAt(); !ok && !phuo.mutation.UpdatedAtCleared() {
-		if procedurehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := procedurehistory.UpdateDefaultUpdatedAt()
 		phuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

@@ -369,9 +369,7 @@ func (chu *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *ControlHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := chu.defaults(); err != nil {
-		return 0, err
-	}
+	chu.defaults()
 	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -398,15 +396,11 @@ func (chu *ControlHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chu *ControlHistoryUpdate) defaults() error {
+func (chu *ControlHistoryUpdate) defaults() {
 	if _, ok := chu.mutation.UpdatedAt(); !ok && !chu.mutation.UpdatedAtCleared() {
-		if controlhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
 		chu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -914,9 +908,7 @@ func (chuo *ControlHistoryUpdateOne) Select(field string, fields ...string) *Con
 
 // Save executes the query and returns the updated ControlHistory entity.
 func (chuo *ControlHistoryUpdateOne) Save(ctx context.Context) (*ControlHistory, error) {
-	if err := chuo.defaults(); err != nil {
-		return nil, err
-	}
+	chuo.defaults()
 	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -943,15 +935,11 @@ func (chuo *ControlHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chuo *ControlHistoryUpdateOne) defaults() error {
+func (chuo *ControlHistoryUpdateOne) defaults() {
 	if _, ok := chuo.mutation.UpdatedAt(); !ok && !chuo.mutation.UpdatedAtCleared() {
-		if controlhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
 		chuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

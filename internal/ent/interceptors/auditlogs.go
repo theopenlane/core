@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -16,7 +17,7 @@ import (
 )
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
-func HistoryAccess(relation string, orgOwned, userOwed bool) ent.Interceptor {
+func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		au, err := auth.GetAuthenticatedUserContext(ctx)
 		if err != nil {
@@ -48,6 +49,19 @@ func HistoryAccess(relation string, orgOwned, userOwed bool) ent.Interceptor {
 
 		if len(allowedOrgs) == 0 {
 			return rout.ErrPermissionDenied
+		}
+
+		if objectOwner != "" {
+			filter, err := GetAuthorizedObjectIDs(ctx, objectOwner)
+			if err != nil {
+				return err
+			}
+
+			idField := strings.ToLower(objectOwner + "_id")
+
+			q.WhereP(
+				sql.FieldIn(idField, filter...),
+			)
 		}
 
 		return addFilter(ctx, q, orgOwned, userOwed, allowedOrgs)

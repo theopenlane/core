@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (oshq *OrganizationSettingHistoryQuery) prepareQuery(ctx context.Context) e
 			return err
 		}
 		oshq.sql = prev
-	}
-	if organizationsettinghistory.Policy == nil {
-		return errors.New("generated: uninitialized organizationsettinghistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := organizationsettinghistory.Policy.EvalQuery(ctx, oshq); err != nil {
-		return err
 	}
 	return nil
 }

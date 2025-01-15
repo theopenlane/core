@@ -299,9 +299,7 @@ func (phc *ProgramHistoryCreate) Mutation() *ProgramHistoryMutation {
 
 // Save creates the ProgramHistory in the database.
 func (phc *ProgramHistoryCreate) Save(ctx context.Context) (*ProgramHistory, error) {
-	if err := phc.defaults(); err != nil {
-		return nil, err
-	}
+	phc.defaults()
 	return withHooks(ctx, phc.sqlSave, phc.mutation, phc.hooks)
 }
 
@@ -328,32 +326,20 @@ func (phc *ProgramHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phc *ProgramHistoryCreate) defaults() error {
+func (phc *ProgramHistoryCreate) defaults() {
 	if _, ok := phc.mutation.HistoryTime(); !ok {
-		if programhistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized programhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := programhistory.DefaultHistoryTime()
 		phc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := phc.mutation.CreatedAt(); !ok {
-		if programhistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized programhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := programhistory.DefaultCreatedAt()
 		phc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := phc.mutation.UpdatedAt(); !ok {
-		if programhistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized programhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := programhistory.DefaultUpdatedAt()
 		phc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := phc.mutation.MappingID(); !ok {
-		if programhistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized programhistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := programhistory.DefaultMappingID()
 		phc.mutation.SetMappingID(v)
 	}
@@ -378,13 +364,9 @@ func (phc *ProgramHistoryCreate) defaults() error {
 		phc.mutation.SetAuditorReadComments(v)
 	}
 	if _, ok := phc.mutation.ID(); !ok {
-		if programhistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized programhistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := programhistory.DefaultID()
 		phc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

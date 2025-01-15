@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (shq *SubcontrolHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		shq.sql = prev
-	}
-	if subcontrolhistory.Policy == nil {
-		return errors.New("generated: uninitialized subcontrolhistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := subcontrolhistory.Policy.EvalQuery(ctx, shq); err != nil {
-		return err
 	}
 	return nil
 }

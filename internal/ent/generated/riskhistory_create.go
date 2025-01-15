@@ -311,9 +311,7 @@ func (rhc *RiskHistoryCreate) Mutation() *RiskHistoryMutation {
 
 // Save creates the RiskHistory in the database.
 func (rhc *RiskHistoryCreate) Save(ctx context.Context) (*RiskHistory, error) {
-	if err := rhc.defaults(); err != nil {
-		return nil, err
-	}
+	rhc.defaults()
 	return withHooks(ctx, rhc.sqlSave, rhc.mutation, rhc.hooks)
 }
 
@@ -340,32 +338,20 @@ func (rhc *RiskHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (rhc *RiskHistoryCreate) defaults() error {
+func (rhc *RiskHistoryCreate) defaults() {
 	if _, ok := rhc.mutation.HistoryTime(); !ok {
-		if riskhistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized riskhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := riskhistory.DefaultHistoryTime()
 		rhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := rhc.mutation.CreatedAt(); !ok {
-		if riskhistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized riskhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := riskhistory.DefaultCreatedAt()
 		rhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := rhc.mutation.UpdatedAt(); !ok {
-		if riskhistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized riskhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := riskhistory.DefaultUpdatedAt()
 		rhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := rhc.mutation.MappingID(); !ok {
-		if riskhistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized riskhistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := riskhistory.DefaultMappingID()
 		rhc.mutation.SetMappingID(v)
 	}
@@ -382,13 +368,9 @@ func (rhc *RiskHistoryCreate) defaults() error {
 		rhc.mutation.SetLikelihood(v)
 	}
 	if _, ok := rhc.mutation.ID(); !ok {
-		if riskhistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized riskhistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := riskhistory.DefaultID()
 		rhc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -201,9 +201,7 @@ func (gmhc *GroupMembershipHistoryCreate) Mutation() *GroupMembershipHistoryMuta
 
 // Save creates the GroupMembershipHistory in the database.
 func (gmhc *GroupMembershipHistoryCreate) Save(ctx context.Context) (*GroupMembershipHistory, error) {
-	if err := gmhc.defaults(); err != nil {
-		return nil, err
-	}
+	gmhc.defaults()
 	return withHooks(ctx, gmhc.sqlSave, gmhc.mutation, gmhc.hooks)
 }
 
@@ -230,32 +228,20 @@ func (gmhc *GroupMembershipHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (gmhc *GroupMembershipHistoryCreate) defaults() error {
+func (gmhc *GroupMembershipHistoryCreate) defaults() {
 	if _, ok := gmhc.mutation.HistoryTime(); !ok {
-		if groupmembershiphistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := groupmembershiphistory.DefaultHistoryTime()
 		gmhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := gmhc.mutation.CreatedAt(); !ok {
-		if groupmembershiphistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := groupmembershiphistory.DefaultCreatedAt()
 		gmhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := gmhc.mutation.UpdatedAt(); !ok {
-		if groupmembershiphistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := groupmembershiphistory.DefaultUpdatedAt()
 		gmhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := gmhc.mutation.MappingID(); !ok {
-		if groupmembershiphistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := groupmembershiphistory.DefaultMappingID()
 		gmhc.mutation.SetMappingID(v)
 	}
@@ -264,13 +250,9 @@ func (gmhc *GroupMembershipHistoryCreate) defaults() error {
 		gmhc.mutation.SetRole(v)
 	}
 	if _, ok := gmhc.mutation.ID(); !ok {
-		if groupmembershiphistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := groupmembershiphistory.DefaultID()
 		gmhc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

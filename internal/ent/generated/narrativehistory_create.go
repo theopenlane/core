@@ -226,9 +226,7 @@ func (nhc *NarrativeHistoryCreate) Mutation() *NarrativeHistoryMutation {
 
 // Save creates the NarrativeHistory in the database.
 func (nhc *NarrativeHistoryCreate) Save(ctx context.Context) (*NarrativeHistory, error) {
-	if err := nhc.defaults(); err != nil {
-		return nil, err
-	}
+	nhc.defaults()
 	return withHooks(ctx, nhc.sqlSave, nhc.mutation, nhc.hooks)
 }
 
@@ -255,32 +253,20 @@ func (nhc *NarrativeHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhc *NarrativeHistoryCreate) defaults() error {
+func (nhc *NarrativeHistoryCreate) defaults() {
 	if _, ok := nhc.mutation.HistoryTime(); !ok {
-		if narrativehistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := narrativehistory.DefaultHistoryTime()
 		nhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := nhc.mutation.CreatedAt(); !ok {
-		if narrativehistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := narrativehistory.DefaultCreatedAt()
 		nhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := nhc.mutation.UpdatedAt(); !ok {
-		if narrativehistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := narrativehistory.DefaultUpdatedAt()
 		nhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := nhc.mutation.MappingID(); !ok {
-		if narrativehistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := narrativehistory.DefaultMappingID()
 		nhc.mutation.SetMappingID(v)
 	}
@@ -289,13 +275,9 @@ func (nhc *NarrativeHistoryCreate) defaults() error {
 		nhc.mutation.SetTags(v)
 	}
 	if _, ok := nhc.mutation.ID(); !ok {
-		if narrativehistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := narrativehistory.DefaultID()
 		nhc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

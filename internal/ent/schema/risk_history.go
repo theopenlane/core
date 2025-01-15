@@ -2,7 +2,6 @@
 package schema
 
 import (
-	"context"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -12,8 +11,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
@@ -102,18 +99,6 @@ func (RiskHistory) Indexes() []ent.Index {
 // Interceptors of the RiskHistory
 func (RiskHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false),
-	}
-}
-
-// Policy of the RiskHistory
-func (RiskHistory) Policy() ent.Policy {
-	return privacy.Policy{
-		Query: privacy.QueryPolicy{
-			privacy.RiskHistoryQueryRuleFunc(func(ctx context.Context, q *generated.RiskHistoryQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
+		interceptors.FilterListQuery(),
 	}
 }

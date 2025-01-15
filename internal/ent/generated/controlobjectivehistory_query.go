@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (cohq *ControlObjectiveHistoryQuery) prepareQuery(ctx context.Context) erro
 			return err
 		}
 		cohq.sql = prev
-	}
-	if controlobjectivehistory.Policy == nil {
-		return errors.New("generated: uninitialized controlobjectivehistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := controlobjectivehistory.Policy.EvalQuery(ctx, cohq); err != nil {
-		return err
 	}
 	return nil
 }

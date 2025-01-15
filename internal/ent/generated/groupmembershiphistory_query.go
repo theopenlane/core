@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (gmhq *GroupMembershipHistoryQuery) prepareQuery(ctx context.Context) error
 			return err
 		}
 		gmhq.sql = prev
-	}
-	if groupmembershiphistory.Policy == nil {
-		return errors.New("generated: uninitialized groupmembershiphistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := groupmembershiphistory.Policy.EvalQuery(ctx, gmhq); err != nil {
-		return err
 	}
 	return nil
 }

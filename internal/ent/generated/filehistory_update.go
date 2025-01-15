@@ -397,9 +397,7 @@ func (fhu *FileHistoryUpdate) Mutation() *FileHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fhu *FileHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := fhu.defaults(); err != nil {
-		return 0, err
-	}
+	fhu.defaults()
 	return withHooks(ctx, fhu.sqlSave, fhu.mutation, fhu.hooks)
 }
 
@@ -426,15 +424,11 @@ func (fhu *FileHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (fhu *FileHistoryUpdate) defaults() error {
+func (fhu *FileHistoryUpdate) defaults() {
 	if _, ok := fhu.mutation.UpdatedAt(); !ok && !fhu.mutation.UpdatedAtCleared() {
-		if filehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized filehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := filehistory.UpdateDefaultUpdatedAt()
 		fhu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -979,9 +973,7 @@ func (fhuo *FileHistoryUpdateOne) Select(field string, fields ...string) *FileHi
 
 // Save executes the query and returns the updated FileHistory entity.
 func (fhuo *FileHistoryUpdateOne) Save(ctx context.Context) (*FileHistory, error) {
-	if err := fhuo.defaults(); err != nil {
-		return nil, err
-	}
+	fhuo.defaults()
 	return withHooks(ctx, fhuo.sqlSave, fhuo.mutation, fhuo.hooks)
 }
 
@@ -1008,15 +1000,11 @@ func (fhuo *FileHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (fhuo *FileHistoryUpdateOne) defaults() error {
+func (fhuo *FileHistoryUpdateOne) defaults() {
 	if _, ok := fhuo.mutation.UpdatedAt(); !ok && !fhuo.mutation.UpdatedAtCleared() {
-		if filehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized filehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := filehistory.UpdateDefaultUpdatedAt()
 		fhuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
