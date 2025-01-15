@@ -69,7 +69,7 @@ const presignedURLDuration = 60 * time.Minute * 24 // 24 hours
 // setPresignedURL sets the presigned URL for the file response that is valid for 24 hours
 func setPresignedURL(ctx context.Context, file *generated.File, q *generated.FileQuery) error {
 	// if we already have a presigned URL or the storage path is empty, skip
-	if file == nil || file.StoragePath != "" {
+	if file == nil || file.StoragePath == "" {
 		return nil
 	}
 
