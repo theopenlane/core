@@ -1933,6 +1933,14 @@ func (o *Organization) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
+func (o *Organization) AvatarFile(ctx context.Context) (*File, error) {
+	result, err := o.Edges.AvatarFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryAvatarFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (o *Organization) Entities(ctx context.Context) (result []*Entity, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedEntities(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2941,10 +2949,10 @@ func (u *User) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (u *User) File(ctx context.Context) (*File, error) {
-	result, err := u.Edges.FileOrErr()
+func (u *User) AvatarFile(ctx context.Context) (*File, error) {
+	result, err := u.Edges.AvatarFileOrErr()
 	if IsNotLoaded(err) {
-		result, err = u.QueryFile().Only(ctx)
+		result, err = u.QueryAvatarFile().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

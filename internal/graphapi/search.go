@@ -656,10 +656,11 @@ func adminSearchOrganizations(ctx context.Context, query string) ([]*generated.O
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 			},
-			organization.DeletedByContainsFold(query),       // search by DeletedBy
-			organization.NameContainsFold(query),            // search by Name
-			organization.DisplayNameContainsFold(query),     // search by DisplayName
-			organization.AvatarRemoteURLContainsFold(query), // search by AvatarRemoteURL
+			organization.DeletedByContainsFold(query),         // search by DeletedBy
+			organization.NameContainsFold(query),              // search by Name
+			organization.DisplayNameContainsFold(query),       // search by DisplayName
+			organization.AvatarRemoteURLContainsFold(query),   // search by AvatarRemoteURL
+			organization.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
 		),
 	).All(ctx)
 }
@@ -1112,7 +1113,6 @@ func adminSearchUsers(ctx context.Context, query string) ([]*generated.User, err
 			user.LastNameContainsFold(query),          // search by LastName
 			user.DisplayNameContainsFold(query),       // search by DisplayName
 			user.AvatarRemoteURLContainsFold(query),   // search by AvatarRemoteURL
-			user.AvatarLocalFileContainsFold(query),   // search by AvatarLocalFile
 			user.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
 			user.SubContainsFold(query),               // search by Sub
 		),

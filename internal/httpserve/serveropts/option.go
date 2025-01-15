@@ -401,7 +401,7 @@ func WithObjectStorage() ServerOption {
 			)
 
 			switch settings.Provider {
-			case "s3":
+			case storage.ProviderS3:
 				opts := storage.NewS3Options(
 					storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
 					storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
@@ -423,8 +423,11 @@ func WithObjectStorage() ServerOption {
 					log.Panic().Msg("default bucket not found")
 				}
 			default:
+				s.Config.Settings.ObjectStorage.Provider = storage.ProviderDisk
+
 				opts := storage.NewDiskOptions(
 					storage.WithLocalBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+					storage.WithLocalURL(s.Config.Settings.ObjectStorage.LocalURL),
 				)
 
 				store, err = storage.NewDiskStorage(opts)

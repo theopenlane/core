@@ -14,7 +14,7 @@ import (
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
-func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput) (*model.OrganizationCreatePayload, error) {
+func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
@@ -43,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVOrganization(ctx context.Context, input 
 }
 
 // UpdateOrganization is the resolver for the updateOrganization field.
-func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput) (*model.OrganizationUpdatePayload, error) {
+func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organization"})

@@ -228,6 +228,34 @@ func (oc *OrganizationCreate) SetNillableAvatarRemoteURL(s *string) *Organizatio
 	return oc
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (oc *OrganizationCreate) SetAvatarLocalFileID(s string) *OrganizationCreate {
+	oc.mutation.SetAvatarLocalFileID(s)
+	return oc
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableAvatarLocalFileID(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetAvatarLocalFileID(*s)
+	}
+	return oc
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (oc *OrganizationCreate) SetAvatarUpdatedAt(t time.Time) *OrganizationCreate {
+	oc.mutation.SetAvatarUpdatedAt(t)
+	return oc
+}
+
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableAvatarUpdatedAt(t *time.Time) *OrganizationCreate {
+	if t != nil {
+		oc.SetAvatarUpdatedAt(*t)
+	}
+	return oc
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (oc *OrganizationCreate) SetDedicatedDb(b bool) *OrganizationCreate {
 	oc.mutation.SetDedicatedDb(b)
@@ -639,6 +667,25 @@ func (oc *OrganizationCreate) AddFiles(f ...*File) *OrganizationCreate {
 	return oc.AddFileIDs(ids...)
 }
 
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (oc *OrganizationCreate) SetAvatarFileID(id string) *OrganizationCreate {
+	oc.mutation.SetAvatarFileID(id)
+	return oc
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableAvatarFileID(id *string) *OrganizationCreate {
+	if id != nil {
+		oc = oc.SetAvatarFileID(*id)
+	}
+	return oc
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (oc *OrganizationCreate) SetAvatarFile(f *File) *OrganizationCreate {
+	return oc.SetAvatarFileID(f.ID)
+}
+
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (oc *OrganizationCreate) AddEntityIDs(ids ...string) *OrganizationCreate {
 	oc.mutation.AddEntityIDs(ids...)
@@ -919,6 +966,13 @@ func (oc *OrganizationCreate) defaults() error {
 		v := organization.DefaultPersonalOrg
 		oc.mutation.SetPersonalOrg(v)
 	}
+	if _, ok := oc.mutation.AvatarUpdatedAt(); !ok {
+		if organization.DefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organization.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := organization.DefaultAvatarUpdatedAt()
+		oc.mutation.SetAvatarUpdatedAt(v)
+	}
 	if _, ok := oc.mutation.DedicatedDb(); !ok {
 		v := organization.DefaultDedicatedDb
 		oc.mutation.SetDedicatedDb(v)
@@ -1049,6 +1103,10 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organization.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
+	}
+	if value, ok := oc.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(organization.FieldAvatarUpdatedAt, field.TypeTime, value)
+		_node.AvatarUpdatedAt = &value
 	}
 	if value, ok := oc.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
@@ -1485,6 +1543,24 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.AvatarFileTable,
+			Columns: []string{organization.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AvatarLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := oc.mutation.EntitiesIDs(); len(nodes) > 0 {

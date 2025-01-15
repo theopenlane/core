@@ -2,9 +2,11 @@ mutation CreateUser($input: CreateUserInput!, $avatarFile: Upload) {
   createUser(input: $input, avatarFile: $avatarFile) {
     user {
       authProvider
-      avatarLocalFile
       avatarRemoteURL
       avatarLocalFileID
+      avatarFile{
+        presignedURL
+      }
       displayName
       email
       firstName
@@ -52,9 +54,11 @@ query GetAllUsers {
     edges {
       node {
         authProvider
-        avatarLocalFile
         avatarRemoteURL
         avatarLocalFileID
+        avatarFile{
+          presignedURL
+        }
         displayName
         email
         firstName
@@ -92,9 +96,11 @@ query GetAllUsers {
 query GetUserByID($userId: ID!) {
   user(id: $userId) {
     authProvider
-    avatarLocalFile
     avatarRemoteURL
     avatarLocalFileID
+    avatarFile{
+      presignedURL
+    }
     displayName
     email
     firstName
@@ -139,9 +145,11 @@ query GetUserByID($userId: ID!) {
 query GetUserByIDWithOrgs($userId: ID!) {
   user(id: $userId) {
     authProvider
-    avatarLocalFile
     avatarRemoteURL
     avatarLocalFileID
+    avatarFile{
+      presignedURL
+    }
     displayName
     email
     firstName
@@ -186,9 +194,11 @@ mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: U
   updateUser(id: $updateUserId, input: $input, avatarFile: $avatarFile) {
     user {
       authProvider
-      avatarLocalFile
       avatarRemoteURL
       avatarLocalFileID
+      avatarFile{
+        presignedURL
+      }
       displayName
       email
       firstName

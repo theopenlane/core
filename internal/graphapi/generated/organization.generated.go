@@ -91,6 +91,10 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_personalOrg(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Organization_avatarLocalFileID(ctx, field)
+			case "avatarUpdatedAt":
+				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "controlCreators":
@@ -143,6 +147,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_secrets(ctx, field)
 			case "files":
 				return ec.fieldContext_Organization_files(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Organization_avatarFile(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":
@@ -243,6 +249,10 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_personalOrg(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Organization_avatarLocalFileID(ctx, field)
+			case "avatarUpdatedAt":
+				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "controlCreators":
@@ -295,6 +305,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_secrets(ctx, field)
 			case "files":
 				return ec.fieldContext_Organization_files(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Organization_avatarFile(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":
@@ -439,6 +451,10 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_personalOrg(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Organization_avatarLocalFileID(ctx, field)
+			case "avatarUpdatedAt":
+				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "controlCreators":
@@ -491,6 +507,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_secrets(ctx, field)
 			case "files":
 				return ec.fieldContext_Organization_files(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Organization_avatarFile(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":

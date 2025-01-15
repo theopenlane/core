@@ -22,6 +22,9 @@ import (
 // ensure S3Store satisfies the Storage interface
 var _ objects.Storage = &S3Store{}
 
+// ProviderS3 is the provider for the S3 storage
+var ProviderS3 = "s3"
+
 // S3Store is a store that uses S3 as the backend
 type S3Store struct {
 	Client             *s3.Client
@@ -161,7 +164,7 @@ func (s *S3Store) Upload(ctx context.Context, r io.Reader, opts *objects.UploadF
 	}, nil
 }
 
-// Download an object from S3 and return the metadata and a reader - the reader must be closed after use and is the responsibiolity of the caller
+// Download an object from S3 and return the metadata and a reader - the reader must be closed after use and is the responsibility of the caller
 func (s *S3Store) Download(ctx context.Context, opts *objects.DownloadFileOptions) (*objects.DownloadFileMetadata, error) {
 	head, err := s.HeadObj(ctx, opts.FileName)
 	if err != nil {
@@ -188,7 +191,8 @@ func (s *S3Store) Download(ctx context.Context, opts *objects.DownloadFileOption
 	}, nil
 }
 
-// PresignedURL returns a URL that provides access to a file for 15 minutes
+// GetPresignedURL returns a URL that provides access to a file for the set duration
+// if no duration is provided, it will default to 15 minutes
 func (s *S3Store) GetPresignedURL(ctx context.Context, key string, expires time.Duration) (string, error) {
 	presignURL, err := s.PresignClient.PresignGetObject(context.Background(), &s3.GetObjectInput{
 		Bucket:                     aws.String(s.Opts.Bucket),

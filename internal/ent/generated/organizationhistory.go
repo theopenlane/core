@@ -53,6 +53,10 @@ type OrganizationHistory struct {
 	PersonalOrg bool `json:"personal_org,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	// The organizations's local avatar file id, takes precedence over the remote URL
+	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
+	// The time the user's (local) avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb  bool `json:"dedicated_db,omitempty"`
 	selectValues sql.SelectValues
@@ -69,9 +73,9 @@ func (*OrganizationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case organizationhistory.FieldPersonalOrg, organizationhistory.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldMappingID, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL:
+		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldMappingID, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL, organizationhistory.FieldAvatarLocalFileID:
 			values[i] = new(sql.NullString)
-		case organizationhistory.FieldHistoryTime, organizationhistory.FieldCreatedAt, organizationhistory.FieldUpdatedAt, organizationhistory.FieldDeletedAt:
+		case organizationhistory.FieldHistoryTime, organizationhistory.FieldCreatedAt, organizationhistory.FieldUpdatedAt, organizationhistory.FieldDeletedAt, organizationhistory.FieldAvatarUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -199,6 +203,20 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 				oh.AvatarRemoteURL = new(string)
 				*oh.AvatarRemoteURL = value.String
 			}
+		case organizationhistory.FieldAvatarLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
+			} else if value.Valid {
+				oh.AvatarLocalFileID = new(string)
+				*oh.AvatarLocalFileID = value.String
+			}
+		case organizationhistory.FieldAvatarUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
+			} else if value.Valid {
+				oh.AvatarUpdatedAt = new(time.Time)
+				*oh.AvatarUpdatedAt = value.Time
+			}
 		case organizationhistory.FieldDedicatedDb:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field dedicated_db", values[i])
@@ -292,6 +310,16 @@ func (oh *OrganizationHistory) String() string {
 	if v := oh.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
 		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := oh.AvatarLocalFileID; v != nil {
+		builder.WriteString("avatar_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := oh.AvatarUpdatedAt; v != nil {
+		builder.WriteString("avatar_updated_at=")
+		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("dedicated_db=")

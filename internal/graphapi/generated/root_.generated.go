@@ -840,6 +840,7 @@ type ComplexityRoot struct {
 		Organization          func(childComplexity int) int
 		OrganizationSetting   func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
+		PresignedURL          func(childComplexity int) int
 		Program               func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
 		ProvidedFileName      func(childComplexity int) int
@@ -1550,7 +1551,7 @@ type ComplexityRoot struct {
 		CreateInvite                     func(childComplexity int, input generated.CreateInviteInput) int
 		CreateNarrative                  func(childComplexity int, input generated.CreateNarrativeInput) int
 		CreateOrgMembership              func(childComplexity int, input generated.CreateOrgMembershipInput) int
-		CreateOrganization               func(childComplexity int, input generated.CreateOrganizationInput) int
+		CreateOrganization               func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
 		CreateOrganizationSetting        func(childComplexity int, input generated.CreateOrganizationSettingInput) int
 		CreatePersonalAccessToken        func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
 		CreateProcedure                  func(childComplexity int, input generated.CreateProcedureInput) int
@@ -1616,7 +1617,7 @@ type ComplexityRoot struct {
 		UpdateInvite                     func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateNarrative                  func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
 		UpdateOrgMembership              func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
-		UpdateOrganization               func(childComplexity int, id string, input generated.UpdateOrganizationInput) int
+		UpdateOrganization               func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
 		UpdateOrganizationSetting        func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken        func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
 		UpdateProcedure                  func(childComplexity int, id string, input generated.UpdateProcedureInput) int
@@ -1921,7 +1922,10 @@ type ComplexityRoot struct {
 
 	Organization struct {
 		APITokens                func(childComplexity int) int
+		AvatarFile               func(childComplexity int) int
+		AvatarLocalFileID        func(childComplexity int) int
 		AvatarRemoteURL          func(childComplexity int) int
+		AvatarUpdatedAt          func(childComplexity int) int
 		Children                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		Contacts                 func(childComplexity int) int
 		ControlCreators          func(childComplexity int) int
@@ -1999,23 +2003,25 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationHistory struct {
-		AvatarRemoteURL func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DedicatedDb     func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedBy       func(childComplexity int) int
-		Description     func(childComplexity int) int
-		DisplayName     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		PersonalOrg     func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		AvatarLocalFileID func(childComplexity int) int
+		AvatarRemoteURL   func(childComplexity int) int
+		AvatarUpdatedAt   func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DedicatedDb       func(childComplexity int) int
+		DeletedAt         func(childComplexity int) int
+		DeletedBy         func(childComplexity int) int
+		Description       func(childComplexity int) int
+		DisplayName       func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		PersonalOrg       func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	OrganizationHistoryConnection struct {
@@ -3187,7 +3193,7 @@ type ComplexityRoot struct {
 		AssigneeTasks        func(childComplexity int) int
 		AssignerTasks        func(childComplexity int) int
 		AuthProvider         func(childComplexity int) int
-		AvatarLocalFile      func(childComplexity int) int
+		AvatarFile           func(childComplexity int) int
 		AvatarLocalFileID    func(childComplexity int) int
 		AvatarRemoteURL      func(childComplexity int) int
 		AvatarUpdatedAt      func(childComplexity int) int
@@ -3198,7 +3204,6 @@ type ComplexityRoot struct {
 		DisplayName          func(childComplexity int) int
 		Email                func(childComplexity int) int
 		Events               func(childComplexity int) int
-		File                 func(childComplexity int) int
 		Files                func(childComplexity int) int
 		FirstName            func(childComplexity int) int
 		GroupMemberships     func(childComplexity int) int
@@ -3246,7 +3251,6 @@ type ComplexityRoot struct {
 
 	UserHistory struct {
 		AuthProvider      func(childComplexity int) int
-		AvatarLocalFile   func(childComplexity int) int
 		AvatarLocalFileID func(childComplexity int) int
 		AvatarRemoteURL   func(childComplexity int) int
 		AvatarUpdatedAt   func(childComplexity int) int
@@ -6827,6 +6831,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.File.PersistedFileSize(childComplexity), true
+
+	case "File.presignedURL":
+		if e.complexity.File.PresignedURL == nil {
+			break
+		}
+
+		return e.complexity.File.PresignedURL(childComplexity), true
 
 	case "File.program":
 		if e.complexity.File.Program == nil {
@@ -10559,7 +10570,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateOrganization(childComplexity, args["input"].(generated.CreateOrganizationInput)), true
+		return e.complexity.Mutation.CreateOrganization(childComplexity, args["input"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload)), true
 
 	case "Mutation.createOrganizationSetting":
 		if e.complexity.Mutation.CreateOrganizationSetting == nil {
@@ -11351,7 +11362,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateOrganization(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrganizationInput)), true
+		return e.complexity.Mutation.UpdateOrganization(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrganizationInput), args["avatarFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateOrganizationSetting":
 		if e.complexity.Mutation.UpdateOrganizationSetting == nil {
@@ -12816,12 +12827,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.APITokens(childComplexity), true
 
+	case "Organization.avatarFile":
+		if e.complexity.Organization.AvatarFile == nil {
+			break
+		}
+
+		return e.complexity.Organization.AvatarFile(childComplexity), true
+
+	case "Organization.avatarLocalFileID":
+		if e.complexity.Organization.AvatarLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.Organization.AvatarLocalFileID(childComplexity), true
+
 	case "Organization.avatarRemoteURL":
 		if e.complexity.Organization.AvatarRemoteURL == nil {
 			break
 		}
 
 		return e.complexity.Organization.AvatarRemoteURL(childComplexity), true
+
+	case "Organization.avatarUpdatedAt":
+		if e.complexity.Organization.AvatarUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Organization.AvatarUpdatedAt(childComplexity), true
 
 	case "Organization.children":
 		if e.complexity.Organization.Children == nil {
@@ -13241,12 +13273,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationEdge.Node(childComplexity), true
 
+	case "OrganizationHistory.avatarLocalFileID":
+		if e.complexity.OrganizationHistory.AvatarLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.AvatarLocalFileID(childComplexity), true
+
 	case "OrganizationHistory.avatarRemoteURL":
 		if e.complexity.OrganizationHistory.AvatarRemoteURL == nil {
 			break
 		}
 
 		return e.complexity.OrganizationHistory.AvatarRemoteURL(childComplexity), true
+
+	case "OrganizationHistory.avatarUpdatedAt":
+		if e.complexity.OrganizationHistory.AvatarUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.AvatarUpdatedAt(childComplexity), true
 
 	case "OrganizationHistory.createdAt":
 		if e.complexity.OrganizationHistory.CreatedAt == nil {
@@ -19704,12 +19750,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.AuthProvider(childComplexity), true
 
-	case "User.avatarLocalFile":
-		if e.complexity.User.AvatarLocalFile == nil {
+	case "User.avatarFile":
+		if e.complexity.User.AvatarFile == nil {
 			break
 		}
 
-		return e.complexity.User.AvatarLocalFile(childComplexity), true
+		return e.complexity.User.AvatarFile(childComplexity), true
 
 	case "User.avatarLocalFileID":
 		if e.complexity.User.AvatarLocalFileID == nil {
@@ -19780,13 +19826,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.User.Events(childComplexity), true
-
-	case "User.file":
-		if e.complexity.User.File == nil {
-			break
-		}
-
-		return e.complexity.User.File(childComplexity), true
 
 	case "User.files":
 		if e.complexity.User.Files == nil {
@@ -19990,13 +20029,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserHistory.AuthProvider(childComplexity), true
-
-	case "UserHistory.avatarLocalFile":
-		if e.complexity.UserHistory.AvatarLocalFile == nil {
-			break
-		}
-
-		return e.complexity.UserHistory.AvatarLocalFile(childComplexity), true
 
 	case "UserHistory.avatarLocalFileID":
 		if e.complexity.UserHistory.AvatarLocalFileID == nil {
@@ -26060,6 +26092,10 @@ input CreateOrganizationInput {
   """
   avatarRemoteURL: String
   """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
+  """
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean
@@ -26087,6 +26123,7 @@ input CreateOrganizationInput {
   eventIDs: [ID!]
   secretIDs: [ID!]
   fileIDs: [ID!]
+  avatarFileID: ID
   entityIDs: [ID!]
   entityTypeIDs: [ID!]
   contactIDs: [ID!]
@@ -26621,10 +26658,6 @@ input CreateUserInput {
   """
   avatarRemoteURL: String
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  """
   The time the user's (local) avatar was last updated
   """
   avatarUpdatedAt: Time
@@ -26657,7 +26690,7 @@ input CreateUserInput {
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
   fileIDs: [ID!]
-  fileID: ID
+  avatarFileID: ID
   eventIDs: [ID!]
   actionPlanIDs: [ID!]
   subcontrolIDs: [ID!]
@@ -35978,6 +36011,14 @@ type Organization implements Node {
   """
   avatarRemoteURL: String
   """
+  The organizations's local avatar file id, takes precedence over the remote URL
+  """
+  avatarLocalFileID: ID
+  """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
+  """
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
@@ -36063,6 +36104,7 @@ type Organization implements Node {
   events: [Event!]
   secrets: [Hush!]
   files: [File!]
+  avatarFile: File
   entities: [Entity!]
   entityTypes: [EntityType!]
   contacts: [Contact!]
@@ -36143,6 +36185,14 @@ type OrganizationHistory implements Node {
   URL of the user's remote avatar
   """
   avatarRemoteURL: String
+  """
+  The organizations's local avatar file id, takes precedence over the remote URL
+  """
+  avatarLocalFileID: String
+  """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
   """
   Whether the organization has a dedicated database
   """
@@ -36415,6 +36465,37 @@ input OrganizationHistoryWhereInput {
   avatarRemoteURLNotNil: Boolean
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
+  """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: String
+  avatarLocalFileIDNEQ: String
+  avatarLocalFileIDIn: [String!]
+  avatarLocalFileIDNotIn: [String!]
+  avatarLocalFileIDGT: String
+  avatarLocalFileIDGTE: String
+  avatarLocalFileIDLT: String
+  avatarLocalFileIDLTE: String
+  avatarLocalFileIDContains: String
+  avatarLocalFileIDHasPrefix: String
+  avatarLocalFileIDHasSuffix: String
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: String
+  avatarLocalFileIDContainsFold: String
+  """
+  avatar_updated_at field predicates
+  """
+  avatarUpdatedAt: Time
+  avatarUpdatedAtNEQ: Time
+  avatarUpdatedAtIn: [Time!]
+  avatarUpdatedAtNotIn: [Time!]
+  avatarUpdatedAtGT: Time
+  avatarUpdatedAtGTE: Time
+  avatarUpdatedAtLT: Time
+  avatarUpdatedAtLTE: Time
+  avatarUpdatedAtIsNil: Boolean
+  avatarUpdatedAtNotNil: Boolean
 }
 """
 Ordering options for Organization connections
@@ -37281,6 +37362,37 @@ input OrganizationWhereInput {
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
   """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: ID
+  avatarLocalFileIDNEQ: ID
+  avatarLocalFileIDIn: [ID!]
+  avatarLocalFileIDNotIn: [ID!]
+  avatarLocalFileIDGT: ID
+  avatarLocalFileIDGTE: ID
+  avatarLocalFileIDLT: ID
+  avatarLocalFileIDLTE: ID
+  avatarLocalFileIDContains: ID
+  avatarLocalFileIDHasPrefix: ID
+  avatarLocalFileIDHasSuffix: ID
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: ID
+  avatarLocalFileIDContainsFold: ID
+  """
+  avatar_updated_at field predicates
+  """
+  avatarUpdatedAt: Time
+  avatarUpdatedAtNEQ: Time
+  avatarUpdatedAtIn: [Time!]
+  avatarUpdatedAtNotIn: [Time!]
+  avatarUpdatedAtGT: Time
+  avatarUpdatedAtGTE: Time
+  avatarUpdatedAtLT: Time
+  avatarUpdatedAtLTE: Time
+  avatarUpdatedAtIsNil: Boolean
+  avatarUpdatedAtNotNil: Boolean
+  """
   control_creators edge predicates
   """
   hasControlCreators: Boolean
@@ -37405,6 +37517,11 @@ input OrganizationWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  avatar_file edge predicates
+  """
+  hasAvatarFile: Boolean
+  hasAvatarFileWith: [FileWhereInput!]
   """
   entities edge predicates
   """
@@ -47093,6 +47210,11 @@ input UpdateOrganizationInput {
   """
   avatarRemoteURL: String
   clearAvatarRemoteURL: Boolean
+  """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
+  clearAvatarUpdatedAt: Boolean
   addControlCreatorIDs: [ID!]
   removeControlCreatorIDs: [ID!]
   clearControlCreators: Boolean
@@ -47161,6 +47283,8 @@ input UpdateOrganizationInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  avatarFileID: ID
+  clearAvatarFile: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
@@ -47922,11 +48046,6 @@ input UpdateUserInput {
   avatarRemoteURL: String
   clearAvatarRemoteURL: Boolean
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  clearAvatarLocalFile: Boolean
-  """
   The time the user's (local) avatar was last updated
   """
   avatarUpdatedAt: Time
@@ -47980,8 +48099,8 @@ input UpdateUserInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
-  fileID: ID
-  clearFile: Boolean
+  avatarFileID: ID
+  clearAvatarFile: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -48076,11 +48195,7 @@ type User implements Node {
   """
   avatarRemoteURL: String
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  """
-  The user's local avatar file id
+  The user's local avatar file id, takes precedence over the avatar remote URL
   """
   avatarLocalFileID: ID
   """
@@ -48109,7 +48224,7 @@ type User implements Node {
   groups: [Group!]
   organizations: [Organization!]
   files: [File!]
-  file: File
+  avatarFile: File
   events: [Event!]
   actionPlans: [ActionPlan!]
   subcontrols: [Subcontrol!]
@@ -48186,11 +48301,7 @@ type UserHistory implements Node {
   """
   avatarRemoteURL: String
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  """
-  The user's local avatar file id
+  The user's local avatar file id, takes precedence over the avatar remote URL
   """
   avatarLocalFileID: String
   """
@@ -48526,24 +48637,6 @@ input UserHistoryWhereInput {
   avatarRemoteURLNotNil: Boolean
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
-  """
-  avatar_local_file field predicates
-  """
-  avatarLocalFile: String
-  avatarLocalFileNEQ: String
-  avatarLocalFileIn: [String!]
-  avatarLocalFileNotIn: [String!]
-  avatarLocalFileGT: String
-  avatarLocalFileGTE: String
-  avatarLocalFileLT: String
-  avatarLocalFileLTE: String
-  avatarLocalFileContains: String
-  avatarLocalFileHasPrefix: String
-  avatarLocalFileHasSuffix: String
-  avatarLocalFileIsNil: Boolean
-  avatarLocalFileNotNil: Boolean
-  avatarLocalFileEqualFold: String
-  avatarLocalFileContainsFold: String
   """
   avatar_local_file_id field predicates
   """
@@ -49465,24 +49558,6 @@ input UserWhereInput {
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
   """
-  avatar_local_file field predicates
-  """
-  avatarLocalFile: String
-  avatarLocalFileNEQ: String
-  avatarLocalFileIn: [String!]
-  avatarLocalFileNotIn: [String!]
-  avatarLocalFileGT: String
-  avatarLocalFileGTE: String
-  avatarLocalFileLT: String
-  avatarLocalFileLTE: String
-  avatarLocalFileContains: String
-  avatarLocalFileHasPrefix: String
-  avatarLocalFileHasSuffix: String
-  avatarLocalFileIsNil: Boolean
-  avatarLocalFileNotNil: Boolean
-  avatarLocalFileEqualFold: String
-  avatarLocalFileContainsFold: String
-  """
   avatar_local_file_id field predicates
   """
   avatarLocalFileID: ID
@@ -49591,10 +49666,10 @@ input UserWhereInput {
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
   """
-  file edge predicates
+  avatar_file edge predicates
   """
-  hasFile: Boolean
-  hasFileWith: [FileWhereInput!]
+  hasAvatarFile: Boolean
+  hasAvatarFileWith: [FileWhereInput!]
   """
   events edge predicates
   """
@@ -49994,6 +50069,9 @@ type FileDeletePayload {
 }
 
 `, BuiltIn: false},
+	{Name: "../schema/fileextended.graphql", Input: `extend type File {
+    presignedURL: String
+}`, BuiltIn: false},
 	{Name: "../schema/group.graphql", Input: `extend type Query {
     """
     Look up group by ID
@@ -50852,6 +50930,7 @@ extend type Mutation{
         values of the organization
         """
         input: CreateOrganizationInput!
+        avatarFile: Upload
     ): OrganizationCreatePayload!
     """
     Create multiple new organizations
@@ -50883,6 +50962,7 @@ extend type Mutation{
         New values for the organization
         """
         input: UpdateOrganizationInput!
+        avatarFile: Upload
     ): OrganizationUpdatePayload!
     """
     Delete an existing organization

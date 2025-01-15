@@ -4,7 +4,6 @@ import (
 	"context"
 	"path/filepath"
 	"slices"
-	"time"
 
 	"github.com/rs/zerolog/log"
 
@@ -77,14 +76,6 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 		fileData.FolderDestination = metadata.FolderDestination
 		fileData.StorageKey = metadata.Key
 
-		// generate a presigned URL that is valid for 15 minutes
-		fileData.PresignedURL, err = u.Storage.GetPresignedURL(ctx, uploadedFileName, 60*time.Minute) // nolint:mnd
-		if err != nil {
-			log.Error().Err(err).Str("file", f.Filename).Msg("failed to get presigned URL")
-
-			return nil, err
-		}
-
 		// allow the update, permissions are not yet set to allow the update
 		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -104,7 +95,6 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 			Str("id", fileData.FolderDestination).
 			Str("mime_type", fileData.MimeType).
 			Str("size", objects.FormatFileSize(fileData.Size)).
-			Str("presigned_url", fileData.PresignedURL).
 			Msg("file uploaded")
 
 		uploadedFiles = append(uploadedFiles, fileData)

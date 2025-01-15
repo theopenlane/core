@@ -2,6 +2,7 @@ package schema
 
 import (
 	"net/url"
+	"time"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
@@ -80,6 +81,20 @@ func (Organization) Fields() []ent.Field {
 			}).
 			Optional().
 			Nillable(),
+		field.String("avatar_local_file_id").
+			Comment("The organizations's local avatar file id, takes precedence over the avatar remote URL").
+			Optional().
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
+		field.Time("avatar_updated_at").
+			Comment("The time the user's (local) avatar was last updated").
+			Default(time.Now).
+			UpdateDefault(time.Now).
+			Optional().
+			Nillable(),
 		field.Bool("dedicated_db").
 			Comment("Whether the organization has a dedicated database").
 			Default(false). // default to shared db
@@ -146,6 +161,8 @@ func (Organization) Edges() []ent.Edge {
 		edge.To("events", Event.Type),
 		edge.To("secrets", Hush.Type),
 		edge.To("files", File.Type),
+		edge.To("avatar_file", File.Type).
+			Field("avatar_local_file_id").Unique(),
 
 		// Organization owns the following entities
 		edge.To("entities", Entity.Type).

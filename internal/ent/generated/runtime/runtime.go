@@ -1039,8 +1039,10 @@ func init() {
 	file.Hooks[2] = fileMixinHooks1[0]
 	fileMixinInters1 := fileMixin[1].Interceptors()
 	fileMixinInters4 := fileMixin[4].Interceptors()
+	fileInters := schema.File{}.Interceptors()
 	file.Interceptors[0] = fileMixinInters1[0]
 	file.Interceptors[1] = fileMixinInters4[0]
+	file.Interceptors[2] = fileInters[0]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields2 := fileMixin[2].Fields()
@@ -2211,8 +2213,14 @@ func init() {
 			return nil
 		}
 	}()
+	// organizationDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
+	organizationDescAvatarUpdatedAt := organizationFields[7].Descriptor()
+	// organization.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
+	organization.DefaultAvatarUpdatedAt = organizationDescAvatarUpdatedAt.Default.(func() time.Time)
+	// organization.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
+	organization.UpdateDefaultAvatarUpdatedAt = organizationDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationDescDedicatedDb is the schema descriptor for dedicated_db field.
-	organizationDescDedicatedDb := organizationFields[6].Descriptor()
+	organizationDescDedicatedDb := organizationFields[8].Descriptor()
 	// organization.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
 	organization.DefaultDedicatedDb = organizationDescDedicatedDb.Default.(bool)
 	// organizationDescID is the schema descriptor for id field.
@@ -2253,8 +2261,14 @@ func init() {
 	organizationhistoryDescPersonalOrg := organizationhistoryFields[16].Descriptor()
 	// organizationhistory.DefaultPersonalOrg holds the default value on creation for the personal_org field.
 	organizationhistory.DefaultPersonalOrg = organizationhistoryDescPersonalOrg.Default.(bool)
+	// organizationhistoryDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
+	organizationhistoryDescAvatarUpdatedAt := organizationhistoryFields[19].Descriptor()
+	// organizationhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
+	organizationhistory.DefaultAvatarUpdatedAt = organizationhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
+	// organizationhistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
+	organizationhistory.UpdateDefaultAvatarUpdatedAt = organizationhistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationhistoryDescDedicatedDb is the schema descriptor for dedicated_db field.
-	organizationhistoryDescDedicatedDb := organizationhistoryFields[18].Descriptor()
+	organizationhistoryDescDedicatedDb := organizationhistoryFields[20].Descriptor()
 	// organizationhistory.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
 	organizationhistory.DefaultDedicatedDb = organizationhistoryDescDedicatedDb.Default.(bool)
 	// organizationhistoryDescID is the schema descriptor for id field.
@@ -3515,16 +3529,14 @@ func init() {
 			return nil
 		}
 	}()
-	// userDescAvatarLocalFile is the schema descriptor for avatar_local_file field.
-	userDescAvatarLocalFile := userFields[5].Descriptor()
-	// user.AvatarLocalFileValidator is a validator for the "avatar_local_file" field. It is called by the builders before save.
-	user.AvatarLocalFileValidator = userDescAvatarLocalFile.Validators[0].(func(string) error)
 	// userDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	userDescAvatarUpdatedAt := userFields[7].Descriptor()
+	userDescAvatarUpdatedAt := userFields[6].Descriptor()
+	// user.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
+	user.DefaultAvatarUpdatedAt = userDescAvatarUpdatedAt.Default.(func() time.Time)
 	// user.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
 	user.UpdateDefaultAvatarUpdatedAt = userDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// userDescLastSeen is the schema descriptor for last_seen field.
-	userDescLastSeen := userFields[8].Descriptor()
+	userDescLastSeen := userFields[7].Descriptor()
 	// user.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
 	user.UpdateDefaultLastSeen = userDescLastSeen.UpdateDefault.(func() time.Time)
 	// userDescID is the schema descriptor for id field.
@@ -3558,11 +3570,13 @@ func init() {
 	// userhistory.DefaultTags holds the default value on creation for the tags field.
 	userhistory.DefaultTags = userhistoryDescTags.Default.([]string)
 	// userhistoryDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	userhistoryDescAvatarUpdatedAt := userhistoryFields[19].Descriptor()
+	userhistoryDescAvatarUpdatedAt := userhistoryFields[18].Descriptor()
+	// userhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
+	userhistory.DefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
 	// userhistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
 	userhistory.UpdateDefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// userhistoryDescLastSeen is the schema descriptor for last_seen field.
-	userhistoryDescLastSeen := userhistoryFields[20].Descriptor()
+	userhistoryDescLastSeen := userhistoryFields[19].Descriptor()
 	// userhistory.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
 	userhistory.UpdateDefaultLastSeen = userhistoryDescLastSeen.UpdateDefault.(func() time.Time)
 	// userhistoryDescID is the schema descriptor for id field.

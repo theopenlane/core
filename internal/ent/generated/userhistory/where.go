@@ -136,11 +136,6 @@ func AvatarRemoteURL(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldEQ(FieldAvatarRemoteURL, v))
 }
 
-// AvatarLocalFile applies equality check predicate on the "avatar_local_file" field. It's identical to AvatarLocalFileEQ.
-func AvatarLocalFile(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldEQ(FieldAvatarLocalFile, v))
-}
-
 // AvatarLocalFileID applies equality check predicate on the "avatar_local_file_id" field. It's identical to AvatarLocalFileIDEQ.
 func AvatarLocalFileID(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldEQ(FieldAvatarLocalFileID, v))
@@ -1104,81 +1099,6 @@ func AvatarRemoteURLEqualFold(v string) predicate.UserHistory {
 // AvatarRemoteURLContainsFold applies the ContainsFold predicate on the "avatar_remote_url" field.
 func AvatarRemoteURLContainsFold(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldContainsFold(FieldAvatarRemoteURL, v))
-}
-
-// AvatarLocalFileEQ applies the EQ predicate on the "avatar_local_file" field.
-func AvatarLocalFileEQ(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldEQ(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileNEQ applies the NEQ predicate on the "avatar_local_file" field.
-func AvatarLocalFileNEQ(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldNEQ(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileIn applies the In predicate on the "avatar_local_file" field.
-func AvatarLocalFileIn(vs ...string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldIn(FieldAvatarLocalFile, vs...))
-}
-
-// AvatarLocalFileNotIn applies the NotIn predicate on the "avatar_local_file" field.
-func AvatarLocalFileNotIn(vs ...string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldNotIn(FieldAvatarLocalFile, vs...))
-}
-
-// AvatarLocalFileGT applies the GT predicate on the "avatar_local_file" field.
-func AvatarLocalFileGT(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldGT(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileGTE applies the GTE predicate on the "avatar_local_file" field.
-func AvatarLocalFileGTE(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldGTE(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileLT applies the LT predicate on the "avatar_local_file" field.
-func AvatarLocalFileLT(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldLT(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileLTE applies the LTE predicate on the "avatar_local_file" field.
-func AvatarLocalFileLTE(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldLTE(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileContains applies the Contains predicate on the "avatar_local_file" field.
-func AvatarLocalFileContains(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldContains(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileHasPrefix applies the HasPrefix predicate on the "avatar_local_file" field.
-func AvatarLocalFileHasPrefix(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldHasPrefix(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileHasSuffix applies the HasSuffix predicate on the "avatar_local_file" field.
-func AvatarLocalFileHasSuffix(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldHasSuffix(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileIsNil applies the IsNil predicate on the "avatar_local_file" field.
-func AvatarLocalFileIsNil() predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldIsNull(FieldAvatarLocalFile))
-}
-
-// AvatarLocalFileNotNil applies the NotNil predicate on the "avatar_local_file" field.
-func AvatarLocalFileNotNil() predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldNotNull(FieldAvatarLocalFile))
-}
-
-// AvatarLocalFileEqualFold applies the EqualFold predicate on the "avatar_local_file" field.
-func AvatarLocalFileEqualFold(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldEqualFold(FieldAvatarLocalFile, v))
-}
-
-// AvatarLocalFileContainsFold applies the ContainsFold predicate on the "avatar_local_file" field.
-func AvatarLocalFileContainsFold(v string) predicate.UserHistory {
-	return predicate.UserHistory(sql.FieldContainsFold(FieldAvatarLocalFile, v))
 }
 
 // AvatarLocalFileIDEQ applies the EQ predicate on the "avatar_local_file_id" field.

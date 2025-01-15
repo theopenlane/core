@@ -98,9 +98,19 @@ entConfig:
     useListUserService: true
 
 objectStorage:
+  # when using local storage, we serve the files up on a static handler
+  # if switching to s3, be sure to use the below defaultBucket instead
+  defaultBucket: "file_uploads
     # uncomment and update to enable s3, otherwise it will default to local storage
     # accessKey: "REDACTED"
     # secretKey: "REDACTED"
     # region: "us-east-2"
-    # defaultBucket: "openlane"
+    # defaultBucket: "openlane-development"
     # provider: "s3"
+
+subscription:
+    enabled: false
+    privateStripeKey: "sk_test_REDCATED"
+    publicStripeKey: "pk_test_REDACTED"
+    trialSubscriptionPriceID: price_REDACTED
+    stripeBillingPortalSuccessURL: http://localhost:3001/organization-settings/billing

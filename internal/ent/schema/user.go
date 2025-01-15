@@ -92,13 +92,8 @@ func (User) Fields() []ent.Field {
 			}).
 			Optional().
 			Nillable(),
-		field.String("avatar_local_file").
-			Comment("The user's local avatar file").
-			MaxLen(urlMaxLen).
-			Optional().
-			Nillable(),
 		field.String("avatar_local_file_id").
-			Comment("The user's local avatar file id").
+			Comment("The user's local avatar file id, takes precedence over the avatar remote URL").
 			Optional().
 			Annotations(
 				// this field is not exposed to the graphql schema, it is set by the file upload handler
@@ -107,6 +102,7 @@ func (User) Fields() []ent.Field {
 			Nillable(),
 		field.Time("avatar_updated_at").
 			Comment("The time the user's (local) avatar was last updated").
+			Default(time.Now).
 			UpdateDefault(time.Now).
 			Optional().
 			Nillable(),
@@ -175,7 +171,7 @@ func (User) Edges() []ent.Edge {
 		edge.To("webauthn", Webauthn.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("files", File.Type),
-		edge.To("file", File.Type).
+		edge.To("avatar_file", File.Type).
 			Field("avatar_local_file_id").Unique(),
 		edge.To("events", Event.Type),
 		edge.To("action_plans", ActionPlan.Type),

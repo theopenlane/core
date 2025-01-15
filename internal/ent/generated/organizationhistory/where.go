@@ -140,6 +140,16 @@ func AvatarRemoteURL(v string) predicate.OrganizationHistory {
 	return predicate.OrganizationHistory(sql.FieldEQ(FieldAvatarRemoteURL, v))
 }
 
+// AvatarLocalFileID applies equality check predicate on the "avatar_local_file_id" field. It's identical to AvatarLocalFileIDEQ.
+func AvatarLocalFileID(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAt applies equality check predicate on the "avatar_updated_at" field. It's identical to AvatarUpdatedAtEQ.
+func AvatarUpdatedAt(v time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldEQ(FieldAvatarUpdatedAt, v))
+}
+
 // DedicatedDb applies equality check predicate on the "dedicated_db" field. It's identical to DedicatedDbEQ.
 func DedicatedDb(v bool) predicate.OrganizationHistory {
 	return predicate.OrganizationHistory(sql.FieldEQ(FieldDedicatedDb, v))
@@ -1103,6 +1113,131 @@ func AvatarRemoteURLEqualFold(v string) predicate.OrganizationHistory {
 // AvatarRemoteURLContainsFold applies the ContainsFold predicate on the "avatar_remote_url" field.
 func AvatarRemoteURLContainsFold(v string) predicate.OrganizationHistory {
 	return predicate.OrganizationHistory(sql.FieldContainsFold(FieldAvatarRemoteURL, v))
+}
+
+// AvatarLocalFileIDEQ applies the EQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEQ(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDNEQ applies the NEQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNEQ(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldNEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIn applies the In predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIn(vs ...string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDNotIn applies the NotIn predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotIn(vs ...string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldNotIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDGT applies the GT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGT(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldGT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDGTE applies the GTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGTE(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldGTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLT applies the LT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLT(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldLT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLTE applies the LTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLTE(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldLTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContains applies the Contains predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContains(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldContains(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasPrefix applies the HasPrefix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasPrefix(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldHasPrefix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasSuffix applies the HasSuffix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasSuffix(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldHasSuffix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIsNil applies the IsNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIsNil() predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldIsNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDNotNil applies the NotNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotNil() predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldNotNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDEqualFold applies the EqualFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEqualFold(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldEqualFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContainsFold applies the ContainsFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContainsFold(v string) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldContainsFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAtEQ applies the EQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtEQ(v time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtNEQ applies the NEQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNEQ(v time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldNEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIn applies the In predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIn(vs ...time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtNotIn applies the NotIn predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotIn(vs ...time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldNotIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtGT applies the GT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGT(v time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldGT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtGTE applies the GTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGTE(v time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldGTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLT applies the LT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLT(v time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldLT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLTE applies the LTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLTE(v time.Time) predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldLTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIsNil applies the IsNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIsNil() predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldIsNull(FieldAvatarUpdatedAt))
+}
+
+// AvatarUpdatedAtNotNil applies the NotNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotNil() predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldNotNull(FieldAvatarUpdatedAt))
 }
 
 // DedicatedDbEQ applies the EQ predicate on the "dedicated_db" field.

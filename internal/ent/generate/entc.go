@@ -27,6 +27,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/objects"
 
 	"github.com/theopenlane/core/internal/genhelpers"
 )
@@ -122,6 +123,10 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("EntitlementManager"),
 			entc.DependencyType(&entitlements.StripeClient{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("ObjectManager"),
+			entc.DependencyType(&objects.Objects{}),
 		),
 		entc.TemplateDir("./internal/ent/templates"),
 		entc.Extensions(

@@ -196,20 +196,6 @@ func (uc *UserCreate) SetNillableAvatarRemoteURL(s *string) *UserCreate {
 	return uc
 }
 
-// SetAvatarLocalFile sets the "avatar_local_file" field.
-func (uc *UserCreate) SetAvatarLocalFile(s string) *UserCreate {
-	uc.mutation.SetAvatarLocalFile(s)
-	return uc
-}
-
-// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
-func (uc *UserCreate) SetNillableAvatarLocalFile(s *string) *UserCreate {
-	if s != nil {
-		uc.SetAvatarLocalFile(*s)
-	}
-	return uc
-}
-
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
 func (uc *UserCreate) SetAvatarLocalFileID(s string) *UserCreate {
 	uc.mutation.SetAvatarLocalFileID(s)
@@ -453,23 +439,23 @@ func (uc *UserCreate) AddFiles(f ...*File) *UserCreate {
 	return uc.AddFileIDs(ids...)
 }
 
-// SetFileID sets the "file" edge to the File entity by ID.
-func (uc *UserCreate) SetFileID(id string) *UserCreate {
-	uc.mutation.SetFileID(id)
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (uc *UserCreate) SetAvatarFileID(id string) *UserCreate {
+	uc.mutation.SetAvatarFileID(id)
 	return uc
 }
 
-// SetNillableFileID sets the "file" edge to the File entity by ID if the given value is not nil.
-func (uc *UserCreate) SetNillableFileID(id *string) *UserCreate {
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (uc *UserCreate) SetNillableAvatarFileID(id *string) *UserCreate {
 	if id != nil {
-		uc = uc.SetFileID(*id)
+		uc = uc.SetAvatarFileID(*id)
 	}
 	return uc
 }
 
-// SetFile sets the "file" edge to the File entity.
-func (uc *UserCreate) SetFile(f *File) *UserCreate {
-	return uc.SetFileID(f.ID)
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (uc *UserCreate) SetAvatarFile(f *File) *UserCreate {
+	return uc.SetAvatarFileID(f.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -669,6 +655,13 @@ func (uc *UserCreate) defaults() error {
 		v := user.DefaultTags
 		uc.mutation.SetTags(v)
 	}
+	if _, ok := uc.mutation.AvatarUpdatedAt(); !ok {
+		if user.DefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized user.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := user.DefaultAvatarUpdatedAt()
+		uc.mutation.SetAvatarUpdatedAt(v)
+	}
 	if _, ok := uc.mutation.AuthProvider(); !ok {
 		v := user.DefaultAuthProvider
 		uc.mutation.SetAuthProvider(v)
@@ -721,11 +714,6 @@ func (uc *UserCreate) check() error {
 	if v, ok := uc.mutation.AvatarRemoteURL(); ok {
 		if err := user.AvatarRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "User.avatar_remote_url": %w`, err)}
-		}
-	}
-	if v, ok := uc.mutation.AvatarLocalFile(); ok {
-		if err := user.AvatarLocalFileValidator(v); err != nil {
-			return &ValidationError{Name: "avatar_local_file", err: fmt.Errorf(`generated: validator failed for field "User.avatar_local_file": %w`, err)}
 		}
 	}
 	if _, ok := uc.mutation.AuthProvider(); !ok {
@@ -831,10 +819,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(user.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
-	}
-	if value, ok := uc.mutation.AvatarLocalFile(); ok {
-		_spec.SetField(user.FieldAvatarLocalFile, field.TypeString, value)
-		_node.AvatarLocalFile = &value
 	}
 	if value, ok := uc.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(user.FieldAvatarUpdatedAt, field.TypeTime, value)
@@ -1027,12 +1011,12 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := uc.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := uc.mutation.AvatarFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   user.FileTable,
-			Columns: []string{user.FileColumn},
+			Table:   user.AvatarFileTable,
+			Columns: []string{user.AvatarFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),

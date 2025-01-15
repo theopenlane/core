@@ -47,9 +47,7 @@ type User struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
-	// The user's local avatar file
-	AvatarLocalFile *string `json:"avatar_local_file,omitempty"`
-	// The user's local avatar file id
+	// The user's local avatar file id, takes precedence over the avatar remote URL
 	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
@@ -89,8 +87,8 @@ type UserEdges struct {
 	Webauthn []*Webauthn `json:"webauthn,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
-	// File holds the value of the file edge.
-	File *File `json:"file,omitempty"`
+	// AvatarFile holds the value of the avatar_file edge.
+	AvatarFile *File `json:"avatar_file,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
@@ -217,15 +215,15 @@ func (e UserEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
-// FileOrErr returns the File value or an error if the edge
+// AvatarFileOrErr returns the AvatarFile value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e UserEdges) FileOrErr() (*File, error) {
-	if e.File != nil {
-		return e.File, nil
+func (e UserEdges) AvatarFileOrErr() (*File, error) {
+	if e.AvatarFile != nil {
+		return e.AvatarFile, nil
 	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: file.Label}
 	}
-	return nil, &NotLoadedError{edge: "file"}
+	return nil, &NotLoadedError{edge: "avatar_file"}
 }
 
 // EventsOrErr returns the Events value or an error if the edge
@@ -316,7 +314,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldTags:
 			values[i] = new([]byte)
-		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldMappingID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFile, user.FieldAvatarLocalFileID, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole:
+		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldMappingID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFileID, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldDeletedAt, user.FieldAvatarUpdatedAt, user.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -422,13 +420,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 				u.AvatarRemoteURL = new(string)
 				*u.AvatarRemoteURL = value.String
 			}
-		case user.FieldAvatarLocalFile:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field avatar_local_file", values[i])
-			} else if value.Valid {
-				u.AvatarLocalFile = new(string)
-				*u.AvatarLocalFile = value.String
-			}
 		case user.FieldAvatarLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
@@ -533,9 +524,9 @@ func (u *User) QueryFiles() *FileQuery {
 	return NewUserClient(u.config).QueryFiles(u)
 }
 
-// QueryFile queries the "file" edge of the User entity.
-func (u *User) QueryFile() *FileQuery {
-	return NewUserClient(u.config).QueryFile(u)
+// QueryAvatarFile queries the "avatar_file" edge of the User entity.
+func (u *User) QueryAvatarFile() *FileQuery {
+	return NewUserClient(u.config).QueryAvatarFile(u)
 }
 
 // QueryEvents queries the "events" edge of the User entity.
@@ -644,11 +635,6 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	if v := u.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := u.AvatarLocalFile; v != nil {
-		builder.WriteString("avatar_local_file=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

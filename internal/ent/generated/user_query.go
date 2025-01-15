@@ -52,7 +52,7 @@ type UserQuery struct {
 	withOrganizations                *OrganizationQuery
 	withWebauthn                     *WebauthnQuery
 	withFiles                        *FileQuery
-	withFile                         *FileQuery
+	withAvatarFile                   *FileQuery
 	withEvents                       *EventQuery
 	withActionPlans                  *ActionPlanQuery
 	withSubcontrols                  *SubcontrolQuery
@@ -342,8 +342,8 @@ func (uq *UserQuery) QueryFiles() *FileQuery {
 	return query
 }
 
-// QueryFile chains the current query on the "file" edge.
-func (uq *UserQuery) QueryFile() *FileQuery {
+// QueryAvatarFile chains the current query on the "avatar_file" edge.
+func (uq *UserQuery) QueryAvatarFile() *FileQuery {
 	query := (&FileClient{config: uq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := uq.prepareQuery(ctx); err != nil {
@@ -356,7 +356,7 @@ func (uq *UserQuery) QueryFile() *FileQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, user.FileTable, user.FileColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, user.AvatarFileTable, user.AvatarFileColumn),
 		)
 		schemaConfig := uq.schemaConfig
 		step.To.Schema = schemaConfig.File
@@ -793,7 +793,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		withOrganizations:           uq.withOrganizations.Clone(),
 		withWebauthn:                uq.withWebauthn.Clone(),
 		withFiles:                   uq.withFiles.Clone(),
-		withFile:                    uq.withFile.Clone(),
+		withAvatarFile:              uq.withAvatarFile.Clone(),
 		withEvents:                  uq.withEvents.Clone(),
 		withActionPlans:             uq.withActionPlans.Clone(),
 		withSubcontrols:             uq.withSubcontrols.Clone(),
@@ -909,14 +909,14 @@ func (uq *UserQuery) WithFiles(opts ...func(*FileQuery)) *UserQuery {
 	return uq
 }
 
-// WithFile tells the query-builder to eager-load the nodes that are connected to
-// the "file" edge. The optional arguments are used to configure the query builder of the edge.
-func (uq *UserQuery) WithFile(opts ...func(*FileQuery)) *UserQuery {
+// WithAvatarFile tells the query-builder to eager-load the nodes that are connected to
+// the "avatar_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithAvatarFile(opts ...func(*FileQuery)) *UserQuery {
 	query := (&FileClient{config: uq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	uq.withFile = query
+	uq.withAvatarFile = query
 	return uq
 }
 
@@ -1113,7 +1113,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			uq.withOrganizations != nil,
 			uq.withWebauthn != nil,
 			uq.withFiles != nil,
-			uq.withFile != nil,
+			uq.withAvatarFile != nil,
 			uq.withEvents != nil,
 			uq.withActionPlans != nil,
 			uq.withSubcontrols != nil,
@@ -1216,9 +1216,9 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
-	if query := uq.withFile; query != nil {
-		if err := uq.loadFile(ctx, query, nodes, nil,
-			func(n *User, e *File) { n.Edges.File = e }); err != nil {
+	if query := uq.withAvatarFile; query != nil {
+		if err := uq.loadAvatarFile(ctx, query, nodes, nil,
+			func(n *User, e *File) { n.Edges.AvatarFile = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1778,7 +1778,7 @@ func (uq *UserQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*U
 	}
 	return nil
 }
-func (uq *UserQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*User, init func(*User), assign func(*User, *File)) error {
+func (uq *UserQuery) loadAvatarFile(ctx context.Context, query *FileQuery, nodes []*User, init func(*User), assign func(*User, *File)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*User)
 	for i := range nodes {
@@ -2241,7 +2241,7 @@ func (uq *UserQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if uq.withFile != nil {
+		if uq.withAvatarFile != nil {
 			_spec.Node.AddColumnOnce(user.FieldAvatarLocalFileID)
 		}
 	}

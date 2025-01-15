@@ -4098,6 +4098,7 @@ type CreateOrganizationInput struct {
 	Description                *string
 	PersonalOrg                *bool
 	AvatarRemoteURL            *string
+	AvatarUpdatedAt            *time.Time
 	DedicatedDb                *bool
 	ControlCreatorIDs          []string
 	ControlObjectiveCreatorIDs []string
@@ -4123,6 +4124,7 @@ type CreateOrganizationInput struct {
 	EventIDs                   []string
 	SecretIDs                  []string
 	FileIDs                    []string
+	AvatarFileID               *string
 	EntityIDs                  []string
 	EntityTypeIDs              []string
 	ContactIDs                 []string
@@ -4155,6 +4157,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
+	}
+	if v := i.AvatarUpdatedAt; v != nil {
+		m.SetAvatarUpdatedAt(*v)
 	}
 	if v := i.DedicatedDb; v != nil {
 		m.SetDedicatedDb(*v)
@@ -4231,6 +4236,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
+	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
@@ -4289,6 +4297,8 @@ type UpdateOrganizationInput struct {
 	Description                      *string
 	ClearAvatarRemoteURL             bool
 	AvatarRemoteURL                  *string
+	ClearAvatarUpdatedAt             bool
+	AvatarUpdatedAt                  *time.Time
 	ClearControlCreators             bool
 	AddControlCreatorIDs             []string
 	RemoveControlCreatorIDs          []string
@@ -4357,6 +4367,8 @@ type UpdateOrganizationInput struct {
 	ClearFiles                       bool
 	AddFileIDs                       []string
 	RemoveFileIDs                    []string
+	ClearAvatarFile                  bool
+	AvatarFileID                     *string
 	ClearEntities                    bool
 	AddEntityIDs                     []string
 	RemoveEntityIDs                  []string
@@ -4426,6 +4438,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
+	}
+	if i.ClearAvatarUpdatedAt {
+		m.ClearAvatarUpdatedAt()
+	}
+	if v := i.AvatarUpdatedAt; v != nil {
+		m.SetAvatarUpdatedAt(*v)
 	}
 	if i.ClearControlCreators {
 		m.ClearControlCreators()
@@ -4630,6 +4648,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearAvatarFile {
+		m.ClearAvatarFile()
+	}
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
 	}
 	if i.ClearEntities {
 		m.ClearEntities()
@@ -7212,7 +7236,6 @@ type CreateUserInput struct {
 	LastName                  *string
 	DisplayName               string
 	AvatarRemoteURL           *string
-	AvatarLocalFile           *string
 	AvatarUpdatedAt           *time.Time
 	LastSeen                  *time.Time
 	Password                  *string
@@ -7228,7 +7251,7 @@ type CreateUserInput struct {
 	OrganizationIDs           []string
 	WebauthnIDs               []string
 	FileIDs                   []string
-	FileID                    *string
+	AvatarFileID              *string
 	EventIDs                  []string
 	ActionPlanIDs             []string
 	SubcontrolIDs             []string
@@ -7252,9 +7275,6 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	m.SetDisplayName(i.DisplayName)
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
-	}
-	if v := i.AvatarLocalFile; v != nil {
-		m.SetAvatarLocalFile(*v)
 	}
 	if v := i.AvatarUpdatedAt; v != nil {
 		m.SetAvatarUpdatedAt(*v)
@@ -7299,8 +7319,8 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
-	if v := i.FileID; v != nil {
-		m.SetFileID(*v)
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -7341,8 +7361,6 @@ type UpdateUserInput struct {
 	DisplayName                     *string
 	ClearAvatarRemoteURL            bool
 	AvatarRemoteURL                 *string
-	ClearAvatarLocalFile            bool
-	AvatarLocalFile                 *string
 	ClearAvatarUpdatedAt            bool
 	AvatarUpdatedAt                 *time.Time
 	ClearLastSeen                   bool
@@ -7379,8 +7397,8 @@ type UpdateUserInput struct {
 	ClearFiles                      bool
 	AddFileIDs                      []string
 	RemoveFileIDs                   []string
-	ClearFile                       bool
-	FileID                          *string
+	ClearAvatarFile                 bool
+	AvatarFileID                    *string
 	ClearEvents                     bool
 	AddEventIDs                     []string
 	RemoveEventIDs                  []string
@@ -7435,12 +7453,6 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
-	}
-	if i.ClearAvatarLocalFile {
-		m.ClearAvatarLocalFile()
-	}
-	if v := i.AvatarLocalFile; v != nil {
-		m.SetAvatarLocalFile(*v)
 	}
 	if i.ClearAvatarUpdatedAt {
 		m.ClearAvatarUpdatedAt()
@@ -7550,11 +7562,11 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
 	}
-	if i.ClearFile {
-		m.ClearFile()
+	if i.ClearAvatarFile {
+		m.ClearAvatarFile()
 	}
-	if v := i.FileID; v != nil {
-		m.SetFileID(*v)
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()

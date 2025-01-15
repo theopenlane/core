@@ -25,6 +25,9 @@ type Config struct {
 	// DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default
 	// this is the local path for disk storage or the bucket name for S3
 	DefaultBucket string `json:"defaultBucket" koanf:"defaultBucket" default:"file_uploads"`
+	// LocalURL is the URL to use for the "presigned" URL for the file when using local storage
+	// e.g for local development, this can be http://localhost:17608/static/files/
+	LocalURL string `json:"localURL" koanf:"localURL" default:"http://localhost:17608/files/"`
 	// Keys is a list of keys to look for in the multipart form on the REST request
 	// if the keys are not found, the request upload will be skipped
 	// this is not used when uploading files with gqlgen and the graphql handler

@@ -3,9 +3,11 @@ package org
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -26,6 +28,7 @@ func init() {
 	createCmd.Flags().StringP("description", "d", "", "description of the organization")
 	createCmd.Flags().StringP("parent-org-id", "p", "", "parent organization id, leave empty to create a root org")
 	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the organization")
+	createCmd.Flags().StringP("avatar-file", "a", "", "local of avatar file to upload")
 
 	// TODO: https://github.com/theopenlane/core/issues/734
 	// remove flag once the feature is implemented
@@ -33,10 +36,10 @@ func init() {
 }
 
 // createValidation validates the required fields for the command
-func createValidation() (input openlaneclient.CreateOrganizationInput, err error) {
+func createValidation() (input openlaneclient.CreateOrganizationInput, avatarFile *graphql.Upload, err error) {
 	input.Name = cmd.Config.String("name")
 	if input.Name == "" {
-		return input, cmd.NewRequiredFieldMissingError("organization name")
+		return input, nil, cmd.NewRequiredFieldMissingError("organization name")
 	}
 
 	displayName := cmd.Config.String("display-name")
@@ -64,7 +67,22 @@ func createValidation() (input openlaneclient.CreateOrganizationInput, err error
 		input.Tags = tags
 	}
 
-	return input, nil
+	avatarFileLoc := cmd.Config.String("avatar-file")
+	if avatarFileLoc != "" {
+		file, err := objects.NewUploadFile(avatarFileLoc)
+		if err != nil {
+			return input, nil, err
+		}
+
+		avatarFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
+	return input, avatarFile, nil
 }
 
 // create an organization in the platform
@@ -78,10 +96,10 @@ func create(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	input, err := createValidation()
+	input, avatarFile, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.CreateOrganization(ctx, input)
+	o, err := client.CreateOrganization(ctx, input, avatarFile)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

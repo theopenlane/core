@@ -214,20 +214,6 @@ func (uhc *UserHistoryCreate) SetNillableAvatarRemoteURL(s *string) *UserHistory
 	return uhc
 }
 
-// SetAvatarLocalFile sets the "avatar_local_file" field.
-func (uhc *UserHistoryCreate) SetAvatarLocalFile(s string) *UserHistoryCreate {
-	uhc.mutation.SetAvatarLocalFile(s)
-	return uhc
-}
-
-// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableAvatarLocalFile(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetAvatarLocalFile(*s)
-	}
-	return uhc
-}
-
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
 func (uhc *UserHistoryCreate) SetAvatarLocalFileID(s string) *UserHistoryCreate {
 	uhc.mutation.SetAvatarLocalFileID(s)
@@ -395,6 +381,10 @@ func (uhc *UserHistoryCreate) defaults() {
 		v := userhistory.DefaultTags
 		uhc.mutation.SetTags(v)
 	}
+	if _, ok := uhc.mutation.AvatarUpdatedAt(); !ok {
+		v := userhistory.DefaultAvatarUpdatedAt()
+		uhc.mutation.SetAvatarUpdatedAt(v)
+	}
 	if _, ok := uhc.mutation.AuthProvider(); !ok {
 		v := userhistory.DefaultAuthProvider
 		uhc.mutation.SetAuthProvider(v)
@@ -543,10 +533,6 @@ func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) 
 	if value, ok := uhc.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(userhistory.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
-	}
-	if value, ok := uhc.mutation.AvatarLocalFile(); ok {
-		_spec.SetField(userhistory.FieldAvatarLocalFile, field.TypeString, value)
-		_node.AvatarLocalFile = &value
 	}
 	if value, ok := uhc.mutation.AvatarLocalFileID(); ok {
 		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)

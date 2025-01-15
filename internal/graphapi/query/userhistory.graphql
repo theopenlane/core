@@ -3,7 +3,7 @@ query GetAllUserHistories {
     edges {
       node {
         authProvider
-        avatarLocalFile
+        avatarLocalFileID
         avatarRemoteURL
         avatarUpdatedAt
         createdAt
@@ -32,7 +32,7 @@ query GetUserHistories($where: UserHistoryWhereInput) {
     edges {
       node {
         authProvider
-        avatarLocalFile
+        avatarLocalFileID
         avatarRemoteURL
         avatarUpdatedAt
         createdAt

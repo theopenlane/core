@@ -218,6 +218,7 @@ query AdminSearch($query: String!) {
           name
           displayName
           avatarRemoteURL
+          avatarLocalFileID
         }
       }
       ... on OrganizationSettingSearchResult {
@@ -376,7 +377,6 @@ query AdminSearch($query: String!) {
           lastName
           displayName
           avatarRemoteURL
-          avatarLocalFile
           avatarLocalFileID
           sub
         }

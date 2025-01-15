@@ -190,6 +190,38 @@ func (ohu *OrganizationHistoryUpdate) ClearAvatarRemoteURL() *OrganizationHistor
 	return ohu
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (ohu *OrganizationHistoryUpdate) SetAvatarLocalFileID(s string) *OrganizationHistoryUpdate {
+	ohu.mutation.SetAvatarLocalFileID(s)
+	return ohu
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (ohu *OrganizationHistoryUpdate) SetNillableAvatarLocalFileID(s *string) *OrganizationHistoryUpdate {
+	if s != nil {
+		ohu.SetAvatarLocalFileID(*s)
+	}
+	return ohu
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (ohu *OrganizationHistoryUpdate) ClearAvatarLocalFileID() *OrganizationHistoryUpdate {
+	ohu.mutation.ClearAvatarLocalFileID()
+	return ohu
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (ohu *OrganizationHistoryUpdate) SetAvatarUpdatedAt(t time.Time) *OrganizationHistoryUpdate {
+	ohu.mutation.SetAvatarUpdatedAt(t)
+	return ohu
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (ohu *OrganizationHistoryUpdate) ClearAvatarUpdatedAt() *OrganizationHistoryUpdate {
+	ohu.mutation.ClearAvatarUpdatedAt()
+	return ohu
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ohu *OrganizationHistoryUpdate) SetDedicatedDb(b bool) *OrganizationHistoryUpdate {
 	ohu.mutation.SetDedicatedDb(b)
@@ -243,6 +275,14 @@ func (ohu *OrganizationHistoryUpdate) defaults() {
 		v := organizationhistory.UpdateDefaultUpdatedAt()
 		ohu.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ohu.mutation.AvatarUpdatedAt(); !ok && !ohu.mutation.AvatarUpdatedAtCleared() {
+		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
+		ohu.mutation.SetAvatarUpdatedAt(v)
+	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -327,6 +367,18 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if ohu.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ohu.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if ohu.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(organizationhistory.FieldAvatarLocalFileID, field.TypeString)
+	}
+	if value, ok := ohu.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if ohu.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := ohu.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
@@ -513,6 +565,38 @@ func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarRemoteURL() *OrganizationHi
 	return ohuo
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) SetAvatarLocalFileID(s string) *OrganizationHistoryUpdateOne {
+	ohuo.mutation.SetAvatarLocalFileID(s)
+	return ohuo
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (ohuo *OrganizationHistoryUpdateOne) SetNillableAvatarLocalFileID(s *string) *OrganizationHistoryUpdateOne {
+	if s != nil {
+		ohuo.SetAvatarLocalFileID(*s)
+	}
+	return ohuo
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarLocalFileID() *OrganizationHistoryUpdateOne {
+	ohuo.mutation.ClearAvatarLocalFileID()
+	return ohuo
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (ohuo *OrganizationHistoryUpdateOne) SetAvatarUpdatedAt(t time.Time) *OrganizationHistoryUpdateOne {
+	ohuo.mutation.SetAvatarUpdatedAt(t)
+	return ohuo
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarUpdatedAt() *OrganizationHistoryUpdateOne {
+	ohuo.mutation.ClearAvatarUpdatedAt()
+	return ohuo
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ohuo *OrganizationHistoryUpdateOne) SetDedicatedDb(b bool) *OrganizationHistoryUpdateOne {
 	ohuo.mutation.SetDedicatedDb(b)
@@ -579,6 +663,14 @@ func (ohuo *OrganizationHistoryUpdateOne) defaults() {
 		v := organizationhistory.UpdateDefaultUpdatedAt()
 		ohuo.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ohuo.mutation.AvatarUpdatedAt(); !ok && !ohuo.mutation.AvatarUpdatedAtCleared() {
+		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
+		ohuo.mutation.SetAvatarUpdatedAt(v)
+	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -680,6 +772,18 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if ohuo.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ohuo.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if ohuo.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(organizationhistory.FieldAvatarLocalFileID, field.TypeString)
+	}
+	if value, ok := ohuo.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if ohuo.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := ohuo.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)

@@ -111,6 +111,7 @@ func serve(ctx context.Context) error {
 		ent.EntConfig(&so.Config.Settings.EntConfig),
 		ent.Emailer(&so.Config.Settings.Email),
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
+		ent.ObjectManager(so.Config.ObjectManager),
 	)
 
 	// Setup DB connection

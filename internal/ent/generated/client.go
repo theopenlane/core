@@ -90,6 +90,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -362,6 +363,7 @@ type (
 		Emailer            *emailtemplates.Config
 		TOTP               *totp.Manager
 		EntitlementManager *entitlements.StripeClient
+		ObjectManager      *objects.Objects
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -463,6 +465,13 @@ func TOTP(v *totp.Manager) Option {
 func EntitlementManager(v *entitlements.StripeClient) Option {
 	return func(c *config) {
 		c.EntitlementManager = v
+	}
+}
+
+// ObjectManager configures the ObjectManager.
+func ObjectManager(v *objects.Objects) Option {
+	return func(c *config) {
+		c.ObjectManager = v
 	}
 }
 
@@ -9786,6 +9795,25 @@ func (c *OrganizationClient) QueryFiles(o *Organization) *FileQuery {
 	return query
 }
 
+// QueryAvatarFile queries the avatar_file edge of a Organization.
+func (c *OrganizationClient) QueryAvatarFile(o *Organization) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.AvatarFileTable, organization.AvatarFileColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Organization
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEntities queries the entities edge of a Organization.
 func (c *OrganizationClient) QueryEntities(o *Organization) *EntityQuery {
 	query := (&EntityClient{config: c.config}).Query()
@@ -14782,15 +14810,15 @@ func (c *UserClient) QueryFiles(u *User) *FileQuery {
 	return query
 }
 
-// QueryFile queries the file edge of a User.
-func (c *UserClient) QueryFile(u *User) *FileQuery {
+// QueryAvatarFile queries the avatar_file edge of a User.
+func (c *UserClient) QueryAvatarFile(u *User) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, user.FileTable, user.FileColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, user.AvatarFileTable, user.AvatarFileColumn),
 		)
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.File

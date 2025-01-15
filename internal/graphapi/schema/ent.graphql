@@ -4269,6 +4269,10 @@ input CreateOrganizationInput {
   """
   avatarRemoteURL: String
   """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
+  """
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean
@@ -4296,6 +4300,7 @@ input CreateOrganizationInput {
   eventIDs: [ID!]
   secretIDs: [ID!]
   fileIDs: [ID!]
+  avatarFileID: ID
   entityIDs: [ID!]
   entityTypeIDs: [ID!]
   contactIDs: [ID!]
@@ -4830,10 +4835,6 @@ input CreateUserInput {
   """
   avatarRemoteURL: String
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  """
   The time the user's (local) avatar was last updated
   """
   avatarUpdatedAt: Time
@@ -4866,7 +4867,7 @@ input CreateUserInput {
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
   fileIDs: [ID!]
-  fileID: ID
+  avatarFileID: ID
   eventIDs: [ID!]
   actionPlanIDs: [ID!]
   subcontrolIDs: [ID!]
@@ -14187,6 +14188,14 @@ type Organization implements Node {
   """
   avatarRemoteURL: String
   """
+  The organizations's local avatar file id, takes precedence over the remote URL
+  """
+  avatarLocalFileID: ID
+  """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
+  """
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
@@ -14272,6 +14281,7 @@ type Organization implements Node {
   events: [Event!]
   secrets: [Hush!]
   files: [File!]
+  avatarFile: File
   entities: [Entity!]
   entityTypes: [EntityType!]
   contacts: [Contact!]
@@ -14352,6 +14362,14 @@ type OrganizationHistory implements Node {
   URL of the user's remote avatar
   """
   avatarRemoteURL: String
+  """
+  The organizations's local avatar file id, takes precedence over the remote URL
+  """
+  avatarLocalFileID: String
+  """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
   """
   Whether the organization has a dedicated database
   """
@@ -14624,6 +14642,37 @@ input OrganizationHistoryWhereInput {
   avatarRemoteURLNotNil: Boolean
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
+  """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: String
+  avatarLocalFileIDNEQ: String
+  avatarLocalFileIDIn: [String!]
+  avatarLocalFileIDNotIn: [String!]
+  avatarLocalFileIDGT: String
+  avatarLocalFileIDGTE: String
+  avatarLocalFileIDLT: String
+  avatarLocalFileIDLTE: String
+  avatarLocalFileIDContains: String
+  avatarLocalFileIDHasPrefix: String
+  avatarLocalFileIDHasSuffix: String
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: String
+  avatarLocalFileIDContainsFold: String
+  """
+  avatar_updated_at field predicates
+  """
+  avatarUpdatedAt: Time
+  avatarUpdatedAtNEQ: Time
+  avatarUpdatedAtIn: [Time!]
+  avatarUpdatedAtNotIn: [Time!]
+  avatarUpdatedAtGT: Time
+  avatarUpdatedAtGTE: Time
+  avatarUpdatedAtLT: Time
+  avatarUpdatedAtLTE: Time
+  avatarUpdatedAtIsNil: Boolean
+  avatarUpdatedAtNotNil: Boolean
 }
 """
 Ordering options for Organization connections
@@ -15490,6 +15539,37 @@ input OrganizationWhereInput {
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
   """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: ID
+  avatarLocalFileIDNEQ: ID
+  avatarLocalFileIDIn: [ID!]
+  avatarLocalFileIDNotIn: [ID!]
+  avatarLocalFileIDGT: ID
+  avatarLocalFileIDGTE: ID
+  avatarLocalFileIDLT: ID
+  avatarLocalFileIDLTE: ID
+  avatarLocalFileIDContains: ID
+  avatarLocalFileIDHasPrefix: ID
+  avatarLocalFileIDHasSuffix: ID
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: ID
+  avatarLocalFileIDContainsFold: ID
+  """
+  avatar_updated_at field predicates
+  """
+  avatarUpdatedAt: Time
+  avatarUpdatedAtNEQ: Time
+  avatarUpdatedAtIn: [Time!]
+  avatarUpdatedAtNotIn: [Time!]
+  avatarUpdatedAtGT: Time
+  avatarUpdatedAtGTE: Time
+  avatarUpdatedAtLT: Time
+  avatarUpdatedAtLTE: Time
+  avatarUpdatedAtIsNil: Boolean
+  avatarUpdatedAtNotNil: Boolean
+  """
   control_creators edge predicates
   """
   hasControlCreators: Boolean
@@ -15614,6 +15694,11 @@ input OrganizationWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  avatar_file edge predicates
+  """
+  hasAvatarFile: Boolean
+  hasAvatarFileWith: [FileWhereInput!]
   """
   entities edge predicates
   """
@@ -25302,6 +25387,11 @@ input UpdateOrganizationInput {
   """
   avatarRemoteURL: String
   clearAvatarRemoteURL: Boolean
+  """
+  The time the user's (local) avatar was last updated
+  """
+  avatarUpdatedAt: Time
+  clearAvatarUpdatedAt: Boolean
   addControlCreatorIDs: [ID!]
   removeControlCreatorIDs: [ID!]
   clearControlCreators: Boolean
@@ -25370,6 +25460,8 @@ input UpdateOrganizationInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  avatarFileID: ID
+  clearAvatarFile: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
@@ -26131,11 +26223,6 @@ input UpdateUserInput {
   avatarRemoteURL: String
   clearAvatarRemoteURL: Boolean
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  clearAvatarLocalFile: Boolean
-  """
   The time the user's (local) avatar was last updated
   """
   avatarUpdatedAt: Time
@@ -26189,8 +26276,8 @@ input UpdateUserInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
-  fileID: ID
-  clearFile: Boolean
+  avatarFileID: ID
+  clearAvatarFile: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -26285,11 +26372,7 @@ type User implements Node {
   """
   avatarRemoteURL: String
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  """
-  The user's local avatar file id
+  The user's local avatar file id, takes precedence over the avatar remote URL
   """
   avatarLocalFileID: ID
   """
@@ -26318,7 +26401,7 @@ type User implements Node {
   groups: [Group!]
   organizations: [Organization!]
   files: [File!]
-  file: File
+  avatarFile: File
   events: [Event!]
   actionPlans: [ActionPlan!]
   subcontrols: [Subcontrol!]
@@ -26395,11 +26478,7 @@ type UserHistory implements Node {
   """
   avatarRemoteURL: String
   """
-  The user's local avatar file
-  """
-  avatarLocalFile: String
-  """
-  The user's local avatar file id
+  The user's local avatar file id, takes precedence over the avatar remote URL
   """
   avatarLocalFileID: String
   """
@@ -26735,24 +26814,6 @@ input UserHistoryWhereInput {
   avatarRemoteURLNotNil: Boolean
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
-  """
-  avatar_local_file field predicates
-  """
-  avatarLocalFile: String
-  avatarLocalFileNEQ: String
-  avatarLocalFileIn: [String!]
-  avatarLocalFileNotIn: [String!]
-  avatarLocalFileGT: String
-  avatarLocalFileGTE: String
-  avatarLocalFileLT: String
-  avatarLocalFileLTE: String
-  avatarLocalFileContains: String
-  avatarLocalFileHasPrefix: String
-  avatarLocalFileHasSuffix: String
-  avatarLocalFileIsNil: Boolean
-  avatarLocalFileNotNil: Boolean
-  avatarLocalFileEqualFold: String
-  avatarLocalFileContainsFold: String
   """
   avatar_local_file_id field predicates
   """
@@ -27674,24 +27735,6 @@ input UserWhereInput {
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
   """
-  avatar_local_file field predicates
-  """
-  avatarLocalFile: String
-  avatarLocalFileNEQ: String
-  avatarLocalFileIn: [String!]
-  avatarLocalFileNotIn: [String!]
-  avatarLocalFileGT: String
-  avatarLocalFileGTE: String
-  avatarLocalFileLT: String
-  avatarLocalFileLTE: String
-  avatarLocalFileContains: String
-  avatarLocalFileHasPrefix: String
-  avatarLocalFileHasSuffix: String
-  avatarLocalFileIsNil: Boolean
-  avatarLocalFileNotNil: Boolean
-  avatarLocalFileEqualFold: String
-  avatarLocalFileContainsFold: String
-  """
   avatar_local_file_id field predicates
   """
   avatarLocalFileID: ID
@@ -27800,10 +27843,10 @@ input UserWhereInput {
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
   """
-  file edge predicates
+  avatar_file edge predicates
   """
-  hasFile: Boolean
-  hasFileWith: [FileWhereInput!]
+  hasAvatarFile: Boolean
+  hasAvatarFileWith: [FileWhereInput!]
   """
   events edge predicates
   """

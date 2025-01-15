@@ -251,7 +251,7 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
 						AddProcedureCreatorIDs: []string{viewOnlyUser.GroupID},
-					})
+					}, nil)
 				require.NoError(t, err)
 			}
 

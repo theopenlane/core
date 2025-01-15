@@ -14,6 +14,7 @@ import (
 )
 
 type Disk struct {
+	// destinationFolder is the folder where the files will be stored
 	destinationFolder string
 	// Scheme is the scheme of the storage backend
 	Scheme string
@@ -23,6 +24,9 @@ type Disk struct {
 
 // ensure Disk satisfies the Storage interface
 var _ objects.Storage = &Disk{}
+
+// ProviderDisk is the provider for the disk storage
+var ProviderDisk = "disk"
 
 func NewDiskStorage(opts *DiskOptions) (*Disk, error) {
 	if isStringEmpty(opts.Bucket) {
@@ -92,7 +96,7 @@ func (d *Disk) Download(ctx context.Context, opts *objects.DownloadFileOptions) 
 // GetPresignedURL is used to get a presigned URL for a file in the storage backend
 // TODO: Implement this method
 func (d *Disk) GetPresignedURL(ctx context.Context, key string, expires time.Duration) (string, error) {
-	return "", nil
+	return d.Opts.LocalURL + key, nil
 }
 
 // ListBuckets lists the local bucket if it exists

@@ -1282,6 +1282,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organization.FieldParentOrganizationID: {Type: field.TypeString, Column: organization.FieldParentOrganizationID},
 			organization.FieldPersonalOrg:          {Type: field.TypeBool, Column: organization.FieldPersonalOrg},
 			organization.FieldAvatarRemoteURL:      {Type: field.TypeString, Column: organization.FieldAvatarRemoteURL},
+			organization.FieldAvatarLocalFileID:    {Type: field.TypeString, Column: organization.FieldAvatarLocalFileID},
+			organization.FieldAvatarUpdatedAt:      {Type: field.TypeTime, Column: organization.FieldAvatarUpdatedAt},
 			organization.FieldDedicatedDb:          {Type: field.TypeBool, Column: organization.FieldDedicatedDb},
 		},
 	}
@@ -1313,6 +1315,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldParentOrganizationID: {Type: field.TypeString, Column: organizationhistory.FieldParentOrganizationID},
 			organizationhistory.FieldPersonalOrg:          {Type: field.TypeBool, Column: organizationhistory.FieldPersonalOrg},
 			organizationhistory.FieldAvatarRemoteURL:      {Type: field.TypeString, Column: organizationhistory.FieldAvatarRemoteURL},
+			organizationhistory.FieldAvatarLocalFileID:    {Type: field.TypeString, Column: organizationhistory.FieldAvatarLocalFileID},
+			organizationhistory.FieldAvatarUpdatedAt:      {Type: field.TypeTime, Column: organizationhistory.FieldAvatarUpdatedAt},
 			organizationhistory.FieldDedicatedDb:          {Type: field.TypeBool, Column: organizationhistory.FieldDedicatedDb},
 		},
 	}
@@ -2016,7 +2020,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldLastName:          {Type: field.TypeString, Column: user.FieldLastName},
 			user.FieldDisplayName:       {Type: field.TypeString, Column: user.FieldDisplayName},
 			user.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: user.FieldAvatarRemoteURL},
-			user.FieldAvatarLocalFile:   {Type: field.TypeString, Column: user.FieldAvatarLocalFile},
 			user.FieldAvatarLocalFileID: {Type: field.TypeString, Column: user.FieldAvatarLocalFileID},
 			user.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
 			user.FieldLastSeen:          {Type: field.TypeTime, Column: user.FieldLastSeen},
@@ -2053,7 +2056,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldLastName:          {Type: field.TypeString, Column: userhistory.FieldLastName},
 			userhistory.FieldDisplayName:       {Type: field.TypeString, Column: userhistory.FieldDisplayName},
 			userhistory.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: userhistory.FieldAvatarRemoteURL},
-			userhistory.FieldAvatarLocalFile:   {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFile},
 			userhistory.FieldAvatarLocalFileID: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFileID},
 			userhistory.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
 			userhistory.FieldLastSeen:          {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
@@ -4185,6 +4187,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"avatar_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.AvatarFileTable,
+			Columns: []string{organization.AvatarFileColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"File",
+	)
+	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5301,12 +5315,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
-		"file",
+		"avatar_file",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   user.FileTable,
-			Columns: []string{user.FileColumn},
+			Table:   user.AvatarFileTable,
+			Columns: []string{user.AvatarFileColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -12443,6 +12457,16 @@ func (f *OrganizationFilter) WhereAvatarRemoteURL(p entql.StringP) {
 	f.Where(p.Field(organization.FieldAvatarRemoteURL))
 }
 
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *OrganizationFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(organization.FieldAvatarLocalFileID))
+}
+
+// WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
+func (f *OrganizationFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(organization.FieldAvatarUpdatedAt))
+}
+
 // WhereDedicatedDb applies the entql bool predicate on the dedicated_db field.
 func (f *OrganizationFilter) WhereDedicatedDb(p entql.BoolP) {
 	f.Where(p.Field(organization.FieldDedicatedDb))
@@ -12798,6 +12822,20 @@ func (f *OrganizationFilter) WhereHasFilesWith(preds ...predicate.File) {
 	})))
 }
 
+// WhereHasAvatarFile applies a predicate to check if query has an edge avatar_file.
+func (f *OrganizationFilter) WhereHasAvatarFile() {
+	f.Where(entql.HasEdge("avatar_file"))
+}
+
+// WhereHasAvatarFileWith applies a predicate to check if query has an edge avatar_file with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasAvatarFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("avatar_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasEntities applies a predicate to check if query has an edge entities.
 func (f *OrganizationFilter) WhereHasEntities() {
 	f.Where(entql.HasEdge("entities"))
@@ -13117,6 +13155,16 @@ func (f *OrganizationHistoryFilter) WherePersonalOrg(p entql.BoolP) {
 // WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
 func (f *OrganizationHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
 	f.Where(p.Field(organizationhistory.FieldAvatarRemoteURL))
+}
+
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *OrganizationHistoryFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldAvatarLocalFileID))
+}
+
+// WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
+func (f *OrganizationHistoryFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(organizationhistory.FieldAvatarUpdatedAt))
 }
 
 // WhereDedicatedDb applies the entql bool predicate on the dedicated_db field.
@@ -17039,11 +17087,6 @@ func (f *UserFilter) WhereAvatarRemoteURL(p entql.StringP) {
 	f.Where(p.Field(user.FieldAvatarRemoteURL))
 }
 
-// WhereAvatarLocalFile applies the entql string predicate on the avatar_local_file field.
-func (f *UserFilter) WhereAvatarLocalFile(p entql.StringP) {
-	f.Where(p.Field(user.FieldAvatarLocalFile))
-}
-
 // WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
 func (f *UserFilter) WhereAvatarLocalFileID(p entql.StringP) {
 	f.Where(p.Field(user.FieldAvatarLocalFileID))
@@ -17205,14 +17248,14 @@ func (f *UserFilter) WhereHasFilesWith(preds ...predicate.File) {
 	})))
 }
 
-// WhereHasFile applies a predicate to check if query has an edge file.
-func (f *UserFilter) WhereHasFile() {
-	f.Where(entql.HasEdge("file"))
+// WhereHasAvatarFile applies a predicate to check if query has an edge avatar_file.
+func (f *UserFilter) WhereHasAvatarFile() {
+	f.Where(entql.HasEdge("avatar_file"))
 }
 
-// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
-func (f *UserFilter) WhereHasFileWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasAvatarFileWith applies a predicate to check if query has an edge avatar_file with a given conditions (other predicates).
+func (f *UserFilter) WhereHasAvatarFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("avatar_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -17463,11 +17506,6 @@ func (f *UserHistoryFilter) WhereDisplayName(p entql.StringP) {
 // WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
 func (f *UserHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
 	f.Where(p.Field(userhistory.FieldAvatarRemoteURL))
-}
-
-// WhereAvatarLocalFile applies the entql string predicate on the avatar_local_file field.
-func (f *UserHistoryFilter) WhereAvatarLocalFile(p entql.StringP) {
-	f.Where(p.Field(userhistory.FieldAvatarLocalFile))
 }
 
 // WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.

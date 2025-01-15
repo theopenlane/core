@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 type Server struct {
@@ -75,6 +76,12 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	}
 
 	srv.Handler = &s.config.Handler
+
+	// Set the local file path if the object storage provider is disk
+	// this allows us to serve up the files during testing
+	if s.config.Settings.ObjectStorage.Provider == storage.ProviderDisk {
+		srv.LocalFilePath = s.config.Settings.ObjectStorage.DefaultBucket
+	}
 
 	// Add base routes to the server
 	if err := route.RegisterRoutes(srv); err != nil {

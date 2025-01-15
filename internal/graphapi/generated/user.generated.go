@@ -91,8 +91,6 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_displayName(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_User_avatarRemoteURL(ctx, field)
-			case "avatarLocalFile":
-				return ec.fieldContext_User_avatarLocalFile(ctx, field)
 			case "avatarLocalFileID":
 				return ec.fieldContext_User_avatarLocalFileID(ctx, field)
 			case "avatarUpdatedAt":
@@ -117,8 +115,8 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_organizations(ctx, field)
 			case "files":
 				return ec.fieldContext_User_files(ctx, field)
-			case "file":
-				return ec.fieldContext_User_file(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_User_avatarFile(ctx, field)
 			case "events":
 				return ec.fieldContext_User_events(ctx, field)
 			case "actionPlans":
@@ -209,8 +207,6 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_displayName(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_User_avatarRemoteURL(ctx, field)
-			case "avatarLocalFile":
-				return ec.fieldContext_User_avatarLocalFile(ctx, field)
 			case "avatarLocalFileID":
 				return ec.fieldContext_User_avatarLocalFileID(ctx, field)
 			case "avatarUpdatedAt":
@@ -235,8 +231,8 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_organizations(ctx, field)
 			case "files":
 				return ec.fieldContext_User_files(ctx, field)
-			case "file":
-				return ec.fieldContext_User_file(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_User_avatarFile(ctx, field)
 			case "events":
 				return ec.fieldContext_User_events(ctx, field)
 			case "actionPlans":
@@ -371,8 +367,6 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_displayName(ctx, field)
 			case "avatarRemoteURL":
 				return ec.fieldContext_User_avatarRemoteURL(ctx, field)
-			case "avatarLocalFile":
-				return ec.fieldContext_User_avatarLocalFile(ctx, field)
 			case "avatarLocalFileID":
 				return ec.fieldContext_User_avatarLocalFileID(ctx, field)
 			case "avatarUpdatedAt":
@@ -397,8 +391,8 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_organizations(ctx, field)
 			case "files":
 				return ec.fieldContext_User_files(ctx, field)
-			case "file":
-				return ec.fieldContext_User_file(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_User_avatarFile(ctx, field)
 			case "events":
 				return ec.fieldContext_User_events(ctx, field)
 			case "actionPlans":

@@ -3528,6 +3528,8 @@ type CreateOrganizationInput struct {
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// The time the user's (local) avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb                *bool                           `json:"dedicatedDb,omitempty"`
 	ControlCreatorIDs          []string                        `json:"controlCreatorIDs,omitempty"`
@@ -3554,6 +3556,7 @@ type CreateOrganizationInput struct {
 	EventIDs                   []string                        `json:"eventIDs,omitempty"`
 	SecretIDs                  []string                        `json:"secretIDs,omitempty"`
 	FileIDs                    []string                        `json:"fileIDs,omitempty"`
+	AvatarFileID               *string                         `json:"avatarFileID,omitempty"`
 	EntityIDs                  []string                        `json:"entityIDs,omitempty"`
 	EntityTypeIDs              []string                        `json:"entityTypeIDs,omitempty"`
 	ContactIDs                 []string                        `json:"contactIDs,omitempty"`
@@ -3896,8 +3899,6 @@ type CreateUserInput struct {
 	DisplayName string `json:"displayName"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
-	// The user's local avatar file
-	AvatarLocalFile *string `json:"avatarLocalFile,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// the time the user was last seen
@@ -3919,7 +3920,7 @@ type CreateUserInput struct {
 	OrganizationIDs           []string    `json:"organizationIDs,omitempty"`
 	WebauthnIDs               []string    `json:"webauthnIDs,omitempty"`
 	FileIDs                   []string    `json:"fileIDs,omitempty"`
-	FileID                    *string     `json:"fileID,omitempty"`
+	AvatarFileID              *string     `json:"avatarFileID,omitempty"`
 	EventIDs                  []string    `json:"eventIDs,omitempty"`
 	ActionPlanIDs             []string    `json:"actionPlanIDs,omitempty"`
 	SubcontrolIDs             []string    `json:"subcontrolIDs,omitempty"`
@@ -5800,6 +5801,7 @@ type File struct {
 	DocumentData        []*DocumentData        `json:"documentData,omitempty"`
 	Events              []*Event               `json:"events,omitempty"`
 	Program             []*Program             `json:"program,omitempty"`
+	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
 func (File) IsNode() {}
@@ -11597,6 +11599,10 @@ type Organization struct {
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// The organizations's local avatar file id, takes precedence over the remote URL
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
+	// The time the user's (local) avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicatedDb"`
 	// groups that are allowed to create controls
@@ -11633,6 +11639,7 @@ type Organization struct {
 	Events               []*Event                `json:"events,omitempty"`
 	Secrets              []*Hush                 `json:"secrets,omitempty"`
 	Files                []*File                 `json:"files,omitempty"`
+	AvatarFile           *File                   `json:"avatarFile,omitempty"`
 	Entities             []*Entity               `json:"entities,omitempty"`
 	EntityTypes          []*EntityType           `json:"entityTypes,omitempty"`
 	Contacts             []*Contact              `json:"contacts,omitempty"`
@@ -11710,6 +11717,10 @@ type OrganizationHistory struct {
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// The organizations's local avatar file id, takes precedence over the remote URL
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
+	// The time the user's (local) avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicatedDb"`
 }
@@ -11921,6 +11932,33 @@ type OrganizationHistoryWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
+	// avatar_local_file_id field predicates
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIdgt           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIdgte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIdlt           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIdlte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        *bool    `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       *bool    `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
+	// avatar_updated_at field predicates
+	AvatarUpdatedAt       *time.Time   `json:"avatarUpdatedAt,omitempty"`
+	AvatarUpdatedAtNeq    *time.Time   `json:"avatarUpdatedAtNEQ,omitempty"`
+	AvatarUpdatedAtIn     []*time.Time `json:"avatarUpdatedAtIn,omitempty"`
+	AvatarUpdatedAtNotIn  []*time.Time `json:"avatarUpdatedAtNotIn,omitempty"`
+	AvatarUpdatedAtGt     *time.Time   `json:"avatarUpdatedAtGT,omitempty"`
+	AvatarUpdatedAtGte    *time.Time   `json:"avatarUpdatedAtGTE,omitempty"`
+	AvatarUpdatedAtLt     *time.Time   `json:"avatarUpdatedAtLT,omitempty"`
+	AvatarUpdatedAtLte    *time.Time   `json:"avatarUpdatedAtLTE,omitempty"`
+	AvatarUpdatedAtIsNil  *bool        `json:"avatarUpdatedAtIsNil,omitempty"`
+	AvatarUpdatedAtNotNil *bool        `json:"avatarUpdatedAtNotNil,omitempty"`
 }
 
 // Ordering options for Organization connections
@@ -12643,6 +12681,33 @@ type OrganizationWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
+	// avatar_local_file_id field predicates
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIdgt           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIdgte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIdlt           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIdlte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        *bool    `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       *bool    `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
+	// avatar_updated_at field predicates
+	AvatarUpdatedAt       *time.Time   `json:"avatarUpdatedAt,omitempty"`
+	AvatarUpdatedAtNeq    *time.Time   `json:"avatarUpdatedAtNEQ,omitempty"`
+	AvatarUpdatedAtIn     []*time.Time `json:"avatarUpdatedAtIn,omitempty"`
+	AvatarUpdatedAtNotIn  []*time.Time `json:"avatarUpdatedAtNotIn,omitempty"`
+	AvatarUpdatedAtGt     *time.Time   `json:"avatarUpdatedAtGT,omitempty"`
+	AvatarUpdatedAtGte    *time.Time   `json:"avatarUpdatedAtGTE,omitempty"`
+	AvatarUpdatedAtLt     *time.Time   `json:"avatarUpdatedAtLT,omitempty"`
+	AvatarUpdatedAtLte    *time.Time   `json:"avatarUpdatedAtLTE,omitempty"`
+	AvatarUpdatedAtIsNil  *bool        `json:"avatarUpdatedAtIsNil,omitempty"`
+	AvatarUpdatedAtNotNil *bool        `json:"avatarUpdatedAtNotNil,omitempty"`
 	// control_creators edge predicates
 	HasControlCreators     *bool              `json:"hasControlCreators,omitempty"`
 	HasControlCreatorsWith []*GroupWhereInput `json:"hasControlCreatorsWith,omitempty"`
@@ -12718,6 +12783,9 @@ type OrganizationWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// avatar_file edge predicates
+	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
+	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
@@ -19155,8 +19223,11 @@ type UpdateOrganizationInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// URL of the user's remote avatar
-	AvatarRemoteURL                  *string                         `json:"avatarRemoteURL,omitempty"`
-	ClearAvatarRemoteURL             *bool                           `json:"clearAvatarRemoteURL,omitempty"`
+	AvatarRemoteURL      *string `json:"avatarRemoteURL,omitempty"`
+	ClearAvatarRemoteURL *bool   `json:"clearAvatarRemoteURL,omitempty"`
+	// The time the user's (local) avatar was last updated
+	AvatarUpdatedAt                  *time.Time                      `json:"avatarUpdatedAt,omitempty"`
+	ClearAvatarUpdatedAt             *bool                           `json:"clearAvatarUpdatedAt,omitempty"`
 	AddControlCreatorIDs             []string                        `json:"addControlCreatorIDs,omitempty"`
 	RemoveControlCreatorIDs          []string                        `json:"removeControlCreatorIDs,omitempty"`
 	ClearControlCreators             *bool                           `json:"clearControlCreators,omitempty"`
@@ -19225,6 +19296,8 @@ type UpdateOrganizationInput struct {
 	AddFileIDs                       []string                        `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                    []string                        `json:"removeFileIDs,omitempty"`
 	ClearFiles                       *bool                           `json:"clearFiles,omitempty"`
+	AvatarFileID                     *string                         `json:"avatarFileID,omitempty"`
+	ClearAvatarFile                  *bool                           `json:"clearAvatarFile,omitempty"`
 	AddEntityIDs                     []string                        `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs                  []string                        `json:"removeEntityIDs,omitempty"`
 	ClearEntities                    *bool                           `json:"clearEntities,omitempty"`
@@ -19793,9 +19866,6 @@ type UpdateUserInput struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL      *string `json:"avatarRemoteURL,omitempty"`
 	ClearAvatarRemoteURL *bool   `json:"clearAvatarRemoteURL,omitempty"`
-	// The user's local avatar file
-	AvatarLocalFile      *string `json:"avatarLocalFile,omitempty"`
-	ClearAvatarLocalFile *bool   `json:"clearAvatarLocalFile,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt      *time.Time `json:"avatarUpdatedAt,omitempty"`
 	ClearAvatarUpdatedAt *bool      `json:"clearAvatarUpdatedAt,omitempty"`
@@ -19838,8 +19908,8 @@ type UpdateUserInput struct {
 	AddFileIDs                      []string    `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                   []string    `json:"removeFileIDs,omitempty"`
 	ClearFiles                      *bool       `json:"clearFiles,omitempty"`
-	FileID                          *string     `json:"fileID,omitempty"`
-	ClearFile                       *bool       `json:"clearFile,omitempty"`
+	AvatarFileID                    *string     `json:"avatarFileID,omitempty"`
+	ClearAvatarFile                 *bool       `json:"clearAvatarFile,omitempty"`
 	AddEventIDs                     []string    `json:"addEventIDs,omitempty"`
 	RemoveEventIDs                  []string    `json:"removeEventIDs,omitempty"`
 	ClearEvents                     *bool       `json:"clearEvents,omitempty"`
@@ -19911,9 +19981,7 @@ type User struct {
 	DisplayName string `json:"displayName"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
-	// The user's local avatar file
-	AvatarLocalFile *string `json:"avatarLocalFile,omitempty"`
-	// The user's local avatar file id
+	// The user's local avatar file id, takes precedence over the avatar remote URL
 	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
@@ -19931,7 +19999,7 @@ type User struct {
 	Groups               []*Group               `json:"groups,omitempty"`
 	Organizations        []*Organization        `json:"organizations,omitempty"`
 	Files                []*File                `json:"files,omitempty"`
-	File                 *File                  `json:"file,omitempty"`
+	AvatarFile           *File                  `json:"avatarFile,omitempty"`
 	Events               []*Event               `json:"events,omitempty"`
 	ActionPlans          []*ActionPlan          `json:"actionPlans,omitempty"`
 	Subcontrols          []*Subcontrol          `json:"subcontrols,omitempty"`
@@ -20001,9 +20069,7 @@ type UserHistory struct {
 	DisplayName string `json:"displayName"`
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
-	// The user's local avatar file
-	AvatarLocalFile *string `json:"avatarLocalFile,omitempty"`
-	// The user's local avatar file id
+	// The user's local avatar file id, takes precedence over the avatar remote URL
 	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
@@ -20249,22 +20315,6 @@ type UserHistoryWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
-	// avatar_local_file field predicates
-	AvatarLocalFile             *string  `json:"avatarLocalFile,omitempty"`
-	AvatarLocalFileNeq          *string  `json:"avatarLocalFileNEQ,omitempty"`
-	AvatarLocalFileIn           []string `json:"avatarLocalFileIn,omitempty"`
-	AvatarLocalFileNotIn        []string `json:"avatarLocalFileNotIn,omitempty"`
-	AvatarLocalFileGt           *string  `json:"avatarLocalFileGT,omitempty"`
-	AvatarLocalFileGte          *string  `json:"avatarLocalFileGTE,omitempty"`
-	AvatarLocalFileLt           *string  `json:"avatarLocalFileLT,omitempty"`
-	AvatarLocalFileLte          *string  `json:"avatarLocalFileLTE,omitempty"`
-	AvatarLocalFileContains     *string  `json:"avatarLocalFileContains,omitempty"`
-	AvatarLocalFileHasPrefix    *string  `json:"avatarLocalFileHasPrefix,omitempty"`
-	AvatarLocalFileHasSuffix    *string  `json:"avatarLocalFileHasSuffix,omitempty"`
-	AvatarLocalFileIsNil        *bool    `json:"avatarLocalFileIsNil,omitempty"`
-	AvatarLocalFileNotNil       *bool    `json:"avatarLocalFileNotNil,omitempty"`
-	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
-	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 	// avatar_local_file_id field predicates
 	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
 	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
@@ -21009,22 +21059,6 @@ type UserWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
-	// avatar_local_file field predicates
-	AvatarLocalFile             *string  `json:"avatarLocalFile,omitempty"`
-	AvatarLocalFileNeq          *string  `json:"avatarLocalFileNEQ,omitempty"`
-	AvatarLocalFileIn           []string `json:"avatarLocalFileIn,omitempty"`
-	AvatarLocalFileNotIn        []string `json:"avatarLocalFileNotIn,omitempty"`
-	AvatarLocalFileGt           *string  `json:"avatarLocalFileGT,omitempty"`
-	AvatarLocalFileGte          *string  `json:"avatarLocalFileGTE,omitempty"`
-	AvatarLocalFileLt           *string  `json:"avatarLocalFileLT,omitempty"`
-	AvatarLocalFileLte          *string  `json:"avatarLocalFileLTE,omitempty"`
-	AvatarLocalFileContains     *string  `json:"avatarLocalFileContains,omitempty"`
-	AvatarLocalFileHasPrefix    *string  `json:"avatarLocalFileHasPrefix,omitempty"`
-	AvatarLocalFileHasSuffix    *string  `json:"avatarLocalFileHasSuffix,omitempty"`
-	AvatarLocalFileIsNil        *bool    `json:"avatarLocalFileIsNil,omitempty"`
-	AvatarLocalFileNotNil       *bool    `json:"avatarLocalFileNotNil,omitempty"`
-	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
-	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 	// avatar_local_file_id field predicates
 	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
 	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
@@ -21109,9 +21143,9 @@ type UserWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
-	// file edge predicates
-	HasFile     *bool             `json:"hasFile,omitempty"`
-	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// avatar_file edge predicates
+	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
+	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`

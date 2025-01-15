@@ -31,14 +31,22 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			orgSubResult, ok := v.([]*generated.OrgSubscription)
 			if ok {
 				for _, orgSub := range orgSubResult {
-					setSubscriptionURL(orgSub, q) // nolint:errcheck
+					if err := setSubscriptionURL(orgSub, q); err != nil {
+						log.Warn().Err(err).Msg("failed to set subscription URL")
+					}
 				}
+
+				return v, nil
 			}
 
 			// if its not a list, check the single entry
 			orgSub, ok := v.(*generated.OrgSubscription)
 			if ok {
-				setSubscriptionURL(orgSub, q) // nolint:errcheck
+				if err := setSubscriptionURL(orgSub, q); err != nil {
+					log.Warn().Err(err).Msg("failed to set subscription URL")
+				}
+
+				return v, nil
 			}
 
 			return v, nil

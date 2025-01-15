@@ -24,8 +24,8 @@ mutation CreateBulkOrganization($input: [CreateOrganizationInput!]) {
   }
 }
 
-mutation CreateOrganization($input: CreateOrganizationInput!) {
-  createOrganization(input: $input) {
+mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Upload) {
+  createOrganization(input: $input, avatarFile: $avatarFile) {
     organization {
       id
       name
@@ -33,6 +33,11 @@ mutation CreateOrganization($input: CreateOrganizationInput!) {
       description
       personalOrg
       tags
+      avatarRemoteURL
+      avatarLocalFileID
+      avatarFile {
+        presignedURL
+      }
       createdAt
       updatedAt
       setting {
@@ -137,6 +142,8 @@ query GetOrganizationByID($organizationId: ID!) {
     description
     personalOrg
     tags
+    avatarRemoteURL
+    avatarLocalFileID
     parent {
       id
       name
@@ -237,14 +244,23 @@ query GetOrganizations($where: OrganizationWhereInput) {
   }
 }
 
-mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizationInput!) {
-  updateOrganization(id: $updateOrganizationId, input: $input) {
+mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizationInput!, $avatarFile: Upload) {
+  updateOrganization(
+    id: $updateOrganizationId
+    input: $input
+    avatarFile: $avatarFile
+  ) {
     organization {
       id
       name
       displayName
       description
       personalOrg
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarFile {
+        presignedURL
+      }
       tags
       members {
         id
