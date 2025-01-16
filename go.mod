@@ -1,6 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.23.5
+go 1.23.4
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
@@ -68,7 +68,7 @@ require (
 	github.com/theopenlane/entx v0.3.2
 	github.com/theopenlane/gqlgen-plugins v0.4.2
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.6.3-0.20250116230816-792ecece4b5f
+	github.com/theopenlane/iam v0.6.3-0.20250116231202-217ece56184f
 	github.com/theopenlane/newman v0.1.2
 	github.com/theopenlane/riverboat v0.0.7
 	github.com/theopenlane/utils v0.4.2
