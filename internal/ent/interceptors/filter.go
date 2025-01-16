@@ -46,7 +46,7 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 		return nil
 	}
 
-	// filter the query to only include the files that the user has access to
+	// filter the query to only include the objects that the user has access to
 	q.WhereP(
 		sql.FieldIn("id", objectIDs...),
 	)

@@ -294,6 +294,15 @@ func (suite *GraphTestSuite) TestMutationDeleteOrgMembers() {
 
 	// make sure the user default org is not set to the deleted org
 	suite.assertDefaultOrgUpdate(testUser1.UserCtx, om.UserID, om.OrganizationID, false)
+
+	// test re-adding the user to the org
+	_, err = suite.client.api.AddUserToOrgWithRole(testUser1.UserCtx, openlaneclient.CreateOrgMembershipInput{
+		OrganizationID: om.OrganizationID,
+		UserID:         om.UserID,
+		Role:           &om.Role,
+	})
+
+	require.NoError(t, err)
 }
 
 func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, userID, orgID string, isEqual bool) {

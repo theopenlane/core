@@ -123,14 +123,12 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 	switch op {
 	case ent.OpCreate:
 		return addToManagedGroups(managedCtx, m, orgMember)
-	case ent.OpDelete, ent.OpDeleteOne:
-		return removeFromManagedGroups(managedCtx, m, orgMember)
 	case ent.OpUpdate, ent.OpUpdateOne:
-		if entx.CheckIsSoftDelete(managedCtx) {
-			return removeFromManagedGroups(managedCtx, m, orgMember)
+		// deletes are handled by the cascade delete hook
+		// which will delete the group memberships when the org membership is deleted
+		if !entx.CheckIsSoftDelete(managedCtx) {
+			return updateManagedGroups(managedCtx, m, orgMember)
 		}
-
-		return updateManagedGroups(managedCtx, m, orgMember)
 	}
 
 	return nil
@@ -189,10 +187,9 @@ func removeFromManagedGroups(ctx context.Context, m *generated.OrgMembershipMuta
 		}
 	}
 
-	// remove from the all users group if they are removed from the organization
-	if entx.CheckIsSoftDelete(ctx) {
-		return removeMemberFromManagedGroup(ctx, m, om, AllMembersGroup)
-	}
+	// we shouldn't remove users from the All Members group
+	// that only happens when the org membership is deleted
+	// and the cascade delete hook will handle that
 
 	return nil
 }

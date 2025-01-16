@@ -48,6 +48,12 @@ func (ProgramMembership) Edges() []ent.Edge {
 			Required().
 			Unique().
 			Immutable(),
+		edge.To("orgmembership", OrgMembership.Type).
+			Immutable().
+			Unique().
+			Annotations(
+				entgql.Skip(entgql.SkipAll),
+			),
 	}
 }
 

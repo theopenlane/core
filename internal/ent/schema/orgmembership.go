@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -63,6 +64,19 @@ func (OrgMembership) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.MembershipChecks("organization"),
+		// Delete groups + program members when orgmembership is deleted
+		entx.CascadeThroughAnnotationField(
+			[]entx.ThroughCleanup{
+				{
+					Field:   "Orgmembership",
+					Through: "GroupMembership",
+				},
+				{
+					Field:   "Orgmembership",
+					Through: "ProgramMembership",
+				},
+			},
+		),
 	}
 }
 

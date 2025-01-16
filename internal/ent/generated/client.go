@@ -6082,6 +6082,25 @@ func (c *GroupMembershipClient) QueryUser(gm *GroupMembership) *UserQuery {
 	return query
 }
 
+// QueryOrgmembership queries the orgmembership edge of a GroupMembership.
+func (c *GroupMembershipClient) QueryOrgmembership(gm *GroupMembership) *OrgMembershipQuery {
+	query := (&OrgMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, id),
+			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.OrgmembershipTable, groupmembership.OrgmembershipColumn),
+		)
+		schemaConfig := gm.schemaConfig
+		step.To.Schema = schemaConfig.OrgMembership
+		step.Edge.Schema = schemaConfig.GroupMembership
+		fromV = sqlgraph.Neighbors(gm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvents queries the events edge of a GroupMembership.
 func (c *GroupMembershipClient) QueryEvents(gm *GroupMembership) *EventQuery {
 	query := (&EventClient{config: c.config}).Query()
@@ -12084,6 +12103,25 @@ func (c *ProgramMembershipClient) QueryUser(pm *ProgramMembership) *UserQuery {
 		)
 		schemaConfig := pm.schemaConfig
 		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgmembership queries the orgmembership edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryOrgmembership(pm *ProgramMembership) *OrgMembershipQuery {
+	query := (&OrgMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
+			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.OrgmembershipTable, programmembership.OrgmembershipColumn),
+		)
+		schemaConfig := pm.schemaConfig
+		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
 		return fromV, nil

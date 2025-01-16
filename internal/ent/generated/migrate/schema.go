@@ -838,6 +838,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
+		{Name: "group_membership_orgmembership", Type: field.TypeString, Nullable: true},
 	}
 	// GroupMembershipsTable holds the schema information for the "group_memberships" table.
 	GroupMembershipsTable = &schema.Table{
@@ -856,6 +857,12 @@ var (
 				Columns:    []*schema.Column{GroupMembershipsColumns[10]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "group_memberships_org_memberships_orgmembership",
+				Columns:    []*schema.Column{GroupMembershipsColumns[11]},
+				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -1894,6 +1901,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
+		{Name: "program_membership_orgmembership", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramMembershipsTable holds the schema information for the "program_memberships" table.
 	ProgramMembershipsTable = &schema.Table{
@@ -1912,6 +1920,12 @@ var (
 				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "program_memberships_org_memberships_orgmembership",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[11]},
+				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -5088,6 +5102,7 @@ func init() {
 	}
 	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
 	GroupMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_membership_history",
 	}
@@ -5149,6 +5164,7 @@ func init() {
 	}
 	ProgramMembershipsTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
 	ProgramMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_membership_history",
 	}

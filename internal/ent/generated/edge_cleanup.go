@@ -41,154 +41,132 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/utils/contextx"
+
+	"github.com/theopenlane/iam/entfga"
 )
 
-// CascadeDeleteKey is a key for the context to indicate that the delete is happening as part of a cascade delete
-type CascadeDeleteKey struct{}
-
 func APITokenEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup apitoken edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup apitoken edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ActionPlanEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplan edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplan edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ActionPlanHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplanhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplanhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ContactEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ContactHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contacthistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contacthistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ControlEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ControlHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ControlObjectiveEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjective edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjective edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ControlObjectiveHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjectivehistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjectivehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func DocumentDataEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdata edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdata edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func DocumentDataHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdatahistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdatahistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func EmailVerificationTokenEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailverificationtoken edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailverificationtoken edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func EntityEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entity edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entity edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func EntityHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entityhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entityhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func EntityTypeEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytype edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytype edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func EntityTypeHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytypehistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytypehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func EventEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup event edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup event edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func EventHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup eventhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup eventhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func FileEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup file edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup file edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func FileHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filehistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func GroupEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup group edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup group edge")), entfga.DeleteTuplesFirstKey{})
 
 	if exists, err := FromContext(ctx).GroupSetting.Query().Where((groupsetting.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupsettingCount, err := FromContext(ctx).GroupSetting.Delete().Where(groupsetting.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
@@ -208,148 +186,141 @@ func GroupEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func GroupHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup grouphistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup grouphistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func GroupMembershipEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembership edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembership edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func GroupMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembershiphistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func GroupSettingEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsetting edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsetting edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func GroupSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsettinghistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsettinghistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func HushEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hush edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hush edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func HushHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hushhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hushhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func IntegrationEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integration edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integration edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func IntegrationHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func InternalPolicyHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicyhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicyhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func NarrativeEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrative edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrative edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func NarrativeHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrativehistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrativehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func NoteEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup note edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup note edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func NoteHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notehistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembership edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembership edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasOrgmembershipWith(orgmembership.ID(id)))).Exist(ctx); err == nil && exists {
+		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasOrgmembershipWith(orgmembership.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", groupmembershipCount).Msg("deleting groupmembership")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasOrgmembershipWith(orgmembership.ID(id)))).Exist(ctx); err == nil && exists {
+		if programmembershipCount, err := FromContext(ctx).ProgramMembership.Delete().Where(programmembership.HasOrgmembershipWith(orgmembership.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", programmembershipCount).Msg("deleting programmembership")
+			return err
+		}
+	}
 
 	return nil
 }
 
 func OrgMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembershiphistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func OrgSubscriptionEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func OrgSubscriptionHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscriptionhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscriptionhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func OrganizationEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organization edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organization edge")), entfga.DeleteTuplesFirstKey{})
 
 	if exists, err := FromContext(ctx).Organization.Query().Where(organization.HasParentWith(organization.ID(id))).Exist(ctx); err == nil && exists {
 		if organizationCount, err := FromContext(ctx).Organization.Delete().Where(organization.HasParentWith(organization.ID(id))).Exec(ctx); err != nil {
@@ -516,57 +487,49 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func OrganizationHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func OrganizationSettingEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsetting edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsetting edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func OrganizationSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsettinghistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsettinghistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func PasswordResetTokenEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup passwordresettoken edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup passwordresettoken edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func PersonalAccessTokenEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ProcedureEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedure edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedure edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ProcedureHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedurehistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedurehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ProgramEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup program edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup program edge")), entfga.DeleteTuplesFirstKey{})
 
 	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasProgramWith(program.ID(id)))).Exist(ctx); err == nil && exists {
 		if programmembershipCount, err := FromContext(ctx).ProgramMembership.Delete().Where(programmembership.HasProgramWith(program.ID(id))).Exec(ctx); err != nil {
@@ -579,99 +542,85 @@ func ProgramEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func ProgramHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembership edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembership edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func ProgramMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembershiphistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func RiskEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func RiskHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup riskhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup riskhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func StandardEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func StandardHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standardhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standardhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func SubcontrolEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func SubcontrolHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrolhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrolhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func SubscriberEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func TFASettingEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tfasetting edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tfasetting edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func TaskEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup task edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup task edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func TaskHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup taskhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup taskhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func TemplateEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup template edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup template edge")), entfga.DeleteTuplesFirstKey{})
 
 	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasTemplateWith(template.ID(id)))).Exist(ctx); err == nil && exists {
 		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasTemplateWith(template.ID(id))).Exec(ctx); err != nil {
@@ -684,15 +633,13 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func TemplateHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup templatehistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup templatehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func UserEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup user edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup user edge")), entfga.DeleteTuplesFirstKey{})
 
 	if exists, err := FromContext(ctx).PersonalAccessToken.Query().Where((personalaccesstoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if personalaccesstokenCount, err := FromContext(ctx).PersonalAccessToken.Delete().Where(personalaccesstoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
@@ -754,29 +701,25 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func UserHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup userhistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup userhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func UserSettingEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersetting edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersetting edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func UserSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersettinghistory edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersettinghistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
 func WebauthnEdgeCleanup(ctx context.Context, id string) error {
-	// If a user has access to delete the object, they have access to delete all edges
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup webauthn edge")), CascadeDeleteKey{})
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup webauthn edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

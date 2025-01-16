@@ -45,10 +45,6 @@ func (m *GroupMembershipMutation) CreateTuplesFromCreate(ctx context.Context) er
 }
 
 func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
-		return m.CreateTuplesFromDelete(ctx)
-	}
 
 	// get ids that will be updated
 	ids, err := m.IDs(ctx)
@@ -96,12 +92,11 @@ func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) er
 	// use the predicates from the original request to get the members if we don't have ids
 	if len(ids) == 0 {
 		members, err = m.Client().GroupMembership.Query().Where(m.predicates...).All(ctx)
-
 	} else {
 		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil || len(members) == 0 {
+	if err != nil && !!IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for update")
 
 		return err
@@ -142,11 +137,6 @@ func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) er
 }
 
 func (m *GroupMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
-		return nil
-	}
-
 	// get ids that will be deleted
 	ids, err := m.IDs(ctx)
 	if err != nil {
@@ -167,16 +157,15 @@ func (m *GroupMembershipMutation) CreateTuplesFromDelete(ctx context.Context) er
 	members := []*GroupMembership{}
 
 	// use the predicates from the original request to get the members if we don't have ids
-	deleteCtx := entx.SkipSoftDelete(ctx)
+	ctx = entx.SkipSoftDelete(ctx)
 	if len(ids) == 0 {
-		// this will not work for the soft delete case because the predicates will include deleted_at = nil
-		// and this hook is setup to run after the delete happens
-		members, err = m.Client().GroupMembership.Query().Where(m.predicates...).All(deleteCtx)
+		predicates := m.predicates[:len(m.predicates)-1]
+		members, err = m.Client().GroupMembership.Query().Where(predicates...).All(ctx)
 	} else {
-		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(deleteCtx)
+		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil || len(members) == 0 {
+	if err != nil && !!IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for delete")
 
 		return err
@@ -238,10 +227,6 @@ func (m *OrgMembershipMutation) CreateTuplesFromCreate(ctx context.Context) erro
 }
 
 func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
-		return m.CreateTuplesFromDelete(ctx)
-	}
 
 	// get ids that will be updated
 	ids, err := m.IDs(ctx)
@@ -289,12 +274,11 @@ func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) erro
 	// use the predicates from the original request to get the members if we don't have ids
 	if len(ids) == 0 {
 		members, err = m.Client().OrgMembership.Query().Where(m.predicates...).All(ctx)
-
 	} else {
 		members, err = m.Client().OrgMembership.Query().Where(orgmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil || len(members) == 0 {
+	if err != nil && !!IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for update")
 
 		return err
@@ -335,11 +319,6 @@ func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) erro
 }
 
 func (m *OrgMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
-		return nil
-	}
-
 	// get ids that will be deleted
 	ids, err := m.IDs(ctx)
 	if err != nil {
@@ -360,16 +339,14 @@ func (m *OrgMembershipMutation) CreateTuplesFromDelete(ctx context.Context) erro
 	members := []*OrgMembership{}
 
 	// use the predicates from the original request to get the members if we don't have ids
-	deleteCtx := entx.SkipSoftDelete(ctx)
+	ctx = entx.SkipSoftDelete(ctx)
 	if len(ids) == 0 {
-		// this will not work for the soft delete case because the predicates will include deleted_at = nil
-		// and this hook is setup to run after the delete happens
-		members, err = m.Client().OrgMembership.Query().Where(m.predicates...).All(deleteCtx)
+		members, err = m.Client().OrgMembership.Query().Where(m.predicates...).All(ctx)
 	} else {
-		members, err = m.Client().OrgMembership.Query().Where(orgmembership.IDIn(ids...)).All(deleteCtx)
+		members, err = m.Client().OrgMembership.Query().Where(orgmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil || len(members) == 0 {
+	if err != nil && !!IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for delete")
 
 		return err
@@ -431,10 +408,6 @@ func (m *ProgramMembershipMutation) CreateTuplesFromCreate(ctx context.Context) 
 }
 
 func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
-		return m.CreateTuplesFromDelete(ctx)
-	}
 
 	// get ids that will be updated
 	ids, err := m.IDs(ctx)
@@ -482,12 +455,11 @@ func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) 
 	// use the predicates from the original request to get the members if we don't have ids
 	if len(ids) == 0 {
 		members, err = m.Client().ProgramMembership.Query().Where(m.predicates...).All(ctx)
-
 	} else {
 		members, err = m.Client().ProgramMembership.Query().Where(programmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil || len(members) == 0 {
+	if err != nil && !!IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for update")
 
 		return err
@@ -528,11 +500,6 @@ func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) 
 }
 
 func (m *ProgramMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
-		return nil
-	}
-
 	// get ids that will be deleted
 	ids, err := m.IDs(ctx)
 	if err != nil {
@@ -553,16 +520,14 @@ func (m *ProgramMembershipMutation) CreateTuplesFromDelete(ctx context.Context) 
 	members := []*ProgramMembership{}
 
 	// use the predicates from the original request to get the members if we don't have ids
-	deleteCtx := entx.SkipSoftDelete(ctx)
+	ctx = entx.SkipSoftDelete(ctx)
 	if len(ids) == 0 {
-		// this will not work for the soft delete case because the predicates will include deleted_at = nil
-		// and this hook is setup to run after the delete happens
-		members, err = m.Client().ProgramMembership.Query().Where(m.predicates...).All(deleteCtx)
+		members, err = m.Client().ProgramMembership.Query().Where(m.predicates...).All(ctx)
 	} else {
-		members, err = m.Client().ProgramMembership.Query().Where(programmembership.IDIn(ids...)).All(deleteCtx)
+		members, err = m.Client().ProgramMembership.Query().Where(programmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil || len(members) == 0 {
+	if err != nil && !!IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for delete")
 
 		return err

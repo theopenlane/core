@@ -14,7 +14,6 @@ type CascadeDeleteKey struct{}
 	{{- range $node := $.Nodes }}
             {{/* create an EdgeCleanup function accepting an ID */}}
 			func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
-            	// If a user has access to delete the object, they have access to delete all edges
 	            ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")), CascadeDeleteKey{})
 
                {{/* For each edge */}}

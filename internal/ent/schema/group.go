@@ -178,7 +178,7 @@ func (Group) Annotations() []schema.Annotation {
 // Interceptors of the Group
 func (Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorGroup(),
+		interceptors.FilterListQuery(),
 	}
 }
 

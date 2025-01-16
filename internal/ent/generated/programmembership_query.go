@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -23,14 +24,16 @@ import (
 // ProgramMembershipQuery is the builder for querying ProgramMembership entities.
 type ProgramMembershipQuery struct {
 	config
-	ctx         *QueryContext
-	order       []programmembership.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.ProgramMembership
-	withProgram *ProgramQuery
-	withUser    *UserQuery
-	loadTotal   []func(context.Context, []*ProgramMembership) error
-	modifiers   []func(*sql.Selector)
+	ctx               *QueryContext
+	order             []programmembership.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.ProgramMembership
+	withProgram       *ProgramQuery
+	withUser          *UserQuery
+	withOrgmembership *OrgMembershipQuery
+	withFKs           bool
+	loadTotal         []func(context.Context, []*ProgramMembership) error
+	modifiers         []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -110,6 +113,31 @@ func (pmq *ProgramMembershipQuery) QueryUser() *UserQuery {
 		)
 		schemaConfig := pmq.schemaConfig
 		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrgmembership chains the current query on the "orgmembership" edge.
+func (pmq *ProgramMembershipQuery) QueryOrgmembership() *OrgMembershipQuery {
+	query := (&OrgMembershipClient{config: pmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
+			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.OrgmembershipTable, programmembership.OrgmembershipColumn),
+		)
+		schemaConfig := pmq.schemaConfig
+		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
 		return fromU, nil
@@ -304,13 +332,14 @@ func (pmq *ProgramMembershipQuery) Clone() *ProgramMembershipQuery {
 		return nil
 	}
 	return &ProgramMembershipQuery{
-		config:      pmq.config,
-		ctx:         pmq.ctx.Clone(),
-		order:       append([]programmembership.OrderOption{}, pmq.order...),
-		inters:      append([]Interceptor{}, pmq.inters...),
-		predicates:  append([]predicate.ProgramMembership{}, pmq.predicates...),
-		withProgram: pmq.withProgram.Clone(),
-		withUser:    pmq.withUser.Clone(),
+		config:            pmq.config,
+		ctx:               pmq.ctx.Clone(),
+		order:             append([]programmembership.OrderOption{}, pmq.order...),
+		inters:            append([]Interceptor{}, pmq.inters...),
+		predicates:        append([]predicate.ProgramMembership{}, pmq.predicates...),
+		withProgram:       pmq.withProgram.Clone(),
+		withUser:          pmq.withUser.Clone(),
+		withOrgmembership: pmq.withOrgmembership.Clone(),
 		// clone intermediate query.
 		sql:       pmq.sql.Clone(),
 		path:      pmq.path,
@@ -337,6 +366,17 @@ func (pmq *ProgramMembershipQuery) WithUser(opts ...func(*UserQuery)) *ProgramMe
 		opt(query)
 	}
 	pmq.withUser = query
+	return pmq
+}
+
+// WithOrgmembership tells the query-builder to eager-load the nodes that are connected to
+// the "orgmembership" edge. The optional arguments are used to configure the query builder of the edge.
+func (pmq *ProgramMembershipQuery) WithOrgmembership(opts ...func(*OrgMembershipQuery)) *ProgramMembershipQuery {
+	query := (&OrgMembershipClient{config: pmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pmq.withOrgmembership = query
 	return pmq
 }
 
@@ -423,12 +463,20 @@ func (pmq *ProgramMembershipQuery) prepareQuery(ctx context.Context) error {
 func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProgramMembership, error) {
 	var (
 		nodes       = []*ProgramMembership{}
+		withFKs     = pmq.withFKs
 		_spec       = pmq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			pmq.withProgram != nil,
 			pmq.withUser != nil,
+			pmq.withOrgmembership != nil,
 		}
 	)
+	if pmq.withOrgmembership != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, programmembership.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ProgramMembership).scanValues(nil, columns)
 	}
@@ -461,6 +509,12 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if query := pmq.withUser; query != nil {
 		if err := pmq.loadUser(ctx, query, nodes, nil,
 			func(n *ProgramMembership, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pmq.withOrgmembership; query != nil {
+		if err := pmq.loadOrgmembership(ctx, query, nodes, nil,
+			func(n *ProgramMembership, e *OrgMembership) { n.Edges.Orgmembership = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -523,6 +577,38 @@ func (pmq *ProgramMembershipQuery) loadUser(ctx context.Context, query *UserQuer
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pmq *ProgramMembershipQuery) loadOrgmembership(ctx context.Context, query *OrgMembershipQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *OrgMembership)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ProgramMembership)
+	for i := range nodes {
+		if nodes[i].program_membership_orgmembership == nil {
+			continue
+		}
+		fk := *nodes[i].program_membership_orgmembership
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(orgmembership.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "program_membership_orgmembership" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

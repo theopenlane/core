@@ -69,7 +69,7 @@ func (suite *GraphTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
 	if testing.Verbose() {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
 
 	// setup db container

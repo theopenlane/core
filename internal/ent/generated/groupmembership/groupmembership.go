@@ -42,6 +42,8 @@ const (
 	EdgeGroup = "group"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
+	// EdgeOrgmembership holds the string denoting the orgmembership edge name in mutations.
+	EdgeOrgmembership = "orgmembership"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// Table holds the table name of the groupmembership in the database.
@@ -60,6 +62,13 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
+	// OrgmembershipTable is the table that holds the orgmembership relation/edge.
+	OrgmembershipTable = "group_memberships"
+	// OrgmembershipInverseTable is the table name for the OrgMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "orgmembership" package.
+	OrgmembershipInverseTable = "org_memberships"
+	// OrgmembershipColumn is the table column denoting the orgmembership relation/edge.
+	OrgmembershipColumn = "group_membership_orgmembership"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "group_membership_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -82,6 +91,12 @@ var Columns = []string{
 	FieldUserID,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "group_memberships"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"group_membership_orgmembership",
+}
+
 var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
@@ -92,6 +107,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -203,6 +223,13 @@ func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByOrgmembershipField orders the results by orgmembership field.
+func ByOrgmembershipField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgmembershipStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByEventsCount orders the results by events count.
 func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -228,6 +255,13 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, UserTable, UserColumn),
+	)
+}
+func newOrgmembershipStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgmembershipInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, OrgmembershipTable, OrgmembershipColumn),
 	)
 }
 func newEventsStep() *sqlgraph.Step {

@@ -40639,28 +40639,30 @@ func (m *GroupHistoryMutation) ResetEdge(name string) error {
 // GroupMembershipMutation represents an operation that mutates the GroupMembership nodes in the graph.
 type GroupMembershipMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	created_at    *time.Time
-	updated_at    *time.Time
-	created_by    *string
-	updated_by    *string
-	mapping_id    *string
-	deleted_at    *time.Time
-	deleted_by    *string
-	role          *enums.Role
-	clearedFields map[string]struct{}
-	group         *string
-	clearedgroup  bool
-	user          *string
-	cleareduser   bool
-	events        map[string]struct{}
-	removedevents map[string]struct{}
-	clearedevents bool
-	done          bool
-	oldValue      func(context.Context) (*GroupMembership, error)
-	predicates    []predicate.GroupMembership
+	op                   Op
+	typ                  string
+	id                   *string
+	created_at           *time.Time
+	updated_at           *time.Time
+	created_by           *string
+	updated_by           *string
+	mapping_id           *string
+	deleted_at           *time.Time
+	deleted_by           *string
+	role                 *enums.Role
+	clearedFields        map[string]struct{}
+	group                *string
+	clearedgroup         bool
+	user                 *string
+	cleareduser          bool
+	orgmembership        *string
+	clearedorgmembership bool
+	events               map[string]struct{}
+	removedevents        map[string]struct{}
+	clearedevents        bool
+	done                 bool
+	oldValue             func(context.Context) (*GroupMembership, error)
+	predicates           []predicate.GroupMembership
 }
 
 var _ ent.Mutation = (*GroupMembershipMutation)(nil)
@@ -41259,6 +41261,45 @@ func (m *GroupMembershipMutation) ResetUser() {
 	m.cleareduser = false
 }
 
+// SetOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by id.
+func (m *GroupMembershipMutation) SetOrgmembershipID(id string) {
+	m.orgmembership = &id
+}
+
+// ClearOrgmembership clears the "orgmembership" edge to the OrgMembership entity.
+func (m *GroupMembershipMutation) ClearOrgmembership() {
+	m.clearedorgmembership = true
+}
+
+// OrgmembershipCleared reports if the "orgmembership" edge to the OrgMembership entity was cleared.
+func (m *GroupMembershipMutation) OrgmembershipCleared() bool {
+	return m.clearedorgmembership
+}
+
+// OrgmembershipID returns the "orgmembership" edge ID in the mutation.
+func (m *GroupMembershipMutation) OrgmembershipID() (id string, exists bool) {
+	if m.orgmembership != nil {
+		return *m.orgmembership, true
+	}
+	return
+}
+
+// OrgmembershipIDs returns the "orgmembership" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OrgmembershipID instead. It exists only for internal usage by the builders.
+func (m *GroupMembershipMutation) OrgmembershipIDs() (ids []string) {
+	if id := m.orgmembership; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOrgmembership resets all changes to the "orgmembership" edge.
+func (m *GroupMembershipMutation) ResetOrgmembership() {
+	m.orgmembership = nil
+	m.clearedorgmembership = false
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by ids.
 func (m *GroupMembershipMutation) AddEventIDs(ids ...string) {
 	if m.events == nil {
@@ -41638,12 +41679,15 @@ func (m *GroupMembershipMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *GroupMembershipMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.group != nil {
 		edges = append(edges, groupmembership.EdgeGroup)
 	}
 	if m.user != nil {
 		edges = append(edges, groupmembership.EdgeUser)
+	}
+	if m.orgmembership != nil {
+		edges = append(edges, groupmembership.EdgeOrgmembership)
 	}
 	if m.events != nil {
 		edges = append(edges, groupmembership.EdgeEvents)
@@ -41663,6 +41707,10 @@ func (m *GroupMembershipMutation) AddedIDs(name string) []ent.Value {
 		if id := m.user; id != nil {
 			return []ent.Value{*id}
 		}
+	case groupmembership.EdgeOrgmembership:
+		if id := m.orgmembership; id != nil {
+			return []ent.Value{*id}
+		}
 	case groupmembership.EdgeEvents:
 		ids := make([]ent.Value, 0, len(m.events))
 		for id := range m.events {
@@ -41675,7 +41723,7 @@ func (m *GroupMembershipMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *GroupMembershipMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedevents != nil {
 		edges = append(edges, groupmembership.EdgeEvents)
 	}
@@ -41698,12 +41746,15 @@ func (m *GroupMembershipMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *GroupMembershipMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedgroup {
 		edges = append(edges, groupmembership.EdgeGroup)
 	}
 	if m.cleareduser {
 		edges = append(edges, groupmembership.EdgeUser)
+	}
+	if m.clearedorgmembership {
+		edges = append(edges, groupmembership.EdgeOrgmembership)
 	}
 	if m.clearedevents {
 		edges = append(edges, groupmembership.EdgeEvents)
@@ -41719,6 +41770,8 @@ func (m *GroupMembershipMutation) EdgeCleared(name string) bool {
 		return m.clearedgroup
 	case groupmembership.EdgeUser:
 		return m.cleareduser
+	case groupmembership.EdgeOrgmembership:
+		return m.clearedorgmembership
 	case groupmembership.EdgeEvents:
 		return m.clearedevents
 	}
@@ -41735,6 +41788,9 @@ func (m *GroupMembershipMutation) ClearEdge(name string) error {
 	case groupmembership.EdgeUser:
 		m.ClearUser()
 		return nil
+	case groupmembership.EdgeOrgmembership:
+		m.ClearOrgmembership()
+		return nil
 	}
 	return fmt.Errorf("unknown GroupMembership unique edge %s", name)
 }
@@ -41748,6 +41804,9 @@ func (m *GroupMembershipMutation) ResetEdge(name string) error {
 		return nil
 	case groupmembership.EdgeUser:
 		m.ResetUser()
+		return nil
+	case groupmembership.EdgeOrgmembership:
+		m.ResetOrgmembership()
 		return nil
 	case groupmembership.EdgeEvents:
 		m.ResetEvents()
@@ -88714,25 +88773,27 @@ func (m *ProgramHistoryMutation) ResetEdge(name string) error {
 // ProgramMembershipMutation represents an operation that mutates the ProgramMembership nodes in the graph.
 type ProgramMembershipMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *string
-	created_at     *time.Time
-	updated_at     *time.Time
-	created_by     *string
-	updated_by     *string
-	mapping_id     *string
-	deleted_at     *time.Time
-	deleted_by     *string
-	role           *enums.Role
-	clearedFields  map[string]struct{}
-	program        *string
-	clearedprogram bool
-	user           *string
-	cleareduser    bool
-	done           bool
-	oldValue       func(context.Context) (*ProgramMembership, error)
-	predicates     []predicate.ProgramMembership
+	op                   Op
+	typ                  string
+	id                   *string
+	created_at           *time.Time
+	updated_at           *time.Time
+	created_by           *string
+	updated_by           *string
+	mapping_id           *string
+	deleted_at           *time.Time
+	deleted_by           *string
+	role                 *enums.Role
+	clearedFields        map[string]struct{}
+	program              *string
+	clearedprogram       bool
+	user                 *string
+	cleareduser          bool
+	orgmembership        *string
+	clearedorgmembership bool
+	done                 bool
+	oldValue             func(context.Context) (*ProgramMembership, error)
+	predicates           []predicate.ProgramMembership
 }
 
 var _ ent.Mutation = (*ProgramMembershipMutation)(nil)
@@ -89331,6 +89392,45 @@ func (m *ProgramMembershipMutation) ResetUser() {
 	m.cleareduser = false
 }
 
+// SetOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by id.
+func (m *ProgramMembershipMutation) SetOrgmembershipID(id string) {
+	m.orgmembership = &id
+}
+
+// ClearOrgmembership clears the "orgmembership" edge to the OrgMembership entity.
+func (m *ProgramMembershipMutation) ClearOrgmembership() {
+	m.clearedorgmembership = true
+}
+
+// OrgmembershipCleared reports if the "orgmembership" edge to the OrgMembership entity was cleared.
+func (m *ProgramMembershipMutation) OrgmembershipCleared() bool {
+	return m.clearedorgmembership
+}
+
+// OrgmembershipID returns the "orgmembership" edge ID in the mutation.
+func (m *ProgramMembershipMutation) OrgmembershipID() (id string, exists bool) {
+	if m.orgmembership != nil {
+		return *m.orgmembership, true
+	}
+	return
+}
+
+// OrgmembershipIDs returns the "orgmembership" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OrgmembershipID instead. It exists only for internal usage by the builders.
+func (m *ProgramMembershipMutation) OrgmembershipIDs() (ids []string) {
+	if id := m.orgmembership; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOrgmembership resets all changes to the "orgmembership" edge.
+func (m *ProgramMembershipMutation) ResetOrgmembership() {
+	m.orgmembership = nil
+	m.clearedorgmembership = false
+}
+
 // Where appends a list predicates to the ProgramMembershipMutation builder.
 func (m *ProgramMembershipMutation) Where(ps ...predicate.ProgramMembership) {
 	m.predicates = append(m.predicates, ps...)
@@ -89656,12 +89756,15 @@ func (m *ProgramMembershipMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProgramMembershipMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.program != nil {
 		edges = append(edges, programmembership.EdgeProgram)
 	}
 	if m.user != nil {
 		edges = append(edges, programmembership.EdgeUser)
+	}
+	if m.orgmembership != nil {
+		edges = append(edges, programmembership.EdgeOrgmembership)
 	}
 	return edges
 }
@@ -89678,13 +89781,17 @@ func (m *ProgramMembershipMutation) AddedIDs(name string) []ent.Value {
 		if id := m.user; id != nil {
 			return []ent.Value{*id}
 		}
+	case programmembership.EdgeOrgmembership:
+		if id := m.orgmembership; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProgramMembershipMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	return edges
 }
 
@@ -89696,12 +89803,15 @@ func (m *ProgramMembershipMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProgramMembershipMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedprogram {
 		edges = append(edges, programmembership.EdgeProgram)
 	}
 	if m.cleareduser {
 		edges = append(edges, programmembership.EdgeUser)
+	}
+	if m.clearedorgmembership {
+		edges = append(edges, programmembership.EdgeOrgmembership)
 	}
 	return edges
 }
@@ -89714,6 +89824,8 @@ func (m *ProgramMembershipMutation) EdgeCleared(name string) bool {
 		return m.clearedprogram
 	case programmembership.EdgeUser:
 		return m.cleareduser
+	case programmembership.EdgeOrgmembership:
+		return m.clearedorgmembership
 	}
 	return false
 }
@@ -89728,6 +89840,9 @@ func (m *ProgramMembershipMutation) ClearEdge(name string) error {
 	case programmembership.EdgeUser:
 		m.ClearUser()
 		return nil
+	case programmembership.EdgeOrgmembership:
+		m.ClearOrgmembership()
+		return nil
 	}
 	return fmt.Errorf("unknown ProgramMembership unique edge %s", name)
 }
@@ -89741,6 +89856,9 @@ func (m *ProgramMembershipMutation) ResetEdge(name string) error {
 		return nil
 	case programmembership.EdgeUser:
 		m.ResetUser()
+		return nil
+	case programmembership.EdgeOrgmembership:
+		m.ResetOrgmembership()
 		return nil
 	}
 	return fmt.Errorf("unknown ProgramMembership edge %s", name)

@@ -3457,6 +3457,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"orgmembership",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.OrgmembershipTable,
+			Columns: []string{groupmembership.OrgmembershipColumn},
+			Bidi:    false,
+		},
+		"GroupMembership",
+		"OrgMembership",
+	)
+	graph.MustAddE(
 		"events",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4787,6 +4799,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ProgramMembership",
 		"User",
+	)
+	graph.MustAddE(
+		"orgmembership",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.OrgmembershipTable,
+			Columns: []string{programmembership.OrgmembershipColumn},
+			Bidi:    false,
+		},
+		"ProgramMembership",
+		"OrgMembership",
 	)
 	graph.MustAddE(
 		"owner",
@@ -9810,6 +9834,20 @@ func (f *GroupMembershipFilter) WhereHasUserWith(preds ...predicate.User) {
 	})))
 }
 
+// WhereHasOrgmembership applies a predicate to check if query has an edge orgmembership.
+func (f *GroupMembershipFilter) WhereHasOrgmembership() {
+	f.Where(entql.HasEdge("orgmembership"))
+}
+
+// WhereHasOrgmembershipWith applies a predicate to check if query has an edge orgmembership with a given conditions (other predicates).
+func (f *GroupMembershipFilter) WhereHasOrgmembershipWith(preds ...predicate.OrgMembership) {
+	f.Where(entql.HasEdgeWith("orgmembership", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasEvents applies a predicate to check if query has an edge events.
 func (f *GroupMembershipFilter) WhereHasEvents() {
 	f.Where(entql.HasEdge("events"))
@@ -14778,6 +14816,20 @@ func (f *ProgramMembershipFilter) WhereHasUser() {
 // WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
 func (f *ProgramMembershipFilter) WhereHasUserWith(preds ...predicate.User) {
 	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOrgmembership applies a predicate to check if query has an edge orgmembership.
+func (f *ProgramMembershipFilter) WhereHasOrgmembership() {
+	f.Where(entql.HasEdge("orgmembership"))
+}
+
+// WhereHasOrgmembershipWith applies a predicate to check if query has an edge orgmembership with a given conditions (other predicates).
+func (f *ProgramMembershipFilter) WhereHasOrgmembershipWith(preds ...predicate.OrgMembership) {
+	f.Where(entql.HasEdgeWith("orgmembership", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

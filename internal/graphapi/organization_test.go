@@ -672,35 +672,35 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 		ctx      context.Context
 		errorMsg string
 	}{
-		// {
-		// 	name:     "delete org, access denied",
-		// 	orgID:    viewOnlyUser.OrganizationID,
-		// 	ctx:      viewOnlyUser.UserCtx,
-		// 	errorMsg: notAuthorizedErrorMsg,
-		// },
-		// {
-		// 	name:     "delete org, not found",
-		// 	orgID:    org.ID,
-		// 	ctx:      testUser2.UserCtx,
-		// 	errorMsg: notFoundErrorMsg,
-		// },
+		{
+			name:     "delete org, access denied",
+			orgID:    viewOnlyUser.OrganizationID,
+			ctx:      viewOnlyUser.UserCtx,
+			errorMsg: notAuthorizedErrorMsg,
+		},
+		{
+			name:     "delete org, not found",
+			orgID:    org.ID,
+			ctx:      testUser2.UserCtx,
+			errorMsg: notFoundErrorMsg,
+		},
 		{
 			name:  "delete org, happy path",
 			orgID: org.ID,
 			ctx:   testUser1.UserCtx,
 		},
-		// {
-		// 	name:     "delete org, personal org not allowed",
-		// 	orgID:    testUser1.PersonalOrgID,
-		// 	ctx:      testUser1.UserCtx,
-		// 	errorMsg: "cannot delete personal organizations",
-		// },
-		// {
-		// 	name:     "delete org, not found",
-		// 	orgID:    "tacos-tuesday",
-		// 	ctx:      testUser1.UserCtx,
-		// 	errorMsg: notFoundErrorMsg,
-		// },
+		{
+			name:     "delete org, personal org not allowed",
+			orgID:    testUser1.PersonalOrgID,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "cannot delete personal organizations",
+		},
+		{
+			name:     "delete org, not found",
+			orgID:    "tacos-tuesday",
+			ctx:      testUser1.UserCtx,
+			errorMsg: notFoundErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {

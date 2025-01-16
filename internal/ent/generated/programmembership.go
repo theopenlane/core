@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -42,8 +43,9 @@ type ProgramMembership struct {
 	UserID string `json:"user_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProgramMembershipQuery when eager-loading is set.
-	Edges        ProgramMembershipEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                            ProgramMembershipEdges `json:"edges"`
+	program_membership_orgmembership *string
+	selectValues                     sql.SelectValues
 }
 
 // ProgramMembershipEdges holds the relations/edges for other nodes in the graph.
@@ -52,9 +54,11 @@ type ProgramMembershipEdges struct {
 	Program *Program `json:"program,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
+	// Orgmembership holds the value of the orgmembership edge.
+	Orgmembership *OrgMembership `json:"orgmembership,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
 	totalCount [2]map[string]int
 }
@@ -81,6 +85,17 @@ func (e ProgramMembershipEdges) UserOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "user"}
 }
 
+// OrgmembershipOrErr returns the Orgmembership value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramMembershipEdges) OrgmembershipOrErr() (*OrgMembership, error) {
+	if e.Orgmembership != nil {
+		return e.Orgmembership, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: orgmembership.Label}
+	}
+	return nil, &NotLoadedError{edge: "orgmembership"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ProgramMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -90,6 +105,8 @@ func (*ProgramMembership) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case programmembership.FieldCreatedAt, programmembership.FieldUpdatedAt, programmembership.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case programmembership.ForeignKeys[0]: // program_membership_orgmembership
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -171,6 +188,13 @@ func (pm *ProgramMembership) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				pm.UserID = value.String
 			}
+		case programmembership.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_membership_orgmembership", values[i])
+			} else if value.Valid {
+				pm.program_membership_orgmembership = new(string)
+				*pm.program_membership_orgmembership = value.String
+			}
 		default:
 			pm.selectValues.Set(columns[i], values[i])
 		}
@@ -192,6 +216,11 @@ func (pm *ProgramMembership) QueryProgram() *ProgramQuery {
 // QueryUser queries the "user" edge of the ProgramMembership entity.
 func (pm *ProgramMembership) QueryUser() *UserQuery {
 	return NewProgramMembershipClient(pm.config).QueryUser(pm)
+}
+
+// QueryOrgmembership queries the "orgmembership" edge of the ProgramMembership entity.
+func (pm *ProgramMembership) QueryOrgmembership() *OrgMembershipQuery {
+	return NewProgramMembershipClient(pm.config).QueryOrgmembership(pm)
 }
 
 // Update returns a builder for updating this ProgramMembership.

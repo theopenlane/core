@@ -771,6 +771,35 @@ func HasUserWith(preds ...predicate.User) predicate.GroupMembership {
 	})
 }
 
+// HasOrgmembership applies the HasEdge predicate on the "orgmembership" edge.
+func HasOrgmembership() predicate.GroupMembership {
+	return predicate.GroupMembership(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, OrgmembershipTable, OrgmembershipColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgMembership
+		step.Edge.Schema = schemaConfig.GroupMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrgmembershipWith applies the HasEdge predicate on the "orgmembership" edge with a given conditions (other predicates).
+func HasOrgmembershipWith(preds ...predicate.OrgMembership) predicate.GroupMembership {
+	return predicate.GroupMembership(func(s *sql.Selector) {
+		step := newOrgmembershipStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgMembership
+		step.Edge.Schema = schemaConfig.GroupMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEvents applies the HasEdge predicate on the "events" edge.
 func HasEvents() predicate.GroupMembership {
 	return predicate.GroupMembership(func(s *sql.Selector) {
