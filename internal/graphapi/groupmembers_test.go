@@ -348,7 +348,7 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 			ctx:        context.Background(),
 		},
 		{
-			name:       "happy path, delete group member",
+			name:       "happy path, delete org member",
 			idToDelete: gm1.ID,
 			client:     suite.client.api,
 			ctx:        testUser1.UserCtx,
