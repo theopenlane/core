@@ -121,9 +121,6 @@ func orgMembersSkipInterceptor(ctx context.Context, v ent.Value) bool {
 	// Organization list queries should not be deduped, they
 	// will show up under each org they are a member of
 	ctxQuery := ent.QueryFromContext(ctx)
-	if ctxQuery.Type == generated.TypeOrganization {
-		return true
-	}
 
-	return false
+	return ctxQuery.Type == generated.TypeOrganization
 }
