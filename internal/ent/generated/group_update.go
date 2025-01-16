@@ -1635,6 +1635,9 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if gu.mutation.DescriptionCleared() {
 		_spec.ClearField(group.FieldDescription, field.TypeString)
 	}
+	if gu.mutation.IsManagedCleared() {
+		_spec.ClearField(group.FieldIsManaged, field.TypeBool)
+	}
 	if value, ok := gu.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(group.FieldGravatarLogoURL, field.TypeString, value)
 	}
@@ -5006,6 +5009,9 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	}
 	if guo.mutation.DescriptionCleared() {
 		_spec.ClearField(group.FieldDescription, field.TypeString)
+	}
+	if guo.mutation.IsManagedCleared() {
+		_spec.ClearField(group.FieldIsManaged, field.TypeBool)
 	}
 	if value, ok := guo.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(group.FieldGravatarLogoURL, field.TypeString, value)

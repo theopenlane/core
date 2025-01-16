@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -126,8 +127,9 @@ func HookInviteAccepted() ent.Hook {
 				Role:           &role,
 			}
 
-			// add user to the inviting org
-			if _, err := m.Client().OrgMembership.Create().SetInput(input).Save(ctx); err != nil {
+			// add user to the inviting org, allow the context to bypass privacy checks
+			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			if _, err := m.Client().OrgMembership.Create().SetInput(input).Save(allowCtx); err != nil {
 				log.Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err

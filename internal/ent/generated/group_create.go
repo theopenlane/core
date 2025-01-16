@@ -173,6 +173,20 @@ func (gc *GroupCreate) SetNillableDescription(s *string) *GroupCreate {
 	return gc
 }
 
+// SetIsManaged sets the "is_managed" field.
+func (gc *GroupCreate) SetIsManaged(b bool) *GroupCreate {
+	gc.mutation.SetIsManaged(b)
+	return gc
+}
+
+// SetNillableIsManaged sets the "is_managed" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableIsManaged(b *bool) *GroupCreate {
+	if b != nil {
+		gc.SetIsManaged(*b)
+	}
+	return gc
+}
+
 // SetGravatarLogoURL sets the "gravatar_logo_url" field.
 func (gc *GroupCreate) SetGravatarLogoURL(s string) *GroupCreate {
 	gc.mutation.SetGravatarLogoURL(s)
@@ -817,6 +831,10 @@ func (gc *GroupCreate) defaults() error {
 		v := group.DefaultTags
 		gc.mutation.SetTags(v)
 	}
+	if _, ok := gc.mutation.IsManaged(); !ok {
+		v := group.DefaultIsManaged
+		gc.mutation.SetIsManaged(v)
+	}
 	if _, ok := gc.mutation.DisplayName(); !ok {
 		v := group.DefaultDisplayName
 		gc.mutation.SetDisplayName(v)
@@ -935,6 +953,10 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	if value, ok := gc.mutation.Description(); ok {
 		_spec.SetField(group.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := gc.mutation.IsManaged(); ok {
+		_spec.SetField(group.FieldIsManaged, field.TypeBool, value)
+		_node.IsManaged = value
 	}
 	if value, ok := gc.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(group.FieldGravatarLogoURL, field.TypeString, value)

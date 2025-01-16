@@ -700,6 +700,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldOwnerID:         {Type: field.TypeString, Column: group.FieldOwnerID},
 			group.FieldName:            {Type: field.TypeString, Column: group.FieldName},
 			group.FieldDescription:     {Type: field.TypeString, Column: group.FieldDescription},
+			group.FieldIsManaged:       {Type: field.TypeBool, Column: group.FieldIsManaged},
 			group.FieldGravatarLogoURL: {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
 			group.FieldLogoURL:         {Type: field.TypeString, Column: group.FieldLogoURL},
 			group.FieldDisplayName:     {Type: field.TypeString, Column: group.FieldDisplayName},
@@ -730,6 +731,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldOwnerID:         {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
 			grouphistory.FieldName:            {Type: field.TypeString, Column: grouphistory.FieldName},
 			grouphistory.FieldDescription:     {Type: field.TypeString, Column: grouphistory.FieldDescription},
+			grouphistory.FieldIsManaged:       {Type: field.TypeBool, Column: grouphistory.FieldIsManaged},
 			grouphistory.FieldGravatarLogoURL: {Type: field.TypeString, Column: grouphistory.FieldGravatarLogoURL},
 			grouphistory.FieldLogoURL:         {Type: field.TypeString, Column: grouphistory.FieldLogoURL},
 			grouphistory.FieldDisplayName:     {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
@@ -9036,6 +9038,11 @@ func (f *GroupFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(group.FieldDescription))
 }
 
+// WhereIsManaged applies the entql bool predicate on the is_managed field.
+func (f *GroupFilter) WhereIsManaged(p entql.BoolP) {
+	f.Where(p.Field(group.FieldIsManaged))
+}
+
 // WhereGravatarLogoURL applies the entql string predicate on the gravatar_logo_url field.
 func (f *GroupFilter) WhereGravatarLogoURL(p entql.StringP) {
 	f.Where(p.Field(group.FieldGravatarLogoURL))
@@ -9663,6 +9670,11 @@ func (f *GroupHistoryFilter) WhereName(p entql.StringP) {
 // WhereDescription applies the entql string predicate on the description field.
 func (f *GroupHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldDescription))
+}
+
+// WhereIsManaged applies the entql bool predicate on the is_managed field.
+func (f *GroupHistoryFilter) WhereIsManaged(p entql.BoolP) {
+	f.Where(p.Field(grouphistory.FieldIsManaged))
 }
 
 // WhereGravatarLogoURL applies the entql string predicate on the gravatar_logo_url field.

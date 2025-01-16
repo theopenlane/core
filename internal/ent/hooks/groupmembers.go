@@ -5,6 +5,8 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/utils/contextx"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -28,6 +30,11 @@ func HookGroupMembers() ent.Hook {
 			if err != nil {
 				// group not found, let the default validation handle it
 				return next.Mutate(ctx, m)
+			}
+
+			_, allowCtx := contextx.From[ManagedContextKey](ctx)
+			if group.IsManaged && !allowCtx {
+				return nil, ErrManagedGroup
 			}
 
 			// ensure user is a member of the organization

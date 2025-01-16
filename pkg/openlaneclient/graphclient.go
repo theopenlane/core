@@ -15013,6 +15013,7 @@ type GetAllGroups_Groups_Edges_Node struct {
 	Description *string                                   "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string                                    "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                    "json:\"id\" graphql:\"id\""
+	IsManaged   *bool                                     "json:\"isManaged,omitempty\" graphql:\"isManaged\""
 	LogoURL     *string                                   "json:\"logoURL,omitempty\" graphql:\"logoURL\""
 	Members     []*GetAllGroups_Groups_Edges_Node_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                    "json:\"name\" graphql:\"name\""
@@ -15052,6 +15053,12 @@ func (t *GetAllGroups_Groups_Edges_Node) GetID() string {
 		t = &GetAllGroups_Groups_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllGroups_Groups_Edges_Node) GetIsManaged() *bool {
+	if t == nil {
+		t = &GetAllGroups_Groups_Edges_Node{}
+	}
+	return t.IsManaged
 }
 func (t *GetAllGroups_Groups_Edges_Node) GetLogoURL() *string {
 	if t == nil {
@@ -15272,6 +15279,7 @@ type GetGroupByID_Group struct {
 	Description *string                       "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string                        "json:\"displayName\" graphql:\"displayName\""
 	ID          string                        "json:\"id\" graphql:\"id\""
+	IsManaged   *bool                         "json:\"isManaged,omitempty\" graphql:\"isManaged\""
 	LogoURL     *string                       "json:\"logoURL,omitempty\" graphql:\"logoURL\""
 	Members     []*GetGroupByID_Group_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                        "json:\"name\" graphql:\"name\""
@@ -15311,6 +15319,12 @@ func (t *GetGroupByID_Group) GetID() string {
 		t = &GetGroupByID_Group{}
 	}
 	return t.ID
+}
+func (t *GetGroupByID_Group) GetIsManaged() *bool {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.IsManaged
 }
 func (t *GetGroupByID_Group) GetLogoURL() *string {
 	if t == nil {
@@ -15509,6 +15523,7 @@ type GetGroups_Groups_Edges_Node struct {
 	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string                                 "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                 "json:\"id\" graphql:\"id\""
+	IsManaged   *bool                                  "json:\"isManaged,omitempty\" graphql:\"isManaged\""
 	LogoURL     *string                                "json:\"logoURL,omitempty\" graphql:\"logoURL\""
 	Members     []*GetGroups_Groups_Edges_Node_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                 "json:\"name\" graphql:\"name\""
@@ -15548,6 +15563,12 @@ func (t *GetGroups_Groups_Edges_Node) GetID() string {
 		t = &GetGroups_Groups_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetGroups_Groups_Edges_Node) GetIsManaged() *bool {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node{}
+	}
+	return t.IsManaged
 }
 func (t *GetGroups_Groups_Edges_Node) GetLogoURL() *string {
 	if t == nil {
@@ -52476,6 +52497,7 @@ const GetAllGroupsDocument = `query GetAllGroups {
 				logoURL
 				name
 				tags
+				isManaged
 				owner {
 					id
 					displayName
@@ -52534,6 +52556,7 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 		logoURL
 		name
 		tags
+		isManaged
 		owner {
 			id
 			displayName
@@ -52594,6 +52617,7 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 				logoURL
 				name
 				tags
+				isManaged
 				owner {
 					id
 					displayName

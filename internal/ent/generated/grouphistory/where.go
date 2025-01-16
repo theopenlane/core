@@ -125,6 +125,11 @@ func Description(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldDescription, v))
 }
 
+// IsManaged applies equality check predicate on the "is_managed" field. It's identical to IsManagedEQ.
+func IsManaged(v bool) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldIsManaged, v))
+}
+
 // GravatarLogoURL applies equality check predicate on the "gravatar_logo_url" field. It's identical to GravatarLogoURLEQ.
 func GravatarLogoURL(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldGravatarLogoURL, v))
@@ -938,6 +943,26 @@ func DescriptionEqualFold(v string) predicate.GroupHistory {
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// IsManagedEQ applies the EQ predicate on the "is_managed" field.
+func IsManagedEQ(v bool) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldIsManaged, v))
+}
+
+// IsManagedNEQ applies the NEQ predicate on the "is_managed" field.
+func IsManagedNEQ(v bool) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNEQ(FieldIsManaged, v))
+}
+
+// IsManagedIsNil applies the IsNil predicate on the "is_managed" field.
+func IsManagedIsNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIsNull(FieldIsManaged))
+}
+
+// IsManagedNotNil applies the NotNil predicate on the "is_managed" field.
+func IsManagedNotNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotNull(FieldIsManaged))
 }
 
 // GravatarLogoURLEQ applies the EQ predicate on the "gravatar_logo_url" field.

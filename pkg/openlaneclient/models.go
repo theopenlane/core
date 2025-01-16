@@ -6559,6 +6559,8 @@ type Group struct {
 	Name string `json:"name"`
 	// the groups description
 	Description *string `json:"description,omitempty"`
+	// whether the group is managed by the system
+	IsManaged *bool `json:"isManaged,omitempty"`
 	// the URL to an auto generated gravatar image for the group
 	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
@@ -6660,6 +6662,8 @@ type GroupHistory struct {
 	Name string `json:"name"`
 	// the groups description
 	Description *string `json:"description,omitempty"`
+	// whether the group is managed by the system
+	IsManaged *bool `json:"isManaged,omitempty"`
 	// the URL to an auto generated gravatar image for the group
 	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
@@ -6854,6 +6858,11 @@ type GroupHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// is_managed field predicates
+	IsManaged       *bool `json:"isManaged,omitempty"`
+	IsManagedNeq    *bool `json:"isManagedNEQ,omitempty"`
+	IsManagedIsNil  *bool `json:"isManagedIsNil,omitempty"`
+	IsManagedNotNil *bool `json:"isManagedNotNil,omitempty"`
 	// display_name field predicates
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
@@ -7807,6 +7816,11 @@ type GroupWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// is_managed field predicates
+	IsManaged       *bool `json:"isManaged,omitempty"`
+	IsManagedNeq    *bool `json:"isManagedNEQ,omitempty"`
+	IsManagedIsNil  *bool `json:"isManagedIsNil,omitempty"`
+	IsManagedNotNil *bool `json:"isManagedNotNil,omitempty"`
 	// display_name field predicates
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`

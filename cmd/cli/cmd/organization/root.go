@@ -40,7 +40,6 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-		e = nodes
 	case *openlaneclient.GetOrganizations:
 		var nodes []*openlaneclient.GetOrganizations_Organizations_Edges_Node
 

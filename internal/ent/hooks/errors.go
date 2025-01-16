@@ -44,6 +44,8 @@ var (
 	ErrUnableToCast = errors.New("unable to cast")
 	// ErrTooManySubscriptions is returned when an organization has too many subscriptions
 	ErrTooManySubscriptions = errors.New("organization has too many subscriptions")
+	// ErrManagedGroup is returned when a user attempts to modify a managed group
+	ErrManagedGroup = errors.New("managed groups cannot be modified")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

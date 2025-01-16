@@ -116,6 +116,7 @@ query GetAllGroups {
         logoURL
         name
         tags
+        isManaged
         owner {
           id
           displayName
@@ -158,6 +159,7 @@ query GetGroupByID($groupId: ID!) {
     logoURL
     name
     tags
+    isManaged
     owner {
       id
       displayName
@@ -200,6 +202,7 @@ query GetGroups($where: GroupWhereInput) {
         logoURL
         name
         tags
+        isManaged
         owner {
           id
           displayName

@@ -34863,6 +34863,7 @@ type GroupMutation struct {
 	appendtags                              []string
 	name                                    *string
 	description                             *string
+	is_managed                              *bool
 	gravatar_logo_url                       *string
 	logo_url                                *string
 	display_name                            *string
@@ -35609,6 +35610,55 @@ func (m *GroupMutation) DescriptionCleared() bool {
 func (m *GroupMutation) ResetDescription() {
 	m.description = nil
 	delete(m.clearedFields, group.FieldDescription)
+}
+
+// SetIsManaged sets the "is_managed" field.
+func (m *GroupMutation) SetIsManaged(b bool) {
+	m.is_managed = &b
+}
+
+// IsManaged returns the value of the "is_managed" field in the mutation.
+func (m *GroupMutation) IsManaged() (r bool, exists bool) {
+	v := m.is_managed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsManaged returns the old "is_managed" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldIsManaged(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsManaged is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsManaged requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsManaged: %w", err)
+	}
+	return oldValue.IsManaged, nil
+}
+
+// ClearIsManaged clears the value of the "is_managed" field.
+func (m *GroupMutation) ClearIsManaged() {
+	m.is_managed = nil
+	m.clearedFields[group.FieldIsManaged] = struct{}{}
+}
+
+// IsManagedCleared returns if the "is_managed" field was cleared in this mutation.
+func (m *GroupMutation) IsManagedCleared() bool {
+	_, ok := m.clearedFields[group.FieldIsManaged]
+	return ok
+}
+
+// ResetIsManaged resets all changes to the "is_managed" field.
+func (m *GroupMutation) ResetIsManaged() {
+	m.is_managed = nil
+	delete(m.clearedFields, group.FieldIsManaged)
 }
 
 // SetGravatarLogoURL sets the "gravatar_logo_url" field.
@@ -37681,7 +37731,7 @@ func (m *GroupMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, group.FieldCreatedAt)
 	}
@@ -37714,6 +37764,9 @@ func (m *GroupMutation) Fields() []string {
 	}
 	if m.description != nil {
 		fields = append(fields, group.FieldDescription)
+	}
+	if m.is_managed != nil {
+		fields = append(fields, group.FieldIsManaged)
 	}
 	if m.gravatar_logo_url != nil {
 		fields = append(fields, group.FieldGravatarLogoURL)
@@ -37754,6 +37807,8 @@ func (m *GroupMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case group.FieldDescription:
 		return m.Description()
+	case group.FieldIsManaged:
+		return m.IsManaged()
 	case group.FieldGravatarLogoURL:
 		return m.GravatarLogoURL()
 	case group.FieldLogoURL:
@@ -37791,6 +37846,8 @@ func (m *GroupMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldName(ctx)
 	case group.FieldDescription:
 		return m.OldDescription(ctx)
+	case group.FieldIsManaged:
+		return m.OldIsManaged(ctx)
 	case group.FieldGravatarLogoURL:
 		return m.OldGravatarLogoURL(ctx)
 	case group.FieldLogoURL:
@@ -37883,6 +37940,13 @@ func (m *GroupMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
+	case group.FieldIsManaged:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsManaged(v)
+		return nil
 	case group.FieldGravatarLogoURL:
 		v, ok := value.(string)
 		if !ok {
@@ -37961,6 +38025,9 @@ func (m *GroupMutation) ClearedFields() []string {
 	if m.FieldCleared(group.FieldDescription) {
 		fields = append(fields, group.FieldDescription)
 	}
+	if m.FieldCleared(group.FieldIsManaged) {
+		fields = append(fields, group.FieldIsManaged)
+	}
 	if m.FieldCleared(group.FieldGravatarLogoURL) {
 		fields = append(fields, group.FieldGravatarLogoURL)
 	}
@@ -38008,6 +38075,9 @@ func (m *GroupMutation) ClearField(name string) error {
 	case group.FieldDescription:
 		m.ClearDescription()
 		return nil
+	case group.FieldIsManaged:
+		m.ClearIsManaged()
+		return nil
 	case group.FieldGravatarLogoURL:
 		m.ClearGravatarLogoURL()
 		return nil
@@ -38054,6 +38124,9 @@ func (m *GroupMutation) ResetField(name string) error {
 		return nil
 	case group.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case group.FieldIsManaged:
+		m.ResetIsManaged()
 		return nil
 	case group.FieldGravatarLogoURL:
 		m.ResetGravatarLogoURL()
@@ -39067,6 +39140,7 @@ type GroupHistoryMutation struct {
 	owner_id          *string
 	name              *string
 	description       *string
+	is_managed        *bool
 	gravatar_logo_url *string
 	logo_url          *string
 	display_name      *string
@@ -39830,6 +39904,55 @@ func (m *GroupHistoryMutation) ResetDescription() {
 	delete(m.clearedFields, grouphistory.FieldDescription)
 }
 
+// SetIsManaged sets the "is_managed" field.
+func (m *GroupHistoryMutation) SetIsManaged(b bool) {
+	m.is_managed = &b
+}
+
+// IsManaged returns the value of the "is_managed" field in the mutation.
+func (m *GroupHistoryMutation) IsManaged() (r bool, exists bool) {
+	v := m.is_managed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsManaged returns the old "is_managed" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldIsManaged(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsManaged is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsManaged requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsManaged: %w", err)
+	}
+	return oldValue.IsManaged, nil
+}
+
+// ClearIsManaged clears the value of the "is_managed" field.
+func (m *GroupHistoryMutation) ClearIsManaged() {
+	m.is_managed = nil
+	m.clearedFields[grouphistory.FieldIsManaged] = struct{}{}
+}
+
+// IsManagedCleared returns if the "is_managed" field was cleared in this mutation.
+func (m *GroupHistoryMutation) IsManagedCleared() bool {
+	_, ok := m.clearedFields[grouphistory.FieldIsManaged]
+	return ok
+}
+
+// ResetIsManaged resets all changes to the "is_managed" field.
+func (m *GroupHistoryMutation) ResetIsManaged() {
+	m.is_managed = nil
+	delete(m.clearedFields, grouphistory.FieldIsManaged)
+}
+
 // SetGravatarLogoURL sets the "gravatar_logo_url" field.
 func (m *GroupHistoryMutation) SetGravatarLogoURL(s string) {
 	m.gravatar_logo_url = &s
@@ -39998,7 +40121,7 @@ func (m *GroupHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.history_time != nil {
 		fields = append(fields, grouphistory.FieldHistoryTime)
 	}
@@ -40040,6 +40163,9 @@ func (m *GroupHistoryMutation) Fields() []string {
 	}
 	if m.description != nil {
 		fields = append(fields, grouphistory.FieldDescription)
+	}
+	if m.is_managed != nil {
+		fields = append(fields, grouphistory.FieldIsManaged)
 	}
 	if m.gravatar_logo_url != nil {
 		fields = append(fields, grouphistory.FieldGravatarLogoURL)
@@ -40086,6 +40212,8 @@ func (m *GroupHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case grouphistory.FieldDescription:
 		return m.Description()
+	case grouphistory.FieldIsManaged:
+		return m.IsManaged()
 	case grouphistory.FieldGravatarLogoURL:
 		return m.GravatarLogoURL()
 	case grouphistory.FieldLogoURL:
@@ -40129,6 +40257,8 @@ func (m *GroupHistoryMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldName(ctx)
 	case grouphistory.FieldDescription:
 		return m.OldDescription(ctx)
+	case grouphistory.FieldIsManaged:
+		return m.OldIsManaged(ctx)
 	case grouphistory.FieldGravatarLogoURL:
 		return m.OldGravatarLogoURL(ctx)
 	case grouphistory.FieldLogoURL:
@@ -40242,6 +40372,13 @@ func (m *GroupHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
+	case grouphistory.FieldIsManaged:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsManaged(v)
+		return nil
 	case grouphistory.FieldGravatarLogoURL:
 		v, ok := value.(string)
 		if !ok {
@@ -40323,6 +40460,9 @@ func (m *GroupHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(grouphistory.FieldDescription) {
 		fields = append(fields, grouphistory.FieldDescription)
 	}
+	if m.FieldCleared(grouphistory.FieldIsManaged) {
+		fields = append(fields, grouphistory.FieldIsManaged)
+	}
 	if m.FieldCleared(grouphistory.FieldGravatarLogoURL) {
 		fields = append(fields, grouphistory.FieldGravatarLogoURL)
 	}
@@ -40372,6 +40512,9 @@ func (m *GroupHistoryMutation) ClearField(name string) error {
 		return nil
 	case grouphistory.FieldDescription:
 		m.ClearDescription()
+		return nil
+	case grouphistory.FieldIsManaged:
+		m.ClearIsManaged()
 		return nil
 	case grouphistory.FieldGravatarLogoURL:
 		m.ClearGravatarLogoURL()
@@ -40428,6 +40571,9 @@ func (m *GroupHistoryMutation) ResetField(name string) error {
 		return nil
 	case grouphistory.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case grouphistory.FieldIsManaged:
+		m.ResetIsManaged()
 		return nil
 	case grouphistory.FieldGravatarLogoURL:
 		m.ResetGravatarLogoURL()

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -89,6 +90,7 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 					ID: &org1.ID,
 				},
 			},
+			IsManaged: lo.ToPtr(false),
 		}
 
 		resp, err := suite.client.api.GetGroups(reqCtx, whereInput)
@@ -121,6 +123,7 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 					ID: &org2.ID,
 				},
 			},
+			IsManaged: lo.ToPtr(false),
 		}
 
 		resp, err = suite.client.api.GetGroups(reqCtx2, whereInput)
@@ -148,8 +151,8 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 		require.NotNil(t, resp)
 		require.NotNil(t, resp.Groups.Edges)
 
-		// make sure two organizations are returned (group 2 and group 3) and the seeded group
-		assert.Equal(t, 3, len(resp.Groups.Edges))
+		// make sure two organizations are returned (group 2 and group 3), the seeded group, and the 3 managed groups
+		assert.Equal(t, 6, len(resp.Groups.Edges))
 
 		group1Found := false
 		group2Found := false
@@ -178,8 +181,8 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 		require.NoError(t, err)
 		require.NotNil(t, resp)
 
-		// make sure only two groups are returned, group 1 and the seeded group
-		assert.Equal(t, 2, len(resp.Groups.Edges))
+		// make sure only two groups are returned, group 1 and the seeded group, and the 3 managed groups
+		assert.Equal(t, 5, len(resp.Groups.Edges))
 	})
 }
 
@@ -548,4 +551,41 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 			assert.Equal(t, tc.groupID, resp.DeleteGroup.DeletedID)
 		})
 	}
+}
+
+func (suite *GraphTestSuite) TestManagedGroups() {
+	t := suite.T()
+	whereInput := &openlaneclient.GroupWhereInput{
+		IsManaged: lo.ToPtr(true),
+	}
+
+	resp, err := suite.client.api.GetGroups(testUser1.UserCtx, whereInput)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	// there should be 3 managed groups created by the system on org creation
+	assert.Len(t, resp.Groups.Edges, 3)
+
+	// you should not be able to update a managed group
+	groupID := resp.Groups.Edges[0].Node.ID
+	input := openlaneclient.UpdateGroupInput{
+		Tags: []string{"test"},
+	}
+
+	_, err = suite.client.api.UpdateGroup(testUser1.UserCtx, groupID, input)
+	require.Error(t, err)
+	assert.ErrorContains(t, err, "managed groups cannot be modified")
+
+	// you should not be able to add group members to a managed group
+	_, err = suite.client.api.AddUserToGroupWithRole(testUser1.UserCtx, openlaneclient.CreateGroupMembershipInput{
+		GroupID: groupID,
+		UserID:  testUser2.ID,
+	})
+	require.Error(t, err)
+	assert.ErrorContains(t, err, "managed groups cannot be modified")
+
+	// you should not be able to delete a managed group
+	_, err = suite.client.api.DeleteGroup(testUser1.UserCtx, groupID)
+	require.Error(t, err)
+	assert.ErrorContains(t, err, "managed groups cannot be modified")
 }

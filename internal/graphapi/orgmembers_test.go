@@ -121,6 +121,8 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 	require.NoError(t, err)
 	require.Len(t, orgMember, 1)
 
+	userCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
+
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -136,14 +138,14 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			name:   "happy path, add admin",
 			orgID:  org1.ID,
 			userID: user1.ID,
-			ctx:    testUser1.UserCtx,
+			ctx:    userCtx,
 			role:   enums.RoleAdmin,
 		},
 		{
 			name:   "happy path, add member",
 			orgID:  org1.ID,
 			userID: user2.ID,
-			ctx:    testUser1.UserCtx,
+			ctx:    userCtx,
 			role:   enums.RoleMember,
 		},
 		{
@@ -151,7 +153,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			orgID:  org1.ID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
-			ctx:    testUser1.UserCtx,
+			ctx:    userCtx,
 			errMsg: "already exists",
 		},
 		{
@@ -159,7 +161,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			orgID:  testUser1.PersonalOrgID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
-			ctx:    testUser1.UserCtx,
+			ctx:    userCtx,
 			errMsg: hooks.ErrPersonalOrgsNoMembers.Error(),
 		},
 		{
@@ -167,7 +169,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			orgID:  org1.ID,
 			userID: ulids.New().String(),
 			role:   enums.RoleMember,
-			ctx:    testUser1.UserCtx,
+			ctx:    userCtx,
 			errMsg: "constraint failed, unable to complete the create",
 		},
 		{
@@ -183,7 +185,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			orgID:  org1.ID,
 			userID: user1.ID,
 			role:   enums.RoleInvalid,
-			ctx:    testUser1.UserCtx,
+			ctx:    userCtx,
 			errMsg: "not a valid OrgMembershipRole",
 		},
 	}

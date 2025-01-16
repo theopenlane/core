@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -56,14 +57,38 @@ func HookOrgMembers() ent.Hook {
 				return nil, err
 			}
 
+			// update the managed group members when members are added
+			// after the mutation has been executed
+			if err := updateManagedGroupMembers(ctx, m); err != nil {
+				return nil, err
+			}
+
 			// check to see if the default org needs to be updated for the user
 			if err := updateOrgMemberDefaultOrgOnCreate(ctx, m, orgID); err != nil {
-				return retValue, err
+				return nil, err
 			}
 
 			return retValue, err
 		})
 	}, ent.OpCreate)
+}
+
+// HookUpdateManagedGroups runs when org members are added to add the users to the system managed groups
+func HookUpdateManagedGroups() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
+			// skip this update if it is a cascade delete
+			if _, isCascadeDelete := contextx.From[generated.CascadeDeleteKey](ctx); !isCascadeDelete {
+				// update the managed group members when members are added
+				// before the mutation has been executed
+				if err := updateManagedGroupMembers(ctx, m); err != nil {
+					return nil, err
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne)
 }
 
 // HookOrgMembersDelete is a hook that runs during the delete operation of an org membership
@@ -74,6 +99,8 @@ func HookOrgMembersDelete() ent.Hook {
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
 			if rootFieldCtx == nil || rootFieldCtx.Object != "deleteOrgMembership" {
+				log.Warn().Msg("skipping org membership delete hook")
+
 				return next.Mutate(ctx, m)
 			}
 

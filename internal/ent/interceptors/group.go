@@ -8,9 +8,11 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/hooks"
 )
 
 // InterceptorGroup is middleware to change the Group query
@@ -41,29 +43,27 @@ func filterGroupsByAccess(ctx context.Context, q *generated.GroupQuery, v ent.Va
 
 	var groups []*generated.Group
 
-	// check if query is for an exists query, which returns a slice of group ids
-	// instead of the group objects
-	switch qc.Op {
-	case ExistOperation, IDsOperation:
-		groupIDs, ok := v.([]string)
-		if !ok {
-			log.Error().Msg("unexpected type for group query")
-
-			return nil, ErrInternalServerError
-		}
-
-		for _, g := range groupIDs {
+	switch v := v.(type) {
+	case []string:
+		for _, g := range v {
 			groups = append(groups, &generated.Group{ID: g})
 		}
+	case string:
+		groups = append(groups, &generated.Group{ID: v})
+	case []*generated.Group:
+		groups = v
+	case *generated.Group:
+		groups = append(groups, v)
 	default:
-		var ok bool
+		log.Error().Msg("unexpected type for group query")
 
-		groups, ok = v.([]*generated.Group)
-		if !ok {
-			log.Error().Msg("unexpected type for group query")
+		return nil, ErrInternalServerError
+	}
 
-			return nil, ErrInternalServerError
-		}
+	_, managedGroup := contextx.From[hooks.ManagedContextKey](ctx)
+
+	if qc.Op == OnlyOperation && managedGroup {
+		return v.([]*generated.Group), nil
 	}
 
 	// get userID for tuple checks

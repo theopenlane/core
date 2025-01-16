@@ -45,6 +45,8 @@ const (
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldIsManaged holds the string denoting the is_managed field in the database.
+	FieldIsManaged = "is_managed"
 	// FieldGravatarLogoURL holds the string denoting the gravatar_logo_url field in the database.
 	FieldGravatarLogoURL = "gravatar_logo_url"
 	// FieldLogoURL holds the string denoting the logo_url field in the database.
@@ -72,6 +74,7 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldDescription,
+	FieldIsManaged,
 	FieldGravatarLogoURL,
 	FieldLogoURL,
 	FieldDisplayName,
@@ -106,6 +109,8 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultIsManaged holds the default value on creation for the "is_managed" field.
+	DefaultIsManaged bool
 	// DefaultDisplayName holds the default value on creation for the "display_name" field.
 	DefaultDisplayName string
 	// DefaultID holds the default value on creation for the "id" field.
@@ -193,6 +198,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByIsManaged orders the results by the is_managed field.
+func ByIsManaged(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsManaged, opts...).ToFunc()
 }
 
 // ByGravatarLogoURL orders the results by the gravatar_logo_url field.

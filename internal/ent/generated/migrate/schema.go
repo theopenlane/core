@@ -760,6 +760,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "is_managed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
@@ -773,7 +774,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "groups_organizations_groups",
-				Columns:    []*schema.Column{GroupsColumns[14]},
+				Columns:    []*schema.Column{GroupsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -782,7 +783,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[14]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -806,6 +807,7 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "is_managed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},

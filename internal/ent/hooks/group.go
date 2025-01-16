@@ -9,10 +9,12 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -53,6 +55,39 @@ func HookGroup() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
+// HookManagedGroups runs on group mutations to prevent updates to managed groups
+func HookManagedGroups() ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return hook.GroupFunc(func(ctx context.Context, m *generated.GroupMutation) (ent.Value, error) {
+			if m.Op().Is(ent.OpCreate) {
+				return next.Mutate(ctx, m)
+			}
+
+			groupID, ok := m.ID()
+			if !ok || groupID == "" {
+				return next.Mutate(ctx, m)
+			}
+
+			group, err := m.Client().Group.Get(ctx, groupID)
+			if err != nil {
+				log.Error().Err(err).Msg("failed to get group")
+
+				return nil, err
+			}
+
+			// allow general allow context to bypass managed group check
+			_, allowCtx := privacy.DecisionFromContext(ctx)
+			_, allowManagedCtx := contextx.From[ManagedContextKey](ctx)
+
+			if group.IsManaged && (!allowManagedCtx && !allowCtx) {
+				return nil, ErrManagedGroup
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}
+}
+
 // HookGroupAuthz runs on group mutations to setup or remove relationship tuples
 func HookGroupAuthz() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
@@ -79,10 +114,11 @@ func HookGroupAuthz() ent.Hook {
 
 func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 	objID, exists := m.ID()
+
 	if exists {
 		// create the admin group member if not using an API token (which is not associated with a user)
 		if !auth.IsAPITokenAuthentication(ctx) {
-			if err := createGroupMemberOwner(ctx, objID, m); err != nil {
+			if err := createGroupMember(ctx, objID, m); err != nil {
 				return err
 			}
 		} else {
@@ -119,7 +155,22 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 	return nil
 }
 
-func createGroupMemberOwner(ctx context.Context, gID string, m *generated.GroupMutation) error {
+func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutation) error {
+	managed, _ := m.IsManaged()
+	groupName, _ := m.Name()
+
+	role := enums.RoleAdmin
+
+	if managed {
+		// do not add the owner to the Members group
+		if groupName == ViewersGroup {
+			return nil
+		}
+
+		// managed groups do not have owners, add them as a member
+		role = enums.RoleMember
+	}
+
 	// get userID from context
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
@@ -132,7 +183,7 @@ func createGroupMemberOwner(ctx context.Context, gID string, m *generated.GroupM
 	input := generated.CreateGroupMembershipInput{
 		UserID:  userID,
 		GroupID: gID,
-		Role:    &enums.RoleAdmin,
+		Role:    &role,
 	}
 
 	if _, err := m.Client().GroupMembership.Create().SetInput(input).Save(ctx); err != nil {
@@ -159,7 +210,7 @@ func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
 	log.Debug().Str("object", object).Msg("deleting relationship tuples")
 
 	// delete all relationship tuples except for the user, those are handled by the cascade delete of the group membership
-	if err := m.Authz.DeleteAllObjectRelations(ctx, object, []string{"admin", "user", "owner"}); err != nil {
+	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
 		log.Error().Err(err).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError

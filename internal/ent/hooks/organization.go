@@ -243,6 +243,13 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
+	// create generated groups
+	if err := generateOrganizationGroups(ctx, m, orgCreated.ID); err != nil {
+		log.Error().Err(err).Msg("error creating generated groups")
+
+		return err
+	}
+
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
 		if err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg); err != nil {

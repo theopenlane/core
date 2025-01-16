@@ -8,13 +8,15 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 )
 
 func (m *GroupMembershipMutation) CreateTuplesFromCreate(ctx context.Context) error {
-
 	// Get fields for tuple creation
 	userID, _ := m.UserID()
 	objectID, _ := m.GroupID()
@@ -43,7 +45,6 @@ func (m *GroupMembershipMutation) CreateTuplesFromCreate(ctx context.Context) er
 }
 
 func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
-
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDelete(ctx) {
 		return m.CreateTuplesFromDelete(ctx)
@@ -52,7 +53,18 @@ func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) er
 	// get ids that will be updated
 	ids, err := m.IDs(ctx)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to get ids for update")
+
 		return err
+	}
+
+	// check for the single update case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
 	}
 
 	var (
@@ -79,13 +91,24 @@ func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) er
 		return nil
 	}
 
-	// User the IDs of the memberships and delete all related tuples
-	for _, id := range ids {
-		member, err := m.Client().GroupMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
+	members := []*GroupMembership{}
 
+	// use the predicates from the original request to get the members if we don't have ids
+	if len(ids) == 0 {
+		members, err = m.Client().GroupMembership.Query().Where(m.predicates...).All(ctx)
+
+	} else {
+		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(ctx)
+	}
+
+	if err != nil || len(members) == 0 {
+		log.Error().Err(err).Msg("failed to get members for update")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
 		req := fgax.TupleRequest{
 			SubjectID:   member.UserID,
 			SubjectType: "user",
@@ -119,7 +142,6 @@ func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) er
 }
 
 func (m *GroupMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
-
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDelete(ctx) {
 		return nil
@@ -131,22 +153,43 @@ func (m *GroupMembershipMutation) CreateTuplesFromDelete(ctx context.Context) er
 		return err
 	}
 
+	// check for the single delete case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
+	}
+
 	tuples := []fgax.TupleKey{}
 
-	// User the IDs of the memberships and delete all related tuples
-	for _, id := range ids {
-		// this wont work with soft deletes
-		members, err := m.Client().GroupMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
+	members := []*GroupMembership{}
 
+	// use the predicates from the original request to get the members if we don't have ids
+	deleteCtx := entx.SkipSoftDelete(ctx)
+	if len(ids) == 0 {
+		// this will not work for the soft delete case because the predicates will include deleted_at = nil
+		// and this hook is setup to run after the delete happens
+		members, err = m.Client().GroupMembership.Query().Where(m.predicates...).All(deleteCtx)
+	} else {
+		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(deleteCtx)
+	}
+
+	if err != nil || len(members) == 0 {
+		log.Error().Err(err).Msg("failed to get members for delete")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
 		req := fgax.TupleRequest{
-			SubjectID:   members.UserID,
+			SubjectID:   member.UserID,
 			SubjectType: "user",
-			ObjectID:    members.GroupID,
+			ObjectID:    member.GroupID,
 			ObjectType:  "group",
-			Relation:    members.Role.String(),
+			Relation:    member.Role.String(),
 		}
 
 		t := fgax.GetTupleKey(req)
@@ -167,7 +210,6 @@ func (m *GroupMembershipMutation) CreateTuplesFromDelete(ctx context.Context) er
 }
 
 func (m *OrgMembershipMutation) CreateTuplesFromCreate(ctx context.Context) error {
-
 	// Get fields for tuple creation
 	userID, _ := m.UserID()
 	objectID, _ := m.OrganizationID()
@@ -196,7 +238,6 @@ func (m *OrgMembershipMutation) CreateTuplesFromCreate(ctx context.Context) erro
 }
 
 func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
-
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDelete(ctx) {
 		return m.CreateTuplesFromDelete(ctx)
@@ -205,7 +246,18 @@ func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) erro
 	// get ids that will be updated
 	ids, err := m.IDs(ctx)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to get ids for update")
+
 		return err
+	}
+
+	// check for the single update case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
 	}
 
 	var (
@@ -232,13 +284,24 @@ func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) erro
 		return nil
 	}
 
-	// User the IDs of the memberships and delete all related tuples
-	for _, id := range ids {
-		member, err := m.Client().OrgMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
+	members := []*OrgMembership{}
 
+	// use the predicates from the original request to get the members if we don't have ids
+	if len(ids) == 0 {
+		members, err = m.Client().OrgMembership.Query().Where(m.predicates...).All(ctx)
+
+	} else {
+		members, err = m.Client().OrgMembership.Query().Where(orgmembership.IDIn(ids...)).All(ctx)
+	}
+
+	if err != nil || len(members) == 0 {
+		log.Error().Err(err).Msg("failed to get members for update")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
 		req := fgax.TupleRequest{
 			SubjectID:   member.UserID,
 			SubjectType: "user",
@@ -272,7 +335,6 @@ func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) erro
 }
 
 func (m *OrgMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
-
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDelete(ctx) {
 		return nil
@@ -284,22 +346,43 @@ func (m *OrgMembershipMutation) CreateTuplesFromDelete(ctx context.Context) erro
 		return err
 	}
 
+	// check for the single delete case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
+	}
+
 	tuples := []fgax.TupleKey{}
 
-	// User the IDs of the memberships and delete all related tuples
-	for _, id := range ids {
-		// this wont work with soft deletes
-		members, err := m.Client().OrgMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
+	members := []*OrgMembership{}
 
+	// use the predicates from the original request to get the members if we don't have ids
+	deleteCtx := entx.SkipSoftDelete(ctx)
+	if len(ids) == 0 {
+		// this will not work for the soft delete case because the predicates will include deleted_at = nil
+		// and this hook is setup to run after the delete happens
+		members, err = m.Client().OrgMembership.Query().Where(m.predicates...).All(deleteCtx)
+	} else {
+		members, err = m.Client().OrgMembership.Query().Where(orgmembership.IDIn(ids...)).All(deleteCtx)
+	}
+
+	if err != nil || len(members) == 0 {
+		log.Error().Err(err).Msg("failed to get members for delete")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
 		req := fgax.TupleRequest{
-			SubjectID:   members.UserID,
+			SubjectID:   member.UserID,
 			SubjectType: "user",
-			ObjectID:    members.OrganizationID,
+			ObjectID:    member.OrganizationID,
 			ObjectType:  "organization",
-			Relation:    members.Role.String(),
+			Relation:    member.Role.String(),
 		}
 
 		t := fgax.GetTupleKey(req)
@@ -320,7 +403,6 @@ func (m *OrgMembershipMutation) CreateTuplesFromDelete(ctx context.Context) erro
 }
 
 func (m *ProgramMembershipMutation) CreateTuplesFromCreate(ctx context.Context) error {
-
 	// Get fields for tuple creation
 	userID, _ := m.UserID()
 	objectID, _ := m.ProgramID()
@@ -349,7 +431,6 @@ func (m *ProgramMembershipMutation) CreateTuplesFromCreate(ctx context.Context) 
 }
 
 func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
-
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDelete(ctx) {
 		return m.CreateTuplesFromDelete(ctx)
@@ -358,7 +439,18 @@ func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) 
 	// get ids that will be updated
 	ids, err := m.IDs(ctx)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to get ids for update")
+
 		return err
+	}
+
+	// check for the single update case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
 	}
 
 	var (
@@ -385,13 +477,24 @@ func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) 
 		return nil
 	}
 
-	// User the IDs of the memberships and delete all related tuples
-	for _, id := range ids {
-		member, err := m.Client().ProgramMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
+	members := []*ProgramMembership{}
 
+	// use the predicates from the original request to get the members if we don't have ids
+	if len(ids) == 0 {
+		members, err = m.Client().ProgramMembership.Query().Where(m.predicates...).All(ctx)
+
+	} else {
+		members, err = m.Client().ProgramMembership.Query().Where(programmembership.IDIn(ids...)).All(ctx)
+	}
+
+	if err != nil || len(members) == 0 {
+		log.Error().Err(err).Msg("failed to get members for update")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
 		req := fgax.TupleRequest{
 			SubjectID:   member.UserID,
 			SubjectType: "user",
@@ -425,7 +528,6 @@ func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) 
 }
 
 func (m *ProgramMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
-
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDelete(ctx) {
 		return nil
@@ -437,22 +539,43 @@ func (m *ProgramMembershipMutation) CreateTuplesFromDelete(ctx context.Context) 
 		return err
 	}
 
+	// check for the single delete case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
+	}
+
 	tuples := []fgax.TupleKey{}
 
-	// User the IDs of the memberships and delete all related tuples
-	for _, id := range ids {
-		// this wont work with soft deletes
-		members, err := m.Client().ProgramMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
+	members := []*ProgramMembership{}
 
+	// use the predicates from the original request to get the members if we don't have ids
+	deleteCtx := entx.SkipSoftDelete(ctx)
+	if len(ids) == 0 {
+		// this will not work for the soft delete case because the predicates will include deleted_at = nil
+		// and this hook is setup to run after the delete happens
+		members, err = m.Client().ProgramMembership.Query().Where(m.predicates...).All(deleteCtx)
+	} else {
+		members, err = m.Client().ProgramMembership.Query().Where(programmembership.IDIn(ids...)).All(deleteCtx)
+	}
+
+	if err != nil || len(members) == 0 {
+		log.Error().Err(err).Msg("failed to get members for delete")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
 		req := fgax.TupleRequest{
-			SubjectID:   members.UserID,
+			SubjectID:   member.UserID,
 			SubjectType: "user",
-			ObjectID:    members.ProgramID,
+			ObjectID:    member.ProgramID,
 			ObjectType:  "program",
-			Relation:    members.Role.String(),
+			Relation:    member.Role.String(),
 		}
 
 		t := fgax.GetTupleKey(req)
