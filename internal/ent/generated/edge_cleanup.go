@@ -40,9 +40,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
-	"github.com/theopenlane/utils/contextx"
-
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/contextx"
 )
 
 func APITokenEdgeCleanup(ctx context.Context, id string) error {

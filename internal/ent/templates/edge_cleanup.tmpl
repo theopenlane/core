@@ -7,14 +7,11 @@
 {{ $pkg := base $.Config.Package }}
 {{ template "header" $ }}
 
-// CascadeDeleteKey is a key for the context to indicate that the delete is happening as part of a cascade delete
-type CascadeDeleteKey struct{}
-
     {{/* For each schema */}}
 	{{- range $node := $.Nodes }}
             {{/* create an EdgeCleanup function accepting an ID */}}
 			func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
-	            ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")), CascadeDeleteKey{})
+	            ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")), entfga.DeleteTuplesFirstKey{})
 
                {{/* For each edge */}}
                {{- range $edge := $node.Edges }}

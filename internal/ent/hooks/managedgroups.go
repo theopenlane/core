@@ -71,10 +71,14 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 	return nil
 }
 
+// OrgMember is a struct to hold the org member details
 type OrgMember struct {
+	// UserID is the user ID of the org member
 	UserID string
-	Role   enums.Role
-	OrgID  string
+	// Role is the role of the org member
+	Role enums.Role
+	// OrgID is the organization ID of the org member
+	OrgID string
 }
 
 // updateManagedGroupMembers groups adds or removes the org members to the managed system groups
@@ -174,7 +178,8 @@ func addToManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation,
 	return nil
 }
 
-// removeFromManagedGroups removes the user from the system managed groups when they are removed from the organization or their role changes
+// removeFromManagedGroups removes the user from the system managed groups when their role changes
+// users that are removed from the organization are handled by the cascade delete
 func removeFromManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation, om OrgMember) error {
 	switch om.Role {
 	case enums.RoleMember:
@@ -186,10 +191,6 @@ func removeFromManagedGroups(ctx context.Context, m *generated.OrgMembershipMuta
 			return err
 		}
 	}
-
-	// we shouldn't remove users from the All Members group
-	// that only happens when the org membership is deleted
-	// and the cascade delete hook will handle that
 
 	return nil
 }

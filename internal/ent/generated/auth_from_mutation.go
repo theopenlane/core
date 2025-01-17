@@ -159,8 +159,7 @@ func (m *GroupMembershipMutation) CreateTuplesFromDelete(ctx context.Context) er
 	// use the predicates from the original request to get the members if we don't have ids
 	ctx = entx.SkipSoftDelete(ctx)
 	if len(ids) == 0 {
-		predicates := m.predicates[:len(m.predicates)-1]
-		members, err = m.Client().GroupMembership.Query().Where(predicates...).All(ctx)
+		members, err = m.Client().GroupMembership.Query().Where(m.predicates...).All(ctx)
 	} else {
 		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(ctx)
 	}
