@@ -42,6 +42,8 @@ const (
 	EdgeProgram = "program"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
+	// EdgeOrgmembership holds the string denoting the orgmembership edge name in mutations.
+	EdgeOrgmembership = "orgmembership"
 	// Table holds the table name of the programmembership in the database.
 	Table = "program_memberships"
 	// ProgramTable is the table that holds the program relation/edge.
@@ -58,6 +60,13 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
+	// OrgmembershipTable is the table that holds the orgmembership relation/edge.
+	OrgmembershipTable = "program_memberships"
+	// OrgmembershipInverseTable is the table name for the OrgMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "orgmembership" package.
+	OrgmembershipInverseTable = "org_memberships"
+	// OrgmembershipColumn is the table column denoting the orgmembership relation/edge.
+	OrgmembershipColumn = "program_membership_orgmembership"
 )
 
 // Columns holds all SQL columns for programmembership fields.
@@ -75,10 +84,21 @@ var Columns = []string{
 	FieldUserID,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "program_memberships"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"program_membership_orgmembership",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -189,6 +209,13 @@ func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByOrgmembershipField orders the results by orgmembership field.
+func ByOrgmembershipField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgmembershipStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newProgramStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -201,6 +228,13 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, UserTable, UserColumn),
+	)
+}
+func newOrgmembershipStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgmembershipInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, OrgmembershipTable, OrgmembershipColumn),
 	)
 }
 

@@ -47,6 +47,8 @@ type GroupHistory struct {
 	Name string `json:"name,omitempty"`
 	// the groups description
 	Description string `json:"description,omitempty"`
+	// whether the group is managed by the system
+	IsManaged bool `json:"is_managed,omitempty"`
 	// the URL to an auto generated gravatar image for the group
 	GravatarLogoURL string `json:"gravatar_logo_url,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
@@ -65,6 +67,8 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case grouphistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case grouphistory.FieldIsManaged:
+			values[i] = new(sql.NullBool)
 		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldMappingID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
@@ -176,6 +180,12 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				gh.Description = value.String
 			}
+		case grouphistory.FieldIsManaged:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_managed", values[i])
+			} else if value.Valid {
+				gh.IsManaged = value.Bool
+			}
 		case grouphistory.FieldGravatarLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gravatar_logo_url", values[i])
@@ -271,6 +281,9 @@ func (gh *GroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(gh.Description)
+	builder.WriteString(", ")
+	builder.WriteString("is_managed=")
+	builder.WriteString(fmt.Sprintf("%v", gh.IsManaged))
 	builder.WriteString(", ")
 	builder.WriteString("gravatar_logo_url=")
 	builder.WriteString(gh.GravatarLogoURL)

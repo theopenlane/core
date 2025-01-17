@@ -136,6 +136,11 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			}
 		}
 
+		// skip interceptor if the context has the managed group key
+		if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
+			return nil
+		}
+
 		// check query context skips
 		ctxQuery := ent.QueryFromContext(ctx)
 

@@ -2393,6 +2393,7 @@ func (pq *ProgramQuery) loadMembers(ctx context.Context, query *ProgramMembershi
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(programmembership.FieldProgramID)
 	}

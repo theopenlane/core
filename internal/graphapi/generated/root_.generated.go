@@ -939,6 +939,7 @@ type ComplexityRoot struct {
 		InternalPolicyBlockedGroups   func(childComplexity int) int
 		InternalPolicyCreators        func(childComplexity int) int
 		InternalPolicyEditors         func(childComplexity int) int
+		IsManaged                     func(childComplexity int) int
 		LogoURL                       func(childComplexity int) int
 		Members                       func(childComplexity int) int
 		Name                          func(childComplexity int) int
@@ -1001,6 +1002,7 @@ type ComplexityRoot struct {
 		GravatarLogoURL func(childComplexity int) int
 		HistoryTime     func(childComplexity int) int
 		ID              func(childComplexity int) int
+		IsManaged       func(childComplexity int) int
 		LogoURL         func(childComplexity int) int
 		Name            func(childComplexity int) int
 		Operation       func(childComplexity int) int
@@ -7357,6 +7359,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.InternalPolicyEditors(childComplexity), true
 
+	case "Group.isManaged":
+		if e.complexity.Group.IsManaged == nil {
+			break
+		}
+
+		return e.complexity.Group.IsManaged(childComplexity), true
+
 	case "Group.logoURL":
 		if e.complexity.Group.LogoURL == nil {
 			break
@@ -7664,6 +7673,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupHistory.ID(childComplexity), true
+
+	case "GroupHistory.isManaged":
+		if e.complexity.GroupHistory.IsManaged == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.IsManaged(childComplexity), true
 
 	case "GroupHistory.logoURL":
 		if e.complexity.GroupHistory.LogoURL == nil {
@@ -29858,6 +29874,10 @@ type Group implements Node {
   """
   description: String
   """
+  whether the group is managed by the system
+  """
+  isManaged: Boolean
+  """
   the URL to an auto generated gravatar image for the group
   """
   gravatarLogoURL: String
@@ -29963,6 +29983,10 @@ type GroupHistory implements Node {
   the groups description
   """
   description: String
+  """
+  whether the group is managed by the system
+  """
+  isManaged: Boolean
   """
   the URL to an auto generated gravatar image for the group
   """
@@ -30218,6 +30242,13 @@ input GroupHistoryWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  is_managed field predicates
+  """
+  isManaged: Boolean
+  isManagedNEQ: Boolean
+  isManagedIsNil: Boolean
+  isManagedNotNil: Boolean
   """
   display_name field predicates
   """
@@ -31360,6 +31391,13 @@ input GroupWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  is_managed field predicates
+  """
+  isManaged: Boolean
+  isManagedNEQ: Boolean
+  isManagedIsNil: Boolean
+  isManagedNotNil: Boolean
   """
   display_name field predicates
   """

@@ -2403,6 +2403,10 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDescription(description)
 	}
 
+	if isManaged, exists := m.IsManaged(); exists {
+		create = create.SetIsManaged(isManaged)
+	}
+
 	if gravatarLogoURL, exists := m.GravatarLogoURL(); exists {
 		create = create.SetGravatarLogoURL(gravatarLogoURL)
 	}
@@ -2511,6 +2515,12 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(group.Description)
 		}
 
+		if isManaged, exists := m.IsManaged(); exists {
+			create = create.SetIsManaged(isManaged)
+		} else {
+			create = create.SetIsManaged(group.IsManaged)
+		}
+
 		if gravatarLogoURL, exists := m.GravatarLogoURL(); exists {
 			create = create.SetGravatarLogoURL(gravatarLogoURL)
 		} else {
@@ -2572,6 +2582,7 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetOwnerID(group.OwnerID).
 			SetName(group.Name).
 			SetDescription(group.Description).
+			SetIsManaged(group.IsManaged).
 			SetGravatarLogoURL(group.GravatarLogoURL).
 			SetLogoURL(group.LogoURL).
 			SetDisplayName(group.DisplayName).

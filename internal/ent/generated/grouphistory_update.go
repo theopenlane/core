@@ -345,6 +345,9 @@ func (ghu *GroupHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ghu.mutation.DescriptionCleared() {
 		_spec.ClearField(grouphistory.FieldDescription, field.TypeString)
 	}
+	if ghu.mutation.IsManagedCleared() {
+		_spec.ClearField(grouphistory.FieldIsManaged, field.TypeBool)
+	}
 	if value, ok := ghu.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(grouphistory.FieldGravatarLogoURL, field.TypeString, value)
 	}
@@ -726,6 +729,9 @@ func (ghuo *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHis
 	}
 	if ghuo.mutation.DescriptionCleared() {
 		_spec.ClearField(grouphistory.FieldDescription, field.TypeString)
+	}
+	if ghuo.mutation.IsManagedCleared() {
+		_spec.ClearField(grouphistory.FieldIsManaged, field.TypeBool)
 	}
 	if value, ok := ghuo.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(grouphistory.FieldGravatarLogoURL, field.TypeString, value)

@@ -18477,6 +18477,12 @@ type GroupWhereInput struct {
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 
+	// "is_managed" field predicates.
+	IsManaged       *bool `json:"isManaged,omitempty"`
+	IsManagedNEQ    *bool `json:"isManagedNEQ,omitempty"`
+	IsManagedIsNil  bool  `json:"isManagedIsNil,omitempty"`
+	IsManagedNotNil bool  `json:"isManagedNotNil,omitempty"`
+
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -19046,6 +19052,18 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if i.NameContainsFold != nil {
 		predicates = append(predicates, group.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.IsManaged != nil {
+		predicates = append(predicates, group.IsManagedEQ(*i.IsManaged))
+	}
+	if i.IsManagedNEQ != nil {
+		predicates = append(predicates, group.IsManagedNEQ(*i.IsManagedNEQ))
+	}
+	if i.IsManagedIsNil {
+		predicates = append(predicates, group.IsManagedIsNil())
+	}
+	if i.IsManagedNotNil {
+		predicates = append(predicates, group.IsManagedNotNil())
 	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, group.DisplayNameEQ(*i.DisplayName))
@@ -19916,6 +19934,12 @@ type GroupHistoryWhereInput struct {
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 
+	// "is_managed" field predicates.
+	IsManaged       *bool `json:"isManaged,omitempty"`
+	IsManagedNEQ    *bool `json:"isManagedNEQ,omitempty"`
+	IsManagedIsNil  bool  `json:"isManagedIsNil,omitempty"`
+	IsManagedNotNil bool  `json:"isManagedNotNil,omitempty"`
+
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -20422,6 +20446,18 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	}
 	if i.NameContainsFold != nil {
 		predicates = append(predicates, grouphistory.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.IsManaged != nil {
+		predicates = append(predicates, grouphistory.IsManagedEQ(*i.IsManaged))
+	}
+	if i.IsManagedNEQ != nil {
+		predicates = append(predicates, grouphistory.IsManagedNEQ(*i.IsManagedNEQ))
+	}
+	if i.IsManagedIsNil {
+		predicates = append(predicates, grouphistory.IsManagedIsNil())
+	}
+	if i.IsManagedNotNil {
+		predicates = append(predicates, grouphistory.IsManagedNotNil())
 	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, grouphistory.DisplayNameEQ(*i.DisplayName))

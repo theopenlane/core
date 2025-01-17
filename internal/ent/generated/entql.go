@@ -700,6 +700,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldOwnerID:         {Type: field.TypeString, Column: group.FieldOwnerID},
 			group.FieldName:            {Type: field.TypeString, Column: group.FieldName},
 			group.FieldDescription:     {Type: field.TypeString, Column: group.FieldDescription},
+			group.FieldIsManaged:       {Type: field.TypeBool, Column: group.FieldIsManaged},
 			group.FieldGravatarLogoURL: {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
 			group.FieldLogoURL:         {Type: field.TypeString, Column: group.FieldLogoURL},
 			group.FieldDisplayName:     {Type: field.TypeString, Column: group.FieldDisplayName},
@@ -730,6 +731,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldOwnerID:         {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
 			grouphistory.FieldName:            {Type: field.TypeString, Column: grouphistory.FieldName},
 			grouphistory.FieldDescription:     {Type: field.TypeString, Column: grouphistory.FieldDescription},
+			grouphistory.FieldIsManaged:       {Type: field.TypeBool, Column: grouphistory.FieldIsManaged},
 			grouphistory.FieldGravatarLogoURL: {Type: field.TypeString, Column: grouphistory.FieldGravatarLogoURL},
 			grouphistory.FieldLogoURL:         {Type: field.TypeString, Column: grouphistory.FieldLogoURL},
 			grouphistory.FieldDisplayName:     {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
@@ -3455,6 +3457,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"orgmembership",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.OrgmembershipTable,
+			Columns: []string{groupmembership.OrgmembershipColumn},
+			Bidi:    false,
+		},
+		"GroupMembership",
+		"OrgMembership",
+	)
+	graph.MustAddE(
 		"events",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4785,6 +4799,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ProgramMembership",
 		"User",
+	)
+	graph.MustAddE(
+		"orgmembership",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.OrgmembershipTable,
+			Columns: []string{programmembership.OrgmembershipColumn},
+			Bidi:    false,
+		},
+		"ProgramMembership",
+		"OrgMembership",
 	)
 	graph.MustAddE(
 		"owner",
@@ -9036,6 +9062,11 @@ func (f *GroupFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(group.FieldDescription))
 }
 
+// WhereIsManaged applies the entql bool predicate on the is_managed field.
+func (f *GroupFilter) WhereIsManaged(p entql.BoolP) {
+	f.Where(p.Field(group.FieldIsManaged))
+}
+
 // WhereGravatarLogoURL applies the entql string predicate on the gravatar_logo_url field.
 func (f *GroupFilter) WhereGravatarLogoURL(p entql.StringP) {
 	f.Where(p.Field(group.FieldGravatarLogoURL))
@@ -9665,6 +9696,11 @@ func (f *GroupHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldDescription))
 }
 
+// WhereIsManaged applies the entql bool predicate on the is_managed field.
+func (f *GroupHistoryFilter) WhereIsManaged(p entql.BoolP) {
+	f.Where(p.Field(grouphistory.FieldIsManaged))
+}
+
 // WhereGravatarLogoURL applies the entql string predicate on the gravatar_logo_url field.
 func (f *GroupHistoryFilter) WhereGravatarLogoURL(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldGravatarLogoURL))
@@ -9792,6 +9828,20 @@ func (f *GroupMembershipFilter) WhereHasUser() {
 // WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
 func (f *GroupMembershipFilter) WhereHasUserWith(preds ...predicate.User) {
 	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOrgmembership applies a predicate to check if query has an edge orgmembership.
+func (f *GroupMembershipFilter) WhereHasOrgmembership() {
+	f.Where(entql.HasEdge("orgmembership"))
+}
+
+// WhereHasOrgmembershipWith applies a predicate to check if query has an edge orgmembership with a given conditions (other predicates).
+func (f *GroupMembershipFilter) WhereHasOrgmembershipWith(preds ...predicate.OrgMembership) {
+	f.Where(entql.HasEdgeWith("orgmembership", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14766,6 +14816,20 @@ func (f *ProgramMembershipFilter) WhereHasUser() {
 // WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
 func (f *ProgramMembershipFilter) WhereHasUserWith(preds ...predicate.User) {
 	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOrgmembership applies a predicate to check if query has an edge orgmembership.
+func (f *ProgramMembershipFilter) WhereHasOrgmembership() {
+	f.Where(entql.HasEdge("orgmembership"))
+}
+
+// WhereHasOrgmembershipWith applies a predicate to check if query has an edge orgmembership with a given conditions (other predicates).
+func (f *ProgramMembershipFilter) WhereHasOrgmembershipWith(preds ...predicate.OrgMembership) {
+	f.Where(entql.HasEdgeWith("orgmembership", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

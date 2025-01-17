@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -25,16 +26,18 @@ import (
 // GroupMembershipQuery is the builder for querying GroupMembership entities.
 type GroupMembershipQuery struct {
 	config
-	ctx             *QueryContext
-	order           []groupmembership.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.GroupMembership
-	withGroup       *GroupQuery
-	withUser        *UserQuery
-	withEvents      *EventQuery
-	loadTotal       []func(context.Context, []*GroupMembership) error
-	modifiers       []func(*sql.Selector)
-	withNamedEvents map[string]*EventQuery
+	ctx               *QueryContext
+	order             []groupmembership.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.GroupMembership
+	withGroup         *GroupQuery
+	withUser          *UserQuery
+	withOrgmembership *OrgMembershipQuery
+	withEvents        *EventQuery
+	withFKs           bool
+	loadTotal         []func(context.Context, []*GroupMembership) error
+	modifiers         []func(*sql.Selector)
+	withNamedEvents   map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -114,6 +117,31 @@ func (gmq *GroupMembershipQuery) QueryUser() *UserQuery {
 		)
 		schemaConfig := gmq.schemaConfig
 		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.GroupMembership
+		fromU = sqlgraph.SetNeighbors(gmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrgmembership chains the current query on the "orgmembership" edge.
+func (gmq *GroupMembershipQuery) QueryOrgmembership() *OrgMembershipQuery {
+	query := (&OrgMembershipClient{config: gmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, selector),
+			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.OrgmembershipTable, groupmembership.OrgmembershipColumn),
+		)
+		schemaConfig := gmq.schemaConfig
+		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(gmq.driver.Dialect(), step)
 		return fromU, nil
@@ -333,14 +361,15 @@ func (gmq *GroupMembershipQuery) Clone() *GroupMembershipQuery {
 		return nil
 	}
 	return &GroupMembershipQuery{
-		config:     gmq.config,
-		ctx:        gmq.ctx.Clone(),
-		order:      append([]groupmembership.OrderOption{}, gmq.order...),
-		inters:     append([]Interceptor{}, gmq.inters...),
-		predicates: append([]predicate.GroupMembership{}, gmq.predicates...),
-		withGroup:  gmq.withGroup.Clone(),
-		withUser:   gmq.withUser.Clone(),
-		withEvents: gmq.withEvents.Clone(),
+		config:            gmq.config,
+		ctx:               gmq.ctx.Clone(),
+		order:             append([]groupmembership.OrderOption{}, gmq.order...),
+		inters:            append([]Interceptor{}, gmq.inters...),
+		predicates:        append([]predicate.GroupMembership{}, gmq.predicates...),
+		withGroup:         gmq.withGroup.Clone(),
+		withUser:          gmq.withUser.Clone(),
+		withOrgmembership: gmq.withOrgmembership.Clone(),
+		withEvents:        gmq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       gmq.sql.Clone(),
 		path:      gmq.path,
@@ -367,6 +396,17 @@ func (gmq *GroupMembershipQuery) WithUser(opts ...func(*UserQuery)) *GroupMember
 		opt(query)
 	}
 	gmq.withUser = query
+	return gmq
+}
+
+// WithOrgmembership tells the query-builder to eager-load the nodes that are connected to
+// the "orgmembership" edge. The optional arguments are used to configure the query builder of the edge.
+func (gmq *GroupMembershipQuery) WithOrgmembership(opts ...func(*OrgMembershipQuery)) *GroupMembershipQuery {
+	query := (&OrgMembershipClient{config: gmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gmq.withOrgmembership = query
 	return gmq
 }
 
@@ -464,13 +504,21 @@ func (gmq *GroupMembershipQuery) prepareQuery(ctx context.Context) error {
 func (gmq *GroupMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*GroupMembership, error) {
 	var (
 		nodes       = []*GroupMembership{}
+		withFKs     = gmq.withFKs
 		_spec       = gmq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			gmq.withGroup != nil,
 			gmq.withUser != nil,
+			gmq.withOrgmembership != nil,
 			gmq.withEvents != nil,
 		}
 	)
+	if gmq.withOrgmembership != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, groupmembership.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*GroupMembership).scanValues(nil, columns)
 	}
@@ -503,6 +551,12 @@ func (gmq *GroupMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if query := gmq.withUser; query != nil {
 		if err := gmq.loadUser(ctx, query, nodes, nil,
 			func(n *GroupMembership, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gmq.withOrgmembership; query != nil {
+		if err := gmq.loadOrgmembership(ctx, query, nodes, nil,
+			func(n *GroupMembership, e *OrgMembership) { n.Edges.Orgmembership = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -579,6 +633,38 @@ func (gmq *GroupMembershipQuery) loadUser(ctx context.Context, query *UserQuery,
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (gmq *GroupMembershipQuery) loadOrgmembership(ctx context.Context, query *OrgMembershipQuery, nodes []*GroupMembership, init func(*GroupMembership), assign func(*GroupMembership, *OrgMembership)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*GroupMembership)
+	for i := range nodes {
+		if nodes[i].group_membership_orgmembership == nil {
+			continue
+		}
+		fk := *nodes[i].group_membership_orgmembership
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(orgmembership.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "group_membership_orgmembership" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

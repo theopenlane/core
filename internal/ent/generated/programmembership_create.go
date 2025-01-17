@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -169,6 +170,25 @@ func (pmc *ProgramMembershipCreate) SetProgram(p *Program) *ProgramMembershipCre
 // SetUser sets the "user" edge to the User entity.
 func (pmc *ProgramMembershipCreate) SetUser(u *User) *ProgramMembershipCreate {
 	return pmc.SetUserID(u.ID)
+}
+
+// SetOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by ID.
+func (pmc *ProgramMembershipCreate) SetOrgmembershipID(id string) *ProgramMembershipCreate {
+	pmc.mutation.SetOrgmembershipID(id)
+	return pmc
+}
+
+// SetNillableOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by ID if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableOrgmembershipID(id *string) *ProgramMembershipCreate {
+	if id != nil {
+		pmc = pmc.SetOrgmembershipID(*id)
+	}
+	return pmc
+}
+
+// SetOrgmembership sets the "orgmembership" edge to the OrgMembership entity.
+func (pmc *ProgramMembershipCreate) SetOrgmembership(o *OrgMembership) *ProgramMembershipCreate {
+	return pmc.SetOrgmembershipID(o.ID)
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
@@ -370,6 +390,24 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pmc.mutation.OrgmembershipIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.OrgmembershipTable,
+			Columns: []string{programmembership.OrgmembershipColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmc.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.program_membership_orgmembership = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

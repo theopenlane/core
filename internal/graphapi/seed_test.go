@@ -88,11 +88,11 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	viewOnlyUser = suite.userBuilder(ctx)
 
 	// add the user to the organization
-	suite.addUserToOrganization(&viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
 
 	// setup a test user that is an admin of an organization
 	adminUser = suite.userBuilder(ctx)
-	suite.addUserToOrganization(&adminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	// setup client with a personal access token
 	pat := (&PersonalAccessTokenBuilder{
@@ -125,11 +125,12 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 }
 
 // addUserToOrganization adds a user to an organization with the provided role and set's the user's organization ID and user context
-func (suite *GraphTestSuite) addUserToOrganization(userDetails *testUserDetails, role enums.Role, organizationID string) {
+// the context passed in is the context that has access to the organization the user is being added to
+func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, userDetails *testUserDetails, role enums.Role, organizationID string) {
 	t := suite.T()
 
 	// update organization to be the read-only member of the first test organization
-	(&OrgMemberBuilder{client: suite.client, UserID: userDetails.ID, OrgID: organizationID, Role: role.String()}).MustNew(userDetails.UserCtx, t)
+	(&OrgMemberBuilder{client: suite.client, UserID: userDetails.ID, OrgID: organizationID, Role: role.String()}).MustNew(ctx, t)
 
 	userDetails.OrganizationID = organizationID
 

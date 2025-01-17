@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -170,6 +171,25 @@ func (gmc *GroupMembershipCreate) SetGroup(g *Group) *GroupMembershipCreate {
 // SetUser sets the "user" edge to the User entity.
 func (gmc *GroupMembershipCreate) SetUser(u *User) *GroupMembershipCreate {
 	return gmc.SetUserID(u.ID)
+}
+
+// SetOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by ID.
+func (gmc *GroupMembershipCreate) SetOrgmembershipID(id string) *GroupMembershipCreate {
+	gmc.mutation.SetOrgmembershipID(id)
+	return gmc
+}
+
+// SetNillableOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by ID if the given value is not nil.
+func (gmc *GroupMembershipCreate) SetNillableOrgmembershipID(id *string) *GroupMembershipCreate {
+	if id != nil {
+		gmc = gmc.SetOrgmembershipID(*id)
+	}
+	return gmc
+}
+
+// SetOrgmembership sets the "orgmembership" edge to the OrgMembership entity.
+func (gmc *GroupMembershipCreate) SetOrgmembership(o *OrgMembership) *GroupMembershipCreate {
+	return gmc.SetOrgmembershipID(o.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -386,6 +406,24 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gmc.mutation.OrgmembershipIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.OrgmembershipTable,
+			Columns: []string{groupmembership.OrgmembershipColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmc.schemaConfig.GroupMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.group_membership_orgmembership = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := gmc.mutation.EventsIDs(); len(nodes) > 0 {

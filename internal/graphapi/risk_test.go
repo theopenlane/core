@@ -422,7 +422,7 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor/viewer permissions
 	anotherAdminUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(&anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 

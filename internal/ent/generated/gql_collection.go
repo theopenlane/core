@@ -4304,6 +4304,11 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, group.FieldDescription)
 				fieldSeen[group.FieldDescription] = struct{}{}
 			}
+		case "isManaged":
+			if _, ok := fieldSeen[group.FieldIsManaged]; !ok {
+				selectedFields = append(selectedFields, group.FieldIsManaged)
+				fieldSeen[group.FieldIsManaged] = struct{}{}
+			}
 		case "gravatarLogoURL":
 			if _, ok := fieldSeen[group.FieldGravatarLogoURL]; !ok {
 				selectedFields = append(selectedFields, group.FieldGravatarLogoURL)
@@ -4467,6 +4472,11 @@ func (gh *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[grouphistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldDescription)
 				fieldSeen[grouphistory.FieldDescription] = struct{}{}
+			}
+		case "isManaged":
+			if _, ok := fieldSeen[grouphistory.FieldIsManaged]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldIsManaged)
+				fieldSeen[grouphistory.FieldIsManaged] = struct{}{}
 			}
 		case "gravatarLogoURL":
 			if _, ok := fieldSeen[grouphistory.FieldGravatarLogoURL]; !ok {

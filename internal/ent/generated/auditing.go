@@ -766,6 +766,9 @@ func (gh *GroupHistory) changes(new *GroupHistory) []Change {
 	if !reflect.DeepEqual(gh.Description, new.Description) {
 		changes = append(changes, NewChange(grouphistory.FieldDescription, gh.Description, new.Description))
 	}
+	if !reflect.DeepEqual(gh.IsManaged, new.IsManaged) {
+		changes = append(changes, NewChange(grouphistory.FieldIsManaged, gh.IsManaged, new.IsManaged))
+	}
 	if !reflect.DeepEqual(gh.GravatarLogoURL, new.GravatarLogoURL) {
 		changes = append(changes, NewChange(grouphistory.FieldGravatarLogoURL, gh.GravatarLogoURL, new.GravatarLogoURL))
 	}

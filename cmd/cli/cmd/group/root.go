@@ -79,9 +79,14 @@ func jsonOutput(out any) error {
 
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Group) {
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Visibility", "Organization", "Members")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Display Name", "Description", "Visibility", "Managed", "Organization", "Members")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.DisplayName, *i.Description, i.Setting.Visibility, i.Owner.DisplayName, len(i.Members))
+		isManaged := false
+		if i.IsManaged != nil {
+			isManaged = *i.IsManaged
+		}
+
+		writer.AddRow(i.ID, i.Name, i.DisplayName, *i.Description, i.Setting.Visibility, isManaged, i.Owner.DisplayName, len(i.Members))
 	}
 
 	writer.Render()

@@ -967,6 +967,8 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Group_description(ctx, field)
+			case "isManaged":
+				return ec.fieldContext_Group_isManaged(ctx, field)
 			case "gravatarLogoURL":
 				return ec.fieldContext_Group_gravatarLogoURL(ctx, field)
 			case "logoURL":

@@ -760,6 +760,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "is_managed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
@@ -773,7 +774,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "groups_organizations_groups",
-				Columns:    []*schema.Column{GroupsColumns[14]},
+				Columns:    []*schema.Column{GroupsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -782,7 +783,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[14]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -806,6 +807,7 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "is_managed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
@@ -836,6 +838,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
+		{Name: "group_membership_orgmembership", Type: field.TypeString, Nullable: true},
 	}
 	// GroupMembershipsTable holds the schema information for the "group_memberships" table.
 	GroupMembershipsTable = &schema.Table{
@@ -854,6 +857,12 @@ var (
 				Columns:    []*schema.Column{GroupMembershipsColumns[10]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "group_memberships_org_memberships_orgmembership",
+				Columns:    []*schema.Column{GroupMembershipsColumns[11]},
+				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -1892,6 +1901,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
+		{Name: "program_membership_orgmembership", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramMembershipsTable holds the schema information for the "program_memberships" table.
 	ProgramMembershipsTable = &schema.Table{
@@ -1910,6 +1920,12 @@ var (
 				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "program_memberships_org_memberships_orgmembership",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[11]},
+				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -5086,6 +5102,7 @@ func init() {
 	}
 	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
 	GroupMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_membership_history",
 	}
@@ -5147,6 +5164,7 @@ func init() {
 	}
 	ProgramMembershipsTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
 	ProgramMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_membership_history",
 	}

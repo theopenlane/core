@@ -8035,6 +8035,10 @@ type Group implements Node {
   """
   description: String
   """
+  whether the group is managed by the system
+  """
+  isManaged: Boolean
+  """
   the URL to an auto generated gravatar image for the group
   """
   gravatarLogoURL: String
@@ -8140,6 +8144,10 @@ type GroupHistory implements Node {
   the groups description
   """
   description: String
+  """
+  whether the group is managed by the system
+  """
+  isManaged: Boolean
   """
   the URL to an auto generated gravatar image for the group
   """
@@ -8395,6 +8403,13 @@ input GroupHistoryWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  is_managed field predicates
+  """
+  isManaged: Boolean
+  isManagedNEQ: Boolean
+  isManagedIsNil: Boolean
+  isManagedNotNil: Boolean
   """
   display_name field predicates
   """
@@ -9537,6 +9552,13 @@ input GroupWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  is_managed field predicates
+  """
+  isManaged: Boolean
+  isManagedNEQ: Boolean
+  isManagedIsNil: Boolean
+  isManagedNotNil: Boolean
   """
   display_name field predicates
   """

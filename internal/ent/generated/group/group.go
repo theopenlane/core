@@ -37,6 +37,8 @@ const (
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldIsManaged holds the string denoting the is_managed field in the database.
+	FieldIsManaged = "is_managed"
 	// FieldGravatarLogoURL holds the string denoting the gravatar_logo_url field in the database.
 	FieldGravatarLogoURL = "gravatar_logo_url"
 	// FieldLogoURL holds the string denoting the logo_url field in the database.
@@ -321,6 +323,7 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldDescription,
+	FieldIsManaged,
 	FieldGravatarLogoURL,
 	FieldLogoURL,
 	FieldDisplayName,
@@ -441,7 +444,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
+	Hooks        [7]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -458,6 +461,8 @@ var (
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultIsManaged holds the default value on creation for the "is_managed" field.
+	DefaultIsManaged bool
 	// DefaultDisplayName holds the default value on creation for the "display_name" field.
 	DefaultDisplayName string
 	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
@@ -522,6 +527,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByIsManaged orders the results by the is_managed field.
+func ByIsManaged(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsManaged, opts...).ToFunc()
 }
 
 // ByGravatarLogoURL orders the results by the gravatar_logo_url field.

@@ -403,7 +403,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor permissions
 	anotherAdminUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(&anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
@@ -411,7 +411,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 	// also add them to the same group as testUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
 	anotherViewerUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(&anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
@@ -421,7 +421,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 	// create a view only user and add them to the same organization as testUser1
 	meowViewerUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(&meowViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, &meowViewerUser, enums.RoleMember, testUser1.OrganizationID)
 
 	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)

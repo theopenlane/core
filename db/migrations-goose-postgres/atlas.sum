@@ -1,4 +1,4 @@
-h1:I6+x6Xrpl6vRY8YmytqV1hS1C6AN5rIiydu0/AibHFo=
+h1:SvdYZY+jhvoJO611V/nLdeRww51BAlR9JpePeCDC154=
 20241211231032_init.sql h1:Cj6GduEDECy6Y+8DfI6767WosqG2AKWybIyJJ6AgKqA=
 20241212223714_consistent_naming.sql h1:RvnNmsStlHkmAdSCnX1fFh/KYgfj1RMYYEc4iCN9JcQ=
 20250109002850_billing_address.sql h1:m0ek3WXqRgS3+ZbSa/DcIMB16vb8Tjm2MgNqyRll3rU=
@@ -6,3 +6,5 @@ h1:I6+x6Xrpl6vRY8YmytqV1hS1C6AN5rIiydu0/AibHFo=
 20250110162830_subscription_price.sql h1:ju8ocKPbqtOalaBZ1aGk8qCDLbgxFCDoA0Dmkr9bLzA=
 20250110233413_orgsubsfeatures.sql h1:bEdXn+bDT7GuWRRkCYiFCK6t91DxjeEmkFWme2K/lCw=
 20250114212723_avatar_files.sql h1:CmUGP2CRigFaGGhFdUt0uIDTOSy1HhIqao++18/KWsU=
+20250115183331_managed_groups.sql h1:AdVu5549xOolPlU5zUuy1JdR1TTHr/uSI2xv1LvFZZs=
+20250116051102_membership_edges.sql h1:uQTmqRX56YTDxMZ4w681orLrnLlCC5XIreJIOsrgLeE=

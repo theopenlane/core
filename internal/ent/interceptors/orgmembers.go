@@ -5,8 +5,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/99designs/gqlgen/graphql"
-
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -23,9 +22,10 @@ func TraverseOrgMembers() ent.Interceptor {
 			return nil
 		}
 
-		// Organization list queries should not be filtered by organization id
+		// Organization list queries should not be deduped, they
+		// will show up under each org they are a member of
 		ctxQuery := ent.QueryFromContext(ctx)
-		if ctxQuery.Type == "Organization" {
+		if ctxQuery.Type == generated.TypeOrganization {
 			return nil
 		}
 
@@ -57,10 +57,14 @@ func InterceptorOrgMember() ent.Interceptor {
 				return nil, err
 			}
 
+			if orgMembersSkipInterceptor(ctx, v) {
+				return v, nil
+			}
+
 			// deduplicate the org members if the query is for org members
 			members, ok := v.([]*generated.OrgMembership)
 			if !ok {
-				return v, err
+				return v, nil
 			}
 
 			return dedupeOrgMembers(ctx, members)
@@ -70,21 +74,29 @@ func InterceptorOrgMember() ent.Interceptor {
 
 // dedupeOrgMembers removes duplicate org members from the list
 func dedupeOrgMembers(ctx context.Context, members []*generated.OrgMembership) ([]*generated.OrgMembership, error) {
-	authorizedOrg, err := getQueriedOrg(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	seen := map[string]*generated.OrgMembership{}
 	deduped := []*generated.OrgMembership{}
 
 	for _, om := range members {
-		if _, ok := seen[om.UserID]; ok {
-			// prefer the direct membership over the indirect one
-			if om.OrganizationID == authorizedOrg {
-				seen[om.UserID] = om
-			}
-		} else {
+		// we dedupe for hierarchical orgs, we should skip this if the org has no parent or children
+		org, err := om.Organization(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		children, err := org.QueryChildren().All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		if org.ParentOrganizationID == "" && len(children) == 0 {
+			deduped = append(deduped, om)
+			seen[om.UserID] = om
+
+			continue
+		}
+
+		if _, ok := seen[om.UserID]; !ok {
 			deduped = append(deduped, om)
 			seen[om.UserID] = om
 		}
@@ -93,26 +105,22 @@ func dedupeOrgMembers(ctx context.Context, members []*generated.OrgMembership) (
 	return deduped, nil
 }
 
-// getQueriedOrg gets the organization id from the context or the graphql context
-func getQueriedOrg(ctx context.Context) (string, error) {
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err == nil {
-		return orgID, nil
+// orgMembersSkipInterceptor includes conditions to skip the org members interceptor
+func orgMembersSkipInterceptor(ctx context.Context, v ent.Value) bool {
+	// bypass filter if the request is internal and already set to allowed
+	// this only happens from internal requests
+	// and we don't need to dedupe the org members
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return true
 	}
 
-	// when the organization id is not in the context, try to get it from the graphql context
-	// for the Organization query
-	gtx := graphql.GetFieldContext(ctx)
-	if gtx != nil {
-		if gtx.Object == "Organization" {
-			if gtx.Parent != nil && gtx.Parent.Args != nil {
-				orgID, ok := gtx.Parent.Args["id"]
-				if ok {
-					return orgID.(string), nil
-				}
-			}
-		}
+	if entx.CheckIsSoftDelete(ctx) {
+		return true
 	}
 
-	return "", ErrRetrievingObjects
+	// Organization list queries should not be deduped, they
+	// will show up under each org they are a member of
+	ctxQuery := ent.QueryFromContext(ctx)
+
+	return ctxQuery.Type == generated.TypeOrganization
 }

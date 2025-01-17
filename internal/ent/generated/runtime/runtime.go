@@ -1135,6 +1135,8 @@ func init() {
 	group.Hooks[4] = groupHooks[0]
 
 	group.Hooks[5] = groupHooks[1]
+
+	group.Hooks[6] = groupHooks[2]
 	groupMixinInters1 := groupMixin[1].Interceptors()
 	groupMixinInters4 := groupMixin[4].Interceptors()
 	groupInters := schema.Group{}.Interceptors()
@@ -1177,8 +1179,12 @@ func init() {
 	groupDescName := groupFields[0].Descriptor()
 	// group.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	group.NameValidator = groupDescName.Validators[0].(func(string) error)
+	// groupDescIsManaged is the schema descriptor for is_managed field.
+	groupDescIsManaged := groupFields[2].Descriptor()
+	// group.DefaultIsManaged holds the default value on creation for the is_managed field.
+	group.DefaultIsManaged = groupDescIsManaged.Default.(bool)
 	// groupDescDisplayName is the schema descriptor for display_name field.
-	groupDescDisplayName := groupFields[4].Descriptor()
+	groupDescDisplayName := groupFields[5].Descriptor()
 	// group.DefaultDisplayName holds the default value on creation for the display_name field.
 	group.DefaultDisplayName = groupDescDisplayName.Default.(string)
 	// group.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
@@ -1213,8 +1219,12 @@ func init() {
 	grouphistoryDescTags := grouphistoryFields[11].Descriptor()
 	// grouphistory.DefaultTags holds the default value on creation for the tags field.
 	grouphistory.DefaultTags = grouphistoryDescTags.Default.([]string)
+	// grouphistoryDescIsManaged is the schema descriptor for is_managed field.
+	grouphistoryDescIsManaged := grouphistoryFields[15].Descriptor()
+	// grouphistory.DefaultIsManaged holds the default value on creation for the is_managed field.
+	grouphistory.DefaultIsManaged = grouphistoryDescIsManaged.Default.(bool)
 	// grouphistoryDescDisplayName is the schema descriptor for display_name field.
-	grouphistoryDescDisplayName := grouphistoryFields[17].Descriptor()
+	grouphistoryDescDisplayName := grouphistoryFields[18].Descriptor()
 	// grouphistory.DefaultDisplayName holds the default value on creation for the display_name field.
 	grouphistory.DefaultDisplayName = grouphistoryDescDisplayName.Default.(string)
 	// grouphistoryDescID is the schema descriptor for id field.
@@ -1957,6 +1967,8 @@ func init() {
 	orgmembership.Hooks[3] = orgmembershipHooks[0]
 
 	orgmembership.Hooks[4] = orgmembershipHooks[1]
+
+	orgmembership.Hooks[5] = orgmembershipHooks[2]
 	orgmembershipMixinInters2 := orgmembershipMixin[2].Interceptors()
 	orgmembershipInters := schema.OrgMembership{}.Interceptors()
 	orgmembership.Interceptors[0] = orgmembershipMixinInters2[0]

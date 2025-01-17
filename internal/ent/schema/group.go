@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -41,6 +42,14 @@ func (Group) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.Bool("is_managed").
+			Comment("whether the group is managed by the system").
+			Optional().
+			Immutable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Default(false),
 		field.String("gravatar_logo_url").
 			Comment("the URL to an auto generated gravatar image for the group").
 			Optional().
@@ -169,7 +178,7 @@ func (Group) Annotations() []schema.Annotation {
 // Interceptors of the Group
 func (Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorGroup(),
+		interceptors.FilterListQuery(),
 	}
 }
 
@@ -178,6 +187,7 @@ func (Group) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookGroupAuthz(),
 		hooks.HookGroup(),
+		hooks.HookManagedGroups(),
 	}
 }
 
@@ -186,6 +196,7 @@ func (Group) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			entfga.CheckReadAccess[*generated.GroupQuery](),
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),

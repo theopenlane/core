@@ -2130,6 +2130,7 @@ func (uq *UserQuery) loadGroupMemberships(ctx context.Context, query *GroupMembe
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(groupmembership.FieldUserID)
 	}
@@ -2190,6 +2191,7 @@ func (uq *UserQuery) loadProgramMemberships(ctx context.Context, query *ProgramM
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(programmembership.FieldUserID)
 	}

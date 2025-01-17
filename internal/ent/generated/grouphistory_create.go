@@ -193,6 +193,20 @@ func (ghc *GroupHistoryCreate) SetNillableDescription(s *string) *GroupHistoryCr
 	return ghc
 }
 
+// SetIsManaged sets the "is_managed" field.
+func (ghc *GroupHistoryCreate) SetIsManaged(b bool) *GroupHistoryCreate {
+	ghc.mutation.SetIsManaged(b)
+	return ghc
+}
+
+// SetNillableIsManaged sets the "is_managed" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableIsManaged(b *bool) *GroupHistoryCreate {
+	if b != nil {
+		ghc.SetIsManaged(*b)
+	}
+	return ghc
+}
+
 // SetGravatarLogoURL sets the "gravatar_logo_url" field.
 func (ghc *GroupHistoryCreate) SetGravatarLogoURL(s string) *GroupHistoryCreate {
 	ghc.mutation.SetGravatarLogoURL(s)
@@ -303,6 +317,10 @@ func (ghc *GroupHistoryCreate) defaults() {
 	if _, ok := ghc.mutation.Tags(); !ok {
 		v := grouphistory.DefaultTags
 		ghc.mutation.SetTags(v)
+	}
+	if _, ok := ghc.mutation.IsManaged(); !ok {
+		v := grouphistory.DefaultIsManaged
+		ghc.mutation.SetIsManaged(v)
 	}
 	if _, ok := ghc.mutation.DisplayName(); !ok {
 		v := grouphistory.DefaultDisplayName
@@ -427,6 +445,10 @@ func (ghc *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec
 	if value, ok := ghc.mutation.Description(); ok {
 		_spec.SetField(grouphistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := ghc.mutation.IsManaged(); ok {
+		_spec.SetField(grouphistory.FieldIsManaged, field.TypeBool, value)
+		_node.IsManaged = value
 	}
 	if value, ok := ghc.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(grouphistory.FieldGravatarLogoURL, field.TypeString, value)

@@ -42,6 +42,8 @@ type Group struct {
 	Name string `json:"name,omitempty"`
 	// the groups description
 	Description string `json:"description,omitempty"`
+	// whether the group is managed by the system
+	IsManaged bool `json:"is_managed,omitempty"`
 	// the URL to an auto generated gravatar image for the group
 	GravatarLogoURL string `json:"gravatar_logo_url,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
@@ -505,6 +507,8 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case group.FieldTags:
 			values[i] = new([]byte)
+		case group.FieldIsManaged:
+			values[i] = new(sql.NullBool)
 		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldDeletedBy, group.FieldMappingID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt, group.FieldDeletedAt:
@@ -597,6 +601,12 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				gr.Description = value.String
+			}
+		case group.FieldIsManaged:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_managed", values[i])
+			} else if value.Valid {
+				gr.IsManaged = value.Bool
 			}
 		case group.FieldGravatarLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -864,6 +874,9 @@ func (gr *Group) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(gr.Description)
+	builder.WriteString(", ")
+	builder.WriteString("is_managed=")
+	builder.WriteString(fmt.Sprintf("%v", gr.IsManaged))
 	builder.WriteString(", ")
 	builder.WriteString("gravatar_logo_url=")
 	builder.WriteString(gr.GravatarLogoURL)
