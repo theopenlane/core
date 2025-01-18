@@ -65,7 +65,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.1
 	github.com/theopenlane/emailtemplates v0.1.2
-	github.com/theopenlane/entx v0.3.3
+	github.com/theopenlane/entx v0.4.0
 	github.com/theopenlane/gqlgen-plugins v0.4.2
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.7.0
