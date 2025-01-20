@@ -77,20 +77,6 @@ func (evtc *EmailVerificationTokenCreate) SetNillableUpdatedBy(s *string) *Email
 	return evtc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (evtc *EmailVerificationTokenCreate) SetMappingID(s string) *EmailVerificationTokenCreate {
-	evtc.mutation.SetMappingID(s)
-	return evtc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (evtc *EmailVerificationTokenCreate) SetNillableMappingID(s *string) *EmailVerificationTokenCreate {
-	if s != nil {
-		evtc.SetMappingID(*s)
-	}
-	return evtc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (evtc *EmailVerificationTokenCreate) SetDeletedAt(t time.Time) *EmailVerificationTokenCreate {
 	evtc.mutation.SetDeletedAt(t)
@@ -219,13 +205,6 @@ func (evtc *EmailVerificationTokenCreate) defaults() error {
 		v := emailverificationtoken.DefaultUpdatedAt()
 		evtc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := evtc.mutation.MappingID(); !ok {
-		if emailverificationtoken.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized emailverificationtoken.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := emailverificationtoken.DefaultMappingID()
-		evtc.mutation.SetMappingID(v)
-	}
 	if _, ok := evtc.mutation.ID(); !ok {
 		if emailverificationtoken.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized emailverificationtoken.DefaultID (forgotten import generated/runtime?)")
@@ -238,9 +217,6 @@ func (evtc *EmailVerificationTokenCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (evtc *EmailVerificationTokenCreate) check() error {
-	if _, ok := evtc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "EmailVerificationToken.mapping_id"`)}
-	}
 	if _, ok := evtc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "EmailVerificationToken.owner_id"`)}
 	}
@@ -325,10 +301,6 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 	if value, ok := evtc.mutation.UpdatedBy(); ok {
 		_spec.SetField(emailverificationtoken.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := evtc.mutation.MappingID(); ok {
-		_spec.SetField(emailverificationtoken.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := evtc.mutation.DeletedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedAt, field.TypeTime, value)

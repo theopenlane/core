@@ -77,20 +77,6 @@ func (tsc *TFASettingCreate) SetNillableUpdatedBy(s *string) *TFASettingCreate {
 	return tsc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (tsc *TFASettingCreate) SetMappingID(s string) *TFASettingCreate {
-	tsc.mutation.SetMappingID(s)
-	return tsc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableMappingID(s *string) *TFASettingCreate {
-	if s != nil {
-		tsc.SetMappingID(*s)
-	}
-	return tsc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (tsc *TFASettingCreate) SetDeletedAt(t time.Time) *TFASettingCreate {
 	tsc.mutation.SetDeletedAt(t)
@@ -285,13 +271,6 @@ func (tsc *TFASettingCreate) defaults() error {
 		v := tfasetting.DefaultUpdatedAt()
 		tsc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tsc.mutation.MappingID(); !ok {
-		if tfasetting.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized tfasetting.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := tfasetting.DefaultMappingID()
-		tsc.mutation.SetMappingID(v)
-	}
 	if _, ok := tsc.mutation.Tags(); !ok {
 		v := tfasetting.DefaultTags
 		tsc.mutation.SetTags(v)
@@ -324,9 +303,6 @@ func (tsc *TFASettingCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (tsc *TFASettingCreate) check() error {
-	if _, ok := tsc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "TFASetting.mapping_id"`)}
-	}
 	if _, ok := tsc.mutation.Verified(); !ok {
 		return &ValidationError{Name: "verified", err: errors.New(`generated: missing required field "TFASetting.verified"`)}
 	}
@@ -381,10 +357,6 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 	if value, ok := tsc.mutation.UpdatedBy(); ok {
 		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := tsc.mutation.MappingID(); ok {
-		_spec.SetField(tfasetting.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := tsc.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)

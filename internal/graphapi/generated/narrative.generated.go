@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Narrative_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Narrative_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":
@@ -169,6 +171,8 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Narrative_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Narrative_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":
@@ -303,6 +307,8 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Narrative_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Narrative_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":

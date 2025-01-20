@@ -140,17 +140,9 @@ func (rhc *RiskHistoryCreate) SetNillableDeletedBy(s *string) *RiskHistoryCreate
 	return rhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (rhc *RiskHistoryCreate) SetMappingID(s string) *RiskHistoryCreate {
-	rhc.mutation.SetMappingID(s)
-	return rhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableMappingID(s *string) *RiskHistoryCreate {
-	if s != nil {
-		rhc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (rhc *RiskHistoryCreate) SetDisplayID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetDisplayID(s)
 	return rhc
 }
 
@@ -351,10 +343,6 @@ func (rhc *RiskHistoryCreate) defaults() {
 		v := riskhistory.DefaultUpdatedAt()
 		rhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := rhc.mutation.MappingID(); !ok {
-		v := riskhistory.DefaultMappingID()
-		rhc.mutation.SetMappingID(v)
-	}
 	if _, ok := rhc.mutation.Tags(); !ok {
 		v := riskhistory.DefaultTags
 		rhc.mutation.SetTags(v)
@@ -386,8 +374,8 @@ func (rhc *RiskHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := rhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "RiskHistory.mapping_id"`)}
+	if _, ok := rhc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "RiskHistory.display_id"`)}
 	}
 	if _, ok := rhc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "RiskHistory.owner_id"`)}
@@ -477,9 +465,9 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(riskhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := rhc.mutation.MappingID(); ok {
-		_spec.SetField(riskhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := rhc.mutation.DisplayID(); ok {
+		_spec.SetField(riskhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := rhc.mutation.Tags(); ok {
 		_spec.SetField(riskhistory.FieldTags, field.TypeJSON, value)

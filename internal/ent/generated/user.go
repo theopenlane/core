@@ -33,8 +33,8 @@ type User struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// Email holds the value of the "email" field.
@@ -314,7 +314,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldTags:
 			values[i] = new([]byte)
-		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldMappingID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFileID, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole:
+		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldDisplayID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFileID, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldDeletedAt, user.FieldAvatarUpdatedAt, user.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -375,11 +375,11 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.DeletedBy = value.String
 			}
-		case user.FieldMappingID:
+		case user.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				u.MappingID = value.String
+				u.DisplayID = value.String
 			}
 		case user.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -615,8 +615,8 @@ func (u *User) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(u.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(u.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(u.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", u.Tags))

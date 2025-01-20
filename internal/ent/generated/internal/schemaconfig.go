@@ -100,7 +100,6 @@ type SchemaConfig struct {
 	OrganizationEvents                   string // Organization-events->Event table.
 	OrganizationSecrets                  string // Organization-secrets->Hush table.
 	OrganizationFiles                    string // Organization-files->File table.
-	OrganizationTasks                    string // Organization-tasks->Task table.
 	OrganizationHistory                  string // OrganizationHistory table.
 	OrganizationSetting                  string // OrganizationSetting table.
 	OrganizationSettingFiles             string // OrganizationSetting-files->File table.

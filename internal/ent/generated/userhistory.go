@@ -38,8 +38,8 @@ type UserHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// Email holds the value of the "email" field.
@@ -78,7 +78,7 @@ func (*UserHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case userhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldMappingID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFileID, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
+		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldDisplayID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFileID, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
 			values[i] = new(sql.NullString)
 		case userhistory.FieldHistoryTime, userhistory.FieldCreatedAt, userhistory.FieldUpdatedAt, userhistory.FieldDeletedAt, userhistory.FieldAvatarUpdatedAt, userhistory.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -157,11 +157,11 @@ func (uh *UserHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				uh.DeletedBy = value.String
 			}
-		case userhistory.FieldMappingID:
+		case userhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				uh.MappingID = value.String
+				uh.DisplayID = value.String
 			}
 		case userhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -311,8 +311,8 @@ func (uh *UserHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(uh.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(uh.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(uh.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", uh.Tags))

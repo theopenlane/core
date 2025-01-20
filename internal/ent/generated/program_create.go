@@ -93,17 +93,9 @@ func (pc *ProgramCreate) SetNillableUpdatedBy(s *string) *ProgramCreate {
 	return pc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (pc *ProgramCreate) SetMappingID(s string) *ProgramCreate {
-	pc.mutation.SetMappingID(s)
-	return pc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableMappingID(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (pc *ProgramCreate) SetDisplayID(s string) *ProgramCreate {
+	pc.mutation.SetDisplayID(s)
 	return pc
 }
 
@@ -584,13 +576,6 @@ func (pc *ProgramCreate) defaults() error {
 		v := program.DefaultUpdatedAt()
 		pc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := pc.mutation.MappingID(); !ok {
-		if program.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized program.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := program.DefaultMappingID()
-		pc.mutation.SetMappingID(v)
-	}
 	if _, ok := pc.mutation.Tags(); !ok {
 		v := program.DefaultTags
 		pc.mutation.SetTags(v)
@@ -623,8 +608,13 @@ func (pc *ProgramCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProgramCreate) check() error {
-	if _, ok := pc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Program.mapping_id"`)}
+	if _, ok := pc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Program.display_id"`)}
+	}
+	if v, ok := pc.mutation.DisplayID(); ok {
+		if err := program.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Program.display_id": %w`, err)}
+		}
 	}
 	if v, ok := pc.mutation.OwnerID(); ok {
 		if err := program.OwnerIDValidator(v); err != nil {
@@ -708,9 +698,9 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pc.mutation.MappingID(); ok {
-		_spec.SetField(program.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := pc.mutation.DisplayID(); ok {
+		_spec.SetField(program.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := pc.mutation.DeletedAt(); ok {
 		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)

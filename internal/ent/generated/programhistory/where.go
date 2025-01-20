@@ -96,9 +96,9 @@ func UpdatedBy(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
-func MappingID(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldEQ(FieldMappingID, v))
+// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
+func DisplayID(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldDisplayID, v))
 }
 
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
@@ -536,69 +536,69 @@ func UpdatedByContainsFold(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// MappingIDEQ applies the EQ predicate on the "mapping_id" field.
-func MappingIDEQ(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldEQ(FieldMappingID, v))
+// DisplayIDEQ applies the EQ predicate on the "display_id" field.
+func DisplayIDEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldDisplayID, v))
 }
 
-// MappingIDNEQ applies the NEQ predicate on the "mapping_id" field.
-func MappingIDNEQ(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldNEQ(FieldMappingID, v))
+// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
+func DisplayIDNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldDisplayID, v))
 }
 
-// MappingIDIn applies the In predicate on the "mapping_id" field.
-func MappingIDIn(vs ...string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldIn(FieldMappingID, vs...))
+// DisplayIDIn applies the In predicate on the "display_id" field.
+func DisplayIDIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldDisplayID, vs...))
 }
 
-// MappingIDNotIn applies the NotIn predicate on the "mapping_id" field.
-func MappingIDNotIn(vs ...string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldNotIn(FieldMappingID, vs...))
+// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
+func DisplayIDNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldDisplayID, vs...))
 }
 
-// MappingIDGT applies the GT predicate on the "mapping_id" field.
-func MappingIDGT(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldGT(FieldMappingID, v))
+// DisplayIDGT applies the GT predicate on the "display_id" field.
+func DisplayIDGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldDisplayID, v))
 }
 
-// MappingIDGTE applies the GTE predicate on the "mapping_id" field.
-func MappingIDGTE(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldGTE(FieldMappingID, v))
+// DisplayIDGTE applies the GTE predicate on the "display_id" field.
+func DisplayIDGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldDisplayID, v))
 }
 
-// MappingIDLT applies the LT predicate on the "mapping_id" field.
-func MappingIDLT(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldLT(FieldMappingID, v))
+// DisplayIDLT applies the LT predicate on the "display_id" field.
+func DisplayIDLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldDisplayID, v))
 }
 
-// MappingIDLTE applies the LTE predicate on the "mapping_id" field.
-func MappingIDLTE(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldLTE(FieldMappingID, v))
+// DisplayIDLTE applies the LTE predicate on the "display_id" field.
+func DisplayIDLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldDisplayID, v))
 }
 
-// MappingIDContains applies the Contains predicate on the "mapping_id" field.
-func MappingIDContains(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldContains(FieldMappingID, v))
+// DisplayIDContains applies the Contains predicate on the "display_id" field.
+func DisplayIDContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldDisplayID, v))
 }
 
-// MappingIDHasPrefix applies the HasPrefix predicate on the "mapping_id" field.
-func MappingIDHasPrefix(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldMappingID, v))
+// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
+func DisplayIDHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldDisplayID, v))
 }
 
-// MappingIDHasSuffix applies the HasSuffix predicate on the "mapping_id" field.
-func MappingIDHasSuffix(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldMappingID, v))
+// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
+func DisplayIDHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldDisplayID, v))
 }
 
-// MappingIDEqualFold applies the EqualFold predicate on the "mapping_id" field.
-func MappingIDEqualFold(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldEqualFold(FieldMappingID, v))
+// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
+func DisplayIDEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldDisplayID, v))
 }
 
-// MappingIDContainsFold applies the ContainsFold predicate on the "mapping_id" field.
-func MappingIDContainsFold(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldContainsFold(FieldMappingID, v))
+// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
+func DisplayIDContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.

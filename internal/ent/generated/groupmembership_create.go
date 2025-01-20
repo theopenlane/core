@@ -81,20 +81,6 @@ func (gmc *GroupMembershipCreate) SetNillableUpdatedBy(s *string) *GroupMembersh
 	return gmc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (gmc *GroupMembershipCreate) SetMappingID(s string) *GroupMembershipCreate {
-	gmc.mutation.SetMappingID(s)
-	return gmc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (gmc *GroupMembershipCreate) SetNillableMappingID(s *string) *GroupMembershipCreate {
-	if s != nil {
-		gmc.SetMappingID(*s)
-	}
-	return gmc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (gmc *GroupMembershipCreate) SetDeletedAt(t time.Time) *GroupMembershipCreate {
 	gmc.mutation.SetDeletedAt(t)
@@ -258,13 +244,6 @@ func (gmc *GroupMembershipCreate) defaults() error {
 		v := groupmembership.DefaultUpdatedAt()
 		gmc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gmc.mutation.MappingID(); !ok {
-		if groupmembership.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized groupmembership.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := groupmembership.DefaultMappingID()
-		gmc.mutation.SetMappingID(v)
-	}
 	if _, ok := gmc.mutation.Role(); !ok {
 		v := groupmembership.DefaultRole
 		gmc.mutation.SetRole(v)
@@ -281,9 +260,6 @@ func (gmc *GroupMembershipCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (gmc *GroupMembershipCreate) check() error {
-	if _, ok := gmc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "GroupMembership.mapping_id"`)}
-	}
 	if _, ok := gmc.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "GroupMembership.role"`)}
 	}
@@ -355,10 +331,6 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 	if value, ok := gmc.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := gmc.mutation.MappingID(); ok {
-		_spec.SetField(groupmembership.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := gmc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)

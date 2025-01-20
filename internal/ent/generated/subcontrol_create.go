@@ -110,17 +110,9 @@ func (sc *SubcontrolCreate) SetNillableDeletedBy(s *string) *SubcontrolCreate {
 	return sc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (sc *SubcontrolCreate) SetMappingID(s string) *SubcontrolCreate {
-	sc.mutation.SetMappingID(s)
-	return sc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableMappingID(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (sc *SubcontrolCreate) SetDisplayID(s string) *SubcontrolCreate {
+	sc.mutation.SetDisplayID(s)
 	return sc
 }
 
@@ -493,13 +485,6 @@ func (sc *SubcontrolCreate) defaults() error {
 		v := subcontrol.DefaultUpdatedAt()
 		sc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sc.mutation.MappingID(); !ok {
-		if subcontrol.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized subcontrol.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := subcontrol.DefaultMappingID()
-		sc.mutation.SetMappingID(v)
-	}
 	if _, ok := sc.mutation.Tags(); !ok {
 		v := subcontrol.DefaultTags
 		sc.mutation.SetTags(v)
@@ -516,8 +501,13 @@ func (sc *SubcontrolCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *SubcontrolCreate) check() error {
-	if _, ok := sc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Subcontrol.mapping_id"`)}
+	if _, ok := sc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Subcontrol.display_id"`)}
+	}
+	if v, ok := sc.mutation.DisplayID(); ok {
+		if err := subcontrol.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.display_id": %w`, err)}
+		}
 	}
 	if _, ok := sc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Subcontrol.owner_id"`)}
@@ -601,9 +591,9 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := sc.mutation.MappingID(); ok {
-		_spec.SetField(subcontrol.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := sc.mutation.DisplayID(); ok {
+		_spec.SetField(subcontrol.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := sc.mutation.Tags(); ok {
 		_spec.SetField(subcontrol.FieldTags, field.TypeJSON, value)

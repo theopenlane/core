@@ -37,8 +37,8 @@ type SubcontrolHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -87,7 +87,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldMappingID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldName, subcontrolhistory.FieldDescription, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSubcontrolType, subcontrolhistory.FieldVersion, subcontrolhistory.FieldSubcontrolNumber, subcontrolhistory.FieldFamily, subcontrolhistory.FieldClass, subcontrolhistory.FieldSource, subcontrolhistory.FieldMappedFrameworks, subcontrolhistory.FieldImplementationEvidence, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationVerification:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldName, subcontrolhistory.FieldDescription, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSubcontrolType, subcontrolhistory.FieldVersion, subcontrolhistory.FieldSubcontrolNumber, subcontrolhistory.FieldFamily, subcontrolhistory.FieldClass, subcontrolhistory.FieldSource, subcontrolhistory.FieldMappedFrameworks, subcontrolhistory.FieldImplementationEvidence, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationVerification:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt, subcontrolhistory.FieldImplementationDate, subcontrolhistory.FieldImplementationVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -166,11 +166,11 @@ func (sh *SubcontrolHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				sh.DeletedBy = value.String
 			}
-		case subcontrolhistory.FieldMappingID:
+		case subcontrolhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				sh.MappingID = value.String
+				sh.DisplayID = value.String
 			}
 		case subcontrolhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -347,8 +347,8 @@ func (sh *SubcontrolHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(sh.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(sh.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(sh.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Tags))

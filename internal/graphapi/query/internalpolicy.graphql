@@ -7,6 +7,7 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
       description
       details
       id
+      displayID
       name
       policyType
       purposeAndScope
@@ -28,6 +29,7 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
       description
       details
       id
+      displayID
       name
       policyType
       purposeAndScope
@@ -49,6 +51,7 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       description
       details
       id
+      displayID
       name
       policyType
       purposeAndScope
@@ -85,6 +88,7 @@ query GetAllInternalPolicies {
         description
         details
         id
+        displayID
         name
         policyType
         purposeAndScope
@@ -116,6 +120,7 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
         description
         details
         id
+        displayID
         name
         policyType
         purposeAndScope
@@ -145,6 +150,7 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
     description
     details
     id
+    displayID
     name
     policyType
     purposeAndScope
@@ -173,6 +179,7 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       description
       details
       id
+      displayID
       name
       policyType
       purposeAndScope

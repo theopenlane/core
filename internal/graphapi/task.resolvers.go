@@ -11,10 +11,17 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTask is the resolver for the createTask field.
 func (r *mutationResolver) CreateTask(ctx context.Context, input generated.CreateTaskInput) (*model.TaskCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	res, err := withTransactionalMutation(ctx).Task.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "task"})
@@ -47,6 +54,11 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input gene
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
+	}
+
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request

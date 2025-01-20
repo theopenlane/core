@@ -124,40 +124,19 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(
 				entx.CascadeAnnotationField("Child"),
 			),
-		edge.To("groups", Group.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-			),
-		edge.To("templates", Template.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-			),
-		edge.To("integrations", Integration.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-			),
+
 		edge.To("setting", OrganizationSetting.Type).
 			Unique().
 			Annotations(
 				entx.CascadeAnnotationField("Organization"),
 			),
-		edge.To("document_data", DocumentData.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-			),
-		edge.To("org_subscriptions", OrgSubscription.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-			),
+
 		edge.To("personal_access_tokens", PersonalAccessToken.Type),
 		edge.To("api_tokens", APIToken.Type),
 		edge.From("users", User.Type).
 			Ref("organizations").
 			Through("members", OrgMembership.Type),
-		edge.To("invites", Invite.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
-		edge.To("subscribers", Subscriber.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+
 		edge.To("events", Event.Type),
 		edge.To("secrets", Hush.Type),
 		edge.To("files", File.Type),
@@ -165,6 +144,20 @@ func (Organization) Edges() []ent.Edge {
 			Field("avatar_local_file_id").Unique(),
 
 		// Organization owns the following entities
+		edge.To("groups", Group.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("templates", Template.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("integrations", Integration.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("document_data", DocumentData.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("org_subscriptions", OrgSubscription.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("invites", Invite.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("subscribers", Subscriber.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("entities", Entity.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("entity_types", EntityType.Type).
@@ -174,7 +167,7 @@ func (Organization) Edges() []ent.Edge {
 		edge.To("notes", Note.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("tasks", Task.Type).
-			Annotations(entx.CascadeAnnotationField("Organization")),
+			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("programs", Program.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("procedures", Procedure.Type).

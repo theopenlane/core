@@ -82,7 +82,7 @@ func (Procedure) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("PRD"),
 		emixin.TagMixin{},
 		NewOrgOwnMixinWithRef("procedures"),
 		// add group edit permissions to the procedure

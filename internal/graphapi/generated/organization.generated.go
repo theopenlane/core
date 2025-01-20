@@ -119,28 +119,14 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
 				return ec.fieldContext_Organization_children(ctx, field)
-			case "groups":
-				return ec.fieldContext_Organization_groups(ctx, field)
-			case "templates":
-				return ec.fieldContext_Organization_templates(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Organization_integrations(ctx, field)
 			case "setting":
 				return ec.fieldContext_Organization_setting(ctx, field)
-			case "documentData":
-				return ec.fieldContext_Organization_documentData(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 			case "personalAccessTokens":
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
 			case "users":
 				return ec.fieldContext_Organization_users(ctx, field)
-			case "invites":
-				return ec.fieldContext_Organization_invites(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "events":
 				return ec.fieldContext_Organization_events(ctx, field)
 			case "secrets":
@@ -149,6 +135,20 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_files(ctx, field)
 			case "avatarFile":
 				return ec.fieldContext_Organization_avatarFile(ctx, field)
+			case "groups":
+				return ec.fieldContext_Organization_groups(ctx, field)
+			case "templates":
+				return ec.fieldContext_Organization_templates(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Organization_integrations(ctx, field)
+			case "documentData":
+				return ec.fieldContext_Organization_documentData(ctx, field)
+			case "orgSubscriptions":
+				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
+			case "invites":
+				return ec.fieldContext_Organization_invites(ctx, field)
+			case "subscribers":
+				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":
@@ -277,28 +277,14 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
 				return ec.fieldContext_Organization_children(ctx, field)
-			case "groups":
-				return ec.fieldContext_Organization_groups(ctx, field)
-			case "templates":
-				return ec.fieldContext_Organization_templates(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Organization_integrations(ctx, field)
 			case "setting":
 				return ec.fieldContext_Organization_setting(ctx, field)
-			case "documentData":
-				return ec.fieldContext_Organization_documentData(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 			case "personalAccessTokens":
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
 			case "users":
 				return ec.fieldContext_Organization_users(ctx, field)
-			case "invites":
-				return ec.fieldContext_Organization_invites(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "events":
 				return ec.fieldContext_Organization_events(ctx, field)
 			case "secrets":
@@ -307,6 +293,20 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_files(ctx, field)
 			case "avatarFile":
 				return ec.fieldContext_Organization_avatarFile(ctx, field)
+			case "groups":
+				return ec.fieldContext_Organization_groups(ctx, field)
+			case "templates":
+				return ec.fieldContext_Organization_templates(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Organization_integrations(ctx, field)
+			case "documentData":
+				return ec.fieldContext_Organization_documentData(ctx, field)
+			case "orgSubscriptions":
+				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
+			case "invites":
+				return ec.fieldContext_Organization_invites(ctx, field)
+			case "subscribers":
+				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":
@@ -479,28 +479,14 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
 				return ec.fieldContext_Organization_children(ctx, field)
-			case "groups":
-				return ec.fieldContext_Organization_groups(ctx, field)
-			case "templates":
-				return ec.fieldContext_Organization_templates(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Organization_integrations(ctx, field)
 			case "setting":
 				return ec.fieldContext_Organization_setting(ctx, field)
-			case "documentData":
-				return ec.fieldContext_Organization_documentData(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 			case "personalAccessTokens":
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
 			case "users":
 				return ec.fieldContext_Organization_users(ctx, field)
-			case "invites":
-				return ec.fieldContext_Organization_invites(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "events":
 				return ec.fieldContext_Organization_events(ctx, field)
 			case "secrets":
@@ -509,6 +495,20 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_files(ctx, field)
 			case "avatarFile":
 				return ec.fieldContext_Organization_avatarFile(ctx, field)
+			case "groups":
+				return ec.fieldContext_Organization_groups(ctx, field)
+			case "templates":
+				return ec.fieldContext_Organization_templates(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Organization_integrations(ctx, field)
+			case "documentData":
+				return ec.fieldContext_Organization_documentData(ctx, field)
+			case "orgSubscriptions":
+				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
+			case "invites":
+				return ec.fieldContext_Organization_invites(ctx, field)
+			case "subscribers":
+				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":

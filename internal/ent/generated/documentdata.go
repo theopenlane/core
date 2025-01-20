@@ -29,8 +29,6 @@ type DocumentData struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -116,7 +114,7 @@ func (*DocumentData) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case documentdata.FieldTags, documentdata.FieldData:
 			values[i] = new([]byte)
-		case documentdata.FieldID, documentdata.FieldCreatedBy, documentdata.FieldUpdatedBy, documentdata.FieldMappingID, documentdata.FieldDeletedBy, documentdata.FieldOwnerID, documentdata.FieldTemplateID:
+		case documentdata.FieldID, documentdata.FieldCreatedBy, documentdata.FieldUpdatedBy, documentdata.FieldDeletedBy, documentdata.FieldOwnerID, documentdata.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdata.FieldCreatedAt, documentdata.FieldUpdatedAt, documentdata.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -164,12 +162,6 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				dd.UpdatedBy = value.String
-			}
-		case documentdata.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				dd.MappingID = value.String
 			}
 		case documentdata.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -278,9 +270,6 @@ func (dd *DocumentData) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(dd.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(dd.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", dd.Tags))

@@ -112,20 +112,6 @@ func (chc *ContactHistoryCreate) SetNillableUpdatedBy(s *string) *ContactHistory
 	return chc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (chc *ContactHistoryCreate) SetMappingID(s string) *ContactHistoryCreate {
-	chc.mutation.SetMappingID(s)
-	return chc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableMappingID(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetMappingID(*s)
-	}
-	return chc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (chc *ContactHistoryCreate) SetDeletedAt(t time.Time) *ContactHistoryCreate {
 	chc.mutation.SetDeletedAt(t)
@@ -325,10 +311,6 @@ func (chc *ContactHistoryCreate) defaults() {
 		v := contacthistory.DefaultUpdatedAt()
 		chc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := chc.mutation.MappingID(); !ok {
-		v := contacthistory.DefaultMappingID()
-		chc.mutation.SetMappingID(v)
-	}
 	if _, ok := chc.mutation.Tags(); !ok {
 		v := contacthistory.DefaultTags
 		chc.mutation.SetTags(v)
@@ -355,9 +337,6 @@ func (chc *ContactHistoryCreate) check() error {
 		if err := contacthistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ContactHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := chc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ContactHistory.mapping_id"`)}
 	}
 	if _, ok := chc.mutation.FullName(); !ok {
 		return &ValidationError{Name: "full_name", err: errors.New(`generated: missing required field "ContactHistory.full_name"`)}
@@ -433,10 +412,6 @@ func (chc *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.Create
 	if value, ok := chc.mutation.UpdatedBy(); ok {
 		_spec.SetField(contacthistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := chc.mutation.MappingID(); ok {
-		_spec.SetField(contacthistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := chc.mutation.DeletedAt(); ok {
 		_spec.SetField(contacthistory.FieldDeletedAt, field.TypeTime, value)

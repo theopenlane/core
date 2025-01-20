@@ -316,6 +316,9 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			require.NotEmpty(t, resp.CreateControl.Control.ID)
 			assert.Equal(t, tc.request.Name, resp.CreateControl.Control.Name)
 
+			assert.NotEmpty(t, resp.CreateControl.Control.DisplayID)
+			assert.Contains(t, resp.CreateControl.Control.DisplayID, "CTL-")
+
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
 				require.NotEmpty(t, resp.CreateControl.Control.Programs)

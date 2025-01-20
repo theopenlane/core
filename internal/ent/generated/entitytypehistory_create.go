@@ -111,20 +111,6 @@ func (ethc *EntityTypeHistoryCreate) SetNillableUpdatedBy(s *string) *EntityType
 	return ethc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ethc *EntityTypeHistoryCreate) SetMappingID(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetMappingID(s)
-	return ethc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableMappingID(s *string) *EntityTypeHistoryCreate {
-	if s != nil {
-		ethc.SetMappingID(*s)
-	}
-	return ethc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ethc *EntityTypeHistoryCreate) SetDeletedAt(t time.Time) *EntityTypeHistoryCreate {
 	ethc.mutation.SetDeletedAt(t)
@@ -240,10 +226,6 @@ func (ethc *EntityTypeHistoryCreate) defaults() {
 		v := entitytypehistory.DefaultUpdatedAt()
 		ethc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ethc.mutation.MappingID(); !ok {
-		v := entitytypehistory.DefaultMappingID()
-		ethc.mutation.SetMappingID(v)
-	}
 	if _, ok := ethc.mutation.Tags(); !ok {
 		v := entitytypehistory.DefaultTags
 		ethc.mutation.SetTags(v)
@@ -266,9 +248,6 @@ func (ethc *EntityTypeHistoryCreate) check() error {
 		if err := entitytypehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "EntityTypeHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ethc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "EntityTypeHistory.mapping_id"`)}
 	}
 	if _, ok := ethc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "EntityTypeHistory.name"`)}
@@ -336,10 +315,6 @@ func (ethc *EntityTypeHistoryCreate) createSpec() (*EntityTypeHistory, *sqlgraph
 	if value, ok := ethc.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := ethc.mutation.MappingID(); ok {
-		_spec.SetField(entitytypehistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ethc.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldDeletedAt, field.TypeTime, value)

@@ -111,17 +111,9 @@ func (rc *RiskCreate) SetNillableDeletedBy(s *string) *RiskCreate {
 	return rc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (rc *RiskCreate) SetMappingID(s string) *RiskCreate {
-	rc.mutation.SetMappingID(s)
-	return rc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableMappingID(s *string) *RiskCreate {
-	if s != nil {
-		rc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (rc *RiskCreate) SetDisplayID(s string) *RiskCreate {
+	rc.mutation.SetDisplayID(s)
 	return rc
 }
 
@@ -436,13 +428,6 @@ func (rc *RiskCreate) defaults() error {
 		v := risk.DefaultUpdatedAt()
 		rc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := rc.mutation.MappingID(); !ok {
-		if risk.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized risk.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := risk.DefaultMappingID()
-		rc.mutation.SetMappingID(v)
-	}
 	if _, ok := rc.mutation.Tags(); !ok {
 		v := risk.DefaultTags
 		rc.mutation.SetTags(v)
@@ -467,8 +452,13 @@ func (rc *RiskCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RiskCreate) check() error {
-	if _, ok := rc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Risk.mapping_id"`)}
+	if _, ok := rc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Risk.display_id"`)}
+	}
+	if v, ok := rc.mutation.DisplayID(); ok {
+		if err := risk.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Risk.display_id": %w`, err)}
+		}
 	}
 	if _, ok := rc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Risk.owner_id"`)}
@@ -559,9 +549,9 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := rc.mutation.MappingID(); ok {
-		_spec.SetField(risk.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := rc.mutation.DisplayID(); ok {
+		_spec.SetField(risk.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := rc.mutation.Tags(); ok {
 		_spec.SetField(risk.FieldTags, field.TypeJSON, value)

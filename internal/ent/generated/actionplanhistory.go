@@ -37,8 +37,6 @@ type ActionPlanHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the action plan
@@ -67,7 +65,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldMappingID, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -145,12 +143,6 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				aph.DeletedBy = value.String
-			}
-		case actionplanhistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				aph.MappingID = value.String
 			}
 		case actionplanhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -266,9 +258,6 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(aph.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(aph.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", aph.Tags))

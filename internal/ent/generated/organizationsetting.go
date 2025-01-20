@@ -29,8 +29,6 @@ type OrganizationSetting struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -105,7 +103,7 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsetting.FieldBillingNotificationsEnabled:
 			values[i] = new(sql.NullBool)
-		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldMappingID, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID:
+		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case organizationsetting.FieldCreatedAt, organizationsetting.FieldUpdatedAt, organizationsetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -153,12 +151,6 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				os.UpdatedBy = value.String
-			}
-		case organizationsetting.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				os.MappingID = value.String
 			}
 		case organizationsetting.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -295,9 +287,6 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(os.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(os.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", os.Tags))

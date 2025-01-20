@@ -33,8 +33,6 @@ type EventHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// EventID holds the value of the "event_id" field.
@@ -57,7 +55,7 @@ func (*EventHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case eventhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldCreatedBy, eventhistory.FieldUpdatedBy, eventhistory.FieldMappingID, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType:
+		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldCreatedBy, eventhistory.FieldUpdatedBy, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType:
 			values[i] = new(sql.NullString)
 		case eventhistory.FieldHistoryTime, eventhistory.FieldCreatedAt, eventhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -123,12 +121,6 @@ func (eh *EventHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				eh.UpdatedBy = value.String
-			}
-		case eventhistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				eh.MappingID = value.String
 			}
 		case eventhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -220,9 +212,6 @@ func (eh *EventHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(eh.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(eh.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", eh.Tags))

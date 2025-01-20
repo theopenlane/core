@@ -78,20 +78,6 @@ func (sc *SubscriberCreate) SetNillableUpdatedBy(s *string) *SubscriberCreate {
 	return sc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (sc *SubscriberCreate) SetMappingID(s string) *SubscriberCreate {
-	sc.mutation.SetMappingID(s)
-	return sc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableMappingID(s *string) *SubscriberCreate {
-	if s != nil {
-		sc.SetMappingID(*s)
-	}
-	return sc
-}
-
 // SetTags sets the "tags" field.
 func (sc *SubscriberCreate) SetTags(s []string) *SubscriberCreate {
 	sc.mutation.SetTags(s)
@@ -305,13 +291,6 @@ func (sc *SubscriberCreate) defaults() error {
 		v := subscriber.DefaultUpdatedAt()
 		sc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sc.mutation.MappingID(); !ok {
-		if subscriber.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized subscriber.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := subscriber.DefaultMappingID()
-		sc.mutation.SetMappingID(v)
-	}
 	if _, ok := sc.mutation.Tags(); !ok {
 		v := subscriber.DefaultTags
 		sc.mutation.SetTags(v)
@@ -340,9 +319,6 @@ func (sc *SubscriberCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *SubscriberCreate) check() error {
-	if _, ok := sc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Subscriber.mapping_id"`)}
-	}
 	if v, ok := sc.mutation.OwnerID(); ok {
 		if err := subscriber.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subscriber.owner_id": %w`, err)}
@@ -440,10 +416,6 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.UpdatedBy(); ok {
 		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := sc.mutation.MappingID(); ok {
-		_spec.SetField(subscriber.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := sc.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)

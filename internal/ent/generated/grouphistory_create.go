@@ -139,20 +139,6 @@ func (ghc *GroupHistoryCreate) SetNillableDeletedBy(s *string) *GroupHistoryCrea
 	return ghc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ghc *GroupHistoryCreate) SetMappingID(s string) *GroupHistoryCreate {
-	ghc.mutation.SetMappingID(s)
-	return ghc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ghc *GroupHistoryCreate) SetNillableMappingID(s *string) *GroupHistoryCreate {
-	if s != nil {
-		ghc.SetMappingID(*s)
-	}
-	return ghc
-}
-
 // SetTags sets the "tags" field.
 func (ghc *GroupHistoryCreate) SetTags(s []string) *GroupHistoryCreate {
 	ghc.mutation.SetTags(s)
@@ -310,10 +296,6 @@ func (ghc *GroupHistoryCreate) defaults() {
 		v := grouphistory.DefaultUpdatedAt()
 		ghc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ghc.mutation.MappingID(); !ok {
-		v := grouphistory.DefaultMappingID()
-		ghc.mutation.SetMappingID(v)
-	}
 	if _, ok := ghc.mutation.Tags(); !ok {
 		v := grouphistory.DefaultTags
 		ghc.mutation.SetTags(v)
@@ -344,9 +326,6 @@ func (ghc *GroupHistoryCreate) check() error {
 		if err := grouphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "GroupHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ghc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "GroupHistory.mapping_id"`)}
 	}
 	if _, ok := ghc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "GroupHistory.name"`)}
@@ -425,10 +404,6 @@ func (ghc *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec
 	if value, ok := ghc.mutation.DeletedBy(); ok {
 		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := ghc.mutation.MappingID(); ok {
-		_spec.SetField(grouphistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ghc.mutation.Tags(); ok {
 		_spec.SetField(grouphistory.FieldTags, field.TypeJSON, value)

@@ -75,12 +75,16 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Task_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Task_ownerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "description":
@@ -91,14 +95,20 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_status(ctx, field)
 			case "due":
 				return ec.fieldContext_Task_due(ctx, field)
+			case "priority":
+				return ec.fieldContext_Task_priority(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
+			case "assigneeID":
+				return ec.fieldContext_Task_assigneeID(ctx, field)
+			case "assignerID":
+				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Task_owner(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
 				return ec.fieldContext_Task_assignee(ctx, field)
-			case "organization":
-				return ec.fieldContext_Task_organization(ctx, field)
 			case "group":
 				return ec.fieldContext_Task_group(ctx, field)
 			case "internalPolicy":
@@ -169,12 +179,16 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Task_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Task_ownerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "description":
@@ -185,14 +199,20 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_status(ctx, field)
 			case "due":
 				return ec.fieldContext_Task_due(ctx, field)
+			case "priority":
+				return ec.fieldContext_Task_priority(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
+			case "assigneeID":
+				return ec.fieldContext_Task_assigneeID(ctx, field)
+			case "assignerID":
+				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Task_owner(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
 				return ec.fieldContext_Task_assignee(ctx, field)
-			case "organization":
-				return ec.fieldContext_Task_organization(ctx, field)
 			case "group":
 				return ec.fieldContext_Task_group(ctx, field)
 			case "internalPolicy":
@@ -307,12 +327,16 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Task_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Task_ownerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "description":
@@ -323,14 +347,20 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_status(ctx, field)
 			case "due":
 				return ec.fieldContext_Task_due(ctx, field)
+			case "priority":
+				return ec.fieldContext_Task_priority(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
+			case "assigneeID":
+				return ec.fieldContext_Task_assigneeID(ctx, field)
+			case "assignerID":
+				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Task_owner(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
 				return ec.fieldContext_Task_assignee(ctx, field)
-			case "organization":
-				return ec.fieldContext_Task_organization(ctx, field)
 			case "group":
 				return ec.fieldContext_Task_group(ctx, field)
 			case "internalPolicy":

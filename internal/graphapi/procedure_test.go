@@ -270,6 +270,9 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 			// check required fields
 			assert.Equal(t, tc.request.Name, resp.CreateProcedure.Procedure.Name)
 
+			assert.NotEmpty(t, resp.CreateProcedure.Procedure.DisplayID)
+			assert.Contains(t, resp.CreateProcedure.Procedure.DisplayID, "PRD-")
+
 			// check optional fields with if checks if they were provided or not
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.CreateProcedure.Procedure.Description)

@@ -31,8 +31,6 @@ type PersonalAccessToken struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The user id that owns the object
@@ -109,7 +107,7 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case personalaccesstoken.FieldTags, personalaccesstoken.FieldScopes:
 			values[i] = new([]byte)
-		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldMappingID, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
+		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
 			values[i] = new(sql.NullString)
 		case personalaccesstoken.FieldCreatedAt, personalaccesstoken.FieldUpdatedAt, personalaccesstoken.FieldDeletedAt, personalaccesstoken.FieldExpiresAt, personalaccesstoken.FieldLastUsedAt:
 			values[i] = new(sql.NullTime)
@@ -169,12 +167,6 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				pat.DeletedBy = value.String
-			}
-		case personalaccesstoken.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				pat.MappingID = value.String
 			}
 		case personalaccesstoken.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -299,9 +291,6 @@ func (pat *PersonalAccessToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(pat.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(pat.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", pat.Tags))

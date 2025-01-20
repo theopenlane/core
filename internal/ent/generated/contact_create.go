@@ -80,20 +80,6 @@ func (cc *ContactCreate) SetNillableUpdatedBy(s *string) *ContactCreate {
 	return cc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (cc *ContactCreate) SetMappingID(s string) *ContactCreate {
-	cc.mutation.SetMappingID(s)
-	return cc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableMappingID(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetMappingID(*s)
-	}
-	return cc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (cc *ContactCreate) SetDeletedAt(t time.Time) *ContactCreate {
 	cc.mutation.SetDeletedAt(t)
@@ -332,13 +318,6 @@ func (cc *ContactCreate) defaults() error {
 		v := contact.DefaultUpdatedAt()
 		cc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cc.mutation.MappingID(); !ok {
-		if contact.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized contact.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := contact.DefaultMappingID()
-		cc.mutation.SetMappingID(v)
-	}
 	if _, ok := cc.mutation.Tags(); !ok {
 		v := contact.DefaultTags
 		cc.mutation.SetTags(v)
@@ -359,9 +338,6 @@ func (cc *ContactCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *ContactCreate) check() error {
-	if _, ok := cc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Contact.mapping_id"`)}
-	}
 	if v, ok := cc.mutation.OwnerID(); ok {
 		if err := contact.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Contact.owner_id": %w`, err)}
@@ -444,10 +420,6 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.UpdatedBy(); ok {
 		_spec.SetField(contact.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := cc.mutation.MappingID(); ok {
-		_spec.SetField(contact.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := cc.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)

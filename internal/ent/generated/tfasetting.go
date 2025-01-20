@@ -27,8 +27,6 @@ type TFASetting struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -86,7 +84,7 @@ func (*TFASetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case tfasetting.FieldVerified, tfasetting.FieldPhoneOtpAllowed, tfasetting.FieldEmailOtpAllowed, tfasetting.FieldTotpAllowed:
 			values[i] = new(sql.NullBool)
-		case tfasetting.FieldID, tfasetting.FieldCreatedBy, tfasetting.FieldUpdatedBy, tfasetting.FieldMappingID, tfasetting.FieldDeletedBy, tfasetting.FieldOwnerID, tfasetting.FieldTfaSecret:
+		case tfasetting.FieldID, tfasetting.FieldCreatedBy, tfasetting.FieldUpdatedBy, tfasetting.FieldDeletedBy, tfasetting.FieldOwnerID, tfasetting.FieldTfaSecret:
 			values[i] = new(sql.NullString)
 		case tfasetting.FieldCreatedAt, tfasetting.FieldUpdatedAt, tfasetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -134,12 +132,6 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				ts.UpdatedBy = value.String
-			}
-		case tfasetting.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				ts.MappingID = value.String
 			}
 		case tfasetting.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -258,9 +250,6 @@ func (ts *TFASetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(ts.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(ts.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ts.DeletedAt.Format(time.ANSIC))

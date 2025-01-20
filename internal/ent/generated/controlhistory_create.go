@@ -139,17 +139,9 @@ func (chc *ControlHistoryCreate) SetNillableDeletedBy(s *string) *ControlHistory
 	return chc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (chc *ControlHistoryCreate) SetMappingID(s string) *ControlHistoryCreate {
-	chc.mutation.SetMappingID(s)
-	return chc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableMappingID(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (chc *ControlHistoryCreate) SetDisplayID(s string) *ControlHistoryCreate {
+	chc.mutation.SetDisplayID(s)
 	return chc
 }
 
@@ -378,10 +370,6 @@ func (chc *ControlHistoryCreate) defaults() {
 		v := controlhistory.DefaultUpdatedAt()
 		chc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := chc.mutation.MappingID(); !ok {
-		v := controlhistory.DefaultMappingID()
-		chc.mutation.SetMappingID(v)
-	}
 	if _, ok := chc.mutation.Tags(); !ok {
 		v := controlhistory.DefaultTags
 		chc.mutation.SetTags(v)
@@ -405,8 +393,8 @@ func (chc *ControlHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := chc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ControlHistory.mapping_id"`)}
+	if _, ok := chc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlHistory.display_id"`)}
 	}
 	if _, ok := chc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlHistory.owner_id"`)}
@@ -486,9 +474,9 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_spec.SetField(controlhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := chc.mutation.MappingID(); ok {
-		_spec.SetField(controlhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := chc.mutation.DisplayID(); ok {
+		_spec.SetField(controlhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := chc.mutation.Tags(); ok {
 		_spec.SetField(controlhistory.FieldTags, field.TypeJSON, value)

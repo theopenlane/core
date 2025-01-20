@@ -18,7 +18,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "token", Type: field.TypeString, Unique: true},
@@ -36,7 +35,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "api_tokens_organizations_api_tokens",
-				Columns:    []*schema.Column{APITokensColumns[15]},
+				Columns:    []*schema.Column{APITokensColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -45,7 +44,7 @@ var (
 			{
 				Name:    "apitoken_token",
 				Unique:  false,
-				Columns: []*schema.Column{APITokensColumns[10]},
+				Columns: []*schema.Column{APITokensColumns[9]},
 			},
 		},
 	}
@@ -58,7 +57,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -86,7 +84,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -116,7 +113,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -137,7 +133,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "contacts_organizations_contacts",
-				Columns:    []*schema.Column{ContactsColumns[16]},
+				Columns:    []*schema.Column{ContactsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -153,7 +149,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -188,7 +183,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -231,6 +226,13 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "control_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[23]},
+			},
+		},
 	}
 	// ControlHistoryColumns holds the columns for the "control_history" table.
 	ControlHistoryColumns = []*schema.Column{
@@ -244,7 +246,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
@@ -282,7 +284,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -317,6 +319,13 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "controlobjective_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ControlObjectivesColumns[7], ControlObjectivesColumns[21]},
+			},
+		},
 	}
 	// ControlObjectiveHistoryColumns holds the columns for the "control_objective_history" table.
 	ControlObjectiveHistoryColumns = []*schema.Column{
@@ -330,7 +339,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
@@ -365,7 +374,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -381,13 +389,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "document_data_organizations_document_data",
-				Columns:    []*schema.Column{DocumentDataColumns[10]},
+				Columns:    []*schema.Column{DocumentDataColumns[9]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "document_data_templates_documents",
-				Columns:    []*schema.Column{DocumentDataColumns[11]},
+				Columns:    []*schema.Column{DocumentDataColumns[10]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -403,7 +411,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -431,7 +438,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
@@ -448,7 +454,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "email_verification_tokens_users_email_verification_tokens",
-				Columns:    []*schema.Column{EmailVerificationTokensColumns[12]},
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[11]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -457,7 +463,7 @@ var (
 			{
 				Name:    "emailverificationtoken_token",
 				Unique:  true,
-				Columns: []*schema.Column{EmailVerificationTokensColumns[8]},
+				Columns: []*schema.Column{EmailVerificationTokensColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -471,7 +477,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -492,19 +497,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "entities_entity_types_entity_type",
-				Columns:    []*schema.Column{EntitiesColumns[14]},
+				Columns:    []*schema.Column{EntitiesColumns[13]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_entity_types_entities",
-				Columns:    []*schema.Column{EntitiesColumns[15]},
+				Columns:    []*schema.Column{EntitiesColumns[14]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_organizations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[16]},
+				Columns:    []*schema.Column{EntitiesColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -513,7 +518,7 @@ var (
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[9], EntitiesColumns[16]},
+				Columns: []*schema.Column{EntitiesColumns[8], EntitiesColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -530,7 +535,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -562,7 +566,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -577,7 +580,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "entity_types_organizations_entity_types",
-				Columns:    []*schema.Column{EntityTypesColumns[10]},
+				Columns:    []*schema.Column{EntityTypesColumns[9]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -586,7 +589,7 @@ var (
 			{
 				Name:    "entitytype_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntityTypesColumns[9], EntityTypesColumns[10]},
+				Columns: []*schema.Column{EntityTypesColumns[8], EntityTypesColumns[9]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -603,7 +606,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -630,7 +632,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
@@ -653,7 +654,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
@@ -682,7 +682,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "provided_file_name", Type: field.TypeString},
 		{Name: "provided_file_extension", Type: field.TypeString},
@@ -717,7 +716,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "provided_file_name", Type: field.TypeString},
 		{Name: "provided_file_extension", Type: field.TypeString},
@@ -756,7 +754,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -774,7 +771,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "groups_organizations_groups",
-				Columns:    []*schema.Column{GroupsColumns[15]},
+				Columns:    []*schema.Column{GroupsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -783,7 +780,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[15]},
+				Columns: []*schema.Column{GroupsColumns[8], GroupsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -802,7 +799,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -832,7 +828,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
@@ -848,19 +843,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "group_memberships_groups_group",
-				Columns:    []*schema.Column{GroupMembershipsColumns[9]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "group_memberships_users_user",
-				Columns:    []*schema.Column{GroupMembershipsColumns[10]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[9]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "group_memberships_org_memberships_orgmembership",
-				Columns:    []*schema.Column{GroupMembershipsColumns[11]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[10]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -869,7 +864,7 @@ var (
 			{
 				Name:    "groupmembership_user_id_group_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupMembershipsColumns[10], GroupMembershipsColumns[9]},
+				Columns: []*schema.Column{GroupMembershipsColumns[9], GroupMembershipsColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -886,7 +881,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
@@ -913,7 +907,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -931,7 +924,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "group_settings_groups_setting",
-				Columns:    []*schema.Column{GroupSettingsColumns[13]},
+				Columns:    []*schema.Column{GroupSettingsColumns[12]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -947,7 +940,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -977,7 +969,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1002,7 +993,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1031,7 +1021,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1049,13 +1038,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[12]},
+				Columns:    []*schema.Column{IntegrationsColumns[11]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_organizations_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[13]},
+				Columns:    []*schema.Column{IntegrationsColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1071,7 +1060,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1102,7 +1090,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1127,6 +1115,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "internalpolicy_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[17]},
+			},
+		},
 	}
 	// InternalPolicyHistoryColumns holds the columns for the "internal_policy_history" table.
 	InternalPolicyHistoryColumns = []*schema.Column{
@@ -1140,7 +1135,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1172,7 +1167,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
@@ -1193,7 +1187,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "invites_organizations_invites",
-				Columns:    []*schema.Column{InvitesColumns[16]},
+				Columns:    []*schema.Column{InvitesColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1202,7 +1196,7 @@ var (
 			{
 				Name:    "invite_recipient_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InvitesColumns[10], InvitesColumns[16]},
+				Columns: []*schema.Column{InvitesColumns[9], InvitesColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1218,7 +1212,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1239,6 +1233,13 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "narrative_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{NarrativesColumns[7], NarrativesColumns[13]},
+			},
+		},
 	}
 	// NarrativeHistoryColumns holds the columns for the "narrative_history" table.
 	NarrativeHistoryColumns = []*schema.Column{
@@ -1252,7 +1253,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
@@ -1280,7 +1281,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -1307,6 +1308,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "note_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{NotesColumns[5], NotesColumns[11]},
+			},
+		},
 	}
 	// NoteHistoryColumns holds the columns for the "note_history" table.
 	NoteHistoryColumns = []*schema.Column{
@@ -1318,7 +1326,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -1345,7 +1353,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
@@ -1360,13 +1367,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_memberships_organizations_organization",
-				Columns:    []*schema.Column{OrgMembershipsColumns[9]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[8]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "org_memberships_users_user",
-				Columns:    []*schema.Column{OrgMembershipsColumns[10]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[9]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1375,7 +1382,7 @@ var (
 			{
 				Name:    "orgmembership_user_id_organization_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrgMembershipsColumns[10], OrgMembershipsColumns[9]},
+				Columns: []*schema.Column{OrgMembershipsColumns[9], OrgMembershipsColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1392,7 +1399,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
@@ -1419,7 +1425,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1443,7 +1448,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[19]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1459,7 +1464,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1495,7 +1499,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1517,13 +1520,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[16]},
+				Columns:    []*schema.Column{OrganizationsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "organizations_files_avatar_file",
-				Columns:    []*schema.Column{OrganizationsColumns[17]},
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1532,7 +1535,7 @@ var (
 			{
 				Name:    "organization_name",
 				Unique:  true,
-				Columns: []*schema.Column{OrganizationsColumns[9]},
+				Columns: []*schema.Column{OrganizationsColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1549,7 +1552,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1583,7 +1585,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1605,7 +1606,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1621,7 +1622,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -1655,7 +1655,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
@@ -1672,7 +1671,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "password_reset_tokens_users_password_reset_tokens",
-				Columns:    []*schema.Column{PasswordResetTokensColumns[12]},
+				Columns:    []*schema.Column{PasswordResetTokensColumns[11]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1681,7 +1680,7 @@ var (
 			{
 				Name:    "passwordresettoken_token",
 				Unique:  true,
-				Columns: []*schema.Column{PasswordResetTokensColumns[8]},
+				Columns: []*schema.Column{PasswordResetTokensColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1697,7 +1696,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "token", Type: field.TypeString, Unique: true},
@@ -1715,7 +1713,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "personal_access_tokens_users_personal_access_tokens",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[15]},
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1724,7 +1722,7 @@ var (
 			{
 				Name:    "personalaccesstoken_token",
 				Unique:  false,
-				Columns: []*schema.Column{PersonalAccessTokensColumns[10]},
+				Columns: []*schema.Column{PersonalAccessTokensColumns[9]},
 			},
 		},
 	}
@@ -1737,7 +1735,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1777,6 +1775,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "procedure_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[19]},
+			},
+		},
 	}
 	// ProcedureHistoryColumns holds the columns for the "procedure_history" table.
 	ProcedureHistoryColumns = []*schema.Column{
@@ -1790,7 +1795,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1823,7 +1828,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -1850,6 +1855,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "program_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ProgramsColumns[5], ProgramsColumns[17]},
+			},
+		},
 	}
 	// ProgramHistoryColumns holds the columns for the "program_history" table.
 	ProgramHistoryColumns = []*schema.Column{
@@ -1861,7 +1873,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -1895,7 +1907,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
@@ -1911,19 +1922,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "program_memberships_programs_program",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[9]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "program_memberships_users_user",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[9]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "program_memberships_org_memberships_orgmembership",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[11]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1932,7 +1943,7 @@ var (
 			{
 				Name:    "programmembership_user_id_program_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProgramMembershipsColumns[10], ProgramMembershipsColumns[9]},
+				Columns: []*schema.Column{ProgramMembershipsColumns[9], ProgramMembershipsColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1949,7 +1960,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
@@ -1978,7 +1988,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2012,6 +2022,13 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "risk_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{RisksColumns[7], RisksColumns[20]},
+			},
+		},
 	}
 	// RiskHistoryColumns holds the columns for the "risk_history" table.
 	RiskHistoryColumns = []*schema.Column{
@@ -2025,7 +2042,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
@@ -2061,7 +2078,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2092,7 +2108,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2127,7 +2142,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2174,6 +2189,13 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subcontrol_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[27]},
+			},
+		},
 	}
 	// SubcontrolHistoryColumns holds the columns for the "subcontrol_history" table.
 	SubcontrolHistoryColumns = []*schema.Column{
@@ -2187,7 +2209,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
@@ -2227,7 +2249,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -2249,7 +2270,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subscribers_organizations_subscribers",
-				Columns:    []*schema.Column{SubscribersColumns[17]},
+				Columns:    []*schema.Column{SubscribersColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2258,7 +2279,7 @@ var (
 			{
 				Name:    "subscriber_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubscribersColumns[9], SubscribersColumns[17]},
+				Columns: []*schema.Column{SubscribersColumns[8], SubscribersColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2272,7 +2293,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -2292,7 +2312,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tfa_settings_users_tfa_settings",
-				Columns:    []*schema.Column{TfaSettingsColumns[15]},
+				Columns:    []*schema.Column{TfaSettingsColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2301,7 +2321,7 @@ var (
 			{
 				Name:    "tfasetting_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TfaSettingsColumns[15]},
+				Columns: []*schema.Column{TfaSettingsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2315,7 +2335,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
@@ -2324,9 +2344,11 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
+		{Name: "priority", Type: field.TypeEnum, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "MEDIUM"},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
-		{Name: "user_assigner_tasks", Type: field.TypeString},
-		{Name: "user_assignee_tasks", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
+		{Name: "assigner_id", Type: field.TypeString},
+		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
 	TasksTable = &schema.Table{
@@ -2335,16 +2357,29 @@ var (
 		PrimaryKey: []*schema.Column{TasksColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "tasks_organizations_tasks",
+				Columns:    []*schema.Column{TasksColumns[16]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
 				Symbol:     "tasks_users_assigner_tasks",
-				Columns:    []*schema.Column{TasksColumns[15]},
+				Columns:    []*schema.Column{TasksColumns[17]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
-				Columns:    []*schema.Column{TasksColumns[16]},
+				Columns:    []*schema.Column{TasksColumns[18]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "task_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{TasksColumns[5], TasksColumns[16]},
 			},
 		},
 	}
@@ -2358,16 +2393,20 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
+		{Name: "priority", Type: field.TypeEnum, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "MEDIUM"},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
+		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
+		{Name: "assigner_id", Type: field.TypeString},
 	}
 	// TaskHistoryTable holds the schema information for the "task_history" table.
 	TaskHistoryTable = &schema.Table{
@@ -2391,7 +2430,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "template_type", Type: field.TypeEnum, Enums: []string{"ROOTTEMPLATE", "DOCUMENT"}, Default: "DOCUMENT"},
@@ -2408,7 +2446,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "templates_organizations_templates",
-				Columns:    []*schema.Column{TemplatesColumns[14]},
+				Columns:    []*schema.Column{TemplatesColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2417,7 +2455,7 @@ var (
 			{
 				Name:    "template_name_owner_id_template_type",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[9], TemplatesColumns[14], TemplatesColumns[10]},
+				Columns: []*schema.Column{TemplatesColumns[8], TemplatesColumns[13], TemplatesColumns[9]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2436,7 +2474,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -2467,7 +2504,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "display_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "first_name", Type: field.TypeString, Nullable: true, Size: 64},
@@ -2523,7 +2560,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "first_name", Type: field.TypeString, Nullable: true, Size: 64},
@@ -2558,7 +2595,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -2581,13 +2617,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "user_settings_users_setting",
-				Columns:    []*schema.Column{UserSettingsColumns[17]},
+				Columns:    []*schema.Column{UserSettingsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "user_settings_organizations_default_org",
-				Columns:    []*schema.Column{UserSettingsColumns[18]},
+				Columns:    []*schema.Column{UserSettingsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2603,7 +2639,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
@@ -2637,7 +2672,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "credential_id", Type: field.TypeBytes, Unique: true, Nullable: true},
 		{Name: "public_key", Type: field.TypeBytes, Nullable: true},
@@ -2659,7 +2693,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "webauthns_users_webauthn",
-				Columns:    []*schema.Column{WebauthnsColumns[17]},
+				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -3940,31 +3974,6 @@ var (
 			},
 		},
 	}
-	// OrganizationTasksColumns holds the columns for the "organization_tasks" table.
-	OrganizationTasksColumns = []*schema.Column{
-		{Name: "organization_id", Type: field.TypeString},
-		{Name: "task_id", Type: field.TypeString},
-	}
-	// OrganizationTasksTable holds the schema information for the "organization_tasks" table.
-	OrganizationTasksTable = &schema.Table{
-		Name:       "organization_tasks",
-		Columns:    OrganizationTasksColumns,
-		PrimaryKey: []*schema.Column{OrganizationTasksColumns[0], OrganizationTasksColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "organization_tasks_organization_id",
-				Columns:    []*schema.Column{OrganizationTasksColumns[0]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "organization_tasks_task_id",
-				Columns:    []*schema.Column{OrganizationTasksColumns[1]},
-				RefColumns: []*schema.Column{TasksColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// OrganizationSettingFilesColumns holds the columns for the "organization_setting_files" table.
 	OrganizationSettingFilesColumns = []*schema.Column{
 		{Name: "organization_setting_id", Type: field.TypeString},
@@ -5013,7 +5022,6 @@ var (
 		OrganizationEventsTable,
 		OrganizationSecretsTable,
 		OrganizationFilesTable,
-		OrganizationTasksTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
 		ProcedureBlockedGroupsTable,
@@ -5184,8 +5192,9 @@ func init() {
 	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
-	TasksTable.ForeignKeys[0].RefTable = UsersTable
+	TasksTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TasksTable.ForeignKeys[1].RefTable = UsersTable
+	TasksTable.ForeignKeys[2].RefTable = UsersTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
@@ -5305,8 +5314,6 @@ func init() {
 	OrganizationSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
-	OrganizationTasksTable.ForeignKeys[0].RefTable = OrganizationsTable
-	OrganizationTasksTable.ForeignKeys[1].RefTable = TasksTable
 	OrganizationSettingFilesTable.ForeignKeys[0].RefTable = OrganizationSettingsTable
 	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable

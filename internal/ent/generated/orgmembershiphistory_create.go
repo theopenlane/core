@@ -112,20 +112,6 @@ func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *OrgMemb
 	return omhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (omhc *OrgMembershipHistoryCreate) SetMappingID(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetMappingID(s)
-	return omhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableMappingID(s *string) *OrgMembershipHistoryCreate {
-	if s != nil {
-		omhc.SetMappingID(*s)
-	}
-	return omhc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (omhc *OrgMembershipHistoryCreate) SetDeletedAt(t time.Time) *OrgMembershipHistoryCreate {
 	omhc.mutation.SetDeletedAt(t)
@@ -241,10 +227,6 @@ func (omhc *OrgMembershipHistoryCreate) defaults() {
 		v := orgmembershiphistory.DefaultUpdatedAt()
 		omhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := omhc.mutation.MappingID(); !ok {
-		v := orgmembershiphistory.DefaultMappingID()
-		omhc.mutation.SetMappingID(v)
-	}
 	if _, ok := omhc.mutation.Role(); !ok {
 		v := orgmembershiphistory.DefaultRole
 		omhc.mutation.SetRole(v)
@@ -267,9 +249,6 @@ func (omhc *OrgMembershipHistoryCreate) check() error {
 		if err := orgmembershiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "OrgMembershipHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := omhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "OrgMembershipHistory.mapping_id"`)}
 	}
 	if _, ok := omhc.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "OrgMembershipHistory.role"`)}
@@ -348,10 +327,6 @@ func (omhc *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sq
 	if value, ok := omhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := omhc.mutation.MappingID(); ok {
-		_spec.SetField(orgmembershiphistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := omhc.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldDeletedAt, field.TypeTime, value)

@@ -111,20 +111,6 @@ func (ihc *IntegrationHistoryCreate) SetNillableUpdatedBy(s *string) *Integratio
 	return ihc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ihc *IntegrationHistoryCreate) SetMappingID(s string) *IntegrationHistoryCreate {
-	ihc.mutation.SetMappingID(s)
-	return ihc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ihc *IntegrationHistoryCreate) SetNillableMappingID(s *string) *IntegrationHistoryCreate {
-	if s != nil {
-		ihc.SetMappingID(*s)
-	}
-	return ihc
-}
-
 // SetTags sets the "tags" field.
 func (ihc *IntegrationHistoryCreate) SetTags(s []string) *IntegrationHistoryCreate {
 	ihc.mutation.SetTags(s)
@@ -268,10 +254,6 @@ func (ihc *IntegrationHistoryCreate) defaults() {
 		v := integrationhistory.DefaultUpdatedAt()
 		ihc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ihc.mutation.MappingID(); !ok {
-		v := integrationhistory.DefaultMappingID()
-		ihc.mutation.SetMappingID(v)
-	}
 	if _, ok := ihc.mutation.Tags(); !ok {
 		v := integrationhistory.DefaultTags
 		ihc.mutation.SetTags(v)
@@ -294,9 +276,6 @@ func (ihc *IntegrationHistoryCreate) check() error {
 		if err := integrationhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "IntegrationHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ihc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "IntegrationHistory.mapping_id"`)}
 	}
 	if _, ok := ihc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "IntegrationHistory.name"`)}
@@ -364,10 +343,6 @@ func (ihc *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgrap
 	if value, ok := ihc.mutation.UpdatedBy(); ok {
 		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := ihc.mutation.MappingID(); ok {
-		_spec.SetField(integrationhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ihc.mutation.Tags(); ok {
 		_spec.SetField(integrationhistory.FieldTags, field.TypeJSON, value)

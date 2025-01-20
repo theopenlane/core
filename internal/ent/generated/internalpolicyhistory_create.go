@@ -139,17 +139,9 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableDeletedBy(s *string) *Intern
 	return iphc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (iphc *InternalPolicyHistoryCreate) SetMappingID(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetMappingID(s)
-	return iphc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableMappingID(s *string) *InternalPolicyHistoryCreate {
-	if s != nil {
-		iphc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (iphc *InternalPolicyHistoryCreate) SetDisplayID(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDisplayID(s)
 	return iphc
 }
 
@@ -330,10 +322,6 @@ func (iphc *InternalPolicyHistoryCreate) defaults() {
 		v := internalpolicyhistory.DefaultUpdatedAt()
 		iphc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := iphc.mutation.MappingID(); !ok {
-		v := internalpolicyhistory.DefaultMappingID()
-		iphc.mutation.SetMappingID(v)
-	}
 	if _, ok := iphc.mutation.Tags(); !ok {
 		v := internalpolicyhistory.DefaultTags
 		iphc.mutation.SetTags(v)
@@ -357,8 +345,8 @@ func (iphc *InternalPolicyHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := iphc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "InternalPolicyHistory.mapping_id"`)}
+	if _, ok := iphc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "InternalPolicyHistory.display_id"`)}
 	}
 	if _, ok := iphc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "InternalPolicyHistory.name"`)}
@@ -435,9 +423,9 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := iphc.mutation.MappingID(); ok {
-		_spec.SetField(internalpolicyhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := iphc.mutation.DisplayID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := iphc.mutation.Tags(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)

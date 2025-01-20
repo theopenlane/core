@@ -62,7 +62,7 @@ func (Program) Fields() []ent.Field {
 func (Program) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("PRG"),
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
 		// all programs must be associated to an organization

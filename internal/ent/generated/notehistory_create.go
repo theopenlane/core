@@ -111,17 +111,9 @@ func (nhc *NoteHistoryCreate) SetNillableUpdatedBy(s *string) *NoteHistoryCreate
 	return nhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (nhc *NoteHistoryCreate) SetMappingID(s string) *NoteHistoryCreate {
-	nhc.mutation.SetMappingID(s)
-	return nhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (nhc *NoteHistoryCreate) SetNillableMappingID(s *string) *NoteHistoryCreate {
-	if s != nil {
-		nhc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (nhc *NoteHistoryCreate) SetDisplayID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetDisplayID(s)
 	return nhc
 }
 
@@ -240,10 +232,6 @@ func (nhc *NoteHistoryCreate) defaults() {
 		v := notehistory.DefaultUpdatedAt()
 		nhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := nhc.mutation.MappingID(); !ok {
-		v := notehistory.DefaultMappingID()
-		nhc.mutation.SetMappingID(v)
-	}
 	if _, ok := nhc.mutation.Tags(); !ok {
 		v := notehistory.DefaultTags
 		nhc.mutation.SetTags(v)
@@ -267,8 +255,8 @@ func (nhc *NoteHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "NoteHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := nhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "NoteHistory.mapping_id"`)}
+	if _, ok := nhc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "NoteHistory.display_id"`)}
 	}
 	if _, ok := nhc.mutation.Text(); !ok {
 		return &ValidationError{Name: "text", err: errors.New(`generated: missing required field "NoteHistory.text"`)}
@@ -337,9 +325,9 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := nhc.mutation.MappingID(); ok {
-		_spec.SetField(notehistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := nhc.mutation.DisplayID(); ok {
+		_spec.SetField(notehistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := nhc.mutation.DeletedAt(); ok {
 		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)

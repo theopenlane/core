@@ -102,7 +102,7 @@ func (Subcontrol) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("SCL"),
 		emixin.TagMixin{},
 		// subcontrols can inherit permissions from the parent control
 		NewObjectOwnedMixin(ObjectOwnedMixin{

@@ -37,8 +37,6 @@ type FileHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the file provided in the payload key without the extension
@@ -83,7 +81,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldMappingID, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -161,12 +159,6 @@ func (fh *FileHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				fh.DeletedBy = value.String
-			}
-		case filehistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				fh.MappingID = value.String
 			}
 		case filehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -322,9 +314,6 @@ func (fh *FileHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(fh.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(fh.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", fh.Tags))

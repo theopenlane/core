@@ -112,20 +112,6 @@ func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *Group
 	return gmhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (gmhc *GroupMembershipHistoryCreate) SetMappingID(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetMappingID(s)
-	return gmhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableMappingID(s *string) *GroupMembershipHistoryCreate {
-	if s != nil {
-		gmhc.SetMappingID(*s)
-	}
-	return gmhc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (gmhc *GroupMembershipHistoryCreate) SetDeletedAt(t time.Time) *GroupMembershipHistoryCreate {
 	gmhc.mutation.SetDeletedAt(t)
@@ -241,10 +227,6 @@ func (gmhc *GroupMembershipHistoryCreate) defaults() {
 		v := groupmembershiphistory.DefaultUpdatedAt()
 		gmhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gmhc.mutation.MappingID(); !ok {
-		v := groupmembershiphistory.DefaultMappingID()
-		gmhc.mutation.SetMappingID(v)
-	}
 	if _, ok := gmhc.mutation.Role(); !ok {
 		v := groupmembershiphistory.DefaultRole
 		gmhc.mutation.SetRole(v)
@@ -267,9 +249,6 @@ func (gmhc *GroupMembershipHistoryCreate) check() error {
 		if err := groupmembershiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "GroupMembershipHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := gmhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "GroupMembershipHistory.mapping_id"`)}
 	}
 	if _, ok := gmhc.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "GroupMembershipHistory.role"`)}
@@ -348,10 +327,6 @@ func (gmhc *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory,
 	if value, ok := gmhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := gmhc.mutation.MappingID(); ok {
-		_spec.SetField(groupmembershiphistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := gmhc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupmembershiphistory.FieldDeletedAt, field.TypeTime, value)

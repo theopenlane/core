@@ -32,8 +32,8 @@ type Risk struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -179,7 +179,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case risk.FieldTags, risk.FieldDetails:
 			values[i] = new([]byte)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldMappingID, risk.FieldOwnerID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -242,11 +242,11 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.DeletedBy = value.String
 			}
-		case risk.FieldMappingID:
+		case risk.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				r.MappingID = value.String
+				r.DisplayID = value.String
 			}
 		case risk.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -425,8 +425,8 @@ func (r *Risk) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(r.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(r.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(r.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", r.Tags))

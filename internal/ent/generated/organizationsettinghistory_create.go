@@ -113,20 +113,6 @@ func (oshc *OrganizationSettingHistoryCreate) SetNillableUpdatedBy(s *string) *O
 	return oshc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (oshc *OrganizationSettingHistoryCreate) SetMappingID(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetMappingID(s)
-	return oshc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableMappingID(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetMappingID(*s)
-	}
-	return oshc
-}
-
 // SetTags sets the "tags" field.
 func (oshc *OrganizationSettingHistoryCreate) SetTags(s []string) *OrganizationSettingHistoryCreate {
 	oshc.mutation.SetTags(s)
@@ -340,10 +326,6 @@ func (oshc *OrganizationSettingHistoryCreate) defaults() {
 		v := organizationsettinghistory.DefaultUpdatedAt()
 		oshc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := oshc.mutation.MappingID(); !ok {
-		v := organizationsettinghistory.DefaultMappingID()
-		oshc.mutation.SetMappingID(v)
-	}
 	if _, ok := oshc.mutation.Tags(); !ok {
 		v := organizationsettinghistory.DefaultTags
 		oshc.mutation.SetTags(v)
@@ -374,9 +356,6 @@ func (oshc *OrganizationSettingHistoryCreate) check() error {
 		if err := organizationsettinghistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := oshc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "OrganizationSettingHistory.mapping_id"`)}
 	}
 	if v, ok := oshc.mutation.GeoLocation(); ok {
 		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
@@ -449,10 +428,6 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 	if value, ok := oshc.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := oshc.mutation.MappingID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := oshc.mutation.Tags(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTags, field.TypeJSON, value)

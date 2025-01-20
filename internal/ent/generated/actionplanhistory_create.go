@@ -139,20 +139,6 @@ func (aphc *ActionPlanHistoryCreate) SetNillableDeletedBy(s *string) *ActionPlan
 	return aphc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (aphc *ActionPlanHistoryCreate) SetMappingID(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetMappingID(s)
-	return aphc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableMappingID(s *string) *ActionPlanHistoryCreate {
-	if s != nil {
-		aphc.SetMappingID(*s)
-	}
-	return aphc
-}
-
 // SetTags sets the "tags" field.
 func (aphc *ActionPlanHistoryCreate) SetTags(s []string) *ActionPlanHistoryCreate {
 	aphc.mutation.SetTags(s)
@@ -302,10 +288,6 @@ func (aphc *ActionPlanHistoryCreate) defaults() {
 		v := actionplanhistory.DefaultUpdatedAt()
 		aphc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := aphc.mutation.MappingID(); !ok {
-		v := actionplanhistory.DefaultMappingID()
-		aphc.mutation.SetMappingID(v)
-	}
 	if _, ok := aphc.mutation.Tags(); !ok {
 		v := actionplanhistory.DefaultTags
 		aphc.mutation.SetTags(v)
@@ -328,9 +310,6 @@ func (aphc *ActionPlanHistoryCreate) check() error {
 		if err := actionplanhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := aphc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ActionPlanHistory.mapping_id"`)}
 	}
 	if _, ok := aphc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ActionPlanHistory.name"`)}
@@ -406,10 +385,6 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 	if value, ok := aphc.mutation.DeletedBy(); ok {
 		_spec.SetField(actionplanhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := aphc.mutation.MappingID(); ok {
-		_spec.SetField(actionplanhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := aphc.mutation.Tags(); ok {
 		_spec.SetField(actionplanhistory.FieldTags, field.TypeJSON, value)

@@ -111,20 +111,6 @@ func (hhc *HushHistoryCreate) SetNillableUpdatedBy(s *string) *HushHistoryCreate
 	return hhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (hhc *HushHistoryCreate) SetMappingID(s string) *HushHistoryCreate {
-	hhc.mutation.SetMappingID(s)
-	return hhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableMappingID(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetMappingID(*s)
-	}
-	return hhc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (hhc *HushHistoryCreate) SetDeletedAt(t time.Time) *HushHistoryCreate {
 	hhc.mutation.SetDeletedAt(t)
@@ -276,10 +262,6 @@ func (hhc *HushHistoryCreate) defaults() {
 		v := hushhistory.DefaultUpdatedAt()
 		hhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := hhc.mutation.MappingID(); !ok {
-		v := hushhistory.DefaultMappingID()
-		hhc.mutation.SetMappingID(v)
-	}
 	if _, ok := hhc.mutation.ID(); !ok {
 		v := hushhistory.DefaultID()
 		hhc.mutation.SetID(v)
@@ -298,9 +280,6 @@ func (hhc *HushHistoryCreate) check() error {
 		if err := hushhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "HushHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := hhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "HushHistory.mapping_id"`)}
 	}
 	if _, ok := hhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "HushHistory.name"`)}
@@ -368,10 +347,6 @@ func (hhc *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) 
 	if value, ok := hhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := hhc.mutation.MappingID(); ok {
-		_spec.SetField(hushhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := hhc.mutation.DeletedAt(); ok {
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)

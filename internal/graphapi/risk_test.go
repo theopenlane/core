@@ -216,7 +216,7 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 		{
 			name: "add groups",
 			request: openlaneclient.CreateRiskInput{
-				Name:            "Test Procedure",
+				Name:            "Test Risk",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
@@ -322,6 +322,9 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 			// check required fields
 			require.NotEmpty(t, resp.CreateRisk.Risk.ID)
 			assert.Equal(t, tc.request.Name, resp.CreateRisk.Risk.Name)
+
+			assert.NotEmpty(t, resp.CreateRisk.Risk.DisplayID)
+			assert.Contains(t, resp.CreateRisk.Risk.DisplayID, "RSK-")
 
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {

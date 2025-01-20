@@ -111,17 +111,9 @@ func (nc *NarrativeCreate) SetNillableDeletedBy(s *string) *NarrativeCreate {
 	return nc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (nc *NarrativeCreate) SetMappingID(s string) *NarrativeCreate {
-	nc.mutation.SetMappingID(s)
-	return nc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableMappingID(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (nc *NarrativeCreate) SetDisplayID(s string) *NarrativeCreate {
+	nc.mutation.SetDisplayID(s)
 	return nc
 }
 
@@ -367,13 +359,6 @@ func (nc *NarrativeCreate) defaults() error {
 		v := narrative.DefaultUpdatedAt()
 		nc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := nc.mutation.MappingID(); !ok {
-		if narrative.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized narrative.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := narrative.DefaultMappingID()
-		nc.mutation.SetMappingID(v)
-	}
 	if _, ok := nc.mutation.Tags(); !ok {
 		v := narrative.DefaultTags
 		nc.mutation.SetTags(v)
@@ -390,8 +375,13 @@ func (nc *NarrativeCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (nc *NarrativeCreate) check() error {
-	if _, ok := nc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Narrative.mapping_id"`)}
+	if _, ok := nc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Narrative.display_id"`)}
+	}
+	if v, ok := nc.mutation.DisplayID(); ok {
+		if err := narrative.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.display_id": %w`, err)}
+		}
 	}
 	if _, ok := nc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Narrative.owner_id"`)}
@@ -472,9 +462,9 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		_spec.SetField(narrative.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := nc.mutation.MappingID(); ok {
-		_spec.SetField(narrative.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := nc.mutation.DisplayID(); ok {
+		_spec.SetField(narrative.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := nc.mutation.Tags(); ok {
 		_spec.SetField(narrative.FieldTags, field.TypeJSON, value)

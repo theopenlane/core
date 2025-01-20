@@ -1769,72 +1769,12 @@ func (o *Organization) Children(
 	return o.QueryChildren().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (o *Organization) Groups(ctx context.Context) (result []*Group, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedGroups(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.GroupsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryGroups().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Templates(ctx context.Context) (result []*Template, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedTemplates(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.TemplatesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryTemplates().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Integrations(ctx context.Context) (result []*Integration, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedIntegrations(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.IntegrationsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryIntegrations().All(ctx)
-	}
-	return result, err
-}
-
 func (o *Organization) Setting(ctx context.Context) (*OrganizationSetting, error) {
 	result, err := o.Edges.SettingOrErr()
 	if IsNotLoaded(err) {
 		result, err = o.QuerySetting().Only(ctx)
 	}
 	return result, MaskNotFound(err)
-}
-
-func (o *Organization) DocumentData(ctx context.Context) (result []*DocumentData, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedDocumentData(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.DocumentDataOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryDocumentData().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) OrgSubscriptions(ctx context.Context) (result []*OrgSubscription, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedOrgSubscriptions(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.OrgSubscriptionsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryOrgSubscriptions().All(ctx)
-	}
-	return result, err
 }
 
 func (o *Organization) PersonalAccessTokens(ctx context.Context) (result []*PersonalAccessToken, err error) {
@@ -1869,30 +1809,6 @@ func (o *Organization) Users(ctx context.Context) (result []*User, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QueryUsers().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Invites(ctx context.Context) (result []*Invite, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedInvites(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.InvitesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryInvites().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Subscribers(ctx context.Context) (result []*Subscriber, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedSubscribers(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.SubscribersOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QuerySubscribers().All(ctx)
 	}
 	return result, err
 }
@@ -1939,6 +1855,90 @@ func (o *Organization) AvatarFile(ctx context.Context) (*File, error) {
 		result, err = o.QueryAvatarFile().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (o *Organization) Groups(ctx context.Context) (result []*Group, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedGroups(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.GroupsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryGroups().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) Templates(ctx context.Context) (result []*Template, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedTemplates(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.TemplatesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryTemplates().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) Integrations(ctx context.Context) (result []*Integration, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedIntegrations(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.IntegrationsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryIntegrations().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) DocumentData(ctx context.Context) (result []*DocumentData, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedDocumentData(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.DocumentDataOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryDocumentData().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) OrgSubscriptions(ctx context.Context) (result []*OrgSubscription, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedOrgSubscriptions(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.OrgSubscriptionsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryOrgSubscriptions().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) Invites(ctx context.Context) (result []*Invite, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedInvites(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.InvitesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryInvites().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) Subscribers(ctx context.Context) (result []*Subscriber, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedSubscribers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.SubscribersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QuerySubscribers().All(ctx)
+	}
+	return result, err
 }
 
 func (o *Organization) Entities(ctx context.Context) (result []*Entity, err error) {
@@ -2737,6 +2737,14 @@ func (ts *TFASetting) Owner(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
+func (t *Task) Owner(ctx context.Context) (*Organization, error) {
+	result, err := t.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryOwner().Only(ctx)
+	}
+	return result, err
+}
+
 func (t *Task) Assigner(ctx context.Context) (*User, error) {
 	result, err := t.Edges.AssignerOrErr()
 	if IsNotLoaded(err) {
@@ -2751,18 +2759,6 @@ func (t *Task) Assignee(ctx context.Context) (*User, error) {
 		result, err = t.QueryAssignee().Only(ctx)
 	}
 	return result, MaskNotFound(err)
-}
-
-func (t *Task) Organization(ctx context.Context) (result []*Organization, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = t.NamedOrganization(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = t.Edges.OrganizationOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = t.QueryOrganization().All(ctx)
-	}
-	return result, err
 }
 
 func (t *Task) Group(ctx context.Context) (result []*Group, err error) {

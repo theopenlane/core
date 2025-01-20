@@ -139,17 +139,9 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableDeletedBy(s *string) *Cont
 	return cohc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (cohc *ControlObjectiveHistoryCreate) SetMappingID(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetMappingID(s)
-	return cohc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableMappingID(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (cohc *ControlObjectiveHistoryCreate) SetDisplayID(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetDisplayID(s)
 	return cohc
 }
 
@@ -364,10 +356,6 @@ func (cohc *ControlObjectiveHistoryCreate) defaults() {
 		v := controlobjectivehistory.DefaultUpdatedAt()
 		cohc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cohc.mutation.MappingID(); !ok {
-		v := controlobjectivehistory.DefaultMappingID()
-		cohc.mutation.SetMappingID(v)
-	}
 	if _, ok := cohc.mutation.Tags(); !ok {
 		v := controlobjectivehistory.DefaultTags
 		cohc.mutation.SetTags(v)
@@ -391,8 +379,8 @@ func (cohc *ControlObjectiveHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := cohc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ControlObjectiveHistory.mapping_id"`)}
+	if _, ok := cohc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlObjectiveHistory.display_id"`)}
 	}
 	if _, ok := cohc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlObjectiveHistory.owner_id"`)}
@@ -472,9 +460,9 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 		_spec.SetField(controlobjectivehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cohc.mutation.MappingID(); ok {
-		_spec.SetField(controlobjectivehistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := cohc.mutation.DisplayID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := cohc.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)

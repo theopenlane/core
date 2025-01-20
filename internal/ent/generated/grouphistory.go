@@ -37,8 +37,6 @@ type GroupHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -69,7 +67,7 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case grouphistory.FieldIsManaged:
 			values[i] = new(sql.NullBool)
-		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldMappingID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName:
+		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -147,12 +145,6 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				gh.DeletedBy = value.String
-			}
-		case grouphistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				gh.MappingID = value.String
 			}
 		case grouphistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -266,9 +258,6 @@ func (gh *GroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(gh.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(gh.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", gh.Tags))

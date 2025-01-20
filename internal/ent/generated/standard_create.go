@@ -109,20 +109,6 @@ func (sc *StandardCreate) SetNillableDeletedBy(s *string) *StandardCreate {
 	return sc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (sc *StandardCreate) SetMappingID(s string) *StandardCreate {
-	sc.mutation.SetMappingID(s)
-	return sc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableMappingID(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetMappingID(*s)
-	}
-	return sc
-}
-
 // SetTags sets the "tags" field.
 func (sc *StandardCreate) SetTags(s []string) *StandardCreate {
 	sc.mutation.SetTags(s)
@@ -393,13 +379,6 @@ func (sc *StandardCreate) defaults() error {
 		v := standard.DefaultUpdatedAt()
 		sc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sc.mutation.MappingID(); !ok {
-		if standard.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized standard.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := standard.DefaultMappingID()
-		sc.mutation.SetMappingID(v)
-	}
 	if _, ok := sc.mutation.Tags(); !ok {
 		v := standard.DefaultTags
 		sc.mutation.SetTags(v)
@@ -416,9 +395,6 @@ func (sc *StandardCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *StandardCreate) check() error {
-	if _, ok := sc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Standard.mapping_id"`)}
-	}
 	if _, ok := sc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Standard.name"`)}
 	}
@@ -486,10 +462,6 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.DeletedBy(); ok {
 		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := sc.mutation.MappingID(); ok {
-		_spec.SetField(standard.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := sc.mutation.Tags(); ok {
 		_spec.SetField(standard.FieldTags, field.TypeJSON, value)

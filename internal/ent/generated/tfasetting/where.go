@@ -87,11 +87,6 @@ func UpdatedBy(v string) predicate.TFASetting {
 	return predicate.TFASetting(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
-func MappingID(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldEQ(FieldMappingID, v))
-}
-
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.TFASetting {
 	return predicate.TFASetting(sql.FieldEQ(FieldDeletedAt, v))
@@ -380,71 +375,6 @@ func UpdatedByEqualFold(v string) predicate.TFASetting {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.TFASetting {
 	return predicate.TFASetting(sql.FieldContainsFold(FieldUpdatedBy, v))
-}
-
-// MappingIDEQ applies the EQ predicate on the "mapping_id" field.
-func MappingIDEQ(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldEQ(FieldMappingID, v))
-}
-
-// MappingIDNEQ applies the NEQ predicate on the "mapping_id" field.
-func MappingIDNEQ(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldNEQ(FieldMappingID, v))
-}
-
-// MappingIDIn applies the In predicate on the "mapping_id" field.
-func MappingIDIn(vs ...string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldIn(FieldMappingID, vs...))
-}
-
-// MappingIDNotIn applies the NotIn predicate on the "mapping_id" field.
-func MappingIDNotIn(vs ...string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldNotIn(FieldMappingID, vs...))
-}
-
-// MappingIDGT applies the GT predicate on the "mapping_id" field.
-func MappingIDGT(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldGT(FieldMappingID, v))
-}
-
-// MappingIDGTE applies the GTE predicate on the "mapping_id" field.
-func MappingIDGTE(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldGTE(FieldMappingID, v))
-}
-
-// MappingIDLT applies the LT predicate on the "mapping_id" field.
-func MappingIDLT(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldLT(FieldMappingID, v))
-}
-
-// MappingIDLTE applies the LTE predicate on the "mapping_id" field.
-func MappingIDLTE(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldLTE(FieldMappingID, v))
-}
-
-// MappingIDContains applies the Contains predicate on the "mapping_id" field.
-func MappingIDContains(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldContains(FieldMappingID, v))
-}
-
-// MappingIDHasPrefix applies the HasPrefix predicate on the "mapping_id" field.
-func MappingIDHasPrefix(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldHasPrefix(FieldMappingID, v))
-}
-
-// MappingIDHasSuffix applies the HasSuffix predicate on the "mapping_id" field.
-func MappingIDHasSuffix(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldHasSuffix(FieldMappingID, v))
-}
-
-// MappingIDEqualFold applies the EqualFold predicate on the "mapping_id" field.
-func MappingIDEqualFold(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldEqualFold(FieldMappingID, v))
-}
-
-// MappingIDContainsFold applies the ContainsFold predicate on the "mapping_id" field.
-func MappingIDContainsFold(v string) predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldContainsFold(FieldMappingID, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.

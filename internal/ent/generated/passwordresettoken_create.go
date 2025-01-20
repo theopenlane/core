@@ -77,20 +77,6 @@ func (prtc *PasswordResetTokenCreate) SetNillableUpdatedBy(s *string) *PasswordR
 	return prtc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (prtc *PasswordResetTokenCreate) SetMappingID(s string) *PasswordResetTokenCreate {
-	prtc.mutation.SetMappingID(s)
-	return prtc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (prtc *PasswordResetTokenCreate) SetNillableMappingID(s *string) *PasswordResetTokenCreate {
-	if s != nil {
-		prtc.SetMappingID(*s)
-	}
-	return prtc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (prtc *PasswordResetTokenCreate) SetDeletedAt(t time.Time) *PasswordResetTokenCreate {
 	prtc.mutation.SetDeletedAt(t)
@@ -219,13 +205,6 @@ func (prtc *PasswordResetTokenCreate) defaults() error {
 		v := passwordresettoken.DefaultUpdatedAt()
 		prtc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := prtc.mutation.MappingID(); !ok {
-		if passwordresettoken.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized passwordresettoken.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := passwordresettoken.DefaultMappingID()
-		prtc.mutation.SetMappingID(v)
-	}
 	if _, ok := prtc.mutation.ID(); !ok {
 		if passwordresettoken.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized passwordresettoken.DefaultID (forgotten import generated/runtime?)")
@@ -238,9 +217,6 @@ func (prtc *PasswordResetTokenCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (prtc *PasswordResetTokenCreate) check() error {
-	if _, ok := prtc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "PasswordResetToken.mapping_id"`)}
-	}
 	if _, ok := prtc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "PasswordResetToken.owner_id"`)}
 	}
@@ -325,10 +301,6 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 	if value, ok := prtc.mutation.UpdatedBy(); ok {
 		_spec.SetField(passwordresettoken.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := prtc.mutation.MappingID(); ok {
-		_spec.SetField(passwordresettoken.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := prtc.mutation.DeletedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedAt, field.TypeTime, value)

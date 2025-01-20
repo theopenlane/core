@@ -115,17 +115,9 @@ func (cc *ControlCreate) SetNillableDeletedBy(s *string) *ControlCreate {
 	return cc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (cc *ControlCreate) SetMappingID(s string) *ControlCreate {
-	cc.mutation.SetMappingID(s)
-	return cc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableMappingID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (cc *ControlCreate) SetDisplayID(s string) *ControlCreate {
+	cc.mutation.SetDisplayID(s)
 	return cc
 }
 
@@ -543,13 +535,6 @@ func (cc *ControlCreate) defaults() error {
 		v := control.DefaultUpdatedAt()
 		cc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cc.mutation.MappingID(); !ok {
-		if control.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized control.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := control.DefaultMappingID()
-		cc.mutation.SetMappingID(v)
-	}
 	if _, ok := cc.mutation.Tags(); !ok {
 		v := control.DefaultTags
 		cc.mutation.SetTags(v)
@@ -566,8 +551,13 @@ func (cc *ControlCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *ControlCreate) check() error {
-	if _, ok := cc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Control.mapping_id"`)}
+	if _, ok := cc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Control.display_id"`)}
+	}
+	if v, ok := cc.mutation.DisplayID(); ok {
+		if err := control.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Control.display_id": %w`, err)}
+		}
 	}
 	if _, ok := cc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Control.owner_id"`)}
@@ -648,9 +638,9 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cc.mutation.MappingID(); ok {
-		_spec.SetField(control.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := cc.mutation.DisplayID(); ok {
+		_spec.SetField(control.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := cc.mutation.Tags(); ok {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)

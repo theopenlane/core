@@ -80,20 +80,6 @@ func (pmc *ProgramMembershipCreate) SetNillableUpdatedBy(s *string) *ProgramMemb
 	return pmc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (pmc *ProgramMembershipCreate) SetMappingID(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetMappingID(s)
-	return pmc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableMappingID(s *string) *ProgramMembershipCreate {
-	if s != nil {
-		pmc.SetMappingID(*s)
-	}
-	return pmc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (pmc *ProgramMembershipCreate) SetDeletedAt(t time.Time) *ProgramMembershipCreate {
 	pmc.mutation.SetDeletedAt(t)
@@ -242,13 +228,6 @@ func (pmc *ProgramMembershipCreate) defaults() error {
 		v := programmembership.DefaultUpdatedAt()
 		pmc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := pmc.mutation.MappingID(); !ok {
-		if programmembership.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized programmembership.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := programmembership.DefaultMappingID()
-		pmc.mutation.SetMappingID(v)
-	}
 	if _, ok := pmc.mutation.Role(); !ok {
 		v := programmembership.DefaultRole
 		pmc.mutation.SetRole(v)
@@ -265,9 +244,6 @@ func (pmc *ProgramMembershipCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (pmc *ProgramMembershipCreate) check() error {
-	if _, ok := pmc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ProgramMembership.mapping_id"`)}
-	}
 	if _, ok := pmc.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "ProgramMembership.role"`)}
 	}
@@ -339,10 +315,6 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 	if value, ok := pmc.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := pmc.mutation.MappingID(); ok {
-		_spec.SetField(programmembership.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := pmc.mutation.DeletedAt(); ok {
 		_spec.SetField(programmembership.FieldDeletedAt, field.TypeTime, value)

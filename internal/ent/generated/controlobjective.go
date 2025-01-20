@@ -31,8 +31,8 @@ type ControlObjective struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -240,7 +240,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlobjective.FieldTags, controlobjective.FieldDetails:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldMappingID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -303,11 +303,11 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.DeletedBy = value.String
 			}
-		case controlobjective.FieldMappingID:
+		case controlobjective.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				co.MappingID = value.String
+				co.DisplayID = value.String
 			}
 		case controlobjective.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -517,8 +517,8 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(co.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(co.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(co.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", co.Tags))

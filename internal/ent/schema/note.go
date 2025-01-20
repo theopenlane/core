@@ -34,7 +34,7 @@ func (Note) Fields() []ent.Field {
 func (Note) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("NTE"),
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
 		NewOrgOwnMixinWithRef("notes"), // TODO: update to object owned mixin instead of org owned

@@ -139,20 +139,6 @@ func (fhc *FileHistoryCreate) SetNillableDeletedBy(s *string) *FileHistoryCreate
 	return fhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (fhc *FileHistoryCreate) SetMappingID(s string) *FileHistoryCreate {
-	fhc.mutation.SetMappingID(s)
-	return fhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableMappingID(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetMappingID(*s)
-	}
-	return fhc
-}
-
 // SetTags sets the "tags" field.
 func (fhc *FileHistoryCreate) SetTags(s []string) *FileHistoryCreate {
 	fhc.mutation.SetTags(s)
@@ -384,10 +370,6 @@ func (fhc *FileHistoryCreate) defaults() {
 		v := filehistory.DefaultUpdatedAt()
 		fhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := fhc.mutation.MappingID(); !ok {
-		v := filehistory.DefaultMappingID()
-		fhc.mutation.SetMappingID(v)
-	}
 	if _, ok := fhc.mutation.Tags(); !ok {
 		v := filehistory.DefaultTags
 		fhc.mutation.SetTags(v)
@@ -410,9 +392,6 @@ func (fhc *FileHistoryCreate) check() error {
 		if err := filehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "FileHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := fhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "FileHistory.mapping_id"`)}
 	}
 	if _, ok := fhc.mutation.ProvidedFileName(); !ok {
 		return &ValidationError{Name: "provided_file_name", err: errors.New(`generated: missing required field "FileHistory.provided_file_name"`)}
@@ -494,10 +473,6 @@ func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) 
 	if value, ok := fhc.mutation.DeletedBy(); ok {
 		_spec.SetField(filehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := fhc.mutation.MappingID(); ok {
-		_spec.SetField(filehistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := fhc.mutation.Tags(); ok {
 		_spec.SetField(filehistory.FieldTags, field.TypeJSON, value)

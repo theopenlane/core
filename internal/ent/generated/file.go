@@ -30,8 +30,6 @@ type File struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the file provided in the payload key without the extension
@@ -221,7 +219,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldMappingID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -281,12 +279,6 @@ func (f *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				f.DeletedBy = value.String
-			}
-		case file.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				f.MappingID = value.String
 			}
 		case file.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -488,9 +480,6 @@ func (f *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(f.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(f.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", f.Tags))

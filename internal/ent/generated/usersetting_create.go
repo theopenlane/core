@@ -80,20 +80,6 @@ func (usc *UserSettingCreate) SetNillableUpdatedBy(s *string) *UserSettingCreate
 	return usc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (usc *UserSettingCreate) SetMappingID(s string) *UserSettingCreate {
-	usc.mutation.SetMappingID(s)
-	return usc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (usc *UserSettingCreate) SetNillableMappingID(s *string) *UserSettingCreate {
-	if s != nil {
-		usc.SetMappingID(*s)
-	}
-	return usc
-}
-
 // SetTags sets the "tags" field.
 func (usc *UserSettingCreate) SetTags(s []string) *UserSettingCreate {
 	usc.mutation.SetTags(s)
@@ -358,13 +344,6 @@ func (usc *UserSettingCreate) defaults() error {
 		v := usersetting.DefaultUpdatedAt()
 		usc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := usc.mutation.MappingID(); !ok {
-		if usersetting.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized usersetting.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := usersetting.DefaultMappingID()
-		usc.mutation.SetMappingID(v)
-	}
 	if _, ok := usc.mutation.Tags(); !ok {
 		v := usersetting.DefaultTags
 		usc.mutation.SetTags(v)
@@ -401,9 +380,6 @@ func (usc *UserSettingCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (usc *UserSettingCreate) check() error {
-	if _, ok := usc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "UserSetting.mapping_id"`)}
-	}
 	if _, ok := usc.mutation.Locked(); !ok {
 		return &ValidationError{Name: "locked", err: errors.New(`generated: missing required field "UserSetting.locked"`)}
 	}
@@ -469,10 +445,6 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 	if value, ok := usc.mutation.UpdatedBy(); ok {
 		_spec.SetField(usersetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := usc.mutation.MappingID(); ok {
-		_spec.SetField(usersetting.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := usc.mutation.Tags(); ok {
 		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)

@@ -28,8 +28,8 @@ type Program struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -296,7 +296,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldMappingID, program.FieldDeletedBy, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDisplayID, program.FieldDeletedBy, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -345,11 +345,11 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedBy = value.String
 			}
-		case program.FieldMappingID:
+		case program.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				pr.MappingID = value.String
+				pr.DisplayID = value.String
 			}
 		case program.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -563,8 +563,8 @@ func (pr *Program) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pr.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(pr.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(pr.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pr.DeletedAt.Format(time.ANSIC))

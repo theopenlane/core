@@ -38,8 +38,8 @@ type RiskHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -76,7 +76,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldMappingID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -155,11 +155,11 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rh.DeletedBy = value.String
 			}
-		case riskhistory.FieldMappingID:
+		case riskhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				rh.MappingID = value.String
+				rh.DisplayID = value.String
 			}
 		case riskhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -300,8 +300,8 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(rh.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(rh.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(rh.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", rh.Tags))

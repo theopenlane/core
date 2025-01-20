@@ -33,8 +33,8 @@ type NoteHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -57,7 +57,7 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case notehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldMappingID, notehistory.FieldDeletedBy, notehistory.FieldOwnerID, notehistory.FieldText:
+		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDisplayID, notehistory.FieldDeletedBy, notehistory.FieldOwnerID, notehistory.FieldText:
 			values[i] = new(sql.NullString)
 		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -124,11 +124,11 @@ func (nh *NoteHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nh.UpdatedBy = value.String
 			}
-		case notehistory.FieldMappingID:
+		case notehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				nh.MappingID = value.String
+				nh.DisplayID = value.String
 			}
 		case notehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -219,8 +219,8 @@ func (nh *NoteHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(nh.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(nh.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(nh.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(nh.DeletedAt.Format(time.ANSIC))

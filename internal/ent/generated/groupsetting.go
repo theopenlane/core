@@ -28,8 +28,6 @@ type GroupSetting struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -83,7 +81,7 @@ func (*GroupSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case groupsetting.FieldSyncToSlack, groupsetting.FieldSyncToGithub:
 			values[i] = new(sql.NullBool)
-		case groupsetting.FieldID, groupsetting.FieldCreatedBy, groupsetting.FieldUpdatedBy, groupsetting.FieldMappingID, groupsetting.FieldDeletedBy, groupsetting.FieldVisibility, groupsetting.FieldJoinPolicy, groupsetting.FieldGroupID:
+		case groupsetting.FieldID, groupsetting.FieldCreatedBy, groupsetting.FieldUpdatedBy, groupsetting.FieldDeletedBy, groupsetting.FieldVisibility, groupsetting.FieldJoinPolicy, groupsetting.FieldGroupID:
 			values[i] = new(sql.NullString)
 		case groupsetting.FieldCreatedAt, groupsetting.FieldUpdatedAt, groupsetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -131,12 +129,6 @@ func (gs *GroupSetting) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				gs.UpdatedBy = value.String
-			}
-		case groupsetting.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				gs.MappingID = value.String
 			}
 		case groupsetting.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -240,9 +232,6 @@ func (gs *GroupSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(gs.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(gs.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", gs.Tags))

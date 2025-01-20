@@ -95,11 +95,6 @@ func UpdatedBy(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
-func MappingID(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldEQ(FieldMappingID, v))
-}
-
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -513,71 +508,6 @@ func UpdatedByEqualFold(v string) predicate.IntegrationHistory {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
-}
-
-// MappingIDEQ applies the EQ predicate on the "mapping_id" field.
-func MappingIDEQ(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldEQ(FieldMappingID, v))
-}
-
-// MappingIDNEQ applies the NEQ predicate on the "mapping_id" field.
-func MappingIDNEQ(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldNEQ(FieldMappingID, v))
-}
-
-// MappingIDIn applies the In predicate on the "mapping_id" field.
-func MappingIDIn(vs ...string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldIn(FieldMappingID, vs...))
-}
-
-// MappingIDNotIn applies the NotIn predicate on the "mapping_id" field.
-func MappingIDNotIn(vs ...string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldNotIn(FieldMappingID, vs...))
-}
-
-// MappingIDGT applies the GT predicate on the "mapping_id" field.
-func MappingIDGT(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldGT(FieldMappingID, v))
-}
-
-// MappingIDGTE applies the GTE predicate on the "mapping_id" field.
-func MappingIDGTE(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldGTE(FieldMappingID, v))
-}
-
-// MappingIDLT applies the LT predicate on the "mapping_id" field.
-func MappingIDLT(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldLT(FieldMappingID, v))
-}
-
-// MappingIDLTE applies the LTE predicate on the "mapping_id" field.
-func MappingIDLTE(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldLTE(FieldMappingID, v))
-}
-
-// MappingIDContains applies the Contains predicate on the "mapping_id" field.
-func MappingIDContains(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldContains(FieldMappingID, v))
-}
-
-// MappingIDHasPrefix applies the HasPrefix predicate on the "mapping_id" field.
-func MappingIDHasPrefix(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldMappingID, v))
-}
-
-// MappingIDHasSuffix applies the HasSuffix predicate on the "mapping_id" field.
-func MappingIDHasSuffix(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldMappingID, v))
-}
-
-// MappingIDEqualFold applies the EqualFold predicate on the "mapping_id" field.
-func MappingIDEqualFold(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldMappingID, v))
-}
-
-// MappingIDContainsFold applies the ContainsFold predicate on the "mapping_id" field.
-func MappingIDContainsFold(v string) predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldMappingID, v))
 }
 
 // TagsIsNil applies the IsNil predicate on the "tags" field.

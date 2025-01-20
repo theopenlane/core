@@ -69,10 +69,6 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
-	}
-
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
 	}
@@ -171,12 +167,6 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDeletedBy(actionplan.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(actionplan.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -263,7 +253,6 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedBy(actionplan.UpdatedBy).
 			SetDeletedAt(actionplan.DeletedAt).
 			SetDeletedBy(actionplan.DeletedBy).
-			SetMappingID(actionplan.MappingID).
 			SetTags(actionplan.Tags).
 			SetName(actionplan.Name).
 			SetDescription(actionplan.Description).
@@ -310,10 +299,6 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -412,12 +397,6 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(contact.UpdatedBy)
-		}
-
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(contact.MappingID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -522,7 +501,6 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(contact.UpdatedAt).
 			SetCreatedBy(contact.CreatedBy).
 			SetUpdatedBy(contact.UpdatedBy).
-			SetMappingID(contact.MappingID).
 			SetDeletedAt(contact.DeletedAt).
 			SetDeletedBy(contact.DeletedBy).
 			SetTags(contact.Tags).
@@ -582,8 +560,8 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -708,10 +686,10 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(control.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(control.MappingID)
+			create = create.SetDisplayID(control.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -836,7 +814,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(control.UpdatedBy).
 			SetDeletedAt(control.DeletedAt).
 			SetDeletedBy(control.DeletedBy).
-			SetMappingID(control.MappingID).
+			SetDisplayID(control.DisplayID).
 			SetTags(control.Tags).
 			SetOwnerID(control.OwnerID).
 			SetName(control.Name).
@@ -899,8 +877,8 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -1021,10 +999,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDeletedBy(controlobjective.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(controlobjective.MappingID)
+			create = create.SetDisplayID(controlobjective.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -1143,7 +1121,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetUpdatedBy(controlobjective.UpdatedBy).
 			SetDeletedAt(controlobjective.DeletedAt).
 			SetDeletedBy(controlobjective.DeletedBy).
-			SetMappingID(controlobjective.MappingID).
+			SetDisplayID(controlobjective.DisplayID).
 			SetTags(controlobjective.Tags).
 			SetOwnerID(controlobjective.OwnerID).
 			SetName(controlobjective.Name).
@@ -1195,10 +1173,6 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -1279,12 +1253,6 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(documentdata.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(documentdata.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -1357,7 +1325,6 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(documentdata.UpdatedAt).
 			SetCreatedBy(documentdata.CreatedBy).
 			SetUpdatedBy(documentdata.UpdatedBy).
-			SetMappingID(documentdata.MappingID).
 			SetTags(documentdata.Tags).
 			SetDeletedAt(documentdata.DeletedAt).
 			SetDeletedBy(documentdata.DeletedBy).
@@ -1402,10 +1369,6 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -1500,12 +1463,6 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(entity.UpdatedBy)
-		}
-
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(entity.MappingID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -1604,7 +1561,6 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(entity.UpdatedAt).
 			SetCreatedBy(entity.CreatedBy).
 			SetUpdatedBy(entity.UpdatedBy).
-			SetMappingID(entity.MappingID).
 			SetDeletedAt(entity.DeletedAt).
 			SetDeletedBy(entity.DeletedBy).
 			SetTags(entity.Tags).
@@ -1653,10 +1609,6 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -1733,12 +1685,6 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedBy(entitytype.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(entitytype.MappingID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -1805,7 +1751,6 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedAt(entitytype.UpdatedAt).
 			SetCreatedBy(entitytype.CreatedBy).
 			SetUpdatedBy(entitytype.UpdatedBy).
-			SetMappingID(entitytype.MappingID).
 			SetDeletedAt(entitytype.DeletedAt).
 			SetDeletedBy(entitytype.DeletedBy).
 			SetTags(entitytype.Tags).
@@ -1849,10 +1794,6 @@ func (m *EventMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -1929,12 +1870,6 @@ func (m *EventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(event.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(event.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -2001,7 +1936,6 @@ func (m *EventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(event.UpdatedAt).
 			SetCreatedBy(event.CreatedBy).
 			SetUpdatedBy(event.UpdatedBy).
-			SetMappingID(event.MappingID).
 			SetTags(event.Tags).
 			SetEventID(event.EventID).
 			SetCorrelationID(event.CorrelationID).
@@ -2053,10 +1987,6 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -2183,12 +2113,6 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(file.DeletedBy)
-		}
-
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(file.MappingID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -2319,7 +2243,6 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(file.UpdatedBy).
 			SetDeletedAt(file.DeletedAt).
 			SetDeletedBy(file.DeletedBy).
-			SetMappingID(file.MappingID).
 			SetTags(file.Tags).
 			SetProvidedFileName(file.ProvidedFileName).
 			SetProvidedFileExtension(file.ProvidedFileExtension).
@@ -2381,10 +2304,6 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -2485,12 +2404,6 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(group.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(group.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -2577,7 +2490,6 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(group.UpdatedBy).
 			SetDeletedAt(group.DeletedAt).
 			SetDeletedBy(group.DeletedBy).
-			SetMappingID(group.MappingID).
 			SetTags(group.Tags).
 			SetOwnerID(group.OwnerID).
 			SetName(group.Name).
@@ -2624,10 +2536,6 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -2704,12 +2612,6 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(groupmembership.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(groupmembership.MappingID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -2776,7 +2678,6 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(groupmembership.UpdatedAt).
 			SetCreatedBy(groupmembership.CreatedBy).
 			SetUpdatedBy(groupmembership.UpdatedBy).
-			SetMappingID(groupmembership.MappingID).
 			SetDeletedAt(groupmembership.DeletedAt).
 			SetDeletedBy(groupmembership.DeletedBy).
 			SetRole(groupmembership.Role).
@@ -2820,10 +2721,6 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -2912,12 +2809,6 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(groupsetting.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(groupsetting.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -3002,7 +2893,6 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(groupsetting.UpdatedAt).
 			SetCreatedBy(groupsetting.CreatedBy).
 			SetUpdatedBy(groupsetting.UpdatedBy).
-			SetMappingID(groupsetting.MappingID).
 			SetTags(groupsetting.Tags).
 			SetDeletedAt(groupsetting.DeletedAt).
 			SetDeletedBy(groupsetting.DeletedBy).
@@ -3049,10 +2939,6 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -3137,12 +3023,6 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(hush.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(hush.MappingID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -3221,7 +3101,6 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(hush.UpdatedAt).
 			SetCreatedBy(hush.CreatedBy).
 			SetUpdatedBy(hush.UpdatedBy).
-			SetMappingID(hush.MappingID).
 			SetDeletedAt(hush.DeletedAt).
 			SetDeletedBy(hush.DeletedBy).
 			SetName(hush.Name).
@@ -3267,10 +3146,6 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -3355,12 +3230,6 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(integration.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(integration.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -3439,7 +3308,6 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(integration.UpdatedAt).
 			SetCreatedBy(integration.CreatedBy).
 			SetUpdatedBy(integration.UpdatedBy).
-			SetMappingID(integration.MappingID).
 			SetTags(integration.Tags).
 			SetDeletedAt(integration.DeletedAt).
 			SetDeletedBy(integration.DeletedBy).
@@ -3495,8 +3363,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -3605,10 +3473,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDeletedBy(internalpolicy.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(internalpolicy.MappingID)
+			create = create.SetDisplayID(internalpolicy.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -3709,7 +3577,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedBy(internalpolicy.UpdatedBy).
 			SetDeletedAt(internalpolicy.DeletedAt).
 			SetDeletedBy(internalpolicy.DeletedBy).
-			SetMappingID(internalpolicy.MappingID).
+			SetDisplayID(internalpolicy.DisplayID).
 			SetTags(internalpolicy.Tags).
 			SetOwnerID(internalpolicy.OwnerID).
 			SetName(internalpolicy.Name).
@@ -3768,8 +3636,8 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -3862,10 +3730,10 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(narrative.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(narrative.MappingID)
+			create = create.SetDisplayID(narrative.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -3942,7 +3810,7 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(narrative.UpdatedBy).
 			SetDeletedAt(narrative.DeletedAt).
 			SetDeletedBy(narrative.DeletedBy).
-			SetMappingID(narrative.MappingID).
+			SetDisplayID(narrative.DisplayID).
 			SetTags(narrative.Tags).
 			SetOwnerID(narrative.OwnerID).
 			SetName(narrative.Name).
@@ -3989,8 +3857,8 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -4067,10 +3935,10 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(note.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(note.MappingID)
+			create = create.SetDisplayID(note.DisplayID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -4139,7 +4007,7 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(note.UpdatedAt).
 			SetCreatedBy(note.CreatedBy).
 			SetUpdatedBy(note.UpdatedBy).
-			SetMappingID(note.MappingID).
+			SetDisplayID(note.DisplayID).
 			SetDeletedAt(note.DeletedAt).
 			SetDeletedBy(note.DeletedBy).
 			SetTags(note.Tags).
@@ -4183,10 +4051,6 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -4263,12 +4127,6 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(orgmembership.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(orgmembership.MappingID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -4335,7 +4193,6 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(orgmembership.UpdatedAt).
 			SetCreatedBy(orgmembership.CreatedBy).
 			SetUpdatedBy(orgmembership.UpdatedBy).
-			SetMappingID(orgmembership.MappingID).
 			SetDeletedAt(orgmembership.DeletedAt).
 			SetDeletedBy(orgmembership.DeletedBy).
 			SetRole(orgmembership.Role).
@@ -4379,10 +4236,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -4493,12 +4346,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(orgsubscription.UpdatedBy)
-		}
-
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(orgsubscription.MappingID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -4621,7 +4468,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(orgsubscription.UpdatedAt).
 			SetCreatedBy(orgsubscription.CreatedBy).
 			SetUpdatedBy(orgsubscription.UpdatedBy).
-			SetMappingID(orgsubscription.MappingID).
 			SetTags(orgsubscription.Tags).
 			SetDeletedAt(orgsubscription.DeletedAt).
 			SetDeletedBy(orgsubscription.DeletedBy).
@@ -4674,10 +4520,6 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -4780,12 +4622,6 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(organization.UpdatedBy)
-		}
-
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(organization.MappingID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -4896,7 +4732,6 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(organization.UpdatedAt).
 			SetCreatedBy(organization.CreatedBy).
 			SetUpdatedBy(organization.UpdatedBy).
-			SetMappingID(organization.MappingID).
 			SetTags(organization.Tags).
 			SetDeletedAt(organization.DeletedAt).
 			SetDeletedBy(organization.DeletedBy).
@@ -4947,10 +4782,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -5053,12 +4884,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(organizationsetting.UpdatedBy)
-		}
-
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(organizationsetting.MappingID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -5169,7 +4994,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetUpdatedAt(organizationsetting.UpdatedAt).
 			SetCreatedBy(organizationsetting.CreatedBy).
 			SetUpdatedBy(organizationsetting.UpdatedBy).
-			SetMappingID(organizationsetting.MappingID).
 			SetTags(organizationsetting.Tags).
 			SetDeletedAt(organizationsetting.DeletedAt).
 			SetDeletedBy(organizationsetting.DeletedBy).
@@ -5230,8 +5054,8 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -5344,10 +5168,10 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(procedure.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(procedure.MappingID)
+			create = create.SetDisplayID(procedure.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -5454,7 +5278,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(procedure.UpdatedBy).
 			SetDeletedAt(procedure.DeletedAt).
 			SetDeletedBy(procedure.DeletedBy).
-			SetMappingID(procedure.MappingID).
+			SetDisplayID(procedure.DisplayID).
 			SetTags(procedure.Tags).
 			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
@@ -5506,8 +5330,8 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -5612,10 +5436,10 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(program.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(program.MappingID)
+			create = create.SetDisplayID(program.DisplayID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -5726,7 +5550,7 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(program.UpdatedAt).
 			SetCreatedBy(program.CreatedBy).
 			SetUpdatedBy(program.UpdatedBy).
-			SetMappingID(program.MappingID).
+			SetDisplayID(program.DisplayID).
 			SetDeletedAt(program.DeletedAt).
 			SetDeletedBy(program.DeletedBy).
 			SetTags(program.Tags).
@@ -5777,10 +5601,6 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -5857,12 +5677,6 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetUpdatedBy(programmembership.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(programmembership.MappingID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -5929,7 +5743,6 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetUpdatedAt(programmembership.UpdatedAt).
 			SetCreatedBy(programmembership.CreatedBy).
 			SetUpdatedBy(programmembership.UpdatedBy).
-			SetMappingID(programmembership.MappingID).
 			SetDeletedAt(programmembership.DeletedAt).
 			SetDeletedBy(programmembership.DeletedBy).
 			SetRole(programmembership.Role).
@@ -5983,8 +5796,8 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -6101,10 +5914,10 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(risk.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(risk.MappingID)
+			create = create.SetDisplayID(risk.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -6217,7 +6030,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(risk.UpdatedBy).
 			SetDeletedAt(risk.DeletedAt).
 			SetDeletedBy(risk.DeletedBy).
-			SetMappingID(risk.MappingID).
+			SetDisplayID(risk.DisplayID).
 			SetTags(risk.Tags).
 			SetOwnerID(risk.OwnerID).
 			SetName(risk.Name).
@@ -6276,10 +6089,6 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -6392,12 +6201,6 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(standard.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(standard.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -6502,7 +6305,6 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(standard.UpdatedBy).
 			SetDeletedAt(standard.DeletedAt).
 			SetDeletedBy(standard.DeletedBy).
-			SetMappingID(standard.MappingID).
 			SetTags(standard.Tags).
 			SetName(standard.Name).
 			SetDescription(standard.Description).
@@ -6562,8 +6364,8 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -6704,10 +6506,10 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDeletedBy(subcontrol.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(subcontrol.MappingID)
+			create = create.SetDisplayID(subcontrol.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -6856,7 +6658,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedBy(subcontrol.UpdatedBy).
 			SetDeletedAt(subcontrol.DeletedAt).
 			SetDeletedBy(subcontrol.DeletedBy).
-			SetMappingID(subcontrol.MappingID).
+			SetDisplayID(subcontrol.DisplayID).
 			SetTags(subcontrol.Tags).
 			SetOwnerID(subcontrol.OwnerID).
 			SetName(subcontrol.Name).
@@ -6915,8 +6717,8 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -6929,6 +6731,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
 	}
 
 	if title, exists := m.Title(); exists {
@@ -6951,8 +6757,20 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDue(due)
 	}
 
+	if priority, exists := m.Priority(); exists {
+		create = create.SetPriority(priority)
+	}
+
 	if completed, exists := m.Completed(); exists {
 		create = create.SetCompleted(completed)
+	}
+
+	if assigneeID, exists := m.AssigneeID(); exists {
+		create = create.SetAssigneeID(assigneeID)
+	}
+
+	if assignerID, exists := m.AssignerID(); exists {
+		create = create.SetAssignerID(assignerID)
 	}
 
 	_, err := create.Save(ctx)
@@ -7009,10 +6827,10 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(task.UpdatedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(task.MappingID)
+			create = create.SetDisplayID(task.DisplayID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -7031,6 +6849,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(task.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(task.OwnerID)
 		}
 
 		if title, exists := m.Title(); exists {
@@ -7063,10 +6887,28 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDue(task.Due)
 		}
 
+		if priority, exists := m.Priority(); exists {
+			create = create.SetPriority(priority)
+		} else {
+			create = create.SetPriority(task.Priority)
+		}
+
 		if completed, exists := m.Completed(); exists {
 			create = create.SetCompleted(completed)
 		} else {
 			create = create.SetCompleted(task.Completed)
+		}
+
+		if assigneeID, exists := m.AssigneeID(); exists {
+			create = create.SetAssigneeID(assigneeID)
+		} else {
+			create = create.SetAssigneeID(task.AssigneeID)
+		}
+
+		if assignerID, exists := m.AssignerID(); exists {
+			create = create.SetAssignerID(assignerID)
+		} else {
+			create = create.SetAssignerID(task.AssignerID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -7105,16 +6947,20 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(task.UpdatedAt).
 			SetCreatedBy(task.CreatedBy).
 			SetUpdatedBy(task.UpdatedBy).
-			SetMappingID(task.MappingID).
+			SetDisplayID(task.DisplayID).
 			SetDeletedAt(task.DeletedAt).
 			SetDeletedBy(task.DeletedBy).
 			SetTags(task.Tags).
+			SetOwnerID(task.OwnerID).
 			SetTitle(task.Title).
 			SetDescription(task.Description).
 			SetDetails(task.Details).
 			SetStatus(task.Status).
 			SetDue(task.Due).
+			SetPriority(task.Priority).
 			SetCompleted(task.Completed).
+			SetAssigneeID(task.AssigneeID).
+			SetAssignerID(task.AssignerID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7161,10 +7007,6 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -7261,12 +7103,6 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(template.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(template.MappingID)
-		}
-
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -7347,7 +7183,6 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(template.UpdatedBy).
 			SetDeletedAt(template.DeletedAt).
 			SetDeletedBy(template.DeletedBy).
-			SetMappingID(template.MappingID).
 			SetTags(template.Tags).
 			SetOwnerID(template.OwnerID).
 			SetName(template.Name).
@@ -7403,8 +7238,8 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -7525,10 +7360,10 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(user.DeletedBy)
 		}
 
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
 		} else {
-			create = create.SetMappingID(user.MappingID)
+			create = create.SetDisplayID(user.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -7647,7 +7482,7 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(user.UpdatedBy).
 			SetDeletedAt(user.DeletedAt).
 			SetDeletedBy(user.DeletedBy).
-			SetMappingID(user.MappingID).
+			SetDisplayID(user.DisplayID).
 			SetTags(user.Tags).
 			SetEmail(user.Email).
 			SetFirstName(user.FirstName).
@@ -7699,10 +7534,6 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if mappingID, exists := m.MappingID(); exists {
-		create = create.SetMappingID(mappingID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -7805,12 +7636,6 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(usersetting.UpdatedBy)
-		}
-
-		if mappingID, exists := m.MappingID(); exists {
-			create = create.SetMappingID(mappingID)
-		} else {
-			create = create.SetMappingID(usersetting.MappingID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -7921,7 +7746,6 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(usersetting.UpdatedAt).
 			SetCreatedBy(usersetting.CreatedBy).
 			SetUpdatedBy(usersetting.UpdatedBy).
-			SetMappingID(usersetting.MappingID).
 			SetTags(usersetting.Tags).
 			SetDeletedAt(usersetting.DeletedAt).
 			SetDeletedBy(usersetting.DeletedBy).

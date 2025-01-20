@@ -3,6 +3,7 @@ package task
 import (
 	"encoding/json"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -88,7 +89,7 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Task) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Title", "Description", "Details", "Assignee", "Assigner", "Status", "Due")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Title", "Description", "Details", "Assignee", "Assigner", "Status", "Due")
 
 	for _, i := range out {
 		assignee := ""
@@ -96,7 +97,19 @@ func tableOutput(out []openlaneclient.Task) {
 			assignee = i.Assignee.ID
 		}
 
-		writer.AddRow(i.ID, i.Title, *i.Description, i.Details, assignee, i.Assigner.ID, i.Status, i.Due)
+		var details string
+		if i.Details != nil {
+			for k, v := range i.Details {
+				details += k + ": " + v.(string) + "\n"
+			}
+		}
+
+		var dueDate string
+		if i.Due != nil {
+			dueDate = i.Due.Format(time.RFC3339)
+		}
+
+		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Description, details, assignee, i.Assigner.ID, i.Status, dueDate)
 	}
 
 	writer.Render()

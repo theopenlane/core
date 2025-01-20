@@ -32,14 +32,16 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldMappingID holds the string denoting the mapping_id field in the database.
-	FieldMappingID = "mapping_id"
+	// FieldDisplayID holds the string denoting the display_id field in the database.
+	FieldDisplayID = "display_id"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -50,8 +52,14 @@ const (
 	FieldStatus = "status"
 	// FieldDue holds the string denoting the due field in the database.
 	FieldDue = "due"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
 	// FieldCompleted holds the string denoting the completed field in the database.
 	FieldCompleted = "completed"
+	// FieldAssigneeID holds the string denoting the assignee_id field in the database.
+	FieldAssigneeID = "assignee_id"
+	// FieldAssignerID holds the string denoting the assigner_id field in the database.
+	FieldAssignerID = "assigner_id"
 	// Table holds the table name of the taskhistory in the database.
 	Table = "task_history"
 )
@@ -66,16 +74,20 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldMappingID,
+	FieldDisplayID,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
 	FieldTitle,
 	FieldDescription,
 	FieldDetails,
 	FieldStatus,
 	FieldDue,
+	FieldPriority,
 	FieldCompleted,
+	FieldAssigneeID,
+	FieldAssignerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -103,8 +115,6 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultMappingID holds the default value on creation for the "mapping_id" field.
-	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
 	// DefaultID holds the default value on creation for the "id" field.
@@ -130,6 +140,18 @@ func StatusValidator(s enums.TaskStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("taskhistory: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultPriority enums.Priority = "MEDIUM"
+
+// PriorityValidator is a validator for the "priority" field enum values. It is called by the builders before save.
+func PriorityValidator(pr enums.Priority) error {
+	switch pr.String() {
+	case "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("taskhistory: invalid enum value for priority field: %q", pr)
 	}
 }
 
@@ -176,9 +198,9 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
-// ByMappingID orders the results by the mapping_id field.
-func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
+// ByDisplayID orders the results by the display_id field.
+func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
 // ByDeletedAt orders the results by the deleted_at field.
@@ -189,6 +211,11 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.
@@ -211,9 +238,24 @@ func ByDue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDue, opts...).ToFunc()
 }
 
+// ByPriority orders the results by the priority field.
+func ByPriority(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPriority, opts...).ToFunc()
+}
+
 // ByCompleted orders the results by the completed field.
 func ByCompleted(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompleted, opts...).ToFunc()
+}
+
+// ByAssigneeID orders the results by the assignee_id field.
+func ByAssigneeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssigneeID, opts...).ToFunc()
+}
+
+// ByAssignerID orders the results by the assigner_id field.
+func ByAssignerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignerID, opts...).ToFunc()
 }
 
 var (
@@ -228,4 +270,11 @@ var (
 	_ graphql.Marshaler = (*enums.TaskStatus)(nil)
 	// enums.TaskStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.TaskStatus)(nil)
+)
+
+var (
+	// enums.Priority must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Priority)(nil)
+	// enums.Priority must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Priority)(nil)
 )

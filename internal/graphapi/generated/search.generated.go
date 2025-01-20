@@ -320,6 +320,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_ControlObjective_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlObjective_tags(ctx, field)
 			case "ownerID":
@@ -429,6 +431,8 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
@@ -1248,6 +1252,8 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
@@ -1343,6 +1349,8 @@ func (ec *executionContext) fieldContext_NarrativeSearchResult_narratives(_ cont
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Narrative_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Narrative_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":
@@ -1555,28 +1563,14 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
 				return ec.fieldContext_Organization_children(ctx, field)
-			case "groups":
-				return ec.fieldContext_Organization_groups(ctx, field)
-			case "templates":
-				return ec.fieldContext_Organization_templates(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Organization_integrations(ctx, field)
 			case "setting":
 				return ec.fieldContext_Organization_setting(ctx, field)
-			case "documentData":
-				return ec.fieldContext_Organization_documentData(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 			case "personalAccessTokens":
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
 			case "users":
 				return ec.fieldContext_Organization_users(ctx, field)
-			case "invites":
-				return ec.fieldContext_Organization_invites(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "events":
 				return ec.fieldContext_Organization_events(ctx, field)
 			case "secrets":
@@ -1585,6 +1579,20 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_files(ctx, field)
 			case "avatarFile":
 				return ec.fieldContext_Organization_avatarFile(ctx, field)
+			case "groups":
+				return ec.fieldContext_Organization_groups(ctx, field)
+			case "templates":
+				return ec.fieldContext_Organization_templates(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Organization_integrations(ctx, field)
+			case "documentData":
+				return ec.fieldContext_Organization_documentData(ctx, field)
+			case "orgSubscriptions":
+				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
+			case "invites":
+				return ec.fieldContext_Organization_invites(ctx, field)
+			case "subscribers":
+				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
 			case "entityTypes":
@@ -1828,6 +1836,8 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Procedure_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
@@ -1921,6 +1931,8 @@ func (ec *executionContext) fieldContext_ProgramSearchResult_programs(_ context.
 				return ec.fieldContext_Program_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Program_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedBy":
@@ -2038,6 +2050,8 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Risk_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Risk_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
@@ -2366,6 +2380,8 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
@@ -2611,12 +2627,16 @@ func (ec *executionContext) fieldContext_TaskSearchResult_tasks(_ context.Contex
 				return ec.fieldContext_Task_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Task_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Task_ownerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "description":
@@ -2627,14 +2647,20 @@ func (ec *executionContext) fieldContext_TaskSearchResult_tasks(_ context.Contex
 				return ec.fieldContext_Task_status(ctx, field)
 			case "due":
 				return ec.fieldContext_Task_due(ctx, field)
+			case "priority":
+				return ec.fieldContext_Task_priority(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
+			case "assigneeID":
+				return ec.fieldContext_Task_assigneeID(ctx, field)
+			case "assignerID":
+				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Task_owner(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
 				return ec.fieldContext_Task_assignee(ctx, field)
-			case "organization":
-				return ec.fieldContext_Task_organization(ctx, field)
 			case "group":
 				return ec.fieldContext_Task_group(ctx, field)
 			case "internalPolicy":
@@ -2783,6 +2809,8 @@ func (ec *executionContext) fieldContext_UserSearchResult_users(_ context.Contex
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_User_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":

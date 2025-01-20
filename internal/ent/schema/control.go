@@ -94,7 +94,7 @@ func (Control) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("CTL"),
 		emixin.TagMixin{},
 		// controls must be associated with an organization but do not inherit permissions from the organization
 		// controls can inherit permissions from the associated programs

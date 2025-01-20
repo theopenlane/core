@@ -28,8 +28,6 @@ type OrgSubscription struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -97,7 +95,7 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orgsubscription.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldMappingID, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
+		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
 			values[i] = new(sql.NullString)
 		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
@@ -145,12 +143,6 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				os.UpdatedBy = value.String
-			}
-		case orgsubscription.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				os.MappingID = value.String
 			}
 		case orgsubscription.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -297,9 +289,6 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(os.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(os.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", os.Tags))

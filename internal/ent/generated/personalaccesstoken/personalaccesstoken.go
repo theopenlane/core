@@ -27,8 +27,6 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
-	// FieldMappingID holds the string denoting the mapping_id field in the database.
-	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
@@ -81,7 +79,6 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
-	FieldMappingID,
 	FieldTags,
 	FieldOwnerID,
 	FieldName,
@@ -126,8 +123,6 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultMappingID holds the default value on creation for the "mapping_id" field.
-	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -174,11 +169,6 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
-}
-
-// ByMappingID orders the results by the mapping_id field.
-func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

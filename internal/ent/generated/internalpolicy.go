@@ -31,8 +31,8 @@ type InternalPolicy struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -185,7 +185,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case internalpolicy.FieldTags, internalpolicy.FieldDetails:
 			values[i] = new([]byte)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldMappingID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -246,11 +246,11 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.DeletedBy = value.String
 			}
-		case internalpolicy.FieldMappingID:
+		case internalpolicy.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				ip.MappingID = value.String
+				ip.DisplayID = value.String
 			}
 		case internalpolicy.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -415,8 +415,8 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(ip.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(ip.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(ip.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ip.Tags))

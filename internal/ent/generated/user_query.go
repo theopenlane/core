@@ -2006,7 +2006,9 @@ func (uq *UserQuery) loadAssignerTasks(ctx context.Context, query *TaskQuery, no
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(task.FieldAssignerID)
+	}
 	query.Where(predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.AssignerTasksColumn), fks...))
 	}))
@@ -2015,13 +2017,10 @@ func (uq *UserQuery) loadAssignerTasks(ctx context.Context, query *TaskQuery, no
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.user_assigner_tasks
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "user_assigner_tasks" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.AssignerID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "user_assigner_tasks" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "assigner_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -2037,7 +2036,9 @@ func (uq *UserQuery) loadAssigneeTasks(ctx context.Context, query *TaskQuery, no
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(task.FieldAssigneeID)
+	}
 	query.Where(predicate.Task(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.AssigneeTasksColumn), fks...))
 	}))
@@ -2046,13 +2047,10 @@ func (uq *UserQuery) loadAssigneeTasks(ctx context.Context, query *TaskQuery, no
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.user_assignee_tasks
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "user_assignee_tasks" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.AssigneeID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "user_assignee_tasks" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "assignee_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
