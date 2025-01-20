@@ -105,20 +105,6 @@ func (atc *APITokenCreate) SetNillableDeletedBy(s *string) *APITokenCreate {
 	return atc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (atc *APITokenCreate) SetMappingID(s string) *APITokenCreate {
-	atc.mutation.SetMappingID(s)
-	return atc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (atc *APITokenCreate) SetNillableMappingID(s *string) *APITokenCreate {
-	if s != nil {
-		atc.SetMappingID(*s)
-	}
-	return atc
-}
-
 // SetTags sets the "tags" field.
 func (atc *APITokenCreate) SetTags(s []string) *APITokenCreate {
 	atc.mutation.SetTags(s)
@@ -277,13 +263,6 @@ func (atc *APITokenCreate) defaults() error {
 		v := apitoken.DefaultUpdatedAt()
 		atc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := atc.mutation.MappingID(); !ok {
-		if apitoken.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized apitoken.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := apitoken.DefaultMappingID()
-		atc.mutation.SetMappingID(v)
-	}
 	if _, ok := atc.mutation.Tags(); !ok {
 		v := apitoken.DefaultTags
 		atc.mutation.SetTags(v)
@@ -307,9 +286,6 @@ func (atc *APITokenCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (atc *APITokenCreate) check() error {
-	if _, ok := atc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "APIToken.mapping_id"`)}
-	}
 	if v, ok := atc.mutation.OwnerID(); ok {
 		if err := apitoken.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "APIToken.owner_id": %w`, err)}
@@ -385,10 +361,6 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 	if value, ok := atc.mutation.DeletedBy(); ok {
 		_spec.SetField(apitoken.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := atc.mutation.MappingID(); ok {
-		_spec.SetField(apitoken.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := atc.mutation.Tags(); ok {
 		_spec.SetField(apitoken.FieldTags, field.TypeJSON, value)

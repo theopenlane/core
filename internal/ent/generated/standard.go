@@ -30,8 +30,6 @@ type Standard struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
@@ -137,7 +135,7 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case standard.FieldTags, standard.FieldDetails:
 			values[i] = new([]byte)
-		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldMappingID, standard.FieldName, standard.FieldDescription, standard.FieldFamily, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldPurposeAndScope, standard.FieldBackground, standard.FieldSatisfies:
+		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldName, standard.FieldDescription, standard.FieldFamily, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldPurposeAndScope, standard.FieldBackground, standard.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case standard.FieldCreatedAt, standard.FieldUpdatedAt, standard.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -197,12 +195,6 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				s.DeletedBy = value.String
-			}
-		case standard.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				s.MappingID = value.String
 			}
 		case standard.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -352,9 +344,6 @@ func (s *Standard) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(s.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(s.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", s.Tags))

@@ -9,6 +9,7 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks
@@ -33,6 +34,7 @@ mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks
@@ -57,6 +59,7 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks
@@ -104,6 +107,7 @@ query GetAllControlObjectives {
         createdBy
         description
         details
+        displayID
         family
         id
         mappedFrameworks
@@ -143,6 +147,7 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     createdBy
     description
     details
+    displayID
     family
     id
     mappedFrameworks
@@ -183,6 +188,7 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
         createdBy
         description
         details
+        displayID
         family
         id
         mappedFrameworks
@@ -223,6 +229,7 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks

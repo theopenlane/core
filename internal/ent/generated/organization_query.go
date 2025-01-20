@@ -65,21 +65,21 @@ type OrganizationQuery struct {
 	withTemplateCreators              *GroupQuery
 	withParent                        *OrganizationQuery
 	withChildren                      *OrganizationQuery
-	withGroups                        *GroupQuery
-	withTemplates                     *TemplateQuery
-	withIntegrations                  *IntegrationQuery
 	withSetting                       *OrganizationSettingQuery
-	withDocumentData                  *DocumentDataQuery
-	withOrgSubscriptions              *OrgSubscriptionQuery
 	withPersonalAccessTokens          *PersonalAccessTokenQuery
 	withAPITokens                     *APITokenQuery
 	withUsers                         *UserQuery
-	withInvites                       *InviteQuery
-	withSubscribers                   *SubscriberQuery
 	withEvents                        *EventQuery
 	withSecrets                       *HushQuery
 	withFiles                         *FileQuery
 	withAvatarFile                    *FileQuery
+	withGroups                        *GroupQuery
+	withTemplates                     *TemplateQuery
+	withIntegrations                  *IntegrationQuery
+	withDocumentData                  *DocumentDataQuery
+	withOrgSubscriptions              *OrgSubscriptionQuery
+	withInvites                       *InviteQuery
+	withSubscribers                   *SubscriberQuery
 	withEntities                      *EntityQuery
 	withEntityTypes                   *EntityTypeQuery
 	withContacts                      *ContactQuery
@@ -106,19 +106,19 @@ type OrganizationQuery struct {
 	withNamedRiskCreators             map[string]*GroupQuery
 	withNamedTemplateCreators         map[string]*GroupQuery
 	withNamedChildren                 map[string]*OrganizationQuery
+	withNamedPersonalAccessTokens     map[string]*PersonalAccessTokenQuery
+	withNamedAPITokens                map[string]*APITokenQuery
+	withNamedUsers                    map[string]*UserQuery
+	withNamedEvents                   map[string]*EventQuery
+	withNamedSecrets                  map[string]*HushQuery
+	withNamedFiles                    map[string]*FileQuery
 	withNamedGroups                   map[string]*GroupQuery
 	withNamedTemplates                map[string]*TemplateQuery
 	withNamedIntegrations             map[string]*IntegrationQuery
 	withNamedDocumentData             map[string]*DocumentDataQuery
 	withNamedOrgSubscriptions         map[string]*OrgSubscriptionQuery
-	withNamedPersonalAccessTokens     map[string]*PersonalAccessTokenQuery
-	withNamedAPITokens                map[string]*APITokenQuery
-	withNamedUsers                    map[string]*UserQuery
 	withNamedInvites                  map[string]*InviteQuery
 	withNamedSubscribers              map[string]*SubscriberQuery
-	withNamedEvents                   map[string]*EventQuery
-	withNamedSecrets                  map[string]*HushQuery
-	withNamedFiles                    map[string]*FileQuery
 	withNamedEntities                 map[string]*EntityQuery
 	withNamedEntityTypes              map[string]*EntityTypeQuery
 	withNamedContacts                 map[string]*ContactQuery
@@ -444,81 +444,6 @@ func (oq *OrganizationQuery) QueryChildren() *OrganizationQuery {
 	return query
 }
 
-// QueryGroups chains the current query on the "groups" edge.
-func (oq *OrganizationQuery) QueryGroups() *GroupQuery {
-	query := (&GroupClient{config: oq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := oq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupsTable, organization.GroupsColumn),
-		)
-		schemaConfig := oq.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryTemplates chains the current query on the "templates" edge.
-func (oq *OrganizationQuery) QueryTemplates() *TemplateQuery {
-	query := (&TemplateClient{config: oq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := oq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(template.Table, template.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplatesTable, organization.TemplatesColumn),
-		)
-		schemaConfig := oq.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.Template
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryIntegrations chains the current query on the "integrations" edge.
-func (oq *OrganizationQuery) QueryIntegrations() *IntegrationQuery {
-	query := (&IntegrationClient{config: oq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := oq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(integration.Table, integration.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationsTable, organization.IntegrationsColumn),
-		)
-		schemaConfig := oq.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QuerySetting chains the current query on the "setting" edge.
 func (oq *OrganizationQuery) QuerySetting() *OrganizationSettingQuery {
 	query := (&OrganizationSettingClient{config: oq.config}).Query()
@@ -538,56 +463,6 @@ func (oq *OrganizationQuery) QuerySetting() *OrganizationSettingQuery {
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.OrganizationSetting
 		step.Edge.Schema = schemaConfig.OrganizationSetting
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryDocumentData chains the current query on the "document_data" edge.
-func (oq *OrganizationQuery) QueryDocumentData() *DocumentDataQuery {
-	query := (&DocumentDataClient{config: oq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := oq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(documentdata.Table, documentdata.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentDataTable, organization.DocumentDataColumn),
-		)
-		schemaConfig := oq.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.DocumentData
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryOrgSubscriptions chains the current query on the "org_subscriptions" edge.
-func (oq *OrganizationQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
-	query := (&OrgSubscriptionClient{config: oq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := oq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgSubscriptionsTable, organization.OrgSubscriptionsColumn),
-		)
-		schemaConfig := oq.schemaConfig
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -663,56 +538,6 @@ func (oq *OrganizationQuery) QueryUsers() *UserQuery {
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrgMembership
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryInvites chains the current query on the "invites" edge.
-func (oq *OrganizationQuery) QueryInvites() *InviteQuery {
-	query := (&InviteClient{config: oq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := oq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(invite.Table, invite.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.InvitesTable, organization.InvitesColumn),
-		)
-		schemaConfig := oq.schemaConfig
-		step.To.Schema = schemaConfig.Invite
-		step.Edge.Schema = schemaConfig.Invite
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QuerySubscribers chains the current query on the "subscribers" edge.
-func (oq *OrganizationQuery) QuerySubscribers() *SubscriberQuery {
-	query := (&SubscriberClient{config: oq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := oq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(subscriber.Table, subscriber.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubscribersTable, organization.SubscribersColumn),
-		)
-		schemaConfig := oq.schemaConfig
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -813,6 +638,181 @@ func (oq *OrganizationQuery) QueryAvatarFile() *FileQuery {
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.Organization
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryGroups chains the current query on the "groups" edge.
+func (oq *OrganizationQuery) QueryGroups() *GroupQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupsTable, organization.GroupsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTemplates chains the current query on the "templates" edge.
+func (oq *OrganizationQuery) QueryTemplates() *TemplateQuery {
+	query := (&TemplateClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplatesTable, organization.TemplatesColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrations chains the current query on the "integrations" edge.
+func (oq *OrganizationQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationsTable, organization.IntegrationsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDocumentData chains the current query on the "document_data" edge.
+func (oq *OrganizationQuery) QueryDocumentData() *DocumentDataQuery {
+	query := (&DocumentDataClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentDataTable, organization.DocumentDataColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrgSubscriptions chains the current query on the "org_subscriptions" edge.
+func (oq *OrganizationQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgSubscriptionsTable, organization.OrgSubscriptionsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInvites chains the current query on the "invites" edge.
+func (oq *OrganizationQuery) QueryInvites() *InviteQuery {
+	query := (&InviteClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(invite.Table, invite.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.InvitesTable, organization.InvitesColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Invite
+		step.Edge.Schema = schemaConfig.Invite
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubscribers chains the current query on the "subscribers" edge.
+func (oq *OrganizationQuery) QuerySubscribers() *SubscriberQuery {
+	query := (&SubscriberClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubscribersTable, organization.SubscribersColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -933,11 +933,11 @@ func (oq *OrganizationQuery) QueryTasks() *TaskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(task.Table, task.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.TasksTable, organization.TasksPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TasksTable, organization.TasksColumn),
 		)
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.OrganizationTasks
+		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1372,21 +1372,21 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withTemplateCreators:         oq.withTemplateCreators.Clone(),
 		withParent:                   oq.withParent.Clone(),
 		withChildren:                 oq.withChildren.Clone(),
-		withGroups:                   oq.withGroups.Clone(),
-		withTemplates:                oq.withTemplates.Clone(),
-		withIntegrations:             oq.withIntegrations.Clone(),
 		withSetting:                  oq.withSetting.Clone(),
-		withDocumentData:             oq.withDocumentData.Clone(),
-		withOrgSubscriptions:         oq.withOrgSubscriptions.Clone(),
 		withPersonalAccessTokens:     oq.withPersonalAccessTokens.Clone(),
 		withAPITokens:                oq.withAPITokens.Clone(),
 		withUsers:                    oq.withUsers.Clone(),
-		withInvites:                  oq.withInvites.Clone(),
-		withSubscribers:              oq.withSubscribers.Clone(),
 		withEvents:                   oq.withEvents.Clone(),
 		withSecrets:                  oq.withSecrets.Clone(),
 		withFiles:                    oq.withFiles.Clone(),
 		withAvatarFile:               oq.withAvatarFile.Clone(),
+		withGroups:                   oq.withGroups.Clone(),
+		withTemplates:                oq.withTemplates.Clone(),
+		withIntegrations:             oq.withIntegrations.Clone(),
+		withDocumentData:             oq.withDocumentData.Clone(),
+		withOrgSubscriptions:         oq.withOrgSubscriptions.Clone(),
+		withInvites:                  oq.withInvites.Clone(),
+		withSubscribers:              oq.withSubscribers.Clone(),
 		withEntities:                 oq.withEntities.Clone(),
 		withEntityTypes:              oq.withEntityTypes.Clone(),
 		withContacts:                 oq.withContacts.Clone(),
@@ -1529,39 +1529,6 @@ func (oq *OrganizationQuery) WithChildren(opts ...func(*OrganizationQuery)) *Org
 	return oq
 }
 
-// WithGroups tells the query-builder to eager-load the nodes that are connected to
-// the "groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithGroups(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withGroups = query
-	return oq
-}
-
-// WithTemplates tells the query-builder to eager-load the nodes that are connected to
-// the "templates" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithTemplates(opts ...func(*TemplateQuery)) *OrganizationQuery {
-	query := (&TemplateClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withTemplates = query
-	return oq
-}
-
-// WithIntegrations tells the query-builder to eager-load the nodes that are connected to
-// the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *OrganizationQuery {
-	query := (&IntegrationClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withIntegrations = query
-	return oq
-}
-
 // WithSetting tells the query-builder to eager-load the nodes that are connected to
 // the "setting" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithSetting(opts ...func(*OrganizationSettingQuery)) *OrganizationQuery {
@@ -1570,28 +1537,6 @@ func (oq *OrganizationQuery) WithSetting(opts ...func(*OrganizationSettingQuery)
 		opt(query)
 	}
 	oq.withSetting = query
-	return oq
-}
-
-// WithDocumentData tells the query-builder to eager-load the nodes that are connected to
-// the "document_data" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithDocumentData(opts ...func(*DocumentDataQuery)) *OrganizationQuery {
-	query := (&DocumentDataClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withDocumentData = query
-	return oq
-}
-
-// WithOrgSubscriptions tells the query-builder to eager-load the nodes that are connected to
-// the "org_subscriptions" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithOrgSubscriptions(opts ...func(*OrgSubscriptionQuery)) *OrganizationQuery {
-	query := (&OrgSubscriptionClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withOrgSubscriptions = query
 	return oq
 }
 
@@ -1625,28 +1570,6 @@ func (oq *OrganizationQuery) WithUsers(opts ...func(*UserQuery)) *OrganizationQu
 		opt(query)
 	}
 	oq.withUsers = query
-	return oq
-}
-
-// WithInvites tells the query-builder to eager-load the nodes that are connected to
-// the "invites" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithInvites(opts ...func(*InviteQuery)) *OrganizationQuery {
-	query := (&InviteClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withInvites = query
-	return oq
-}
-
-// WithSubscribers tells the query-builder to eager-load the nodes that are connected to
-// the "subscribers" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *OrganizationQuery {
-	query := (&SubscriberClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withSubscribers = query
 	return oq
 }
 
@@ -1691,6 +1614,83 @@ func (oq *OrganizationQuery) WithAvatarFile(opts ...func(*FileQuery)) *Organizat
 		opt(query)
 	}
 	oq.withAvatarFile = query
+	return oq
+}
+
+// WithGroups tells the query-builder to eager-load the nodes that are connected to
+// the "groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithGroups(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withGroups = query
+	return oq
+}
+
+// WithTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithTemplates(opts ...func(*TemplateQuery)) *OrganizationQuery {
+	query := (&TemplateClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withTemplates = query
+	return oq
+}
+
+// WithIntegrations tells the query-builder to eager-load the nodes that are connected to
+// the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *OrganizationQuery {
+	query := (&IntegrationClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withIntegrations = query
+	return oq
+}
+
+// WithDocumentData tells the query-builder to eager-load the nodes that are connected to
+// the "document_data" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithDocumentData(opts ...func(*DocumentDataQuery)) *OrganizationQuery {
+	query := (&DocumentDataClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withDocumentData = query
+	return oq
+}
+
+// WithOrgSubscriptions tells the query-builder to eager-load the nodes that are connected to
+// the "org_subscriptions" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithOrgSubscriptions(opts ...func(*OrgSubscriptionQuery)) *OrganizationQuery {
+	query := (&OrgSubscriptionClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withOrgSubscriptions = query
+	return oq
+}
+
+// WithInvites tells the query-builder to eager-load the nodes that are connected to
+// the "invites" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithInvites(opts ...func(*InviteQuery)) *OrganizationQuery {
+	query := (&InviteClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withInvites = query
+	return oq
+}
+
+// WithSubscribers tells the query-builder to eager-load the nodes that are connected to
+// the "subscribers" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *OrganizationQuery {
+	query := (&SubscriberClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withSubscribers = query
 	return oq
 }
 
@@ -1944,21 +1944,21 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withTemplateCreators != nil,
 			oq.withParent != nil,
 			oq.withChildren != nil,
-			oq.withGroups != nil,
-			oq.withTemplates != nil,
-			oq.withIntegrations != nil,
 			oq.withSetting != nil,
-			oq.withDocumentData != nil,
-			oq.withOrgSubscriptions != nil,
 			oq.withPersonalAccessTokens != nil,
 			oq.withAPITokens != nil,
 			oq.withUsers != nil,
-			oq.withInvites != nil,
-			oq.withSubscribers != nil,
 			oq.withEvents != nil,
 			oq.withSecrets != nil,
 			oq.withFiles != nil,
 			oq.withAvatarFile != nil,
+			oq.withGroups != nil,
+			oq.withTemplates != nil,
+			oq.withIntegrations != nil,
+			oq.withDocumentData != nil,
+			oq.withOrgSubscriptions != nil,
+			oq.withInvites != nil,
+			oq.withSubscribers != nil,
 			oq.withEntities != nil,
 			oq.withEntityTypes != nil,
 			oq.withContacts != nil,
@@ -2078,46 +2078,9 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := oq.withGroups; query != nil {
-		if err := oq.loadGroups(ctx, query, nodes,
-			func(n *Organization) { n.Edges.Groups = []*Group{} },
-			func(n *Organization, e *Group) { n.Edges.Groups = append(n.Edges.Groups, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := oq.withTemplates; query != nil {
-		if err := oq.loadTemplates(ctx, query, nodes,
-			func(n *Organization) { n.Edges.Templates = []*Template{} },
-			func(n *Organization, e *Template) { n.Edges.Templates = append(n.Edges.Templates, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := oq.withIntegrations; query != nil {
-		if err := oq.loadIntegrations(ctx, query, nodes,
-			func(n *Organization) { n.Edges.Integrations = []*Integration{} },
-			func(n *Organization, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := oq.withSetting; query != nil {
 		if err := oq.loadSetting(ctx, query, nodes, nil,
 			func(n *Organization, e *OrganizationSetting) { n.Edges.Setting = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := oq.withDocumentData; query != nil {
-		if err := oq.loadDocumentData(ctx, query, nodes,
-			func(n *Organization) { n.Edges.DocumentData = []*DocumentData{} },
-			func(n *Organization, e *DocumentData) { n.Edges.DocumentData = append(n.Edges.DocumentData, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := oq.withOrgSubscriptions; query != nil {
-		if err := oq.loadOrgSubscriptions(ctx, query, nodes,
-			func(n *Organization) { n.Edges.OrgSubscriptions = []*OrgSubscription{} },
-			func(n *Organization, e *OrgSubscription) {
-				n.Edges.OrgSubscriptions = append(n.Edges.OrgSubscriptions, e)
-			}); err != nil {
 			return nil, err
 		}
 	}
@@ -2141,20 +2104,6 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadUsers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Users = []*User{} },
 			func(n *Organization, e *User) { n.Edges.Users = append(n.Edges.Users, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := oq.withInvites; query != nil {
-		if err := oq.loadInvites(ctx, query, nodes,
-			func(n *Organization) { n.Edges.Invites = []*Invite{} },
-			func(n *Organization, e *Invite) { n.Edges.Invites = append(n.Edges.Invites, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := oq.withSubscribers; query != nil {
-		if err := oq.loadSubscribers(ctx, query, nodes,
-			func(n *Organization) { n.Edges.Subscribers = []*Subscriber{} },
-			func(n *Organization, e *Subscriber) { n.Edges.Subscribers = append(n.Edges.Subscribers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2182,6 +2131,57 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if query := oq.withAvatarFile; query != nil {
 		if err := oq.loadAvatarFile(ctx, query, nodes, nil,
 			func(n *Organization, e *File) { n.Edges.AvatarFile = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withGroups; query != nil {
+		if err := oq.loadGroups(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Groups = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.Groups = append(n.Edges.Groups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withTemplates; query != nil {
+		if err := oq.loadTemplates(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Templates = []*Template{} },
+			func(n *Organization, e *Template) { n.Edges.Templates = append(n.Edges.Templates, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withIntegrations; query != nil {
+		if err := oq.loadIntegrations(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Integrations = []*Integration{} },
+			func(n *Organization, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withDocumentData; query != nil {
+		if err := oq.loadDocumentData(ctx, query, nodes,
+			func(n *Organization) { n.Edges.DocumentData = []*DocumentData{} },
+			func(n *Organization, e *DocumentData) { n.Edges.DocumentData = append(n.Edges.DocumentData, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withOrgSubscriptions; query != nil {
+		if err := oq.loadOrgSubscriptions(ctx, query, nodes,
+			func(n *Organization) { n.Edges.OrgSubscriptions = []*OrgSubscription{} },
+			func(n *Organization, e *OrgSubscription) {
+				n.Edges.OrgSubscriptions = append(n.Edges.OrgSubscriptions, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withInvites; query != nil {
+		if err := oq.loadInvites(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Invites = []*Invite{} },
+			func(n *Organization, e *Invite) { n.Edges.Invites = append(n.Edges.Invites, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withSubscribers; query != nil {
+		if err := oq.loadSubscribers(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Subscribers = []*Subscriber{} },
+			func(n *Organization, e *Subscriber) { n.Edges.Subscribers = append(n.Edges.Subscribers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2357,6 +2357,48 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range oq.withNamedPersonalAccessTokens {
+		if err := oq.loadPersonalAccessTokens(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedPersonalAccessTokens(name) },
+			func(n *Organization, e *PersonalAccessToken) { n.appendNamedPersonalAccessTokens(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedAPITokens {
+		if err := oq.loadAPITokens(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAPITokens(name) },
+			func(n *Organization, e *APIToken) { n.appendNamedAPITokens(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedUsers {
+		if err := oq.loadUsers(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedUsers(name) },
+			func(n *Organization, e *User) { n.appendNamedUsers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedEvents {
+		if err := oq.loadEvents(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedEvents(name) },
+			func(n *Organization, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedSecrets {
+		if err := oq.loadSecrets(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedSecrets(name) },
+			func(n *Organization, e *Hush) { n.appendNamedSecrets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedFiles {
+		if err := oq.loadFiles(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedFiles(name) },
+			func(n *Organization, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range oq.withNamedGroups {
 		if err := oq.loadGroups(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedGroups(name) },
@@ -2392,27 +2434,6 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	for name, query := range oq.withNamedPersonalAccessTokens {
-		if err := oq.loadPersonalAccessTokens(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedPersonalAccessTokens(name) },
-			func(n *Organization, e *PersonalAccessToken) { n.appendNamedPersonalAccessTokens(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range oq.withNamedAPITokens {
-		if err := oq.loadAPITokens(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedAPITokens(name) },
-			func(n *Organization, e *APIToken) { n.appendNamedAPITokens(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range oq.withNamedUsers {
-		if err := oq.loadUsers(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedUsers(name) },
-			func(n *Organization, e *User) { n.appendNamedUsers(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range oq.withNamedInvites {
 		if err := oq.loadInvites(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedInvites(name) },
@@ -2424,27 +2445,6 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadSubscribers(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedSubscribers(name) },
 			func(n *Organization, e *Subscriber) { n.appendNamedSubscribers(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range oq.withNamedEvents {
-		if err := oq.loadEvents(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedEvents(name) },
-			func(n *Organization, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range oq.withNamedSecrets {
-		if err := oq.loadSecrets(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedSecrets(name) },
-			func(n *Organization, e *Hush) { n.appendNamedSecrets(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range oq.withNamedFiles {
-		if err := oq.loadFiles(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedFiles(name) },
-			func(n *Organization, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3171,97 +3171,6 @@ func (oq *OrganizationQuery) loadChildren(ctx context.Context, query *Organizati
 	}
 	return nil
 }
-func (oq *OrganizationQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(group.FieldOwnerID)
-	}
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.GroupsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (oq *OrganizationQuery) loadTemplates(ctx context.Context, query *TemplateQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Template)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(template.FieldOwnerID)
-	}
-	query.Where(predicate.Template(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.TemplatesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (oq *OrganizationQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Integration)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(integration.FieldOwnerID)
-	}
-	query.Where(predicate.Integration(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.IntegrationsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (oq *OrganizationQuery) loadSetting(ctx context.Context, query *OrganizationSettingQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrganizationSetting)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3284,66 +3193,6 @@ func (oq *OrganizationQuery) loadSetting(ctx context.Context, query *Organizatio
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (oq *OrganizationQuery) loadDocumentData(ctx context.Context, query *DocumentDataQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DocumentData)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(documentdata.FieldOwnerID)
-	}
-	query.Where(predicate.DocumentData(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.DocumentDataColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (oq *OrganizationQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscriptionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgSubscription)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(orgsubscription.FieldOwnerID)
-	}
-	query.Where(predicate.OrgSubscription(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.OrgSubscriptionsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -3500,66 +3349,6 @@ func (oq *OrganizationQuery) loadUsers(ctx context.Context, query *UserQuery, no
 		for kn := range nodes {
 			assign(kn, n)
 		}
-	}
-	return nil
-}
-func (oq *OrganizationQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Invite)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(invite.FieldOwnerID)
-	}
-	query.Where(predicate.Invite(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.InvitesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (oq *OrganizationQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Subscriber)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(subscriber.FieldOwnerID)
-	}
-	query.Where(predicate.Subscriber(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.SubscribersColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
 	}
 	return nil
 }
@@ -3781,6 +3570,217 @@ func (oq *OrganizationQuery) loadAvatarFile(ctx context.Context, query *FileQuer
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(group.FieldOwnerID)
+	}
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.GroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadTemplates(ctx context.Context, query *TemplateQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Template)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(template.FieldOwnerID)
+	}
+	query.Where(predicate.Template(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.TemplatesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Integration)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(integration.FieldOwnerID)
+	}
+	query.Where(predicate.Integration(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IntegrationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadDocumentData(ctx context.Context, query *DocumentDataQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DocumentData)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(documentdata.FieldOwnerID)
+	}
+	query.Where(predicate.DocumentData(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.DocumentDataColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscriptionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgSubscription)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(orgsubscription.FieldOwnerID)
+	}
+	query.Where(predicate.OrgSubscription(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.OrgSubscriptionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Invite)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(invite.FieldOwnerID)
+	}
+	query.Where(predicate.Invite(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.InvitesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Subscriber)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(subscriber.FieldOwnerID)
+	}
+	query.Where(predicate.Subscriber(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.SubscribersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Entity)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3904,64 +3904,32 @@ func (oq *OrganizationQuery) loadNotes(ctx context.Context, query *NoteQuery, no
 	return nil
 }
 func (oq *OrganizationQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Task)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Organization)
-	nids := make(map[string]map[*Organization]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
 		if init != nil {
-			init(node)
+			init(nodes[i])
 		}
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(organization.TasksTable)
-		joinT.Schema(oq.schemaConfig.OrganizationTasks)
-		s.Join(joinT).On(s.C(task.FieldID), joinT.C(organization.TasksPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(organization.TasksPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(organization.TasksPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(task.FieldOwnerID)
 	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Organization]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	query.Where(predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.TasksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -4485,6 +4453,90 @@ func (oq *OrganizationQuery) WithNamedChildren(name string, opts ...func(*Organi
 	return oq
 }
 
+// WithNamedPersonalAccessTokens tells the query-builder to eager-load the nodes that are connected to the "personal_access_tokens"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedPersonalAccessTokens(name string, opts ...func(*PersonalAccessTokenQuery)) *OrganizationQuery {
+	query := (&PersonalAccessTokenClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedPersonalAccessTokens == nil {
+		oq.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery)
+	}
+	oq.withNamedPersonalAccessTokens[name] = query
+	return oq
+}
+
+// WithNamedAPITokens tells the query-builder to eager-load the nodes that are connected to the "api_tokens"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedAPITokens(name string, opts ...func(*APITokenQuery)) *OrganizationQuery {
+	query := (&APITokenClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedAPITokens == nil {
+		oq.withNamedAPITokens = make(map[string]*APITokenQuery)
+	}
+	oq.withNamedAPITokens[name] = query
+	return oq
+}
+
+// WithNamedUsers tells the query-builder to eager-load the nodes that are connected to the "users"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedUsers(name string, opts ...func(*UserQuery)) *OrganizationQuery {
+	query := (&UserClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedUsers == nil {
+		oq.withNamedUsers = make(map[string]*UserQuery)
+	}
+	oq.withNamedUsers[name] = query
+	return oq
+}
+
+// WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *OrganizationQuery {
+	query := (&EventClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedEvents == nil {
+		oq.withNamedEvents = make(map[string]*EventQuery)
+	}
+	oq.withNamedEvents[name] = query
+	return oq
+}
+
+// WithNamedSecrets tells the query-builder to eager-load the nodes that are connected to the "secrets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedSecrets(name string, opts ...func(*HushQuery)) *OrganizationQuery {
+	query := (&HushClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedSecrets == nil {
+		oq.withNamedSecrets = make(map[string]*HushQuery)
+	}
+	oq.withNamedSecrets[name] = query
+	return oq
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *OrganizationQuery {
+	query := (&FileClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedFiles == nil {
+		oq.withNamedFiles = make(map[string]*FileQuery)
+	}
+	oq.withNamedFiles[name] = query
+	return oq
+}
+
 // WithNamedGroups tells the query-builder to eager-load the nodes that are connected to the "groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -4555,48 +4607,6 @@ func (oq *OrganizationQuery) WithNamedOrgSubscriptions(name string, opts ...func
 	return oq
 }
 
-// WithNamedPersonalAccessTokens tells the query-builder to eager-load the nodes that are connected to the "personal_access_tokens"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedPersonalAccessTokens(name string, opts ...func(*PersonalAccessTokenQuery)) *OrganizationQuery {
-	query := (&PersonalAccessTokenClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if oq.withNamedPersonalAccessTokens == nil {
-		oq.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery)
-	}
-	oq.withNamedPersonalAccessTokens[name] = query
-	return oq
-}
-
-// WithNamedAPITokens tells the query-builder to eager-load the nodes that are connected to the "api_tokens"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedAPITokens(name string, opts ...func(*APITokenQuery)) *OrganizationQuery {
-	query := (&APITokenClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if oq.withNamedAPITokens == nil {
-		oq.withNamedAPITokens = make(map[string]*APITokenQuery)
-	}
-	oq.withNamedAPITokens[name] = query
-	return oq
-}
-
-// WithNamedUsers tells the query-builder to eager-load the nodes that are connected to the "users"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedUsers(name string, opts ...func(*UserQuery)) *OrganizationQuery {
-	query := (&UserClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if oq.withNamedUsers == nil {
-		oq.withNamedUsers = make(map[string]*UserQuery)
-	}
-	oq.withNamedUsers[name] = query
-	return oq
-}
-
 // WithNamedInvites tells the query-builder to eager-load the nodes that are connected to the "invites"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithNamedInvites(name string, opts ...func(*InviteQuery)) *OrganizationQuery {
@@ -4622,48 +4632,6 @@ func (oq *OrganizationQuery) WithNamedSubscribers(name string, opts ...func(*Sub
 		oq.withNamedSubscribers = make(map[string]*SubscriberQuery)
 	}
 	oq.withNamedSubscribers[name] = query
-	return oq
-}
-
-// WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *OrganizationQuery {
-	query := (&EventClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if oq.withNamedEvents == nil {
-		oq.withNamedEvents = make(map[string]*EventQuery)
-	}
-	oq.withNamedEvents[name] = query
-	return oq
-}
-
-// WithNamedSecrets tells the query-builder to eager-load the nodes that are connected to the "secrets"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedSecrets(name string, opts ...func(*HushQuery)) *OrganizationQuery {
-	query := (&HushClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if oq.withNamedSecrets == nil {
-		oq.withNamedSecrets = make(map[string]*HushQuery)
-	}
-	oq.withNamedSecrets[name] = query
-	return oq
-}
-
-// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *OrganizationQuery {
-	query := (&FileClient{config: oq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if oq.withNamedFiles == nil {
-		oq.withNamedFiles = make(map[string]*FileQuery)
-	}
-	oq.withNamedFiles[name] = query
 	return oq
 }
 

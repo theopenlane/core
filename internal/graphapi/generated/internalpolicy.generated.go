@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
@@ -177,6 +179,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
@@ -319,6 +323,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":

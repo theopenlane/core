@@ -31,8 +31,6 @@ type APIToken struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -84,7 +82,7 @@ func (*APIToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apitoken.FieldTags, apitoken.FieldScopes:
 			values[i] = new([]byte)
-		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldMappingID, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription:
+		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription:
 			values[i] = new(sql.NullString)
 		case apitoken.FieldCreatedAt, apitoken.FieldUpdatedAt, apitoken.FieldDeletedAt, apitoken.FieldExpiresAt, apitoken.FieldLastUsedAt:
 			values[i] = new(sql.NullTime)
@@ -144,12 +142,6 @@ func (at *APIToken) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				at.DeletedBy = value.String
-			}
-		case apitoken.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				at.MappingID = value.String
 			}
 		case apitoken.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -264,9 +256,6 @@ func (at *APIToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(at.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(at.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", at.Tags))

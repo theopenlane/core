@@ -414,51 +414,6 @@ func (ou *OrganizationUpdate) AddChildren(o ...*Organization) *OrganizationUpdat
 	return ou.AddChildIDs(ids...)
 }
 
-// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddGroupIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddGroupIDs(ids...)
-	return ou
-}
-
-// AddGroups adds the "groups" edges to the Group entity.
-func (ou *OrganizationUpdate) AddGroups(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ou.AddGroupIDs(ids...)
-}
-
-// AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
-func (ou *OrganizationUpdate) AddTemplateIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddTemplateIDs(ids...)
-	return ou
-}
-
-// AddTemplates adds the "templates" edges to the Template entity.
-func (ou *OrganizationUpdate) AddTemplates(t ...*Template) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return ou.AddTemplateIDs(ids...)
-}
-
-// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (ou *OrganizationUpdate) AddIntegrationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddIntegrationIDs(ids...)
-	return ou
-}
-
-// AddIntegrations adds the "integrations" edges to the Integration entity.
-func (ou *OrganizationUpdate) AddIntegrations(i ...*Integration) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ou.AddIntegrationIDs(ids...)
-}
-
 // SetSettingID sets the "setting" edge to the OrganizationSetting entity by ID.
 func (ou *OrganizationUpdate) SetSettingID(id string) *OrganizationUpdate {
 	ou.mutation.SetSettingID(id)
@@ -476,36 +431,6 @@ func (ou *OrganizationUpdate) SetNillableSettingID(id *string) *OrganizationUpda
 // SetSetting sets the "setting" edge to the OrganizationSetting entity.
 func (ou *OrganizationUpdate) SetSetting(o *OrganizationSetting) *OrganizationUpdate {
 	return ou.SetSettingID(o.ID)
-}
-
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (ou *OrganizationUpdate) AddDocumentDatumIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddDocumentDatumIDs(ids...)
-	return ou
-}
-
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (ou *OrganizationUpdate) AddDocumentData(d ...*DocumentData) *OrganizationUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
-	}
-	return ou.AddDocumentDatumIDs(ids...)
-}
-
-// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
-func (ou *OrganizationUpdate) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddOrgSubscriptionIDs(ids...)
-	return ou
-}
-
-// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
-func (ou *OrganizationUpdate) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return ou.AddOrgSubscriptionIDs(ids...)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
@@ -551,36 +476,6 @@ func (ou *OrganizationUpdate) AddUsers(u ...*User) *OrganizationUpdate {
 		ids[i] = u[i].ID
 	}
 	return ou.AddUserIDs(ids...)
-}
-
-// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
-func (ou *OrganizationUpdate) AddInviteIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddInviteIDs(ids...)
-	return ou
-}
-
-// AddInvites adds the "invites" edges to the Invite entity.
-func (ou *OrganizationUpdate) AddInvites(i ...*Invite) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ou.AddInviteIDs(ids...)
-}
-
-// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
-func (ou *OrganizationUpdate) AddSubscriberIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddSubscriberIDs(ids...)
-	return ou
-}
-
-// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
-func (ou *OrganizationUpdate) AddSubscribers(s ...*Subscriber) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ou.AddSubscriberIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -645,6 +540,111 @@ func (ou *OrganizationUpdate) SetNillableAvatarFileID(id *string) *OrganizationU
 // SetAvatarFile sets the "avatar_file" edge to the File entity.
 func (ou *OrganizationUpdate) SetAvatarFile(f *File) *OrganizationUpdate {
 	return ou.SetAvatarFileID(f.ID)
+}
+
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
+func (ou *OrganizationUpdate) AddGroupIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddGroupIDs(ids...)
+	return ou
+}
+
+// AddGroups adds the "groups" edges to the Group entity.
+func (ou *OrganizationUpdate) AddGroups(g ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ou.AddGroupIDs(ids...)
+}
+
+// AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
+func (ou *OrganizationUpdate) AddTemplateIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddTemplateIDs(ids...)
+	return ou
+}
+
+// AddTemplates adds the "templates" edges to the Template entity.
+func (ou *OrganizationUpdate) AddTemplates(t ...*Template) *OrganizationUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ou.AddTemplateIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (ou *OrganizationUpdate) AddIntegrationIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddIntegrationIDs(ids...)
+	return ou
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (ou *OrganizationUpdate) AddIntegrations(i ...*Integration) *OrganizationUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ou.AddIntegrationIDs(ids...)
+}
+
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
+func (ou *OrganizationUpdate) AddDocumentDatumIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddDocumentDatumIDs(ids...)
+	return ou
+}
+
+// AddDocumentData adds the "document_data" edges to the DocumentData entity.
+func (ou *OrganizationUpdate) AddDocumentData(d ...*DocumentData) *OrganizationUpdate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ou.AddDocumentDatumIDs(ids...)
+}
+
+// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
+func (ou *OrganizationUpdate) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddOrgSubscriptionIDs(ids...)
+	return ou
+}
+
+// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
+func (ou *OrganizationUpdate) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ou.AddOrgSubscriptionIDs(ids...)
+}
+
+// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
+func (ou *OrganizationUpdate) AddInviteIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddInviteIDs(ids...)
+	return ou
+}
+
+// AddInvites adds the "invites" edges to the Invite entity.
+func (ou *OrganizationUpdate) AddInvites(i ...*Invite) *OrganizationUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ou.AddInviteIDs(ids...)
+}
+
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (ou *OrganizationUpdate) AddSubscriberIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddSubscriberIDs(ids...)
+	return ou
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (ou *OrganizationUpdate) AddSubscribers(s ...*Subscriber) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.AddSubscriberIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
@@ -1072,115 +1072,10 @@ func (ou *OrganizationUpdate) RemoveChildren(o ...*Organization) *OrganizationUp
 	return ou.RemoveChildIDs(ids...)
 }
 
-// ClearGroups clears all "groups" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearGroups() *OrganizationUpdate {
-	ou.mutation.ClearGroups()
-	return ou
-}
-
-// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveGroupIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveGroupIDs(ids...)
-	return ou
-}
-
-// RemoveGroups removes "groups" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveGroups(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ou.RemoveGroupIDs(ids...)
-}
-
-// ClearTemplates clears all "templates" edges to the Template entity.
-func (ou *OrganizationUpdate) ClearTemplates() *OrganizationUpdate {
-	ou.mutation.ClearTemplates()
-	return ou
-}
-
-// RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
-func (ou *OrganizationUpdate) RemoveTemplateIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveTemplateIDs(ids...)
-	return ou
-}
-
-// RemoveTemplates removes "templates" edges to Template entities.
-func (ou *OrganizationUpdate) RemoveTemplates(t ...*Template) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return ou.RemoveTemplateIDs(ids...)
-}
-
-// ClearIntegrations clears all "integrations" edges to the Integration entity.
-func (ou *OrganizationUpdate) ClearIntegrations() *OrganizationUpdate {
-	ou.mutation.ClearIntegrations()
-	return ou
-}
-
-// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
-func (ou *OrganizationUpdate) RemoveIntegrationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveIntegrationIDs(ids...)
-	return ou
-}
-
-// RemoveIntegrations removes "integrations" edges to Integration entities.
-func (ou *OrganizationUpdate) RemoveIntegrations(i ...*Integration) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ou.RemoveIntegrationIDs(ids...)
-}
-
 // ClearSetting clears the "setting" edge to the OrganizationSetting entity.
 func (ou *OrganizationUpdate) ClearSetting() *OrganizationUpdate {
 	ou.mutation.ClearSetting()
 	return ou
-}
-
-// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
-func (ou *OrganizationUpdate) ClearDocumentData() *OrganizationUpdate {
-	ou.mutation.ClearDocumentData()
-	return ou
-}
-
-// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
-func (ou *OrganizationUpdate) RemoveDocumentDatumIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveDocumentDatumIDs(ids...)
-	return ou
-}
-
-// RemoveDocumentData removes "document_data" edges to DocumentData entities.
-func (ou *OrganizationUpdate) RemoveDocumentData(d ...*DocumentData) *OrganizationUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
-	}
-	return ou.RemoveDocumentDatumIDs(ids...)
-}
-
-// ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
-func (ou *OrganizationUpdate) ClearOrgSubscriptions() *OrganizationUpdate {
-	ou.mutation.ClearOrgSubscriptions()
-	return ou
-}
-
-// RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
-func (ou *OrganizationUpdate) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveOrgSubscriptionIDs(ids...)
-	return ou
-}
-
-// RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
-func (ou *OrganizationUpdate) RemoveOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return ou.RemoveOrgSubscriptionIDs(ids...)
 }
 
 // ClearPersonalAccessTokens clears all "personal_access_tokens" edges to the PersonalAccessToken entity.
@@ -1244,48 +1139,6 @@ func (ou *OrganizationUpdate) RemoveUsers(u ...*User) *OrganizationUpdate {
 		ids[i] = u[i].ID
 	}
 	return ou.RemoveUserIDs(ids...)
-}
-
-// ClearInvites clears all "invites" edges to the Invite entity.
-func (ou *OrganizationUpdate) ClearInvites() *OrganizationUpdate {
-	ou.mutation.ClearInvites()
-	return ou
-}
-
-// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
-func (ou *OrganizationUpdate) RemoveInviteIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveInviteIDs(ids...)
-	return ou
-}
-
-// RemoveInvites removes "invites" edges to Invite entities.
-func (ou *OrganizationUpdate) RemoveInvites(i ...*Invite) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ou.RemoveInviteIDs(ids...)
-}
-
-// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
-func (ou *OrganizationUpdate) ClearSubscribers() *OrganizationUpdate {
-	ou.mutation.ClearSubscribers()
-	return ou
-}
-
-// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
-func (ou *OrganizationUpdate) RemoveSubscriberIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveSubscriberIDs(ids...)
-	return ou
-}
-
-// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
-func (ou *OrganizationUpdate) RemoveSubscribers(s ...*Subscriber) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ou.RemoveSubscriberIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -1355,6 +1208,153 @@ func (ou *OrganizationUpdate) RemoveFiles(f ...*File) *OrganizationUpdate {
 func (ou *OrganizationUpdate) ClearAvatarFile() *OrganizationUpdate {
 	ou.mutation.ClearAvatarFile()
 	return ou
+}
+
+// ClearGroups clears all "groups" edges to the Group entity.
+func (ou *OrganizationUpdate) ClearGroups() *OrganizationUpdate {
+	ou.mutation.ClearGroups()
+	return ou
+}
+
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
+func (ou *OrganizationUpdate) RemoveGroupIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveGroupIDs(ids...)
+	return ou
+}
+
+// RemoveGroups removes "groups" edges to Group entities.
+func (ou *OrganizationUpdate) RemoveGroups(g ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ou.RemoveGroupIDs(ids...)
+}
+
+// ClearTemplates clears all "templates" edges to the Template entity.
+func (ou *OrganizationUpdate) ClearTemplates() *OrganizationUpdate {
+	ou.mutation.ClearTemplates()
+	return ou
+}
+
+// RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
+func (ou *OrganizationUpdate) RemoveTemplateIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveTemplateIDs(ids...)
+	return ou
+}
+
+// RemoveTemplates removes "templates" edges to Template entities.
+func (ou *OrganizationUpdate) RemoveTemplates(t ...*Template) *OrganizationUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ou.RemoveTemplateIDs(ids...)
+}
+
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (ou *OrganizationUpdate) ClearIntegrations() *OrganizationUpdate {
+	ou.mutation.ClearIntegrations()
+	return ou
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (ou *OrganizationUpdate) RemoveIntegrationIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveIntegrationIDs(ids...)
+	return ou
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (ou *OrganizationUpdate) RemoveIntegrations(i ...*Integration) *OrganizationUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ou.RemoveIntegrationIDs(ids...)
+}
+
+// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
+func (ou *OrganizationUpdate) ClearDocumentData() *OrganizationUpdate {
+	ou.mutation.ClearDocumentData()
+	return ou
+}
+
+// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
+func (ou *OrganizationUpdate) RemoveDocumentDatumIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveDocumentDatumIDs(ids...)
+	return ou
+}
+
+// RemoveDocumentData removes "document_data" edges to DocumentData entities.
+func (ou *OrganizationUpdate) RemoveDocumentData(d ...*DocumentData) *OrganizationUpdate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ou.RemoveDocumentDatumIDs(ids...)
+}
+
+// ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
+func (ou *OrganizationUpdate) ClearOrgSubscriptions() *OrganizationUpdate {
+	ou.mutation.ClearOrgSubscriptions()
+	return ou
+}
+
+// RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
+func (ou *OrganizationUpdate) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveOrgSubscriptionIDs(ids...)
+	return ou
+}
+
+// RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
+func (ou *OrganizationUpdate) RemoveOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ou.RemoveOrgSubscriptionIDs(ids...)
+}
+
+// ClearInvites clears all "invites" edges to the Invite entity.
+func (ou *OrganizationUpdate) ClearInvites() *OrganizationUpdate {
+	ou.mutation.ClearInvites()
+	return ou
+}
+
+// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
+func (ou *OrganizationUpdate) RemoveInviteIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveInviteIDs(ids...)
+	return ou
+}
+
+// RemoveInvites removes "invites" edges to Invite entities.
+func (ou *OrganizationUpdate) RemoveInvites(i ...*Invite) *OrganizationUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ou.RemoveInviteIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (ou *OrganizationUpdate) ClearSubscribers() *OrganizationUpdate {
+	ou.mutation.ClearSubscribers()
+	return ou
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (ou *OrganizationUpdate) RemoveSubscriberIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveSubscriberIDs(ids...)
+	return ou
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (ou *OrganizationUpdate) RemoveSubscribers(s ...*Subscriber) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.RemoveSubscriberIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
@@ -2289,150 +2289,6 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.GroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.GroupsTable,
-			Columns: []string{organization.GroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !ou.mutation.GroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.GroupsTable,
-			Columns: []string{organization.GroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.GroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.GroupsTable,
-			Columns: []string{organization.GroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ou.mutation.TemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.TemplatesTable,
-			Columns: []string{organization.TemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Template
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !ou.mutation.TemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.TemplatesTable,
-			Columns: []string{organization.TemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Template
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.TemplatesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.TemplatesTable,
-			Columns: []string{organization.TemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Template
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ou.mutation.IntegrationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.IntegrationsTable,
-			Columns: []string{organization.IntegrationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Integration
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !ou.mutation.IntegrationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.IntegrationsTable,
-			Columns: []string{organization.IntegrationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Integration
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.IntegrationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.IntegrationsTable,
-			Columns: []string{organization.IntegrationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Integration
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if ou.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -2459,102 +2315,6 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = ou.schemaConfig.OrganizationSetting
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ou.mutation.DocumentDataCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.DocumentData
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !ou.mutation.DocumentDataCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.DocumentData
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.DocumentDataIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.DocumentData
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ou.mutation.OrgSubscriptionsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OrgSubscriptionsTable,
-			Columns: []string{organization.OrgSubscriptionsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.OrgSubscription
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !ou.mutation.OrgSubscriptionsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OrgSubscriptionsTable,
-			Columns: []string{organization.OrgSubscriptionsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.OrgSubscription
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OrgSubscriptionsTable,
-			Columns: []string{organization.OrgSubscriptionsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2722,102 +2482,6 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ou.mutation.InvitesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.InvitesTable,
-			Columns: []string{organization.InvitesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Invite
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !ou.mutation.InvitesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.InvitesTable,
-			Columns: []string{organization.InvitesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Invite
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.InvitesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.InvitesTable,
-			Columns: []string{organization.InvitesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Invite
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ou.mutation.SubscribersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.SubscribersTable,
-			Columns: []string{organization.SubscribersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Subscriber
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !ou.mutation.SubscribersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.SubscribersTable,
-			Columns: []string{organization.SubscribersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Subscriber
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.SubscribersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.SubscribersTable,
-			Columns: []string{organization.SubscribersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ou.schemaConfig.Subscriber
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
@@ -2991,6 +2655,342 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = ou.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupsTable,
+			Columns: []string{organization.GroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !ou.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupsTable,
+			Columns: []string{organization.GroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.GroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupsTable,
+			Columns: []string{organization.GroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplatesTable,
+			Columns: []string{organization.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !ou.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplatesTable,
+			Columns: []string{organization.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.TemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplatesTable,
+			Columns: []string{organization.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsTable,
+			Columns: []string{organization.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !ou.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsTable,
+			Columns: []string{organization.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsTable,
+			Columns: []string{organization.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.DocumentDataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !ou.mutation.DocumentDataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.DocumentDataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.OrgSubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.OrgSubscription
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !ou.mutation.OrgSubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InvitesTable,
+			Columns: []string{organization.InvitesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Invite
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !ou.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InvitesTable,
+			Columns: []string{organization.InvitesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.InvitesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InvitesTable,
+			Columns: []string{organization.InvitesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubscribersTable,
+			Columns: []string{organization.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !ou.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubscribersTable,
+			Columns: []string{organization.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubscribersTable,
+			Columns: []string{organization.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3190,30 +3190,30 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.TasksTable,
-			Columns: organization.TasksPrimaryKey,
+			Columns: []string{organization.TasksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationTasks
+		edge.Schema = ou.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ou.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.TasksTable,
-			Columns: organization.TasksPrimaryKey,
+			Columns: []string{organization.TasksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationTasks
+		edge.Schema = ou.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3221,16 +3221,16 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := ou.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.TasksTable,
-			Columns: organization.TasksPrimaryKey,
+			Columns: []string{organization.TasksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationTasks
+		edge.Schema = ou.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4046,51 +4046,6 @@ func (ouo *OrganizationUpdateOne) AddChildren(o ...*Organization) *OrganizationU
 	return ouo.AddChildIDs(ids...)
 }
 
-// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddGroupIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddGroupIDs(ids...)
-	return ouo
-}
-
-// AddGroups adds the "groups" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddGroups(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ouo.AddGroupIDs(ids...)
-}
-
-// AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
-func (ouo *OrganizationUpdateOne) AddTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddTemplateIDs(ids...)
-	return ouo
-}
-
-// AddTemplates adds the "templates" edges to the Template entity.
-func (ouo *OrganizationUpdateOne) AddTemplates(t ...*Template) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return ouo.AddTemplateIDs(ids...)
-}
-
-// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (ouo *OrganizationUpdateOne) AddIntegrationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddIntegrationIDs(ids...)
-	return ouo
-}
-
-// AddIntegrations adds the "integrations" edges to the Integration entity.
-func (ouo *OrganizationUpdateOne) AddIntegrations(i ...*Integration) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ouo.AddIntegrationIDs(ids...)
-}
-
 // SetSettingID sets the "setting" edge to the OrganizationSetting entity by ID.
 func (ouo *OrganizationUpdateOne) SetSettingID(id string) *OrganizationUpdateOne {
 	ouo.mutation.SetSettingID(id)
@@ -4108,36 +4063,6 @@ func (ouo *OrganizationUpdateOne) SetNillableSettingID(id *string) *Organization
 // SetSetting sets the "setting" edge to the OrganizationSetting entity.
 func (ouo *OrganizationUpdateOne) SetSetting(o *OrganizationSetting) *OrganizationUpdateOne {
 	return ouo.SetSettingID(o.ID)
-}
-
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (ouo *OrganizationUpdateOne) AddDocumentDatumIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddDocumentDatumIDs(ids...)
-	return ouo
-}
-
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (ouo *OrganizationUpdateOne) AddDocumentData(d ...*DocumentData) *OrganizationUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
-	}
-	return ouo.AddDocumentDatumIDs(ids...)
-}
-
-// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
-func (ouo *OrganizationUpdateOne) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddOrgSubscriptionIDs(ids...)
-	return ouo
-}
-
-// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
-func (ouo *OrganizationUpdateOne) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return ouo.AddOrgSubscriptionIDs(ids...)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
@@ -4183,36 +4108,6 @@ func (ouo *OrganizationUpdateOne) AddUsers(u ...*User) *OrganizationUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return ouo.AddUserIDs(ids...)
-}
-
-// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
-func (ouo *OrganizationUpdateOne) AddInviteIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddInviteIDs(ids...)
-	return ouo
-}
-
-// AddInvites adds the "invites" edges to the Invite entity.
-func (ouo *OrganizationUpdateOne) AddInvites(i ...*Invite) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ouo.AddInviteIDs(ids...)
-}
-
-// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
-func (ouo *OrganizationUpdateOne) AddSubscriberIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddSubscriberIDs(ids...)
-	return ouo
-}
-
-// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
-func (ouo *OrganizationUpdateOne) AddSubscribers(s ...*Subscriber) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ouo.AddSubscriberIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -4277,6 +4172,111 @@ func (ouo *OrganizationUpdateOne) SetNillableAvatarFileID(id *string) *Organizat
 // SetAvatarFile sets the "avatar_file" edge to the File entity.
 func (ouo *OrganizationUpdateOne) SetAvatarFile(f *File) *OrganizationUpdateOne {
 	return ouo.SetAvatarFileID(f.ID)
+}
+
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
+func (ouo *OrganizationUpdateOne) AddGroupIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddGroupIDs(ids...)
+	return ouo
+}
+
+// AddGroups adds the "groups" edges to the Group entity.
+func (ouo *OrganizationUpdateOne) AddGroups(g ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ouo.AddGroupIDs(ids...)
+}
+
+// AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
+func (ouo *OrganizationUpdateOne) AddTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddTemplateIDs(ids...)
+	return ouo
+}
+
+// AddTemplates adds the "templates" edges to the Template entity.
+func (ouo *OrganizationUpdateOne) AddTemplates(t ...*Template) *OrganizationUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ouo.AddTemplateIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (ouo *OrganizationUpdateOne) AddIntegrationIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddIntegrationIDs(ids...)
+	return ouo
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (ouo *OrganizationUpdateOne) AddIntegrations(i ...*Integration) *OrganizationUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ouo.AddIntegrationIDs(ids...)
+}
+
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
+func (ouo *OrganizationUpdateOne) AddDocumentDatumIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddDocumentDatumIDs(ids...)
+	return ouo
+}
+
+// AddDocumentData adds the "document_data" edges to the DocumentData entity.
+func (ouo *OrganizationUpdateOne) AddDocumentData(d ...*DocumentData) *OrganizationUpdateOne {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ouo.AddDocumentDatumIDs(ids...)
+}
+
+// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
+func (ouo *OrganizationUpdateOne) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddOrgSubscriptionIDs(ids...)
+	return ouo
+}
+
+// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
+func (ouo *OrganizationUpdateOne) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ouo.AddOrgSubscriptionIDs(ids...)
+}
+
+// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
+func (ouo *OrganizationUpdateOne) AddInviteIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddInviteIDs(ids...)
+	return ouo
+}
+
+// AddInvites adds the "invites" edges to the Invite entity.
+func (ouo *OrganizationUpdateOne) AddInvites(i ...*Invite) *OrganizationUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ouo.AddInviteIDs(ids...)
+}
+
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (ouo *OrganizationUpdateOne) AddSubscriberIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddSubscriberIDs(ids...)
+	return ouo
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (ouo *OrganizationUpdateOne) AddSubscribers(s ...*Subscriber) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.AddSubscriberIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
@@ -4704,115 +4704,10 @@ func (ouo *OrganizationUpdateOne) RemoveChildren(o ...*Organization) *Organizati
 	return ouo.RemoveChildIDs(ids...)
 }
 
-// ClearGroups clears all "groups" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearGroups() *OrganizationUpdateOne {
-	ouo.mutation.ClearGroups()
-	return ouo
-}
-
-// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveGroupIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveGroupIDs(ids...)
-	return ouo
-}
-
-// RemoveGroups removes "groups" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveGroups(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ouo.RemoveGroupIDs(ids...)
-}
-
-// ClearTemplates clears all "templates" edges to the Template entity.
-func (ouo *OrganizationUpdateOne) ClearTemplates() *OrganizationUpdateOne {
-	ouo.mutation.ClearTemplates()
-	return ouo
-}
-
-// RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveTemplateIDs(ids...)
-	return ouo
-}
-
-// RemoveTemplates removes "templates" edges to Template entities.
-func (ouo *OrganizationUpdateOne) RemoveTemplates(t ...*Template) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return ouo.RemoveTemplateIDs(ids...)
-}
-
-// ClearIntegrations clears all "integrations" edges to the Integration entity.
-func (ouo *OrganizationUpdateOne) ClearIntegrations() *OrganizationUpdateOne {
-	ouo.mutation.ClearIntegrations()
-	return ouo
-}
-
-// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveIntegrationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveIntegrationIDs(ids...)
-	return ouo
-}
-
-// RemoveIntegrations removes "integrations" edges to Integration entities.
-func (ouo *OrganizationUpdateOne) RemoveIntegrations(i ...*Integration) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ouo.RemoveIntegrationIDs(ids...)
-}
-
 // ClearSetting clears the "setting" edge to the OrganizationSetting entity.
 func (ouo *OrganizationUpdateOne) ClearSetting() *OrganizationUpdateOne {
 	ouo.mutation.ClearSetting()
 	return ouo
-}
-
-// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
-func (ouo *OrganizationUpdateOne) ClearDocumentData() *OrganizationUpdateOne {
-	ouo.mutation.ClearDocumentData()
-	return ouo
-}
-
-// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveDocumentDatumIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveDocumentDatumIDs(ids...)
-	return ouo
-}
-
-// RemoveDocumentData removes "document_data" edges to DocumentData entities.
-func (ouo *OrganizationUpdateOne) RemoveDocumentData(d ...*DocumentData) *OrganizationUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
-	}
-	return ouo.RemoveDocumentDatumIDs(ids...)
-}
-
-// ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
-func (ouo *OrganizationUpdateOne) ClearOrgSubscriptions() *OrganizationUpdateOne {
-	ouo.mutation.ClearOrgSubscriptions()
-	return ouo
-}
-
-// RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveOrgSubscriptionIDs(ids...)
-	return ouo
-}
-
-// RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
-func (ouo *OrganizationUpdateOne) RemoveOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return ouo.RemoveOrgSubscriptionIDs(ids...)
 }
 
 // ClearPersonalAccessTokens clears all "personal_access_tokens" edges to the PersonalAccessToken entity.
@@ -4876,48 +4771,6 @@ func (ouo *OrganizationUpdateOne) RemoveUsers(u ...*User) *OrganizationUpdateOne
 		ids[i] = u[i].ID
 	}
 	return ouo.RemoveUserIDs(ids...)
-}
-
-// ClearInvites clears all "invites" edges to the Invite entity.
-func (ouo *OrganizationUpdateOne) ClearInvites() *OrganizationUpdateOne {
-	ouo.mutation.ClearInvites()
-	return ouo
-}
-
-// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveInviteIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveInviteIDs(ids...)
-	return ouo
-}
-
-// RemoveInvites removes "invites" edges to Invite entities.
-func (ouo *OrganizationUpdateOne) RemoveInvites(i ...*Invite) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return ouo.RemoveInviteIDs(ids...)
-}
-
-// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
-func (ouo *OrganizationUpdateOne) ClearSubscribers() *OrganizationUpdateOne {
-	ouo.mutation.ClearSubscribers()
-	return ouo
-}
-
-// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveSubscriberIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveSubscriberIDs(ids...)
-	return ouo
-}
-
-// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
-func (ouo *OrganizationUpdateOne) RemoveSubscribers(s ...*Subscriber) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ouo.RemoveSubscriberIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -4987,6 +4840,153 @@ func (ouo *OrganizationUpdateOne) RemoveFiles(f ...*File) *OrganizationUpdateOne
 func (ouo *OrganizationUpdateOne) ClearAvatarFile() *OrganizationUpdateOne {
 	ouo.mutation.ClearAvatarFile()
 	return ouo
+}
+
+// ClearGroups clears all "groups" edges to the Group entity.
+func (ouo *OrganizationUpdateOne) ClearGroups() *OrganizationUpdateOne {
+	ouo.mutation.ClearGroups()
+	return ouo
+}
+
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveGroupIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveGroupIDs(ids...)
+	return ouo
+}
+
+// RemoveGroups removes "groups" edges to Group entities.
+func (ouo *OrganizationUpdateOne) RemoveGroups(g ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ouo.RemoveGroupIDs(ids...)
+}
+
+// ClearTemplates clears all "templates" edges to the Template entity.
+func (ouo *OrganizationUpdateOne) ClearTemplates() *OrganizationUpdateOne {
+	ouo.mutation.ClearTemplates()
+	return ouo
+}
+
+// RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveTemplateIDs(ids...)
+	return ouo
+}
+
+// RemoveTemplates removes "templates" edges to Template entities.
+func (ouo *OrganizationUpdateOne) RemoveTemplates(t ...*Template) *OrganizationUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ouo.RemoveTemplateIDs(ids...)
+}
+
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (ouo *OrganizationUpdateOne) ClearIntegrations() *OrganizationUpdateOne {
+	ouo.mutation.ClearIntegrations()
+	return ouo
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveIntegrationIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveIntegrationIDs(ids...)
+	return ouo
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (ouo *OrganizationUpdateOne) RemoveIntegrations(i ...*Integration) *OrganizationUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ouo.RemoveIntegrationIDs(ids...)
+}
+
+// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
+func (ouo *OrganizationUpdateOne) ClearDocumentData() *OrganizationUpdateOne {
+	ouo.mutation.ClearDocumentData()
+	return ouo
+}
+
+// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveDocumentDatumIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveDocumentDatumIDs(ids...)
+	return ouo
+}
+
+// RemoveDocumentData removes "document_data" edges to DocumentData entities.
+func (ouo *OrganizationUpdateOne) RemoveDocumentData(d ...*DocumentData) *OrganizationUpdateOne {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ouo.RemoveDocumentDatumIDs(ids...)
+}
+
+// ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
+func (ouo *OrganizationUpdateOne) ClearOrgSubscriptions() *OrganizationUpdateOne {
+	ouo.mutation.ClearOrgSubscriptions()
+	return ouo
+}
+
+// RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveOrgSubscriptionIDs(ids...)
+	return ouo
+}
+
+// RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
+func (ouo *OrganizationUpdateOne) RemoveOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ouo.RemoveOrgSubscriptionIDs(ids...)
+}
+
+// ClearInvites clears all "invites" edges to the Invite entity.
+func (ouo *OrganizationUpdateOne) ClearInvites() *OrganizationUpdateOne {
+	ouo.mutation.ClearInvites()
+	return ouo
+}
+
+// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveInviteIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveInviteIDs(ids...)
+	return ouo
+}
+
+// RemoveInvites removes "invites" edges to Invite entities.
+func (ouo *OrganizationUpdateOne) RemoveInvites(i ...*Invite) *OrganizationUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ouo.RemoveInviteIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (ouo *OrganizationUpdateOne) ClearSubscribers() *OrganizationUpdateOne {
+	ouo.mutation.ClearSubscribers()
+	return ouo
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveSubscriberIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveSubscriberIDs(ids...)
+	return ouo
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (ouo *OrganizationUpdateOne) RemoveSubscribers(s ...*Subscriber) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.RemoveSubscriberIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
@@ -5951,150 +5951,6 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.GroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.GroupsTable,
-			Columns: []string{organization.GroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !ouo.mutation.GroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.GroupsTable,
-			Columns: []string{organization.GroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.GroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.GroupsTable,
-			Columns: []string{organization.GroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ouo.mutation.TemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.TemplatesTable,
-			Columns: []string{organization.TemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Template
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !ouo.mutation.TemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.TemplatesTable,
-			Columns: []string{organization.TemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Template
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.TemplatesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.TemplatesTable,
-			Columns: []string{organization.TemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Template
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ouo.mutation.IntegrationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.IntegrationsTable,
-			Columns: []string{organization.IntegrationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Integration
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !ouo.mutation.IntegrationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.IntegrationsTable,
-			Columns: []string{organization.IntegrationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Integration
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.IntegrationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.IntegrationsTable,
-			Columns: []string{organization.IntegrationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Integration
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if ouo.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -6121,102 +5977,6 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.OrganizationSetting
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ouo.mutation.DocumentDataCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.DocumentData
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !ouo.mutation.DocumentDataCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.DocumentData
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.DocumentDataIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.DocumentData
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ouo.mutation.OrgSubscriptionsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OrgSubscriptionsTable,
-			Columns: []string{organization.OrgSubscriptionsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.OrgSubscription
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !ouo.mutation.OrgSubscriptionsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OrgSubscriptionsTable,
-			Columns: []string{organization.OrgSubscriptionsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.OrgSubscription
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OrgSubscriptionsTable,
-			Columns: []string{organization.OrgSubscriptionsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6384,102 +6144,6 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ouo.mutation.InvitesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.InvitesTable,
-			Columns: []string{organization.InvitesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Invite
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !ouo.mutation.InvitesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.InvitesTable,
-			Columns: []string{organization.InvitesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Invite
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.InvitesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.InvitesTable,
-			Columns: []string{organization.InvitesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Invite
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ouo.mutation.SubscribersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.SubscribersTable,
-			Columns: []string{organization.SubscribersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Subscriber
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !ouo.mutation.SubscribersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.SubscribersTable,
-			Columns: []string{organization.SubscribersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Subscriber
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.SubscribersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.SubscribersTable,
-			Columns: []string{organization.SubscribersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ouo.schemaConfig.Subscriber
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
@@ -6653,6 +6317,342 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupsTable,
+			Columns: []string{organization.GroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !ouo.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupsTable,
+			Columns: []string{organization.GroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.GroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupsTable,
+			Columns: []string{organization.GroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplatesTable,
+			Columns: []string{organization.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !ouo.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplatesTable,
+			Columns: []string{organization.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.TemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplatesTable,
+			Columns: []string{organization.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsTable,
+			Columns: []string{organization.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !ouo.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsTable,
+			Columns: []string{organization.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsTable,
+			Columns: []string{organization.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.DocumentDataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !ouo.mutation.DocumentDataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.DocumentDataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.OrgSubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.OrgSubscription
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !ouo.mutation.OrgSubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InvitesTable,
+			Columns: []string{organization.InvitesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Invite
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !ouo.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InvitesTable,
+			Columns: []string{organization.InvitesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.InvitesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InvitesTable,
+			Columns: []string{organization.InvitesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubscribersTable,
+			Columns: []string{organization.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !ouo.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubscribersTable,
+			Columns: []string{organization.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubscribersTable,
+			Columns: []string{organization.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6852,30 +6852,30 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.TasksTable,
-			Columns: organization.TasksPrimaryKey,
+			Columns: []string{organization.TasksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationTasks
+		edge.Schema = ouo.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ouo.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.TasksTable,
-			Columns: organization.TasksPrimaryKey,
+			Columns: []string{organization.TasksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationTasks
+		edge.Schema = ouo.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6883,16 +6883,16 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if nodes := ouo.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.TasksTable,
-			Columns: organization.TasksPrimaryKey,
+			Columns: []string{organization.TasksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationTasks
+		edge.Schema = ouo.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

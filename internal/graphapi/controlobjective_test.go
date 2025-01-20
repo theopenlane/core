@@ -324,6 +324,9 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 			require.NotEmpty(t, resp.CreateControlObjective.ControlObjective.ID)
 			assert.Equal(t, tc.request.Name, resp.CreateControlObjective.ControlObjective.Name)
 
+			assert.NotEmpty(t, resp.CreateControlObjective.ControlObjective.DisplayID)
+			assert.Contains(t, resp.CreateControlObjective.ControlObjective.DisplayID, "CLO-")
+
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
 				require.NotEmpty(t, resp.CreateControlObjective.ControlObjective.Programs)

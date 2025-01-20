@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
@@ -187,6 +189,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
@@ -339,6 +343,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":

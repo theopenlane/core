@@ -80,20 +80,6 @@ func (omc *OrgMembershipCreate) SetNillableUpdatedBy(s *string) *OrgMembershipCr
 	return omc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (omc *OrgMembershipCreate) SetMappingID(s string) *OrgMembershipCreate {
-	omc.mutation.SetMappingID(s)
-	return omc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (omc *OrgMembershipCreate) SetNillableMappingID(s *string) *OrgMembershipCreate {
-	if s != nil {
-		omc.SetMappingID(*s)
-	}
-	return omc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (omc *OrgMembershipCreate) SetDeletedAt(t time.Time) *OrgMembershipCreate {
 	omc.mutation.SetDeletedAt(t)
@@ -238,13 +224,6 @@ func (omc *OrgMembershipCreate) defaults() error {
 		v := orgmembership.DefaultUpdatedAt()
 		omc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := omc.mutation.MappingID(); !ok {
-		if orgmembership.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized orgmembership.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := orgmembership.DefaultMappingID()
-		omc.mutation.SetMappingID(v)
-	}
 	if _, ok := omc.mutation.Role(); !ok {
 		v := orgmembership.DefaultRole
 		omc.mutation.SetRole(v)
@@ -261,9 +240,6 @@ func (omc *OrgMembershipCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (omc *OrgMembershipCreate) check() error {
-	if _, ok := omc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "OrgMembership.mapping_id"`)}
-	}
 	if _, ok := omc.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "OrgMembership.role"`)}
 	}
@@ -335,10 +311,6 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 	if value, ok := omc.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := omc.mutation.MappingID(); ok {
-		_spec.SetField(orgmembership.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := omc.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)

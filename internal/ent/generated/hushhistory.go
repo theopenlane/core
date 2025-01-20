@@ -32,8 +32,6 @@ type HushHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -58,7 +56,7 @@ func (*HushHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case hushhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldCreatedBy, hushhistory.FieldUpdatedBy, hushhistory.FieldMappingID, hushhistory.FieldDeletedBy, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
+		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldCreatedBy, hushhistory.FieldUpdatedBy, hushhistory.FieldDeletedBy, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hushhistory.FieldHistoryTime, hushhistory.FieldCreatedAt, hushhistory.FieldUpdatedAt, hushhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -124,12 +122,6 @@ func (hh *HushHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				hh.UpdatedBy = value.String
-			}
-		case hushhistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				hh.MappingID = value.String
 			}
 		case hushhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -229,9 +221,6 @@ func (hh *HushHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(hh.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(hh.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(hh.DeletedAt.Format(time.ANSIC))

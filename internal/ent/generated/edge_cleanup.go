@@ -328,6 +328,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).OrganizationSetting.Query().Where((organizationsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", organizationsettingCount).Msg("deleting organizationsetting")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).Group.Query().Where((group.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupCount, err := FromContext(ctx).Group.Delete().Where(group.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", groupCount).Msg("deleting group")
@@ -345,13 +352,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Integration.Query().Where((integration.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if integrationCount, err := FromContext(ctx).Integration.Delete().Where(integration.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", integrationCount).Msg("deleting integration")
-			return err
-		}
-	}
-
-	if exists, err := FromContext(ctx).OrganizationSetting.Query().Where((organizationsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
-			log.Debug().Err(err).Int("count", organizationsettingCount).Msg("deleting organizationsetting")
 			return err
 		}
 	}
@@ -412,8 +412,8 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	if exists, err := FromContext(ctx).Task.Query().Where((task.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if taskCount, err := FromContext(ctx).Task.Delete().Where(task.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
+	if exists, err := FromContext(ctx).Task.Query().Where((task.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if taskCount, err := FromContext(ctx).Task.Delete().Where(task.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", taskCount).Msg("deleting task")
 			return err
 		}

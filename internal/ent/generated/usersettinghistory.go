@@ -34,8 +34,6 @@ type UserSettingHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -74,7 +72,7 @@ func (*UserSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case usersettinghistory.FieldLocked, usersettinghistory.FieldEmailConfirmed, usersettinghistory.FieldIsWebauthnAllowed, usersettinghistory.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
-		case usersettinghistory.FieldID, usersettinghistory.FieldRef, usersettinghistory.FieldCreatedBy, usersettinghistory.FieldUpdatedBy, usersettinghistory.FieldMappingID, usersettinghistory.FieldDeletedBy, usersettinghistory.FieldUserID, usersettinghistory.FieldStatus, usersettinghistory.FieldPhoneNumber:
+		case usersettinghistory.FieldID, usersettinghistory.FieldRef, usersettinghistory.FieldCreatedBy, usersettinghistory.FieldUpdatedBy, usersettinghistory.FieldDeletedBy, usersettinghistory.FieldUserID, usersettinghistory.FieldStatus, usersettinghistory.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case usersettinghistory.FieldHistoryTime, usersettinghistory.FieldCreatedAt, usersettinghistory.FieldUpdatedAt, usersettinghistory.FieldDeletedAt, usersettinghistory.FieldSilencedAt, usersettinghistory.FieldSuspendedAt:
 			values[i] = new(sql.NullTime)
@@ -140,12 +138,6 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				ush.UpdatedBy = value.String
-			}
-		case usersettinghistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				ush.MappingID = value.String
 			}
 		case usersettinghistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -280,9 +272,6 @@ func (ush *UserSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(ush.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(ush.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ush.Tags))

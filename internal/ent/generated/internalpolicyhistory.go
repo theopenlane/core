@@ -37,8 +37,8 @@ type InternalPolicyHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -71,7 +71,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicyhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldMappingID, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldDescription, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldVersion, internalpolicyhistory.FieldPurposeAndScope, internalpolicyhistory.FieldBackground:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldDescription, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldVersion, internalpolicyhistory.FieldPurposeAndScope, internalpolicyhistory.FieldBackground:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -150,11 +150,11 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.DeletedBy = value.String
 			}
-		case internalpolicyhistory.FieldMappingID:
+		case internalpolicyhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				iph.MappingID = value.String
+				iph.DisplayID = value.String
 			}
 		case internalpolicyhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -283,8 +283,8 @@ func (iph *InternalPolicyHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(iph.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(iph.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(iph.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", iph.Tags))

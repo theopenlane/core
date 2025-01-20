@@ -33,8 +33,6 @@ type ProgramMembershipHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -55,7 +53,7 @@ func (*ProgramMembershipHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case programmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case programmembershiphistory.FieldID, programmembershiphistory.FieldRef, programmembershiphistory.FieldCreatedBy, programmembershiphistory.FieldUpdatedBy, programmembershiphistory.FieldMappingID, programmembershiphistory.FieldDeletedBy, programmembershiphistory.FieldRole, programmembershiphistory.FieldProgramID, programmembershiphistory.FieldUserID:
+		case programmembershiphistory.FieldID, programmembershiphistory.FieldRef, programmembershiphistory.FieldCreatedBy, programmembershiphistory.FieldUpdatedBy, programmembershiphistory.FieldDeletedBy, programmembershiphistory.FieldRole, programmembershiphistory.FieldProgramID, programmembershiphistory.FieldUserID:
 			values[i] = new(sql.NullString)
 		case programmembershiphistory.FieldHistoryTime, programmembershiphistory.FieldCreatedAt, programmembershiphistory.FieldUpdatedAt, programmembershiphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -121,12 +119,6 @@ func (pmh *ProgramMembershipHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				pmh.UpdatedBy = value.String
-			}
-		case programmembershiphistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				pmh.MappingID = value.String
 			}
 		case programmembershiphistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -214,9 +206,6 @@ func (pmh *ProgramMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(pmh.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(pmh.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pmh.DeletedAt.Format(time.ANSIC))

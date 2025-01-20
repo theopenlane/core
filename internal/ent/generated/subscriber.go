@@ -27,8 +27,6 @@ type Subscriber struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -103,7 +101,7 @@ func (*Subscriber) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subscriber.FieldVerifiedEmail, subscriber.FieldVerifiedPhone, subscriber.FieldActive:
 			values[i] = new(sql.NullBool)
-		case subscriber.FieldID, subscriber.FieldCreatedBy, subscriber.FieldUpdatedBy, subscriber.FieldMappingID, subscriber.FieldDeletedBy, subscriber.FieldOwnerID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken:
+		case subscriber.FieldID, subscriber.FieldCreatedBy, subscriber.FieldUpdatedBy, subscriber.FieldDeletedBy, subscriber.FieldOwnerID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken:
 			values[i] = new(sql.NullString)
 		case subscriber.FieldCreatedAt, subscriber.FieldUpdatedAt, subscriber.FieldDeletedAt, subscriber.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -151,12 +149,6 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				s.UpdatedBy = value.String
-			}
-		case subscriber.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				s.MappingID = value.String
 			}
 		case subscriber.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -290,9 +282,6 @@ func (s *Subscriber) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(s.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(s.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", s.Tags))

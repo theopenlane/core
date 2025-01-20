@@ -9,6 +9,7 @@ mutation CreateBulkCSVProgram($input: Upload!) {
       description
       endDate
       id
+      displayID
       name
       ownerID
       startDate
@@ -31,6 +32,7 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
       description
       endDate
       id
+      displayID
       name
       ownerID
       startDate
@@ -60,6 +62,7 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
     program {
       name
       id
+      displayID
       members {
         id
       }
@@ -77,14 +80,17 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
       }
       risks {
         id
+        displayID
         name
       }
       internalPolicies {
         id
+        displayID
         name
       }
       procedures {
         id
+        displayID
         name
       }
     }
@@ -102,6 +108,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
       description
       endDate
       id
+      displayID
       name
       ownerID
       startDate
@@ -116,6 +123,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
         description
         details
         id
+        displayID
         name
         procedureType
         purposeAndScope
@@ -133,6 +141,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
         description
         details
         id
+        displayID
         name
         policyType
         purposeAndScope
@@ -163,6 +172,7 @@ mutation CreateProgramWithMembers($input: CreateProgramWithMembersInput!) {
     program {
       name
       id
+      displayID
       members {
         id
         user {
@@ -193,6 +203,7 @@ query GetAllPrograms {
         description
         endDate
         id
+        displayID
         name
         ownerID
         startDate
@@ -207,6 +218,7 @@ query GetAllPrograms {
           description
           details
           id
+          displayID
           name
           procedureType
           purposeAndScope
@@ -224,6 +236,7 @@ query GetAllPrograms {
           description
           details
           id
+          displayID
           name
           policyType
           purposeAndScope
@@ -260,6 +273,7 @@ query GetProgramByID($programId: ID!) {
     description
     endDate
     id
+    displayID
     name
     ownerID
     startDate
@@ -274,6 +288,7 @@ query GetProgramByID($programId: ID!) {
       description
       details
       id
+      displayID
       name
       procedureType
       purposeAndScope
@@ -291,6 +306,7 @@ query GetProgramByID($programId: ID!) {
       description
       details
       id
+      displayID
       name
       policyType
       purposeAndScope
@@ -327,6 +343,7 @@ query GetPrograms($where: ProgramWhereInput) {
         description
         endDate
         id
+        displayID
         name
         ownerID
         startDate
@@ -341,6 +358,7 @@ query GetPrograms($where: ProgramWhereInput) {
           description
           details
           id
+          displayID
           name
           procedureType
           purposeAndScope
@@ -358,6 +376,7 @@ query GetPrograms($where: ProgramWhereInput) {
           description
           details
           id
+          displayID
           name
           policyType
           purposeAndScope

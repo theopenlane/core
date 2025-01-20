@@ -3,7 +3,6 @@
 INSERT INTO
     organizations (
         id,
-        mapping_id,
         name,
         display_name,
         description,
@@ -14,7 +13,6 @@ INSERT INTO
     )
 VALUES (
         '01101101011010010111010001100010',
-        '01101111011100000110010101101110',
         'openlane system',
         'openlane',
         'the openlane system organization',
@@ -29,7 +27,6 @@ INSERT INTO
     organization_settings (
         id,
         organization_id,
-        mapping_id,
         created_at,
         updated_at,
         created_by,
@@ -38,7 +35,6 @@ INSERT INTO
 VALUES (
         '01101101011001010110111101110111',
         '01101101011010010111010001100010',
-        '01101100011000010110111001100101',
         '1970-01-01 00:00:00',
         '1970-01-01 00:00:00',
         'system',

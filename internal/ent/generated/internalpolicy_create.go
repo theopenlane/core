@@ -112,17 +112,9 @@ func (ipc *InternalPolicyCreate) SetNillableDeletedBy(s *string) *InternalPolicy
 	return ipc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ipc *InternalPolicyCreate) SetMappingID(s string) *InternalPolicyCreate {
-	ipc.mutation.SetMappingID(s)
-	return ipc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableMappingID(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (ipc *InternalPolicyCreate) SetDisplayID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetDisplayID(s)
 	return ipc
 }
 
@@ -432,13 +424,6 @@ func (ipc *InternalPolicyCreate) defaults() error {
 		v := internalpolicy.DefaultUpdatedAt()
 		ipc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ipc.mutation.MappingID(); !ok {
-		if internalpolicy.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := internalpolicy.DefaultMappingID()
-		ipc.mutation.SetMappingID(v)
-	}
 	if _, ok := ipc.mutation.Tags(); !ok {
 		v := internalpolicy.DefaultTags
 		ipc.mutation.SetTags(v)
@@ -455,8 +440,13 @@ func (ipc *InternalPolicyCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ipc *InternalPolicyCreate) check() error {
-	if _, ok := ipc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "InternalPolicy.mapping_id"`)}
+	if _, ok := ipc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "InternalPolicy.display_id"`)}
+	}
+	if v, ok := ipc.mutation.DisplayID(); ok {
+		if err := internalpolicy.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.display_id": %w`, err)}
+		}
 	}
 	if v, ok := ipc.mutation.OwnerID(); ok {
 		if err := internalpolicy.OwnerIDValidator(v); err != nil {
@@ -531,9 +521,9 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ipc.mutation.MappingID(); ok {
-		_spec.SetField(internalpolicy.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := ipc.mutation.DisplayID(); ok {
+		_spec.SetField(internalpolicy.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := ipc.mutation.Tags(); ok {
 		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)

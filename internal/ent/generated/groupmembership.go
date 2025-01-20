@@ -29,8 +29,6 @@ type GroupMembership struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -114,7 +112,7 @@ func (*GroupMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case groupmembership.FieldID, groupmembership.FieldCreatedBy, groupmembership.FieldUpdatedBy, groupmembership.FieldMappingID, groupmembership.FieldDeletedBy, groupmembership.FieldRole, groupmembership.FieldGroupID, groupmembership.FieldUserID:
+		case groupmembership.FieldID, groupmembership.FieldCreatedBy, groupmembership.FieldUpdatedBy, groupmembership.FieldDeletedBy, groupmembership.FieldRole, groupmembership.FieldGroupID, groupmembership.FieldUserID:
 			values[i] = new(sql.NullString)
 		case groupmembership.FieldCreatedAt, groupmembership.FieldUpdatedAt, groupmembership.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -164,12 +162,6 @@ func (gm *GroupMembership) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				gm.UpdatedBy = value.String
-			}
-		case groupmembership.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				gm.MappingID = value.String
 			}
 		case groupmembership.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -275,9 +267,6 @@ func (gm *GroupMembership) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(gm.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(gm.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(gm.DeletedAt.Format(time.ANSIC))

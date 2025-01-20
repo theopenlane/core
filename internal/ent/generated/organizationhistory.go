@@ -33,8 +33,6 @@ type OrganizationHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -73,7 +71,7 @@ func (*OrganizationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case organizationhistory.FieldPersonalOrg, organizationhistory.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldMappingID, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL, organizationhistory.FieldAvatarLocalFileID:
+		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL, organizationhistory.FieldAvatarLocalFileID:
 			values[i] = new(sql.NullString)
 		case organizationhistory.FieldHistoryTime, organizationhistory.FieldCreatedAt, organizationhistory.FieldUpdatedAt, organizationhistory.FieldDeletedAt, organizationhistory.FieldAvatarUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -139,12 +137,6 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				oh.UpdatedBy = value.String
-			}
-		case organizationhistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				oh.MappingID = value.String
 			}
 		case organizationhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -279,9 +271,6 @@ func (oh *OrganizationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(oh.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(oh.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", oh.Tags))

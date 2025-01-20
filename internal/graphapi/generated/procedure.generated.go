@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Procedure_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
@@ -179,6 +181,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Procedure_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
@@ -323,6 +327,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Procedure_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":

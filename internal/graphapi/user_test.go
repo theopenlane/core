@@ -59,6 +59,9 @@ func (suite *GraphTestSuite) TestQueryUser() {
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 			require.NotNil(t, resp.User)
+
+			assert.NotEmpty(t, resp.User.DisplayID)
+			assert.Contains(t, resp.User.DisplayID, "USR-")
 		})
 	}
 }

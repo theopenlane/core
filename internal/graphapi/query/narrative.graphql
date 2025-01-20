@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVNarrative($input: Upload!) {
   createBulkCSVNarrative(input: $input) {
     narratives {
@@ -6,6 +5,7 @@ mutation CreateBulkCSVNarrative($input: Upload!) {
       createdBy
       description
       details
+      displayID
       id
       name
       satisfies
@@ -23,6 +23,7 @@ mutation CreateBulkNarrative($input: [CreateNarrativeInput!]) {
       createdBy
       description
       details
+      displayID
       id
       name
       satisfies
@@ -40,6 +41,7 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
       createdBy
       description
       details
+      displayID
       id
       name
       satisfies
@@ -80,6 +82,7 @@ query GetAllNarratives {
         createdBy
         description
         details
+        displayID
         id
         name
         satisfies
@@ -106,12 +109,14 @@ query GetAllNarratives {
     }
   }
 }
+
 query GetNarrativeByID($narrativeId: ID!) {
   narrative(id: $narrativeId) {
     createdAt
     createdBy
     description
     details
+    displayID
     id
     name
     satisfies
@@ -145,6 +150,7 @@ query GetNarratives($where: NarrativeWhereInput) {
         createdBy
         description
         details
+        displayID
         id
         name
         satisfies
@@ -171,6 +177,7 @@ query GetNarratives($where: NarrativeWhereInput) {
     }
   }
 }
+
 mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!) {
   updateNarrative(id: $updateNarrativeId, input: $input) {
     narrative {
@@ -178,6 +185,7 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
       createdBy
       description
       details
+      displayID
       id
       name
       satisfies

@@ -31,8 +31,8 @@ type Narrative struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -177,7 +177,7 @@ func (*Narrative) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case narrative.FieldTags, narrative.FieldDetails:
 			values[i] = new([]byte)
-		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldDeletedBy, narrative.FieldMappingID, narrative.FieldOwnerID, narrative.FieldName, narrative.FieldDescription, narrative.FieldSatisfies:
+		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldDeletedBy, narrative.FieldDisplayID, narrative.FieldOwnerID, narrative.FieldName, narrative.FieldDescription, narrative.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case narrative.FieldCreatedAt, narrative.FieldUpdatedAt, narrative.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -238,11 +238,11 @@ func (n *Narrative) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.DeletedBy = value.String
 			}
-		case narrative.FieldMappingID:
+		case narrative.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				n.MappingID = value.String
+				n.DisplayID = value.String
 			}
 		case narrative.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -383,8 +383,8 @@ func (n *Narrative) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(n.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(n.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(n.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", n.Tags))

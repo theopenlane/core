@@ -4607,6 +4607,21 @@ type ControlWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -5185,6 +5200,45 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, control.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, control.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, control.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, control.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, control.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, control.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, control.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, control.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, control.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, control.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, control.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, control.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, control.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, control.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, control.OwnerIDEQ(*i.OwnerID))
@@ -6098,6 +6152,21 @@ type ControlHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -6705,6 +6774,45 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, controlhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, controlhistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, controlhistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, controlhistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, controlhistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, controlhistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, controlhistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, controlhistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, controlhistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, controlhistory.OwnerIDEQ(*i.OwnerID))
@@ -7351,6 +7459,21 @@ type ControlObjectiveWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -7912,6 +8035,45 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, controlobjective.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, controlobjective.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, controlobjective.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, controlobjective.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, controlobjective.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, controlobjective.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, controlobjective.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, controlobjective.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, controlobjective.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, controlobjective.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, controlobjective.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, controlobjective.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, controlobjective.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, controlobjective.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, controlobjective.OwnerIDEQ(*i.OwnerID))
@@ -8780,6 +8942,21 @@ type ControlObjectiveHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -9370,6 +9547,45 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, controlobjectivehistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, controlobjectivehistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, controlobjectivehistory.OwnerIDEQ(*i.OwnerID))
@@ -26075,6 +26291,21 @@ type InternalPolicyWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -26571,6 +26802,45 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, internalpolicy.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, internalpolicy.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicy.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, internalpolicy.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, internalpolicy.OwnerIDEQ(*i.OwnerID))
@@ -27238,6 +27508,21 @@ type InternalPolicyHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -27779,6 +28064,45 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, internalpolicyhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, internalpolicyhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, internalpolicyhistory.OwnerIDEQ(*i.OwnerID))
@@ -29029,6 +29353,21 @@ type NarrativeWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -29455,6 +29794,45 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, narrative.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, narrative.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, narrative.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, narrative.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, narrative.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, narrative.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, narrative.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, narrative.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, narrative.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, narrative.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, narrative.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, narrative.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, narrative.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, narrative.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, narrative.OwnerIDEQ(*i.OwnerID))
@@ -29936,6 +30314,21 @@ type NarrativeHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -30408,6 +30801,45 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, narrativehistory.DeletedByContainsFold(*i.DeletedByContainsFold))
 	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, narrativehistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, narrativehistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, narrativehistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, narrativehistory.OwnerIDEQ(*i.OwnerID))
 	}
@@ -30663,6 +31095,21 @@ type NoteWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
 	// "deleted_at" field predicates.
 	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
@@ -30992,6 +31439,45 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, note.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, note.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, note.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, note.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, note.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, note.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, note.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, note.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, note.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, note.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, note.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, note.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, note.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, note.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.DeletedAt != nil {
 		predicates = append(predicates, note.DeletedAtEQ(*i.DeletedAt))
@@ -31344,6 +31830,21 @@ type NoteHistoryWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
 	// "deleted_at" field predicates.
 	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
@@ -31738,6 +32239,45 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, notehistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, notehistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, notehistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, notehistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, notehistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, notehistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, notehistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, notehistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, notehistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, notehistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, notehistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, notehistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, notehistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, notehistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.DeletedAt != nil {
 		predicates = append(predicates, notehistory.DeletedAtEQ(*i.DeletedAt))
@@ -35335,29 +35875,9 @@ type OrganizationWhereInput struct {
 	HasChildren     *bool                     `json:"hasChildren,omitempty"`
 	HasChildrenWith []*OrganizationWhereInput `json:"hasChildrenWith,omitempty"`
 
-	// "groups" edge predicates.
-	HasGroups     *bool              `json:"hasGroups,omitempty"`
-	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
-
-	// "templates" edge predicates.
-	HasTemplates     *bool                 `json:"hasTemplates,omitempty"`
-	HasTemplatesWith []*TemplateWhereInput `json:"hasTemplatesWith,omitempty"`
-
-	// "integrations" edge predicates.
-	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
-	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
-
 	// "setting" edge predicates.
 	HasSetting     *bool                            `json:"hasSetting,omitempty"`
 	HasSettingWith []*OrganizationSettingWhereInput `json:"hasSettingWith,omitempty"`
-
-	// "document_data" edge predicates.
-	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
-	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
-
-	// "org_subscriptions" edge predicates.
-	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
-	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
 
 	// "personal_access_tokens" edge predicates.
 	HasPersonalAccessTokens     *bool                            `json:"hasPersonalAccessTokens,omitempty"`
@@ -35370,14 +35890,6 @@ type OrganizationWhereInput struct {
 	// "users" edge predicates.
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
-
-	// "invites" edge predicates.
-	HasInvites     *bool               `json:"hasInvites,omitempty"`
-	HasInvitesWith []*InviteWhereInput `json:"hasInvitesWith,omitempty"`
-
-	// "subscribers" edge predicates.
-	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
-	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
 
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
@@ -35394,6 +35906,34 @@ type OrganizationWhereInput struct {
 	// "avatar_file" edge predicates.
 	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
 	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
+
+	// "groups" edge predicates.
+	HasGroups     *bool              `json:"hasGroups,omitempty"`
+	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
+
+	// "templates" edge predicates.
+	HasTemplates     *bool                 `json:"hasTemplates,omitempty"`
+	HasTemplatesWith []*TemplateWhereInput `json:"hasTemplatesWith,omitempty"`
+
+	// "integrations" edge predicates.
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+
+	// "document_data" edge predicates.
+	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
+	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
+
+	// "org_subscriptions" edge predicates.
+	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
+	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
+
+	// "invites" edge predicates.
+	HasInvites     *bool               `json:"hasInvites,omitempty"`
+	HasInvitesWith []*InviteWhereInput `json:"hasInvitesWith,omitempty"`
+
+	// "subscribers" edge predicates.
+	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
+	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
 
 	// "entities" edge predicates.
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
@@ -36193,60 +36733,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasChildrenWith(with...))
 	}
-	if i.HasGroups != nil {
-		p := organization.HasGroups()
-		if !*i.HasGroups {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasGroupsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
-		for _, w := range i.HasGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasGroupsWith(with...))
-	}
-	if i.HasTemplates != nil {
-		p := organization.HasTemplates()
-		if !*i.HasTemplates {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTemplatesWith) > 0 {
-		with := make([]predicate.Template, 0, len(i.HasTemplatesWith))
-		for _, w := range i.HasTemplatesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTemplatesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasTemplatesWith(with...))
-	}
-	if i.HasIntegrations != nil {
-		p := organization.HasIntegrations()
-		if !*i.HasIntegrations {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasIntegrationsWith) > 0 {
-		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
-		for _, w := range i.HasIntegrationsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasIntegrationsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasIntegrationsWith(with...))
-	}
 	if i.HasSetting != nil {
 		p := organization.HasSetting()
 		if !*i.HasSetting {
@@ -36264,42 +36750,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasSettingWith(with...))
-	}
-	if i.HasDocumentData != nil {
-		p := organization.HasDocumentData()
-		if !*i.HasDocumentData {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasDocumentDataWith) > 0 {
-		with := make([]predicate.DocumentData, 0, len(i.HasDocumentDataWith))
-		for _, w := range i.HasDocumentDataWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDocumentDataWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasDocumentDataWith(with...))
-	}
-	if i.HasOrgSubscriptions != nil {
-		p := organization.HasOrgSubscriptions()
-		if !*i.HasOrgSubscriptions {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasOrgSubscriptionsWith) > 0 {
-		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgSubscriptionsWith))
-		for _, w := range i.HasOrgSubscriptionsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOrgSubscriptionsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasOrgSubscriptionsWith(with...))
 	}
 	if i.HasPersonalAccessTokens != nil {
 		p := organization.HasPersonalAccessTokens()
@@ -36354,42 +36804,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasUsersWith(with...))
-	}
-	if i.HasInvites != nil {
-		p := organization.HasInvites()
-		if !*i.HasInvites {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasInvitesWith) > 0 {
-		with := make([]predicate.Invite, 0, len(i.HasInvitesWith))
-		for _, w := range i.HasInvitesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasInvitesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasInvitesWith(with...))
-	}
-	if i.HasSubscribers != nil {
-		p := organization.HasSubscribers()
-		if !*i.HasSubscribers {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSubscribersWith) > 0 {
-		with := make([]predicate.Subscriber, 0, len(i.HasSubscribersWith))
-		for _, w := range i.HasSubscribersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSubscribersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasSubscribersWith(with...))
 	}
 	if i.HasEvents != nil {
 		p := organization.HasEvents()
@@ -36462,6 +36876,132 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasAvatarFileWith(with...))
+	}
+	if i.HasGroups != nil {
+		p := organization.HasGroups()
+		if !*i.HasGroups {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		for _, w := range i.HasGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasGroupsWith(with...))
+	}
+	if i.HasTemplates != nil {
+		p := organization.HasTemplates()
+		if !*i.HasTemplates {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTemplatesWith) > 0 {
+		with := make([]predicate.Template, 0, len(i.HasTemplatesWith))
+		for _, w := range i.HasTemplatesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTemplatesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasTemplatesWith(with...))
+	}
+	if i.HasIntegrations != nil {
+		p := organization.HasIntegrations()
+		if !*i.HasIntegrations {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasIntegrationsWith) > 0 {
+		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		for _, w := range i.HasIntegrationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasIntegrationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasIntegrationsWith(with...))
+	}
+	if i.HasDocumentData != nil {
+		p := organization.HasDocumentData()
+		if !*i.HasDocumentData {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDocumentDataWith) > 0 {
+		with := make([]predicate.DocumentData, 0, len(i.HasDocumentDataWith))
+		for _, w := range i.HasDocumentDataWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDocumentDataWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasDocumentDataWith(with...))
+	}
+	if i.HasOrgSubscriptions != nil {
+		p := organization.HasOrgSubscriptions()
+		if !*i.HasOrgSubscriptions {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrgSubscriptionsWith) > 0 {
+		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgSubscriptionsWith))
+		for _, w := range i.HasOrgSubscriptionsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrgSubscriptionsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasOrgSubscriptionsWith(with...))
+	}
+	if i.HasInvites != nil {
+		p := organization.HasInvites()
+		if !*i.HasInvites {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInvitesWith) > 0 {
+		with := make([]predicate.Invite, 0, len(i.HasInvitesWith))
+		for _, w := range i.HasInvitesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInvitesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasInvitesWith(with...))
+	}
+	if i.HasSubscribers != nil {
+		p := organization.HasSubscribers()
+		if !*i.HasSubscribers {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubscribersWith) > 0 {
+		with := make([]predicate.Subscriber, 0, len(i.HasSubscribersWith))
+		for _, w := range i.HasSubscribersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubscribersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasSubscribersWith(with...))
 	}
 	if i.HasEntities != nil {
 		p := organization.HasEntities()
@@ -40075,6 +40615,21 @@ type ProcedureWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -40588,6 +41143,45 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, procedure.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, procedure.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, procedure.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, procedure.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, procedure.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, procedure.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, procedure.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, procedure.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, procedure.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, procedure.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, procedure.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, procedure.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, procedure.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, procedure.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, procedure.OwnerIDEQ(*i.OwnerID))
@@ -41300,6 +41894,21 @@ type ProcedureHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -41859,6 +42468,45 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, procedurehistory.DeletedByContainsFold(*i.DeletedByContainsFold))
 	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, procedurehistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, procedurehistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, procedurehistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, procedurehistory.OwnerIDEQ(*i.OwnerID))
 	}
@@ -42346,6 +42994,21 @@ type ProgramWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "deleted_at" field predicates.
 	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
 	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
@@ -42789,6 +43452,45 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, program.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, program.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, program.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, program.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, program.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, program.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, program.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, program.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, program.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, program.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, program.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, program.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, program.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, program.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.DeletedAt != nil {
 		predicates = append(predicates, program.DeletedAtEQ(*i.DeletedAt))
@@ -43529,6 +44231,21 @@ type ProgramHistoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "deleted_at" field predicates.
 	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
 	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
@@ -43981,6 +44698,45 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, programhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, programhistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, programhistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, programhistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, programhistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, programhistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, programhistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, programhistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, programhistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, programhistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, programhistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, programhistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, programhistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, programhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.DeletedAt != nil {
 		predicates = append(predicates, programhistory.DeletedAtEQ(*i.DeletedAt))
@@ -45691,6 +46447,21 @@ type RiskWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -46197,6 +46968,45 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, risk.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, risk.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, risk.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, risk.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, risk.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, risk.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, risk.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, risk.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, risk.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, risk.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, risk.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, risk.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, risk.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, risk.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, risk.OwnerIDEQ(*i.OwnerID))
@@ -46876,6 +47686,21 @@ type RiskHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -47431,6 +48256,45 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, riskhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, riskhistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, riskhistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, riskhistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, riskhistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, riskhistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, riskhistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, riskhistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, riskhistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, riskhistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, riskhistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, riskhistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, riskhistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, riskhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, riskhistory.OwnerIDEQ(*i.OwnerID))
@@ -50145,6 +51009,21 @@ type SubcontrolWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -50753,6 +51632,45 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, subcontrol.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, subcontrol.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, subcontrol.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, subcontrol.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, subcontrol.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, subcontrol.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, subcontrol.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, subcontrol.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, subcontrol.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, subcontrol.OwnerIDEQ(*i.OwnerID))
@@ -51690,6 +52608,21 @@ type SubcontrolHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -52355,6 +53288,45 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, subcontrolhistory.OwnerIDEQ(*i.OwnerID))
@@ -54374,6 +55346,21 @@ type TaskWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "deleted_at" field predicates.
 	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
 	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
@@ -54402,6 +55389,21 @@ type TaskWhereInput struct {
 	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
@@ -54453,6 +55455,12 @@ type TaskWhereInput struct {
 	DueIsNil  bool        `json:"dueIsNil,omitempty"`
 	DueNotNil bool        `json:"dueNotNil,omitempty"`
 
+	// "priority" field predicates.
+	Priority      *enums.Priority  `json:"priority,omitempty"`
+	PriorityNEQ   *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn []enums.Priority `json:"priorityNotIn,omitempty"`
+
 	// "completed" field predicates.
 	Completed       *time.Time  `json:"completed,omitempty"`
 	CompletedNEQ    *time.Time  `json:"completedNEQ,omitempty"`
@@ -54465,6 +55473,42 @@ type TaskWhereInput struct {
 	CompletedIsNil  bool        `json:"completedIsNil,omitempty"`
 	CompletedNotNil bool        `json:"completedNotNil,omitempty"`
 
+	// "assignee_id" field predicates.
+	AssigneeID             *string  `json:"assigneeID,omitempty"`
+	AssigneeIDNEQ          *string  `json:"assigneeIDNEQ,omitempty"`
+	AssigneeIDIn           []string `json:"assigneeIDIn,omitempty"`
+	AssigneeIDNotIn        []string `json:"assigneeIDNotIn,omitempty"`
+	AssigneeIDGT           *string  `json:"assigneeIDGT,omitempty"`
+	AssigneeIDGTE          *string  `json:"assigneeIDGTE,omitempty"`
+	AssigneeIDLT           *string  `json:"assigneeIDLT,omitempty"`
+	AssigneeIDLTE          *string  `json:"assigneeIDLTE,omitempty"`
+	AssigneeIDContains     *string  `json:"assigneeIDContains,omitempty"`
+	AssigneeIDHasPrefix    *string  `json:"assigneeIDHasPrefix,omitempty"`
+	AssigneeIDHasSuffix    *string  `json:"assigneeIDHasSuffix,omitempty"`
+	AssigneeIDIsNil        bool     `json:"assigneeIDIsNil,omitempty"`
+	AssigneeIDNotNil       bool     `json:"assigneeIDNotNil,omitempty"`
+	AssigneeIDEqualFold    *string  `json:"assigneeIDEqualFold,omitempty"`
+	AssigneeIDContainsFold *string  `json:"assigneeIDContainsFold,omitempty"`
+
+	// "assigner_id" field predicates.
+	AssignerID             *string  `json:"assignerID,omitempty"`
+	AssignerIDNEQ          *string  `json:"assignerIDNEQ,omitempty"`
+	AssignerIDIn           []string `json:"assignerIDIn,omitempty"`
+	AssignerIDNotIn        []string `json:"assignerIDNotIn,omitempty"`
+	AssignerIDGT           *string  `json:"assignerIDGT,omitempty"`
+	AssignerIDGTE          *string  `json:"assignerIDGTE,omitempty"`
+	AssignerIDLT           *string  `json:"assignerIDLT,omitempty"`
+	AssignerIDLTE          *string  `json:"assignerIDLTE,omitempty"`
+	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
+	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
+	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
+	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
 	// "assigner" edge predicates.
 	HasAssigner     *bool             `json:"hasAssigner,omitempty"`
 	HasAssignerWith []*UserWhereInput `json:"hasAssignerWith,omitempty"`
@@ -54472,10 +55516,6 @@ type TaskWhereInput struct {
 	// "assignee" edge predicates.
 	HasAssignee     *bool             `json:"hasAssignee,omitempty"`
 	HasAssigneeWith []*UserWhereInput `json:"hasAssigneeWith,omitempty"`
-
-	// "organization" edge predicates.
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 
 	// "group" edge predicates.
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
@@ -54757,6 +55797,45 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, task.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, task.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, task.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, task.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, task.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, task.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, task.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, task.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, task.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, task.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, task.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, task.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, task.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, task.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
 	if i.DeletedAt != nil {
 		predicates = append(predicates, task.DeletedAtEQ(*i.DeletedAt))
 	}
@@ -54831,6 +55910,45 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, task.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, task.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, task.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, task.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, task.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, task.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, task.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, task.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, task.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, task.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, task.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, task.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, task.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, task.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.Title != nil {
 		predicates = append(predicates, task.TitleEQ(*i.Title))
@@ -54958,6 +56076,18 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.DueNotNil {
 		predicates = append(predicates, task.DueNotNil())
 	}
+	if i.Priority != nil {
+		predicates = append(predicates, task.PriorityEQ(*i.Priority))
+	}
+	if i.PriorityNEQ != nil {
+		predicates = append(predicates, task.PriorityNEQ(*i.PriorityNEQ))
+	}
+	if len(i.PriorityIn) > 0 {
+		predicates = append(predicates, task.PriorityIn(i.PriorityIn...))
+	}
+	if len(i.PriorityNotIn) > 0 {
+		predicates = append(predicates, task.PriorityNotIn(i.PriorityNotIn...))
+	}
 	if i.Completed != nil {
 		predicates = append(predicates, task.CompletedEQ(*i.Completed))
 	}
@@ -54988,7 +56118,109 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.CompletedNotNil {
 		predicates = append(predicates, task.CompletedNotNil())
 	}
+	if i.AssigneeID != nil {
+		predicates = append(predicates, task.AssigneeIDEQ(*i.AssigneeID))
+	}
+	if i.AssigneeIDNEQ != nil {
+		predicates = append(predicates, task.AssigneeIDNEQ(*i.AssigneeIDNEQ))
+	}
+	if len(i.AssigneeIDIn) > 0 {
+		predicates = append(predicates, task.AssigneeIDIn(i.AssigneeIDIn...))
+	}
+	if len(i.AssigneeIDNotIn) > 0 {
+		predicates = append(predicates, task.AssigneeIDNotIn(i.AssigneeIDNotIn...))
+	}
+	if i.AssigneeIDGT != nil {
+		predicates = append(predicates, task.AssigneeIDGT(*i.AssigneeIDGT))
+	}
+	if i.AssigneeIDGTE != nil {
+		predicates = append(predicates, task.AssigneeIDGTE(*i.AssigneeIDGTE))
+	}
+	if i.AssigneeIDLT != nil {
+		predicates = append(predicates, task.AssigneeIDLT(*i.AssigneeIDLT))
+	}
+	if i.AssigneeIDLTE != nil {
+		predicates = append(predicates, task.AssigneeIDLTE(*i.AssigneeIDLTE))
+	}
+	if i.AssigneeIDContains != nil {
+		predicates = append(predicates, task.AssigneeIDContains(*i.AssigneeIDContains))
+	}
+	if i.AssigneeIDHasPrefix != nil {
+		predicates = append(predicates, task.AssigneeIDHasPrefix(*i.AssigneeIDHasPrefix))
+	}
+	if i.AssigneeIDHasSuffix != nil {
+		predicates = append(predicates, task.AssigneeIDHasSuffix(*i.AssigneeIDHasSuffix))
+	}
+	if i.AssigneeIDIsNil {
+		predicates = append(predicates, task.AssigneeIDIsNil())
+	}
+	if i.AssigneeIDNotNil {
+		predicates = append(predicates, task.AssigneeIDNotNil())
+	}
+	if i.AssigneeIDEqualFold != nil {
+		predicates = append(predicates, task.AssigneeIDEqualFold(*i.AssigneeIDEqualFold))
+	}
+	if i.AssigneeIDContainsFold != nil {
+		predicates = append(predicates, task.AssigneeIDContainsFold(*i.AssigneeIDContainsFold))
+	}
+	if i.AssignerID != nil {
+		predicates = append(predicates, task.AssignerIDEQ(*i.AssignerID))
+	}
+	if i.AssignerIDNEQ != nil {
+		predicates = append(predicates, task.AssignerIDNEQ(*i.AssignerIDNEQ))
+	}
+	if len(i.AssignerIDIn) > 0 {
+		predicates = append(predicates, task.AssignerIDIn(i.AssignerIDIn...))
+	}
+	if len(i.AssignerIDNotIn) > 0 {
+		predicates = append(predicates, task.AssignerIDNotIn(i.AssignerIDNotIn...))
+	}
+	if i.AssignerIDGT != nil {
+		predicates = append(predicates, task.AssignerIDGT(*i.AssignerIDGT))
+	}
+	if i.AssignerIDGTE != nil {
+		predicates = append(predicates, task.AssignerIDGTE(*i.AssignerIDGTE))
+	}
+	if i.AssignerIDLT != nil {
+		predicates = append(predicates, task.AssignerIDLT(*i.AssignerIDLT))
+	}
+	if i.AssignerIDLTE != nil {
+		predicates = append(predicates, task.AssignerIDLTE(*i.AssignerIDLTE))
+	}
+	if i.AssignerIDContains != nil {
+		predicates = append(predicates, task.AssignerIDContains(*i.AssignerIDContains))
+	}
+	if i.AssignerIDHasPrefix != nil {
+		predicates = append(predicates, task.AssignerIDHasPrefix(*i.AssignerIDHasPrefix))
+	}
+	if i.AssignerIDHasSuffix != nil {
+		predicates = append(predicates, task.AssignerIDHasSuffix(*i.AssignerIDHasSuffix))
+	}
+	if i.AssignerIDEqualFold != nil {
+		predicates = append(predicates, task.AssignerIDEqualFold(*i.AssignerIDEqualFold))
+	}
+	if i.AssignerIDContainsFold != nil {
+		predicates = append(predicates, task.AssignerIDContainsFold(*i.AssignerIDContainsFold))
+	}
 
+	if i.HasOwner != nil {
+		p := task.HasOwner()
+		if !*i.HasOwner {
+			p = task.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, task.HasOwnerWith(with...))
+	}
 	if i.HasAssigner != nil {
 		p := task.HasAssigner()
 		if !*i.HasAssigner {
@@ -55024,24 +56256,6 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, task.HasAssigneeWith(with...))
-	}
-	if i.HasOrganization != nil {
-		p := task.HasOrganization()
-		if !*i.HasOrganization {
-			p = task.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasOrganizationWith) > 0 {
-		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
-		for _, w := range i.HasOrganizationWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOrganizationWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, task.HasOrganizationWith(with...))
 	}
 	if i.HasGroup != nil {
 		p := task.HasGroup()
@@ -55289,6 +56503,21 @@ type TaskHistoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "deleted_at" field predicates.
 	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
 	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
@@ -55317,6 +56546,21 @@ type TaskHistoryWhereInput struct {
 	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
@@ -55368,6 +56612,12 @@ type TaskHistoryWhereInput struct {
 	DueIsNil  bool        `json:"dueIsNil,omitempty"`
 	DueNotNil bool        `json:"dueNotNil,omitempty"`
 
+	// "priority" field predicates.
+	Priority      *enums.Priority  `json:"priority,omitempty"`
+	PriorityNEQ   *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn []enums.Priority `json:"priorityNotIn,omitempty"`
+
 	// "completed" field predicates.
 	Completed       *time.Time  `json:"completed,omitempty"`
 	CompletedNEQ    *time.Time  `json:"completedNEQ,omitempty"`
@@ -55379,6 +56629,38 @@ type TaskHistoryWhereInput struct {
 	CompletedLTE    *time.Time  `json:"completedLTE,omitempty"`
 	CompletedIsNil  bool        `json:"completedIsNil,omitempty"`
 	CompletedNotNil bool        `json:"completedNotNil,omitempty"`
+
+	// "assignee_id" field predicates.
+	AssigneeID             *string  `json:"assigneeID,omitempty"`
+	AssigneeIDNEQ          *string  `json:"assigneeIDNEQ,omitempty"`
+	AssigneeIDIn           []string `json:"assigneeIDIn,omitempty"`
+	AssigneeIDNotIn        []string `json:"assigneeIDNotIn,omitempty"`
+	AssigneeIDGT           *string  `json:"assigneeIDGT,omitempty"`
+	AssigneeIDGTE          *string  `json:"assigneeIDGTE,omitempty"`
+	AssigneeIDLT           *string  `json:"assigneeIDLT,omitempty"`
+	AssigneeIDLTE          *string  `json:"assigneeIDLTE,omitempty"`
+	AssigneeIDContains     *string  `json:"assigneeIDContains,omitempty"`
+	AssigneeIDHasPrefix    *string  `json:"assigneeIDHasPrefix,omitempty"`
+	AssigneeIDHasSuffix    *string  `json:"assigneeIDHasSuffix,omitempty"`
+	AssigneeIDIsNil        bool     `json:"assigneeIDIsNil,omitempty"`
+	AssigneeIDNotNil       bool     `json:"assigneeIDNotNil,omitempty"`
+	AssigneeIDEqualFold    *string  `json:"assigneeIDEqualFold,omitempty"`
+	AssigneeIDContainsFold *string  `json:"assigneeIDContainsFold,omitempty"`
+
+	// "assigner_id" field predicates.
+	AssignerID             *string  `json:"assignerID,omitempty"`
+	AssignerIDNEQ          *string  `json:"assignerIDNEQ,omitempty"`
+	AssignerIDIn           []string `json:"assignerIDIn,omitempty"`
+	AssignerIDNotIn        []string `json:"assignerIDNotIn,omitempty"`
+	AssignerIDGT           *string  `json:"assignerIDGT,omitempty"`
+	AssignerIDGTE          *string  `json:"assignerIDGTE,omitempty"`
+	AssignerIDLT           *string  `json:"assignerIDLT,omitempty"`
+	AssignerIDLTE          *string  `json:"assignerIDLTE,omitempty"`
+	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
+	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
+	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
+	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -55713,6 +56995,45 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, taskhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, taskhistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, taskhistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, taskhistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, taskhistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, taskhistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, taskhistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, taskhistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, taskhistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, taskhistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, taskhistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, taskhistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, taskhistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, taskhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
 	if i.DeletedAt != nil {
 		predicates = append(predicates, taskhistory.DeletedAtEQ(*i.DeletedAt))
 	}
@@ -55787,6 +57108,45 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, taskhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, taskhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, taskhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, taskhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, taskhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, taskhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, taskhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, taskhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, taskhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, taskhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, taskhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, taskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, taskhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, taskhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.Title != nil {
 		predicates = append(predicates, taskhistory.TitleEQ(*i.Title))
@@ -55914,6 +57274,18 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.DueNotNil {
 		predicates = append(predicates, taskhistory.DueNotNil())
 	}
+	if i.Priority != nil {
+		predicates = append(predicates, taskhistory.PriorityEQ(*i.Priority))
+	}
+	if i.PriorityNEQ != nil {
+		predicates = append(predicates, taskhistory.PriorityNEQ(*i.PriorityNEQ))
+	}
+	if len(i.PriorityIn) > 0 {
+		predicates = append(predicates, taskhistory.PriorityIn(i.PriorityIn...))
+	}
+	if len(i.PriorityNotIn) > 0 {
+		predicates = append(predicates, taskhistory.PriorityNotIn(i.PriorityNotIn...))
+	}
 	if i.Completed != nil {
 		predicates = append(predicates, taskhistory.CompletedEQ(*i.Completed))
 	}
@@ -55943,6 +57315,90 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.CompletedNotNil {
 		predicates = append(predicates, taskhistory.CompletedNotNil())
+	}
+	if i.AssigneeID != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDEQ(*i.AssigneeID))
+	}
+	if i.AssigneeIDNEQ != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDNEQ(*i.AssigneeIDNEQ))
+	}
+	if len(i.AssigneeIDIn) > 0 {
+		predicates = append(predicates, taskhistory.AssigneeIDIn(i.AssigneeIDIn...))
+	}
+	if len(i.AssigneeIDNotIn) > 0 {
+		predicates = append(predicates, taskhistory.AssigneeIDNotIn(i.AssigneeIDNotIn...))
+	}
+	if i.AssigneeIDGT != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDGT(*i.AssigneeIDGT))
+	}
+	if i.AssigneeIDGTE != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDGTE(*i.AssigneeIDGTE))
+	}
+	if i.AssigneeIDLT != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDLT(*i.AssigneeIDLT))
+	}
+	if i.AssigneeIDLTE != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDLTE(*i.AssigneeIDLTE))
+	}
+	if i.AssigneeIDContains != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDContains(*i.AssigneeIDContains))
+	}
+	if i.AssigneeIDHasPrefix != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDHasPrefix(*i.AssigneeIDHasPrefix))
+	}
+	if i.AssigneeIDHasSuffix != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDHasSuffix(*i.AssigneeIDHasSuffix))
+	}
+	if i.AssigneeIDIsNil {
+		predicates = append(predicates, taskhistory.AssigneeIDIsNil())
+	}
+	if i.AssigneeIDNotNil {
+		predicates = append(predicates, taskhistory.AssigneeIDNotNil())
+	}
+	if i.AssigneeIDEqualFold != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDEqualFold(*i.AssigneeIDEqualFold))
+	}
+	if i.AssigneeIDContainsFold != nil {
+		predicates = append(predicates, taskhistory.AssigneeIDContainsFold(*i.AssigneeIDContainsFold))
+	}
+	if i.AssignerID != nil {
+		predicates = append(predicates, taskhistory.AssignerIDEQ(*i.AssignerID))
+	}
+	if i.AssignerIDNEQ != nil {
+		predicates = append(predicates, taskhistory.AssignerIDNEQ(*i.AssignerIDNEQ))
+	}
+	if len(i.AssignerIDIn) > 0 {
+		predicates = append(predicates, taskhistory.AssignerIDIn(i.AssignerIDIn...))
+	}
+	if len(i.AssignerIDNotIn) > 0 {
+		predicates = append(predicates, taskhistory.AssignerIDNotIn(i.AssignerIDNotIn...))
+	}
+	if i.AssignerIDGT != nil {
+		predicates = append(predicates, taskhistory.AssignerIDGT(*i.AssignerIDGT))
+	}
+	if i.AssignerIDGTE != nil {
+		predicates = append(predicates, taskhistory.AssignerIDGTE(*i.AssignerIDGTE))
+	}
+	if i.AssignerIDLT != nil {
+		predicates = append(predicates, taskhistory.AssignerIDLT(*i.AssignerIDLT))
+	}
+	if i.AssignerIDLTE != nil {
+		predicates = append(predicates, taskhistory.AssignerIDLTE(*i.AssignerIDLTE))
+	}
+	if i.AssignerIDContains != nil {
+		predicates = append(predicates, taskhistory.AssignerIDContains(*i.AssignerIDContains))
+	}
+	if i.AssignerIDHasPrefix != nil {
+		predicates = append(predicates, taskhistory.AssignerIDHasPrefix(*i.AssignerIDHasPrefix))
+	}
+	if i.AssignerIDHasSuffix != nil {
+		predicates = append(predicates, taskhistory.AssignerIDHasSuffix(*i.AssignerIDHasSuffix))
+	}
+	if i.AssignerIDEqualFold != nil {
+		predicates = append(predicates, taskhistory.AssignerIDEqualFold(*i.AssignerIDEqualFold))
+	}
+	if i.AssignerIDContainsFold != nil {
+		predicates = append(predicates, taskhistory.AssignerIDContainsFold(*i.AssignerIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -57521,6 +58977,21 @@ type UserWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "email" field predicates.
 	Email             *string  `json:"email,omitempty"`
 	EmailNEQ          *string  `json:"emailNEQ,omitempty"`
@@ -58081,6 +59552,45 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, user.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, user.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, user.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, user.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, user.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, user.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, user.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, user.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, user.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, user.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, user.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, user.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, user.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, user.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.Email != nil {
 		predicates = append(predicates, user.EmailEQ(*i.Email))
@@ -58958,6 +60468,21 @@ type UserHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "display_id" field predicates.
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIDNEQ          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIDGT           *string  `json:"displayIDGT,omitempty"`
+	DisplayIDGTE          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIDLT           *string  `json:"displayIDLT,omitempty"`
+	DisplayIDLTE          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+
 	// "email" field predicates.
 	Email             *string  `json:"email,omitempty"`
 	EmailNEQ          *string  `json:"emailNEQ,omitempty"`
@@ -59535,6 +61060,45 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, userhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.DisplayID != nil {
+		predicates = append(predicates, userhistory.DisplayIDEQ(*i.DisplayID))
+	}
+	if i.DisplayIDNEQ != nil {
+		predicates = append(predicates, userhistory.DisplayIDNEQ(*i.DisplayIDNEQ))
+	}
+	if len(i.DisplayIDIn) > 0 {
+		predicates = append(predicates, userhistory.DisplayIDIn(i.DisplayIDIn...))
+	}
+	if len(i.DisplayIDNotIn) > 0 {
+		predicates = append(predicates, userhistory.DisplayIDNotIn(i.DisplayIDNotIn...))
+	}
+	if i.DisplayIDGT != nil {
+		predicates = append(predicates, userhistory.DisplayIDGT(*i.DisplayIDGT))
+	}
+	if i.DisplayIDGTE != nil {
+		predicates = append(predicates, userhistory.DisplayIDGTE(*i.DisplayIDGTE))
+	}
+	if i.DisplayIDLT != nil {
+		predicates = append(predicates, userhistory.DisplayIDLT(*i.DisplayIDLT))
+	}
+	if i.DisplayIDLTE != nil {
+		predicates = append(predicates, userhistory.DisplayIDLTE(*i.DisplayIDLTE))
+	}
+	if i.DisplayIDContains != nil {
+		predicates = append(predicates, userhistory.DisplayIDContains(*i.DisplayIDContains))
+	}
+	if i.DisplayIDHasPrefix != nil {
+		predicates = append(predicates, userhistory.DisplayIDHasPrefix(*i.DisplayIDHasPrefix))
+	}
+	if i.DisplayIDHasSuffix != nil {
+		predicates = append(predicates, userhistory.DisplayIDHasSuffix(*i.DisplayIDHasSuffix))
+	}
+	if i.DisplayIDEqualFold != nil {
+		predicates = append(predicates, userhistory.DisplayIDEqualFold(*i.DisplayIDEqualFold))
+	}
+	if i.DisplayIDContainsFold != nil {
+		predicates = append(predicates, userhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
 	if i.Email != nil {
 		predicates = append(predicates, userhistory.EmailEQ(*i.Email))

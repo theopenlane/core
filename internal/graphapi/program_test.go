@@ -300,6 +300,9 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			// check required fields
 			assert.Equal(t, tc.request.Name, resp.CreateProgram.Program.Name)
 
+			assert.NotEmpty(t, resp.CreateProgram.Program.DisplayID)
+			assert.Contains(t, resp.CreateProgram.Program.DisplayID, "PRG-")
+
 			// ensure the owner is set to the user's organization, not the  input
 			if tc.request.OwnerID != nil && tc.ctx == testUser2.UserCtx {
 				assert.Equal(t, testUser2.OrganizationID, *resp.CreateProgram.Program.OwnerID)

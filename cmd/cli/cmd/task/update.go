@@ -31,8 +31,6 @@ func init() {
 	updateCmd.Flags().StringP("status", "s", "", "status of the task")
 	updateCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
 	updateCmd.Flags().Duration("due", 0, "time until due date of the task")
-	updateCmd.Flags().StringP("add-organization", "o", "", "organization ID to own the task, this will give the organization access to the task")
-	updateCmd.Flags().String("remove-organization", "", "organization ID to own the task, this will give the organization access to the task")
 	updateCmd.Flags().StringP("add-group", "g", "", "group ID to own the task, this will give the group access to the task")
 	updateCmd.Flags().String("remove-group", "", "group ID to own the task, this will give the group access to the task")
 }
@@ -70,16 +68,6 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 	if due != 0 {
 		dueDate := time.Now().Add(due)
 		input.Due = &dueDate
-	}
-
-	organization := cmd.Config.String("add-organization")
-	if organization != "" {
-		input.AddOrganizationIDs = []string{organization}
-	}
-
-	organization = cmd.Config.String("remove-organization")
-	if organization != "" {
-		input.RemoveOrganizationIDs = []string{organization}
 	}
 
 	group := cmd.Config.String("add-group")

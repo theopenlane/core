@@ -123,6 +123,20 @@ func (thu *TaskHistoryUpdate) ClearTags() *TaskHistoryUpdate {
 	return thu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (thu *TaskHistoryUpdate) SetOwnerID(s string) *TaskHistoryUpdate {
+	thu.mutation.SetOwnerID(s)
+	return thu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (thu *TaskHistoryUpdate) SetNillableOwnerID(s *string) *TaskHistoryUpdate {
+	if s != nil {
+		thu.SetOwnerID(*s)
+	}
+	return thu
+}
+
 // SetTitle sets the "title" field.
 func (thu *TaskHistoryUpdate) SetTitle(s string) *TaskHistoryUpdate {
 	thu.mutation.SetTitle(s)
@@ -203,6 +217,20 @@ func (thu *TaskHistoryUpdate) ClearDue() *TaskHistoryUpdate {
 	return thu
 }
 
+// SetPriority sets the "priority" field.
+func (thu *TaskHistoryUpdate) SetPriority(e enums.Priority) *TaskHistoryUpdate {
+	thu.mutation.SetPriority(e)
+	return thu
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (thu *TaskHistoryUpdate) SetNillablePriority(e *enums.Priority) *TaskHistoryUpdate {
+	if e != nil {
+		thu.SetPriority(*e)
+	}
+	return thu
+}
+
 // SetCompleted sets the "completed" field.
 func (thu *TaskHistoryUpdate) SetCompleted(t time.Time) *TaskHistoryUpdate {
 	thu.mutation.SetCompleted(t)
@@ -220,6 +248,40 @@ func (thu *TaskHistoryUpdate) SetNillableCompleted(t *time.Time) *TaskHistoryUpd
 // ClearCompleted clears the value of the "completed" field.
 func (thu *TaskHistoryUpdate) ClearCompleted() *TaskHistoryUpdate {
 	thu.mutation.ClearCompleted()
+	return thu
+}
+
+// SetAssigneeID sets the "assignee_id" field.
+func (thu *TaskHistoryUpdate) SetAssigneeID(s string) *TaskHistoryUpdate {
+	thu.mutation.SetAssigneeID(s)
+	return thu
+}
+
+// SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
+func (thu *TaskHistoryUpdate) SetNillableAssigneeID(s *string) *TaskHistoryUpdate {
+	if s != nil {
+		thu.SetAssigneeID(*s)
+	}
+	return thu
+}
+
+// ClearAssigneeID clears the value of the "assignee_id" field.
+func (thu *TaskHistoryUpdate) ClearAssigneeID() *TaskHistoryUpdate {
+	thu.mutation.ClearAssigneeID()
+	return thu
+}
+
+// SetAssignerID sets the "assigner_id" field.
+func (thu *TaskHistoryUpdate) SetAssignerID(s string) *TaskHistoryUpdate {
+	thu.mutation.SetAssignerID(s)
+	return thu
+}
+
+// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
+func (thu *TaskHistoryUpdate) SetNillableAssignerID(s *string) *TaskHistoryUpdate {
+	if s != nil {
+		thu.SetAssignerID(*s)
+	}
 	return thu
 }
 
@@ -269,6 +331,11 @@ func (thu *TaskHistoryUpdate) check() error {
 	if v, ok := thu.mutation.Status(); ok {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := thu.mutation.Priority(); ok {
+		if err := taskhistory.PriorityValidator(v); err != nil {
+			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.priority": %w`, err)}
 		}
 	}
 	return nil
@@ -336,6 +403,9 @@ func (thu *TaskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if thu.mutation.TagsCleared() {
 		_spec.ClearField(taskhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := thu.mutation.OwnerID(); ok {
+		_spec.SetField(taskhistory.FieldOwnerID, field.TypeString, value)
+	}
 	if value, ok := thu.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
@@ -360,11 +430,23 @@ func (thu *TaskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if thu.mutation.DueCleared() {
 		_spec.ClearField(taskhistory.FieldDue, field.TypeTime)
 	}
+	if value, ok := thu.mutation.Priority(); ok {
+		_spec.SetField(taskhistory.FieldPriority, field.TypeEnum, value)
+	}
 	if value, ok := thu.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
 	}
 	if thu.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
+	}
+	if value, ok := thu.mutation.AssigneeID(); ok {
+		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)
+	}
+	if thu.mutation.AssigneeIDCleared() {
+		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
+	}
+	if value, ok := thu.mutation.AssignerID(); ok {
+		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
 	}
 	_spec.Node.Schema = thu.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thu.schemaConfig)
@@ -480,6 +562,20 @@ func (thuo *TaskHistoryUpdateOne) ClearTags() *TaskHistoryUpdateOne {
 	return thuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (thuo *TaskHistoryUpdateOne) SetOwnerID(s string) *TaskHistoryUpdateOne {
+	thuo.mutation.SetOwnerID(s)
+	return thuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (thuo *TaskHistoryUpdateOne) SetNillableOwnerID(s *string) *TaskHistoryUpdateOne {
+	if s != nil {
+		thuo.SetOwnerID(*s)
+	}
+	return thuo
+}
+
 // SetTitle sets the "title" field.
 func (thuo *TaskHistoryUpdateOne) SetTitle(s string) *TaskHistoryUpdateOne {
 	thuo.mutation.SetTitle(s)
@@ -560,6 +656,20 @@ func (thuo *TaskHistoryUpdateOne) ClearDue() *TaskHistoryUpdateOne {
 	return thuo
 }
 
+// SetPriority sets the "priority" field.
+func (thuo *TaskHistoryUpdateOne) SetPriority(e enums.Priority) *TaskHistoryUpdateOne {
+	thuo.mutation.SetPriority(e)
+	return thuo
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (thuo *TaskHistoryUpdateOne) SetNillablePriority(e *enums.Priority) *TaskHistoryUpdateOne {
+	if e != nil {
+		thuo.SetPriority(*e)
+	}
+	return thuo
+}
+
 // SetCompleted sets the "completed" field.
 func (thuo *TaskHistoryUpdateOne) SetCompleted(t time.Time) *TaskHistoryUpdateOne {
 	thuo.mutation.SetCompleted(t)
@@ -577,6 +687,40 @@ func (thuo *TaskHistoryUpdateOne) SetNillableCompleted(t *time.Time) *TaskHistor
 // ClearCompleted clears the value of the "completed" field.
 func (thuo *TaskHistoryUpdateOne) ClearCompleted() *TaskHistoryUpdateOne {
 	thuo.mutation.ClearCompleted()
+	return thuo
+}
+
+// SetAssigneeID sets the "assignee_id" field.
+func (thuo *TaskHistoryUpdateOne) SetAssigneeID(s string) *TaskHistoryUpdateOne {
+	thuo.mutation.SetAssigneeID(s)
+	return thuo
+}
+
+// SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
+func (thuo *TaskHistoryUpdateOne) SetNillableAssigneeID(s *string) *TaskHistoryUpdateOne {
+	if s != nil {
+		thuo.SetAssigneeID(*s)
+	}
+	return thuo
+}
+
+// ClearAssigneeID clears the value of the "assignee_id" field.
+func (thuo *TaskHistoryUpdateOne) ClearAssigneeID() *TaskHistoryUpdateOne {
+	thuo.mutation.ClearAssigneeID()
+	return thuo
+}
+
+// SetAssignerID sets the "assigner_id" field.
+func (thuo *TaskHistoryUpdateOne) SetAssignerID(s string) *TaskHistoryUpdateOne {
+	thuo.mutation.SetAssignerID(s)
+	return thuo
+}
+
+// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
+func (thuo *TaskHistoryUpdateOne) SetNillableAssignerID(s *string) *TaskHistoryUpdateOne {
+	if s != nil {
+		thuo.SetAssignerID(*s)
+	}
 	return thuo
 }
 
@@ -639,6 +783,11 @@ func (thuo *TaskHistoryUpdateOne) check() error {
 	if v, ok := thuo.mutation.Status(); ok {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := thuo.mutation.Priority(); ok {
+		if err := taskhistory.PriorityValidator(v); err != nil {
+			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.priority": %w`, err)}
 		}
 	}
 	return nil
@@ -723,6 +872,9 @@ func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHisto
 	if thuo.mutation.TagsCleared() {
 		_spec.ClearField(taskhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := thuo.mutation.OwnerID(); ok {
+		_spec.SetField(taskhistory.FieldOwnerID, field.TypeString, value)
+	}
 	if value, ok := thuo.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
@@ -747,11 +899,23 @@ func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHisto
 	if thuo.mutation.DueCleared() {
 		_spec.ClearField(taskhistory.FieldDue, field.TypeTime)
 	}
+	if value, ok := thuo.mutation.Priority(); ok {
+		_spec.SetField(taskhistory.FieldPriority, field.TypeEnum, value)
+	}
 	if value, ok := thuo.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
 	}
 	if thuo.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
+	}
+	if value, ok := thuo.mutation.AssigneeID(); ok {
+		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)
+	}
+	if thuo.mutation.AssigneeIDCleared() {
+		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
+	}
+	if value, ok := thuo.mutation.AssignerID(); ok {
+		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
 	}
 	_spec.Node.Schema = thuo.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thuo.schemaConfig)

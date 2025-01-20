@@ -97,9 +97,9 @@ func DeletedBy(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
-func MappingID(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldMappingID, v))
+// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
+func DisplayID(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldDisplayID, v))
 }
 
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
@@ -532,69 +532,69 @@ func DeletedByContainsFold(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// MappingIDEQ applies the EQ predicate on the "mapping_id" field.
-func MappingIDEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldMappingID, v))
+// DisplayIDEQ applies the EQ predicate on the "display_id" field.
+func DisplayIDEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldDisplayID, v))
 }
 
-// MappingIDNEQ applies the NEQ predicate on the "mapping_id" field.
-func MappingIDNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldMappingID, v))
+// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
+func DisplayIDNEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNEQ(FieldDisplayID, v))
 }
 
-// MappingIDIn applies the In predicate on the "mapping_id" field.
-func MappingIDIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldMappingID, vs...))
+// DisplayIDIn applies the In predicate on the "display_id" field.
+func DisplayIDIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIn(FieldDisplayID, vs...))
 }
 
-// MappingIDNotIn applies the NotIn predicate on the "mapping_id" field.
-func MappingIDNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldMappingID, vs...))
+// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
+func DisplayIDNotIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotIn(FieldDisplayID, vs...))
 }
 
-// MappingIDGT applies the GT predicate on the "mapping_id" field.
-func MappingIDGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldMappingID, v))
+// DisplayIDGT applies the GT predicate on the "display_id" field.
+func DisplayIDGT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGT(FieldDisplayID, v))
 }
 
-// MappingIDGTE applies the GTE predicate on the "mapping_id" field.
-func MappingIDGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldMappingID, v))
+// DisplayIDGTE applies the GTE predicate on the "display_id" field.
+func DisplayIDGTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGTE(FieldDisplayID, v))
 }
 
-// MappingIDLT applies the LT predicate on the "mapping_id" field.
-func MappingIDLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldMappingID, v))
+// DisplayIDLT applies the LT predicate on the "display_id" field.
+func DisplayIDLT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLT(FieldDisplayID, v))
 }
 
-// MappingIDLTE applies the LTE predicate on the "mapping_id" field.
-func MappingIDLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldMappingID, v))
+// DisplayIDLTE applies the LTE predicate on the "display_id" field.
+func DisplayIDLTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLTE(FieldDisplayID, v))
 }
 
-// MappingIDContains applies the Contains predicate on the "mapping_id" field.
-func MappingIDContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldMappingID, v))
+// DisplayIDContains applies the Contains predicate on the "display_id" field.
+func DisplayIDContains(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContains(FieldDisplayID, v))
 }
 
-// MappingIDHasPrefix applies the HasPrefix predicate on the "mapping_id" field.
-func MappingIDHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldMappingID, v))
+// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
+func DisplayIDHasPrefix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasPrefix(FieldDisplayID, v))
 }
 
-// MappingIDHasSuffix applies the HasSuffix predicate on the "mapping_id" field.
-func MappingIDHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldMappingID, v))
+// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
+func DisplayIDHasSuffix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasSuffix(FieldDisplayID, v))
 }
 
-// MappingIDEqualFold applies the EqualFold predicate on the "mapping_id" field.
-func MappingIDEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldMappingID, v))
+// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
+func DisplayIDEqualFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEqualFold(FieldDisplayID, v))
 }
 
-// MappingIDContainsFold applies the ContainsFold predicate on the "mapping_id" field.
-func MappingIDContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldMappingID, v))
+// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
+func DisplayIDContainsFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
 // TagsIsNil applies the IsNil predicate on the "tags" field.

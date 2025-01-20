@@ -26,14 +26,16 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldMappingID holds the string denoting the mapping_id field in the database.
-	FieldMappingID = "mapping_id"
+	// FieldDisplayID holds the string denoting the display_id field in the database.
+	FieldDisplayID = "display_id"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -44,14 +46,20 @@ const (
 	FieldStatus = "status"
 	// FieldDue holds the string denoting the due field in the database.
 	FieldDue = "due"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
 	// FieldCompleted holds the string denoting the completed field in the database.
 	FieldCompleted = "completed"
+	// FieldAssigneeID holds the string denoting the assignee_id field in the database.
+	FieldAssigneeID = "assignee_id"
+	// FieldAssignerID holds the string denoting the assigner_id field in the database.
+	FieldAssignerID = "assigner_id"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeAssigner holds the string denoting the assigner edge name in mutations.
 	EdgeAssigner = "assigner"
 	// EdgeAssignee holds the string denoting the assignee edge name in mutations.
 	EdgeAssignee = "assignee"
-	// EdgeOrganization holds the string denoting the organization edge name in mutations.
-	EdgeOrganization = "organization"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
 	EdgeGroup = "group"
 	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
@@ -68,25 +76,27 @@ const (
 	EdgeProgram = "program"
 	// Table holds the table name of the task in the database.
 	Table = "tasks"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "tasks"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// AssignerTable is the table that holds the assigner relation/edge.
 	AssignerTable = "tasks"
 	// AssignerInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	AssignerInverseTable = "users"
 	// AssignerColumn is the table column denoting the assigner relation/edge.
-	AssignerColumn = "user_assigner_tasks"
+	AssignerColumn = "assigner_id"
 	// AssigneeTable is the table that holds the assignee relation/edge.
 	AssigneeTable = "tasks"
 	// AssigneeInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	AssigneeInverseTable = "users"
 	// AssigneeColumn is the table column denoting the assignee relation/edge.
-	AssigneeColumn = "user_assignee_tasks"
-	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
-	OrganizationTable = "organization_tasks"
-	// OrganizationInverseTable is the table name for the Organization entity.
-	// It exists in this package in order to avoid circular dependency with the "organization" package.
-	OrganizationInverseTable = "organizations"
+	AssigneeColumn = "assignee_id"
 	// GroupTable is the table that holds the group relation/edge. The primary key declared below.
 	GroupTable = "group_tasks"
 	// GroupInverseTable is the table name for the Group entity.
@@ -131,29 +141,23 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldMappingID,
+	FieldDisplayID,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
 	FieldTitle,
 	FieldDescription,
 	FieldDetails,
 	FieldStatus,
 	FieldDue,
+	FieldPriority,
 	FieldCompleted,
-}
-
-// ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"user_assigner_tasks",
-	"user_assignee_tasks",
+	FieldAssigneeID,
+	FieldAssignerID,
 }
 
 var (
-	// OrganizationPrimaryKey and OrganizationColumn2 are the table columns denoting the
-	// primary key for the organization relation (M2M).
-	OrganizationPrimaryKey = []string{"organization_id", "task_id"}
 	// GroupPrimaryKey and GroupColumn2 are the table columns denoting the
 	// primary key for the group relation (M2M).
 	GroupPrimaryKey = []string{"group_id", "task_id"}
@@ -184,11 +188,6 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
-			return true
-		}
-	}
 	return false
 }
 
@@ -198,7 +197,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -207,10 +206,12 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultMappingID holds the default value on creation for the "mapping_id" field.
-	DefaultMappingID func() string
+	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	DisplayIDValidator func(string) error
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -226,6 +227,18 @@ func StatusValidator(s enums.TaskStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultPriority enums.Priority = "MEDIUM"
+
+// PriorityValidator is a validator for the "priority" field enum values. It is called by the builders before save.
+func PriorityValidator(pr enums.Priority) error {
+	switch pr.String() {
+	case "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("task: invalid enum value for priority field: %q", pr)
 	}
 }
 
@@ -257,9 +270,9 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
-// ByMappingID orders the results by the mapping_id field.
-func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
+// ByDisplayID orders the results by the display_id field.
+func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
 // ByDeletedAt orders the results by the deleted_at field.
@@ -270,6 +283,11 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.
@@ -292,9 +310,31 @@ func ByDue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDue, opts...).ToFunc()
 }
 
+// ByPriority orders the results by the priority field.
+func ByPriority(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPriority, opts...).ToFunc()
+}
+
 // ByCompleted orders the results by the completed field.
 func ByCompleted(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompleted, opts...).ToFunc()
+}
+
+// ByAssigneeID orders the results by the assignee_id field.
+func ByAssigneeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssigneeID, opts...).ToFunc()
+}
+
+// ByAssignerID orders the results by the assigner_id field.
+func ByAssignerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignerID, opts...).ToFunc()
+}
+
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
 }
 
 // ByAssignerField orders the results by assigner field.
@@ -308,20 +348,6 @@ func ByAssignerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByAssigneeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssigneeStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByOrganizationCount orders the results by organization count.
-func ByOrganizationCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrganizationStep(), opts...)
-	}
-}
-
-// ByOrganization orders the results by organization terms.
-func ByOrganization(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrganizationStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -422,6 +448,13 @@ func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
 func newAssignerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -434,13 +467,6 @@ func newAssigneeStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssigneeInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, AssigneeTable, AssigneeColumn),
-	)
-}
-func newOrganizationStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrganizationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationTable, OrganizationPrimaryKey...),
 	)
 }
 func newGroupStep() *sqlgraph.Step {
@@ -498,4 +524,11 @@ var (
 	_ graphql.Marshaler = (*enums.TaskStatus)(nil)
 	// enums.TaskStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.TaskStatus)(nil)
+)
+
+var (
+	// enums.Priority must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Priority)(nil)
+	// enums.Priority must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Priority)(nil)
 )

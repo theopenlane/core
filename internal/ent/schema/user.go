@@ -42,7 +42,10 @@ func (User) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
+		emixin.IDMixin{
+			HumanIdentifierPrefix: "USR",
+			SingleFieldIndex:      true,
+		},
 		emixin.TagMixin{},
 	}
 }

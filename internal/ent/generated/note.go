@@ -28,8 +28,8 @@ type Note struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -114,7 +114,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case note.FieldTags:
 			values[i] = new([]byte)
-		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldMappingID, note.FieldDeletedBy, note.FieldOwnerID, note.FieldText:
+		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDisplayID, note.FieldDeletedBy, note.FieldOwnerID, note.FieldText:
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -165,11 +165,11 @@ func (n *Note) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.UpdatedBy = value.String
 			}
-		case note.FieldMappingID:
+		case note.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				n.MappingID = value.String
+				n.DisplayID = value.String
 			}
 		case note.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -278,8 +278,8 @@ func (n *Note) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(n.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(n.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(n.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(n.DeletedAt.Format(time.ANSIC))

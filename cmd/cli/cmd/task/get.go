@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 var getCmd = &cobra.Command{
@@ -21,6 +22,7 @@ func init() {
 	command.AddCommand(getCmd)
 
 	getCmd.Flags().StringP("id", "i", "", "task id to query")
+	getCmd.Flags().BoolP("include-completed", "c", false, "include completed tasks")
 }
 
 // get an existing task in the platform
@@ -44,9 +46,19 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
-	// get all will be filtered for the authorized organization(s)
-	o, err := client.GetAllTasks(ctx)
-	cobra.CheckErr(err)
+	includeCompleted := cmd.Config.Bool("include-completed")
+	if includeCompleted {
+		// get all will be filtered for the authorized organization(s)
+		o, err := client.GetAllTasks(ctx)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+
+	}
+
+	o, err := client.GetTasks(ctx, &openlaneclient.TaskWhereInput{
+		CompletedIsNil: &includeCompleted,
+	})
 
 	return consoleOutput(o)
 }

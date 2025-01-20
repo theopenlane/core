@@ -96,9 +96,9 @@ func UpdatedBy(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
-func MappingID(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldEQ(FieldMappingID, v))
+// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
+func DisplayID(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldDisplayID, v))
 }
 
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
@@ -109,6 +109,11 @@ func DeletedAt(v time.Time) predicate.TaskHistory {
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
 func DeletedBy(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
@@ -129,6 +134,16 @@ func Due(v time.Time) predicate.TaskHistory {
 // Completed applies equality check predicate on the "completed" field. It's identical to CompletedEQ.
 func Completed(v time.Time) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldCompleted, v))
+}
+
+// AssigneeID applies equality check predicate on the "assignee_id" field. It's identical to AssigneeIDEQ.
+func AssigneeID(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldAssigneeID, v))
+}
+
+// AssignerID applies equality check predicate on the "assigner_id" field. It's identical to AssignerIDEQ.
+func AssignerID(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldAssignerID, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -516,69 +531,69 @@ func UpdatedByContainsFold(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// MappingIDEQ applies the EQ predicate on the "mapping_id" field.
-func MappingIDEQ(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldEQ(FieldMappingID, v))
+// DisplayIDEQ applies the EQ predicate on the "display_id" field.
+func DisplayIDEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldDisplayID, v))
 }
 
-// MappingIDNEQ applies the NEQ predicate on the "mapping_id" field.
-func MappingIDNEQ(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldNEQ(FieldMappingID, v))
+// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
+func DisplayIDNEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNEQ(FieldDisplayID, v))
 }
 
-// MappingIDIn applies the In predicate on the "mapping_id" field.
-func MappingIDIn(vs ...string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldIn(FieldMappingID, vs...))
+// DisplayIDIn applies the In predicate on the "display_id" field.
+func DisplayIDIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIn(FieldDisplayID, vs...))
 }
 
-// MappingIDNotIn applies the NotIn predicate on the "mapping_id" field.
-func MappingIDNotIn(vs ...string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldNotIn(FieldMappingID, vs...))
+// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
+func DisplayIDNotIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotIn(FieldDisplayID, vs...))
 }
 
-// MappingIDGT applies the GT predicate on the "mapping_id" field.
-func MappingIDGT(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldGT(FieldMappingID, v))
+// DisplayIDGT applies the GT predicate on the "display_id" field.
+func DisplayIDGT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGT(FieldDisplayID, v))
 }
 
-// MappingIDGTE applies the GTE predicate on the "mapping_id" field.
-func MappingIDGTE(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldGTE(FieldMappingID, v))
+// DisplayIDGTE applies the GTE predicate on the "display_id" field.
+func DisplayIDGTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGTE(FieldDisplayID, v))
 }
 
-// MappingIDLT applies the LT predicate on the "mapping_id" field.
-func MappingIDLT(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldLT(FieldMappingID, v))
+// DisplayIDLT applies the LT predicate on the "display_id" field.
+func DisplayIDLT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLT(FieldDisplayID, v))
 }
 
-// MappingIDLTE applies the LTE predicate on the "mapping_id" field.
-func MappingIDLTE(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldLTE(FieldMappingID, v))
+// DisplayIDLTE applies the LTE predicate on the "display_id" field.
+func DisplayIDLTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLTE(FieldDisplayID, v))
 }
 
-// MappingIDContains applies the Contains predicate on the "mapping_id" field.
-func MappingIDContains(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldContains(FieldMappingID, v))
+// DisplayIDContains applies the Contains predicate on the "display_id" field.
+func DisplayIDContains(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContains(FieldDisplayID, v))
 }
 
-// MappingIDHasPrefix applies the HasPrefix predicate on the "mapping_id" field.
-func MappingIDHasPrefix(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldHasPrefix(FieldMappingID, v))
+// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
+func DisplayIDHasPrefix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasPrefix(FieldDisplayID, v))
 }
 
-// MappingIDHasSuffix applies the HasSuffix predicate on the "mapping_id" field.
-func MappingIDHasSuffix(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldHasSuffix(FieldMappingID, v))
+// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
+func DisplayIDHasSuffix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasSuffix(FieldDisplayID, v))
 }
 
-// MappingIDEqualFold applies the EqualFold predicate on the "mapping_id" field.
-func MappingIDEqualFold(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldEqualFold(FieldMappingID, v))
+// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
+func DisplayIDEqualFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEqualFold(FieldDisplayID, v))
 }
 
-// MappingIDContainsFold applies the ContainsFold predicate on the "mapping_id" field.
-func MappingIDContainsFold(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldContainsFold(FieldMappingID, v))
+// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
+func DisplayIDContainsFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
@@ -714,6 +729,71 @@ func TagsIsNil() predicate.TaskHistory {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldNotNull(FieldTags))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // TitleEQ applies the EQ predicate on the "title" field.
@@ -946,6 +1026,36 @@ func DueNotNil() predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldNotNull(FieldDue))
 }
 
+// PriorityEQ applies the EQ predicate on the "priority" field.
+func PriorityEQ(v enums.Priority) predicate.TaskHistory {
+	vc := v
+	return predicate.TaskHistory(sql.FieldEQ(FieldPriority, vc))
+}
+
+// PriorityNEQ applies the NEQ predicate on the "priority" field.
+func PriorityNEQ(v enums.Priority) predicate.TaskHistory {
+	vc := v
+	return predicate.TaskHistory(sql.FieldNEQ(FieldPriority, vc))
+}
+
+// PriorityIn applies the In predicate on the "priority" field.
+func PriorityIn(vs ...enums.Priority) predicate.TaskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TaskHistory(sql.FieldIn(FieldPriority, v...))
+}
+
+// PriorityNotIn applies the NotIn predicate on the "priority" field.
+func PriorityNotIn(vs ...enums.Priority) predicate.TaskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TaskHistory(sql.FieldNotIn(FieldPriority, v...))
+}
+
 // CompletedEQ applies the EQ predicate on the "completed" field.
 func CompletedEQ(v time.Time) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldCompleted, v))
@@ -994,6 +1104,146 @@ func CompletedIsNil() predicate.TaskHistory {
 // CompletedNotNil applies the NotNil predicate on the "completed" field.
 func CompletedNotNil() predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldNotNull(FieldCompleted))
+}
+
+// AssigneeIDEQ applies the EQ predicate on the "assignee_id" field.
+func AssigneeIDEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldAssigneeID, v))
+}
+
+// AssigneeIDNEQ applies the NEQ predicate on the "assignee_id" field.
+func AssigneeIDNEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNEQ(FieldAssigneeID, v))
+}
+
+// AssigneeIDIn applies the In predicate on the "assignee_id" field.
+func AssigneeIDIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIn(FieldAssigneeID, vs...))
+}
+
+// AssigneeIDNotIn applies the NotIn predicate on the "assignee_id" field.
+func AssigneeIDNotIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotIn(FieldAssigneeID, vs...))
+}
+
+// AssigneeIDGT applies the GT predicate on the "assignee_id" field.
+func AssigneeIDGT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGT(FieldAssigneeID, v))
+}
+
+// AssigneeIDGTE applies the GTE predicate on the "assignee_id" field.
+func AssigneeIDGTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGTE(FieldAssigneeID, v))
+}
+
+// AssigneeIDLT applies the LT predicate on the "assignee_id" field.
+func AssigneeIDLT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLT(FieldAssigneeID, v))
+}
+
+// AssigneeIDLTE applies the LTE predicate on the "assignee_id" field.
+func AssigneeIDLTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLTE(FieldAssigneeID, v))
+}
+
+// AssigneeIDContains applies the Contains predicate on the "assignee_id" field.
+func AssigneeIDContains(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContains(FieldAssigneeID, v))
+}
+
+// AssigneeIDHasPrefix applies the HasPrefix predicate on the "assignee_id" field.
+func AssigneeIDHasPrefix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasPrefix(FieldAssigneeID, v))
+}
+
+// AssigneeIDHasSuffix applies the HasSuffix predicate on the "assignee_id" field.
+func AssigneeIDHasSuffix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasSuffix(FieldAssigneeID, v))
+}
+
+// AssigneeIDIsNil applies the IsNil predicate on the "assignee_id" field.
+func AssigneeIDIsNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIsNull(FieldAssigneeID))
+}
+
+// AssigneeIDNotNil applies the NotNil predicate on the "assignee_id" field.
+func AssigneeIDNotNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotNull(FieldAssigneeID))
+}
+
+// AssigneeIDEqualFold applies the EqualFold predicate on the "assignee_id" field.
+func AssigneeIDEqualFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEqualFold(FieldAssigneeID, v))
+}
+
+// AssigneeIDContainsFold applies the ContainsFold predicate on the "assignee_id" field.
+func AssigneeIDContainsFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContainsFold(FieldAssigneeID, v))
+}
+
+// AssignerIDEQ applies the EQ predicate on the "assigner_id" field.
+func AssignerIDEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldAssignerID, v))
+}
+
+// AssignerIDNEQ applies the NEQ predicate on the "assigner_id" field.
+func AssignerIDNEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNEQ(FieldAssignerID, v))
+}
+
+// AssignerIDIn applies the In predicate on the "assigner_id" field.
+func AssignerIDIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIn(FieldAssignerID, vs...))
+}
+
+// AssignerIDNotIn applies the NotIn predicate on the "assigner_id" field.
+func AssignerIDNotIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotIn(FieldAssignerID, vs...))
+}
+
+// AssignerIDGT applies the GT predicate on the "assigner_id" field.
+func AssignerIDGT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGT(FieldAssignerID, v))
+}
+
+// AssignerIDGTE applies the GTE predicate on the "assigner_id" field.
+func AssignerIDGTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGTE(FieldAssignerID, v))
+}
+
+// AssignerIDLT applies the LT predicate on the "assigner_id" field.
+func AssignerIDLT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLT(FieldAssignerID, v))
+}
+
+// AssignerIDLTE applies the LTE predicate on the "assigner_id" field.
+func AssignerIDLTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLTE(FieldAssignerID, v))
+}
+
+// AssignerIDContains applies the Contains predicate on the "assigner_id" field.
+func AssignerIDContains(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContains(FieldAssignerID, v))
+}
+
+// AssignerIDHasPrefix applies the HasPrefix predicate on the "assigner_id" field.
+func AssignerIDHasPrefix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasPrefix(FieldAssignerID, v))
+}
+
+// AssignerIDHasSuffix applies the HasSuffix predicate on the "assigner_id" field.
+func AssignerIDHasSuffix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasSuffix(FieldAssignerID, v))
+}
+
+// AssignerIDEqualFold applies the EqualFold predicate on the "assigner_id" field.
+func AssignerIDEqualFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEqualFold(FieldAssignerID, v))
+}
+
+// AssignerIDContainsFold applies the ContainsFold predicate on the "assigner_id" field.
+func AssignerIDContainsFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContainsFold(FieldAssignerID, v))
 }
 
 // And groups predicates with the AND operator between them.

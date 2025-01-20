@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_User_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":
@@ -195,6 +197,8 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_User_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":
@@ -355,6 +359,8 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_User_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":

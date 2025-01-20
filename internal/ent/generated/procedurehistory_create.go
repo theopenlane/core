@@ -139,17 +139,9 @@ func (phc *ProcedureHistoryCreate) SetNillableDeletedBy(s *string) *ProcedureHis
 	return phc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (phc *ProcedureHistoryCreate) SetMappingID(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetMappingID(s)
-	return phc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillableMappingID(s *string) *ProcedureHistoryCreate {
-	if s != nil {
-		phc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (phc *ProcedureHistoryCreate) SetDisplayID(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetDisplayID(s)
 	return phc
 }
 
@@ -344,10 +336,6 @@ func (phc *ProcedureHistoryCreate) defaults() {
 		v := procedurehistory.DefaultUpdatedAt()
 		phc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := phc.mutation.MappingID(); !ok {
-		v := procedurehistory.DefaultMappingID()
-		phc.mutation.SetMappingID(v)
-	}
 	if _, ok := phc.mutation.Tags(); !ok {
 		v := procedurehistory.DefaultTags
 		phc.mutation.SetTags(v)
@@ -371,8 +359,8 @@ func (phc *ProcedureHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := phc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ProcedureHistory.mapping_id"`)}
+	if _, ok := phc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ProcedureHistory.display_id"`)}
 	}
 	if _, ok := phc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ProcedureHistory.name"`)}
@@ -449,9 +437,9 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 		_spec.SetField(procedurehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := phc.mutation.MappingID(); ok {
-		_spec.SetField(procedurehistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := phc.mutation.DisplayID(); ok {
+		_spec.SetField(procedurehistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := phc.mutation.Tags(); ok {
 		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)

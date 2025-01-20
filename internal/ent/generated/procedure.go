@@ -31,8 +31,8 @@ type Procedure struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -189,7 +189,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case procedure.FieldTags, procedure.FieldDetails:
 			values[i] = new([]byte)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldMappingID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldDescription, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldVersion, procedure.FieldPurposeAndScope, procedure.FieldBackground, procedure.FieldSatisfies:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldDescription, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldVersion, procedure.FieldPurposeAndScope, procedure.FieldBackground, procedure.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -254,11 +254,11 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.DeletedBy = value.String
 			}
-		case procedure.FieldMappingID:
+		case procedure.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				pr.MappingID = value.String
+				pr.DisplayID = value.String
 			}
 		case procedure.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -443,8 +443,8 @@ func (pr *Procedure) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(pr.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(pr.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(pr.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Tags))

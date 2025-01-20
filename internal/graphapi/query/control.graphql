@@ -9,6 +9,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks
@@ -34,6 +35,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks
@@ -59,6 +61,7 @@ mutation CreateControl($input: CreateControlInput!) {
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks
@@ -111,6 +114,7 @@ query GetAllControls {
         createdBy
         description
         details
+        displayID
         family
         id
         mappedFrameworks
@@ -155,6 +159,7 @@ query GetControlByID($controlId: ID!) {
     createdBy
     description
     details
+    displayID
     family
     id
     mappedFrameworks
@@ -200,6 +205,7 @@ query GetControls($where: ControlWhereInput) {
         createdBy
         description
         details
+        displayID
         family
         id
         mappedFrameworks
@@ -245,6 +251,7 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       createdBy
       description
       details
+      displayID
       family
       id
       mappedFrameworks

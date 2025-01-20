@@ -87,11 +87,6 @@ func UpdatedBy(v string) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
-func MappingID(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEQ(FieldMappingID, v))
-}
-
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldEQ(FieldOwnerID, v))
@@ -390,71 +385,6 @@ func UpdatedByEqualFold(v string) predicate.Webauthn {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldContainsFold(FieldUpdatedBy, v))
-}
-
-// MappingIDEQ applies the EQ predicate on the "mapping_id" field.
-func MappingIDEQ(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEQ(FieldMappingID, v))
-}
-
-// MappingIDNEQ applies the NEQ predicate on the "mapping_id" field.
-func MappingIDNEQ(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNEQ(FieldMappingID, v))
-}
-
-// MappingIDIn applies the In predicate on the "mapping_id" field.
-func MappingIDIn(vs ...string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldIn(FieldMappingID, vs...))
-}
-
-// MappingIDNotIn applies the NotIn predicate on the "mapping_id" field.
-func MappingIDNotIn(vs ...string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNotIn(FieldMappingID, vs...))
-}
-
-// MappingIDGT applies the GT predicate on the "mapping_id" field.
-func MappingIDGT(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldGT(FieldMappingID, v))
-}
-
-// MappingIDGTE applies the GTE predicate on the "mapping_id" field.
-func MappingIDGTE(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldGTE(FieldMappingID, v))
-}
-
-// MappingIDLT applies the LT predicate on the "mapping_id" field.
-func MappingIDLT(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldLT(FieldMappingID, v))
-}
-
-// MappingIDLTE applies the LTE predicate on the "mapping_id" field.
-func MappingIDLTE(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldLTE(FieldMappingID, v))
-}
-
-// MappingIDContains applies the Contains predicate on the "mapping_id" field.
-func MappingIDContains(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldContains(FieldMappingID, v))
-}
-
-// MappingIDHasPrefix applies the HasPrefix predicate on the "mapping_id" field.
-func MappingIDHasPrefix(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldHasPrefix(FieldMappingID, v))
-}
-
-// MappingIDHasSuffix applies the HasSuffix predicate on the "mapping_id" field.
-func MappingIDHasSuffix(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldHasSuffix(FieldMappingID, v))
-}
-
-// MappingIDEqualFold applies the EqualFold predicate on the "mapping_id" field.
-func MappingIDEqualFold(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEqualFold(FieldMappingID, v))
-}
-
-// MappingIDContainsFold applies the ContainsFold predicate on the "mapping_id" field.
-func MappingIDContainsFold(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldContainsFold(FieldMappingID, v))
 }
 
 // TagsIsNil applies the IsNil predicate on the "tags" field.

@@ -92,7 +92,7 @@ func (ControlObjective) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("CLO"),
 		emixin.TagMixin{},
 		// control objectives inherit permissions from the associated programs, but must have an organization as well
 		// this mixin will add the owner_id field using the OrgHook but not organization tuples are created

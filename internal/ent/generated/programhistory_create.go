@@ -112,17 +112,9 @@ func (phc *ProgramHistoryCreate) SetNillableUpdatedBy(s *string) *ProgramHistory
 	return phc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (phc *ProgramHistoryCreate) SetMappingID(s string) *ProgramHistoryCreate {
-	phc.mutation.SetMappingID(s)
-	return phc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableMappingID(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (phc *ProgramHistoryCreate) SetDisplayID(s string) *ProgramHistoryCreate {
+	phc.mutation.SetDisplayID(s)
 	return phc
 }
 
@@ -339,10 +331,6 @@ func (phc *ProgramHistoryCreate) defaults() {
 		v := programhistory.DefaultUpdatedAt()
 		phc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := phc.mutation.MappingID(); !ok {
-		v := programhistory.DefaultMappingID()
-		phc.mutation.SetMappingID(v)
-	}
 	if _, ok := phc.mutation.Tags(); !ok {
 		v := programhistory.DefaultTags
 		phc.mutation.SetTags(v)
@@ -382,8 +370,8 @@ func (phc *ProgramHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := phc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ProgramHistory.mapping_id"`)}
+	if _, ok := phc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ProgramHistory.display_id"`)}
 	}
 	if _, ok := phc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ProgramHistory.name"`)}
@@ -469,9 +457,9 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := phc.mutation.MappingID(); ok {
-		_spec.SetField(programhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := phc.mutation.DisplayID(); ok {
+		_spec.SetField(programhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := phc.mutation.DeletedAt(); ok {
 		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)

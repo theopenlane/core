@@ -112,20 +112,6 @@ func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedBy(s *string) *OrgSu
 	return oshc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetMappingID(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetMappingID(s)
-	return oshc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableMappingID(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetMappingID(*s)
-	}
-	return oshc
-}
-
 // SetTags sets the "tags" field.
 func (oshc *OrgSubscriptionHistoryCreate) SetTags(s []string) *OrgSubscriptionHistoryCreate {
 	oshc.mutation.SetTags(s)
@@ -359,10 +345,6 @@ func (oshc *OrgSubscriptionHistoryCreate) defaults() {
 		v := orgsubscriptionhistory.DefaultUpdatedAt()
 		oshc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := oshc.mutation.MappingID(); !ok {
-		v := orgsubscriptionhistory.DefaultMappingID()
-		oshc.mutation.SetMappingID(v)
-	}
 	if _, ok := oshc.mutation.Tags(); !ok {
 		v := orgsubscriptionhistory.DefaultTags
 		oshc.mutation.SetTags(v)
@@ -389,9 +371,6 @@ func (oshc *OrgSubscriptionHistoryCreate) check() error {
 		if err := orgsubscriptionhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "OrgSubscriptionHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := oshc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "OrgSubscriptionHistory.mapping_id"`)}
 	}
 	if _, ok := oshc.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "OrgSubscriptionHistory.active"`)}
@@ -459,10 +438,6 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 	if value, ok := oshc.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := oshc.mutation.MappingID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := oshc.mutation.Tags(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)

@@ -1602,6 +1602,7 @@ type AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls struct {
 	DeletedBy        *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string         "json:\"displayID\" graphql:\"displayID\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID               string         "json:\"id\" graphql:\"id\""
 	MappedFrameworks *string        "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
@@ -1649,6 +1650,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDetails(
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetFamily() *string {
 	if t == nil {
@@ -1729,6 +1736,7 @@ type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjective
 	DeletedBy            *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string         "json:\"displayID\" graphql:\"displayID\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string         "json:\"id\" graphql:\"id\""
 	MappedFrameworks     *string        "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
@@ -1775,6 +1783,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjec
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetFamily() *string {
 	if t == nil {
@@ -2366,6 +2380,7 @@ type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies s
 	DeletedBy       *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -2399,6 +2414,12 @@ func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolici
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetID() string {
 	if t == nil {
@@ -2464,6 +2485,7 @@ type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives struct {
 	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string         "json:\"displayID\" graphql:\"displayID\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Name        string         "json:\"name\" graphql:\"name\""
 	OwnerID     string         "json:\"ownerID\" graphql:\"ownerID\""
@@ -2488,6 +2510,12 @@ func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDeta
 		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetID() string {
 	if t == nil {
@@ -2834,6 +2862,7 @@ type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures struct {
 	DeletedBy       *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -2868,6 +2897,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDeta
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetID() string {
 	if t == nil {
@@ -2938,6 +2973,7 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult) GetProcedures() []
 type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -2955,6 +2991,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDescript
 		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
 	}
 	return t.Description
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetID() string {
 	if t == nil {
@@ -2997,6 +3039,7 @@ type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
 	DeletedBy     *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description   *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string         "json:\"displayID\" graphql:\"displayID\""
 	ID            string         "json:\"id\" graphql:\"id\""
 	Mitigation    *string        "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string         "json:\"name\" graphql:\"name\""
@@ -3030,6 +3073,12 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDetails() map[
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetID() string {
 	if t == nil {
@@ -3202,6 +3251,7 @@ type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols struct {
 	DeletedBy                  *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description                *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                    map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                  string         "json:\"displayID\" graphql:\"displayID\""
 	Family                     *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID                         string         "json:\"id\" graphql:\"id\""
 	ImplementationEvidence     *string        "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
@@ -3241,6 +3291,12 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDe
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetFamily() *string {
 	if t == nil {
@@ -3446,14 +3502,30 @@ func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult) GetTFASettings() 
 }
 
 type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
+	AssigneeID  *string        "json:\"assigneeID,omitempty\" graphql:\"assigneeID\""
+	AssignerID  string         "json:\"assignerID\" graphql:\"assignerID\""
 	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string         "json:\"displayID\" graphql:\"displayID\""
 	ID          string         "json:\"id\" graphql:\"id\""
+	OwnerID     string         "json:\"ownerID\" graphql:\"ownerID\""
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string         "json:\"title\" graphql:\"title\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetAssigneeID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.AssigneeID
+}
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetAssignerID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.AssignerID
+}
 func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
@@ -3472,11 +3544,23 @@ func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDetails() map[
 	}
 	return t.Details
 }
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.DisplayID
+}
 func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetOwnerID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.OwnerID
 }
 func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetTags() []string {
 	if t == nil {
@@ -3577,6 +3661,7 @@ type AdminSearch_AdminSearch_Nodes_UserSearchResult_Users struct {
 	AvatarLocalFileID *string  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	DeletedBy         *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DisplayID         string   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName       string   "json:\"displayName\" graphql:\"displayName\""
 	Email             string   "json:\"email\" graphql:\"email\""
 	FirstName         *string  "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -3603,6 +3688,12 @@ func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDeletedBy() *s
 		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
 	}
 	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDisplayName() string {
 	if t == nil {
@@ -5488,6 +5579,7 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string         "json:\"displayID\" graphql:\"displayID\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID               string         "json:\"id\" graphql:\"id\""
 	MappedFrameworks *string        "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
@@ -5542,6 +5634,12 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDetails() map[st
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
 	return t.Details
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetFamily() *string {
 	if t == nil {
@@ -5629,6 +5727,7 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string         "json:\"displayID\" graphql:\"displayID\""
 	Family           *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID               string         "json:\"id\" graphql:\"id\""
 	MappedFrameworks *string        "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
@@ -5683,6 +5782,12 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetDetails() map[string]a
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.Details
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetFamily() *string {
 	if t == nil {
@@ -5861,6 +5966,7 @@ type CreateControl_CreateControl_Control struct {
 	CreatedBy        *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                               "json:\"displayID\" graphql:\"displayID\""
 	Editors          []*CreateControl_CreateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family           *string                                              "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                                               "json:\"id\" graphql:\"id\""
@@ -5925,6 +6031,12 @@ func (t *CreateControl_CreateControl_Control) GetDetails() map[string]any {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.Details
+}
+func (t *CreateControl_CreateControl_Control) GetDisplayID() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.DisplayID
 }
 func (t *CreateControl_CreateControl_Control) GetEditors() []*CreateControl_CreateControl_Control_Editors {
 	if t == nil {
@@ -6138,6 +6250,7 @@ type GetAllControls_Controls_Edges_Node struct {
 	CreatedBy        *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                                             "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                              "json:\"displayID\" graphql:\"displayID\""
 	Editors          []*GetAllControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family           *string                                             "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                                              "json:\"id\" graphql:\"id\""
@@ -6202,6 +6315,12 @@ func (t *GetAllControls_Controls_Edges_Node) GetDetails() map[string]any {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllControls_Controls_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllControls_Controls_Edges_Node) GetEditors() []*GetAllControls_Controls_Edges_Node_Editors {
 	if t == nil {
@@ -6415,6 +6534,7 @@ type GetControlByID_Control struct {
 	CreatedBy        *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                                 "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                          "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                  "json:\"displayID\" graphql:\"displayID\""
 	Editors          []*GetControlByID_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family           *string                                 "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                                  "json:\"id\" graphql:\"id\""
@@ -6479,6 +6599,12 @@ func (t *GetControlByID_Control) GetDetails() map[string]any {
 		t = &GetControlByID_Control{}
 	}
 	return t.Details
+}
+func (t *GetControlByID_Control) GetDisplayID() string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.DisplayID
 }
 func (t *GetControlByID_Control) GetEditors() []*GetControlByID_Control_Editors {
 	if t == nil {
@@ -6670,6 +6796,7 @@ type GetControls_Controls_Edges_Node struct {
 	CreatedBy        *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                                          "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                   "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                           "json:\"displayID\" graphql:\"displayID\""
 	Editors          []*GetControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family           *string                                          "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                                           "json:\"id\" graphql:\"id\""
@@ -6734,6 +6861,12 @@ func (t *GetControls_Controls_Edges_Node) GetDetails() map[string]any {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetControls_Controls_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetControls_Controls_Edges_Node) GetEditors() []*GetControls_Controls_Edges_Node_Editors {
 	if t == nil {
@@ -6947,6 +7080,7 @@ type UpdateControl_UpdateControl_Control struct {
 	CreatedBy        *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details          map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                               "json:\"displayID\" graphql:\"displayID\""
 	Editors          []*UpdateControl_UpdateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family           *string                                              "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                                               "json:\"id\" graphql:\"id\""
@@ -7011,6 +7145,12 @@ func (t *UpdateControl_UpdateControl_Control) GetDetails() map[string]any {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.Details
+}
+func (t *UpdateControl_UpdateControl_Control) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateControl_UpdateControl_Control) GetEditors() []*UpdateControl_UpdateControl_Control_Editors {
 	if t == nil {
@@ -7468,6 +7608,7 @@ type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectiv
 	CreatedBy            *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string         "json:\"displayID\" graphql:\"displayID\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string         "json:\"id\" graphql:\"id\""
 	MappedFrameworks     *string        "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
@@ -7521,6 +7662,12 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
 	}
 	return t.Details
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetFamily() *string {
 	if t == nil {
@@ -7602,6 +7749,7 @@ type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives str
 	CreatedBy            *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string         "json:\"displayID\" graphql:\"displayID\""
 	Family               *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string         "json:\"id\" graphql:\"id\""
 	MappedFrameworks     *string        "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
@@ -7655,6 +7803,12 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
 	return t.Details
+}
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetFamily() *string {
 	if t == nil {
@@ -7809,6 +7963,7 @@ type CreateControlObjective_CreateControlObjective_ControlObjective struct {
 	CreatedBy            *string                                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                                                         "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                                  "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string                                                                          "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*CreateControlObjective_CreateControlObjective_ControlObjective_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family               *string                                                                         "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                                                                          "json:\"id\" graphql:\"id\""
@@ -7871,6 +8026,12 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetDeta
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
 	return t.Details
+}
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetDisplayID() string {
+	if t == nil {
+		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
+	}
+	return t.DisplayID
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetEditors() []*CreateControlObjective_CreateControlObjective_ControlObjective_Editors {
 	if t == nil {
@@ -8054,6 +8215,7 @@ type GetAllControlObjectives_ControlObjectives_Edges_Node struct {
 	CreatedBy            *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                                               "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                        "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string                                                                "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*GetAllControlObjectives_ControlObjectives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family               *string                                                               "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                                                                "json:\"id\" graphql:\"id\""
@@ -8116,6 +8278,12 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetDetails() map[
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetEditors() []*GetAllControlObjectives_ControlObjectives_Edges_Node_Editors {
 	if t == nil {
@@ -8299,6 +8467,7 @@ type GetControlObjectiveByID_ControlObjective struct {
 	CreatedBy            *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                                   "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                            "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string                                                    "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*GetControlObjectiveByID_ControlObjective_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family               *string                                                   "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                                                    "json:\"id\" graphql:\"id\""
@@ -8361,6 +8530,12 @@ func (t *GetControlObjectiveByID_ControlObjective) GetDetails() map[string]any {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
 	return t.Details
+}
+func (t *GetControlObjectiveByID_ControlObjective) GetDisplayID() string {
+	if t == nil {
+		t = &GetControlObjectiveByID_ControlObjective{}
+	}
+	return t.DisplayID
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetEditors() []*GetControlObjectiveByID_ControlObjective_Editors {
 	if t == nil {
@@ -8522,6 +8697,7 @@ type GetControlObjectives_ControlObjectives_Edges_Node struct {
 	CreatedBy            *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                                            "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                     "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string                                                             "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*GetControlObjectives_ControlObjectives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family               *string                                                            "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                                                             "json:\"id\" graphql:\"id\""
@@ -8584,6 +8760,12 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetDetails() map[str
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetEditors() []*GetControlObjectives_ControlObjectives_Edges_Node_Editors {
 	if t == nil {
@@ -8767,6 +8949,7 @@ type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
 	CreatedBy            *string                                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                                                         "json:\"description,omitempty\" graphql:\"description\""
 	Details              map[string]any                                                                  "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID            string                                                                          "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*UpdateControlObjective_UpdateControlObjective_ControlObjective_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	Family               *string                                                                         "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                                                                          "json:\"id\" graphql:\"id\""
@@ -8829,6 +9012,12 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetDeta
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
 	return t.Details
+}
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetEditors() []*UpdateControlObjective_UpdateControlObjective_ControlObjective_Editors {
 	if t == nil {
@@ -19737,6 +19926,7 @@ type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies st
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -19777,6 +19967,12 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
 	return t.Details
+}
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetID() string {
 	if t == nil {
@@ -19850,6 +20046,7 @@ type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -19890,6 +20087,12 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.Details
+}
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetID() string {
 	if t == nil {
@@ -20000,6 +20203,7 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                            "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                                    "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                                    "json:\"id\" graphql:\"id\""
 	Name            string                                                                    "json:\"name\" graphql:\"name\""
@@ -20047,6 +20251,12 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDetails() 
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.Details
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDisplayID() string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.DisplayID
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetEditors() []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors {
 	if t == nil {
@@ -20174,6 +20384,7 @@ type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
 	CreatedBy       *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                                             "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                              "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                              "json:\"id\" graphql:\"id\""
 	Name            string                                                              "json:\"name\" graphql:\"name\""
@@ -20221,6 +20432,12 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDetails() map[st
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetEditors() []*GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors {
 	if t == nil {
@@ -20348,6 +20565,7 @@ type GetInternalPolicies_InternalPolicies_Edges_Node struct {
 	CreatedBy       *string                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                                          "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                   "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                           "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                           "json:\"id\" graphql:\"id\""
 	Name            string                                                           "json:\"name\" graphql:\"name\""
@@ -20395,6 +20613,12 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDetails() map[strin
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetEditors() []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors {
 	if t == nil {
@@ -20522,6 +20746,7 @@ type GetInternalPolicyByID_InternalPolicy struct {
 	CreatedBy       *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                               "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                        "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*GetInternalPolicyByID_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                "json:\"id\" graphql:\"id\""
 	Name            string                                                "json:\"name\" graphql:\"name\""
@@ -20569,6 +20794,12 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetDetails() map[string]any {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
 	return t.Details
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetDisplayID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.DisplayID
 }
 func (t *GetInternalPolicyByID_InternalPolicy) GetEditors() []*GetInternalPolicyByID_InternalPolicy_Editors {
 	if t == nil {
@@ -20674,6 +20905,7 @@ type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
 	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                                            "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                                    "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                                    "json:\"id\" graphql:\"id\""
 	Name            string                                                                    "json:\"name\" graphql:\"name\""
@@ -20721,6 +20953,12 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDetails() 
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
 	return t.Details
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetEditors() []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors {
 	if t == nil {
@@ -21567,6 +21805,7 @@ type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives struct {
 	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string         "json:\"displayID\" graphql:\"displayID\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Name        string         "json:\"name\" graphql:\"name\""
 	Satisfies   *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -21598,6 +21837,12 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetDetails() 
 		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
 	}
 	return t.Details
+}
+func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetID() string {
 	if t == nil {
@@ -21652,6 +21897,7 @@ type CreateBulkNarrative_CreateBulkNarrative_Narratives struct {
 	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string         "json:\"displayID\" graphql:\"displayID\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Name        string         "json:\"name\" graphql:\"name\""
 	Satisfies   *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -21683,6 +21929,12 @@ func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetDetails() map[st
 		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
 	}
 	return t.Details
+}
+func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetID() string {
 	if t == nil {
@@ -21810,6 +22062,7 @@ type CreateNarrative_CreateNarrative_Narrative struct {
 	CreatedBy     *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                                     "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*CreateNarrative_CreateNarrative_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                                     "json:\"id\" graphql:\"id\""
 	Name          string                                                     "json:\"name\" graphql:\"name\""
@@ -21850,6 +22103,12 @@ func (t *CreateNarrative_CreateNarrative_Narrative) GetDetails() map[string]any 
 		t = &CreateNarrative_CreateNarrative_Narrative{}
 	}
 	return t.Details
+}
+func (t *CreateNarrative_CreateNarrative_Narrative) GetDisplayID() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative{}
+	}
+	return t.DisplayID
 }
 func (t *CreateNarrative_CreateNarrative_Narrative) GetEditors() []*CreateNarrative_CreateNarrative_Narrative_Editors {
 	if t == nil {
@@ -22006,6 +22265,7 @@ type GetAllNarratives_Narratives_Edges_Node struct {
 	CreatedBy     *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                                 "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                          "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                                  "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetAllNarratives_Narratives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                                  "json:\"id\" graphql:\"id\""
 	Name          string                                                  "json:\"name\" graphql:\"name\""
@@ -22046,6 +22306,12 @@ func (t *GetAllNarratives_Narratives_Edges_Node) GetDetails() map[string]any {
 		t = &GetAllNarratives_Narratives_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllNarratives_Narratives_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllNarratives_Narratives_Edges_Node) GetEditors() []*GetAllNarratives_Narratives_Edges_Node_Editors {
 	if t == nil {
@@ -22202,6 +22468,7 @@ type GetNarrativeByID_Narrative struct {
 	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                      "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetNarrativeByID_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                      "json:\"id\" graphql:\"id\""
 	Name          string                                      "json:\"name\" graphql:\"name\""
@@ -22242,6 +22509,12 @@ func (t *GetNarrativeByID_Narrative) GetDetails() map[string]any {
 		t = &GetNarrativeByID_Narrative{}
 	}
 	return t.Details
+}
+func (t *GetNarrativeByID_Narrative) GetDisplayID() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative{}
+	}
+	return t.DisplayID
 }
 func (t *GetNarrativeByID_Narrative) GetEditors() []*GetNarrativeByID_Narrative_Editors {
 	if t == nil {
@@ -22376,6 +22649,7 @@ type GetNarratives_Narratives_Edges_Node struct {
 	CreatedBy     *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                               "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetNarratives_Narratives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                               "json:\"id\" graphql:\"id\""
 	Name          string                                               "json:\"name\" graphql:\"name\""
@@ -22416,6 +22690,12 @@ func (t *GetNarratives_Narratives_Edges_Node) GetDetails() map[string]any {
 		t = &GetNarratives_Narratives_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetNarratives_Narratives_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetNarratives_Narratives_Edges_Node) GetEditors() []*GetNarratives_Narratives_Edges_Node_Editors {
 	if t == nil {
@@ -22572,6 +22852,7 @@ type UpdateNarrative_UpdateNarrative_Narrative struct {
 	CreatedBy     *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                                     "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*UpdateNarrative_UpdateNarrative_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                                     "json:\"id\" graphql:\"id\""
 	Name          string                                                     "json:\"name\" graphql:\"name\""
@@ -22612,6 +22893,12 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative) GetDetails() map[string]any 
 		t = &UpdateNarrative_UpdateNarrative_Narrative{}
 	}
 	return t.Details
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateNarrative_UpdateNarrative_Narrative) GetEditors() []*UpdateNarrative_UpdateNarrative_Narrative_Editors {
 	if t == nil {
@@ -27688,6 +27975,7 @@ type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -27729,6 +28017,12 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDetails() 
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
 	return t.Details
+}
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetID() string {
 	if t == nil {
@@ -27808,6 +28102,7 @@ type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -27849,6 +28144,12 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDetails() map[st
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
 	return t.Details
+}
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetID() string {
 	if t == nil {
@@ -27965,6 +28266,7 @@ type CreateProcedure_CreateProcedure_Procedure struct {
 	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                     "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*CreateProcedure_CreateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                     "json:\"id\" graphql:\"id\""
 	Name            string                                                     "json:\"name\" graphql:\"name\""
@@ -28013,6 +28315,12 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetDetails() map[string]any 
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
 	return t.Details
+}
+func (t *CreateProcedure_CreateProcedure_Procedure) GetDisplayID() string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.DisplayID
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetEditors() []*CreateProcedure_CreateProcedure_Procedure_Editors {
 	if t == nil {
@@ -28146,6 +28454,7 @@ type GetAllProcedures_Procedures_Edges_Node struct {
 	CreatedBy       *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                                 "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                          "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                  "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*GetAllProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                  "json:\"id\" graphql:\"id\""
 	Name            string                                                  "json:\"name\" graphql:\"name\""
@@ -28194,6 +28503,12 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetDetails() map[string]any {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllProcedures_Procedures_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllProcedures_Procedures_Edges_Node) GetEditors() []*GetAllProcedures_Procedures_Edges_Node_Editors {
 	if t == nil {
@@ -28327,6 +28642,7 @@ type GetProcedureByID_Procedure struct {
 	CreatedBy       *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                      "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*GetProcedureByID_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                      "json:\"id\" graphql:\"id\""
 	Name            string                                      "json:\"name\" graphql:\"name\""
@@ -28375,6 +28691,12 @@ func (t *GetProcedureByID_Procedure) GetDetails() map[string]any {
 		t = &GetProcedureByID_Procedure{}
 	}
 	return t.Details
+}
+func (t *GetProcedureByID_Procedure) GetDisplayID() string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.DisplayID
 }
 func (t *GetProcedureByID_Procedure) GetEditors() []*GetProcedureByID_Procedure_Editors {
 	if t == nil {
@@ -28486,6 +28808,7 @@ type GetProcedures_Procedures_Edges_Node struct {
 	CreatedBy       *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                               "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*GetProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                               "json:\"id\" graphql:\"id\""
 	Name            string                                               "json:\"name\" graphql:\"name\""
@@ -28534,6 +28857,12 @@ func (t *GetProcedures_Procedures_Edges_Node) GetDetails() map[string]any {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetProcedures_Procedures_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetProcedures_Procedures_Edges_Node) GetEditors() []*GetProcedures_Procedures_Edges_Node_Editors {
 	if t == nil {
@@ -28667,6 +28996,7 @@ type UpdateProcedure_UpdateProcedure_Procedure struct {
 	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string                                                     "json:\"displayID\" graphql:\"displayID\""
 	Editors         []*UpdateProcedure_UpdateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID              string                                                     "json:\"id\" graphql:\"id\""
 	Name            string                                                     "json:\"name\" graphql:\"name\""
@@ -28715,6 +29045,12 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDetails() map[string]any 
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
 	return t.Details
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetEditors() []*UpdateProcedure_UpdateProcedure_Procedure_Editors {
 	if t == nil {
@@ -29105,6 +29441,7 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID            string              "json:\"displayID\" graphql:\"displayID\""
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
@@ -29151,6 +29488,12 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetDescription() *s
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
 	}
 	return t.Description
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetEndDate() *time.Time {
 	if t == nil {
@@ -29225,6 +29568,7 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID            string              "json:\"displayID\" graphql:\"displayID\""
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
@@ -29271,6 +29615,12 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetDescription() *string 
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
 	}
 	return t.Description
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetEndDate() *time.Time {
 	if t == nil {
@@ -29465,10 +29815,17 @@ func (t *CreateFullProgram_CreateFullProgram_Program_Controls) GetSubcontrols() 
 }
 
 type CreateFullProgram_CreateFullProgram_Program_Risks struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
+func (t *CreateFullProgram_CreateFullProgram_Program_Risks) GetDisplayID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Risks{}
+	}
+	return t.DisplayID
+}
 func (t *CreateFullProgram_CreateFullProgram_Program_Risks) GetID() string {
 	if t == nil {
 		t = &CreateFullProgram_CreateFullProgram_Program_Risks{}
@@ -29483,10 +29840,17 @@ func (t *CreateFullProgram_CreateFullProgram_Program_Risks) GetName() string {
 }
 
 type CreateFullProgram_CreateFullProgram_Program_InternalPolicies struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
+func (t *CreateFullProgram_CreateFullProgram_Program_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_InternalPolicies{}
+	}
+	return t.DisplayID
+}
 func (t *CreateFullProgram_CreateFullProgram_Program_InternalPolicies) GetID() string {
 	if t == nil {
 		t = &CreateFullProgram_CreateFullProgram_Program_InternalPolicies{}
@@ -29501,10 +29865,17 @@ func (t *CreateFullProgram_CreateFullProgram_Program_InternalPolicies) GetName()
 }
 
 type CreateFullProgram_CreateFullProgram_Program_Procedures struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
+func (t *CreateFullProgram_CreateFullProgram_Program_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Procedures{}
+	}
+	return t.DisplayID
+}
 func (t *CreateFullProgram_CreateFullProgram_Program_Procedures) GetID() string {
 	if t == nil {
 		t = &CreateFullProgram_CreateFullProgram_Program_Procedures{}
@@ -29520,6 +29891,7 @@ func (t *CreateFullProgram_CreateFullProgram_Program_Procedures) GetName() strin
 
 type CreateFullProgram_CreateFullProgram_Program struct {
 	Controls         []*CreateFullProgram_CreateFullProgram_Program_Controls         "json:\"controls,omitempty\" graphql:\"controls\""
+	DisplayID        string                                                          "json:\"displayID\" graphql:\"displayID\""
 	ID               string                                                          "json:\"id\" graphql:\"id\""
 	InternalPolicies []*CreateFullProgram_CreateFullProgram_Program_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
 	Members          []*CreateFullProgram_CreateFullProgram_Program_Members          "json:\"members,omitempty\" graphql:\"members\""
@@ -29534,6 +29906,12 @@ func (t *CreateFullProgram_CreateFullProgram_Program) GetControls() []*CreateFul
 		t = &CreateFullProgram_CreateFullProgram_Program{}
 	}
 	return t.Controls
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetDisplayID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.DisplayID
 }
 func (t *CreateFullProgram_CreateFullProgram_Program) GetID() string {
 	if t == nil {
@@ -29595,6 +29973,7 @@ type CreateProgram_CreateProgram_Program_Procedures struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -29636,6 +30015,12 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetDetails() map[string
 		t = &CreateProgram_CreateProgram_Program_Procedures{}
 	}
 	return t.Details
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *CreateProgram_CreateProgram_Program_Procedures) GetID() string {
 	if t == nil {
@@ -29704,6 +30089,7 @@ type CreateProgram_CreateProgram_Program_InternalPolicies struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -29744,6 +30130,12 @@ func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetDetails() map[
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
 	}
 	return t.Details
+}
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetID() string {
 	if t == nil {
@@ -29862,6 +30254,7 @@ type CreateProgram_CreateProgram_Program struct {
 	CreatedAt            *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID            string                                                  "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*CreateProgram_CreateProgram_Program_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                              "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                                  "json:\"id\" graphql:\"id\""
@@ -29918,6 +30311,12 @@ func (t *CreateProgram_CreateProgram_Program) GetDescription() *string {
 		t = &CreateProgram_CreateProgram_Program{}
 	}
 	return t.Description
+}
+func (t *CreateProgram_CreateProgram_Program) GetDisplayID() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.DisplayID
 }
 func (t *CreateProgram_CreateProgram_Program) GetEditors() []*CreateProgram_CreateProgram_Program_Editors {
 	if t == nil {
@@ -30053,11 +30452,18 @@ func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members) GetU
 }
 
 type CreateProgramWithMembers_CreateProgramWithMembers_Program struct {
-	ID      string                                                               "json:\"id\" graphql:\"id\""
-	Members []*CreateProgramWithMembers_CreateProgramWithMembers_Program_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name    string                                                               "json:\"name\" graphql:\"name\""
+	DisplayID string                                                               "json:\"displayID\" graphql:\"displayID\""
+	ID        string                                                               "json:\"id\" graphql:\"id\""
+	Members   []*CreateProgramWithMembers_CreateProgramWithMembers_Program_Members "json:\"members,omitempty\" graphql:\"members\""
+	Name      string                                                               "json:\"name\" graphql:\"name\""
 }
 
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetDisplayID() string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
+	}
+	return t.DisplayID
+}
 func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetID() string {
 	if t == nil {
 		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
@@ -30105,6 +30511,7 @@ type GetAllPrograms_Programs_Edges_Node_Procedures struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -30146,6 +30553,12 @@ func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDetails() map[string]
 		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
 	}
 	return t.Details
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetID() string {
 	if t == nil {
@@ -30214,6 +30627,7 @@ type GetAllPrograms_Programs_Edges_Node_InternalPolicies struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -30254,6 +30668,12 @@ func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetDetails() map[s
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
 	return t.Details
+}
+func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetID() string {
 	if t == nil {
@@ -30372,6 +30792,7 @@ type GetAllPrograms_Programs_Edges_Node struct {
 	CreatedAt            *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                                "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID            string                                                 "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*GetAllPrograms_Programs_Edges_Node_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                             "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                                 "json:\"id\" graphql:\"id\""
@@ -30428,6 +30849,12 @@ func (t *GetAllPrograms_Programs_Edges_Node) GetDescription() *string {
 		t = &GetAllPrograms_Programs_Edges_Node{}
 	}
 	return t.Description
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllPrograms_Programs_Edges_Node) GetEditors() []*GetAllPrograms_Programs_Edges_Node_Editors {
 	if t == nil {
@@ -30536,6 +30963,7 @@ type GetProgramByID_Program_Procedures struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -30577,6 +31005,12 @@ func (t *GetProgramByID_Program_Procedures) GetDetails() map[string]any {
 		t = &GetProgramByID_Program_Procedures{}
 	}
 	return t.Details
+}
+func (t *GetProgramByID_Program_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *GetProgramByID_Program_Procedures) GetID() string {
 	if t == nil {
@@ -30645,6 +31079,7 @@ type GetProgramByID_Program_InternalPolicies struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -30685,6 +31120,12 @@ func (t *GetProgramByID_Program_InternalPolicies) GetDetails() map[string]any {
 		t = &GetProgramByID_Program_InternalPolicies{}
 	}
 	return t.Details
+}
+func (t *GetProgramByID_Program_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &GetProgramByID_Program_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *GetProgramByID_Program_InternalPolicies) GetID() string {
 	if t == nil {
@@ -30803,6 +31244,7 @@ type GetProgramByID_Program struct {
 	CreatedAt            *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID            string                                     "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*GetProgramByID_Program_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                 "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                     "json:\"id\" graphql:\"id\""
@@ -30859,6 +31301,12 @@ func (t *GetProgramByID_Program) GetDescription() *string {
 		t = &GetProgramByID_Program{}
 	}
 	return t.Description
+}
+func (t *GetProgramByID_Program) GetDisplayID() string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.DisplayID
 }
 func (t *GetProgramByID_Program) GetEditors() []*GetProgramByID_Program_Editors {
 	if t == nil {
@@ -30945,6 +31393,7 @@ type GetPrograms_Programs_Edges_Node_Procedures struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -30986,6 +31435,12 @@ func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDetails() map[string]any
 		t = &GetPrograms_Programs_Edges_Node_Procedures{}
 	}
 	return t.Details
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *GetPrograms_Programs_Edges_Node_Procedures) GetID() string {
 	if t == nil {
@@ -31054,6 +31509,7 @@ type GetPrograms_Programs_Edges_Node_InternalPolicies struct {
 	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
 	ID              string         "json:\"id\" graphql:\"id\""
 	Name            string         "json:\"name\" graphql:\"name\""
 	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -31094,6 +31550,12 @@ func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetDetails() map[stri
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
 	return t.Details
+}
+func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetID() string {
 	if t == nil {
@@ -31212,6 +31674,7 @@ type GetPrograms_Programs_Edges_Node struct {
 	CreatedAt            *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                                             "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID            string                                              "json:\"displayID\" graphql:\"displayID\""
 	Editors              []*GetPrograms_Programs_Edges_Node_Editors          "json:\"editors,omitempty\" graphql:\"editors\""
 	EndDate              *time.Time                                          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                              "json:\"id\" graphql:\"id\""
@@ -31268,6 +31731,12 @@ func (t *GetPrograms_Programs_Edges_Node) GetDescription() *string {
 		t = &GetPrograms_Programs_Edges_Node{}
 	}
 	return t.Description
+}
+func (t *GetPrograms_Programs_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetPrograms_Programs_Edges_Node) GetEditors() []*GetPrograms_Programs_Edges_Node_Editors {
 	if t == nil {
@@ -33417,6 +33886,7 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
 	ID            string                "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact     "json:\"impact,omitempty\" graphql:\"impact\""
 	Likelihood    *enums.RiskLikelihood "json:\"likelihood,omitempty\" graphql:\"likelihood\""
@@ -33459,6 +33929,12 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDetails() map[string]any 
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
 	return t.Details
+}
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetID() string {
 	if t == nil {
@@ -33544,6 +34020,7 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
 	ID            string                "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact     "json:\"impact,omitempty\" graphql:\"impact\""
 	Likelihood    *enums.RiskLikelihood "json:\"likelihood,omitempty\" graphql:\"likelihood\""
@@ -33586,6 +34063,12 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDetails() map[string]any {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.Details
+}
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetID() string {
 	if t == nil {
@@ -33744,6 +34227,7 @@ type CreateRisk_CreateRisk_Risk struct {
 	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                      "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*CreateRisk_CreateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                      "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact                           "json:\"impact,omitempty\" graphql:\"impact\""
@@ -33795,6 +34279,12 @@ func (t *CreateRisk_CreateRisk_Risk) GetDetails() map[string]any {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.Details
+}
+func (t *CreateRisk_CreateRisk_Risk) GetDisplayID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.DisplayID
 }
 func (t *CreateRisk_CreateRisk_Risk) GetEditors() []*CreateRisk_CreateRisk_Risk_Editors {
 	if t == nil {
@@ -33982,6 +34472,7 @@ type GetAllRisks_Risks_Edges_Node struct {
 	CreatedBy     *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                                "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                        "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetAllRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                        "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact                             "json:\"impact,omitempty\" graphql:\"impact\""
@@ -34033,6 +34524,12 @@ func (t *GetAllRisks_Risks_Edges_Node) GetDetails() map[string]any {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetEditors() []*GetAllRisks_Risks_Edges_Node_Editors {
 	if t == nil {
@@ -34220,6 +34717,7 @@ type GetRiskByID_Risk struct {
 	CreatedBy     *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                           "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                    "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                            "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetRiskByID_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                            "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact                 "json:\"impact,omitempty\" graphql:\"impact\""
@@ -34271,6 +34769,12 @@ func (t *GetRiskByID_Risk) GetDetails() map[string]any {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.Details
+}
+func (t *GetRiskByID_Risk) GetDisplayID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.DisplayID
 }
 func (t *GetRiskByID_Risk) GetEditors() []*GetRiskByID_Risk_Editors {
 	if t == nil {
@@ -34436,6 +34940,7 @@ type GetRisks_Risks_Edges_Node struct {
 	CreatedBy     *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                    "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                     "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                     "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact                          "json:\"impact,omitempty\" graphql:\"impact\""
@@ -34487,6 +34992,12 @@ func (t *GetRisks_Risks_Edges_Node) GetDetails() map[string]any {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetRisks_Risks_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetRisks_Risks_Edges_Node) GetEditors() []*GetRisks_Risks_Edges_Node_Editors {
 	if t == nil {
@@ -34674,6 +35185,7 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
 	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                      "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*UpdateRisk_UpdateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                      "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact                           "json:\"impact,omitempty\" graphql:\"impact\""
@@ -34725,6 +35237,12 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetDetails() map[string]any {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.Details
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateRisk_UpdateRisk_Risk) GetEditors() []*UpdateRisk_UpdateRisk_Risk_Editors {
 	if t == nil {
@@ -35236,6 +35754,7 @@ func (t *GlobalSearch_Search_Nodes_ContactSearchResult) GetContacts() []*GlobalS
 
 type GlobalSearch_Search_Nodes_ControlSearchResult_Controls struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	Family      *string  "json:\"family,omitempty\" graphql:\"family\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
@@ -35247,6 +35766,12 @@ func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetDescription(
 		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetFamily() *string {
 	if t == nil {
@@ -35286,6 +35811,7 @@ func (t *GlobalSearch_Search_Nodes_ControlSearchResult) GetControls() []*GlobalS
 
 type GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	Family      *string  "json:\"family,omitempty\" graphql:\"family\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
@@ -35297,6 +35823,12 @@ func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjective
 		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetFamily() *string {
 	if t == nil {
@@ -35603,6 +36135,7 @@ func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult) GetIntegrations() []
 
 type GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -35613,6 +36146,12 @@ func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) 
 		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetID() string {
 	if t == nil {
@@ -35646,6 +36185,7 @@ func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult) GetInternalPolici
 
 type GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -35656,6 +36196,12 @@ func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetDescript
 		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetID() string {
 	if t == nil {
@@ -35819,6 +36365,7 @@ func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult) GetPersonalA
 
 type GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -35829,6 +36376,12 @@ func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetDescript
 		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetID() string {
 	if t == nil {
@@ -35862,6 +36415,7 @@ func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult) GetProcedures() []*Glo
 
 type GlobalSearch_Search_Nodes_ProgramSearchResult_Programs struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -35872,6 +36426,12 @@ func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetDescription(
 		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetID() string {
 	if t == nil {
@@ -35905,6 +36465,7 @@ func (t *GlobalSearch_Search_Nodes_ProgramSearchResult) GetPrograms() []*GlobalS
 
 type GlobalSearch_Search_Nodes_RiskSearchResult_Risks struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -35915,6 +36476,12 @@ func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetDescription() *str
 		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetID() string {
 	if t == nil {
@@ -35990,6 +36557,7 @@ func (t *GlobalSearch_Search_Nodes_StandardSearchResult) GetStandards() []*Globa
 }
 
 type GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols struct {
+	DisplayID      string   "json:\"displayID\" graphql:\"displayID\""
 	Family         *string  "json:\"family,omitempty\" graphql:\"family\""
 	ID             string   "json:\"id\" graphql:\"id\""
 	Name           string   "json:\"name\" graphql:\"name\""
@@ -35997,6 +36565,12 @@ type GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols struct {
 	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+	}
+	return t.DisplayID
+}
 func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetFamily() *string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
@@ -36106,6 +36680,7 @@ func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult) GetTFASettings() []*G
 
 type GlobalSearch_Search_Nodes_TaskSearchResult_Tasks struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string   "json:\"title\" graphql:\"title\""
@@ -36116,6 +36691,12 @@ func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetDescription() *str
 		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
 	}
 	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.DisplayID
 }
 func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetID() string {
 	if t == nil {
@@ -36191,10 +36772,17 @@ func (t *GlobalSearch_Search_Nodes_TemplateSearchResult) GetTemplates() []*Globa
 }
 
 type GlobalSearch_Search_Nodes_UserSearchResult_Users struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *GlobalSearch_Search_Nodes_UserSearchResult_Users) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_UserSearchResult_Users{}
+	}
+	return t.DisplayID
+}
 func (t *GlobalSearch_Search_Nodes_UserSearchResult_Users) GetID() string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_UserSearchResult_Users{}
@@ -37708,6 +38296,7 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	CreatedBy                      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                      string         "json:\"displayID\" graphql:\"displayID\""
 	Family                         *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string         "json:\"id\" graphql:\"id\""
 	ImplementationDate             *time.Time     "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
@@ -37756,6 +38345,12 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetDetails
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
 	return t.Details
+}
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetFamily() *string {
 	if t == nil {
@@ -37877,6 +38472,7 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	CreatedBy                      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string        "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                      string         "json:\"displayID\" graphql:\"displayID\""
 	Family                         *string        "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string         "json:\"id\" graphql:\"id\""
 	ImplementationDate             *time.Time     "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
@@ -37925,6 +38521,12 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetDetails() map
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
 	return t.Details
+}
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.DisplayID
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetFamily() *string {
 	if t == nil {
@@ -38065,6 +38667,7 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	CreatedBy                      *string                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                                                  "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                           "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                      string                                                   "json:\"displayID\" graphql:\"displayID\""
 	Family                         *string                                                  "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                                                   "json:\"id\" graphql:\"id\""
 	ImplementationDate             *time.Time                                               "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
@@ -38119,6 +38722,12 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetDetails() map[string]a
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.Details
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetDisplayID() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.DisplayID
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetFamily() *string {
 	if t == nil {
@@ -38270,6 +38879,7 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	CreatedBy                      *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                                              "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                      string                                               "json:\"displayID\" graphql:\"displayID\""
 	Family                         *string                                              "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                                               "json:\"id\" graphql:\"id\""
 	ImplementationDate             *time.Time                                           "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
@@ -38324,6 +38934,12 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetDetails() map[string]any {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetFamily() *string {
 	if t == nil {
@@ -38475,6 +39091,7 @@ type GetSubcontrolByID_Subcontrol struct {
 	CreatedBy                      *string                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                                  "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                           "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                      string                                   "json:\"displayID\" graphql:\"displayID\""
 	Family                         *string                                  "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                                   "json:\"id\" graphql:\"id\""
 	ImplementationDate             *time.Time                               "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
@@ -38529,6 +39146,12 @@ func (t *GetSubcontrolByID_Subcontrol) GetDetails() map[string]any {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.Details
+}
+func (t *GetSubcontrolByID_Subcontrol) GetDisplayID() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.DisplayID
 }
 func (t *GetSubcontrolByID_Subcontrol) GetFamily() *string {
 	if t == nil {
@@ -38658,6 +39281,7 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	CreatedBy                      *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                                           "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                    "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                      string                                            "json:\"displayID\" graphql:\"displayID\""
 	Family                         *string                                           "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                                            "json:\"id\" graphql:\"id\""
 	ImplementationDate             *time.Time                                        "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
@@ -38712,6 +39336,12 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetDetails() map[string]any {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetFamily() *string {
 	if t == nil {
@@ -38863,6 +39493,7 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	CreatedBy                      *string                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                                                  "json:\"description,omitempty\" graphql:\"description\""
 	Details                        map[string]any                                           "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID                      string                                                   "json:\"displayID\" graphql:\"displayID\""
 	Family                         *string                                                  "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                                                   "json:\"id\" graphql:\"id\""
 	ImplementationDate             *time.Time                                               "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
@@ -38917,6 +39548,12 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetDetails() map[string]a
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.Details
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetFamily() *string {
 	if t == nil {
@@ -39906,8 +40543,10 @@ type CreateBulkCSVTask_CreateBulkCSVTask_Tasks struct {
 	CreatedBy   *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                             "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string                                              "json:\"displayID\" graphql:\"displayID\""
 	Due         *time.Time                                          "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                                              "json:\"id\" graphql:\"id\""
+	Priority    enums.Priority                                      "json:\"priority\" graphql:\"priority\""
 	Status      enums.TaskStatus                                    "json:\"status\" graphql:\"status\""
 	Tags        []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                                              "json:\"title\" graphql:\"title\""
@@ -39957,6 +40596,12 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDetails() map[string]any 
 	}
 	return t.Details
 }
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.DisplayID
+}
 func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDue() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
@@ -39968,6 +40613,12 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetID() string {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
 	}
 	return t.ID
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return &t.Priority
 }
 func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetStatus() *enums.TaskStatus {
 	if t == nil {
@@ -40069,8 +40720,10 @@ type CreateBulkTask_CreateBulkTask_Tasks struct {
 	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                                "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string                                        "json:\"displayID\" graphql:\"displayID\""
 	Due         *time.Time                                    "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                                        "json:\"id\" graphql:\"id\""
+	Priority    enums.Priority                                "json:\"priority\" graphql:\"priority\""
 	Status      enums.TaskStatus                              "json:\"status\" graphql:\"status\""
 	Tags        []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                                        "json:\"title\" graphql:\"title\""
@@ -40120,6 +40773,12 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDetails() map[string]any {
 	}
 	return t.Details
 }
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.DisplayID
+}
 func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDue() *time.Time {
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks{}
@@ -40131,6 +40790,12 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks) GetID() string {
 		t = &CreateBulkTask_CreateBulkTask_Tasks{}
 	}
 	return t.ID
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return &t.Priority
 }
 func (t *CreateBulkTask_CreateBulkTask_Tasks) GetStatus() *enums.TaskStatus {
 	if t == nil {
@@ -40232,8 +40897,11 @@ type CreateTask_CreateTask_Task struct {
 	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string                               "json:\"displayID\" graphql:\"displayID\""
 	Due         *time.Time                           "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                               "json:\"id\" graphql:\"id\""
+	OwnerID     string                               "json:\"ownerID\" graphql:\"ownerID\""
+	Priority    enums.Priority                       "json:\"priority\" graphql:\"priority\""
 	Status      enums.TaskStatus                     "json:\"status\" graphql:\"status\""
 	Tags        []string                             "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                               "json:\"title\" graphql:\"title\""
@@ -40283,6 +40951,12 @@ func (t *CreateTask_CreateTask_Task) GetDetails() map[string]any {
 	}
 	return t.Details
 }
+func (t *CreateTask_CreateTask_Task) GetDisplayID() string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.DisplayID
+}
 func (t *CreateTask_CreateTask_Task) GetDue() *time.Time {
 	if t == nil {
 		t = &CreateTask_CreateTask_Task{}
@@ -40294,6 +40968,18 @@ func (t *CreateTask_CreateTask_Task) GetID() string {
 		t = &CreateTask_CreateTask_Task{}
 	}
 	return t.ID
+}
+func (t *CreateTask_CreateTask_Task) GetOwnerID() string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.OwnerID
+}
+func (t *CreateTask_CreateTask_Task) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return &t.Priority
 }
 func (t *CreateTask_CreateTask_Task) GetStatus() *enums.TaskStatus {
 	if t == nil {
@@ -40398,40 +41084,42 @@ func (t *GetAllTasks_Tasks_Edges_Node_Assigner) GetLastName() *string {
 	return t.LastName
 }
 
-type GetAllTasks_Tasks_Edges_Node_Organization struct {
+type GetAllTasks_Tasks_Edges_Node_Owner struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllTasks_Tasks_Edges_Node_Organization) GetID() string {
+func (t *GetAllTasks_Tasks_Edges_Node_Owner) GetID() string {
 	if t == nil {
-		t = &GetAllTasks_Tasks_Edges_Node_Organization{}
+		t = &GetAllTasks_Tasks_Edges_Node_Owner{}
 	}
 	return t.ID
 }
-func (t *GetAllTasks_Tasks_Edges_Node_Organization) GetName() string {
+func (t *GetAllTasks_Tasks_Edges_Node_Owner) GetName() string {
 	if t == nil {
-		t = &GetAllTasks_Tasks_Edges_Node_Organization{}
+		t = &GetAllTasks_Tasks_Edges_Node_Owner{}
 	}
 	return t.Name
 }
 
 type GetAllTasks_Tasks_Edges_Node struct {
-	Assignee     *GetAllTasks_Tasks_Edges_Node_Assignee       "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner     GetAllTasks_Tasks_Edges_Node_Assigner        "json:\"assigner\" graphql:\"assigner\""
-	Completed    *time.Time                                   "json:\"completed,omitempty\" graphql:\"completed\""
-	CreatedAt    *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string                                      "json:\"description,omitempty\" graphql:\"description\""
-	Details      map[string]any                               "json:\"details,omitempty\" graphql:\"details\""
-	Due          *time.Time                                   "json:\"due,omitempty\" graphql:\"due\""
-	ID           string                                       "json:\"id\" graphql:\"id\""
-	Organization []*GetAllTasks_Tasks_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Status       enums.TaskStatus                             "json:\"status\" graphql:\"status\""
-	Tags         []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
-	Title        string                                       "json:\"title\" graphql:\"title\""
-	UpdatedAt    *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Assignee    *GetAllTasks_Tasks_Edges_Node_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner    GetAllTasks_Tasks_Edges_Node_Assigner  "json:\"assigner\" graphql:\"assigner\""
+	Completed   *time.Time                             "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]any                         "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string                                 "json:\"displayID\" graphql:\"displayID\""
+	Due         *time.Time                             "json:\"due,omitempty\" graphql:\"due\""
+	ID          string                                 "json:\"id\" graphql:\"id\""
+	Owner       GetAllTasks_Tasks_Edges_Node_Owner     "json:\"owner\" graphql:\"owner\""
+	Priority    enums.Priority                         "json:\"priority\" graphql:\"priority\""
+	Status      enums.TaskStatus                       "json:\"status\" graphql:\"status\""
+	Tags        []string                               "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                                 "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTasks_Tasks_Edges_Node) GetAssignee() *GetAllTasks_Tasks_Edges_Node_Assignee {
@@ -40476,6 +41164,12 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetDetails() map[string]any {
 	}
 	return t.Details
 }
+func (t *GetAllTasks_Tasks_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.DisplayID
+}
 func (t *GetAllTasks_Tasks_Edges_Node) GetDue() *time.Time {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node{}
@@ -40488,11 +41182,17 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllTasks_Tasks_Edges_Node) GetOrganization() []*GetAllTasks_Tasks_Edges_Node_Organization {
+func (t *GetAllTasks_Tasks_Edges_Node) GetOwner() *GetAllTasks_Tasks_Edges_Node_Owner {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node{}
 	}
-	return t.Organization
+	return &t.Owner
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return &t.Priority
 }
 func (t *GetAllTasks_Tasks_Edges_Node) GetStatus() *enums.TaskStatus {
 	if t == nil {
@@ -40597,40 +41297,42 @@ func (t *GetTaskByID_Task_Assigner) GetLastName() *string {
 	return t.LastName
 }
 
-type GetTaskByID_Task_Organization struct {
+type GetTaskByID_Task_Owner struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetTaskByID_Task_Organization) GetID() string {
+func (t *GetTaskByID_Task_Owner) GetID() string {
 	if t == nil {
-		t = &GetTaskByID_Task_Organization{}
+		t = &GetTaskByID_Task_Owner{}
 	}
 	return t.ID
 }
-func (t *GetTaskByID_Task_Organization) GetName() string {
+func (t *GetTaskByID_Task_Owner) GetName() string {
 	if t == nil {
-		t = &GetTaskByID_Task_Organization{}
+		t = &GetTaskByID_Task_Owner{}
 	}
 	return t.Name
 }
 
 type GetTaskByID_Task struct {
-	Assignee     *GetTaskByID_Task_Assignee       "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner     GetTaskByID_Task_Assigner        "json:\"assigner\" graphql:\"assigner\""
-	Completed    *time.Time                       "json:\"completed,omitempty\" graphql:\"completed\""
-	CreatedAt    *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string                          "json:\"description,omitempty\" graphql:\"description\""
-	Details      map[string]any                   "json:\"details,omitempty\" graphql:\"details\""
-	Due          *time.Time                       "json:\"due,omitempty\" graphql:\"due\""
-	ID           string                           "json:\"id\" graphql:\"id\""
-	Organization []*GetTaskByID_Task_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Status       enums.TaskStatus                 "json:\"status\" graphql:\"status\""
-	Tags         []string                         "json:\"tags,omitempty\" graphql:\"tags\""
-	Title        string                           "json:\"title\" graphql:\"title\""
-	UpdatedAt    *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Assignee    *GetTaskByID_Task_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner    GetTaskByID_Task_Assigner  "json:\"assigner\" graphql:\"assigner\""
+	Completed   *time.Time                 "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                    "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]any             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string                     "json:\"displayID\" graphql:\"displayID\""
+	Due         *time.Time                 "json:\"due,omitempty\" graphql:\"due\""
+	ID          string                     "json:\"id\" graphql:\"id\""
+	Owner       GetTaskByID_Task_Owner     "json:\"owner\" graphql:\"owner\""
+	Priority    enums.Priority             "json:\"priority\" graphql:\"priority\""
+	Status      enums.TaskStatus           "json:\"status\" graphql:\"status\""
+	Tags        []string                   "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                     "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTaskByID_Task) GetAssignee() *GetTaskByID_Task_Assignee {
@@ -40675,6 +41377,12 @@ func (t *GetTaskByID_Task) GetDetails() map[string]any {
 	}
 	return t.Details
 }
+func (t *GetTaskByID_Task) GetDisplayID() string {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.DisplayID
+}
 func (t *GetTaskByID_Task) GetDue() *time.Time {
 	if t == nil {
 		t = &GetTaskByID_Task{}
@@ -40687,11 +41395,17 @@ func (t *GetTaskByID_Task) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetTaskByID_Task) GetOrganization() []*GetTaskByID_Task_Organization {
+func (t *GetTaskByID_Task) GetOwner() *GetTaskByID_Task_Owner {
 	if t == nil {
 		t = &GetTaskByID_Task{}
 	}
-	return t.Organization
+	return &t.Owner
+}
+func (t *GetTaskByID_Task) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return &t.Priority
 }
 func (t *GetTaskByID_Task) GetStatus() *enums.TaskStatus {
 	if t == nil {
@@ -40782,8 +41496,10 @@ type GetTasks_Tasks_Edges_Node struct {
 	CreatedBy   *string                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                             "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string                              "json:\"displayID\" graphql:\"displayID\""
 	Due         *time.Time                          "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                              "json:\"id\" graphql:\"id\""
+	Priority    enums.Priority                      "json:\"priority\" graphql:\"priority\""
 	Status      enums.TaskStatus                    "json:\"status\" graphql:\"status\""
 	Tags        []string                            "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                              "json:\"title\" graphql:\"title\""
@@ -40833,6 +41549,12 @@ func (t *GetTasks_Tasks_Edges_Node) GetDetails() map[string]any {
 	}
 	return t.Details
 }
+func (t *GetTasks_Tasks_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.DisplayID
+}
 func (t *GetTasks_Tasks_Edges_Node) GetDue() *time.Time {
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node{}
@@ -40844,6 +41566,12 @@ func (t *GetTasks_Tasks_Edges_Node) GetID() string {
 		t = &GetTasks_Tasks_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetTasks_Tasks_Edges_Node) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return &t.Priority
 }
 func (t *GetTasks_Tasks_Edges_Node) GetStatus() *enums.TaskStatus {
 	if t == nil {
@@ -40956,8 +41684,10 @@ type UpdateTask_UpdateTask_Task struct {
 	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
 	Details     map[string]any                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID   string                               "json:\"displayID\" graphql:\"displayID\""
 	Due         *time.Time                           "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                               "json:\"id\" graphql:\"id\""
+	Priority    enums.Priority                       "json:\"priority\" graphql:\"priority\""
 	Status      enums.TaskStatus                     "json:\"status\" graphql:\"status\""
 	Tags        []string                             "json:\"tags,omitempty\" graphql:\"tags\""
 	Title       string                               "json:\"title\" graphql:\"title\""
@@ -41007,6 +41737,12 @@ func (t *UpdateTask_UpdateTask_Task) GetDetails() map[string]any {
 	}
 	return t.Details
 }
+func (t *UpdateTask_UpdateTask_Task) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.DisplayID
+}
 func (t *UpdateTask_UpdateTask_Task) GetDue() *time.Time {
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task{}
@@ -41018,6 +41754,12 @@ func (t *UpdateTask_UpdateTask_Task) GetID() string {
 		t = &UpdateTask_UpdateTask_Task{}
 	}
 	return t.ID
+}
+func (t *UpdateTask_UpdateTask_Task) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return &t.Priority
 }
 func (t *UpdateTask_UpdateTask_Task) GetStatus() *enums.TaskStatus {
 	if t == nil {
@@ -42433,6 +43175,7 @@ type CreateUser_CreateUser_User struct {
 	AvatarFile        *CreateUser_CreateUser_User_AvatarFile         "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
 	AvatarLocalFileID *string                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	DisplayID         string                                         "json:\"displayID\" graphql:\"displayID\""
 	DisplayName       string                                         "json:\"displayName\" graphql:\"displayName\""
 	Email             string                                         "json:\"email\" graphql:\"email\""
 	FirstName         *string                                        "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -42468,6 +43211,12 @@ func (t *CreateUser_CreateUser_User) GetAvatarRemoteURL() *string {
 		t = &CreateUser_CreateUser_User{}
 	}
 	return t.AvatarRemoteURL
+}
+func (t *CreateUser_CreateUser_User) GetDisplayID() string {
+	if t == nil {
+		t = &CreateUser_CreateUser_User{}
+	}
+	return t.DisplayID
 }
 func (t *CreateUser_CreateUser_User) GetDisplayName() string {
 	if t == nil {
@@ -42676,6 +43425,7 @@ type GetAllUsers_Users_Edges_Node struct {
 	AvatarRemoteURL   *string                                  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy         *string                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID         string                                   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName       string                                   "json:\"displayName\" graphql:\"displayName\""
 	Email             string                                   "json:\"email\" graphql:\"email\""
 	FirstName         *string                                  "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -42724,6 +43474,12 @@ func (t *GetAllUsers_Users_Edges_Node) GetCreatedBy() *string {
 		t = &GetAllUsers_Users_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetAllUsers_Users_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllUsers_Users_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllUsers_Users_Edges_Node) GetDisplayName() string {
 	if t == nil {
@@ -42988,6 +43744,7 @@ type GetUserByID_User struct {
 	AvatarRemoteURL   *string                           "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy         *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID         string                            "json:\"displayID\" graphql:\"displayID\""
 	DisplayName       string                            "json:\"displayName\" graphql:\"displayName\""
 	Email             string                            "json:\"email\" graphql:\"email\""
 	FirstName         *string                           "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -43037,6 +43794,12 @@ func (t *GetUserByID_User) GetCreatedBy() *string {
 		t = &GetUserByID_User{}
 	}
 	return t.CreatedBy
+}
+func (t *GetUserByID_User) GetDisplayID() string {
+	if t == nil {
+		t = &GetUserByID_User{}
+	}
+	return t.DisplayID
 }
 func (t *GetUserByID_User) GetDisplayName() string {
 	if t == nil {
@@ -43278,6 +44041,7 @@ type GetUserByIDWithOrgs_User struct {
 	AvatarRemoteURL   *string                                    "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	CreatedAt         *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy         *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID         string                                     "json:\"displayID\" graphql:\"displayID\""
 	DisplayName       string                                     "json:\"displayName\" graphql:\"displayName\""
 	Email             string                                     "json:\"email\" graphql:\"email\""
 	FirstName         *string                                    "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -43327,6 +44091,12 @@ func (t *GetUserByIDWithOrgs_User) GetCreatedBy() *string {
 		t = &GetUserByIDWithOrgs_User{}
 	}
 	return t.CreatedBy
+}
+func (t *GetUserByIDWithOrgs_User) GetDisplayID() string {
+	if t == nil {
+		t = &GetUserByIDWithOrgs_User{}
+	}
+	return t.DisplayID
 }
 func (t *GetUserByIDWithOrgs_User) GetDisplayName() string {
 	if t == nil {
@@ -43545,6 +44315,7 @@ type UpdateUser_UpdateUser_User struct {
 	AvatarFile        *UpdateUser_UpdateUser_User_AvatarFile         "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
 	AvatarLocalFileID *string                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	DisplayID         string                                         "json:\"displayID\" graphql:\"displayID\""
 	DisplayName       string                                         "json:\"displayName\" graphql:\"displayName\""
 	Email             string                                         "json:\"email\" graphql:\"email\""
 	FirstName         *string                                        "json:\"firstName,omitempty\" graphql:\"firstName\""
@@ -43580,6 +44351,12 @@ func (t *UpdateUser_UpdateUser_User) GetAvatarRemoteURL() *string {
 		t = &UpdateUser_UpdateUser_User{}
 	}
 	return t.AvatarRemoteURL
+}
+func (t *UpdateUser_UpdateUser_User) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateUser_UpdateUser_User{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateUser_UpdateUser_User) GetDisplayName() string {
 	if t == nil {
@@ -48667,6 +49444,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				controls {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
@@ -48687,6 +49465,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				controlObjectives {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
@@ -48795,6 +49574,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				internalPolicies {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
@@ -48811,6 +49591,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				narratives {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
@@ -48873,6 +49654,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				procedures {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
@@ -48889,6 +49671,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on ProgramSearchResult {
 				programs {
 					id
+					displayID
 					deletedBy
 					tags
 					ownerID
@@ -48900,6 +49683,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				risks {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
@@ -48933,6 +49717,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				subcontrols {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
@@ -48973,11 +49758,15 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			... on TaskSearchResult {
 				tasks {
 					id
+					displayID
 					deletedBy
 					tags
+					ownerID
 					title
 					description
 					details
+					assigneeID
+					assignerID
 				}
 			}
 			... on TemplateSearchResult {
@@ -48996,6 +49785,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				users {
 					deletedBy
 					id
+					displayID
 					tags
 					email
 					firstName
@@ -49609,6 +50399,7 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -49652,6 +50443,7 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -49695,6 +50487,7 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -49783,6 +50576,7 @@ const GetAllControlsDocument = `query GetAllControls {
 				createdBy
 				description
 				details
+				displayID
 				family
 				id
 				mappedFrameworks
@@ -49844,6 +50638,7 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		createdBy
 		description
 		details
+		displayID
 		family
 		id
 		mappedFrameworks
@@ -49907,6 +50702,7 @@ const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
 				createdBy
 				description
 				details
+				displayID
 				family
 				id
 				mappedFrameworks
@@ -49971,6 +50767,7 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -50129,6 +50926,7 @@ const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObje
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -50171,6 +50969,7 @@ const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective 
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -50213,6 +51012,7 @@ const CreateControlObjectiveDocument = `mutation CreateControlObjective ($input:
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -50296,6 +51096,7 @@ const GetAllControlObjectivesDocument = `query GetAllControlObjectives {
 				createdBy
 				description
 				details
+				displayID
 				family
 				id
 				mappedFrameworks
@@ -50352,6 +51153,7 @@ const GetControlObjectiveByIDDocument = `query GetControlObjectiveByID ($control
 		createdBy
 		description
 		details
+		displayID
 		family
 		id
 		mappedFrameworks
@@ -50410,6 +51212,7 @@ const GetControlObjectivesDocument = `query GetControlObjectives ($where: Contro
 				createdBy
 				description
 				details
+				displayID
 				family
 				id
 				mappedFrameworks
@@ -50469,6 +51272,7 @@ const UpdateControlObjectiveDocument = `mutation UpdateControlObjective ($update
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			mappedFrameworks
@@ -54106,6 +54910,7 @@ const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolic
 			description
 			details
 			id
+			displayID
 			name
 			policyType
 			purposeAndScope
@@ -54145,6 +54950,7 @@ const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($in
 			description
 			details
 			id
+			displayID
 			name
 			policyType
 			purposeAndScope
@@ -54184,6 +54990,7 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			description
 			details
 			id
+			displayID
 			name
 			policyType
 			purposeAndScope
@@ -54256,6 +55063,7 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 				description
 				details
 				id
+				displayID
 				name
 				policyType
 				purposeAndScope
@@ -54303,6 +55111,7 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 				description
 				details
 				id
+				displayID
 				name
 				policyType
 				purposeAndScope
@@ -54350,6 +55159,7 @@ const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPol
 		description
 		details
 		id
+		displayID
 		name
 		policyType
 		purposeAndScope
@@ -54396,6 +55206,7 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			description
 			details
 			id
+			displayID
 			name
 			policyType
 			purposeAndScope
@@ -54756,6 +55567,7 @@ const CreateBulkCSVNarrativeDocument = `mutation CreateBulkCSVNarrative ($input:
 			createdBy
 			description
 			details
+			displayID
 			id
 			name
 			satisfies
@@ -54791,6 +55603,7 @@ const CreateBulkNarrativeDocument = `mutation CreateBulkNarrative ($input: [Crea
 			createdBy
 			description
 			details
+			displayID
 			id
 			name
 			satisfies
@@ -54826,6 +55639,7 @@ const CreateNarrativeDocument = `mutation CreateNarrative ($input: CreateNarrati
 			createdBy
 			description
 			details
+			displayID
 			id
 			name
 			satisfies
@@ -54902,6 +55716,7 @@ const GetAllNarrativesDocument = `query GetAllNarratives {
 				createdBy
 				description
 				details
+				displayID
 				id
 				name
 				satisfies
@@ -54951,6 +55766,7 @@ const GetNarrativeByIDDocument = `query GetNarrativeByID ($narrativeId: ID!) {
 		createdBy
 		description
 		details
+		displayID
 		id
 		name
 		satisfies
@@ -55002,6 +55818,7 @@ const GetNarrativesDocument = `query GetNarratives ($where: NarrativeWhereInput)
 				createdBy
 				description
 				details
+				displayID
 				id
 				name
 				satisfies
@@ -55054,6 +55871,7 @@ const UpdateNarrativeDocument = `mutation UpdateNarrative ($updateNarrativeId: I
 			createdBy
 			description
 			details
+			displayID
 			id
 			name
 			satisfies
@@ -56747,6 +57565,7 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 			description
 			details
 			id
+			displayID
 			name
 			procedureType
 			purposeAndScope
@@ -56787,6 +57606,7 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 			description
 			details
 			id
+			displayID
 			name
 			procedureType
 			purposeAndScope
@@ -56827,6 +57647,7 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			description
 			details
 			id
+			displayID
 			name
 			procedureType
 			purposeAndScope
@@ -56900,6 +57721,7 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 				description
 				details
 				id
+				displayID
 				name
 				procedureType
 				purposeAndScope
@@ -56946,6 +57768,7 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		description
 		details
 		id
+		displayID
 		name
 		procedureType
 		purposeAndScope
@@ -56994,6 +57817,7 @@ const GetProceduresDocument = `query GetProcedures ($where: ProcedureWhereInput)
 				description
 				details
 				id
+				displayID
 				name
 				procedureType
 				purposeAndScope
@@ -57043,6 +57867,7 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			description
 			details
 			id
+			displayID
 			name
 			procedureType
 			purposeAndScope
@@ -57182,6 +58007,7 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			description
 			endDate
 			id
+			displayID
 			name
 			ownerID
 			startDate
@@ -57222,6 +58048,7 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			description
 			endDate
 			id
+			displayID
 			name
 			ownerID
 			startDate
@@ -57287,6 +58114,7 @@ const CreateFullProgramDocument = `mutation CreateFullProgram ($input: CreateFul
 		program {
 			name
 			id
+			displayID
 			members {
 				id
 			}
@@ -57304,14 +58132,17 @@ const CreateFullProgramDocument = `mutation CreateFullProgram ($input: CreateFul
 			}
 			risks {
 				id
+				displayID
 				name
 			}
 			internalPolicies {
 				id
+				displayID
 				name
 			}
 			procedures {
 				id
+				displayID
 				name
 			}
 		}
@@ -57347,6 +58178,7 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			description
 			endDate
 			id
+			displayID
 			name
 			ownerID
 			startDate
@@ -57361,6 +58193,7 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 				description
 				details
 				id
+				displayID
 				name
 				procedureType
 				purposeAndScope
@@ -57378,6 +58211,7 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 				description
 				details
 				id
+				displayID
 				name
 				policyType
 				purposeAndScope
@@ -57426,6 +58260,7 @@ const CreateProgramWithMembersDocument = `mutation CreateProgramWithMembers ($in
 		program {
 			name
 			id
+			displayID
 			members {
 				id
 				user {
@@ -57492,6 +58327,7 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				description
 				endDate
 				id
+				displayID
 				name
 				ownerID
 				startDate
@@ -57506,6 +58342,7 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 					description
 					details
 					id
+					displayID
 					name
 					procedureType
 					purposeAndScope
@@ -57523,6 +58360,7 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 					description
 					details
 					id
+					displayID
 					name
 					policyType
 					purposeAndScope
@@ -57575,6 +58413,7 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		description
 		endDate
 		id
+		displayID
 		name
 		ownerID
 		startDate
@@ -57589,6 +58428,7 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 			description
 			details
 			id
+			displayID
 			name
 			procedureType
 			purposeAndScope
@@ -57606,6 +58446,7 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 			description
 			details
 			id
+			displayID
 			name
 			policyType
 			purposeAndScope
@@ -57660,6 +58501,7 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				description
 				endDate
 				id
+				displayID
 				name
 				ownerID
 				startDate
@@ -57674,6 +58516,7 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 					description
 					details
 					id
+					displayID
 					name
 					procedureType
 					purposeAndScope
@@ -57691,6 +58534,7 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 					description
 					details
 					id
+					displayID
 					name
 					policyType
 					purposeAndScope
@@ -58475,6 +59319,7 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			description
 			details
 			id
+			displayID
 			impact
 			likelihood
 			mitigation
@@ -58516,6 +59361,7 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			description
 			details
 			id
+			displayID
 			impact
 			likelihood
 			mitigation
@@ -58557,6 +59403,7 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			description
 			details
 			id
+			displayID
 			impact
 			likelihood
 			mitigation
@@ -58639,6 +59486,7 @@ const GetAllRisksDocument = `query GetAllRisks {
 				description
 				details
 				id
+				displayID
 				impact
 				likelihood
 				mitigation
@@ -58694,6 +59542,7 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		description
 		details
 		id
+		displayID
 		impact
 		likelihood
 		mitigation
@@ -58751,6 +59600,7 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 				description
 				details
 				id
+				displayID
 				impact
 				likelihood
 				mitigation
@@ -58809,6 +59659,7 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			description
 			details
 			id
+			displayID
 			impact
 			likelihood
 			mitigation
@@ -58973,6 +59824,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on ControlSearchResult {
 				controls {
 					description
+					displayID
 					family
 					id
 					name
@@ -58982,6 +59834,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on ControlObjectiveSearchResult {
 				controlObjectives {
 					description
+					displayID
 					family
 					id
 					name
@@ -59044,6 +59897,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on InternalPolicySearchResult {
 				internalPolicies {
 					description
+					displayID
 					id
 					name
 					tags
@@ -59052,6 +59906,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on NarrativeSearchResult {
 				narratives {
 					description
+					displayID
 					id
 					name
 					tags
@@ -59086,6 +59941,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on ProcedureSearchResult {
 				procedures {
 					description
+					displayID
 					id
 					name
 					tags
@@ -59094,6 +59950,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on ProgramSearchResult {
 				programs {
 					description
+					displayID
 					id
 					name
 					tags
@@ -59102,6 +59959,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on RiskSearchResult {
 				risks {
 					description
+					displayID
 					id
 					name
 					tags
@@ -59117,6 +59975,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on SubcontrolSearchResult {
 				subcontrols {
+					displayID
 					family
 					id
 					name
@@ -59140,6 +59999,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on TaskSearchResult {
 				tasks {
 					description
+					displayID
 					id
 					tags
 					title
@@ -59155,6 +60015,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on UserSearchResult {
 				users {
+					displayID
 					id
 					tags
 				}
@@ -59597,6 +60458,7 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			implementationDate
@@ -59644,6 +60506,7 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			implementationDate
@@ -59691,6 +60554,7 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			implementationDate
@@ -59767,6 +60631,7 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 				createdBy
 				description
 				details
+				displayID
 				family
 				id
 				implementationDate
@@ -59816,6 +60681,7 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 		createdBy
 		description
 		details
+		displayID
 		family
 		id
 		implementationDate
@@ -59867,6 +60733,7 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInp
 				createdBy
 				description
 				details
+				displayID
 				family
 				id
 				implementationDate
@@ -59919,6 +60786,7 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			createdBy
 			description
 			details
+			displayID
 			family
 			id
 			implementationDate
@@ -60327,6 +61195,8 @@ const CreateBulkCSVTaskDocument = `mutation CreateBulkCSVTask ($input: Upload!) 
 			details
 			due
 			id
+			displayID
+			priority
 			status
 			tags
 			title
@@ -60374,6 +61244,8 @@ const CreateBulkTaskDocument = `mutation CreateBulkTask ($input: [CreateTaskInpu
 			details
 			due
 			id
+			displayID
+			priority
 			status
 			tags
 			title
@@ -60421,6 +61293,9 @@ const CreateTaskDocument = `mutation CreateTask ($input: CreateTaskInput!) {
 			details
 			due
 			id
+			ownerID
+			displayID
+			priority
 			status
 			tags
 			title
@@ -60486,7 +61361,7 @@ const GetAllTasksDocument = `query GetAllTasks {
 					firstName
 					lastName
 				}
-				organization {
+				owner {
 					id
 					name
 				}
@@ -60497,6 +61372,8 @@ const GetAllTasksDocument = `query GetAllTasks {
 				details
 				due
 				id
+				displayID
+				priority
 				status
 				tags
 				title
@@ -60535,7 +61412,7 @@ const GetTaskByIDDocument = `query GetTaskByID ($taskId: ID!) {
 			firstName
 			lastName
 		}
-		organization {
+		owner {
 			id
 			name
 		}
@@ -60546,6 +61423,8 @@ const GetTaskByIDDocument = `query GetTaskByID ($taskId: ID!) {
 		details
 		due
 		id
+		displayID
+		priority
 		status
 		tags
 		title
@@ -60593,6 +61472,8 @@ const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
 				details
 				due
 				id
+				displayID
+				priority
 				status
 				tags
 				title
@@ -60641,6 +61522,8 @@ const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: Upd
 			details
 			due
 			id
+			displayID
+			priority
 			status
 			tags
 			title
@@ -61168,6 +62051,7 @@ const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avat
 			avatarFile {
 				presignedURL
 			}
+			displayID
 			displayName
 			email
 			firstName
@@ -61257,6 +62141,7 @@ const GetAllUsersDocument = `query GetAllUsers {
 				avatarFile {
 					presignedURL
 				}
+				displayID
 				displayName
 				email
 				firstName
@@ -61315,6 +62200,7 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 		avatarFile {
 			presignedURL
 		}
+		displayID
 		displayName
 		email
 		firstName
@@ -61382,6 +62268,7 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 		avatarFile {
 			presignedURL
 		}
+		displayID
 		displayName
 		email
 		firstName
@@ -61449,6 +62336,7 @@ const UpdateUserDocument = `mutation UpdateUser ($updateUserId: ID!, $input: Upd
 			avatarFile {
 				presignedURL
 			}
+			displayID
 			displayName
 			email
 			firstName

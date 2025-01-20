@@ -740,7 +740,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	}
 
 	if c.OrganizationID != "" {
-		taskCreate.AddOrganizationIDs(c.OrganizationID)
+		taskCreate.SetOwnerID(c.OrganizationID)
 	}
 
 	if c.GroupID != "" {

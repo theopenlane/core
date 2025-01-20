@@ -37,8 +37,6 @@ type StandardHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
@@ -73,7 +71,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case standardhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldMappingID, standardhistory.FieldName, standardhistory.FieldDescription, standardhistory.FieldFamily, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldPurposeAndScope, standardhistory.FieldBackground, standardhistory.FieldSatisfies:
+		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldName, standardhistory.FieldDescription, standardhistory.FieldFamily, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldPurposeAndScope, standardhistory.FieldBackground, standardhistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case standardhistory.FieldHistoryTime, standardhistory.FieldCreatedAt, standardhistory.FieldUpdatedAt, standardhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -151,12 +149,6 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				sh.DeletedBy = value.String
-			}
-		case standardhistory.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				sh.MappingID = value.String
 			}
 		case standardhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -290,9 +282,6 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(sh.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(sh.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Tags))

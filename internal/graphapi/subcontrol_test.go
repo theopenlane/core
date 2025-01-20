@@ -330,6 +330,9 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			require.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.ID)
 			assert.Equal(t, tc.request.Name, resp.CreateSubcontrol.Subcontrol.Name)
 
+			assert.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.DisplayID)
+			assert.Contains(t, resp.CreateSubcontrol.Subcontrol.DisplayID, "SCL-")
+
 			// ensure the control is set
 			if len(tc.request.ControlIDs) > 0 {
 				require.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.Controls)

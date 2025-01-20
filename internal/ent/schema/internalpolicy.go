@@ -77,7 +77,7 @@ func (InternalPolicy) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("PLC"),
 		emixin.TagMixin{},
 		// all policies must be associated to an organization
 		NewOrgOwnMixinWithRef("internal_policies"),

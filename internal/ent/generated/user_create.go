@@ -122,17 +122,9 @@ func (uc *UserCreate) SetNillableDeletedBy(s *string) *UserCreate {
 	return uc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (uc *UserCreate) SetMappingID(s string) *UserCreate {
-	uc.mutation.SetMappingID(s)
-	return uc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableMappingID(s *string) *UserCreate {
-	if s != nil {
-		uc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (uc *UserCreate) SetDisplayID(s string) *UserCreate {
+	uc.mutation.SetDisplayID(s)
 	return uc
 }
 
@@ -644,13 +636,6 @@ func (uc *UserCreate) defaults() error {
 		v := user.DefaultUpdatedAt()
 		uc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := uc.mutation.MappingID(); !ok {
-		if user.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized user.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := user.DefaultMappingID()
-		uc.mutation.SetMappingID(v)
-	}
 	if _, ok := uc.mutation.Tags(); !ok {
 		v := user.DefaultTags
 		uc.mutation.SetTags(v)
@@ -682,8 +667,13 @@ func (uc *UserCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
-	if _, ok := uc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "User.mapping_id"`)}
+	if _, ok := uc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "User.display_id"`)}
+	}
+	if v, ok := uc.mutation.DisplayID(); ok {
+		if err := user.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "User.display_id": %w`, err)}
+		}
 	}
 	if _, ok := uc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "User.email"`)}
@@ -792,9 +782,9 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := uc.mutation.MappingID(); ok {
-		_spec.SetField(user.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := uc.mutation.DisplayID(); ok {
+		_spec.SetField(user.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := uc.mutation.Tags(); ok {
 		_spec.SetField(user.FieldTags, field.TypeJSON, value)

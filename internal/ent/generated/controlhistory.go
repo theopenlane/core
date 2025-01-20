@@ -37,8 +37,8 @@ type ControlHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -79,7 +79,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldMappingID, controlhistory.FieldOwnerID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldOwnerID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -158,11 +158,11 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.DeletedBy = value.String
 			}
-		case controlhistory.FieldMappingID:
+		case controlhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				ch.MappingID = value.String
+				ch.DisplayID = value.String
 			}
 		case controlhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -315,8 +315,8 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(ch.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(ch.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(ch.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Tags))

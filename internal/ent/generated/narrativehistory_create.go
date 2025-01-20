@@ -139,17 +139,9 @@ func (nhc *NarrativeHistoryCreate) SetNillableDeletedBy(s *string) *NarrativeHis
 	return nhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (nhc *NarrativeHistoryCreate) SetMappingID(s string) *NarrativeHistoryCreate {
-	nhc.mutation.SetMappingID(s)
-	return nhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (nhc *NarrativeHistoryCreate) SetNillableMappingID(s *string) *NarrativeHistoryCreate {
-	if s != nil {
-		nhc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (nhc *NarrativeHistoryCreate) SetDisplayID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetDisplayID(s)
 	return nhc
 }
 
@@ -266,10 +258,6 @@ func (nhc *NarrativeHistoryCreate) defaults() {
 		v := narrativehistory.DefaultUpdatedAt()
 		nhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := nhc.mutation.MappingID(); !ok {
-		v := narrativehistory.DefaultMappingID()
-		nhc.mutation.SetMappingID(v)
-	}
 	if _, ok := nhc.mutation.Tags(); !ok {
 		v := narrativehistory.DefaultTags
 		nhc.mutation.SetTags(v)
@@ -293,8 +281,8 @@ func (nhc *NarrativeHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "NarrativeHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := nhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "NarrativeHistory.mapping_id"`)}
+	if _, ok := nhc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "NarrativeHistory.display_id"`)}
 	}
 	if _, ok := nhc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "NarrativeHistory.owner_id"`)}
@@ -374,9 +362,9 @@ func (nhc *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cr
 		_spec.SetField(narrativehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := nhc.mutation.MappingID(); ok {
-		_spec.SetField(narrativehistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := nhc.mutation.DisplayID(); ok {
+		_spec.SetField(narrativehistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := nhc.mutation.Tags(); ok {
 		_spec.SetField(narrativehistory.FieldTags, field.TypeJSON, value)

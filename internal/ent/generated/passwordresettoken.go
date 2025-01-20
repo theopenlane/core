@@ -26,8 +26,6 @@ type PasswordResetToken struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -77,7 +75,7 @@ func (*PasswordResetToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case passwordresettoken.FieldSecret:
 			values[i] = new([]byte)
-		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedBy, passwordresettoken.FieldUpdatedBy, passwordresettoken.FieldMappingID, passwordresettoken.FieldDeletedBy, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
+		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedBy, passwordresettoken.FieldUpdatedBy, passwordresettoken.FieldDeletedBy, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
 			values[i] = new(sql.NullString)
 		case passwordresettoken.FieldCreatedAt, passwordresettoken.FieldUpdatedAt, passwordresettoken.FieldDeletedAt, passwordresettoken.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -125,12 +123,6 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				prt.UpdatedBy = value.String
-			}
-		case passwordresettoken.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				prt.MappingID = value.String
 			}
 		case passwordresettoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -227,9 +219,6 @@ func (prt *PasswordResetToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(prt.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(prt.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(prt.DeletedAt.Format(time.ANSIC))

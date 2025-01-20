@@ -4110,21 +4110,21 @@ type CreateOrganizationInput struct {
 	RiskCreatorIDs             []string
 	TemplateCreatorIDs         []string
 	ParentID                   *string
-	GroupIDs                   []string
-	TemplateIDs                []string
-	IntegrationIDs             []string
 	SettingID                  *string
-	DocumentDatumIDs           []string
-	OrgSubscriptionIDs         []string
 	PersonalAccessTokenIDs     []string
 	APITokenIDs                []string
 	UserIDs                    []string
-	InviteIDs                  []string
-	SubscriberIDs              []string
 	EventIDs                   []string
 	SecretIDs                  []string
 	FileIDs                    []string
 	AvatarFileID               *string
+	GroupIDs                   []string
+	TemplateIDs                []string
+	IntegrationIDs             []string
+	DocumentDatumIDs           []string
+	OrgSubscriptionIDs         []string
+	InviteIDs                  []string
+	SubscriberIDs              []string
 	EntityIDs                  []string
 	EntityTypeIDs              []string
 	ContactIDs                 []string
@@ -4194,23 +4194,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
 	}
-	if v := i.GroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
-	}
-	if v := i.TemplateIDs; len(v) > 0 {
-		m.AddTemplateIDs(v...)
-	}
-	if v := i.IntegrationIDs; len(v) > 0 {
-		m.AddIntegrationIDs(v...)
-	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
-	}
-	if v := i.DocumentDatumIDs; len(v) > 0 {
-		m.AddDocumentDatumIDs(v...)
-	}
-	if v := i.OrgSubscriptionIDs; len(v) > 0 {
-		m.AddOrgSubscriptionIDs(v...)
 	}
 	if v := i.PersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
@@ -4220,12 +4205,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
-	}
-	if v := i.InviteIDs; len(v) > 0 {
-		m.AddInviteIDs(v...)
-	}
-	if v := i.SubscriberIDs; len(v) > 0 {
-		m.AddSubscriberIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -4238,6 +4217,27 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
+	}
+	if v := i.GroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.TemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.DocumentDatumIDs; len(v) > 0 {
+		m.AddDocumentDatumIDs(v...)
+	}
+	if v := i.OrgSubscriptionIDs; len(v) > 0 {
+		m.AddOrgSubscriptionIDs(v...)
+	}
+	if v := i.InviteIDs; len(v) > 0 {
+		m.AddInviteIDs(v...)
+	}
+	if v := i.SubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
 	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
@@ -4326,23 +4326,8 @@ type UpdateOrganizationInput struct {
 	ClearTemplateCreators            bool
 	AddTemplateCreatorIDs            []string
 	RemoveTemplateCreatorIDs         []string
-	ClearGroups                      bool
-	AddGroupIDs                      []string
-	RemoveGroupIDs                   []string
-	ClearTemplates                   bool
-	AddTemplateIDs                   []string
-	RemoveTemplateIDs                []string
-	ClearIntegrations                bool
-	AddIntegrationIDs                []string
-	RemoveIntegrationIDs             []string
 	ClearSetting                     bool
 	SettingID                        *string
-	ClearDocumentData                bool
-	AddDocumentDatumIDs              []string
-	RemoveDocumentDatumIDs           []string
-	ClearOrgSubscriptions            bool
-	AddOrgSubscriptionIDs            []string
-	RemoveOrgSubscriptionIDs         []string
 	ClearPersonalAccessTokens        bool
 	AddPersonalAccessTokenIDs        []string
 	RemovePersonalAccessTokenIDs     []string
@@ -4352,12 +4337,6 @@ type UpdateOrganizationInput struct {
 	ClearUsers                       bool
 	AddUserIDs                       []string
 	RemoveUserIDs                    []string
-	ClearInvites                     bool
-	AddInviteIDs                     []string
-	RemoveInviteIDs                  []string
-	ClearSubscribers                 bool
-	AddSubscriberIDs                 []string
-	RemoveSubscriberIDs              []string
 	ClearEvents                      bool
 	AddEventIDs                      []string
 	RemoveEventIDs                   []string
@@ -4369,6 +4348,27 @@ type UpdateOrganizationInput struct {
 	RemoveFileIDs                    []string
 	ClearAvatarFile                  bool
 	AvatarFileID                     *string
+	ClearGroups                      bool
+	AddGroupIDs                      []string
+	RemoveGroupIDs                   []string
+	ClearTemplates                   bool
+	AddTemplateIDs                   []string
+	RemoveTemplateIDs                []string
+	ClearIntegrations                bool
+	AddIntegrationIDs                []string
+	RemoveIntegrationIDs             []string
+	ClearDocumentData                bool
+	AddDocumentDatumIDs              []string
+	RemoveDocumentDatumIDs           []string
+	ClearOrgSubscriptions            bool
+	AddOrgSubscriptionIDs            []string
+	RemoveOrgSubscriptionIDs         []string
+	ClearInvites                     bool
+	AddInviteIDs                     []string
+	RemoveInviteIDs                  []string
+	ClearSubscribers                 bool
+	AddSubscriberIDs                 []string
+	RemoveSubscriberIDs              []string
 	ClearEntities                    bool
 	AddEntityIDs                     []string
 	RemoveEntityIDs                  []string
@@ -4526,56 +4526,11 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveTemplateCreatorIDs; len(v) > 0 {
 		m.RemoveTemplateCreatorIDs(v...)
 	}
-	if i.ClearGroups {
-		m.ClearGroups()
-	}
-	if v := i.AddGroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
-	}
-	if v := i.RemoveGroupIDs; len(v) > 0 {
-		m.RemoveGroupIDs(v...)
-	}
-	if i.ClearTemplates {
-		m.ClearTemplates()
-	}
-	if v := i.AddTemplateIDs; len(v) > 0 {
-		m.AddTemplateIDs(v...)
-	}
-	if v := i.RemoveTemplateIDs; len(v) > 0 {
-		m.RemoveTemplateIDs(v...)
-	}
-	if i.ClearIntegrations {
-		m.ClearIntegrations()
-	}
-	if v := i.AddIntegrationIDs; len(v) > 0 {
-		m.AddIntegrationIDs(v...)
-	}
-	if v := i.RemoveIntegrationIDs; len(v) > 0 {
-		m.RemoveIntegrationIDs(v...)
-	}
 	if i.ClearSetting {
 		m.ClearSetting()
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
-	}
-	if i.ClearDocumentData {
-		m.ClearDocumentData()
-	}
-	if v := i.AddDocumentDatumIDs; len(v) > 0 {
-		m.AddDocumentDatumIDs(v...)
-	}
-	if v := i.RemoveDocumentDatumIDs; len(v) > 0 {
-		m.RemoveDocumentDatumIDs(v...)
-	}
-	if i.ClearOrgSubscriptions {
-		m.ClearOrgSubscriptions()
-	}
-	if v := i.AddOrgSubscriptionIDs; len(v) > 0 {
-		m.AddOrgSubscriptionIDs(v...)
-	}
-	if v := i.RemoveOrgSubscriptionIDs; len(v) > 0 {
-		m.RemoveOrgSubscriptionIDs(v...)
 	}
 	if i.ClearPersonalAccessTokens {
 		m.ClearPersonalAccessTokens()
@@ -4603,24 +4558,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveUserIDs; len(v) > 0 {
 		m.RemoveUserIDs(v...)
-	}
-	if i.ClearInvites {
-		m.ClearInvites()
-	}
-	if v := i.AddInviteIDs; len(v) > 0 {
-		m.AddInviteIDs(v...)
-	}
-	if v := i.RemoveInviteIDs; len(v) > 0 {
-		m.RemoveInviteIDs(v...)
-	}
-	if i.ClearSubscribers {
-		m.ClearSubscribers()
-	}
-	if v := i.AddSubscriberIDs; len(v) > 0 {
-		m.AddSubscriberIDs(v...)
-	}
-	if v := i.RemoveSubscriberIDs; len(v) > 0 {
-		m.RemoveSubscriberIDs(v...)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -4654,6 +4591,69 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
+	}
+	if i.ClearGroups {
+		m.ClearGroups()
+	}
+	if v := i.AddGroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.RemoveGroupIDs; len(v) > 0 {
+		m.RemoveGroupIDs(v...)
+	}
+	if i.ClearTemplates {
+		m.ClearTemplates()
+	}
+	if v := i.AddTemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.RemoveTemplateIDs; len(v) > 0 {
+		m.RemoveTemplateIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearDocumentData {
+		m.ClearDocumentData()
+	}
+	if v := i.AddDocumentDatumIDs; len(v) > 0 {
+		m.AddDocumentDatumIDs(v...)
+	}
+	if v := i.RemoveDocumentDatumIDs; len(v) > 0 {
+		m.RemoveDocumentDatumIDs(v...)
+	}
+	if i.ClearOrgSubscriptions {
+		m.ClearOrgSubscriptions()
+	}
+	if v := i.AddOrgSubscriptionIDs; len(v) > 0 {
+		m.AddOrgSubscriptionIDs(v...)
+	}
+	if v := i.RemoveOrgSubscriptionIDs; len(v) > 0 {
+		m.RemoveOrgSubscriptionIDs(v...)
+	}
+	if i.ClearInvites {
+		m.ClearInvites()
+	}
+	if v := i.AddInviteIDs; len(v) > 0 {
+		m.AddInviteIDs(v...)
+	}
+	if v := i.RemoveInviteIDs; len(v) > 0 {
+		m.RemoveInviteIDs(v...)
+	}
+	if i.ClearSubscribers {
+		m.ClearSubscribers()
+	}
+	if v := i.AddSubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
+	}
+	if v := i.RemoveSubscriberIDs; len(v) > 0 {
+		m.RemoveSubscriberIDs(v...)
 	}
 	if i.ClearEntities {
 		m.ClearEntities()
@@ -6838,10 +6838,11 @@ type CreateTaskInput struct {
 	Details             map[string]interface{}
 	Status              *enums.TaskStatus
 	Due                 *time.Time
+	Priority            *enums.Priority
 	Completed           *time.Time
+	OwnerID             string
 	AssignerID          string
 	AssigneeID          *string
-	OrganizationIDs     []string
 	GroupIDs            []string
 	InternalPolicyIDs   []string
 	ProcedureIDs        []string
@@ -6869,15 +6870,16 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.Due; v != nil {
 		m.SetDue(*v)
 	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
 	}
+	m.SetOwnerID(i.OwnerID)
 	m.SetAssignerID(i.AssignerID)
 	if v := i.AssigneeID; v != nil {
 		m.SetAssigneeID(*v)
-	}
-	if v := i.OrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
 	}
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
@@ -6921,14 +6923,13 @@ type UpdateTaskInput struct {
 	Status                    *enums.TaskStatus
 	ClearDue                  bool
 	Due                       *time.Time
+	Priority                  *enums.Priority
 	ClearCompleted            bool
 	Completed                 *time.Time
+	OwnerID                   *string
 	AssignerID                *string
 	ClearAssignee             bool
 	AssigneeID                *string
-	ClearOrganization         bool
-	AddOrganizationIDs        []string
-	RemoveOrganizationIDs     []string
 	ClearGroup                bool
 	AddGroupIDs               []string
 	RemoveGroupIDs            []string
@@ -6987,11 +6988,17 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.Due; v != nil {
 		m.SetDue(*v)
 	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
 	if i.ClearCompleted {
 		m.ClearCompleted()
 	}
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.AssignerID; v != nil {
 		m.SetAssignerID(*v)
@@ -7001,15 +7008,6 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.AssigneeID; v != nil {
 		m.SetAssigneeID(*v)
-	}
-	if i.ClearOrganization {
-		m.ClearOrganization()
-	}
-	if v := i.AddOrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
-	}
-	if v := i.RemoveOrganizationIDs; len(v) > 0 {
-		m.RemoveOrganizationIDs(v...)
 	}
 	if i.ClearGroup {
 		m.ClearGroup()

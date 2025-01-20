@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
@@ -193,6 +195,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
@@ -351,6 +355,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":

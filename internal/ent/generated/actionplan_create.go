@@ -109,20 +109,6 @@ func (apc *ActionPlanCreate) SetNillableDeletedBy(s *string) *ActionPlanCreate {
 	return apc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (apc *ActionPlanCreate) SetMappingID(s string) *ActionPlanCreate {
-	apc.mutation.SetMappingID(s)
-	return apc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableMappingID(s *string) *ActionPlanCreate {
-	if s != nil {
-		apc.SetMappingID(*s)
-	}
-	return apc
-}
-
 // SetTags sets the "tags" field.
 func (apc *ActionPlanCreate) SetTags(s []string) *ActionPlanCreate {
 	apc.mutation.SetTags(s)
@@ -351,13 +337,6 @@ func (apc *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultUpdatedAt()
 		apc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := apc.mutation.MappingID(); !ok {
-		if actionplan.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized actionplan.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := actionplan.DefaultMappingID()
-		apc.mutation.SetMappingID(v)
-	}
 	if _, ok := apc.mutation.Tags(); !ok {
 		v := actionplan.DefaultTags
 		apc.mutation.SetTags(v)
@@ -374,9 +353,6 @@ func (apc *ActionPlanCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (apc *ActionPlanCreate) check() error {
-	if _, ok := apc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ActionPlan.mapping_id"`)}
-	}
 	if _, ok := apc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ActionPlan.name"`)}
 	}
@@ -439,10 +415,6 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := apc.mutation.DeletedBy(); ok {
 		_spec.SetField(actionplan.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := apc.mutation.MappingID(); ok {
-		_spec.SetField(actionplan.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := apc.mutation.Tags(); ok {
 		_spec.SetField(actionplan.FieldTags, field.TypeJSON, value)

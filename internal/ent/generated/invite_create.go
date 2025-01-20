@@ -79,20 +79,6 @@ func (ic *InviteCreate) SetNillableUpdatedBy(s *string) *InviteCreate {
 	return ic
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ic *InviteCreate) SetMappingID(s string) *InviteCreate {
-	ic.mutation.SetMappingID(s)
-	return ic
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableMappingID(s *string) *InviteCreate {
-	if s != nil {
-		ic.SetMappingID(*s)
-	}
-	return ic
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ic *InviteCreate) SetDeletedAt(t time.Time) *InviteCreate {
 	ic.mutation.SetDeletedAt(t)
@@ -308,13 +294,6 @@ func (ic *InviteCreate) defaults() error {
 		v := invite.DefaultUpdatedAt()
 		ic.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ic.mutation.MappingID(); !ok {
-		if invite.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized invite.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := invite.DefaultMappingID()
-		ic.mutation.SetMappingID(v)
-	}
 	if _, ok := ic.mutation.Expires(); !ok {
 		if invite.DefaultExpires == nil {
 			return fmt.Errorf("generated: uninitialized invite.DefaultExpires (forgotten import generated/runtime?)")
@@ -346,9 +325,6 @@ func (ic *InviteCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ic *InviteCreate) check() error {
-	if _, ok := ic.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Invite.mapping_id"`)}
-	}
 	if v, ok := ic.mutation.OwnerID(); ok {
 		if err := invite.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Invite.owner_id": %w`, err)}
@@ -453,10 +429,6 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	if value, ok := ic.mutation.UpdatedBy(); ok {
 		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := ic.mutation.MappingID(); ok {
-		_spec.SetField(invite.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ic.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)

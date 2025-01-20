@@ -268,6 +268,9 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 			// check required fields
 			assert.Equal(t, tc.request.Name, resp.CreateInternalPolicy.InternalPolicy.Name)
 
+			assert.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy.DisplayID)
+			assert.Contains(t, resp.CreateInternalPolicy.InternalPolicy.DisplayID, "PLC-")
+
 			// check optional fields with if checks if they were provided or not
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.CreateInternalPolicy.InternalPolicy.Description)

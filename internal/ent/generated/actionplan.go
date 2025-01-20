@@ -30,8 +30,6 @@ type ActionPlan struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the action plan
@@ -131,7 +129,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case actionplan.FieldTags, actionplan.FieldDetails:
 			values[i] = new([]byte)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldMappingID, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -191,12 +189,6 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				ap.DeletedBy = value.String
-			}
-		case actionplan.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				ap.MappingID = value.String
 			}
 		case actionplan.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -328,9 +320,6 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(ap.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(ap.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ap.Tags))

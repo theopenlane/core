@@ -115,17 +115,9 @@ func (coc *ControlObjectiveCreate) SetNillableDeletedBy(s *string) *ControlObjec
 	return coc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (coc *ControlObjectiveCreate) SetMappingID(s string) *ControlObjectiveCreate {
-	coc.mutation.SetMappingID(s)
-	return coc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableMappingID(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (coc *ControlObjectiveCreate) SetDisplayID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetDisplayID(s)
 	return coc
 }
 
@@ -529,13 +521,6 @@ func (coc *ControlObjectiveCreate) defaults() error {
 		v := controlobjective.DefaultUpdatedAt()
 		coc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := coc.mutation.MappingID(); !ok {
-		if controlobjective.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized controlobjective.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := controlobjective.DefaultMappingID()
-		coc.mutation.SetMappingID(v)
-	}
 	if _, ok := coc.mutation.Tags(); !ok {
 		v := controlobjective.DefaultTags
 		coc.mutation.SetTags(v)
@@ -552,8 +537,13 @@ func (coc *ControlObjectiveCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (coc *ControlObjectiveCreate) check() error {
-	if _, ok := coc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ControlObjective.mapping_id"`)}
+	if _, ok := coc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlObjective.display_id"`)}
+	}
+	if v, ok := coc.mutation.DisplayID(); ok {
+		if err := controlobjective.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.display_id": %w`, err)}
+		}
 	}
 	if _, ok := coc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlObjective.owner_id"`)}
@@ -634,9 +624,9 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_spec.SetField(controlobjective.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := coc.mutation.MappingID(); ok {
-		_spec.SetField(controlobjective.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := coc.mutation.DisplayID(); ok {
+		_spec.SetField(controlobjective.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := coc.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)

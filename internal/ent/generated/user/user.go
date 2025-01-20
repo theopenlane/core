@@ -30,8 +30,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
-	// FieldMappingID holds the string denoting the mapping_id field in the database.
-	FieldMappingID = "mapping_id"
+	// FieldDisplayID holds the string denoting the display_id field in the database.
+	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
 	// FieldEmail holds the string denoting the email field in the database.
@@ -183,14 +183,14 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	AssignerTasksInverseTable = "tasks"
 	// AssignerTasksColumn is the table column denoting the assigner_tasks relation/edge.
-	AssignerTasksColumn = "user_assigner_tasks"
+	AssignerTasksColumn = "assigner_id"
 	// AssigneeTasksTable is the table that holds the assignee_tasks relation/edge.
 	AssigneeTasksTable = "tasks"
 	// AssigneeTasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	AssigneeTasksInverseTable = "tasks"
 	// AssigneeTasksColumn is the table column denoting the assignee_tasks relation/edge.
-	AssigneeTasksColumn = "user_assignee_tasks"
+	AssigneeTasksColumn = "assignee_id"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_memberships"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -228,7 +228,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
-	FieldMappingID,
+	FieldDisplayID,
 	FieldTags,
 	FieldEmail,
 	FieldFirstName,
@@ -284,7 +284,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
+	Hooks        [7]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -293,8 +293,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultMappingID holds the default value on creation for the "mapping_id" field.
-	DefaultMappingID func() string
+	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	DisplayIDValidator func(string) error
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
@@ -379,9 +379,9 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
-// ByMappingID orders the results by the mapping_id field.
-func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
+// ByDisplayID orders the results by the display_id field.
+func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
 // ByEmail orders the results by the email field.

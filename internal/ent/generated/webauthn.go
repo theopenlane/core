@@ -27,8 +27,6 @@ type Webauthn struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The user id that owns the object
@@ -92,7 +90,7 @@ func (*Webauthn) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case webauthn.FieldSignCount:
 			values[i] = new(sql.NullInt64)
-		case webauthn.FieldID, webauthn.FieldCreatedBy, webauthn.FieldUpdatedBy, webauthn.FieldMappingID, webauthn.FieldOwnerID, webauthn.FieldAttestationType:
+		case webauthn.FieldID, webauthn.FieldCreatedBy, webauthn.FieldUpdatedBy, webauthn.FieldOwnerID, webauthn.FieldAttestationType:
 			values[i] = new(sql.NullString)
 		case webauthn.FieldCreatedAt, webauthn.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -140,12 +138,6 @@ func (w *Webauthn) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				w.UpdatedBy = value.String
-			}
-		case webauthn.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				w.MappingID = value.String
 			}
 		case webauthn.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -275,9 +267,6 @@ func (w *Webauthn) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(w.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(w.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", w.Tags))

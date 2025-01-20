@@ -8,6 +8,7 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       description
       details
       id
+      displayID
       name
       procedureType
       purposeAndScope
@@ -30,6 +31,7 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       description
       details
       id
+      displayID
       name
       procedureType
       purposeAndScope
@@ -52,6 +54,7 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       description
       details
       id
+      displayID
       name
       procedureType
       purposeAndScope
@@ -89,6 +92,7 @@ query GetAllProcedures {
         description
         details
         id
+        displayID
         name
         procedureType
         purposeAndScope
@@ -118,6 +122,7 @@ query GetProcedureByID($procedureId: ID!) {
     description
     details
     id
+    displayID
     name
     procedureType
     purposeAndScope
@@ -148,6 +153,7 @@ query GetProcedures($where: ProcedureWhereInput) {
         description
         details
         id
+        displayID
         name
         procedureType
         purposeAndScope
@@ -178,6 +184,7 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       description
       details
       id
+      displayID
       name
       procedureType
       purposeAndScope

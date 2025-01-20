@@ -27,8 +27,6 @@ type EntityType struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -87,7 +85,7 @@ func (*EntityType) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entitytype.FieldTags:
 			values[i] = new([]byte)
-		case entitytype.FieldID, entitytype.FieldCreatedBy, entitytype.FieldUpdatedBy, entitytype.FieldMappingID, entitytype.FieldDeletedBy, entitytype.FieldOwnerID, entitytype.FieldName:
+		case entitytype.FieldID, entitytype.FieldCreatedBy, entitytype.FieldUpdatedBy, entitytype.FieldDeletedBy, entitytype.FieldOwnerID, entitytype.FieldName:
 			values[i] = new(sql.NullString)
 		case entitytype.FieldCreatedAt, entitytype.FieldUpdatedAt, entitytype.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -135,12 +133,6 @@ func (et *EntityType) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				et.UpdatedBy = value.String
-			}
-		case entitytype.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				et.MappingID = value.String
 			}
 		case entitytype.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -231,9 +223,6 @@ func (et *EntityType) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(et.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(et.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(et.DeletedAt.Format(time.ANSIC))

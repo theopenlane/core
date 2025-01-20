@@ -34,14 +34,16 @@ type TaskHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
 	// the description of the task
@@ -52,8 +54,14 @@ type TaskHistory struct {
 	Status enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
 	Due time.Time `json:"due,omitempty"`
+	// the priority of the task
+	Priority enums.Priority `json:"priority,omitempty"`
 	// the completion date of the task
-	Completed    time.Time `json:"completed,omitempty"`
+	Completed time.Time `json:"completed,omitempty"`
+	// the id of the user who was assigned the task
+	AssigneeID string `json:"assignee_id,omitempty"`
+	// the id of the user who assigned the task
+	AssignerID   string `json:"assigner_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -66,7 +74,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case taskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldMappingID, taskhistory.FieldDeletedBy, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldStatus:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDisplayID, taskhistory.FieldDeletedBy, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldStatus, taskhistory.FieldPriority, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt, taskhistory.FieldDue, taskhistory.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -133,11 +141,11 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				th.UpdatedBy = value.String
 			}
-		case taskhistory.FieldMappingID:
+		case taskhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				th.MappingID = value.String
+				th.DisplayID = value.String
 			}
 		case taskhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -158,6 +166,12 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &th.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case taskhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				th.OwnerID = value.String
 			}
 		case taskhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -191,11 +205,29 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				th.Due = value.Time
 			}
+		case taskhistory.FieldPriority:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field priority", values[i])
+			} else if value.Valid {
+				th.Priority = enums.Priority(value.String)
+			}
 		case taskhistory.FieldCompleted:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field completed", values[i])
 			} else if value.Valid {
 				th.Completed = value.Time
+			}
+		case taskhistory.FieldAssigneeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assignee_id", values[i])
+			} else if value.Valid {
+				th.AssigneeID = value.String
+			}
+		case taskhistory.FieldAssignerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigner_id", values[i])
+			} else if value.Valid {
+				th.AssignerID = value.String
 			}
 		default:
 			th.selectValues.Set(columns[i], values[i])
@@ -254,8 +286,8 @@ func (th *TaskHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(th.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(th.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(th.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(th.DeletedAt.Format(time.ANSIC))
@@ -265,6 +297,9 @@ func (th *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", th.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(th.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(th.Title)
@@ -281,8 +316,17 @@ func (th *TaskHistory) String() string {
 	builder.WriteString("due=")
 	builder.WriteString(th.Due.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("priority=")
+	builder.WriteString(fmt.Sprintf("%v", th.Priority))
+	builder.WriteString(", ")
 	builder.WriteString("completed=")
 	builder.WriteString(th.Completed.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("assignee_id=")
+	builder.WriteString(th.AssigneeID)
+	builder.WriteString(", ")
+	builder.WriteString("assigner_id=")
+	builder.WriteString(th.AssignerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

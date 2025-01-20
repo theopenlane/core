@@ -1447,6 +1447,8 @@ type Control struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -1542,6 +1544,8 @@ type ControlHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -1720,6 +1724,20 @@ type ControlHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1918,6 +1936,8 @@ type ControlObjective struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -2011,6 +2031,8 @@ type ControlObjectiveHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -2187,6 +2209,20 @@ type ControlObjectiveHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -2471,6 +2507,20 @@ type ControlObjectiveWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -2794,6 +2844,20 @@ type ControlWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -3542,21 +3606,21 @@ type CreateOrganizationInput struct {
 	RiskCreatorIDs             []string                        `json:"riskCreatorIDs,omitempty"`
 	TemplateCreatorIDs         []string                        `json:"templateCreatorIDs,omitempty"`
 	ParentID                   *string                         `json:"parentID,omitempty"`
-	GroupIDs                   []string                        `json:"groupIDs,omitempty"`
-	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
-	IntegrationIDs             []string                        `json:"integrationIDs,omitempty"`
 	SettingID                  *string                         `json:"settingID,omitempty"`
-	DocumentDatumIDs           []string                        `json:"documentDatumIDs,omitempty"`
-	OrgSubscriptionIDs         []string                        `json:"orgSubscriptionIDs,omitempty"`
 	PersonalAccessTokenIDs     []string                        `json:"personalAccessTokenIDs,omitempty"`
 	APITokenIDs                []string                        `json:"apiTokenIDs,omitempty"`
 	UserIDs                    []string                        `json:"userIDs,omitempty"`
-	InviteIDs                  []string                        `json:"inviteIDs,omitempty"`
-	SubscriberIDs              []string                        `json:"subscriberIDs,omitempty"`
 	EventIDs                   []string                        `json:"eventIDs,omitempty"`
 	SecretIDs                  []string                        `json:"secretIDs,omitempty"`
 	FileIDs                    []string                        `json:"fileIDs,omitempty"`
 	AvatarFileID               *string                         `json:"avatarFileID,omitempty"`
+	GroupIDs                   []string                        `json:"groupIDs,omitempty"`
+	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
+	IntegrationIDs             []string                        `json:"integrationIDs,omitempty"`
+	DocumentDatumIDs           []string                        `json:"documentDatumIDs,omitempty"`
+	OrgSubscriptionIDs         []string                        `json:"orgSubscriptionIDs,omitempty"`
+	InviteIDs                  []string                        `json:"inviteIDs,omitempty"`
+	SubscriberIDs              []string                        `json:"subscriberIDs,omitempty"`
 	EntityIDs                  []string                        `json:"entityIDs,omitempty"`
 	EntityTypeIDs              []string                        `json:"entityTypeIDs,omitempty"`
 	ContactIDs                 []string                        `json:"contactIDs,omitempty"`
@@ -3853,11 +3917,13 @@ type CreateTaskInput struct {
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
 	Due *time.Time `json:"due,omitempty"`
+	// the priority of the task
+	Priority *enums.Priority `json:"priority,omitempty"`
 	// the completion date of the task
 	Completed           *time.Time `json:"completed,omitempty"`
+	OwnerID             string     `json:"ownerID"`
 	AssignerID          string     `json:"assignerID"`
 	AssigneeID          *string    `json:"assigneeID,omitempty"`
-	OrganizationIDs     []string   `json:"organizationIDs,omitempty"`
 	GroupIDs            []string   `json:"groupIDs,omitempty"`
 	InternalPolicyIDs   []string   `json:"internalPolicyIDs,omitempty"`
 	ProcedureIDs        []string   `json:"procedureIDs,omitempty"`
@@ -8869,6 +8935,8 @@ type InternalPolicy struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -8951,6 +9019,8 @@ type InternalPolicyHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -9121,6 +9191,20 @@ type InternalPolicyHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -9359,6 +9443,20 @@ type InternalPolicyWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -9776,6 +9874,8 @@ type Narrative struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -9851,6 +9951,8 @@ type NarrativeHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -10013,6 +10115,20 @@ type NarrativeHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10185,6 +10301,20 @@ type NarrativeWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10280,6 +10410,8 @@ type Note struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string     `json:"displayID"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
@@ -10323,8 +10455,10 @@ type NoteHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string     `json:"displayID"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -10454,6 +10588,20 @@ type NoteHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -10584,6 +10732,20 @@ type NoteWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -11639,21 +11801,21 @@ type Organization struct {
 	TemplateCreators     []*Group                `json:"templateCreators,omitempty"`
 	Parent               *Organization           `json:"parent,omitempty"`
 	Children             *OrganizationConnection `json:"children"`
-	Groups               []*Group                `json:"groups,omitempty"`
-	Templates            []*Template             `json:"templates,omitempty"`
-	Integrations         []*Integration          `json:"integrations,omitempty"`
 	Setting              *OrganizationSetting    `json:"setting,omitempty"`
-	DocumentData         []*DocumentData         `json:"documentData,omitempty"`
-	OrgSubscriptions     []*OrgSubscription      `json:"orgSubscriptions,omitempty"`
 	PersonalAccessTokens []*PersonalAccessToken  `json:"personalAccessTokens,omitempty"`
 	APITokens            []*APIToken             `json:"apiTokens,omitempty"`
 	Users                []*User                 `json:"users,omitempty"`
-	Invites              []*Invite               `json:"invites,omitempty"`
-	Subscribers          []*Subscriber           `json:"subscribers,omitempty"`
 	Events               []*Event                `json:"events,omitempty"`
 	Secrets              []*Hush                 `json:"secrets,omitempty"`
 	Files                []*File                 `json:"files,omitempty"`
 	AvatarFile           *File                   `json:"avatarFile,omitempty"`
+	Groups               []*Group                `json:"groups,omitempty"`
+	Templates            []*Template             `json:"templates,omitempty"`
+	Integrations         []*Integration          `json:"integrations,omitempty"`
+	DocumentData         []*DocumentData         `json:"documentData,omitempty"`
+	OrgSubscriptions     []*OrgSubscription      `json:"orgSubscriptions,omitempty"`
+	Invites              []*Invite               `json:"invites,omitempty"`
+	Subscribers          []*Subscriber           `json:"subscribers,omitempty"`
 	Entities             []*Entity               `json:"entities,omitempty"`
 	EntityTypes          []*EntityType           `json:"entityTypes,omitempty"`
 	Contacts             []*Contact              `json:"contacts,omitempty"`
@@ -12755,24 +12917,9 @@ type OrganizationWhereInput struct {
 	// children edge predicates
 	HasChildren     *bool                     `json:"hasChildren,omitempty"`
 	HasChildrenWith []*OrganizationWhereInput `json:"hasChildrenWith,omitempty"`
-	// groups edge predicates
-	HasGroups     *bool              `json:"hasGroups,omitempty"`
-	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
-	// templates edge predicates
-	HasTemplates     *bool                 `json:"hasTemplates,omitempty"`
-	HasTemplatesWith []*TemplateWhereInput `json:"hasTemplatesWith,omitempty"`
-	// integrations edge predicates
-	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
-	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
 	// setting edge predicates
 	HasSetting     *bool                            `json:"hasSetting,omitempty"`
 	HasSettingWith []*OrganizationSettingWhereInput `json:"hasSettingWith,omitempty"`
-	// document_data edge predicates
-	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
-	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
-	// org_subscriptions edge predicates
-	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
-	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
 	// personal_access_tokens edge predicates
 	HasPersonalAccessTokens     *bool                            `json:"hasPersonalAccessTokens,omitempty"`
 	HasPersonalAccessTokensWith []*PersonalAccessTokenWhereInput `json:"hasPersonalAccessTokensWith,omitempty"`
@@ -12782,12 +12929,6 @@ type OrganizationWhereInput struct {
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
-	// invites edge predicates
-	HasInvites     *bool               `json:"hasInvites,omitempty"`
-	HasInvitesWith []*InviteWhereInput `json:"hasInvitesWith,omitempty"`
-	// subscribers edge predicates
-	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
-	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
@@ -12800,6 +12941,27 @@ type OrganizationWhereInput struct {
 	// avatar_file edge predicates
 	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
 	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
+	// groups edge predicates
+	HasGroups     *bool              `json:"hasGroups,omitempty"`
+	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
+	// templates edge predicates
+	HasTemplates     *bool                 `json:"hasTemplates,omitempty"`
+	HasTemplatesWith []*TemplateWhereInput `json:"hasTemplatesWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// document_data edge predicates
+	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
+	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
+	// org_subscriptions edge predicates
+	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
+	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
+	// invites edge predicates
+	HasInvites     *bool               `json:"hasInvites,omitempty"`
+	HasInvitesWith []*InviteWhereInput `json:"hasInvitesWith,omitempty"`
+	// subscribers edge predicates
+	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
+	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
@@ -13085,6 +13247,8 @@ type Procedure struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -13169,6 +13333,8 @@ type ProcedureHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -13341,6 +13507,20 @@ type ProcedureHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -13595,6 +13775,20 @@ type ProcedureWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -13772,6 +13966,8 @@ type Program struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string     `json:"displayID"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
@@ -13865,8 +14061,10 @@ type ProgramHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string     `json:"displayID"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -14010,6 +14208,20 @@ type ProgramHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -14569,6 +14781,20 @@ type ProgramWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -14745,6 +14971,8 @@ type Risk struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -14831,6 +15059,8 @@ type RiskHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -15005,6 +15235,20 @@ type RiskHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15255,6 +15499,20 @@ type RiskWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -16107,6 +16365,8 @@ type Subcontrol struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -16200,6 +16460,8 @@ type SubcontrolHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -16386,6 +16648,20 @@ type SubcontrolHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -16740,6 +17016,20 @@ type SubcontrolWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -17431,10 +17721,14 @@ type Task struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string     `json:"displayID"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the title of the task
 	Title string `json:"title"`
 	// the description of the task
@@ -17445,11 +17739,17 @@ type Task struct {
 	Status enums.TaskStatus `json:"status"`
 	// the due date of the task
 	Due *time.Time `json:"due,omitempty"`
+	// the priority of the task
+	Priority enums.Priority `json:"priority"`
 	// the completion date of the task
-	Completed        *time.Time          `json:"completed,omitempty"`
+	Completed *time.Time `json:"completed,omitempty"`
+	// the id of the user who was assigned the task
+	AssigneeID *string `json:"assigneeID,omitempty"`
+	// the id of the user who assigned the task
+	AssignerID       string              `json:"assignerID"`
+	Owner            *Organization       `json:"owner"`
 	Assigner         *User               `json:"assigner"`
 	Assignee         *User               `json:"assignee,omitempty"`
-	Organization     []*Organization     `json:"organization,omitempty"`
 	Group            []*Group            `json:"group,omitempty"`
 	InternalPolicy   []*InternalPolicy   `json:"internalPolicy,omitempty"`
 	Procedure        []*Procedure        `json:"procedure,omitempty"`
@@ -17506,10 +17806,14 @@ type TaskHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string     `json:"displayID"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the title of the task
 	Title string `json:"title"`
 	// the description of the task
@@ -17520,8 +17824,14 @@ type TaskHistory struct {
 	Status enums.TaskStatus `json:"status"`
 	// the due date of the task
 	Due *time.Time `json:"due,omitempty"`
+	// the priority of the task
+	Priority enums.Priority `json:"priority"`
 	// the completion date of the task
 	Completed *time.Time `json:"completed,omitempty"`
+	// the id of the user who was assigned the task
+	AssigneeID *string `json:"assigneeID,omitempty"`
+	// the id of the user who assigned the task
+	AssignerID string `json:"assignerID"`
 }
 
 func (TaskHistory) IsNode() {}
@@ -17645,6 +17955,20 @@ type TaskHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -17672,6 +17996,20 @@ type TaskHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -17718,6 +18056,11 @@ type TaskHistoryWhereInput struct {
 	DueLte    *time.Time   `json:"dueLTE,omitempty"`
 	DueIsNil  *bool        `json:"dueIsNil,omitempty"`
 	DueNotNil *bool        `json:"dueNotNil,omitempty"`
+	// priority field predicates
+	Priority      *enums.Priority  `json:"priority,omitempty"`
+	PriorityNeq   *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn []enums.Priority `json:"priorityNotIn,omitempty"`
 	// completed field predicates
 	Completed       *time.Time   `json:"completed,omitempty"`
 	CompletedNeq    *time.Time   `json:"completedNEQ,omitempty"`
@@ -17729,6 +18072,36 @@ type TaskHistoryWhereInput struct {
 	CompletedLte    *time.Time   `json:"completedLTE,omitempty"`
 	CompletedIsNil  *bool        `json:"completedIsNil,omitempty"`
 	CompletedNotNil *bool        `json:"completedNotNil,omitempty"`
+	// assignee_id field predicates
+	AssigneeID             *string  `json:"assigneeID,omitempty"`
+	AssigneeIdneq          *string  `json:"assigneeIDNEQ,omitempty"`
+	AssigneeIDIn           []string `json:"assigneeIDIn,omitempty"`
+	AssigneeIDNotIn        []string `json:"assigneeIDNotIn,omitempty"`
+	AssigneeIdgt           *string  `json:"assigneeIDGT,omitempty"`
+	AssigneeIdgte          *string  `json:"assigneeIDGTE,omitempty"`
+	AssigneeIdlt           *string  `json:"assigneeIDLT,omitempty"`
+	AssigneeIdlte          *string  `json:"assigneeIDLTE,omitempty"`
+	AssigneeIDContains     *string  `json:"assigneeIDContains,omitempty"`
+	AssigneeIDHasPrefix    *string  `json:"assigneeIDHasPrefix,omitempty"`
+	AssigneeIDHasSuffix    *string  `json:"assigneeIDHasSuffix,omitempty"`
+	AssigneeIDIsNil        *bool    `json:"assigneeIDIsNil,omitempty"`
+	AssigneeIDNotNil       *bool    `json:"assigneeIDNotNil,omitempty"`
+	AssigneeIDEqualFold    *string  `json:"assigneeIDEqualFold,omitempty"`
+	AssigneeIDContainsFold *string  `json:"assigneeIDContainsFold,omitempty"`
+	// assigner_id field predicates
+	AssignerID             *string  `json:"assignerID,omitempty"`
+	AssignerIdneq          *string  `json:"assignerIDNEQ,omitempty"`
+	AssignerIDIn           []string `json:"assignerIDIn,omitempty"`
+	AssignerIDNotIn        []string `json:"assignerIDNotIn,omitempty"`
+	AssignerIdgt           *string  `json:"assignerIDGT,omitempty"`
+	AssignerIdgte          *string  `json:"assignerIDGTE,omitempty"`
+	AssignerIdlt           *string  `json:"assignerIDLT,omitempty"`
+	AssignerIdlte          *string  `json:"assignerIDLTE,omitempty"`
+	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
+	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
+	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
+	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
 }
 
 type TaskSearchResult struct {
@@ -17814,6 +18187,20 @@ type TaskWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -17841,6 +18228,20 @@ type TaskWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -17887,6 +18288,11 @@ type TaskWhereInput struct {
 	DueLte    *time.Time   `json:"dueLTE,omitempty"`
 	DueIsNil  *bool        `json:"dueIsNil,omitempty"`
 	DueNotNil *bool        `json:"dueNotNil,omitempty"`
+	// priority field predicates
+	Priority      *enums.Priority  `json:"priority,omitempty"`
+	PriorityNeq   *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn []enums.Priority `json:"priorityNotIn,omitempty"`
 	// completed field predicates
 	Completed       *time.Time   `json:"completed,omitempty"`
 	CompletedNeq    *time.Time   `json:"completedNEQ,omitempty"`
@@ -17898,15 +18304,45 @@ type TaskWhereInput struct {
 	CompletedLte    *time.Time   `json:"completedLTE,omitempty"`
 	CompletedIsNil  *bool        `json:"completedIsNil,omitempty"`
 	CompletedNotNil *bool        `json:"completedNotNil,omitempty"`
+	// assignee_id field predicates
+	AssigneeID             *string  `json:"assigneeID,omitempty"`
+	AssigneeIdneq          *string  `json:"assigneeIDNEQ,omitempty"`
+	AssigneeIDIn           []string `json:"assigneeIDIn,omitempty"`
+	AssigneeIDNotIn        []string `json:"assigneeIDNotIn,omitempty"`
+	AssigneeIdgt           *string  `json:"assigneeIDGT,omitempty"`
+	AssigneeIdgte          *string  `json:"assigneeIDGTE,omitempty"`
+	AssigneeIdlt           *string  `json:"assigneeIDLT,omitempty"`
+	AssigneeIdlte          *string  `json:"assigneeIDLTE,omitempty"`
+	AssigneeIDContains     *string  `json:"assigneeIDContains,omitempty"`
+	AssigneeIDHasPrefix    *string  `json:"assigneeIDHasPrefix,omitempty"`
+	AssigneeIDHasSuffix    *string  `json:"assigneeIDHasSuffix,omitempty"`
+	AssigneeIDIsNil        *bool    `json:"assigneeIDIsNil,omitempty"`
+	AssigneeIDNotNil       *bool    `json:"assigneeIDNotNil,omitempty"`
+	AssigneeIDEqualFold    *string  `json:"assigneeIDEqualFold,omitempty"`
+	AssigneeIDContainsFold *string  `json:"assigneeIDContainsFold,omitempty"`
+	// assigner_id field predicates
+	AssignerID             *string  `json:"assignerID,omitempty"`
+	AssignerIdneq          *string  `json:"assignerIDNEQ,omitempty"`
+	AssignerIDIn           []string `json:"assignerIDIn,omitempty"`
+	AssignerIDNotIn        []string `json:"assignerIDNotIn,omitempty"`
+	AssignerIdgt           *string  `json:"assignerIDGT,omitempty"`
+	AssignerIdgte          *string  `json:"assignerIDGTE,omitempty"`
+	AssignerIdlt           *string  `json:"assignerIDLT,omitempty"`
+	AssignerIdlte          *string  `json:"assignerIDLTE,omitempty"`
+	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
+	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
+	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
+	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// assigner edge predicates
 	HasAssigner     *bool             `json:"hasAssigner,omitempty"`
 	HasAssignerWith []*UserWhereInput `json:"hasAssignerWith,omitempty"`
 	// assignee edge predicates
 	HasAssignee     *bool             `json:"hasAssignee,omitempty"`
 	HasAssigneeWith []*UserWhereInput `json:"hasAssigneeWith,omitempty"`
-	// organization edge predicates
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 	// group edge predicates
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
 	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
@@ -19269,23 +19705,8 @@ type UpdateOrganizationInput struct {
 	AddTemplateCreatorIDs            []string                        `json:"addTemplateCreatorIDs,omitempty"`
 	RemoveTemplateCreatorIDs         []string                        `json:"removeTemplateCreatorIDs,omitempty"`
 	ClearTemplateCreators            *bool                           `json:"clearTemplateCreators,omitempty"`
-	AddGroupIDs                      []string                        `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs                   []string                        `json:"removeGroupIDs,omitempty"`
-	ClearGroups                      *bool                           `json:"clearGroups,omitempty"`
-	AddTemplateIDs                   []string                        `json:"addTemplateIDs,omitempty"`
-	RemoveTemplateIDs                []string                        `json:"removeTemplateIDs,omitempty"`
-	ClearTemplates                   *bool                           `json:"clearTemplates,omitempty"`
-	AddIntegrationIDs                []string                        `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs             []string                        `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations                *bool                           `json:"clearIntegrations,omitempty"`
 	SettingID                        *string                         `json:"settingID,omitempty"`
 	ClearSetting                     *bool                           `json:"clearSetting,omitempty"`
-	AddDocumentDatumIDs              []string                        `json:"addDocumentDatumIDs,omitempty"`
-	RemoveDocumentDatumIDs           []string                        `json:"removeDocumentDatumIDs,omitempty"`
-	ClearDocumentData                *bool                           `json:"clearDocumentData,omitempty"`
-	AddOrgSubscriptionIDs            []string                        `json:"addOrgSubscriptionIDs,omitempty"`
-	RemoveOrgSubscriptionIDs         []string                        `json:"removeOrgSubscriptionIDs,omitempty"`
-	ClearOrgSubscriptions            *bool                           `json:"clearOrgSubscriptions,omitempty"`
 	AddPersonalAccessTokenIDs        []string                        `json:"addPersonalAccessTokenIDs,omitempty"`
 	RemovePersonalAccessTokenIDs     []string                        `json:"removePersonalAccessTokenIDs,omitempty"`
 	ClearPersonalAccessTokens        *bool                           `json:"clearPersonalAccessTokens,omitempty"`
@@ -19295,12 +19716,6 @@ type UpdateOrganizationInput struct {
 	AddUserIDs                       []string                        `json:"addUserIDs,omitempty"`
 	RemoveUserIDs                    []string                        `json:"removeUserIDs,omitempty"`
 	ClearUsers                       *bool                           `json:"clearUsers,omitempty"`
-	AddInviteIDs                     []string                        `json:"addInviteIDs,omitempty"`
-	RemoveInviteIDs                  []string                        `json:"removeInviteIDs,omitempty"`
-	ClearInvites                     *bool                           `json:"clearInvites,omitempty"`
-	AddSubscriberIDs                 []string                        `json:"addSubscriberIDs,omitempty"`
-	RemoveSubscriberIDs              []string                        `json:"removeSubscriberIDs,omitempty"`
-	ClearSubscribers                 *bool                           `json:"clearSubscribers,omitempty"`
 	AddEventIDs                      []string                        `json:"addEventIDs,omitempty"`
 	RemoveEventIDs                   []string                        `json:"removeEventIDs,omitempty"`
 	ClearEvents                      *bool                           `json:"clearEvents,omitempty"`
@@ -19312,6 +19727,27 @@ type UpdateOrganizationInput struct {
 	ClearFiles                       *bool                           `json:"clearFiles,omitempty"`
 	AvatarFileID                     *string                         `json:"avatarFileID,omitempty"`
 	ClearAvatarFile                  *bool                           `json:"clearAvatarFile,omitempty"`
+	AddGroupIDs                      []string                        `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs                   []string                        `json:"removeGroupIDs,omitempty"`
+	ClearGroups                      *bool                           `json:"clearGroups,omitempty"`
+	AddTemplateIDs                   []string                        `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs                []string                        `json:"removeTemplateIDs,omitempty"`
+	ClearTemplates                   *bool                           `json:"clearTemplates,omitempty"`
+	AddIntegrationIDs                []string                        `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs             []string                        `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations                *bool                           `json:"clearIntegrations,omitempty"`
+	AddDocumentDatumIDs              []string                        `json:"addDocumentDatumIDs,omitempty"`
+	RemoveDocumentDatumIDs           []string                        `json:"removeDocumentDatumIDs,omitempty"`
+	ClearDocumentData                *bool                           `json:"clearDocumentData,omitempty"`
+	AddOrgSubscriptionIDs            []string                        `json:"addOrgSubscriptionIDs,omitempty"`
+	RemoveOrgSubscriptionIDs         []string                        `json:"removeOrgSubscriptionIDs,omitempty"`
+	ClearOrgSubscriptions            *bool                           `json:"clearOrgSubscriptions,omitempty"`
+	AddInviteIDs                     []string                        `json:"addInviteIDs,omitempty"`
+	RemoveInviteIDs                  []string                        `json:"removeInviteIDs,omitempty"`
+	ClearInvites                     *bool                           `json:"clearInvites,omitempty"`
+	AddSubscriberIDs                 []string                        `json:"addSubscriberIDs,omitempty"`
+	RemoveSubscriberIDs              []string                        `json:"removeSubscriberIDs,omitempty"`
+	ClearSubscribers                 *bool                           `json:"clearSubscribers,omitempty"`
 	AddEntityIDs                     []string                        `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs                  []string                        `json:"removeEntityIDs,omitempty"`
 	ClearEntities                    *bool                           `json:"clearEntities,omitempty"`
@@ -19802,15 +20238,15 @@ type UpdateTaskInput struct {
 	// the due date of the task
 	Due      *time.Time `json:"due,omitempty"`
 	ClearDue *bool      `json:"clearDue,omitempty"`
+	// the priority of the task
+	Priority *enums.Priority `json:"priority,omitempty"`
 	// the completion date of the task
 	Completed                 *time.Time `json:"completed,omitempty"`
 	ClearCompleted            *bool      `json:"clearCompleted,omitempty"`
+	OwnerID                   *string    `json:"ownerID,omitempty"`
 	AssignerID                *string    `json:"assignerID,omitempty"`
 	AssigneeID                *string    `json:"assigneeID,omitempty"`
 	ClearAssignee             *bool      `json:"clearAssignee,omitempty"`
-	AddOrganizationIDs        []string   `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs     []string   `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization         *bool      `json:"clearOrganization,omitempty"`
 	AddGroupIDs               []string   `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs            []string   `json:"removeGroupIDs,omitempty"`
 	ClearGroup                *bool      `json:"clearGroup,omitempty"`
@@ -19986,6 +20422,8 @@ type User struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags      []string `json:"tags,omitempty"`
 	Email     string   `json:"email"`
@@ -20074,6 +20512,8 @@ type UserHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags      []string `json:"tags,omitempty"`
 	Email     string   `json:"email"`
@@ -20253,6 +20693,20 @@ type UserHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// email field predicates
 	Email             *string  `json:"email,omitempty"`
 	EmailNeq          *string  `json:"emailNEQ,omitempty"`
@@ -20997,6 +21451,20 @@ type UserWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// email field predicates
 	Email             *string  `json:"email,omitempty"`
 	EmailNeq          *string  `json:"emailNEQ,omitempty"`

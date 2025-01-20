@@ -306,6 +306,7 @@ type ComplexityRoot struct {
 		DeletedBy         func(childComplexity int) int
 		Description       func(childComplexity int) int
 		Details           func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
 		Editors           func(childComplexity int) int
 		Family            func(childComplexity int) int
 		ID                func(childComplexity int) int
@@ -363,6 +364,7 @@ type ComplexityRoot struct {
 		DeletedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Details          func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
 		Family           func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
@@ -403,6 +405,7 @@ type ComplexityRoot struct {
 		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		Details              func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
 		Family               func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -460,6 +463,7 @@ type ComplexityRoot struct {
 		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		Details              func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
 		Family               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -1341,6 +1345,7 @@ type ComplexityRoot struct {
 		DeletedBy         func(childComplexity int) int
 		Description       func(childComplexity int) int
 		Details           func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
 		Editors           func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Name              func(childComplexity int) int
@@ -1390,6 +1395,7 @@ type ComplexityRoot struct {
 		DeletedBy       func(childComplexity int) int
 		Description     func(childComplexity int) int
 		Details         func(childComplexity int) int
+		DisplayID       func(childComplexity int) int
 		HistoryTime     func(childComplexity int) int
 		ID              func(childComplexity int) int
 		Name            func(childComplexity int) int
@@ -1646,6 +1652,7 @@ type ComplexityRoot struct {
 		DeletedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Details          func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int) int
 		ID               func(childComplexity int) int
 		InternalPolicy   func(childComplexity int) int
@@ -1691,6 +1698,7 @@ type ComplexityRoot struct {
 		DeletedBy   func(childComplexity int) int
 		Description func(childComplexity int) int
 		Details     func(childComplexity int) int
+		DisplayID   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Name        func(childComplexity int) int
@@ -1727,6 +1735,7 @@ type ComplexityRoot struct {
 		CreatedBy   func(childComplexity int) int
 		DeletedAt   func(childComplexity int) int
 		DeletedBy   func(childComplexity int) int
+		DisplayID   func(childComplexity int) int
 		Entity      func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Owner       func(childComplexity int) int
@@ -1755,6 +1764,7 @@ type ComplexityRoot struct {
 		CreatedBy   func(childComplexity int) int
 		DeletedAt   func(childComplexity int) int
 		DeletedBy   func(childComplexity int) int
+		DisplayID   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Operation   func(childComplexity int) int
@@ -2200,6 +2210,7 @@ type ComplexityRoot struct {
 		DeletedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Details          func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int) int
 		ID               func(childComplexity int) int
 		InternalPolicies func(childComplexity int) int
@@ -2251,6 +2262,7 @@ type ComplexityRoot struct {
 		DeletedBy       func(childComplexity int) int
 		Description     func(childComplexity int) int
 		Details         func(childComplexity int) int
+		DisplayID       func(childComplexity int) int
 		HistoryTime     func(childComplexity int) int
 		ID              func(childComplexity int) int
 		Name            func(childComplexity int) int
@@ -2299,6 +2311,7 @@ type ComplexityRoot struct {
 		DeletedAt            func(childComplexity int) int
 		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
 		EndDate              func(childComplexity int) int
 		Files                func(childComplexity int) int
@@ -2356,6 +2369,7 @@ type ComplexityRoot struct {
 		DeletedAt            func(childComplexity int) int
 		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
 		EndDate              func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -2639,6 +2653,7 @@ type ComplexityRoot struct {
 		DeletedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		Details       func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
 		Editors       func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Impact        func(childComplexity int) int
@@ -2689,6 +2704,7 @@ type ComplexityRoot struct {
 		DeletedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		Details       func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Impact        func(childComplexity int) int
@@ -2832,6 +2848,7 @@ type ComplexityRoot struct {
 		DeletedBy                      func(childComplexity int) int
 		Description                    func(childComplexity int) int
 		Details                        func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
 		Family                         func(childComplexity int) int
 		ID                             func(childComplexity int) int
 		ImplementationDate             func(childComplexity int) int
@@ -2888,6 +2905,7 @@ type ComplexityRoot struct {
 		DeletedBy                      func(childComplexity int) int
 		Description                    func(childComplexity int) int
 		Details                        func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
 		Family                         func(childComplexity int) int
 		HistoryTime                    func(childComplexity int) int
 		ID                             func(childComplexity int) int
@@ -3021,7 +3039,9 @@ type ComplexityRoot struct {
 
 	Task struct {
 		Assignee         func(childComplexity int) int
+		AssigneeID       func(childComplexity int) int
 		Assigner         func(childComplexity int) int
+		AssignerID       func(childComplexity int) int
 		Completed        func(childComplexity int) int
 		Control          func(childComplexity int) int
 		ControlObjective func(childComplexity int) int
@@ -3031,11 +3051,14 @@ type ComplexityRoot struct {
 		DeletedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Details          func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
 		Due              func(childComplexity int) int
 		Group            func(childComplexity int) int
 		ID               func(childComplexity int) int
 		InternalPolicy   func(childComplexity int) int
-		Organization     func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Priority         func(childComplexity int) int
 		Procedure        func(childComplexity int) int
 		Program          func(childComplexity int) int
 		Status           func(childComplexity int) int
@@ -3070,6 +3093,8 @@ type ComplexityRoot struct {
 	}
 
 	TaskHistory struct {
+		AssigneeID  func(childComplexity int) int
+		AssignerID  func(childComplexity int) int
 		Completed   func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
@@ -3077,10 +3102,13 @@ type ComplexityRoot struct {
 		DeletedBy   func(childComplexity int) int
 		Description func(childComplexity int) int
 		Details     func(childComplexity int) int
+		DisplayID   func(childComplexity int) int
 		Due         func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Priority    func(childComplexity int) int
 		Ref         func(childComplexity int) int
 		Status      func(childComplexity int) int
 		Tags        func(childComplexity int) int
@@ -3203,6 +3231,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedBy            func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
 		Email                func(childComplexity int) int
 		Events               func(childComplexity int) int
@@ -3260,6 +3289,7 @@ type ComplexityRoot struct {
 		CreatedBy         func(childComplexity int) int
 		DeletedAt         func(childComplexity int) int
 		DeletedBy         func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
 		DisplayName       func(childComplexity int) int
 		Email             func(childComplexity int) int
 		FirstName         func(childComplexity int) int
@@ -4482,6 +4512,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.Details(childComplexity), true
 
+	case "Control.displayID":
+		if e.complexity.Control.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Control.DisplayID(childComplexity), true
+
 	case "Control.editors":
 		if e.complexity.Control.Editors == nil {
 			break
@@ -4755,6 +4792,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.Details(childComplexity), true
 
+	case "ControlHistory.displayID":
+		if e.complexity.ControlHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.DisplayID(childComplexity), true
+
 	case "ControlHistory.family":
 		if e.complexity.ControlHistory.Family == nil {
 			break
@@ -4971,6 +5015,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjective.Details(childComplexity), true
+
+	case "ControlObjective.displayID":
+		if e.complexity.ControlObjective.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.DisplayID(childComplexity), true
 
 	case "ControlObjective.editors":
 		if e.complexity.ControlObjective.Editors == nil {
@@ -5244,6 +5295,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjectiveHistory.Details(childComplexity), true
+
+	case "ControlObjectiveHistory.displayID":
+		if e.complexity.ControlObjectiveHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.DisplayID(childComplexity), true
 
 	case "ControlObjectiveHistory.family":
 		if e.complexity.ControlObjectiveHistory.Family == nil {
@@ -9060,6 +9118,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InternalPolicy.Details(childComplexity), true
 
+	case "InternalPolicy.displayID":
+		if e.complexity.InternalPolicy.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.DisplayID(childComplexity), true
+
 	case "InternalPolicy.editors":
 		if e.complexity.InternalPolicy.Editors == nil {
 			break
@@ -9276,6 +9341,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.InternalPolicyHistory.Details(childComplexity), true
+
+	case "InternalPolicyHistory.displayID":
+		if e.complexity.InternalPolicyHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.DisplayID(childComplexity), true
 
 	case "InternalPolicyHistory.historyTime":
 		if e.complexity.InternalPolicyHistory.HistoryTime == nil {
@@ -11611,6 +11683,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Narrative.Details(childComplexity), true
 
+	case "Narrative.displayID":
+		if e.complexity.Narrative.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Narrative.DisplayID(childComplexity), true
+
 	case "Narrative.editors":
 		if e.complexity.Narrative.Editors == nil {
 			break
@@ -11800,6 +11879,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NarrativeHistory.Details(childComplexity), true
 
+	case "NarrativeHistory.displayID":
+		if e.complexity.NarrativeHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.DisplayID(childComplexity), true
+
 	case "NarrativeHistory.historyTime":
 		if e.complexity.NarrativeHistory.HistoryTime == nil {
 			break
@@ -11947,6 +12033,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Note.DeletedBy(childComplexity), true
 
+	case "Note.displayID":
+		if e.complexity.Note.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Note.DisplayID(childComplexity), true
+
 	case "Note.entity":
 		if e.complexity.Note.Entity == nil {
 			break
@@ -12079,6 +12172,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NoteHistory.DeletedBy(childComplexity), true
+
+	case "NoteHistory.displayID":
+		if e.complexity.NoteHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.DisplayID(childComplexity), true
 
 	case "NoteHistory.historyTime":
 		if e.complexity.NoteHistory.HistoryTime == nil {
@@ -14129,6 +14229,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Procedure.Details(childComplexity), true
 
+	case "Procedure.displayID":
+		if e.complexity.Procedure.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.DisplayID(childComplexity), true
+
 	case "Procedure.editors":
 		if e.complexity.Procedure.Editors == nil {
 			break
@@ -14360,6 +14467,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProcedureHistory.Details(childComplexity), true
 
+	case "ProcedureHistory.displayID":
+		if e.complexity.ProcedureHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.DisplayID(childComplexity), true
+
 	case "ProcedureHistory.historyTime":
 		if e.complexity.ProcedureHistory.HistoryTime == nil {
 			break
@@ -14590,6 +14704,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Program.Description(childComplexity), true
+
+	case "Program.displayID":
+		if e.complexity.Program.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Program.DisplayID(childComplexity), true
 
 	case "Program.editors":
 		if e.complexity.Program.Editors == nil {
@@ -14863,6 +14984,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProgramHistory.Description(childComplexity), true
+
+	case "ProgramHistory.displayID":
+		if e.complexity.ProgramHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.DisplayID(childComplexity), true
 
 	case "ProgramHistory.endDate":
 		if e.complexity.ProgramHistory.EndDate == nil {
@@ -17344,6 +17472,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Risk.Details(childComplexity), true
 
+	case "Risk.displayID":
+		if e.complexity.Risk.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Risk.DisplayID(childComplexity), true
+
 	case "Risk.editors":
 		if e.complexity.Risk.Editors == nil {
 			break
@@ -17567,6 +17702,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.RiskHistory.Details(childComplexity), true
+
+	case "RiskHistory.displayID":
+		if e.complexity.RiskHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.DisplayID(childComplexity), true
 
 	case "RiskHistory.historyTime":
 		if e.complexity.RiskHistory.HistoryTime == nil {
@@ -18212,6 +18354,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.Details(childComplexity), true
 
+	case "Subcontrol.displayID":
+		if e.complexity.Subcontrol.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.DisplayID(childComplexity), true
+
 	case "Subcontrol.family":
 		if e.complexity.Subcontrol.Family == nil {
 			break
@@ -18477,6 +18626,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SubcontrolHistory.Details(childComplexity), true
+
+	case "SubcontrolHistory.displayID":
+		if e.complexity.SubcontrolHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.DisplayID(childComplexity), true
 
 	case "SubcontrolHistory.family":
 		if e.complexity.SubcontrolHistory.Family == nil {
@@ -19010,12 +19166,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Task.Assignee(childComplexity), true
 
+	case "Task.assigneeID":
+		if e.complexity.Task.AssigneeID == nil {
+			break
+		}
+
+		return e.complexity.Task.AssigneeID(childComplexity), true
+
 	case "Task.assigner":
 		if e.complexity.Task.Assigner == nil {
 			break
 		}
 
 		return e.complexity.Task.Assigner(childComplexity), true
+
+	case "Task.assignerID":
+		if e.complexity.Task.AssignerID == nil {
+			break
+		}
+
+		return e.complexity.Task.AssignerID(childComplexity), true
 
 	case "Task.completed":
 		if e.complexity.Task.Completed == nil {
@@ -19080,6 +19250,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Task.Details(childComplexity), true
 
+	case "Task.displayID":
+		if e.complexity.Task.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Task.DisplayID(childComplexity), true
+
 	case "Task.due":
 		if e.complexity.Task.Due == nil {
 			break
@@ -19108,12 +19285,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Task.InternalPolicy(childComplexity), true
 
-	case "Task.organization":
-		if e.complexity.Task.Organization == nil {
+	case "Task.owner":
+		if e.complexity.Task.Owner == nil {
 			break
 		}
 
-		return e.complexity.Task.Organization(childComplexity), true
+		return e.complexity.Task.Owner(childComplexity), true
+
+	case "Task.ownerID":
+		if e.complexity.Task.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Task.OwnerID(childComplexity), true
+
+	case "Task.priority":
+		if e.complexity.Task.Priority == nil {
+			break
+		}
+
+		return e.complexity.Task.Priority(childComplexity), true
 
 	case "Task.procedure":
 		if e.complexity.Task.Procedure == nil {
@@ -19227,6 +19418,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TaskEdge.Node(childComplexity), true
 
+	case "TaskHistory.assigneeID":
+		if e.complexity.TaskHistory.AssigneeID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.AssigneeID(childComplexity), true
+
+	case "TaskHistory.assignerID":
+		if e.complexity.TaskHistory.AssignerID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.AssignerID(childComplexity), true
+
 	case "TaskHistory.completed":
 		if e.complexity.TaskHistory.Completed == nil {
 			break
@@ -19276,6 +19481,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TaskHistory.Details(childComplexity), true
 
+	case "TaskHistory.displayID":
+		if e.complexity.TaskHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.DisplayID(childComplexity), true
+
 	case "TaskHistory.due":
 		if e.complexity.TaskHistory.Due == nil {
 			break
@@ -19303,6 +19515,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TaskHistory.Operation(childComplexity), true
+
+	case "TaskHistory.ownerID":
+		if e.complexity.TaskHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.OwnerID(childComplexity), true
+
+	case "TaskHistory.priority":
+		if e.complexity.TaskHistory.Priority == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.Priority(childComplexity), true
 
 	case "TaskHistory.ref":
 		if e.complexity.TaskHistory.Ref == nil {
@@ -19822,6 +20048,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.DeletedBy(childComplexity), true
 
+	case "User.displayID":
+		if e.complexity.User.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.User.DisplayID(childComplexity), true
+
 	case "User.displayName":
 		if e.complexity.User.DisplayName == nil {
 			break
@@ -20094,6 +20327,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserHistory.DeletedBy(childComplexity), true
+
+	case "UserHistory.displayID":
+		if e.complexity.UserHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.DisplayID(childComplexity), true
 
 	case "UserHistory.displayName":
 		if e.complexity.UserHistory.DisplayName == nil {
@@ -23469,6 +23709,10 @@ type Control implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -23588,6 +23832,10 @@ type ControlHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -23834,6 +24082,22 @@ input ControlHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -24055,6 +24319,10 @@ type ControlObjective implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -24170,6 +24438,10 @@ type ControlObjectiveHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -24411,6 +24683,22 @@ input ControlObjectiveHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -24720,6 +25008,22 @@ input ControlObjectiveWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -25094,6 +25398,22 @@ input ControlWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -26125,21 +26445,21 @@ input CreateOrganizationInput {
   riskCreatorIDs: [ID!]
   templateCreatorIDs: [ID!]
   parentID: ID
-  groupIDs: [ID!]
-  templateIDs: [ID!]
-  integrationIDs: [ID!]
   settingID: ID
-  documentDatumIDs: [ID!]
-  orgSubscriptionIDs: [ID!]
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
   userIDs: [ID!]
-  inviteIDs: [ID!]
-  subscriberIDs: [ID!]
   eventIDs: [ID!]
   secretIDs: [ID!]
   fileIDs: [ID!]
   avatarFileID: ID
+  groupIDs: [ID!]
+  templateIDs: [ID!]
+  integrationIDs: [ID!]
+  documentDatumIDs: [ID!]
+  orgSubscriptionIDs: [ID!]
+  inviteIDs: [ID!]
+  subscriberIDs: [ID!]
   entityIDs: [ID!]
   entityTypeIDs: [ID!]
   contactIDs: [ID!]
@@ -26606,12 +26926,16 @@ input CreateTaskInput {
   """
   due: Time
   """
+  the priority of the task
+  """
+  priority: TaskPriority
+  """
   the completion date of the task
   """
   completed: Time
+  ownerID: ID!
   assignerID: ID!
   assigneeID: ID
-  organizationIDs: [ID!]
   groupIDs: [ID!]
   internalPolicyIDs: [ID!]
   procedureIDs: [ID!]
@@ -32710,6 +33034,10 @@ type InternalPolicy implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -32806,6 +33134,10 @@ type InternalPolicyHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -33035,6 +33367,22 @@ input InternalPolicyHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -33292,6 +33640,22 @@ input InternalPolicyWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -33794,6 +34158,10 @@ type Narrative implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -33877,6 +34245,10 @@ type NarrativeHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -34091,6 +34463,22 @@ input NarrativeHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -34274,6 +34662,22 @@ input NarrativeWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -34403,6 +34807,10 @@ type Note implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   deletedAt: Time
   deletedBy: String
   """
@@ -34461,6 +34869,10 @@ type NoteHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   deletedAt: Time
   deletedBy: String
   """
@@ -34634,6 +35046,22 @@ input NoteHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -34782,6 +35210,22 @@ input NoteWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -36128,21 +36572,21 @@ type Organization implements Node {
     """
     where: OrganizationWhereInput
   ): OrganizationConnection!
-  groups: [Group!]
-  templates: [Template!]
-  integrations: [Integration!]
   setting: OrganizationSetting
-  documentData: [DocumentData!]
-  orgSubscriptions: [OrgSubscription!]
   personalAccessTokens: [PersonalAccessToken!]
   apiTokens: [APIToken!]
   users: [User!]
-  invites: [Invite!]
-  subscribers: [Subscriber!]
   events: [Event!]
   secrets: [Hush!]
   files: [File!]
   avatarFile: File
+  groups: [Group!]
+  templates: [Template!]
+  integrations: [Integration!]
+  documentData: [DocumentData!]
+  orgSubscriptions: [OrgSubscription!]
+  invites: [Invite!]
+  subscribers: [Subscriber!]
   entities: [Entity!]
   entityTypes: [EntityType!]
   contacts: [Contact!]
@@ -37486,35 +37930,10 @@ input OrganizationWhereInput {
   hasChildren: Boolean
   hasChildrenWith: [OrganizationWhereInput!]
   """
-  groups edge predicates
-  """
-  hasGroups: Boolean
-  hasGroupsWith: [GroupWhereInput!]
-  """
-  templates edge predicates
-  """
-  hasTemplates: Boolean
-  hasTemplatesWith: [TemplateWhereInput!]
-  """
-  integrations edge predicates
-  """
-  hasIntegrations: Boolean
-  hasIntegrationsWith: [IntegrationWhereInput!]
-  """
   setting edge predicates
   """
   hasSetting: Boolean
   hasSettingWith: [OrganizationSettingWhereInput!]
-  """
-  document_data edge predicates
-  """
-  hasDocumentData: Boolean
-  hasDocumentDataWith: [DocumentDataWhereInput!]
-  """
-  org_subscriptions edge predicates
-  """
-  hasOrgSubscriptions: Boolean
-  hasOrgSubscriptionsWith: [OrgSubscriptionWhereInput!]
   """
   personal_access_tokens edge predicates
   """
@@ -37530,16 +37949,6 @@ input OrganizationWhereInput {
   """
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
-  """
-  invites edge predicates
-  """
-  hasInvites: Boolean
-  hasInvitesWith: [InviteWhereInput!]
-  """
-  subscribers edge predicates
-  """
-  hasSubscribers: Boolean
-  hasSubscribersWith: [SubscriberWhereInput!]
   """
   events edge predicates
   """
@@ -37560,6 +37969,41 @@ input OrganizationWhereInput {
   """
   hasAvatarFile: Boolean
   hasAvatarFileWith: [FileWhereInput!]
+  """
+  groups edge predicates
+  """
+  hasGroups: Boolean
+  hasGroupsWith: [GroupWhereInput!]
+  """
+  templates edge predicates
+  """
+  hasTemplates: Boolean
+  hasTemplatesWith: [TemplateWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  document_data edge predicates
+  """
+  hasDocumentData: Boolean
+  hasDocumentDataWith: [DocumentDataWhereInput!]
+  """
+  org_subscriptions edge predicates
+  """
+  hasOrgSubscriptions: Boolean
+  hasOrgSubscriptionsWith: [OrgSubscriptionWhereInput!]
+  """
+  invites edge predicates
+  """
+  hasInvites: Boolean
+  hasInvitesWith: [InviteWhereInput!]
+  """
+  subscribers edge predicates
+  """
+  hasSubscribers: Boolean
+  hasSubscribersWith: [SubscriberWhereInput!]
   """
   entities edge predicates
   """
@@ -37898,6 +38342,10 @@ type Procedure implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -37998,6 +38446,10 @@ type ProcedureHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -38231,6 +38683,22 @@ input ProcedureHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -38507,6 +38975,22 @@ input ProcedureWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -38718,6 +39202,10 @@ type Program implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   deletedAt: Time
   deletedBy: String
   """
@@ -38830,6 +39318,10 @@ type ProgramHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   deletedAt: Time
   deletedBy: String
   """
@@ -39040,6 +39532,22 @@ input ProgramHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -39688,6 +40196,22 @@ input ProgramWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -41761,6 +42285,10 @@ type Risk implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -41867,6 +42395,10 @@ type RiskHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -42120,6 +42652,22 @@ input RiskHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -42409,6 +42957,22 @@ input RiskWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -43410,6 +43974,10 @@ type Subcontrol implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -43529,6 +44097,10 @@ type SubcontrolHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -43790,6 +44362,22 @@ input SubcontrolHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -44179,6 +44767,22 @@ input SubcontrolWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -44961,12 +45565,20 @@ type Task implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   deletedAt: Time
   deletedBy: String
   """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID!
   """
   the title of the task
   """
@@ -44988,12 +45600,24 @@ type Task implements Node {
   """
   due: Time
   """
+  the priority of the task
+  """
+  priority: TaskPriority!
+  """
   the completion date of the task
   """
   completed: Time
+  """
+  the id of the user who was assigned the task
+  """
+  assigneeID: ID
+  """
+  the id of the user who assigned the task
+  """
+  assignerID: ID!
+  owner: Organization!
   assigner: User!
   assignee: User
-  organization: [Organization!]
   group: [Group!]
   internalPolicy: [InternalPolicy!]
   procedure: [Procedure!]
@@ -45041,12 +45665,20 @@ type TaskHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   deletedAt: Time
   deletedBy: String
   """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String!
   """
   the title of the task
   """
@@ -45068,9 +45700,21 @@ type TaskHistory implements Node {
   """
   due: Time
   """
+  the priority of the task
+  """
+  priority: TaskHistoryPriority!
+  """
   the completion date of the task
   """
   completed: Time
+  """
+  the id of the user who was assigned the task
+  """
+  assigneeID: String
+  """
+  the id of the user who assigned the task
+  """
+  assignerID: String!
 }
 """
 A connection to a list of items.
@@ -45109,6 +45753,15 @@ enum TaskHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
   INSERT
   UPDATE
   DELETE
+}
+"""
+TaskHistoryPriority is enum for the field priority
+"""
+enum TaskHistoryPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -45240,6 +45893,22 @@ input TaskHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -45270,6 +45939,22 @@ input TaskHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
   """
   title field predicates
   """
@@ -45325,6 +46010,13 @@ input TaskHistoryWhereInput {
   dueIsNil: Boolean
   dueNotNil: Boolean
   """
+  priority field predicates
+  """
+  priority: TaskHistoryPriority
+  priorityNEQ: TaskHistoryPriority
+  priorityIn: [TaskHistoryPriority!]
+  priorityNotIn: [TaskHistoryPriority!]
+  """
   completed field predicates
   """
   completed: Time
@@ -45337,6 +46029,49 @@ input TaskHistoryWhereInput {
   completedLTE: Time
   completedIsNil: Boolean
   completedNotNil: Boolean
+  """
+  assignee_id field predicates
+  """
+  assigneeID: String
+  assigneeIDNEQ: String
+  assigneeIDIn: [String!]
+  assigneeIDNotIn: [String!]
+  assigneeIDGT: String
+  assigneeIDGTE: String
+  assigneeIDLT: String
+  assigneeIDLTE: String
+  assigneeIDContains: String
+  assigneeIDHasPrefix: String
+  assigneeIDHasSuffix: String
+  assigneeIDIsNil: Boolean
+  assigneeIDNotNil: Boolean
+  assigneeIDEqualFold: String
+  assigneeIDContainsFold: String
+  """
+  assigner_id field predicates
+  """
+  assignerID: String
+  assignerIDNEQ: String
+  assignerIDIn: [String!]
+  assignerIDNotIn: [String!]
+  assignerIDGT: String
+  assignerIDGTE: String
+  assignerIDLT: String
+  assignerIDLTE: String
+  assignerIDContains: String
+  assignerIDHasPrefix: String
+  assignerIDHasSuffix: String
+  assignerIDEqualFold: String
+  assignerIDContainsFold: String
+}
+"""
+TaskPriority is enum for the field priority
+"""
+enum TaskPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 TaskTaskStatus is enum for the field status
@@ -45432,6 +46167,22 @@ input TaskWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -45462,6 +46213,22 @@ input TaskWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
   """
   title field predicates
   """
@@ -45517,6 +46284,13 @@ input TaskWhereInput {
   dueIsNil: Boolean
   dueNotNil: Boolean
   """
+  priority field predicates
+  """
+  priority: TaskPriority
+  priorityNEQ: TaskPriority
+  priorityIn: [TaskPriority!]
+  priorityNotIn: [TaskPriority!]
+  """
   completed field predicates
   """
   completed: Time
@@ -45530,6 +46304,45 @@ input TaskWhereInput {
   completedIsNil: Boolean
   completedNotNil: Boolean
   """
+  assignee_id field predicates
+  """
+  assigneeID: ID
+  assigneeIDNEQ: ID
+  assigneeIDIn: [ID!]
+  assigneeIDNotIn: [ID!]
+  assigneeIDGT: ID
+  assigneeIDGTE: ID
+  assigneeIDLT: ID
+  assigneeIDLTE: ID
+  assigneeIDContains: ID
+  assigneeIDHasPrefix: ID
+  assigneeIDHasSuffix: ID
+  assigneeIDIsNil: Boolean
+  assigneeIDNotNil: Boolean
+  assigneeIDEqualFold: ID
+  assigneeIDContainsFold: ID
+  """
+  assigner_id field predicates
+  """
+  assignerID: ID
+  assignerIDNEQ: ID
+  assignerIDIn: [ID!]
+  assignerIDNotIn: [ID!]
+  assignerIDGT: ID
+  assignerIDGTE: ID
+  assignerIDLT: ID
+  assignerIDLTE: ID
+  assignerIDContains: ID
+  assignerIDHasPrefix: ID
+  assignerIDHasSuffix: ID
+  assignerIDEqualFold: ID
+  assignerIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   assigner edge predicates
   """
   hasAssigner: Boolean
@@ -45539,11 +46352,6 @@ input TaskWhereInput {
   """
   hasAssignee: Boolean
   hasAssigneeWith: [UserWhereInput!]
-  """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
   """
   group edge predicates
   """
@@ -47280,23 +48088,8 @@ input UpdateOrganizationInput {
   addTemplateCreatorIDs: [ID!]
   removeTemplateCreatorIDs: [ID!]
   clearTemplateCreators: Boolean
-  addGroupIDs: [ID!]
-  removeGroupIDs: [ID!]
-  clearGroups: Boolean
-  addTemplateIDs: [ID!]
-  removeTemplateIDs: [ID!]
-  clearTemplates: Boolean
-  addIntegrationIDs: [ID!]
-  removeIntegrationIDs: [ID!]
-  clearIntegrations: Boolean
   settingID: ID
   clearSetting: Boolean
-  addDocumentDatumIDs: [ID!]
-  removeDocumentDatumIDs: [ID!]
-  clearDocumentData: Boolean
-  addOrgSubscriptionIDs: [ID!]
-  removeOrgSubscriptionIDs: [ID!]
-  clearOrgSubscriptions: Boolean
   addPersonalAccessTokenIDs: [ID!]
   removePersonalAccessTokenIDs: [ID!]
   clearPersonalAccessTokens: Boolean
@@ -47306,12 +48099,6 @@ input UpdateOrganizationInput {
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUsers: Boolean
-  addInviteIDs: [ID!]
-  removeInviteIDs: [ID!]
-  clearInvites: Boolean
-  addSubscriberIDs: [ID!]
-  removeSubscriberIDs: [ID!]
-  clearSubscribers: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -47323,6 +48110,27 @@ input UpdateOrganizationInput {
   clearFiles: Boolean
   avatarFileID: ID
   clearAvatarFile: Boolean
+  addGroupIDs: [ID!]
+  removeGroupIDs: [ID!]
+  clearGroups: Boolean
+  addTemplateIDs: [ID!]
+  removeTemplateIDs: [ID!]
+  clearTemplates: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addDocumentDatumIDs: [ID!]
+  removeDocumentDatumIDs: [ID!]
+  clearDocumentData: Boolean
+  addOrgSubscriptionIDs: [ID!]
+  removeOrgSubscriptionIDs: [ID!]
+  clearOrgSubscriptions: Boolean
+  addInviteIDs: [ID!]
+  removeInviteIDs: [ID!]
+  clearInvites: Boolean
+  addSubscriberIDs: [ID!]
+  removeSubscriberIDs: [ID!]
+  clearSubscribers: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
@@ -47984,16 +48792,18 @@ input UpdateTaskInput {
   due: Time
   clearDue: Boolean
   """
+  the priority of the task
+  """
+  priority: TaskPriority
+  """
   the completion date of the task
   """
   completed: Time
   clearCompleted: Boolean
+  ownerID: ID
   assignerID: ID
   assigneeID: ID
   clearAssignee: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroup: Boolean
@@ -48218,6 +49028,10 @@ type User implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -48323,6 +49137,10 @@ type UserHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -48589,6 +49407,22 @@ input UserHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   email field predicates
   """
@@ -49509,6 +50343,22 @@ input UserWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   email field predicates
   """

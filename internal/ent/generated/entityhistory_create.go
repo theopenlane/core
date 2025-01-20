@@ -111,20 +111,6 @@ func (ehc *EntityHistoryCreate) SetNillableUpdatedBy(s *string) *EntityHistoryCr
 	return ehc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ehc *EntityHistoryCreate) SetMappingID(s string) *EntityHistoryCreate {
-	ehc.mutation.SetMappingID(s)
-	return ehc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ehc *EntityHistoryCreate) SetNillableMappingID(s *string) *EntityHistoryCreate {
-	if s != nil {
-		ehc.SetMappingID(*s)
-	}
-	return ehc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ehc *EntityHistoryCreate) SetDeletedAt(t time.Time) *EntityHistoryCreate {
 	ehc.mutation.SetDeletedAt(t)
@@ -310,10 +296,6 @@ func (ehc *EntityHistoryCreate) defaults() {
 		v := entityhistory.DefaultUpdatedAt()
 		ehc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ehc.mutation.MappingID(); !ok {
-		v := entityhistory.DefaultMappingID()
-		ehc.mutation.SetMappingID(v)
-	}
 	if _, ok := ehc.mutation.Tags(); !ok {
 		v := entityhistory.DefaultTags
 		ehc.mutation.SetTags(v)
@@ -340,9 +322,6 @@ func (ehc *EntityHistoryCreate) check() error {
 		if err := entityhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "EntityHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ehc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "EntityHistory.mapping_id"`)}
 	}
 	return nil
 }
@@ -407,10 +386,6 @@ func (ehc *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSp
 	if value, ok := ehc.mutation.UpdatedBy(); ok {
 		_spec.SetField(entityhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := ehc.mutation.MappingID(); ok {
-		_spec.SetField(entityhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ehc.mutation.DeletedAt(); ok {
 		_spec.SetField(entityhistory.FieldDeletedAt, field.TypeTime, value)

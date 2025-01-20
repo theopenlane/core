@@ -119,20 +119,6 @@ func (gc *GroupCreate) SetNillableDeletedBy(s *string) *GroupCreate {
 	return gc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (gc *GroupCreate) SetMappingID(s string) *GroupCreate {
-	gc.mutation.SetMappingID(s)
-	return gc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableMappingID(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetMappingID(*s)
-	}
-	return gc
-}
-
 // SetTags sets the "tags" field.
 func (gc *GroupCreate) SetTags(s []string) *GroupCreate {
 	gc.mutation.SetTags(s)
@@ -820,13 +806,6 @@ func (gc *GroupCreate) defaults() error {
 		v := group.DefaultUpdatedAt()
 		gc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gc.mutation.MappingID(); !ok {
-		if group.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized group.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := group.DefaultMappingID()
-		gc.mutation.SetMappingID(v)
-	}
 	if _, ok := gc.mutation.Tags(); !ok {
 		v := group.DefaultTags
 		gc.mutation.SetTags(v)
@@ -851,9 +830,6 @@ func (gc *GroupCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (gc *GroupCreate) check() error {
-	if _, ok := gc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Group.mapping_id"`)}
-	}
 	if v, ok := gc.mutation.OwnerID(); ok {
 		if err := group.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Group.owner_id": %w`, err)}
@@ -937,10 +913,6 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	if value, ok := gc.mutation.DeletedBy(); ok {
 		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := gc.mutation.MappingID(); ok {
-		_spec.SetField(group.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := gc.mutation.Tags(); ok {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)

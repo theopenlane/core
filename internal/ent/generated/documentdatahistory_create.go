@@ -112,20 +112,6 @@ func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedBy(s *string) *Document
 	return ddhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ddhc *DocumentDataHistoryCreate) SetMappingID(s string) *DocumentDataHistoryCreate {
-	ddhc.mutation.SetMappingID(s)
-	return ddhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ddhc *DocumentDataHistoryCreate) SetNillableMappingID(s *string) *DocumentDataHistoryCreate {
-	if s != nil {
-		ddhc.SetMappingID(*s)
-	}
-	return ddhc
-}
-
 // SetTags sets the "tags" field.
 func (ddhc *DocumentDataHistoryCreate) SetTags(s []string) *DocumentDataHistoryCreate {
 	ddhc.mutation.SetTags(s)
@@ -247,10 +233,6 @@ func (ddhc *DocumentDataHistoryCreate) defaults() {
 		v := documentdatahistory.DefaultUpdatedAt()
 		ddhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ddhc.mutation.MappingID(); !ok {
-		v := documentdatahistory.DefaultMappingID()
-		ddhc.mutation.SetMappingID(v)
-	}
 	if _, ok := ddhc.mutation.Tags(); !ok {
 		v := documentdatahistory.DefaultTags
 		ddhc.mutation.SetTags(v)
@@ -273,9 +255,6 @@ func (ddhc *DocumentDataHistoryCreate) check() error {
 		if err := documentdatahistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "DocumentDataHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ddhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "DocumentDataHistory.mapping_id"`)}
 	}
 	if _, ok := ddhc.mutation.TemplateID(); !ok {
 		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "DocumentDataHistory.template_id"`)}
@@ -346,10 +325,6 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 	if value, ok := ddhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := ddhc.mutation.MappingID(); ok {
-		_spec.SetField(documentdatahistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ddhc.mutation.Tags(); ok {
 		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)

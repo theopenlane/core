@@ -28,8 +28,6 @@ type Contact struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -112,7 +110,7 @@ func (*Contact) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contact.FieldTags:
 			values[i] = new([]byte)
-		case contact.FieldID, contact.FieldCreatedBy, contact.FieldUpdatedBy, contact.FieldMappingID, contact.FieldDeletedBy, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus:
+		case contact.FieldID, contact.FieldCreatedBy, contact.FieldUpdatedBy, contact.FieldDeletedBy, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus:
 			values[i] = new(sql.NullString)
 		case contact.FieldCreatedAt, contact.FieldUpdatedAt, contact.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -160,12 +158,6 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				c.UpdatedBy = value.String
-			}
-		case contact.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				c.MappingID = value.String
 			}
 		case contact.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -297,9 +289,6 @@ func (c *Contact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(c.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(c.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(c.DeletedAt.Format(time.ANSIC))

@@ -140,17 +140,9 @@ func (uhc *UserHistoryCreate) SetNillableDeletedBy(s *string) *UserHistoryCreate
 	return uhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (uhc *UserHistoryCreate) SetMappingID(s string) *UserHistoryCreate {
-	uhc.mutation.SetMappingID(s)
-	return uhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableMappingID(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (uhc *UserHistoryCreate) SetDisplayID(s string) *UserHistoryCreate {
+	uhc.mutation.SetDisplayID(s)
 	return uhc
 }
 
@@ -373,10 +365,6 @@ func (uhc *UserHistoryCreate) defaults() {
 		v := userhistory.DefaultUpdatedAt()
 		uhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := uhc.mutation.MappingID(); !ok {
-		v := userhistory.DefaultMappingID()
-		uhc.mutation.SetMappingID(v)
-	}
 	if _, ok := uhc.mutation.Tags(); !ok {
 		v := userhistory.DefaultTags
 		uhc.mutation.SetTags(v)
@@ -412,8 +400,8 @@ func (uhc *UserHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "UserHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := uhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "UserHistory.mapping_id"`)}
+	if _, ok := uhc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "UserHistory.display_id"`)}
 	}
 	if _, ok := uhc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "UserHistory.email"`)}
@@ -506,9 +494,9 @@ func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(userhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := uhc.mutation.MappingID(); ok {
-		_spec.SetField(userhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := uhc.mutation.DisplayID(); ok {
+		_spec.SetField(userhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := uhc.mutation.Tags(); ok {
 		_spec.SetField(userhistory.FieldTags, field.TypeJSON, value)

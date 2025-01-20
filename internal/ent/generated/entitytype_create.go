@@ -78,20 +78,6 @@ func (etc *EntityTypeCreate) SetNillableUpdatedBy(s *string) *EntityTypeCreate {
 	return etc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (etc *EntityTypeCreate) SetMappingID(s string) *EntityTypeCreate {
-	etc.mutation.SetMappingID(s)
-	return etc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (etc *EntityTypeCreate) SetNillableMappingID(s *string) *EntityTypeCreate {
-	if s != nil {
-		etc.SetMappingID(*s)
-	}
-	return etc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (etc *EntityTypeCreate) SetDeletedAt(t time.Time) *EntityTypeCreate {
 	etc.mutation.SetDeletedAt(t)
@@ -231,13 +217,6 @@ func (etc *EntityTypeCreate) defaults() error {
 		v := entitytype.DefaultUpdatedAt()
 		etc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := etc.mutation.MappingID(); !ok {
-		if entitytype.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized entitytype.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := entitytype.DefaultMappingID()
-		etc.mutation.SetMappingID(v)
-	}
 	if _, ok := etc.mutation.Tags(); !ok {
 		v := entitytype.DefaultTags
 		etc.mutation.SetTags(v)
@@ -254,9 +233,6 @@ func (etc *EntityTypeCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (etc *EntityTypeCreate) check() error {
-	if _, ok := etc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "EntityType.mapping_id"`)}
-	}
 	if v, ok := etc.mutation.OwnerID(); ok {
 		if err := entitytype.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "EntityType.owner_id": %w`, err)}
@@ -321,10 +297,6 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 	if value, ok := etc.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytype.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := etc.mutation.MappingID(); ok {
-		_spec.SetField(entitytype.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := etc.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)

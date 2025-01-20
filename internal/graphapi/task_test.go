@@ -140,9 +140,8 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				Details: map[string]interface{}{
 					"task": "do all the things for the thing",
 				},
-				Due:             lo.ToPtr(time.Now().Add(time.Hour * 24)),
-				OrganizationIDs: []string{testUser1.OrganizationID}, // add the org to the task
-				AssigneeID:      &viewOnlyUser.ID,                   // assign the task to another user
+				Due:        lo.ToPtr(time.Now().Add(time.Hour * 24)),
+				AssigneeID: &viewOnlyUser.ID, // assign the task to another user
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -150,7 +149,8 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 		{
 			name: "happy path, using pat",
 			request: openlaneclient.CreateTaskInput{
-				Title: "test-task",
+				Title:   "test-task",
+				OwnerID: testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -181,6 +181,11 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			require.NotNil(t, resp)
 
 			assert.Equal(t, tc.request.Title, resp.CreateTask.Task.Title)
+
+			assert.NotEmpty(t, resp.CreateTask.Task.DisplayID)
+			assert.Contains(t, resp.CreateTask.Task.DisplayID, "TSK-")
+
+			assert.NotNil(t, resp.CreateTask.Task.OwnerID)
 
 			if tc.request.Description == nil {
 				assert.Empty(t, resp.CreateTask.Task.Description)

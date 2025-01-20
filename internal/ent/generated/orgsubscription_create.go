@@ -78,20 +78,6 @@ func (osc *OrgSubscriptionCreate) SetNillableUpdatedBy(s *string) *OrgSubscripti
 	return osc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (osc *OrgSubscriptionCreate) SetMappingID(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetMappingID(s)
-	return osc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableMappingID(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetMappingID(*s)
-	}
-	return osc
-}
-
 // SetTags sets the "tags" field.
 func (osc *OrgSubscriptionCreate) SetTags(s []string) *OrgSubscriptionCreate {
 	osc.mutation.SetTags(s)
@@ -334,13 +320,6 @@ func (osc *OrgSubscriptionCreate) defaults() error {
 		v := orgsubscription.DefaultUpdatedAt()
 		osc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := osc.mutation.MappingID(); !ok {
-		if orgsubscription.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized orgsubscription.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := orgsubscription.DefaultMappingID()
-		osc.mutation.SetMappingID(v)
-	}
 	if _, ok := osc.mutation.Tags(); !ok {
 		v := orgsubscription.DefaultTags
 		osc.mutation.SetTags(v)
@@ -361,9 +340,6 @@ func (osc *OrgSubscriptionCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (osc *OrgSubscriptionCreate) check() error {
-	if _, ok := osc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "OrgSubscription.mapping_id"`)}
-	}
 	if v, ok := osc.mutation.OwnerID(); ok {
 		if err := orgsubscription.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgSubscription.owner_id": %w`, err)}
@@ -423,10 +399,6 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 	if value, ok := osc.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := osc.mutation.MappingID(); ok {
-		_spec.SetField(orgsubscription.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := osc.mutation.Tags(); ok {
 		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)

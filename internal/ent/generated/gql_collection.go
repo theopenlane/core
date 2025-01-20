@@ -1122,6 +1122,11 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldDeletedBy)
 				fieldSeen[control.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[control.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, control.FieldDisplayID)
+				fieldSeen[control.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[control.FieldTags]; !ok {
 				selectedFields = append(selectedFields, control.FieldTags)
@@ -1298,6 +1303,11 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldDeletedBy)
 				fieldSeen[controlhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[controlhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldDisplayID)
+				fieldSeen[controlhistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[controlhistory.FieldTags]; !ok {
@@ -1632,6 +1642,11 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldDeletedBy)
 				fieldSeen[controlobjective.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[controlobjective.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldDisplayID)
+				fieldSeen[controlobjective.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[controlobjective.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldTags)
@@ -1803,6 +1818,11 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 			if _, ok := fieldSeen[controlobjectivehistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldDeletedBy)
 				fieldSeen[controlobjectivehistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldDisplayID)
+				fieldSeen[controlobjectivehistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldTags]; !ok {
@@ -5928,6 +5948,11 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldDeletedBy)
 				fieldSeen[internalpolicy.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[internalpolicy.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldDisplayID)
+				fieldSeen[internalpolicy.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[internalpolicy.FieldTags]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldTags)
@@ -6084,6 +6109,11 @@ func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDeletedBy)
 				fieldSeen[internalpolicyhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldDisplayID)
+				fieldSeen[internalpolicyhistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldTags]; !ok {
@@ -6501,6 +6531,11 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, narrative.FieldDeletedBy)
 				fieldSeen[narrative.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[narrative.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldDisplayID)
+				fieldSeen[narrative.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[narrative.FieldTags]; !ok {
 				selectedFields = append(selectedFields, narrative.FieldTags)
@@ -6637,6 +6672,11 @@ func (nh *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[narrativehistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, narrativehistory.FieldDeletedBy)
 				fieldSeen[narrativehistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[narrativehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldDisplayID)
+				fieldSeen[narrativehistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[narrativehistory.FieldTags]; !ok {
@@ -6802,6 +6842,11 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, note.FieldUpdatedBy)
 				fieldSeen[note.FieldUpdatedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[note.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, note.FieldDisplayID)
+				fieldSeen[note.FieldDisplayID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[note.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, note.FieldDeletedAt)
@@ -6923,6 +6968,11 @@ func (nh *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[notehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, notehistory.FieldUpdatedBy)
 				fieldSeen[notehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[notehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldDisplayID)
+				fieldSeen[notehistory.FieldDisplayID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[notehistory.FieldDeletedAt]; !ok {
@@ -7839,45 +7889,6 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
-		case "groups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedGroups(alias, func(wq *GroupQuery) {
-				*wq = *query
-			})
-
-		case "templates":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&TemplateClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedTemplates(alias, func(wq *TemplateQuery) {
-				*wq = *query
-			})
-
-		case "integrations":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&IntegrationClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
-				*wq = *query
-			})
-
 		case "setting":
 			var (
 				alias = field.Alias
@@ -7888,32 +7899,6 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			o.withSetting = query
-
-		case "documentData":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&DocumentDataClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedDocumentData(alias, func(wq *DocumentDataQuery) {
-				*wq = *query
-			})
-
-		case "orgSubscriptions":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrgSubscriptionClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, orgsubscriptionImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedOrgSubscriptions(alias, func(wq *OrgSubscriptionQuery) {
-				*wq = *query
-			})
 
 		case "personalAccessTokens":
 			var (
@@ -7951,32 +7936,6 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			o.WithNamedUsers(alias, func(wq *UserQuery) {
-				*wq = *query
-			})
-
-		case "invites":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&InviteClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, inviteImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedInvites(alias, func(wq *InviteQuery) {
-				*wq = *query
-			})
-
-		case "subscribers":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&SubscriberClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subscriberImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedSubscribers(alias, func(wq *SubscriberQuery) {
 				*wq = *query
 			})
 
@@ -8033,6 +7992,97 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, organization.FieldAvatarLocalFileID)
 				fieldSeen[organization.FieldAvatarLocalFileID] = struct{}{}
 			}
+
+		case "groups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "templates":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TemplateClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedTemplates(alias, func(wq *TemplateQuery) {
+				*wq = *query
+			})
+
+		case "integrations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
+				*wq = *query
+			})
+
+		case "documentData":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DocumentDataClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedDocumentData(alias, func(wq *DocumentDataQuery) {
+				*wq = *query
+			})
+
+		case "orgSubscriptions":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrgSubscriptionClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, orgsubscriptionImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedOrgSubscriptions(alias, func(wq *OrgSubscriptionQuery) {
+				*wq = *query
+			})
+
+		case "invites":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InviteClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, inviteImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedInvites(alias, func(wq *InviteQuery) {
+				*wq = *query
+			})
+
+		case "subscribers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubscriberClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subscriberImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedSubscribers(alias, func(wq *SubscriberQuery) {
+				*wq = *query
+			})
 
 		case "entities":
 			var (
@@ -9192,6 +9242,11 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldDeletedBy)
 				fieldSeen[procedure.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[procedure.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldDisplayID)
+				fieldSeen[procedure.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[procedure.FieldTags]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldTags)
@@ -9353,6 +9408,11 @@ func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDeletedBy)
 				fieldSeen[procedurehistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[procedurehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldDisplayID)
+				fieldSeen[procedurehistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[procedurehistory.FieldTags]; !ok {
@@ -9727,6 +9787,11 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldUpdatedBy)
 				fieldSeen[program.FieldUpdatedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[program.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, program.FieldDisplayID)
+				fieldSeen[program.FieldDisplayID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[program.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, program.FieldDeletedAt)
@@ -9883,6 +9948,11 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldUpdatedBy)
 				fieldSeen[programhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[programhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldDisplayID)
+				fieldSeen[programhistory.FieldDisplayID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[programhistory.FieldDeletedAt]; !ok {
@@ -10401,6 +10471,11 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, risk.FieldDeletedBy)
 				fieldSeen[risk.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[risk.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldDisplayID)
+				fieldSeen[risk.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[risk.FieldTags]; !ok {
 				selectedFields = append(selectedFields, risk.FieldTags)
@@ -10567,6 +10642,11 @@ func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldDeletedBy)
 				fieldSeen[riskhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[riskhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldDisplayID)
+				fieldSeen[riskhistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[riskhistory.FieldTags]; !ok {
@@ -11172,6 +11252,11 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldDeletedBy)
 				fieldSeen[subcontrol.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[subcontrol.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldDisplayID)
+				fieldSeen[subcontrol.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[subcontrol.FieldTags]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldTags)
@@ -11368,6 +11453,11 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldDeletedBy)
 				fieldSeen[subcontrolhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldDisplayID)
+				fieldSeen[subcontrolhistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[subcontrolhistory.FieldTags]; !ok {
@@ -11809,6 +11899,21 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			t.withOwner = query
+			if _, ok := fieldSeen[task.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, task.FieldOwnerID)
+				fieldSeen[task.FieldOwnerID] = struct{}{}
+			}
+
 		case "assigner":
 			var (
 				alias = field.Alias
@@ -11819,6 +11924,10 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			t.withAssigner = query
+			if _, ok := fieldSeen[task.FieldAssignerID]; !ok {
+				selectedFields = append(selectedFields, task.FieldAssignerID)
+				fieldSeen[task.FieldAssignerID] = struct{}{}
+			}
 
 		case "assignee":
 			var (
@@ -11830,19 +11939,10 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			t.withAssignee = query
-
-		case "organization":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrganizationClient{config: t.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
-				return err
+			if _, ok := fieldSeen[task.FieldAssigneeID]; !ok {
+				selectedFields = append(selectedFields, task.FieldAssigneeID)
+				fieldSeen[task.FieldAssigneeID] = struct{}{}
 			}
-			t.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
-				*wq = *query
-			})
 
 		case "group":
 			var (
@@ -11954,6 +12054,11 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, task.FieldUpdatedBy)
 				fieldSeen[task.FieldUpdatedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[task.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, task.FieldDisplayID)
+				fieldSeen[task.FieldDisplayID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[task.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, task.FieldDeletedAt)
@@ -11968,6 +12073,11 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[task.FieldTags]; !ok {
 				selectedFields = append(selectedFields, task.FieldTags)
 				fieldSeen[task.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[task.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, task.FieldOwnerID)
+				fieldSeen[task.FieldOwnerID] = struct{}{}
 			}
 		case "title":
 			if _, ok := fieldSeen[task.FieldTitle]; !ok {
@@ -11994,10 +12104,25 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, task.FieldDue)
 				fieldSeen[task.FieldDue] = struct{}{}
 			}
+		case "priority":
+			if _, ok := fieldSeen[task.FieldPriority]; !ok {
+				selectedFields = append(selectedFields, task.FieldPriority)
+				fieldSeen[task.FieldPriority] = struct{}{}
+			}
 		case "completed":
 			if _, ok := fieldSeen[task.FieldCompleted]; !ok {
 				selectedFields = append(selectedFields, task.FieldCompleted)
 				fieldSeen[task.FieldCompleted] = struct{}{}
+			}
+		case "assigneeID":
+			if _, ok := fieldSeen[task.FieldAssigneeID]; !ok {
+				selectedFields = append(selectedFields, task.FieldAssigneeID)
+				fieldSeen[task.FieldAssigneeID] = struct{}{}
+			}
+		case "assignerID":
+			if _, ok := fieldSeen[task.FieldAssignerID]; !ok {
+				selectedFields = append(selectedFields, task.FieldAssignerID)
+				fieldSeen[task.FieldAssignerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -12096,6 +12221,11 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldUpdatedBy)
 				fieldSeen[taskhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[taskhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldDisplayID)
+				fieldSeen[taskhistory.FieldDisplayID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[taskhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldDeletedAt)
@@ -12110,6 +12240,11 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldTags)
 				fieldSeen[taskhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[taskhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldOwnerID)
+				fieldSeen[taskhistory.FieldOwnerID] = struct{}{}
 			}
 		case "title":
 			if _, ok := fieldSeen[taskhistory.FieldTitle]; !ok {
@@ -12136,10 +12271,25 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldDue)
 				fieldSeen[taskhistory.FieldDue] = struct{}{}
 			}
+		case "priority":
+			if _, ok := fieldSeen[taskhistory.FieldPriority]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldPriority)
+				fieldSeen[taskhistory.FieldPriority] = struct{}{}
+			}
 		case "completed":
 			if _, ok := fieldSeen[taskhistory.FieldCompleted]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldCompleted)
 				fieldSeen[taskhistory.FieldCompleted] = struct{}{}
+			}
+		case "assigneeID":
+			if _, ok := fieldSeen[taskhistory.FieldAssigneeID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldAssigneeID)
+				fieldSeen[taskhistory.FieldAssigneeID] = struct{}{}
+			}
+		case "assignerID":
+			if _, ok := fieldSeen[taskhistory.FieldAssignerID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldAssignerID)
+				fieldSeen[taskhistory.FieldAssignerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -12795,6 +12945,11 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, user.FieldDeletedBy)
 				fieldSeen[user.FieldDeletedBy] = struct{}{}
 			}
+		case "displayID":
+			if _, ok := fieldSeen[user.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, user.FieldDisplayID)
+				fieldSeen[user.FieldDisplayID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[user.FieldTags]; !ok {
 				selectedFields = append(selectedFields, user.FieldTags)
@@ -12983,6 +13138,11 @@ func (uh *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[userhistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, userhistory.FieldDeletedBy)
 				fieldSeen[userhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[userhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldDisplayID)
+				fieldSeen[userhistory.FieldDisplayID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[userhistory.FieldTags]; !ok {

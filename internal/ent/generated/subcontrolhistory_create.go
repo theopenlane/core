@@ -139,17 +139,9 @@ func (shc *SubcontrolHistoryCreate) SetNillableDeletedBy(s *string) *SubcontrolH
 	return shc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (shc *SubcontrolHistoryCreate) SetMappingID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetMappingID(s)
-	return shc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableMappingID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (shc *SubcontrolHistoryCreate) SetDisplayID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetDisplayID(s)
 	return shc
 }
 
@@ -434,10 +426,6 @@ func (shc *SubcontrolHistoryCreate) defaults() {
 		v := subcontrolhistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := shc.mutation.MappingID(); !ok {
-		v := subcontrolhistory.DefaultMappingID()
-		shc.mutation.SetMappingID(v)
-	}
 	if _, ok := shc.mutation.Tags(); !ok {
 		v := subcontrolhistory.DefaultTags
 		shc.mutation.SetTags(v)
@@ -461,8 +449,8 @@ func (shc *SubcontrolHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "SubcontrolHistory.mapping_id"`)}
+	if _, ok := shc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "SubcontrolHistory.display_id"`)}
 	}
 	if _, ok := shc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "SubcontrolHistory.owner_id"`)}
@@ -542,9 +530,9 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 		_spec.SetField(subcontrolhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := shc.mutation.MappingID(); ok {
-		_spec.SetField(subcontrolhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := shc.mutation.DisplayID(); ok {
+		_spec.SetField(subcontrolhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := shc.mutation.Tags(); ok {
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)

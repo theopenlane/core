@@ -112,17 +112,9 @@ func (pc *ProcedureCreate) SetNillableDeletedBy(s *string) *ProcedureCreate {
 	return pc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (pc *ProcedureCreate) SetMappingID(s string) *ProcedureCreate {
-	pc.mutation.SetMappingID(s)
-	return pc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableMappingID(s *string) *ProcedureCreate {
-	if s != nil {
-		pc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (pc *ProcedureCreate) SetDisplayID(s string) *ProcedureCreate {
+	pc.mutation.SetDisplayID(s)
 	return pc
 }
 
@@ -446,13 +438,6 @@ func (pc *ProcedureCreate) defaults() error {
 		v := procedure.DefaultUpdatedAt()
 		pc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := pc.mutation.MappingID(); !ok {
-		if procedure.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized procedure.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := procedure.DefaultMappingID()
-		pc.mutation.SetMappingID(v)
-	}
 	if _, ok := pc.mutation.Tags(); !ok {
 		v := procedure.DefaultTags
 		pc.mutation.SetTags(v)
@@ -469,8 +454,13 @@ func (pc *ProcedureCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProcedureCreate) check() error {
-	if _, ok := pc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Procedure.mapping_id"`)}
+	if _, ok := pc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Procedure.display_id"`)}
+	}
+	if v, ok := pc.mutation.DisplayID(); ok {
+		if err := procedure.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.display_id": %w`, err)}
+		}
 	}
 	if v, ok := pc.mutation.OwnerID(); ok {
 		if err := procedure.OwnerIDValidator(v); err != nil {
@@ -545,9 +535,9 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := pc.mutation.MappingID(); ok {
-		_spec.SetField(procedure.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := pc.mutation.DisplayID(); ok {
+		_spec.SetField(procedure.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := pc.mutation.Tags(); ok {
 		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)

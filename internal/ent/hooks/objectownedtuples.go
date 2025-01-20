@@ -72,8 +72,13 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 					return nil, err
 				}
 
-				log.Debug().Interface("tuples", addTuples).Msg("added object permissions")
-				log.Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
+				if len(addTuples) != 0 {
+					log.Debug().Interface("tuples", addTuples).Msg("added object permissions")
+				}
+
+				if len(removeTuples) != 0 {
+					log.Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
+				}
 			}
 
 			return retVal, err

@@ -112,20 +112,6 @@ func (ushc *UserSettingHistoryCreate) SetNillableUpdatedBy(s *string) *UserSetti
 	return ushc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ushc *UserSettingHistoryCreate) SetMappingID(s string) *UserSettingHistoryCreate {
-	ushc.mutation.SetMappingID(s)
-	return ushc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ushc *UserSettingHistoryCreate) SetNillableMappingID(s *string) *UserSettingHistoryCreate {
-	if s != nil {
-		ushc.SetMappingID(*s)
-	}
-	return ushc
-}
-
 // SetTags sets the "tags" field.
 func (ushc *UserSettingHistoryCreate) SetTags(s []string) *UserSettingHistoryCreate {
 	ushc.mutation.SetTags(s)
@@ -347,10 +333,6 @@ func (ushc *UserSettingHistoryCreate) defaults() {
 		v := usersettinghistory.DefaultUpdatedAt()
 		ushc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ushc.mutation.MappingID(); !ok {
-		v := usersettinghistory.DefaultMappingID()
-		ushc.mutation.SetMappingID(v)
-	}
 	if _, ok := ushc.mutation.Tags(); !ok {
 		v := usersettinghistory.DefaultTags
 		ushc.mutation.SetTags(v)
@@ -393,9 +375,6 @@ func (ushc *UserSettingHistoryCreate) check() error {
 		if err := usersettinghistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "UserSettingHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ushc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "UserSettingHistory.mapping_id"`)}
 	}
 	if _, ok := ushc.mutation.Locked(); !ok {
 		return &ValidationError{Name: "locked", err: errors.New(`generated: missing required field "UserSettingHistory.locked"`)}
@@ -474,10 +453,6 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 	if value, ok := ushc.mutation.UpdatedBy(); ok {
 		_spec.SetField(usersettinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := ushc.mutation.MappingID(); ok {
-		_spec.SetField(usersettinghistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ushc.mutation.Tags(); ok {
 		_spec.SetField(usersettinghistory.FieldTags, field.TypeJSON, value)

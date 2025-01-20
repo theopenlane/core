@@ -9548,63 +9548,6 @@ func (c *OrganizationClient) QueryChildren(o *Organization) *OrganizationQuery {
 	return query
 }
 
-// QueryGroups queries the groups edge of a Organization.
-func (c *OrganizationClient) QueryGroups(o *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupsTable, organization.GroupsColumn),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryTemplates queries the templates edge of a Organization.
-func (c *OrganizationClient) QueryTemplates(o *Organization) *TemplateQuery {
-	query := (&TemplateClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(template.Table, template.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplatesTable, organization.TemplatesColumn),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.Template
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryIntegrations queries the integrations edge of a Organization.
-func (c *OrganizationClient) QueryIntegrations(o *Organization) *IntegrationQuery {
-	query := (&IntegrationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(integration.Table, integration.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationsTable, organization.IntegrationsColumn),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QuerySetting queries the setting edge of a Organization.
 func (c *OrganizationClient) QuerySetting(o *Organization) *OrganizationSettingQuery {
 	query := (&OrganizationSettingClient{config: c.config}).Query()
@@ -9618,44 +9561,6 @@ func (c *OrganizationClient) QuerySetting(o *Organization) *OrganizationSettingQ
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.OrganizationSetting
 		step.Edge.Schema = schemaConfig.OrganizationSetting
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDocumentData queries the document_data edge of a Organization.
-func (c *OrganizationClient) QueryDocumentData(o *Organization) *DocumentDataQuery {
-	query := (&DocumentDataClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(documentdata.Table, documentdata.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentDataTable, organization.DocumentDataColumn),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.DocumentData
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryOrgSubscriptions queries the org_subscriptions edge of a Organization.
-func (c *OrganizationClient) QueryOrgSubscriptions(o *Organization) *OrgSubscriptionQuery {
-	query := (&OrgSubscriptionClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgSubscriptionsTable, organization.OrgSubscriptionsColumn),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9713,44 +9618,6 @@ func (c *OrganizationClient) QueryUsers(o *Organization) *UserQuery {
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrgMembership
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryInvites queries the invites edge of a Organization.
-func (c *OrganizationClient) QueryInvites(o *Organization) *InviteQuery {
-	query := (&InviteClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(invite.Table, invite.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.InvitesTable, organization.InvitesColumn),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.Invite
-		step.Edge.Schema = schemaConfig.Invite
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QuerySubscribers queries the subscribers edge of a Organization.
-func (c *OrganizationClient) QuerySubscribers(o *Organization) *SubscriberQuery {
-	query := (&SubscriberClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(subscriber.Table, subscriber.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubscribersTable, organization.SubscribersColumn),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9827,6 +9694,139 @@ func (c *OrganizationClient) QueryAvatarFile(o *Organization) *FileQuery {
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.Organization
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroups queries the groups edge of a Organization.
+func (c *OrganizationClient) QueryGroups(o *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupsTable, organization.GroupsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplates queries the templates edge of a Organization.
+func (c *OrganizationClient) QueryTemplates(o *Organization) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplatesTable, organization.TemplatesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrations queries the integrations edge of a Organization.
+func (c *OrganizationClient) QueryIntegrations(o *Organization) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationsTable, organization.IntegrationsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDocumentData queries the document_data edge of a Organization.
+func (c *OrganizationClient) QueryDocumentData(o *Organization) *DocumentDataQuery {
+	query := (&DocumentDataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentDataTable, organization.DocumentDataColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgSubscriptions queries the org_subscriptions edge of a Organization.
+func (c *OrganizationClient) QueryOrgSubscriptions(o *Organization) *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgSubscriptionsTable, organization.OrgSubscriptionsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInvites queries the invites edge of a Organization.
+func (c *OrganizationClient) QueryInvites(o *Organization) *InviteQuery {
+	query := (&InviteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(invite.Table, invite.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.InvitesTable, organization.InvitesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Invite
+		step.Edge.Schema = schemaConfig.Invite
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubscribers queries the subscribers edge of a Organization.
+func (c *OrganizationClient) QuerySubscribers(o *Organization) *SubscriberQuery {
+	query := (&SubscriberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubscribersTable, organization.SubscribersColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9917,11 +9917,11 @@ func (c *OrganizationClient) QueryTasks(o *Organization) *TaskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(task.Table, task.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.TasksTable, organization.TasksPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TasksTable, organization.TasksColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.OrganizationTasks
+		step.Edge.Schema = schemaConfig.Task
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13892,6 +13892,25 @@ func (c *TaskClient) GetX(ctx context.Context, id string) *Task {
 	return obj
 }
 
+// QueryOwner queries the owner edge of a Task.
+func (c *TaskClient) QueryOwner(t *Task) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.OwnerTable, task.OwnerColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssigner queries the assigner edge of a Task.
 func (c *TaskClient) QueryAssigner(t *Task) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -13924,25 +13943,6 @@ func (c *TaskClient) QueryAssignee(t *Task) *UserQuery {
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Task
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryOrganization queries the organization edge of a Task.
-func (c *TaskClient) QueryOrganization(t *Task) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(task.Table, task.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.OrganizationTable, task.OrganizationPrimaryKey...),
-		)
-		schemaConfig := t.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationTasks
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
 	}

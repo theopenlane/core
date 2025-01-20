@@ -111,20 +111,6 @@ func (ehc *EventHistoryCreate) SetNillableUpdatedBy(s *string) *EventHistoryCrea
 	return ehc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (ehc *EventHistoryCreate) SetMappingID(s string) *EventHistoryCreate {
-	ehc.mutation.SetMappingID(s)
-	return ehc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableMappingID(s *string) *EventHistoryCreate {
-	if s != nil {
-		ehc.SetMappingID(*s)
-	}
-	return ehc
-}
-
 // SetTags sets the "tags" field.
 func (ehc *EventHistoryCreate) SetTags(s []string) *EventHistoryCreate {
 	ehc.mutation.SetTags(s)
@@ -232,10 +218,6 @@ func (ehc *EventHistoryCreate) defaults() {
 		v := eventhistory.DefaultUpdatedAt()
 		ehc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ehc.mutation.MappingID(); !ok {
-		v := eventhistory.DefaultMappingID()
-		ehc.mutation.SetMappingID(v)
-	}
 	if _, ok := ehc.mutation.Tags(); !ok {
 		v := eventhistory.DefaultTags
 		ehc.mutation.SetTags(v)
@@ -258,9 +240,6 @@ func (ehc *EventHistoryCreate) check() error {
 		if err := eventhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "EventHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ehc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "EventHistory.mapping_id"`)}
 	}
 	if _, ok := ehc.mutation.EventType(); !ok {
 		return &ValidationError{Name: "event_type", err: errors.New(`generated: missing required field "EventHistory.event_type"`)}
@@ -328,10 +307,6 @@ func (ehc *EventHistoryCreate) createSpec() (*EventHistory, *sqlgraph.CreateSpec
 	if value, ok := ehc.mutation.UpdatedBy(); ok {
 		_spec.SetField(eventhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := ehc.mutation.MappingID(); ok {
-		_spec.SetField(eventhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := ehc.mutation.Tags(); ok {
 		_spec.SetField(eventhistory.FieldTags, field.TypeJSON, value)

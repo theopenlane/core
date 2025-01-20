@@ -65,7 +65,7 @@ func createValidation() (input openlaneclient.CreateTaskInput, err error) {
 
 	organization := cmd.Config.String("organization")
 	if organization != "" {
-		input.OrganizationIDs = []string{organization}
+		input.OwnerID = organization
 	}
 
 	group := cmd.Config.String("group")

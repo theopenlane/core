@@ -23,8 +23,6 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldMappingID holds the string denoting the mapping_id field in the database.
-	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
@@ -71,28 +69,14 @@ const (
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
 	EdgeChildren = "children"
-	// EdgeGroups holds the string denoting the groups edge name in mutations.
-	EdgeGroups = "groups"
-	// EdgeTemplates holds the string denoting the templates edge name in mutations.
-	EdgeTemplates = "templates"
-	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
-	EdgeIntegrations = "integrations"
 	// EdgeSetting holds the string denoting the setting edge name in mutations.
 	EdgeSetting = "setting"
-	// EdgeDocumentData holds the string denoting the document_data edge name in mutations.
-	EdgeDocumentData = "document_data"
-	// EdgeOrgSubscriptions holds the string denoting the org_subscriptions edge name in mutations.
-	EdgeOrgSubscriptions = "org_subscriptions"
 	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
 	EdgePersonalAccessTokens = "personal_access_tokens"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
 	EdgeAPITokens = "api_tokens"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
-	// EdgeInvites holds the string denoting the invites edge name in mutations.
-	EdgeInvites = "invites"
-	// EdgeSubscribers holds the string denoting the subscribers edge name in mutations.
-	EdgeSubscribers = "subscribers"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
@@ -101,6 +85,20 @@ const (
 	EdgeFiles = "files"
 	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
 	EdgeAvatarFile = "avatar_file"
+	// EdgeGroups holds the string denoting the groups edge name in mutations.
+	EdgeGroups = "groups"
+	// EdgeTemplates holds the string denoting the templates edge name in mutations.
+	EdgeTemplates = "templates"
+	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
+	EdgeIntegrations = "integrations"
+	// EdgeDocumentData holds the string denoting the document_data edge name in mutations.
+	EdgeDocumentData = "document_data"
+	// EdgeOrgSubscriptions holds the string denoting the org_subscriptions edge name in mutations.
+	EdgeOrgSubscriptions = "org_subscriptions"
+	// EdgeInvites holds the string denoting the invites edge name in mutations.
+	EdgeInvites = "invites"
+	// EdgeSubscribers holds the string denoting the subscribers edge name in mutations.
+	EdgeSubscribers = "subscribers"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
 	// EdgeEntityTypes holds the string denoting the entity_types edge name in mutations.
@@ -184,27 +182,6 @@ const (
 	ChildrenTable = "organizations"
 	// ChildrenColumn is the table column denoting the children relation/edge.
 	ChildrenColumn = "parent_organization_id"
-	// GroupsTable is the table that holds the groups relation/edge.
-	GroupsTable = "groups"
-	// GroupsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	GroupsInverseTable = "groups"
-	// GroupsColumn is the table column denoting the groups relation/edge.
-	GroupsColumn = "owner_id"
-	// TemplatesTable is the table that holds the templates relation/edge.
-	TemplatesTable = "templates"
-	// TemplatesInverseTable is the table name for the Template entity.
-	// It exists in this package in order to avoid circular dependency with the "template" package.
-	TemplatesInverseTable = "templates"
-	// TemplatesColumn is the table column denoting the templates relation/edge.
-	TemplatesColumn = "owner_id"
-	// IntegrationsTable is the table that holds the integrations relation/edge.
-	IntegrationsTable = "integrations"
-	// IntegrationsInverseTable is the table name for the Integration entity.
-	// It exists in this package in order to avoid circular dependency with the "integration" package.
-	IntegrationsInverseTable = "integrations"
-	// IntegrationsColumn is the table column denoting the integrations relation/edge.
-	IntegrationsColumn = "owner_id"
 	// SettingTable is the table that holds the setting relation/edge.
 	SettingTable = "organization_settings"
 	// SettingInverseTable is the table name for the OrganizationSetting entity.
@@ -212,20 +189,6 @@ const (
 	SettingInverseTable = "organization_settings"
 	// SettingColumn is the table column denoting the setting relation/edge.
 	SettingColumn = "organization_id"
-	// DocumentDataTable is the table that holds the document_data relation/edge.
-	DocumentDataTable = "document_data"
-	// DocumentDataInverseTable is the table name for the DocumentData entity.
-	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
-	DocumentDataInverseTable = "document_data"
-	// DocumentDataColumn is the table column denoting the document_data relation/edge.
-	DocumentDataColumn = "owner_id"
-	// OrgSubscriptionsTable is the table that holds the org_subscriptions relation/edge.
-	OrgSubscriptionsTable = "org_subscriptions"
-	// OrgSubscriptionsInverseTable is the table name for the OrgSubscription entity.
-	// It exists in this package in order to avoid circular dependency with the "orgsubscription" package.
-	OrgSubscriptionsInverseTable = "org_subscriptions"
-	// OrgSubscriptionsColumn is the table column denoting the org_subscriptions relation/edge.
-	OrgSubscriptionsColumn = "owner_id"
 	// PersonalAccessTokensTable is the table that holds the personal_access_tokens relation/edge. The primary key declared below.
 	PersonalAccessTokensTable = "organization_personal_access_tokens"
 	// PersonalAccessTokensInverseTable is the table name for the PersonalAccessToken entity.
@@ -243,20 +206,6 @@ const (
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "users"
-	// InvitesTable is the table that holds the invites relation/edge.
-	InvitesTable = "invites"
-	// InvitesInverseTable is the table name for the Invite entity.
-	// It exists in this package in order to avoid circular dependency with the "invite" package.
-	InvitesInverseTable = "invites"
-	// InvitesColumn is the table column denoting the invites relation/edge.
-	InvitesColumn = "owner_id"
-	// SubscribersTable is the table that holds the subscribers relation/edge.
-	SubscribersTable = "subscribers"
-	// SubscribersInverseTable is the table name for the Subscriber entity.
-	// It exists in this package in order to avoid circular dependency with the "subscriber" package.
-	SubscribersInverseTable = "subscribers"
-	// SubscribersColumn is the table column denoting the subscribers relation/edge.
-	SubscribersColumn = "owner_id"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "organization_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -279,6 +228,55 @@ const (
 	AvatarFileInverseTable = "files"
 	// AvatarFileColumn is the table column denoting the avatar_file relation/edge.
 	AvatarFileColumn = "avatar_local_file_id"
+	// GroupsTable is the table that holds the groups relation/edge.
+	GroupsTable = "groups"
+	// GroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	GroupsInverseTable = "groups"
+	// GroupsColumn is the table column denoting the groups relation/edge.
+	GroupsColumn = "owner_id"
+	// TemplatesTable is the table that holds the templates relation/edge.
+	TemplatesTable = "templates"
+	// TemplatesInverseTable is the table name for the Template entity.
+	// It exists in this package in order to avoid circular dependency with the "template" package.
+	TemplatesInverseTable = "templates"
+	// TemplatesColumn is the table column denoting the templates relation/edge.
+	TemplatesColumn = "owner_id"
+	// IntegrationsTable is the table that holds the integrations relation/edge.
+	IntegrationsTable = "integrations"
+	// IntegrationsInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationsInverseTable = "integrations"
+	// IntegrationsColumn is the table column denoting the integrations relation/edge.
+	IntegrationsColumn = "owner_id"
+	// DocumentDataTable is the table that holds the document_data relation/edge.
+	DocumentDataTable = "document_data"
+	// DocumentDataInverseTable is the table name for the DocumentData entity.
+	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
+	DocumentDataInverseTable = "document_data"
+	// DocumentDataColumn is the table column denoting the document_data relation/edge.
+	DocumentDataColumn = "owner_id"
+	// OrgSubscriptionsTable is the table that holds the org_subscriptions relation/edge.
+	OrgSubscriptionsTable = "org_subscriptions"
+	// OrgSubscriptionsInverseTable is the table name for the OrgSubscription entity.
+	// It exists in this package in order to avoid circular dependency with the "orgsubscription" package.
+	OrgSubscriptionsInverseTable = "org_subscriptions"
+	// OrgSubscriptionsColumn is the table column denoting the org_subscriptions relation/edge.
+	OrgSubscriptionsColumn = "owner_id"
+	// InvitesTable is the table that holds the invites relation/edge.
+	InvitesTable = "invites"
+	// InvitesInverseTable is the table name for the Invite entity.
+	// It exists in this package in order to avoid circular dependency with the "invite" package.
+	InvitesInverseTable = "invites"
+	// InvitesColumn is the table column denoting the invites relation/edge.
+	InvitesColumn = "owner_id"
+	// SubscribersTable is the table that holds the subscribers relation/edge.
+	SubscribersTable = "subscribers"
+	// SubscribersInverseTable is the table name for the Subscriber entity.
+	// It exists in this package in order to avoid circular dependency with the "subscriber" package.
+	SubscribersInverseTable = "subscribers"
+	// SubscribersColumn is the table column denoting the subscribers relation/edge.
+	SubscribersColumn = "owner_id"
 	// EntitiesTable is the table that holds the entities relation/edge.
 	EntitiesTable = "entities"
 	// EntitiesInverseTable is the table name for the Entity entity.
@@ -307,11 +305,13 @@ const (
 	NotesInverseTable = "notes"
 	// NotesColumn is the table column denoting the notes relation/edge.
 	NotesColumn = "owner_id"
-	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
-	TasksTable = "organization_tasks"
+	// TasksTable is the table that holds the tasks relation/edge.
+	TasksTable = "tasks"
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// TasksColumn is the table column denoting the tasks relation/edge.
+	TasksColumn = "owner_id"
 	// ProgramsTable is the table that holds the programs relation/edge.
 	ProgramsTable = "programs"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -384,7 +384,6 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldMappingID,
 	FieldTags,
 	FieldDeletedAt,
 	FieldDeletedBy,
@@ -442,9 +441,6 @@ var (
 	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
 	// primary key for the files relation (M2M).
 	FilesPrimaryKey = []string{"organization_id", "file_id"}
-	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
-	// primary key for the tasks relation (M2M).
-	TasksPrimaryKey = []string{"organization_id", "task_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -472,8 +468,6 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultMappingID holds the default value on creation for the "mapping_id" field.
-	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -522,11 +516,6 @@ func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
-}
-
-// ByMappingID orders the results by the mapping_id field.
-func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
 }
 
 // ByDeletedAt orders the results by the deleted_at field.
@@ -731,80 +720,10 @@ func ByChildren(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByGroupsCount orders the results by groups count.
-func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newGroupsStep(), opts...)
-	}
-}
-
-// ByGroups orders the results by groups terms.
-func ByGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByTemplatesCount orders the results by templates count.
-func ByTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTemplatesStep(), opts...)
-	}
-}
-
-// ByTemplates orders the results by templates terms.
-func ByTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByIntegrationsCount orders the results by integrations count.
-func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
-	}
-}
-
-// ByIntegrations orders the results by integrations terms.
-func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // BySettingField orders the results by setting field.
 func BySettingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSettingStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByDocumentDataCount orders the results by document_data count.
-func ByDocumentDataCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDocumentDataStep(), opts...)
-	}
-}
-
-// ByDocumentData orders the results by document_data terms.
-func ByDocumentData(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDocumentDataStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByOrgSubscriptionsCount orders the results by org_subscriptions count.
-func ByOrgSubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrgSubscriptionsStep(), opts...)
-	}
-}
-
-// ByOrgSubscriptions orders the results by org_subscriptions terms.
-func ByOrgSubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrgSubscriptionsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -847,34 +766,6 @@ func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByInvitesCount orders the results by invites count.
-func ByInvitesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInvitesStep(), opts...)
-	}
-}
-
-// ByInvites orders the results by invites terms.
-func ByInvites(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInvitesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// BySubscribersCount orders the results by subscribers count.
-func BySubscribersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newSubscribersStep(), opts...)
-	}
-}
-
-// BySubscribers orders the results by subscribers terms.
-func BySubscribers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSubscribersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -924,6 +815,104 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 func ByAvatarFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAvatarFileStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByGroupsCount orders the results by groups count.
+func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newGroupsStep(), opts...)
+	}
+}
+
+// ByGroups orders the results by groups terms.
+func ByGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTemplatesCount orders the results by templates count.
+func ByTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTemplatesStep(), opts...)
+	}
+}
+
+// ByTemplates orders the results by templates terms.
+func ByTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIntegrationsCount orders the results by integrations count.
+func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
+	}
+}
+
+// ByIntegrations orders the results by integrations terms.
+func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDocumentDataCount orders the results by document_data count.
+func ByDocumentDataCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDocumentDataStep(), opts...)
+	}
+}
+
+// ByDocumentData orders the results by document_data terms.
+func ByDocumentData(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDocumentDataStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOrgSubscriptionsCount orders the results by org_subscriptions count.
+func ByOrgSubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrgSubscriptionsStep(), opts...)
+	}
+}
+
+// ByOrgSubscriptions orders the results by org_subscriptions terms.
+func ByOrgSubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgSubscriptionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInvitesCount orders the results by invites count.
+func ByInvitesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInvitesStep(), opts...)
+	}
+}
+
+// ByInvites orders the results by invites terms.
+func ByInvites(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInvitesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubscribersCount orders the results by subscribers count.
+func BySubscribersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubscribersStep(), opts...)
+	}
+}
+
+// BySubscribers orders the results by subscribers terms.
+func BySubscribers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubscribersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1199,46 +1188,11 @@ func newChildrenStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ChildrenTable, ChildrenColumn),
 	)
 }
-func newGroupsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(GroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, GroupsTable, GroupsColumn),
-	)
-}
-func newTemplatesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TemplatesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TemplatesTable, TemplatesColumn),
-	)
-}
-func newIntegrationsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(IntegrationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
-	)
-}
 func newSettingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SettingInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, false, SettingTable, SettingColumn),
-	)
-}
-func newDocumentDataStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DocumentDataInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DocumentDataTable, DocumentDataColumn),
-	)
-}
-func newOrgSubscriptionsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrgSubscriptionsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, OrgSubscriptionsTable, OrgSubscriptionsColumn),
 	)
 }
 func newPersonalAccessTokensStep() *sqlgraph.Step {
@@ -1260,20 +1214,6 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UsersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
-	)
-}
-func newInvitesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InvitesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, InvitesTable, InvitesColumn),
-	)
-}
-func newSubscribersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SubscribersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SubscribersTable, SubscribersColumn),
 	)
 }
 func newEventsStep() *sqlgraph.Step {
@@ -1302,6 +1242,55 @@ func newAvatarFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AvatarFileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, AvatarFileTable, AvatarFileColumn),
+	)
+}
+func newGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(GroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, GroupsTable, GroupsColumn),
+	)
+}
+func newTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TemplatesTable, TemplatesColumn),
+	)
+}
+func newIntegrationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+	)
+}
+func newDocumentDataStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DocumentDataInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DocumentDataTable, DocumentDataColumn),
+	)
+}
+func newOrgSubscriptionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgSubscriptionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrgSubscriptionsTable, OrgSubscriptionsColumn),
+	)
+}
+func newInvitesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InvitesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, InvitesTable, InvitesColumn),
+	)
+}
+func newSubscribersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubscribersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SubscribersTable, SubscribersColumn),
 	)
 }
 func newEntitiesStep() *sqlgraph.Step {
@@ -1336,7 +1325,7 @@ func newTasksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

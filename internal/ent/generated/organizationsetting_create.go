@@ -80,20 +80,6 @@ func (osc *OrganizationSettingCreate) SetNillableUpdatedBy(s *string) *Organizat
 	return osc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (osc *OrganizationSettingCreate) SetMappingID(s string) *OrganizationSettingCreate {
-	osc.mutation.SetMappingID(s)
-	return osc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableMappingID(s *string) *OrganizationSettingCreate {
-	if s != nil {
-		osc.SetMappingID(*s)
-	}
-	return osc
-}
-
 // SetTags sets the "tags" field.
 func (osc *OrganizationSettingCreate) SetTags(s []string) *OrganizationSettingCreate {
 	osc.mutation.SetTags(s)
@@ -331,13 +317,6 @@ func (osc *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultUpdatedAt()
 		osc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := osc.mutation.MappingID(); !ok {
-		if organizationsetting.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized organizationsetting.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := organizationsetting.DefaultMappingID()
-		osc.mutation.SetMappingID(v)
-	}
 	if _, ok := osc.mutation.Tags(); !ok {
 		v := organizationsetting.DefaultTags
 		osc.mutation.SetTags(v)
@@ -362,9 +341,6 @@ func (osc *OrganizationSettingCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (osc *OrganizationSettingCreate) check() error {
-	if _, ok := osc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "OrganizationSetting.mapping_id"`)}
-	}
 	if v, ok := osc.mutation.Domains(); ok {
 		if err := organizationsetting.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.domains": %w`, err)}
@@ -439,10 +415,6 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	if value, ok := osc.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := osc.mutation.MappingID(); ok {
-		_spec.SetField(organizationsetting.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := osc.mutation.Tags(); ok {
 		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)

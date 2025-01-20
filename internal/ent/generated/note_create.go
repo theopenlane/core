@@ -80,17 +80,9 @@ func (nc *NoteCreate) SetNillableUpdatedBy(s *string) *NoteCreate {
 	return nc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (nc *NoteCreate) SetMappingID(s string) *NoteCreate {
-	nc.mutation.SetMappingID(s)
-	return nc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableMappingID(s *string) *NoteCreate {
-	if s != nil {
-		nc.SetMappingID(*s)
-	}
+// SetDisplayID sets the "display_id" field.
+func (nc *NoteCreate) SetDisplayID(s string) *NoteCreate {
+	nc.mutation.SetDisplayID(s)
 	return nc
 }
 
@@ -267,13 +259,6 @@ func (nc *NoteCreate) defaults() error {
 		v := note.DefaultUpdatedAt()
 		nc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := nc.mutation.MappingID(); !ok {
-		if note.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized note.DefaultMappingID (forgotten import generated/runtime?)")
-		}
-		v := note.DefaultMappingID()
-		nc.mutation.SetMappingID(v)
-	}
 	if _, ok := nc.mutation.Tags(); !ok {
 		v := note.DefaultTags
 		nc.mutation.SetTags(v)
@@ -290,8 +275,13 @@ func (nc *NoteCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (nc *NoteCreate) check() error {
-	if _, ok := nc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Note.mapping_id"`)}
+	if _, ok := nc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Note.display_id"`)}
+	}
+	if v, ok := nc.mutation.DisplayID(); ok {
+		if err := note.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Note.display_id": %w`, err)}
+		}
 	}
 	if v, ok := nc.mutation.OwnerID(); ok {
 		if err := note.OwnerIDValidator(v); err != nil {
@@ -358,9 +348,9 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := nc.mutation.MappingID(); ok {
-		_spec.SetField(note.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
+	if value, ok := nc.mutation.DisplayID(); ok {
+		_spec.SetField(note.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := nc.mutation.DeletedAt(); ok {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)

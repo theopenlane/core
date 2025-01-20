@@ -112,20 +112,6 @@ func (pmhc *ProgramMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *Pro
 	return pmhc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetMappingID(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetMappingID(s)
-	return pmhc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableMappingID(s *string) *ProgramMembershipHistoryCreate {
-	if s != nil {
-		pmhc.SetMappingID(*s)
-	}
-	return pmhc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (pmhc *ProgramMembershipHistoryCreate) SetDeletedAt(t time.Time) *ProgramMembershipHistoryCreate {
 	pmhc.mutation.SetDeletedAt(t)
@@ -241,10 +227,6 @@ func (pmhc *ProgramMembershipHistoryCreate) defaults() {
 		v := programmembershiphistory.DefaultUpdatedAt()
 		pmhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := pmhc.mutation.MappingID(); !ok {
-		v := programmembershiphistory.DefaultMappingID()
-		pmhc.mutation.SetMappingID(v)
-	}
 	if _, ok := pmhc.mutation.Role(); !ok {
 		v := programmembershiphistory.DefaultRole
 		pmhc.mutation.SetRole(v)
@@ -267,9 +249,6 @@ func (pmhc *ProgramMembershipHistoryCreate) check() error {
 		if err := programmembershiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ProgramMembershipHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := pmhc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ProgramMembershipHistory.mapping_id"`)}
 	}
 	if _, ok := pmhc.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "ProgramMembershipHistory.role"`)}
@@ -348,10 +327,6 @@ func (pmhc *ProgramMembershipHistoryCreate) createSpec() (*ProgramMembershipHist
 	if value, ok := pmhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := pmhc.mutation.MappingID(); ok {
-		_spec.SetField(programmembershiphistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := pmhc.mutation.DeletedAt(); ok {
 		_spec.SetField(programmembershiphistory.FieldDeletedAt, field.TypeTime, value)

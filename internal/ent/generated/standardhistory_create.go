@@ -139,20 +139,6 @@ func (shc *StandardHistoryCreate) SetNillableDeletedBy(s *string) *StandardHisto
 	return shc
 }
 
-// SetMappingID sets the "mapping_id" field.
-func (shc *StandardHistoryCreate) SetMappingID(s string) *StandardHistoryCreate {
-	shc.mutation.SetMappingID(s)
-	return shc
-}
-
-// SetNillableMappingID sets the "mapping_id" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableMappingID(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetMappingID(*s)
-	}
-	return shc
-}
-
 // SetTags sets the "tags" field.
 func (shc *StandardHistoryCreate) SetTags(s []string) *StandardHistoryCreate {
 	shc.mutation.SetTags(s)
@@ -344,10 +330,6 @@ func (shc *StandardHistoryCreate) defaults() {
 		v := standardhistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := shc.mutation.MappingID(); !ok {
-		v := standardhistory.DefaultMappingID()
-		shc.mutation.SetMappingID(v)
-	}
 	if _, ok := shc.mutation.Tags(); !ok {
 		v := standardhistory.DefaultTags
 		shc.mutation.SetTags(v)
@@ -370,9 +352,6 @@ func (shc *StandardHistoryCreate) check() error {
 		if err := standardhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "StandardHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := shc.mutation.MappingID(); !ok {
-		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "StandardHistory.mapping_id"`)}
 	}
 	if _, ok := shc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "StandardHistory.name"`)}
@@ -448,10 +427,6 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 	if value, ok := shc.mutation.DeletedBy(); ok {
 		_spec.SetField(standardhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := shc.mutation.MappingID(); ok {
-		_spec.SetField(standardhistory.FieldMappingID, field.TypeString, value)
-		_node.MappingID = value
 	}
 	if value, ok := shc.mutation.Tags(); ok {
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)

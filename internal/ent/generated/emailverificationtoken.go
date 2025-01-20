@@ -26,8 +26,6 @@ type EmailVerificationToken struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -77,7 +75,7 @@ func (*EmailVerificationToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case emailverificationtoken.FieldSecret:
 			values[i] = new([]byte)
-		case emailverificationtoken.FieldID, emailverificationtoken.FieldCreatedBy, emailverificationtoken.FieldUpdatedBy, emailverificationtoken.FieldMappingID, emailverificationtoken.FieldDeletedBy, emailverificationtoken.FieldOwnerID, emailverificationtoken.FieldToken, emailverificationtoken.FieldEmail:
+		case emailverificationtoken.FieldID, emailverificationtoken.FieldCreatedBy, emailverificationtoken.FieldUpdatedBy, emailverificationtoken.FieldDeletedBy, emailverificationtoken.FieldOwnerID, emailverificationtoken.FieldToken, emailverificationtoken.FieldEmail:
 			values[i] = new(sql.NullString)
 		case emailverificationtoken.FieldCreatedAt, emailverificationtoken.FieldUpdatedAt, emailverificationtoken.FieldDeletedAt, emailverificationtoken.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -125,12 +123,6 @@ func (evt *EmailVerificationToken) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				evt.UpdatedBy = value.String
-			}
-		case emailverificationtoken.FieldMappingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
-			} else if value.Valid {
-				evt.MappingID = value.String
 			}
 		case emailverificationtoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -227,9 +219,6 @@ func (evt *EmailVerificationToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(evt.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(evt.MappingID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(evt.DeletedAt.Format(time.ANSIC))

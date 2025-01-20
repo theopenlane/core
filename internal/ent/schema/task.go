@@ -47,9 +47,18 @@ func (Task) Fields() []ent.Field {
 		field.Time("due").
 			Comment("the due date of the task").
 			Optional(),
+		field.Enum("priority").
+			GoType(enums.Priority("")).
+			Comment("the priority of the task").
+			Default(enums.PriorityMedium.String()),
 		field.Time("completed").
 			Comment("the completion date of the task").
 			Optional(),
+		field.String("assignee_id").
+			Comment("the id of the user who was assigned the task").
+			Optional(),
+		field.String("assigner_id").
+			Comment("the id of the user who assigned the task"),
 	}
 }
 
@@ -57,12 +66,13 @@ func (Task) Fields() []ent.Field {
 func (Task) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("TSK"),
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames: []string{"organization_id", "group_id", "policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id"},
-			Required:   false,
+			FieldNames:            []string{"group_id", "policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "tasks",
 		}),
 	}
 }
@@ -72,13 +82,13 @@ func (Task) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("assigner", User.Type).
 			Ref("assigner_tasks").
+			Field("assigner_id").
 			Required().
 			Unique(),
 		edge.From("assignee", User.Type).
 			Ref("assignee_tasks").
+			Field("assignee_id").
 			Unique(),
-		edge.From("organization", Organization.Type).
-			Ref("tasks"),
 		edge.From("group", Group.Type).
 			Ref("tasks"),
 		edge.From("internal_policy", InternalPolicy.Type).

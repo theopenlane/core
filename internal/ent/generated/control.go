@@ -31,8 +31,8 @@ type Control struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// MappingID holds the value of the "mapping_id" field.
-	MappingID string `json:"mapping_id,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -243,7 +243,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldDetails:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldMappingID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -308,11 +308,11 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.DeletedBy = value.String
 			}
-		case control.FieldMappingID:
+		case control.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_id", values[i])
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				c.MappingID = value.String
+				c.DisplayID = value.String
 			}
 		case control.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -535,8 +535,8 @@ func (c *Control) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(c.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("mapping_id=")
-	builder.WriteString(c.MappingID)
+	builder.WriteString("display_id=")
+	builder.WriteString(c.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", c.Tags))
