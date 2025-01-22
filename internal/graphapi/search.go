@@ -36,7 +36,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 )
@@ -985,38 +984,6 @@ func adminSearchSubscribers(ctx context.Context, query string) ([]*generated.Sub
 			subscriber.OwnerIDContainsFold(query),     // search by OwnerID
 			subscriber.EmailContainsFold(query),       // search by Email
 			subscriber.PhoneNumberContainsFold(query), // search by PhoneNumber
-		),
-	).All(ctx)
-}
-
-// searchTFASetting searches for TFASetting based on the query string looking for matches
-func searchTFASettings(ctx context.Context, query string) ([]*generated.TFASetting, error) {
-	return withTransactionalMutation(ctx).TFASetting.Query().Where(
-		tfasetting.Or(
-			tfasetting.ID(query), // search equal to ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchTFASetting searches for TFASetting based on the query string looking for matches
-func adminSearchTFASettings(ctx context.Context, query string) ([]*generated.TFASetting, error) {
-	return withTransactionalMutation(ctx).TFASetting.Query().Where(
-		tfasetting.Or(
-			tfasetting.ID(query),                    // search equal to ID
-			tfasetting.DeletedByContainsFold(query), // search by DeletedBy
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
-			},
-			tfasetting.TfaSecretContainsFold(query), // search by TfaSecret
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(recoverycodes)::text LIKE $5", likeQuery)) // search by RecoveryCodes
-			},
 		),
 	).All(ctx)
 }

@@ -259,6 +259,33 @@ func (h *Handler) getUserDetailsByID(ctx context.Context, userID string) (*ent.U
 	return user, nil
 }
 
+// getUserTFASettings returns the the user with their tfa settings based on the user ID
+func (h *Handler) getUserTFASettings(ctx context.Context, userID string) (*ent.User, error) {
+	user, err := transaction.FromContext(ctx).User.Query().Where(
+		user.ID(userID),
+	).WithTfaSettings().WithSetting().Only(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error retrieving tfa settings for user")
+
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (h *Handler) updateRecoveryCodes(ctx context.Context, tfaID string, codes []string) error {
+	_, err := transaction.FromContext(ctx).TFASetting.UpdateOneID(tfaID).
+		SetRecoveryCodes(codes).
+		Save(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error updating recovery codes")
+
+		return err
+	}
+
+	return nil
+}
+
 // getUserByInviteToken returns the ent user based on the invite token in the request
 func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.Invite, error) {
 	recipient, err := transaction.FromContext(ctx).Invite.Query().

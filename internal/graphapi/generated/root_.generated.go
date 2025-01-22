@@ -2506,7 +2506,6 @@ type ComplexityRoot struct {
 		AdminStandardSearch            func(childComplexity int, query string) int
 		AdminSubcontrolSearch          func(childComplexity int, query string) int
 		AdminSubscriberSearch          func(childComplexity int, query string) int
-		AdminTFASettingSearch          func(childComplexity int, query string) int
 		AdminTaskSearch                func(childComplexity int, query string) int
 		AdminTemplateSearch            func(childComplexity int, query string) int
 		AdminUserSearch                func(childComplexity int, query string) int
@@ -2610,6 +2609,7 @@ type ComplexityRoot struct {
 		RiskSearch                     func(childComplexity int, query string) int
 		Risks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) int
 		Search                         func(childComplexity int, query string) int
+		Self                           func(childComplexity int) int
 		Standard                       func(childComplexity int, id string) int
 		StandardHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardHistoryWhereInput) int
 		StandardSearch                 func(childComplexity int, query string) int
@@ -2621,7 +2621,6 @@ type ComplexityRoot struct {
 		Subscriber                     func(childComplexity int, email string) int
 		SubscriberSearch               func(childComplexity int, query string) int
 		Subscribers                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubscriberWhereInput) int
-		TFASettingSearch               func(childComplexity int, query string) int
 		Task                           func(childComplexity int, id string) int
 		TaskHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskHistoryWhereInput) int
 		TaskSearch                     func(childComplexity int, query string) int
@@ -2999,19 +2998,16 @@ type ComplexityRoot struct {
 	}
 
 	TFASetting struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		RecoveryCodes func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		TfaSecret     func(childComplexity int) int
-		TotpAllowed   func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Verified      func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
+		DeletedBy   func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Owner       func(childComplexity int) int
+		TotpAllowed func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+		Verified    func(childComplexity int) int
 	}
 
 	TFASettingConnection struct {
@@ -3029,12 +3025,10 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
-	TFASettingSearchResult struct {
-		TFASettings func(childComplexity int) int
-	}
-
 	TFASettingUpdatePayload struct {
-		TfaSetting func(childComplexity int) int
+		QRCode        func(childComplexity int) int
+		RecoveryCodes func(childComplexity int) int
+		TfaSetting    func(childComplexity int) int
 	}
 
 	Task struct {
@@ -15794,18 +15788,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.AdminSubscriberSearch(childComplexity, args["query"].(string)), true
 
-	case "Query.adminTFASettingSearch":
-		if e.complexity.Query.AdminTFASettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminTFASettingSearch_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminTFASettingSearch(childComplexity, args["query"].(string)), true
-
 	case "Query.adminTaskSearch":
 		if e.complexity.Query.AdminTaskSearch == nil {
 			break
@@ -17042,6 +17024,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Search(childComplexity, args["query"].(string)), true
 
+	case "Query.self":
+		if e.complexity.Query.Self == nil {
+			break
+		}
+
+		return e.complexity.Query.Self(childComplexity), true
+
 	case "Query.standard":
 		if e.complexity.Query.Standard == nil {
 			break
@@ -17173,18 +17162,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.SubscriberWhereInput)), true
-
-	case "Query.tFASettingSearch":
-		if e.complexity.Query.TFASettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_tFASettingSearch_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.TFASettingSearch(childComplexity, args["query"].(string)), true
 
 	case "Query.task":
 		if e.complexity.Query.Task == nil {
@@ -19054,27 +19031,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TFASetting.Owner(childComplexity), true
 
-	case "TFASetting.recoveryCodes":
-		if e.complexity.TFASetting.RecoveryCodes == nil {
-			break
-		}
-
-		return e.complexity.TFASetting.RecoveryCodes(childComplexity), true
-
-	case "TFASetting.tags":
-		if e.complexity.TFASetting.Tags == nil {
-			break
-		}
-
-		return e.complexity.TFASetting.Tags(childComplexity), true
-
-	case "TFASetting.tfaSecret":
-		if e.complexity.TFASetting.TfaSecret == nil {
-			break
-		}
-
-		return e.complexity.TFASetting.TfaSecret(childComplexity), true
-
 	case "TFASetting.totpAllowed":
 		if e.complexity.TFASetting.TotpAllowed == nil {
 			break
@@ -19145,12 +19101,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TFASettingEdge.Node(childComplexity), true
 
-	case "TFASettingSearchResult.tFASettings":
-		if e.complexity.TFASettingSearchResult.TFASettings == nil {
+	case "TFASettingUpdatePayload.qrCode":
+		if e.complexity.TFASettingUpdatePayload.QRCode == nil {
 			break
 		}
 
-		return e.complexity.TFASettingSearchResult.TFASettings(childComplexity), true
+		return e.complexity.TFASettingUpdatePayload.QRCode(childComplexity), true
+
+	case "TFASettingUpdatePayload.recoveryCodes":
+		if e.complexity.TFASettingUpdatePayload.RecoveryCodes == nil {
+			break
+		}
+
+		return e.complexity.TFASettingUpdatePayload.RecoveryCodes(childComplexity), true
 
 	case "TFASettingUpdatePayload.tfaSetting":
 		if e.complexity.TFASettingUpdatePayload.TfaSetting == nil {
@@ -21438,15 +21401,6 @@ type ActionPlanBulkCreatePayload {
         """
         query: String!
     ): SubscriberSearchResult
-    """
-    Search across TFASetting objects
-    """
-    adminTFASettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): TFASettingSearchResult
     """
     Search across Task objects
     """
@@ -26886,10 +26840,6 @@ CreateTFASettingInput is used for create TFASetting object.
 Input was generated by ent.
 """
 input CreateTFASettingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
   """
   specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
   """
@@ -45358,21 +45308,9 @@ type TFASetting implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  TFA secret for the user
-  """
-  tfaSecret: String
-  """
   specifies if the TFA device has been verified
   """
   verified: Boolean!
-  """
-  recovery codes for 2fa
-  """
-  recoveryCodes: [String!]
   """
   specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
   """
@@ -45523,24 +45461,6 @@ input TFASettingWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
-  """
-  tfa_secret field predicates
-  """
-  tfaSecret: String
-  tfaSecretNEQ: String
-  tfaSecretIn: [String!]
-  tfaSecretNotIn: [String!]
-  tfaSecretGT: String
-  tfaSecretGTE: String
-  tfaSecretLT: String
-  tfaSecretLTE: String
-  tfaSecretContains: String
-  tfaSecretHasPrefix: String
-  tfaSecretHasSuffix: String
-  tfaSecretIsNil: Boolean
-  tfaSecretNotNil: Boolean
-  tfaSecretEqualFold: String
-  tfaSecretContainsFold: String
   """
   verified field predicates
   """
@@ -48741,12 +48661,6 @@ UpdateTFASettingInput is used for update TFASetting object.
 Input was generated by ent.
 """
 input UpdateTFASettingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
   """
   specifies if the TFA device has been verified
   """
@@ -52944,15 +52858,6 @@ scalar Price`, BuiltIn: false},
         query: String!
     ): SubscriberSearchResult
     """
-    Search across TFASetting objects
-    """
-    tFASettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): TFASettingSearchResult
-    """
     Search across Task objects
     """
     taskSearch(
@@ -53015,7 +52920,6 @@ union SearchResult =
   | StandardSearchResult
   | SubcontrolSearchResult
   | SubscriberSearchResult
-  | TFASettingSearchResult
   | TaskSearchResult
   | TemplateSearchResult
   | UserSearchResult
@@ -53155,10 +53059,6 @@ type  SubcontrolSearchResult {
 
 type  SubscriberSearchResult {
    subscribers: [ Subscriber!]
-}
-
-type  TFASettingSearchResult {
-   tFASettings: [ TFASetting!]
 }
 
 type  TaskSearchResult {
@@ -53698,6 +53598,10 @@ type TemplateBulkCreatePayload {
     """
     templates: [Template!]
 }`, BuiltIn: false},
+	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {
+    qrCode: String
+    recoveryCodes: [String!]
+}`, BuiltIn: false},
 	{Name: "../schema/tfasetting.graphql", Input: `extend type Query {
     """
     Look up tfaSetting for the current user
@@ -53767,6 +53671,13 @@ extend input UpdateTFASettingInput {
         """
         id: ID!
     ):  User!
+}
+
+extend type Query {
+    """
+    Look up user authorized user
+    """
+    self: User!
 }
 
 extend type Mutation{

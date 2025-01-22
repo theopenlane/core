@@ -11,6 +11,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // TFASetting holds the schema definition for the TFASetting entity
@@ -24,7 +26,7 @@ func (TFASetting) Fields() []ent.Field {
 		field.String("tfa_secret").
 			Comment("TFA secret for the user").
 			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.Skip(entgql.SkipAll),
 			).
 			Optional().
 			Nillable(),
@@ -37,7 +39,7 @@ func (TFASetting) Fields() []ent.Field {
 		field.Strings("recovery_codes").
 			Comment("recovery codes for 2fa").
 			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.Skip(entgql.SkipAll),
 			).
 			Optional(),
 		field.Bool("phone_otp_allowed").
@@ -69,7 +71,6 @@ func (TFASetting) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
 		UserOwnedMixin{
 			Ref:             "tfa_settings",
 			Optional:        true,
@@ -96,4 +97,16 @@ func (TFASetting) Annotations() []schema.Annotation {
 			Exclude: true,
 		},
 	}
+}
+
+// Policy of the TFASetting
+func (TFASetting) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.AllowIfSelf(),
+		),
+		policy.WithMutationRules(
+			rule.AllowIfSelf(),
+		),
+	)
 }

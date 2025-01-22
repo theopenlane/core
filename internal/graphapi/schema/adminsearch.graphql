@@ -225,15 +225,6 @@ extend type Query{
         query: String!
     ): SubscriberSearchResult
     """
-    Search across TFASetting objects
-    """
-    adminTFASettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): TFASettingSearchResult
-    """
     Search across Task objects
     """
     adminTaskSearch(

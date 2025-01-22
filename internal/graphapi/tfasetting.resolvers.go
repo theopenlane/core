@@ -6,11 +6,14 @@ package graphapi
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/utils"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/totp"
 )
 
 // CreateTFASetting is the resolver for the createTFASetting field.
@@ -39,17 +42,39 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 		return nil, err
 	}
 
-	settings, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.OwnerID(userID)).Only(ctx)
+	settings, err := withTransactionalMutation(ctx).TFASetting.Query().
+		Where(tfasetting.OwnerID(userID)).
+		WithOwner(). // get the owner so we can get the email later
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
-	settings, err = settings.Update().SetInput(input).Save(ctx)
+	updatedSettings, err := settings.Update().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
-	return &model.TFASettingUpdatePayload{TfaSetting: settings}, nil
+	out := &model.TFASettingUpdatePayload{TfaSetting: settings, RecoveryCodes: updatedSettings.RecoveryCodes}
+
+	if !utils.CheckForRequestedField(ctx, "qrCode") {
+		return out, nil
+	}
+
+	// generate a new QR code if it was requested
+	qrCode, err := r.db.TOTP.TOTPManager.TOTPQRString(&totp.User{
+		ID:            userID,
+		TFASecret:     *updatedSettings.TfaSecret,
+		Email:         sql.NullString{String: settings.Edges.Owner.Email, Valid: true},
+		IsTOTPAllowed: updatedSettings.TotpAllowed,
+	})
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
+	}
+
+	out.QRCode = &qrCode
+
+	return out, nil
 }
 
 // TfaSetting is the resolver for the tfaSettings field.

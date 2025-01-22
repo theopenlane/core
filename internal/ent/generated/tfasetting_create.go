@@ -105,12 +105,6 @@ func (tsc *TFASettingCreate) SetNillableDeletedBy(s *string) *TFASettingCreate {
 	return tsc
 }
 
-// SetTags sets the "tags" field.
-func (tsc *TFASettingCreate) SetTags(s []string) *TFASettingCreate {
-	tsc.mutation.SetTags(s)
-	return tsc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (tsc *TFASettingCreate) SetOwnerID(s string) *TFASettingCreate {
 	tsc.mutation.SetOwnerID(s)
@@ -271,10 +265,6 @@ func (tsc *TFASettingCreate) defaults() error {
 		v := tfasetting.DefaultUpdatedAt()
 		tsc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tsc.mutation.Tags(); !ok {
-		v := tfasetting.DefaultTags
-		tsc.mutation.SetTags(v)
-	}
 	if _, ok := tsc.mutation.Verified(); !ok {
 		v := tfasetting.DefaultVerified
 		tsc.mutation.SetVerified(v)
@@ -365,10 +355,6 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 	if value, ok := tsc.mutation.DeletedBy(); ok {
 		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := tsc.mutation.Tags(); ok {
-		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
 	}
 	if value, ok := tsc.mutation.TfaSecret(); ok {
 		_spec.SetField(tfasetting.FieldTfaSecret, field.TypeString, value)

@@ -225,15 +225,6 @@ extend type Query{
         query: String!
     ): SubscriberSearchResult
     """
-    Search across TFASetting objects
-    """
-    tFASettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): TFASettingSearchResult
-    """
     Search across Task objects
     """
     taskSearch(
@@ -296,7 +287,6 @@ union SearchResult =
   | StandardSearchResult
   | SubcontrolSearchResult
   | SubscriberSearchResult
-  | TFASettingSearchResult
   | TaskSearchResult
   | TemplateSearchResult
   | UserSearchResult
@@ -436,10 +426,6 @@ type  SubcontrolSearchResult {
 
 type  SubscriberSearchResult {
    subscribers: [ Subscriber!]
-}
-
-type  TFASettingSearchResult {
-   tFASettings: [ TFASetting!]
 }
 
 type  TaskSearchResult {

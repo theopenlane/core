@@ -3019,22 +3019,33 @@ func init() {
 	// subscriber.DefaultID holds the default value on creation for the id field.
 	subscriber.DefaultID = subscriberDescID.Default.(func() string)
 	tfasettingMixin := schema.TFASetting{}.Mixin()
+	tfasetting.Policy = privacy.NewPolicies(schema.TFASetting{})
+	tfasetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := tfasetting.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	tfasettingMixinHooks0 := tfasettingMixin[0].Hooks()
 	tfasettingMixinHooks2 := tfasettingMixin[2].Hooks()
-	tfasettingMixinHooks4 := tfasettingMixin[4].Hooks()
+	tfasettingMixinHooks3 := tfasettingMixin[3].Hooks()
 	tfasettingHooks := schema.TFASetting{}.Hooks()
-	tfasetting.Hooks[0] = tfasettingMixinHooks0[0]
-	tfasetting.Hooks[1] = tfasettingMixinHooks2[0]
-	tfasetting.Hooks[2] = tfasettingMixinHooks4[0]
-	tfasetting.Hooks[3] = tfasettingHooks[0]
+
+	tfasetting.Hooks[1] = tfasettingMixinHooks0[0]
+
+	tfasetting.Hooks[2] = tfasettingMixinHooks2[0]
+
+	tfasetting.Hooks[3] = tfasettingMixinHooks3[0]
+
+	tfasetting.Hooks[4] = tfasettingHooks[0]
 	tfasettingMixinInters2 := tfasettingMixin[2].Interceptors()
 	tfasetting.Interceptors[0] = tfasettingMixinInters2[0]
 	tfasettingMixinFields0 := tfasettingMixin[0].Fields()
 	_ = tfasettingMixinFields0
 	tfasettingMixinFields1 := tfasettingMixin[1].Fields()
 	_ = tfasettingMixinFields1
-	tfasettingMixinFields3 := tfasettingMixin[3].Fields()
-	_ = tfasettingMixinFields3
 	tfasettingFields := schema.TFASetting{}.Fields()
 	_ = tfasettingFields
 	// tfasettingDescCreatedAt is the schema descriptor for created_at field.
@@ -3047,10 +3058,6 @@ func init() {
 	tfasetting.DefaultUpdatedAt = tfasettingDescUpdatedAt.Default.(func() time.Time)
 	// tfasetting.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	tfasetting.UpdateDefaultUpdatedAt = tfasettingDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// tfasettingDescTags is the schema descriptor for tags field.
-	tfasettingDescTags := tfasettingMixinFields3[0].Descriptor()
-	// tfasetting.DefaultTags holds the default value on creation for the tags field.
-	tfasetting.DefaultTags = tfasettingDescTags.Default.([]string)
 	// tfasettingDescVerified is the schema descriptor for verified field.
 	tfasettingDescVerified := tfasettingFields[1].Descriptor()
 	// tfasetting.DefaultVerified holds the default value on creation for the verified field.

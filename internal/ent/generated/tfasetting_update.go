@@ -105,24 +105,6 @@ func (tsu *TFASettingUpdate) ClearDeletedBy() *TFASettingUpdate {
 	return tsu
 }
 
-// SetTags sets the "tags" field.
-func (tsu *TFASettingUpdate) SetTags(s []string) *TFASettingUpdate {
-	tsu.mutation.SetTags(s)
-	return tsu
-}
-
-// AppendTags appends s to the "tags" field.
-func (tsu *TFASettingUpdate) AppendTags(s []string) *TFASettingUpdate {
-	tsu.mutation.AppendTags(s)
-	return tsu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (tsu *TFASettingUpdate) ClearTags() *TFASettingUpdate {
-	tsu.mutation.ClearTags()
-	return tsu
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (tsu *TFASettingUpdate) SetOwnerID(s string) *TFASettingUpdate {
 	tsu.mutation.SetOwnerID(s)
@@ -358,17 +340,6 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tsu.mutation.DeletedByCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tsu.mutation.Tags(); ok {
-		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := tsu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, tfasetting.FieldTags, value)
-		})
-	}
-	if tsu.mutation.TagsCleared() {
-		_spec.ClearField(tfasetting.FieldTags, field.TypeJSON)
-	}
 	if value, ok := tsu.mutation.TfaSecret(); ok {
 		_spec.SetField(tfasetting.FieldTfaSecret, field.TypeString, value)
 	}
@@ -531,24 +502,6 @@ func (tsuo *TFASettingUpdateOne) SetNillableDeletedBy(s *string) *TFASettingUpda
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (tsuo *TFASettingUpdateOne) ClearDeletedBy() *TFASettingUpdateOne {
 	tsuo.mutation.ClearDeletedBy()
-	return tsuo
-}
-
-// SetTags sets the "tags" field.
-func (tsuo *TFASettingUpdateOne) SetTags(s []string) *TFASettingUpdateOne {
-	tsuo.mutation.SetTags(s)
-	return tsuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (tsuo *TFASettingUpdateOne) AppendTags(s []string) *TFASettingUpdateOne {
-	tsuo.mutation.AppendTags(s)
-	return tsuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (tsuo *TFASettingUpdateOne) ClearTags() *TFASettingUpdateOne {
-	tsuo.mutation.ClearTags()
 	return tsuo
 }
 
@@ -816,17 +769,6 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	}
 	if tsuo.mutation.DeletedByCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := tsuo.mutation.Tags(); ok {
-		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := tsuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, tfasetting.FieldTags, value)
-		})
-	}
-	if tsuo.mutation.TagsCleared() {
-		_spec.ClearField(tfasetting.FieldTags, field.TypeJSON)
 	}
 	if value, ok := tsuo.mutation.TfaSecret(); ok {
 		_spec.SetField(tfasetting.FieldTfaSecret, field.TypeString, value)

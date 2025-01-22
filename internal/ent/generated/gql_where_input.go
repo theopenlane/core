@@ -54819,23 +54819,6 @@ type TFASettingWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
-	// "tfa_secret" field predicates.
-	TfaSecret             *string  `json:"tfaSecret,omitempty"`
-	TfaSecretNEQ          *string  `json:"tfaSecretNEQ,omitempty"`
-	TfaSecretIn           []string `json:"tfaSecretIn,omitempty"`
-	TfaSecretNotIn        []string `json:"tfaSecretNotIn,omitempty"`
-	TfaSecretGT           *string  `json:"tfaSecretGT,omitempty"`
-	TfaSecretGTE          *string  `json:"tfaSecretGTE,omitempty"`
-	TfaSecretLT           *string  `json:"tfaSecretLT,omitempty"`
-	TfaSecretLTE          *string  `json:"tfaSecretLTE,omitempty"`
-	TfaSecretContains     *string  `json:"tfaSecretContains,omitempty"`
-	TfaSecretHasPrefix    *string  `json:"tfaSecretHasPrefix,omitempty"`
-	TfaSecretHasSuffix    *string  `json:"tfaSecretHasSuffix,omitempty"`
-	TfaSecretIsNil        bool     `json:"tfaSecretIsNil,omitempty"`
-	TfaSecretNotNil       bool     `json:"tfaSecretNotNil,omitempty"`
-	TfaSecretEqualFold    *string  `json:"tfaSecretEqualFold,omitempty"`
-	TfaSecretContainsFold *string  `json:"tfaSecretContainsFold,omitempty"`
-
 	// "verified" field predicates.
 	Verified    *bool `json:"verified,omitempty"`
 	VerifiedNEQ *bool `json:"verifiedNEQ,omitempty"`
@@ -55176,51 +55159,6 @@ func (i *TFASettingWhereInput) P() (predicate.TFASetting, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, tfasetting.DeletedByContainsFold(*i.DeletedByContainsFold))
-	}
-	if i.TfaSecret != nil {
-		predicates = append(predicates, tfasetting.TfaSecretEQ(*i.TfaSecret))
-	}
-	if i.TfaSecretNEQ != nil {
-		predicates = append(predicates, tfasetting.TfaSecretNEQ(*i.TfaSecretNEQ))
-	}
-	if len(i.TfaSecretIn) > 0 {
-		predicates = append(predicates, tfasetting.TfaSecretIn(i.TfaSecretIn...))
-	}
-	if len(i.TfaSecretNotIn) > 0 {
-		predicates = append(predicates, tfasetting.TfaSecretNotIn(i.TfaSecretNotIn...))
-	}
-	if i.TfaSecretGT != nil {
-		predicates = append(predicates, tfasetting.TfaSecretGT(*i.TfaSecretGT))
-	}
-	if i.TfaSecretGTE != nil {
-		predicates = append(predicates, tfasetting.TfaSecretGTE(*i.TfaSecretGTE))
-	}
-	if i.TfaSecretLT != nil {
-		predicates = append(predicates, tfasetting.TfaSecretLT(*i.TfaSecretLT))
-	}
-	if i.TfaSecretLTE != nil {
-		predicates = append(predicates, tfasetting.TfaSecretLTE(*i.TfaSecretLTE))
-	}
-	if i.TfaSecretContains != nil {
-		predicates = append(predicates, tfasetting.TfaSecretContains(*i.TfaSecretContains))
-	}
-	if i.TfaSecretHasPrefix != nil {
-		predicates = append(predicates, tfasetting.TfaSecretHasPrefix(*i.TfaSecretHasPrefix))
-	}
-	if i.TfaSecretHasSuffix != nil {
-		predicates = append(predicates, tfasetting.TfaSecretHasSuffix(*i.TfaSecretHasSuffix))
-	}
-	if i.TfaSecretIsNil {
-		predicates = append(predicates, tfasetting.TfaSecretIsNil())
-	}
-	if i.TfaSecretNotNil {
-		predicates = append(predicates, tfasetting.TfaSecretNotNil())
-	}
-	if i.TfaSecretEqualFold != nil {
-		predicates = append(predicates, tfasetting.TfaSecretEqualFold(*i.TfaSecretEqualFold))
-	}
-	if i.TfaSecretContainsFold != nil {
-		predicates = append(predicates, tfasetting.TfaSecretContainsFold(*i.TfaSecretContainsFold))
 	}
 	if i.Verified != nil {
 		predicates = append(predicates, tfasetting.VerifiedEQ(*i.Verified))

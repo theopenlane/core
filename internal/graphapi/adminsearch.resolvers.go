@@ -43,7 +43,6 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		standardResults            []*generated.Standard
 		subcontrolResults          []*generated.Subcontrol
 		subscriberResults          []*generated.Subscriber
-		tfasettingResults          []*generated.TFASetting
 		taskResults                []*generated.Task
 		templateResults            []*generated.Template
 		userResults                []*generated.User
@@ -222,13 +221,6 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		func() {
 			var err error
 			subscriberResults, err = searchSubscribers(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			tfasettingResults, err = searchTFASettings(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -447,13 +439,6 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		})
 
 		resultCount += len(subscriberResults)
-	}
-	if len(tfasettingResults) > 0 {
-		nodes = append(nodes, model.TFASettingSearchResult{
-			TFASettings: tfasettingResults,
-		})
-
-		resultCount += len(tfasettingResults)
 	}
 	if len(taskResults) > 0 {
 		nodes = append(nodes, model.TaskSearchResult{
@@ -787,18 +772,6 @@ func (r *queryResolver) AdminSubscriberSearch(ctx context.Context, query string)
 	// return the results
 	return &model.SubscriberSearchResult{
 		Subscribers: subscriberResults,
-	}, nil
-}
-func (r *queryResolver) AdminTFASettingSearch(ctx context.Context, query string) (*model.TFASettingSearchResult, error) {
-	tfasettingResults, err := adminSearchTFASettings(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &model.TFASettingSearchResult{
-		TFASettings: tfasettingResults,
 	}, nil
 }
 func (r *queryResolver) AdminTaskSearch(ctx context.Context, query string) (*model.TaskSearchResult, error) {

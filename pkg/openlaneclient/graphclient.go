@@ -313,6 +313,7 @@ type OpenlaneGraphClient interface {
 	UpdateTFASetting(ctx context.Context, input UpdateTFASettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTFASetting, error)
 	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
+	GetSelf(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetSelf, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
 	GetUserByID(ctx context.Context, userID string, interceptors ...clientv2.RequestInterceptor) (*GetUserByID, error)
 	GetUserByIDWithOrgs(ctx context.Context, userID string, interceptors ...clientv2.RequestInterceptor) (*GetUserByIDWithOrgs, error)
@@ -3451,56 +3452,6 @@ func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult) GetSubscribers() 
 	return t.Subscribers
 }
 
-type AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings struct {
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID            string   "json:\"id\" graphql:\"id\""
-	RecoveryCodes []string "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
-	TfaSecret     *string  "json:\"tfaSecret,omitempty\" graphql:\"tfaSecret\""
-}
-
-func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
-	}
-	return t.DeletedBy
-}
-func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
-	}
-	return t.ID
-}
-func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetRecoveryCodes() []string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
-	}
-	return t.RecoveryCodes
-}
-func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetTags() []string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
-	}
-	return t.Tags
-}
-func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetTfaSecret() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
-	}
-	return t.TfaSecret
-}
-
-type AdminSearch_AdminSearch_Nodes_TFASettingSearchResult struct {
-	TFASettings []*AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings "json:\"tFASettings,omitempty\" graphql:\"tFASettings\""
-}
-
-func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult) GetTFASettings() []*AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult{}
-	}
-	return t.TFASettings
-}
-
 type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
 	AssigneeID  *string        "json:\"assigneeID,omitempty\" graphql:\"assigneeID\""
 	AssignerID  string         "json:\"assignerID\" graphql:\"assignerID\""
@@ -3818,7 +3769,6 @@ type AdminSearch_AdminSearch_Nodes struct {
 	StandardSearchResult            AdminSearch_AdminSearch_Nodes_StandardSearchResult            "graphql:\"... on StandardSearchResult\""
 	SubcontrolSearchResult          AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult          "graphql:\"... on SubcontrolSearchResult\""
 	SubscriberSearchResult          AdminSearch_AdminSearch_Nodes_SubscriberSearchResult          "graphql:\"... on SubscriberSearchResult\""
-	TFASettingSearchResult          AdminSearch_AdminSearch_Nodes_TFASettingSearchResult          "graphql:\"... on TFASettingSearchResult\""
 	TaskSearchResult                AdminSearch_AdminSearch_Nodes_TaskSearchResult                "graphql:\"... on TaskSearchResult\""
 	TemplateSearchResult            AdminSearch_AdminSearch_Nodes_TemplateSearchResult            "graphql:\"... on TemplateSearchResult\""
 	UserSearchResult                AdminSearch_AdminSearch_Nodes_UserSearchResult                "graphql:\"... on UserSearchResult\""
@@ -3974,12 +3924,6 @@ func (t *AdminSearch_AdminSearch_Nodes) GetSubscriberSearchResult() *AdminSearch
 		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.SubscriberSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetTFASettingSearchResult() *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.TFASettingSearchResult
 }
 func (t *AdminSearch_AdminSearch_Nodes) GetTaskSearchResult() *AdminSearch_AdminSearch_Nodes_TaskSearchResult {
 	if t == nil {
@@ -36649,35 +36593,6 @@ func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult) GetSubscribers() []*G
 	return t.Subscribers
 }
 
-type GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings) GetID() string {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings{}
-	}
-	return t.ID
-}
-func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings) GetTags() []string {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings{}
-	}
-	return t.Tags
-}
-
-type GlobalSearch_Search_Nodes_TFASettingSearchResult struct {
-	TFASettings []*GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings "json:\"tFASettings,omitempty\" graphql:\"tFASettings\""
-}
-
-func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult) GetTFASettings() []*GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TFASettingSearchResult{}
-	}
-	return t.TFASettings
-}
-
 type GlobalSearch_Search_Nodes_TaskSearchResult_Tasks struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
@@ -36862,7 +36777,6 @@ type GlobalSearch_Search_Nodes struct {
 	StandardSearchResult            GlobalSearch_Search_Nodes_StandardSearchResult            "graphql:\"... on StandardSearchResult\""
 	SubcontrolSearchResult          GlobalSearch_Search_Nodes_SubcontrolSearchResult          "graphql:\"... on SubcontrolSearchResult\""
 	SubscriberSearchResult          GlobalSearch_Search_Nodes_SubscriberSearchResult          "graphql:\"... on SubscriberSearchResult\""
-	TFASettingSearchResult          GlobalSearch_Search_Nodes_TFASettingSearchResult          "graphql:\"... on TFASettingSearchResult\""
 	TaskSearchResult                GlobalSearch_Search_Nodes_TaskSearchResult                "graphql:\"... on TaskSearchResult\""
 	TemplateSearchResult            GlobalSearch_Search_Nodes_TemplateSearchResult            "graphql:\"... on TemplateSearchResult\""
 	UserSearchResult                GlobalSearch_Search_Nodes_UserSearchResult                "graphql:\"... on UserSearchResult\""
@@ -37018,12 +36932,6 @@ func (t *GlobalSearch_Search_Nodes) GetSubscriberSearchResult() *GlobalSearch_Se
 		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.SubscriberSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetTFASettingSearchResult() *GlobalSearch_Search_Nodes_TFASettingSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.TFASettingSearchResult
 }
 func (t *GlobalSearch_Search_Nodes) GetTaskSearchResult() *GlobalSearch_Search_Nodes_TaskSearchResult {
 	if t == nil {
@@ -42831,10 +42739,9 @@ func (t *CreateTFASetting_CreateTFASetting_TfaSetting_Owner) GetID() string {
 }
 
 type CreateTFASetting_CreateTFASetting_TfaSetting struct {
-	Owner         *CreateTFASetting_CreateTFASetting_TfaSetting_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	RecoveryCodes []string                                            "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
-	TotpAllowed   *bool                                               "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
-	Verified      bool                                                "json:\"verified\" graphql:\"verified\""
+	Owner       *CreateTFASetting_CreateTFASetting_TfaSetting_Owner "json:\"owner,omitempty\" graphql:\"owner\""
+	TotpAllowed *bool                                               "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
+	Verified    bool                                                "json:\"verified\" graphql:\"verified\""
 }
 
 func (t *CreateTFASetting_CreateTFASetting_TfaSetting) GetOwner() *CreateTFASetting_CreateTFASetting_TfaSetting_Owner {
@@ -42842,12 +42749,6 @@ func (t *CreateTFASetting_CreateTFASetting_TfaSetting) GetOwner() *CreateTFASett
 		t = &CreateTFASetting_CreateTFASetting_TfaSetting{}
 	}
 	return t.Owner
-}
-func (t *CreateTFASetting_CreateTFASetting_TfaSetting) GetRecoveryCodes() []string {
-	if t == nil {
-		t = &CreateTFASetting_CreateTFASetting_TfaSetting{}
-	}
-	return t.RecoveryCodes
 }
 func (t *CreateTFASetting_CreateTFASetting_TfaSetting) GetTotpAllowed() *bool {
 	if t == nil {
@@ -42885,10 +42786,9 @@ func (t *GetAllTFASettings_TfaSettings_Edges_Node_Owner) GetID() string {
 }
 
 type GetAllTFASettings_TfaSettings_Edges_Node struct {
-	Owner         *GetAllTFASettings_TfaSettings_Edges_Node_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	RecoveryCodes []string                                        "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
-	TotpAllowed   *bool                                           "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
-	Verified      bool                                            "json:\"verified\" graphql:\"verified\""
+	Owner       *GetAllTFASettings_TfaSettings_Edges_Node_Owner "json:\"owner,omitempty\" graphql:\"owner\""
+	TotpAllowed *bool                                           "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
+	Verified    bool                                            "json:\"verified\" graphql:\"verified\""
 }
 
 func (t *GetAllTFASettings_TfaSettings_Edges_Node) GetOwner() *GetAllTFASettings_TfaSettings_Edges_Node_Owner {
@@ -42896,12 +42796,6 @@ func (t *GetAllTFASettings_TfaSettings_Edges_Node) GetOwner() *GetAllTFASettings
 		t = &GetAllTFASettings_TfaSettings_Edges_Node{}
 	}
 	return t.Owner
-}
-func (t *GetAllTFASettings_TfaSettings_Edges_Node) GetRecoveryCodes() []string {
-	if t == nil {
-		t = &GetAllTFASettings_TfaSettings_Edges_Node{}
-	}
-	return t.RecoveryCodes
 }
 func (t *GetAllTFASettings_TfaSettings_Edges_Node) GetTotpAllowed() *bool {
 	if t == nil {
@@ -42950,10 +42844,9 @@ func (t *GetTFASetting_TfaSetting_Owner) GetID() string {
 }
 
 type GetTFASetting_TfaSetting struct {
-	Owner         *GetTFASetting_TfaSetting_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	RecoveryCodes []string                        "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
-	TotpAllowed   *bool                           "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
-	Verified      bool                            "json:\"verified\" graphql:\"verified\""
+	Owner       *GetTFASetting_TfaSetting_Owner "json:\"owner,omitempty\" graphql:\"owner\""
+	TotpAllowed *bool                           "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
+	Verified    bool                            "json:\"verified\" graphql:\"verified\""
 }
 
 func (t *GetTFASetting_TfaSetting) GetOwner() *GetTFASetting_TfaSetting_Owner {
@@ -42961,12 +42854,6 @@ func (t *GetTFASetting_TfaSetting) GetOwner() *GetTFASetting_TfaSetting_Owner {
 		t = &GetTFASetting_TfaSetting{}
 	}
 	return t.Owner
-}
-func (t *GetTFASetting_TfaSetting) GetRecoveryCodes() []string {
-	if t == nil {
-		t = &GetTFASetting_TfaSetting{}
-	}
-	return t.RecoveryCodes
 }
 func (t *GetTFASetting_TfaSetting) GetTotpAllowed() *bool {
 	if t == nil {
@@ -42982,17 +42869,10 @@ func (t *GetTFASetting_TfaSetting) GetVerified() bool {
 }
 
 type UpdateTFASetting_UpdateTFASetting_TfaSetting struct {
-	RecoveryCodes []string "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
-	TotpAllowed   *bool    "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
-	Verified      bool     "json:\"verified\" graphql:\"verified\""
+	TotpAllowed *bool "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
+	Verified    bool  "json:\"verified\" graphql:\"verified\""
 }
 
-func (t *UpdateTFASetting_UpdateTFASetting_TfaSetting) GetRecoveryCodes() []string {
-	if t == nil {
-		t = &UpdateTFASetting_UpdateTFASetting_TfaSetting{}
-	}
-	return t.RecoveryCodes
-}
 func (t *UpdateTFASetting_UpdateTFASetting_TfaSetting) GetTotpAllowed() *bool {
 	if t == nil {
 		t = &UpdateTFASetting_UpdateTFASetting_TfaSetting{}
@@ -43007,9 +42887,23 @@ func (t *UpdateTFASetting_UpdateTFASetting_TfaSetting) GetVerified() bool {
 }
 
 type UpdateTFASetting_UpdateTFASetting struct {
-	TfaSetting UpdateTFASetting_UpdateTFASetting_TfaSetting "json:\"tfaSetting\" graphql:\"tfaSetting\""
+	QRCode        *string                                      "json:\"qrCode,omitempty\" graphql:\"qrCode\""
+	RecoveryCodes []string                                     "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
+	TfaSetting    UpdateTFASetting_UpdateTFASetting_TfaSetting "json:\"tfaSetting\" graphql:\"tfaSetting\""
 }
 
+func (t *UpdateTFASetting_UpdateTFASetting) GetQRCode() *string {
+	if t == nil {
+		t = &UpdateTFASetting_UpdateTFASetting{}
+	}
+	return t.QRCode
+}
+func (t *UpdateTFASetting_UpdateTFASetting) GetRecoveryCodes() []string {
+	if t == nil {
+		t = &UpdateTFASetting_UpdateTFASetting{}
+	}
+	return t.RecoveryCodes
+}
 func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_UpdateTFASetting_TfaSetting {
 	if t == nil {
 		t = &UpdateTFASetting_UpdateTFASetting{}
@@ -43301,6 +43195,278 @@ func (t *DeleteUser_DeleteUser) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetSelf_Self_AvatarFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetSelf_Self_AvatarFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetSelf_Self_AvatarFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetSelf_Self_Setting_DefaultOrg struct {
+	ID          string "json:\"id\" graphql:\"id\""
+	Name        string "json:\"name\" graphql:\"name\""
+	PersonalOrg *bool  "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+}
+
+func (t *GetSelf_Self_Setting_DefaultOrg) GetID() string {
+	if t == nil {
+		t = &GetSelf_Self_Setting_DefaultOrg{}
+	}
+	return t.ID
+}
+func (t *GetSelf_Self_Setting_DefaultOrg) GetName() string {
+	if t == nil {
+		t = &GetSelf_Self_Setting_DefaultOrg{}
+	}
+	return t.Name
+}
+func (t *GetSelf_Self_Setting_DefaultOrg) GetPersonalOrg() *bool {
+	if t == nil {
+		t = &GetSelf_Self_Setting_DefaultOrg{}
+	}
+	return t.PersonalOrg
+}
+
+type GetSelf_Self_Setting struct {
+	CreatedAt      *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DefaultOrg     *GetSelf_Self_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
+	EmailConfirmed bool                             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
+	Locked         bool                             "json:\"locked\" graphql:\"locked\""
+	SilencedAt     *time.Time                       "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
+	Status         enums.UserStatus                 "json:\"status\" graphql:\"status\""
+	SuspendedAt    *time.Time                       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
+	Tags           []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSelf_Self_Setting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSelf_Self_Setting) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSelf_Self_Setting) GetDefaultOrg() *GetSelf_Self_Setting_DefaultOrg {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.DefaultOrg
+}
+func (t *GetSelf_Self_Setting) GetEmailConfirmed() bool {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.EmailConfirmed
+}
+func (t *GetSelf_Self_Setting) GetLocked() bool {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.Locked
+}
+func (t *GetSelf_Self_Setting) GetSilencedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.SilencedAt
+}
+func (t *GetSelf_Self_Setting) GetStatus() *enums.UserStatus {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return &t.Status
+}
+func (t *GetSelf_Self_Setting) GetSuspendedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.SuspendedAt
+}
+func (t *GetSelf_Self_Setting) GetTags() []string {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.Tags
+}
+func (t *GetSelf_Self_Setting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSelf_Self_Setting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.UpdatedBy
+}
+
+type GetSelf_Self_TfaSettings struct {
+	TotpAllowed *bool "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
+	Verified    bool  "json:\"verified\" graphql:\"verified\""
+}
+
+func (t *GetSelf_Self_TfaSettings) GetTotpAllowed() *bool {
+	if t == nil {
+		t = &GetSelf_Self_TfaSettings{}
+	}
+	return t.TotpAllowed
+}
+func (t *GetSelf_Self_TfaSettings) GetVerified() bool {
+	if t == nil {
+		t = &GetSelf_Self_TfaSettings{}
+	}
+	return t.Verified
+}
+
+type GetSelf_Self struct {
+	AuthProvider      enums.AuthProvider          "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarFile        *GetSelf_Self_AvatarFile    "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
+	AvatarLocalFileID *string                     "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	AvatarRemoteURL   *string                     "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	CreatedAt         *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID         string                      "json:\"displayID\" graphql:\"displayID\""
+	DisplayName       string                      "json:\"displayName\" graphql:\"displayName\""
+	Email             string                      "json:\"email\" graphql:\"email\""
+	FirstName         *string                     "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID                string                      "json:\"id\" graphql:\"id\""
+	LastName          *string                     "json:\"lastName,omitempty\" graphql:\"lastName\""
+	LastSeen          *time.Time                  "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
+	Setting           GetSelf_Self_Setting        "json:\"setting\" graphql:\"setting\""
+	Sub               *string                     "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags              []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	TfaSettings       []*GetSelf_Self_TfaSettings "json:\"tfaSettings,omitempty\" graphql:\"tfaSettings\""
+	UpdatedAt         *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSelf_Self) GetAuthProvider() *enums.AuthProvider {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return &t.AuthProvider
+}
+func (t *GetSelf_Self) GetAvatarFile() *GetSelf_Self_AvatarFile {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.AvatarFile
+}
+func (t *GetSelf_Self) GetAvatarLocalFileID() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.AvatarLocalFileID
+}
+func (t *GetSelf_Self) GetAvatarRemoteURL() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.AvatarRemoteURL
+}
+func (t *GetSelf_Self) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSelf_Self) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSelf_Self) GetDisplayID() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.DisplayID
+}
+func (t *GetSelf_Self) GetDisplayName() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.DisplayName
+}
+func (t *GetSelf_Self) GetEmail() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.Email
+}
+func (t *GetSelf_Self) GetFirstName() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.FirstName
+}
+func (t *GetSelf_Self) GetID() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.ID
+}
+func (t *GetSelf_Self) GetLastName() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.LastName
+}
+func (t *GetSelf_Self) GetLastSeen() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.LastSeen
+}
+func (t *GetSelf_Self) GetSetting() *GetSelf_Self_Setting {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return &t.Setting
+}
+func (t *GetSelf_Self) GetSub() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.Sub
+}
+func (t *GetSelf_Self) GetTags() []string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.Tags
+}
+func (t *GetSelf_Self) GetTfaSettings() []*GetSelf_Self_TfaSettings {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.TfaSettings
+}
+func (t *GetSelf_Self) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSelf_Self) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.UpdatedBy
+}
+
 type GetAllUsers_Users_Edges_Node_AvatarFile struct {
 	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
@@ -43310,112 +43476,6 @@ func (t *GetAllUsers_Users_Edges_Node_AvatarFile) GetPresignedURL() *string {
 		t = &GetAllUsers_Users_Edges_Node_AvatarFile{}
 	}
 	return t.PresignedURL
-}
-
-type GetAllUsers_Users_Edges_Node_Setting_DefaultOrg struct {
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-	PersonalOrg *bool  "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-}
-
-func (t *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg) GetID() string {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting_DefaultOrg{}
-	}
-	return t.ID
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg) GetName() string {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting_DefaultOrg{}
-	}
-	return t.Name
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg) GetPersonalOrg() *bool {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting_DefaultOrg{}
-	}
-	return t.PersonalOrg
-}
-
-type GetAllUsers_Users_Edges_Node_Setting struct {
-	CreatedAt      *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DefaultOrg     *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
-	EmailConfirmed bool                                             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
-	Locked         bool                                             "json:\"locked\" graphql:\"locked\""
-	SilencedAt     *time.Time                                       "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
-	Status         enums.UserStatus                                 "json:\"status\" graphql:\"status\""
-	SuspendedAt    *time.Time                                       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
-	Tags           []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.CreatedAt
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.CreatedBy
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetDefaultOrg() *GetAllUsers_Users_Edges_Node_Setting_DefaultOrg {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.DefaultOrg
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetEmailConfirmed() bool {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.EmailConfirmed
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetLocked() bool {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.Locked
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetSilencedAt() *time.Time {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.SilencedAt
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetStatus() *enums.UserStatus {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return &t.Status
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetSuspendedAt() *time.Time {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.SuspendedAt
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetTags() []string {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.Tags
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetAllUsers_Users_Edges_Node_Setting) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node_Setting{}
-	}
-	return t.UpdatedBy
 }
 
 type GetAllUsers_Users_Edges_Node struct {
@@ -43432,7 +43492,6 @@ type GetAllUsers_Users_Edges_Node struct {
 	ID                string                                   "json:\"id\" graphql:\"id\""
 	LastName          *string                                  "json:\"lastName,omitempty\" graphql:\"lastName\""
 	LastSeen          *time.Time                               "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Setting           GetAllUsers_Users_Edges_Node_Setting     "json:\"setting\" graphql:\"setting\""
 	Sub               *string                                  "json:\"sub,omitempty\" graphql:\"sub\""
 	Tags              []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt         *time.Time                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -43516,12 +43575,6 @@ func (t *GetAllUsers_Users_Edges_Node) GetLastSeen() *time.Time {
 		t = &GetAllUsers_Users_Edges_Node{}
 	}
 	return t.LastSeen
-}
-func (t *GetAllUsers_Users_Edges_Node) GetSetting() *GetAllUsers_Users_Edges_Node_Setting {
-	if t == nil {
-		t = &GetAllUsers_Users_Edges_Node{}
-	}
-	return &t.Setting
 }
 func (t *GetAllUsers_Users_Edges_Node) GetSub() *string {
 	if t == nil {
@@ -48893,6 +48946,17 @@ func (t *DeleteUser) GetDeleteUser() *DeleteUser_DeleteUser {
 	return &t.DeleteUser
 }
 
+type GetSelf struct {
+	Self GetSelf_Self "json:\"self\" graphql:\"self\""
+}
+
+func (t *GetSelf) GetSelf() *GetSelf_Self {
+	if t == nil {
+		t = &GetSelf{}
+	}
+	return &t.Self
+}
+
 type GetAllUsers struct {
 	Users GetAllUsers_Users "json:\"users\" graphql:\"users\""
 }
@@ -49744,15 +49808,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					email
 					phoneNumber
-				}
-			}
-			... on TFASettingSearchResult {
-				tFASettings {
-					id
-					deletedBy
-					tags
-					tfaSecret
-					recoveryCodes
 				}
 			}
 			... on TaskSearchResult {
@@ -59990,12 +60045,6 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on TFASettingSearchResult {
-				tFASettings {
-					id
-					tags
-				}
-			}
 			... on TaskSearchResult {
 				tasks {
 					description
@@ -61928,7 +61977,6 @@ func (c *Client) GetTemplateHistories(ctx context.Context, where *TemplateHistor
 const CreateTFASettingDocument = `mutation CreateTFASetting ($input: CreateTFASettingInput!) {
 	createTFASetting(input: $input) {
 		tfaSetting {
-			recoveryCodes
 			totpAllowed
 			verified
 			owner {
@@ -61960,7 +62008,6 @@ const GetAllTFASettingsDocument = `query GetAllTFASettings {
 	tfaSettings {
 		edges {
 			node {
-				recoveryCodes
 				totpAllowed
 				verified
 				owner {
@@ -61989,7 +62036,6 @@ func (c *Client) GetAllTFASettings(ctx context.Context, interceptors ...clientv2
 
 const GetTFASettingDocument = `query GetTFASetting {
 	tfaSetting {
-		recoveryCodes
 		totpAllowed
 		verified
 		owner {
@@ -62017,10 +62063,11 @@ func (c *Client) GetTFASetting(ctx context.Context, interceptors ...clientv2.Req
 const UpdateTFASettingDocument = `mutation UpdateTFASetting ($input: UpdateTFASettingInput!) {
 	updateTFASetting(input: $input) {
 		tfaSetting {
-			recoveryCodes
 			totpAllowed
 			verified
 		}
+		qrCode
+		recoveryCodes
 	}
 }
 `
@@ -62131,6 +62178,67 @@ func (c *Client) DeleteUser(ctx context.Context, deleteUserID string, intercepto
 	return &res, nil
 }
 
+const GetSelfDocument = `query GetSelf {
+	self {
+		authProvider
+		avatarRemoteURL
+		avatarLocalFileID
+		avatarFile {
+			presignedURL
+		}
+		displayID
+		displayName
+		email
+		firstName
+		id
+		lastName
+		lastSeen
+		sub
+		tags
+		setting {
+			defaultOrg {
+				id
+				name
+				personalOrg
+			}
+			createdAt
+			createdBy
+			emailConfirmed
+			locked
+			silencedAt
+			status
+			suspendedAt
+			tags
+			updatedAt
+			updatedBy
+		}
+		tfaSettings {
+			totpAllowed
+			verified
+		}
+		createdAt
+		createdBy
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetSelf(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetSelf, error) {
+	vars := map[string]any{}
+
+	var res GetSelf
+	if err := c.Client.Post(ctx, "GetSelf", GetSelfDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllUsersDocument = `query GetAllUsers {
 	users {
 		edges {
@@ -62150,23 +62258,6 @@ const GetAllUsersDocument = `query GetAllUsers {
 				lastSeen
 				sub
 				tags
-				setting {
-					defaultOrg {
-						id
-						name
-						personalOrg
-					}
-					createdAt
-					createdBy
-					emailConfirmed
-					locked
-					silencedAt
-					status
-					suspendedAt
-					tags
-					updatedAt
-					updatedBy
-				}
 				createdAt
 				createdBy
 				updatedAt
@@ -63041,6 +63132,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateTFASettingDocument:                   "UpdateTFASetting",
 	CreateUserDocument:                         "CreateUser",
 	DeleteUserDocument:                         "DeleteUser",
+	GetSelfDocument:                            "GetSelf",
 	GetAllUsersDocument:                        "GetAllUsers",
 	GetUserByIDDocument:                        "GetUserByID",
 	GetUserByIDWithOrgsDocument:                "GetUserByIDWithOrgs",

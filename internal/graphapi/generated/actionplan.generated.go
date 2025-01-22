@@ -15095,6 +15095,10 @@ func (ec *executionContext) fieldContext_Mutation_updateTFASetting(ctx context.C
 			switch field.Name {
 			case "tfaSetting":
 				return ec.fieldContext_TFASettingUpdatePayload_tfaSetting(ctx, field)
+			case "qrCode":
+				return ec.fieldContext_TFASettingUpdatePayload_qrCode(ctx, field)
+			case "recoveryCodes":
+				return ec.fieldContext_TFASettingUpdatePayload_recoveryCodes(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TFASettingUpdatePayload", field.Name)
 		},
