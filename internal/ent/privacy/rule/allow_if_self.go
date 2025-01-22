@@ -24,6 +24,11 @@ func AllowIfSelf() privacy.QueryMutationRule {
 			WhereUserID(entql.StringP)
 		}
 
+		// OwnerIDFilter is used on user owned entities
+		type OwnerIDFilter interface {
+			WhereOwnerID(entql.StringP)
+		}
+
 		// if the user setting is being deleted, allow it
 		// there are no resolvers, this will always be deleted as part
 		// of a cascade delete
@@ -39,6 +44,9 @@ func AllowIfSelf() privacy.QueryMutationRule {
 		switch actualFilter := f.(type) {
 		case UserIDFilter:
 			actualFilter.WhereUserID(entql.StringEQ(userID))
+		case OwnerIDFilter:
+			actualFilter.WhereOwnerID(entql.StringEQ(userID))
+			// always check this at the end because every schema has an ID field
 		case IDFilter:
 			actualFilter.WhereID(entql.StringEQ(userID))
 		default:

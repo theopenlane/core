@@ -23,11 +23,11 @@ import (
 
 // updateUserLastSeen updates the last seen timestamp of the user
 func (h *Handler) updateUserLastSeen(ctx context.Context, id string) error {
-	if _, err := transaction.FromContext(ctx).
+	if err := transaction.FromContext(ctx).
 		User.
 		UpdateOneID(id).
 		SetLastSeen(time.Now()).
-		Save(ctx); err != nil {
+		Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error updating user last seen")
 
 		return err
@@ -52,11 +52,11 @@ func (h *Handler) createUser(ctx context.Context, input ent.CreateUserInput) (*e
 
 // updateSubscriberVerifiedEmail updates a subscriber by in the database based on the input and sets to active with verified email
 func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, input ent.UpdateSubscriberInput) error {
-	_, err := transaction.FromContext(ctx).Subscriber.UpdateOneID(id).
+	err := transaction.FromContext(ctx).Subscriber.UpdateOneID(id).
 		SetInput(input).
 		SetActive(true).
 		SetVerifiedEmail(true).
-		Save(ctx)
+		Exec(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error updating subscriber verified")
 		return err
@@ -73,11 +73,11 @@ func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *U
 		return err
 	}
 
-	_, err = transaction.FromContext(ctx).Subscriber.UpdateOneID(user.ID).
+	err = transaction.FromContext(ctx).Subscriber.UpdateOneID(user.ID).
 		SetToken(user.EmailVerificationToken.String).
 		SetSecret(user.EmailVerificationSecret).
 		SetTTL(ttl).
-		Save(ctx)
+		Exec(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error updating subscriber tokens")
 
@@ -223,7 +223,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		return ErrMaxDeviceLimit
 	}
 
-	_, err = transaction.FromContext(ctx).Webauthn.Create().
+	err = transaction.FromContext(ctx).Webauthn.Create().
 		SetOwnerID(user.ID).
 		SetTransports(transports).
 		SetAttestationType(credential.AttestationType).
@@ -235,7 +235,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		SetUserPresent(credential.Flags.UserPresent).
 		SetUserVerified(credential.Flags.UserVerified).
 		SetSignCount(int32(credential.Authenticator.SignCount)). // nolint:gosec
-		Save(ctx)
+		Exec(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error creating email verification token")
 
@@ -257,6 +257,33 @@ func (h *Handler) getUserDetailsByID(ctx context.Context, userID string) (*ent.U
 	}
 
 	return user, nil
+}
+
+// getUserTFASettings returns the the user with their tfa settings based on the user ID
+func (h *Handler) getUserTFASettings(ctx context.Context, userID string) (*ent.User, error) {
+	user, err := transaction.FromContext(ctx).User.Query().Where(
+		user.ID(userID),
+	).WithTfaSettings().WithSetting().Only(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error retrieving tfa settings for user")
+
+		return nil, err
+	}
+
+	return user, nil
+}
+
+// updateRecoveryCodes updates the recovery codes for the user in their tfa settings
+func (h *Handler) updateRecoveryCodes(ctx context.Context, tfaID string, codes []string) error {
+	if err := transaction.FromContext(ctx).TFASetting.UpdateOneID(tfaID).
+		SetRecoveryCodes(codes).
+		Exec(ctx); err != nil {
+		log.Error().Err(err).Msg("error updating recovery codes")
+
+		return err
+	}
+
+	return nil
 }
 
 // getUserByInviteToken returns the ent user based on the invite token in the request
@@ -340,8 +367,8 @@ func (h *Handler) expireAllResetTokensUserByEmail(ctx context.Context, email str
 
 // setEmailConfirmed sets the user setting field email_confirmed to true within a transaction
 func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
-	if _, err := transaction.FromContext(ctx).UserSetting.
-		UpdateOne(user.Edges.Setting).SetEmailConfirmed(true).Save(ctx); err != nil {
+	if err := transaction.FromContext(ctx).UserSetting.
+		UpdateOne(user.Edges.Setting).SetEmailConfirmed(true).Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error setting email confirmed")
 
 		return err
@@ -352,7 +379,7 @@ func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
 
 // updateUserPassword changes a updates a user's password in the database
 func (h *Handler) updateUserPassword(ctx context.Context, id string, password string) error {
-	if _, err := transaction.FromContext(ctx).User.UpdateOneID(id).SetPassword(password).Save(ctx); err != nil {
+	if err := transaction.FromContext(ctx).User.UpdateOneID(id).SetPassword(password).Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error updating user password")
 
 		return err
@@ -448,10 +475,10 @@ func (h *Handler) updateUserAvatar(ctx context.Context, user *ent.User, image st
 		return nil
 	}
 
-	if _, err := transaction.FromContext(ctx).
+	if err := transaction.FromContext(ctx).
 		User.UpdateOneID(user.ID).
 		SetAvatarRemoteURL(image).
-		Save(ctx); err != nil {
+		Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error updating user avatar")
 		return err
 	}
@@ -461,10 +488,10 @@ func (h *Handler) updateUserAvatar(ctx context.Context, user *ent.User, image st
 
 // setWebauthnAllowed sets the user setting field is_webauthn_allowed to true within a transaction
 func (h *Handler) setWebauthnAllowed(ctx context.Context, user *ent.User) error {
-	if _, err := transaction.FromContext(ctx).UserSetting.Update().SetIsWebauthnAllowed(true).
+	if err := transaction.FromContext(ctx).UserSetting.Update().SetIsWebauthnAllowed(true).
 		Where(
 			usersetting.UserID(user.ID),
-		).Save(ctx); err != nil {
+		).Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error setting webauthn allowed")
 
 		return err

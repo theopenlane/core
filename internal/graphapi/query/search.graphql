@@ -189,12 +189,6 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on TFASettingSearchResult {
-        tFASettings {
-          id
-          tags
-        }
-      }
       ... on TaskSearchResult {
         tasks {
           description

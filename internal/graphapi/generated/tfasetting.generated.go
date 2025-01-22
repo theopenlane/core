@@ -4,6 +4,7 @@ package gqlgenerated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 	"sync/atomic"
@@ -81,14 +82,8 @@ func (ec *executionContext) fieldContext_TFASettingCreatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TFASetting_tags(ctx, field)
-			case "tfaSecret":
-				return ec.fieldContext_TFASetting_tfaSecret(ctx, field)
 			case "verified":
 				return ec.fieldContext_TFASetting_verified(ctx, field)
-			case "recoveryCodes":
-				return ec.fieldContext_TFASetting_recoveryCodes(ctx, field)
 			case "totpAllowed":
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
 			case "owner":
@@ -153,20 +148,96 @@ func (ec *executionContext) fieldContext_TFASettingUpdatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TFASetting_tags(ctx, field)
-			case "tfaSecret":
-				return ec.fieldContext_TFASetting_tfaSecret(ctx, field)
 			case "verified":
 				return ec.fieldContext_TFASetting_verified(ctx, field)
-			case "recoveryCodes":
-				return ec.fieldContext_TFASetting_recoveryCodes(ctx, field)
 			case "totpAllowed":
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
 			case "owner":
 				return ec.fieldContext_TFASetting_owner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TFASetting", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TFASettingUpdatePayload_qrCode(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TFASettingUpdatePayload_qrCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.QRCode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TFASettingUpdatePayload_qrCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TFASettingUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TFASettingUpdatePayload_recoveryCodes(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TFASettingUpdatePayload_recoveryCodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RecoveryCodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TFASettingUpdatePayload_recoveryCodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TFASettingUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -239,6 +310,10 @@ func (ec *executionContext) _TFASettingUpdatePayload(ctx context.Context, sel as
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "qrCode":
+			out.Values[i] = ec._TFASettingUpdatePayload_qrCode(ctx, field, obj)
+		case "recoveryCodes":
+			out.Values[i] = ec._TFASettingUpdatePayload_recoveryCodes(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

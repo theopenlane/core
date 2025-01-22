@@ -1,4 +1,4 @@
-h1:Q3Iezvre3Q8FexBmyGmluFEO9/0j5rxw0dWBgQpQL1s=
+h1:4GPC8BnqofiMlmiCRghEvAzcPho21UHMrok6Na/GawA=
 20241211231032_init.sql h1:TxjpHzKPB/5L2i7V2JfO1y+Cep/AyQN5wGjhY7saCeE=
 20241212223712_consistent_naming.sql h1:tbdYOtixhW66Jmvy3aCm+X6neI/SRVvItKM0Bdn26TA=
 20250109002849_billing_address.sql h1:mspCGbJ6HVmx3r4j+d/WvruzirJdJ8u5x18WF9R9ESE=
@@ -9,3 +9,4 @@ h1:Q3Iezvre3Q8FexBmyGmluFEO9/0j5rxw0dWBgQpQL1s=
 20250115183329_managed_groups.sql h1:s4C9GaUPkPMSIYXR3bVqBDGAd2jrjKFyzwh9IfvO7y8=
 20250116051100_membership_edges.sql h1:neajKhc8HN2F88ErsQgroNy6Zvjukgg8nOhWF65xQSM=
 20250120161634_display_ids.sql h1:F9kapLU4yySR1LLBY4at5C0KT7GRLU5y3MhLbwx6V5k=
+20250122041747_tfa_setting.sql h1:puZkAVMKDpWtk3EY161vMEidn/WQfxiGPvvNr6jCK2g=

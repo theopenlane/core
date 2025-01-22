@@ -1,0 +1,4 @@
+extend type TFASettingUpdatePayload {
+    qrCode: String
+    recoveryCodes: [String!]
+}

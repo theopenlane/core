@@ -2295,7 +2295,6 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "tfa_secret", Type: field.TypeString, Nullable: true},
 		{Name: "verified", Type: field.TypeBool, Default: false},
 		{Name: "recovery_codes", Type: field.TypeJSON, Nullable: true},
@@ -2312,7 +2311,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tfa_settings_users_tfa_settings",
-				Columns:    []*schema.Column{TfaSettingsColumns[14]},
+				Columns:    []*schema.Column{TfaSettingsColumns[13]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2321,7 +2320,7 @@ var (
 			{
 				Name:    "tfasetting_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TfaSettingsColumns[14]},
+				Columns: []*schema.Column{TfaSettingsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

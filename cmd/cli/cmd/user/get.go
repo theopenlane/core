@@ -21,6 +21,7 @@ func init() {
 	command.AddCommand(getCmd)
 
 	getCmd.Flags().StringP("id", "i", "", "user id to query")
+	getCmd.Flags().BoolP("self", "s", true, "get only details of the current user")
 }
 
 // get retrieves all users or a specific user by ID
@@ -40,6 +41,13 @@ func get(ctx context.Context) error {
 	// if a user ID is provided, filter on that user, otherwise get all
 	if id != "" {
 		o, err := client.GetUserByID(ctx, id)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
+
+	if cmd.Config.Bool("self") {
+		o, err := client.GetSelf(ctx)
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

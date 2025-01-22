@@ -1831,7 +1831,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldUpdatedBy:       {Type: field.TypeString, Column: tfasetting.FieldUpdatedBy},
 			tfasetting.FieldDeletedAt:       {Type: field.TypeTime, Column: tfasetting.FieldDeletedAt},
 			tfasetting.FieldDeletedBy:       {Type: field.TypeString, Column: tfasetting.FieldDeletedBy},
-			tfasetting.FieldTags:            {Type: field.TypeJSON, Column: tfasetting.FieldTags},
 			tfasetting.FieldOwnerID:         {Type: field.TypeString, Column: tfasetting.FieldOwnerID},
 			tfasetting.FieldTfaSecret:       {Type: field.TypeString, Column: tfasetting.FieldTfaSecret},
 			tfasetting.FieldVerified:        {Type: field.TypeBool, Column: tfasetting.FieldVerified},
@@ -16083,11 +16082,6 @@ func (f *TFASettingFilter) WhereDeletedAt(p entql.TimeP) {
 // WhereDeletedBy applies the entql string predicate on the deleted_by field.
 func (f *TFASettingFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(tfasetting.FieldDeletedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *TFASettingFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(tfasetting.FieldTags))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.

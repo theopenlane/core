@@ -210,6 +210,7 @@ func RegisterRoutes(router *Router) error {
 		registerAccountRolesOrganizationHandler,
 		registerAppleMerchantHandler,
 		registerWebhookHandler,
+		register2faHandler,
 	}
 
 	if router.LocalFilePath != "" {

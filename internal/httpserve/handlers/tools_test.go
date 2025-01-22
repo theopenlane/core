@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/testutils"
 
@@ -31,8 +32,12 @@ import (
 
 var (
 	// commonly used vars in tests
-	emptyResponse = "null\n"
-	validPassword = "sup3rs3cu7e!"
+	emptyResponse    = "null\n"
+	validPassword    = "sup3rs3cu7e!"
+	otpManagerSecret = totp.Secret{
+		Version: 0,
+		Key:     "9f0c6da662f018b58b04a093e2dbb2e1d8d54250",
+	}
 )
 
 const (
@@ -93,12 +98,25 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
 
+	// setup otp manager
+	otpOpts := []totp.ConfigOption{
+		totp.WithCodeLength(6),
+		totp.WithIssuer("authenticator.local"),
+		totp.WithSecret(otpManagerSecret),
+		totp.WithRedis(rc),
+	}
+
+	otpMan := totp.NewOTP(otpOpts...)
+
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{}),
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{}),
+		ent.TOTP(&totp.Manager{
+			TOTPManager: otpMan,
+		}),
 	}
 
 	// create database connection
@@ -123,6 +141,11 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup handler
 	suite.h = handlerSetup(t, suite.db)
+
+	// setup totp manager
+	suite.h.OTPManager = &totp.Manager{
+		TOTPManager: otpMan,
+	}
 
 	// setup echo router
 	suite.e = setupEcho(suite.db)

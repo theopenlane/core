@@ -10,6 +10,13 @@ extend type Query {
     ):  User!
 }
 
+extend type Query {
+    """
+    Look up user authorized user
+    """
+    self: User!
+}
+
 extend type Mutation{
     """
     Create a new user

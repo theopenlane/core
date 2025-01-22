@@ -502,16 +502,6 @@ func DeletedByContainsFold(v string) predicate.TFASetting {
 	return predicate.TFASetting(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.TFASetting {
-	return predicate.TFASetting(sql.FieldNotNull(FieldTags))
-}
-
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.TFASetting {
 	return predicate.TFASetting(sql.FieldEQ(FieldOwnerID, v))

@@ -2512,75 +2512,6 @@ func (ec *executionContext) fieldContext_SubscriberSearchResult_subscribers(_ co
 	return fc, nil
 }
 
-func (ec *executionContext) _TFASettingSearchResult_tFASettings(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingSearchResult) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TFASettingSearchResult_tFASettings(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TFASettings, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.TFASetting)
-	fc.Result = res
-	return ec.marshalOTFASetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTFASettingᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TFASettingSearchResult_tFASettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TFASettingSearchResult",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TFASetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TFASetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TFASetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TFASetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TFASetting_tags(ctx, field)
-			case "tfaSecret":
-				return ec.fieldContext_TFASetting_tfaSecret(ctx, field)
-			case "verified":
-				return ec.fieldContext_TFASetting_verified(ctx, field)
-			case "recoveryCodes":
-				return ec.fieldContext_TFASetting_recoveryCodes(ctx, field)
-			case "totpAllowed":
-				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
-			case "owner":
-				return ec.fieldContext_TFASetting_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TFASetting", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _TaskSearchResult_tasks(ctx context.Context, field graphql.CollectedField, obj *model.TaskSearchResult) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_TaskSearchResult_tasks(ctx, field)
 	if err != nil {
@@ -3142,13 +3073,6 @@ func (ec *executionContext) _SearchResult(ctx context.Context, sel ast.Selection
 			return graphql.Null
 		}
 		return ec._SubscriberSearchResult(ctx, sel, obj)
-	case model.TFASettingSearchResult:
-		return ec._TFASettingSearchResult(ctx, sel, &obj)
-	case *model.TFASettingSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._TFASettingSearchResult(ctx, sel, obj)
 	case model.TaskSearchResult:
 		return ec._TaskSearchResult(ctx, sel, &obj)
 	case *model.TaskSearchResult:
@@ -4135,42 +4059,6 @@ func (ec *executionContext) _SubscriberSearchResult(ctx context.Context, sel ast
 	return out
 }
 
-var tFASettingSearchResultImplementors = []string{"TFASettingSearchResult", "SearchResult"}
-
-func (ec *executionContext) _TFASettingSearchResult(ctx context.Context, sel ast.SelectionSet, obj *model.TFASettingSearchResult) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, tFASettingSearchResultImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("TFASettingSearchResult")
-		case "tFASettings":
-			out.Values[i] = ec._TFASettingSearchResult_tFASettings(ctx, field, obj)
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 var taskSearchResultImplementors = []string{"TaskSearchResult", "SearchResult"}
 
 func (ec *executionContext) _TaskSearchResult(ctx context.Context, sel ast.SelectionSet, obj *model.TaskSearchResult) graphql.Marshaler {
@@ -4553,13 +4441,6 @@ func (ec *executionContext) marshalOSubscriberSearchResult2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._SubscriberSearchResult(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOTFASettingSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingSearchResult) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._TFASettingSearchResult(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOTaskSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.TaskSearchResult) graphql.Marshaler {

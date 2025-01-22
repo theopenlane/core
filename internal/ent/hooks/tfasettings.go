@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/totp"
 
@@ -23,8 +24,12 @@ func HookEnableTFA() ent.Hook {
 			verified, ok := m.Verified()
 
 			// if recovery codes are cleared, generate new ones
-			gtx := graphql.GetOperationContext(ctx)
-			regenBackupCodes, _ := gtx.Variables["input"].(map[string]interface{})["regenBackupCodes"].(bool)
+			regenBackupCodes := false
+
+			if graphql.HasOperationContext(ctx) {
+				gtx := graphql.GetOperationContext(ctx)
+				regenBackupCodes, _ = gtx.Variables["input"].(map[string]interface{})["regenBackupCodes"].(bool)
+			}
 
 			if (ok && verified) || regenBackupCodes {
 				u, err := constructTOTPUser(ctx, m)
@@ -34,8 +39,12 @@ func HookEnableTFA() ent.Hook {
 
 				u.TFASecret, err = m.TOTP.TOTPManager.TOTPSecret(u)
 				if err != nil {
+					log.Error().Err(err).Msg("unable to generate TOTP secret")
+
 					return nil, err
 				}
+
+				m.SetTfaSecret(u.TFASecret)
 
 				codes := m.TOTP.TOTPManager.GenerateRecoveryCodes()
 				m.SetRecoveryCodes(codes)
@@ -91,14 +100,27 @@ func constructTOTPUser(ctx context.Context, m *generated.TFASettingMutation) (*t
 	u.IsTOTPAllowed, _ = m.TotpAllowed()
 
 	// setup account name fields
+	isValid := true
+	if user.Email == "" {
+		isValid = false
+	}
+
 	u.Email = sql.NullString{
 		String: user.Email,
+		Valid:  isValid,
 	}
 
 	phoneNumber := setting.PhoneNumber
+
+	isValid = true
+	if phoneNumber == nil {
+		isValid = false
+	}
+
 	if phoneNumber != nil {
 		u.Phone = sql.NullString{
 			String: *setting.PhoneNumber,
+			Valid:  isValid,
 		}
 	}
 

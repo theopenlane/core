@@ -131,7 +131,6 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 
 			// Make sure provided values match
 			assert.Equal(t, tc.input.TotpAllowed, resp.CreateTFASetting.TfaSetting.TotpAllowed)
-			assert.Empty(t, resp.CreateTFASetting.TfaSetting.RecoveryCodes)
 			require.NotEmpty(t, resp.CreateTFASetting.TfaSetting.Owner)
 			assert.Equal(t, tc.userID, resp.CreateTFASetting.TfaSetting.Owner.ID)
 
@@ -211,14 +210,14 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 			require.NotNil(t, resp.UpdateTFASetting.TfaSetting)
 
 			// Make sure provided values match
-			assert.NotEmpty(t, resp.UpdateTFASetting.TfaSetting.RecoveryCodes)
+			assert.NotEmpty(t, resp.UpdateTFASetting.RecoveryCodes)
 
 			// backup codes should only be regenerated on explicit request
 			if tc.input.RegenBackupCodes != nil {
 				if *tc.input.RegenBackupCodes {
-					assert.NotEqual(t, recoveryCodes, resp.UpdateTFASetting.TfaSetting.RecoveryCodes)
+					assert.NotEqual(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
 				} else {
-					assert.Equal(t, recoveryCodes, resp.UpdateTFASetting.TfaSetting.RecoveryCodes)
+					assert.Equal(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
 				}
 			}
 
@@ -232,7 +231,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 			}
 
 			// set at the end so we can compare later
-			recoveryCodes = resp.UpdateTFASetting.TfaSetting.RecoveryCodes
+			recoveryCodes = resp.UpdateTFASetting.RecoveryCodes
 		})
 	}
 }

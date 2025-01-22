@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -370,6 +371,12 @@ func (tsq *TFASettingQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		tsq.sql = prev
+	}
+	if tfasetting.Policy == nil {
+		return errors.New("generated: uninitialized tfasetting.Policy (forgotten import generated/runtime?)")
+	}
+	if err := tfasetting.Policy.EvalQuery(ctx, tsq); err != nil {
+		return err
 	}
 	return nil
 }

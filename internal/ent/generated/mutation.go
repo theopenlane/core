@@ -102838,8 +102838,6 @@ type TFASettingMutation struct {
 	updated_by           *string
 	deleted_at           *time.Time
 	deleted_by           *string
-	tags                 *[]string
-	appendtags           []string
 	tfa_secret           *string
 	verified             *bool
 	recovery_codes       *[]string
@@ -103253,71 +103251,6 @@ func (m *TFASettingMutation) ResetDeletedBy() {
 	delete(m.clearedFields, tfasetting.FieldDeletedBy)
 }
 
-// SetTags sets the "tags" field.
-func (m *TFASettingMutation) SetTags(s []string) {
-	m.tags = &s
-	m.appendtags = nil
-}
-
-// Tags returns the value of the "tags" field in the mutation.
-func (m *TFASettingMutation) Tags() (r []string, exists bool) {
-	v := m.tags
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTags returns the old "tags" field's value of the TFASetting entity.
-// If the TFASetting object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TFASettingMutation) OldTags(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTags is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTags requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTags: %w", err)
-	}
-	return oldValue.Tags, nil
-}
-
-// AppendTags adds s to the "tags" field.
-func (m *TFASettingMutation) AppendTags(s []string) {
-	m.appendtags = append(m.appendtags, s...)
-}
-
-// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
-func (m *TFASettingMutation) AppendedTags() ([]string, bool) {
-	if len(m.appendtags) == 0 {
-		return nil, false
-	}
-	return m.appendtags, true
-}
-
-// ClearTags clears the value of the "tags" field.
-func (m *TFASettingMutation) ClearTags() {
-	m.tags = nil
-	m.appendtags = nil
-	m.clearedFields[tfasetting.FieldTags] = struct{}{}
-}
-
-// TagsCleared returns if the "tags" field was cleared in this mutation.
-func (m *TFASettingMutation) TagsCleared() bool {
-	_, ok := m.clearedFields[tfasetting.FieldTags]
-	return ok
-}
-
-// ResetTags resets all changes to the "tags" field.
-func (m *TFASettingMutation) ResetTags() {
-	m.tags = nil
-	m.appendtags = nil
-	delete(m.clearedFields, tfasetting.FieldTags)
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (m *TFASettingMutation) SetOwnerID(s string) {
 	m.owner = &s
@@ -103725,7 +103658,7 @@ func (m *TFASettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TFASettingMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, tfasetting.FieldCreatedAt)
 	}
@@ -103743,9 +103676,6 @@ func (m *TFASettingMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, tfasetting.FieldDeletedBy)
-	}
-	if m.tags != nil {
-		fields = append(fields, tfasetting.FieldTags)
 	}
 	if m.owner != nil {
 		fields = append(fields, tfasetting.FieldOwnerID)
@@ -103788,8 +103718,6 @@ func (m *TFASettingMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedAt()
 	case tfasetting.FieldDeletedBy:
 		return m.DeletedBy()
-	case tfasetting.FieldTags:
-		return m.Tags()
 	case tfasetting.FieldOwnerID:
 		return m.OwnerID()
 	case tfasetting.FieldTfaSecret:
@@ -103825,8 +103753,6 @@ func (m *TFASettingMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDeletedAt(ctx)
 	case tfasetting.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
-	case tfasetting.FieldTags:
-		return m.OldTags(ctx)
 	case tfasetting.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case tfasetting.FieldTfaSecret:
@@ -103891,13 +103817,6 @@ func (m *TFASettingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedBy(v)
-		return nil
-	case tfasetting.FieldTags:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTags(v)
 		return nil
 	case tfasetting.FieldOwnerID:
 		v, ok := value.(string)
@@ -103996,9 +103915,6 @@ func (m *TFASettingMutation) ClearedFields() []string {
 	if m.FieldCleared(tfasetting.FieldDeletedBy) {
 		fields = append(fields, tfasetting.FieldDeletedBy)
 	}
-	if m.FieldCleared(tfasetting.FieldTags) {
-		fields = append(fields, tfasetting.FieldTags)
-	}
 	if m.FieldCleared(tfasetting.FieldOwnerID) {
 		fields = append(fields, tfasetting.FieldOwnerID)
 	}
@@ -104049,9 +103965,6 @@ func (m *TFASettingMutation) ClearField(name string) error {
 	case tfasetting.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
-	case tfasetting.FieldTags:
-		m.ClearTags()
-		return nil
 	case tfasetting.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -104095,9 +104008,6 @@ func (m *TFASettingMutation) ResetField(name string) error {
 		return nil
 	case tfasetting.FieldDeletedBy:
 		m.ResetDeletedBy()
-		return nil
-	case tfasetting.FieldTags:
-		m.ResetTags()
 		return nil
 	case tfasetting.FieldOwnerID:
 		m.ResetOwnerID()

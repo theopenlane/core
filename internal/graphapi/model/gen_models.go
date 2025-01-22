@@ -920,16 +920,12 @@ type TFASettingCreatePayload struct {
 	TfaSetting *generated.TFASetting `json:"tfaSetting"`
 }
 
-type TFASettingSearchResult struct {
-	TFASettings []*generated.TFASetting `json:"tFASettings,omitempty"`
-}
-
-func (TFASettingSearchResult) IsSearchResult() {}
-
 // Return response for updateTFASetting mutation
 type TFASettingUpdatePayload struct {
 	// Updated tfaSetting
-	TfaSetting *generated.TFASetting `json:"tfaSetting"`
+	TfaSetting    *generated.TFASetting `json:"tfaSetting"`
+	QRCode        *string               `json:"qrCode,omitempty"`
+	RecoveryCodes []string              `json:"recoveryCodes,omitempty"`
 }
 
 // Return response for createBulkTask mutation

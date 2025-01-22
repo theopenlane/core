@@ -65,6 +65,8 @@ var (
 	ErrNoBillingEmail = errors.New("no billing email found")
 	// ErrPersonalOrgsNoBilling is returned when the org ID looked up is a personal org
 	ErrPersonalOrgsNoBilling = errors.New("personal orgs do not have billing")
+	// ErrInvalidRecoveryCode is returned when the recovery code is invalid
+	ErrInvalidRecoveryCode = errors.New("invalid code provided")
 )
 
 var (

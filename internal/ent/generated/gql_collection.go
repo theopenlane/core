@@ -11811,25 +11811,10 @@ func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, tfasetting.FieldDeletedBy)
 				fieldSeen[tfasetting.FieldDeletedBy] = struct{}{}
 			}
-		case "tags":
-			if _, ok := fieldSeen[tfasetting.FieldTags]; !ok {
-				selectedFields = append(selectedFields, tfasetting.FieldTags)
-				fieldSeen[tfasetting.FieldTags] = struct{}{}
-			}
-		case "tfaSecret":
-			if _, ok := fieldSeen[tfasetting.FieldTfaSecret]; !ok {
-				selectedFields = append(selectedFields, tfasetting.FieldTfaSecret)
-				fieldSeen[tfasetting.FieldTfaSecret] = struct{}{}
-			}
 		case "verified":
 			if _, ok := fieldSeen[tfasetting.FieldVerified]; !ok {
 				selectedFields = append(selectedFields, tfasetting.FieldVerified)
 				fieldSeen[tfasetting.FieldVerified] = struct{}{}
-			}
-		case "recoveryCodes":
-			if _, ok := fieldSeen[tfasetting.FieldRecoveryCodes]; !ok {
-				selectedFields = append(selectedFields, tfasetting.FieldRecoveryCodes)
-				fieldSeen[tfasetting.FieldRecoveryCodes] = struct{}{}
 			}
 		case "totpAllowed":
 			if _, ok := fieldSeen[tfasetting.FieldTotpAllowed]; !ok {

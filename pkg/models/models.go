@@ -33,7 +33,6 @@ type AuthData struct {
 type LoginRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	OTPCode  string `json:"otp_code,omitempty"`
 }
 
 // LoginReply holds the response to LoginRequest
@@ -62,7 +61,6 @@ func (r *LoginRequest) Validate() error {
 var ExampleLoginSuccessRequest = LoginRequest{
 	Username: "sfunky@theopenlane.io",
 	Password: "mitb!",
-	OTPCode:  "123456",
 }
 
 // ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation
@@ -793,4 +791,41 @@ type EntitlementsRequest struct {
 // EntitlementsReply holds the fields that are sent on a response to the `/entitlements` endpoint
 type EntitlementsReply struct {
 	ClientSecret string `json:"client_secret"`
+}
+
+// =========
+// TFA VALIDATION
+// =========
+
+// TFARequest holds the payload for verifying the 2fa code (/2fa/validate)
+type TFARequest struct {
+	TOTPCode     string `json:"totp_code,omitempty"`
+	RecoveryCode string `json:"recovery_code,omitempty"`
+}
+
+// TFAReply holds the response to TFARequest
+type TFAReply struct {
+	rout.Reply
+	Message string `json:"message"`
+}
+
+// Validate ensures the required fields are set on the TFARequest request
+func (r *TFARequest) Validate() error {
+	if r.TOTPCode == "" && r.RecoveryCode == "" {
+		return rout.NewMissingRequiredFieldError("totp_code")
+	}
+
+	return nil
+}
+
+// ExampleLoginSuccessRequest is an example of a successful tfa validation request for OpenAPI documentation
+var ExampleTFASuccessRequest = TFARequest{
+	TOTPCode: "113371",
+}
+
+// ExampleLoginSuccessResponse is an example of a successful tfa validation response for OpenAPI documentation
+var ExampleTFASSuccessResponse = TFAReply{
+	Reply: rout.Reply{
+		Success: true,
+	},
 }

@@ -325,6 +325,7 @@ func WithOTP() ServerOption {
 					Version: 0,
 					Key:     s.Config.Settings.TOTP.Secret,
 				}),
+				totp.WithRedis(s.Config.Handler.RedisClient),
 			}
 
 			// append redis client if enabled

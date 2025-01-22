@@ -27,8 +27,6 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldTfaSecret holds the string denoting the tfa_secret field in the database.
@@ -65,7 +63,6 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
-	FieldTags,
 	FieldOwnerID,
 	FieldTfaSecret,
 	FieldVerified,
@@ -91,16 +88,15 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
+	Hooks        [5]ent.Hook
 	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
 	// DefaultVerified holds the default value on creation for the "verified" field.
 	DefaultVerified bool
 	// DefaultPhoneOtpAllowed holds the default value on creation for the "phone_otp_allowed" field.

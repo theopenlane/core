@@ -1,7 +1,6 @@
 mutation CreateTFASetting($input: CreateTFASettingInput!) {
   createTFASetting(input: $input) {
     tfaSetting {
-      recoveryCodes
       totpAllowed
       verified
       owner {
@@ -15,7 +14,6 @@ query GetAllTFASettings {
   tfaSettings {
     edges {
       node {
-        recoveryCodes
         totpAllowed
         verified
         owner {
@@ -28,7 +26,6 @@ query GetAllTFASettings {
 
 query GetTFASetting {
   tfaSetting {
-    recoveryCodes
     totpAllowed
     verified
     owner {
@@ -40,9 +37,10 @@ query GetTFASetting {
 mutation UpdateTFASetting($input: UpdateTFASettingInput!) {
   updateTFASetting(input: $input) {
     tfaSetting {
-      recoveryCodes
       totpAllowed
       verified
     }
+    qrCode
+    recoveryCodes
   }
 }

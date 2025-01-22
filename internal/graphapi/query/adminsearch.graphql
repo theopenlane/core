@@ -344,15 +344,6 @@ query AdminSearch($query: String!) {
           phoneNumber
         }
       }
-      ... on TFASettingSearchResult {
-        tFASettings {
-          id
-          deletedBy
-          tags
-          tfaSecret
-          recoveryCodes
-        }
-      }
       ... on TaskSearchResult {
         tasks {
           id

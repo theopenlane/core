@@ -6762,16 +6762,12 @@ func (c *SubscriberUpdateOne) SetInput(i UpdateSubscriberInput) *SubscriberUpdat
 
 // CreateTFASettingInput represents a mutation input for creating tfasettings.
 type CreateTFASettingInput struct {
-	Tags        []string
 	TotpAllowed *bool
 	OwnerID     *string
 }
 
 // Mutate applies the CreateTFASettingInput on the TFASettingMutation builder.
 func (i *CreateTFASettingInput) Mutate(m *TFASettingMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
 	if v := i.TotpAllowed; v != nil {
 		m.SetTotpAllowed(*v)
 	}
@@ -6788,9 +6784,6 @@ func (c *TFASettingCreate) SetInput(i CreateTFASettingInput) *TFASettingCreate {
 
 // UpdateTFASettingInput represents a mutation input for updating tfasettings.
 type UpdateTFASettingInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
 	Verified         *bool
 	ClearTotpAllowed bool
 	TotpAllowed      *bool
@@ -6798,15 +6791,6 @@ type UpdateTFASettingInput struct {
 
 // Mutate applies the UpdateTFASettingInput on the TFASettingMutation builder.
 func (i *UpdateTFASettingInput) Mutate(m *TFASettingMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
 	if v := i.Verified; v != nil {
 		m.SetVerified(*v)
 	}
