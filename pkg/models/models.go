@@ -399,12 +399,40 @@ type WebauthnRegistrationRequest struct {
 	Name  string `json:"name"`
 }
 
-// WebauthnRegistrationResponse is the response to begin a webauthn login
+func (r *WebauthnRegistrationRequest) Validate() error {
+	if r.Email == "" {
+		return rout.NewMissingRequiredFieldError("email")
+	}
+
+	if r.Name == "" {
+		return rout.NewMissingRequiredFieldError("name")
+	}
+
+	return nil
+}
+
+// WebauthnBeginRegistrationResponse is the response to begin a webauthn login
 // this includes the credential creation options and the session token
 type WebauthnBeginRegistrationResponse struct {
 	Reply rout.Reply
 	*protocol.CredentialCreation
 	Session string `json:"session,omitempty"`
+}
+
+var ExampleWebauthnBeginRegistrationRequest = WebauthnRegistrationRequest{
+	Email: "sarahisthebest@sarahsthebest.com",
+	Name:  "Sarah Funk",
+}
+
+var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse{
+	Reply: rout.Reply{Success: true},
+	CredentialCreation: &protocol.CredentialCreation{
+		Response: protocol.PublicKeyCredentialCreationOptions{
+			RelyingParty: protocol.RelyingPartyEntity{},
+			User:         protocol.UserEntity{},
+			Challenge:    protocol.URLEncodedBase64{},
+		}},
+	Session: "session",
 }
 
 // WebauthnRegistrationResponse is the response after a successful webauthn registration
@@ -423,7 +451,7 @@ type WebauthnBeginLoginResponse struct {
 	Session string `json:"session,omitempty"`
 }
 
-// WebauthnRegistrationResponse is the response after a successful webauthn login
+// WebauthnLoginResponse is the response after a successful webauthn login
 type WebauthnLoginResponse struct {
 	rout.Reply
 	Message string `json:"message,omitempty"`
@@ -463,54 +491,6 @@ var ExampleVerifySubscriptionSuccessRequest = VerifySubscribeRequest{
 var ExampleVerifySubscriptionResponse = VerifySubscribeReply{
 	Reply:   rout.Reply{Success: true},
 	Message: "Subscription confirmed, looking forward to sending you updates!",
-}
-
-// =========
-// PUBLISH EVENT
-// =========
-
-// PublishRequest is the request payload for the event publisher
-type PublishRequest struct {
-	Tags    map[string]string `json:"tags"`
-	Topic   string            `json:"topic"`
-	Message string            `json:"message"`
-}
-
-// PublishReply holds the fields that are sent on a response to the `/event/publish` endpoint
-type PublishReply struct {
-	rout.Reply
-	Message string `json:"message"`
-}
-
-// Validate ensures the required fields are set on the PublishRequest request
-func (r *PublishRequest) Validate() error {
-	switch {
-	case r.Message == "":
-		return rout.NewMissingRequiredFieldError("message")
-	case r.Tags == nil:
-		return rout.NewMissingRequiredFieldError("tags")
-	case len(r.Tags) == 0:
-		return rout.NewMissingRequiredFieldError("tags")
-	case r.Topic == "":
-		return rout.NewMissingRequiredFieldError("topic")
-	}
-
-	return nil
-}
-
-// ExamplePublishSuccessRequest is an example of a successful publish request for OpenAPI documentation
-var ExamplePublishSuccessRequest = PublishRequest{
-	Tags:    map[string]string{"tag1": "meow", "tag2": "meowzer"},
-	Topic:   "meow",
-	Message: "hot diggity dog",
-}
-
-// ExamplePublishSuccessResponse is an example of a successful publish response for OpenAPI documentation
-var ExamplePublishSuccessResponse = PublishReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	Message: "success!",
 }
 
 // =========
@@ -777,20 +757,6 @@ var ExampleUploadFilesSuccessResponse = UploadFilesReply{
 			UpdatedAt:    time.Now(),
 		},
 	},
-}
-
-// =========
-// ENTITLEMENTS
-// =========
-
-// EntitlementsRequest holds the fields that should be included on a request to the `/entitlements` endpoint
-type EntitlementsRequest struct {
-	OrganizationID string `json:"organization_id"`
-}
-
-// EntitlementsReply holds the fields that are sent on a response to the `/entitlements` endpoint
-type EntitlementsReply struct {
-	ClientSecret string `json:"client_secret"`
 }
 
 // =========

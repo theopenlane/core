@@ -48,6 +48,20 @@ func unauthorized() *openapi3.Response {
 		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Unauthorized"}))
 }
 
+// invalidInput is a wrapper for openaAPI invalidInput response
+func invalidInput() *openapi3.Response {
+	return openapi3.NewResponse().
+		WithDescription("Invalid Input").
+		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/InvalidInput"}))
+}
+
+// tooManyRequests is a wrapper for openaAPI too many requests response
+func tooManyRequests() *openapi3.Response {
+	return openapi3.NewResponse().
+		WithDescription("Too Many Requests").
+		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/TooManyRequests"}))
+}
+
 // AddRequestBody is used to add a request body definition to the OpenAPI schema
 func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Operation) {
 	request := openapi3.NewRequestBody().
@@ -85,4 +99,61 @@ func (h *Handler) AddResponse(name string, description string, body interface{},
 
 	response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
 	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
+}
+
+// bearerSecurity is used to add a bearer security definition to the OpenAPI schema
+func BearerSecurity() *openapi3.SecurityRequirements {
+	return &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearer": []string{},
+		},
+	}
+}
+
+// oauthSecurity is used to add a oauth security definition to the OpenAPI schema
+func OauthSecurity() *openapi3.SecurityRequirements {
+	return &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"oauth2": []string{},
+		},
+	}
+}
+
+// basicSecurity is used to add a basic security definition to the OpenAPI schema
+func BasicSecurity() *openapi3.SecurityRequirements {
+	return &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"basic": []string{},
+		},
+	}
+}
+
+// apiKeySecurity is used to add a apiKey security definition to the OpenAPI schema
+func APIKeySecurity() *openapi3.SecurityRequirements {
+	return &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"apiKey": []string{},
+		},
+	}
+}
+
+// allSecurityRequirements is used to add all security definitions to the OpenAPI schema under the "or" context,
+// meaning you can satisfy 1 or any / all of these requirements but only 1 is required
+// if you wanted to list the security requirements with an "and" operator (meaning more than 1 needs to be met)
+// you would list them all under a single `SecurityRequirement` rather than individual ones
+func AllSecurityRequirements() *openapi3.SecurityRequirements {
+	return &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearer": []string{},
+		},
+		openapi3.SecurityRequirement{
+			"oauth2": []string{},
+		},
+		openapi3.SecurityRequirement{
+			"basic": []string{},
+		},
+		openapi3.SecurityRequirement{
+			"apiKey": []string{},
+		},
+	}
 }

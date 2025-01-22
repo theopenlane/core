@@ -153,7 +153,7 @@ func (u *User) setResetTokens(user *generated.User, reqToken string) error {
 func (h *Handler) BindResetPasswordHandler() *openapi3.Operation {
 	resetPassword := openapi3.NewOperation()
 	resetPassword.Description = "ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned"
-	resetPassword.Tags = []string{"authentication"}
+	resetPassword.Tags = []string{"passwordReset"}
 	resetPassword.OperationID = "PasswordReset"
 	resetPassword.Security = &openapi3.SecurityRequirements{}
 
@@ -161,6 +161,7 @@ func (h *Handler) BindResetPasswordHandler() *openapi3.Operation {
 	h.AddResponse("ResetPasswordReply", "success", models.ExampleResetPasswordSuccessResponse, resetPassword, http.StatusOK)
 	resetPassword.AddResponse(http.StatusInternalServerError, internalServerError())
 	resetPassword.AddResponse(http.StatusBadRequest, badRequest())
+	resetPassword.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return resetPassword
 }

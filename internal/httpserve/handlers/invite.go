@@ -261,13 +261,9 @@ func updateInviteStatusExpired(ctx context.Context, i *generated.Invite) error {
 func (h *Handler) BindOrganizationInviteAccept() *openapi3.Operation {
 	inviteAccept := openapi3.NewOperation()
 	inviteAccept.Description = "Accept an Organization Invite"
-	inviteAccept.Tags = []string{"organization"}
+	inviteAccept.Tags = []string{"invitations"}
 	inviteAccept.OperationID = "OrganizationInviteAccept"
-	inviteAccept.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
-	}
+	inviteAccept.Security = AllSecurityRequirements()
 
 	h.AddRequestBody("InviteRequest", models.ExampleInviteRequest, inviteAccept)
 	h.AddResponse("InviteReply", "success", models.ExampleInviteResponse, inviteAccept, http.StatusCreated)

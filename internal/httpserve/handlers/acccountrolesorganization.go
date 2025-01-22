@@ -99,15 +99,11 @@ func (h *Handler) BindAccountRolesOrganization() *openapi3.Operation {
 	orgRoles.Description = "List roles a subject has in relation to the authenticated organization"
 	orgRoles.Tags = []string{"account"}
 	orgRoles.OperationID = "AccountRolesOrganization"
-	orgRoles.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
-	}
+	orgRoles.Security = AllSecurityRequirements()
 
 	orgRoles.AddResponse(http.StatusInternalServerError, internalServerError())
 	orgRoles.AddResponse(http.StatusBadRequest, badRequest())
-	orgRoles.AddResponse(http.StatusUnauthorized, unauthorized())
+	orgRoles.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return orgRoles
 }
@@ -118,11 +114,7 @@ func (h *Handler) BindAccountRolesOrganizationByID() *openapi3.Operation {
 	orgRoles.Description = "List roles a subject has in relation to the organization ID provided"
 	orgRoles.Tags = []string{"account"}
 	orgRoles.OperationID = "AccountRolesOrganizationByID"
-	orgRoles.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
-	}
+	orgRoles.Security = AllSecurityRequirements()
 
 	h.AddPathParameter("AccountRolesOrganizationRequest", "id", models.ExampleAccountRolesOrganizationRequest, orgRoles)
 	h.AddResponse("AccountRolesOrganizationReply", "success", models.ExampleAccountRolesOrganizationReply, orgRoles, http.StatusOK)

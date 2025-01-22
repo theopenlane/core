@@ -67,11 +67,36 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
 	responses["Created"] = &openapi3.ResponseRef{Value: created}
 
+	invalidInput := openapi3.NewResponse().
+		WithDescription("Invalid Input").
+		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
+	responses["InvalidInput"] = &openapi3.ResponseRef{Value: invalidInput}
+
+	toomanyrequests := openapi3.NewResponse().
+		WithDescription("Too Many Requests").
+		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
+	responses["TooManyRequests"] = &openapi3.ResponseRef{Value: toomanyrequests}
+
 	securityschemes["bearer"] = &openapi3.SecuritySchemeRef{
 		Value: openapi3.NewSecurityScheme().
 			WithType("http").
 			WithScheme("bearer").
+			WithBearerFormat("JWT").
 			WithDescription("Bearer authentication, the token must be a valid API token"),
+	}
+
+	securityschemes["apiKey"] = &openapi3.SecuritySchemeRef{
+		Value: openapi3.NewSecurityScheme().
+			WithType("apiKey").
+			WithIn("header").
+			WithDescription("API Key authentication, the key must be a valid API key"),
+	}
+
+	securityschemes["basic"] = &openapi3.SecuritySchemeRef{
+		Value: openapi3.NewSecurityScheme().
+			WithType("http").
+			WithScheme("basic").
+			WithDescription("Username and Password based authentication"),
 	}
 
 	securityschemes["oauth2"] = &openapi3.SecuritySchemeRef{
@@ -86,16 +111,16 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		}).Scheme(),
 	}
 
-	securityschemes["openid"] = &openapi3.SecuritySchemeRef{
+	securityschemes["openIdConnect"] = &openapi3.SecuritySchemeRef{
 		Value: (*OpenID)(&OpenID{
 			ConnectURL: "https://api.theopenlane.io/.well-known/openid-configuration",
 		}).Scheme(),
 	}
 
 	return &openapi3.T{
-		OpenAPI: "3.1.0",
+		OpenAPI: "3.1.1",
 		Info: &openapi3.Info{
-			Title:       "Openlane OpenAPI 3.1.0 Specifications",
+			Title:       "Openlane OpenAPI 3.1.1 Specifications",
 			Description: "Openlane's API services are designed to provide a simple and easy to use interface for interacting with the Openlane platform. This API is designed to be used by both internal and external clients to interact with the Openlane platform.",
 			Version:     "v1.0.0",
 			Contact: &openapi3.Contact{
@@ -137,35 +162,37 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 
 // openAPISchemas is a mapping of types to auto generate schemas for - these specifically live under the OAS "schema" type so that we can simply make schemaRef's to them and not have to define them all individually in the OAS paths
 var openAPISchemas = map[string]any{
-	"LoginRequest":                    &models.LoginRequest{},
-	"LoginReply":                      &models.LoginReply{},
-	"ForgotPasswordRequest":           &models.ForgotPasswordRequest{},
-	"ForgotPasswordReply":             &models.ForgotPasswordReply{},
-	"ResetPasswordRequest":            &models.ResetPasswordRequest{},
-	"ResetPasswordReply":              &models.ResetPasswordReply{},
-	"RefreshRequest":                  &models.RefreshRequest{},
-	"RefreshReply":                    &models.RefreshReply{},
-	"RegisterRequest":                 &models.RegisterRequest{},
-	"RegisterReply":                   &models.RegisterReply{},
-	"ResendEmailRequest":              &models.ResendRequest{},
-	"ResendEmailReply":                &models.ResendReply{},
-	"VerifyRequest":                   &models.VerifyRequest{},
-	"VerifyReply":                     &models.VerifyReply{},
-	"PublishRequest":                  &models.PublishRequest{},
-	"PublishReply":                    &models.PublishReply{},
-	"SwitchOrganizationRequest":       &models.SwitchOrganizationRequest{},
-	"SwitchOrganizationReply":         &models.SwitchOrganizationReply{},
-	"VerifySubscriptionRequest":       &models.VerifySubscribeRequest{},
-	"VerifySubscriptionReply":         &models.VerifySubscribeReply{},
-	"InviteRequest":                   &models.InviteRequest{},
-	"InviteReply":                     &models.InviteReply{},
-	"ErrorReply":                      &rout.StatusError{},
-	"AccountAccessRequest":            &models.AccountAccessRequest{},
-	"AccountAccessReply":              &models.AccountAccessReply{},
-	"AccountRolesRequest":             &models.AccountRolesRequest{},
-	"AccountRolesReply":               &models.AccountRolesReply{},
-	"AccountRolesOrganizationRequest": &models.AccountRolesOrganizationRequest{},
-	"AccountRolesOrganizationReply":   &models.AccountRolesOrganizationReply{},
+	"LoginRequest":                      &models.LoginRequest{},
+	"LoginReply":                        &models.LoginReply{},
+	"ForgotPasswordRequest":             &models.ForgotPasswordRequest{},
+	"ForgotPasswordReply":               &models.ForgotPasswordReply{},
+	"ResetPasswordRequest":              &models.ResetPasswordRequest{},
+	"ResetPasswordReply":                &models.ResetPasswordReply{},
+	"RefreshRequest":                    &models.RefreshRequest{},
+	"RefreshReply":                      &models.RefreshReply{},
+	"RegisterRequest":                   &models.RegisterRequest{},
+	"RegisterReply":                     &models.RegisterReply{},
+	"ResendEmailRequest":                &models.ResendRequest{},
+	"ResendEmailReply":                  &models.ResendReply{},
+	"VerifyRequest":                     &models.VerifyRequest{},
+	"VerifyReply":                       &models.VerifyReply{},
+	"SwitchOrganizationRequest":         &models.SwitchOrganizationRequest{},
+	"SwitchOrganizationReply":           &models.SwitchOrganizationReply{},
+	"VerifySubscriptionRequest":         &models.VerifySubscribeRequest{},
+	"VerifySubscriptionReply":           &models.VerifySubscribeReply{},
+	"InviteRequest":                     &models.InviteRequest{},
+	"InviteReply":                       &models.InviteReply{},
+	"ErrorReply":                        &rout.StatusError{},
+	"AccountAccessRequest":              &models.AccountAccessRequest{},
+	"AccountAccessReply":                &models.AccountAccessReply{},
+	"AccountRolesRequest":               &models.AccountRolesRequest{},
+	"AccountRolesReply":                 &models.AccountRolesReply{},
+	"AccountRolesOrganizationRequest":   &models.AccountRolesOrganizationRequest{},
+	"AccountRolesOrganizationReply":     &models.AccountRolesOrganizationReply{},
+	"TFARequest":                        &models.TFARequest{},
+	"TFAReply":                          &models.TFAReply{},
+	"WebauthnRegistrationRequest":       &models.WebauthnRegistrationRequest{},
+	"WebauthnBeginRegistrationResponse": &models.WebauthnRegistrationResponse{},
 }
 
 // OAuth2 is a struct that represents an OAuth2 security scheme

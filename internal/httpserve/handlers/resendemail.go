@@ -88,7 +88,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 func (h *Handler) BindResendEmailHandler() *openapi3.Operation {
 	resendEmail := openapi3.NewOperation()
 	resendEmail.Description = "ResendEmail accepts an email address via a POST request and always returns a 200 Status OK response, no matter the input or result of the processing. This is to ensure that no secure information is leaked from this unauthenticated endpoint. If the email address belongs to a user who has not been verified, another verification email is sent. If the post request contains an orgID and the user is invited to that organization but hasn't accepted the invite, then the invite is resent."
-	resendEmail.Tags = []string{"register"}
+	resendEmail.Tags = []string{"accountRegistration"}
 	resendEmail.OperationID = "ResendEmail"
 	resendEmail.Security = &openapi3.SecurityRequirements{}
 
@@ -96,6 +96,8 @@ func (h *Handler) BindResendEmailHandler() *openapi3.Operation {
 	h.AddResponse("ResendEmailReply", "success", models.ExampleResendEmailSuccessResponse, resendEmail, http.StatusOK)
 	resendEmail.AddResponse(http.StatusInternalServerError, internalServerError())
 	resendEmail.AddResponse(http.StatusBadRequest, badRequest())
+	resendEmail.AddResponse(http.StatusBadRequest, invalidInput())
+	resendEmail.AddResponse(http.StatusTooManyRequests, tooManyRequests())
 
 	return resendEmail
 }
