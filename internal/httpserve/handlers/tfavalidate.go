@@ -63,10 +63,9 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 		recoveryCodeIndex := slices.Index(tfasetting.RecoveryCodes, in.RecoveryCode)
 		if recoveryCodeIndex > -1 {
 			// remove the recovery code from the list
-			// append(slice[:index], slice[index+1:]...)
-			recoveryCodes := append(tfasetting.RecoveryCodes[:recoveryCodeIndex], tfasetting.RecoveryCodes[recoveryCodeIndex+1:]...)
+			tfasetting.RecoveryCodes = append(tfasetting.RecoveryCodes[:recoveryCodeIndex], tfasetting.RecoveryCodes[recoveryCodeIndex+1:]...)
 
-			if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, recoveryCodes); err != nil {
+			if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, tfasetting.RecoveryCodes); err != nil {
 				log.Error().Err(err).Msg("unable to update recovery codes")
 
 				return h.BadRequest(ctx, err)

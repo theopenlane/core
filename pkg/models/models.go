@@ -33,7 +33,6 @@ type AuthData struct {
 type LoginRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	TOTPCode string `json:"totp_code,omitempty"`
 }
 
 // LoginReply holds the response to LoginRequest
@@ -62,7 +61,6 @@ func (r *LoginRequest) Validate() error {
 var ExampleLoginSuccessRequest = LoginRequest{
 	Username: "sfunky@theopenlane.io",
 	Password: "mitb!",
-	TOTPCode: "123456",
 }
 
 // ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation
