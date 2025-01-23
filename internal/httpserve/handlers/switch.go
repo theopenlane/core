@@ -100,14 +100,16 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 func (h *Handler) BindSwitchHandler() *openapi3.Operation {
 	switchHandler := openapi3.NewOperation()
 	switchHandler.Description = "Switch the user's organization context"
-	switchHandler.Tags = []string{"authentication"}
+	switchHandler.Tags = []string{"switchorganizations"}
 	switchHandler.OperationID = "OrganizationSwitch"
+	switchHandler.Security = AllSecurityRequirements()
 
 	h.AddRequestBody("SwitchOrganizationRequest", models.ExampleSwitchSuccessRequest, switchHandler)
 	h.AddResponse("SwitchOrganizationReply", "success", models.ExampleSwitchSuccessReply, switchHandler, http.StatusOK)
 	switchHandler.AddResponse(http.StatusInternalServerError, internalServerError())
 	switchHandler.AddResponse(http.StatusBadRequest, badRequest())
 	switchHandler.AddResponse(http.StatusUnauthorized, unauthorized())
+	switchHandler.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return switchHandler
 }

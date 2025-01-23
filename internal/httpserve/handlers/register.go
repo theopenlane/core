@@ -23,7 +23,6 @@ const (
 // RegisterHandler handles the registration of a new user, creating the user, personal organization
 // and sending an email verification to the email address in the request
 // the user will not be able to authenticate until the email is verified
-// [MermaidChart: 5a357443-f959-4f16-a07f-ec504f67f0eb]
 func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	var in models.RegisterRequest
 	if err := ctx.Bind(&in); err != nil {
@@ -130,7 +129,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 func (h *Handler) BindRegisterHandler() *openapi3.Operation {
 	register := openapi3.NewOperation()
 	register.Description = "Register creates a new user in the database with the specified password, allowing the user to login to Openlane. This endpoint requires a 'strong' password and a valid register request, otherwise a 400 reply is returned. The password is stored in the database as an argon2 derived key so it is impossible for a hacker to get access to raw passwords. A personal organization is created for the user registering based on the organization data in the register request and the user is assigned the Owner role"
-	register.Tags = []string{"authentication"}
+	register.Tags = []string{"accountRegistration"}
 	register.OperationID = "RegisterHandler"
 	register.Security = &openapi3.SecurityRequirements{}
 
@@ -139,6 +138,7 @@ func (h *Handler) BindRegisterHandler() *openapi3.Operation {
 	register.AddResponse(http.StatusInternalServerError, internalServerError())
 	register.AddResponse(http.StatusBadRequest, badRequest())
 	register.AddResponse(http.StatusConflict, conflict())
+	register.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return register
 }

@@ -78,17 +78,13 @@ func (h *Handler) BindAccountRoles() *openapi3.Operation {
 	roles.Description = "List roles a subject has in relation to an object"
 	roles.Tags = []string{"account"}
 	roles.OperationID = "AccountRoles"
-	roles.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
-	}
+	roles.Security = AllSecurityRequirements()
 
 	h.AddRequestBody("AccountRolesRequest", models.ExampleAccountRolesRequest, roles)
 	h.AddResponse("AccountRolesReply", "success", models.ExampleAccountRolesReply, roles, http.StatusOK)
 	roles.AddResponse(http.StatusInternalServerError, internalServerError())
 	roles.AddResponse(http.StatusBadRequest, badRequest())
-	roles.AddResponse(http.StatusUnauthorized, unauthorized())
+	roles.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return roles
 }

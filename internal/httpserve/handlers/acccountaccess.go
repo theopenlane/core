@@ -61,17 +61,14 @@ func (h *Handler) BindAccountAccess() *openapi3.Operation {
 	checkAccess.Description = "Check Subject Access to Object"
 	checkAccess.Tags = []string{"account"}
 	checkAccess.OperationID = "AccountAccess"
-	checkAccess.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
-	}
+	checkAccess.Security = AllSecurityRequirements()
 
 	h.AddRequestBody("AccountAccessRequest", models.ExampleAccountAccessRequest, checkAccess)
 	h.AddResponse("AccountAccessReply", "success", models.ExampleAccountAccessReply, checkAccess, http.StatusOK)
 	checkAccess.AddResponse(http.StatusInternalServerError, internalServerError())
 	checkAccess.AddResponse(http.StatusBadRequest, badRequest())
 	checkAccess.AddResponse(http.StatusUnauthorized, unauthorized())
+	checkAccess.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return checkAccess
 }

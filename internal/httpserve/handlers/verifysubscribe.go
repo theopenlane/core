@@ -160,6 +160,7 @@ func (h *Handler) BindVerifySubscriberHandler() *openapi3.Operation {
 	h.AddResponse("VerifySubscriptionReply", "success", models.ExampleVerifySubscriptionResponse, verify, http.StatusOK)
 	verify.AddResponse(http.StatusInternalServerError, internalServerError())
 	verify.AddResponse(http.StatusBadRequest, badRequest())
+	verify.AddResponse(http.StatusBadRequest, invalidInput())
 	verify.AddResponse(http.StatusCreated, created())
 
 	return verify

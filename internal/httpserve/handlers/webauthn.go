@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
 
@@ -101,6 +103,21 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, out)
+}
+
+func (h *Handler) BindWebauthnRegistration() *openapi3.Operation {
+	webauthnReg := openapi3.NewOperation()
+	webauthnReg.Description = "Complete WebAuthn credential registration for a user that is currently logged in using a different Openlane authentication method. This API must be called from the backend using the user access token returned upon successful authentication. If successful, the credential will be registered for the user that corresponds to the authorization token."
+	webauthnReg.Tags = []string{"passkeys"}
+	webauthnReg.OperationID = "WebauthnRegistration"
+	webauthnReg.Security = &openapi3.SecurityRequirements{}
+
+	h.AddRequestBody("WebauthnRegistrationRequest", models.ExampleWebauthnBeginRegistrationRequest, webauthnReg)
+	h.AddResponse("WebauthnBeginRegistrationResponse", "success", models.ExampleWebauthnBeginRegistrationResponse, webauthnReg, http.StatusOK)
+	webauthnReg.AddResponse(http.StatusInternalServerError, internalServerError())
+	webauthnReg.AddResponse(http.StatusBadRequest, invalidInput())
+
+	return webauthnReg
 }
 
 // FinishWebauthnRegistration is the request to finish a webauthn registration - this is where we get the credential created by the user back

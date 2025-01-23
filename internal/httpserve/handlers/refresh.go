@@ -85,19 +85,16 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 func (h *Handler) BindRefreshHandler() *openapi3.Operation {
 	refresh := openapi3.NewOperation()
 	refresh.Description = "The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently."
-	refresh.Tags = []string{"authentication"}
+	refresh.Tags = []string{"refresh"}
 	refresh.OperationID = "RefreshHandler"
-	refresh.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
-	}
+	refresh.Security = AllSecurityRequirements()
 
 	h.AddRequestBody("RefreshRequest", models.ExampleRefreshRequest, refresh)
 	h.AddResponse("RefreshReply", "success", models.ExampleRefreshSuccessResponse, refresh, http.StatusOK)
 	refresh.AddResponse(http.StatusInternalServerError, internalServerError())
 	refresh.AddResponse(http.StatusBadRequest, badRequest())
 	refresh.AddResponse(http.StatusNotFound, notFound())
+	refresh.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return refresh
 }

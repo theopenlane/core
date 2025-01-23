@@ -97,16 +97,18 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 	})
 }
 
-// BindLoginHandler binds the login request to the OpenAPI schema
+// BindTFAHandler binds the tfavalidate request to the OpenAPI schema
 func (h *Handler) BindTFAHandler() *openapi3.Operation {
-	login := openapi3.NewOperation()
-	login.Description = "Validate a user's TOTP code"
-	login.Tags = []string{"authentication"}
-	login.OperationID = "TFAValidation"
+	tfavalidate := openapi3.NewOperation()
+	tfavalidate.Description = "Validate a user's TOTP code"
+	tfavalidate.Tags = []string{"tfa"}
+	tfavalidate.OperationID = "TFAValidation"
+	tfavalidate.Security = AllSecurityRequirements()
 
-	h.AddRequestBody("TFARequest", models.ExampleTFASuccessRequest, login)
-	h.AddResponse("TFAReply", "success", models.ExampleTFASSuccessResponse, login, http.StatusOK)
-	login.AddResponse(http.StatusBadRequest, badRequest())
+	h.AddRequestBody("TFARequest", models.ExampleTFASuccessRequest, tfavalidate)
+	h.AddResponse("TFAReply", "success", models.ExampleTFASSuccessResponse, tfavalidate, http.StatusOK)
+	tfavalidate.AddResponse(http.StatusBadRequest, badRequest())
+	tfavalidate.AddResponse(http.StatusBadRequest, invalidInput())
 
-	return login
+	return tfavalidate
 }
