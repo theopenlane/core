@@ -28,6 +28,20 @@ func HookEnableTFA() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			// check if the user has a TFA secret
+			if m.Op() != ent.OpCreate {
+				id, _ := m.ID() // get the ID of the TFA setting which will always be present on update
+				existingSetting, err := m.Client().TFASetting.Get(ctx, id)
+				if err != nil {
+					return nil, err
+				}
+
+				if existingSetting.TfaSecret != nil {
+					return next.Mutate(ctx, m)
+				}
+			}
+
+			// generate the TFA secret
 			u, err := constructTOTPUser(ctx, m)
 			if err != nil {
 				return nil, err
@@ -45,7 +59,7 @@ func HookEnableTFA() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate)
+	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }
 
 // HookVerifyTFA is a hook that will generate recovery codes and enable TFA for a user
@@ -65,7 +79,6 @@ func HookVerifyTFA() ent.Hook {
 			}
 
 			if (ok && verified) || regenBackupCodes {
-				log.Error().Bool("regenBackupCodes", regenBackupCodes).Msg("generating recovery codes and enabling TFA")
 				codes := m.TOTP.TOTPManager.GenerateRecoveryCodes()
 				m.SetRecoveryCodes(codes)
 
@@ -87,7 +100,6 @@ func HookVerifyTFA() ent.Hook {
 				if err := setUserTFASetting(ctx, m, false); err != nil {
 					return nil, err
 				}
-
 			}
 
 			return next.Mutate(ctx, m)
@@ -113,7 +125,6 @@ func setUserTFASetting(ctx context.Context, m *generated.TFASettingMutation, ena
 		Where(usersetting.UserID(userID)).
 		SetIsTfaEnabled(enabled). // set tfa enabled
 		Exec(ctx); err != nil {
-
 		return err
 	}
 

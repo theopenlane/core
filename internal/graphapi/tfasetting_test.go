@@ -162,7 +162,11 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 	t := suite.T()
 
+	// create tfa settings for users
 	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, testUser1.ID)
+
+	// create one with not enabled by default
+	(&TFASettingBuilder{client: suite.client, totpAllowed: lo.ToPtr(false)}).MustNew(testUser2.UserCtx, t, testUser2.ID)
 
 	recoveryCodes := []string{}
 
@@ -176,7 +180,8 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 		{
 			name: "update verify",
 			input: openlaneclient.UpdateTFASettingInput{
-				Verified: lo.ToPtr(true),
+				TotpAllowed: lo.ToPtr(true),
+				Verified:    lo.ToPtr(true),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -213,6 +218,14 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "update TotpAllowed to true should enable TFA",
+			input: openlaneclient.UpdateTFASettingInput{
+				TotpAllowed: lo.ToPtr(true),
+			},
+			client: suite.client.api,
+			ctx:    testUser2.UserCtx,
 		},
 	}
 
