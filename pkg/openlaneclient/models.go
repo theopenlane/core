@@ -17558,6 +17558,7 @@ type TFASettingConnection struct {
 type TFASettingCreatePayload struct {
 	// Created tfaSetting
 	TfaSetting *TFASetting `json:"tfaSetting"`
+	QRCode     *string     `json:"qrCode,omitempty"`
 }
 
 // An edge in a connection.

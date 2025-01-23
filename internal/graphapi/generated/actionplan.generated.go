@@ -15036,6 +15036,8 @@ func (ec *executionContext) fieldContext_Mutation_createTFASetting(ctx context.C
 			switch field.Name {
 			case "tfaSetting":
 				return ec.fieldContext_TFASettingCreatePayload_tfaSetting(ctx, field)
+			case "qrCode":
+				return ec.fieldContext_TFASettingCreatePayload_qrCode(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TFASettingCreatePayload", field.Name)
 		},

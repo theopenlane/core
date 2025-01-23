@@ -3017,6 +3017,7 @@ type ComplexityRoot struct {
 	}
 
 	TFASettingCreatePayload struct {
+		QRCode     func(childComplexity int) int
 		TfaSetting func(childComplexity int) int
 	}
 
@@ -19079,6 +19080,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TFASettingConnection.TotalCount(childComplexity), true
+
+	case "TFASettingCreatePayload.qrCode":
+		if e.complexity.TFASettingCreatePayload.QRCode == nil {
+			break
+		}
+
+		return e.complexity.TFASettingCreatePayload.QRCode(childComplexity), true
 
 	case "TFASettingCreatePayload.tfaSetting":
 		if e.complexity.TFASettingCreatePayload.TfaSetting == nil {
@@ -53601,7 +53609,12 @@ type TemplateBulkCreatePayload {
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {
     qrCode: String
     recoveryCodes: [String!]
-}`, BuiltIn: false},
+}
+
+extend type TFASettingCreatePayload {
+    qrCode: String
+}
+`, BuiltIn: false},
 	{Name: "../schema/tfasetting.graphql", Input: `extend type Query {
     """
     Look up tfaSetting for the current user

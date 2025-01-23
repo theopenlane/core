@@ -3040,6 +3040,8 @@ func init() {
 	tfasetting.Hooks[3] = tfasettingMixinHooks3[0]
 
 	tfasetting.Hooks[4] = tfasettingHooks[0]
+
+	tfasetting.Hooks[5] = tfasettingHooks[1]
 	tfasettingMixinInters2 := tfasettingMixin[2].Interceptors()
 	tfasetting.Interceptors[0] = tfasettingMixinInters2[0]
 	tfasettingMixinFields0 := tfasettingMixin[0].Fields()

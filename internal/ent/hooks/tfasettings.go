@@ -17,7 +17,40 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 )
 
+// HookEnableTFA is a hook that generates the tfa secrets if the totp setting is set to allowed
 func HookEnableTFA() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.TFASettingFunc(func(ctx context.Context, m *generated.TFASettingMutation) (generated.Value, error) {
+			// if the user has TOTP enabled, generate a secret
+			totpAllowed, ok := m.TotpAllowed()
+
+			if !ok || !totpAllowed {
+				return next.Mutate(ctx, m)
+			}
+
+			u, err := constructTOTPUser(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			u.TFASecret, err = m.TOTP.TOTPManager.TOTPSecret(u)
+			if err != nil {
+				log.Error().Err(err).Msg("unable to generate TOTP secret")
+
+				return nil, err
+			}
+
+			// set the TFA secret
+			m.SetTfaSecret(u.TFASecret)
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate)
+}
+
+// HookVerifyTFA is a hook that will generate recovery codes and enable TFA for a user
+// if the TFA has been verified
+func HookVerifyTFA() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TFASettingFunc(func(ctx context.Context, m *generated.TFASettingMutation) (generated.Value, error) {
 			// once verified, create recovery codes
@@ -32,38 +65,59 @@ func HookEnableTFA() ent.Hook {
 			}
 
 			if (ok && verified) || regenBackupCodes {
-				u, err := constructTOTPUser(ctx, m)
-				if err != nil {
-					return nil, err
-				}
-
-				u.TFASecret, err = m.TOTP.TOTPManager.TOTPSecret(u)
-				if err != nil {
-					log.Error().Err(err).Msg("unable to generate TOTP secret")
-
-					return nil, err
-				}
-
-				m.SetTfaSecret(u.TFASecret)
-
+				log.Error().Bool("regenBackupCodes", regenBackupCodes).Msg("generating recovery codes and enabling TFA")
 				codes := m.TOTP.TOTPManager.GenerateRecoveryCodes()
 				m.SetRecoveryCodes(codes)
 
 				if verified {
-					// update user settings
-					_, err := m.Client().UserSetting.Update().
-						Where(usersetting.UserID(u.ID)).
-						SetIsTfaEnabled(true). // set tfa enabled to true
-						Save(ctx)
-					if err != nil {
+					if err := setUserTFASetting(ctx, m, true); err != nil {
 						return nil, err
 					}
 				}
 			}
 
+			totpAllowed, ok := m.TotpAllowed()
+			if ok && !totpAllowed {
+				// if TOTP is not allowed, clear the TFA settings
+				m.SetVerified(false)
+				m.SetRecoveryCodes(nil)
+				m.SetTfaSecret("")
+
+				// disable TFA on the user settings
+				if err := setUserTFASetting(ctx, m, false); err != nil {
+					return nil, err
+				}
+
+			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)
+}
+
+// enableTFA is a function that enables TFA for a user on their user settings
+// once the TFA has been verified
+func setUserTFASetting(ctx context.Context, m *generated.TFASettingMutation, enabled bool) error {
+	userID, ok := m.OwnerID()
+	if !ok {
+		var err error
+
+		userID, err = auth.GetUserIDFromContext(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	// update user settings
+	if err := m.Client().UserSetting.Update().
+		Where(usersetting.UserID(userID)).
+		SetIsTfaEnabled(enabled). // set tfa enabled
+		Exec(ctx); err != nil {
+
+		return err
+	}
+
+	return nil
 }
 
 // constructTOTPUser constructs a TOTP user object from the mutation

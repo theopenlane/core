@@ -2,3 +2,7 @@ extend type TFASettingUpdatePayload {
     qrCode: String
     recoveryCodes: [String!]
 }
+
+extend type TFASettingCreatePayload {
+    qrCode: String
+}

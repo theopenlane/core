@@ -83,7 +83,9 @@ func (TFASetting) Mixin() []ent.Mixin {
 // Hooks of the TFASetting
 func (TFASetting) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookEnableTFA(), // sets 2fa on user settings and stores recovery codes
+		hooks.HookEnableTFA(), // sets 2fa secret if totp is allowed
+		hooks.HookVerifyTFA(), // generates recovery codes and enables TFA on a user settings
+
 	}
 }
 

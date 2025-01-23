@@ -6,14 +6,12 @@ package graphapi
 
 import (
 	"context"
-	"database/sql"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
-	"github.com/theopenlane/core/internal/ent/utils"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/totp"
 )
 
 // CreateTFASetting is the resolver for the createTFASetting field.
@@ -22,12 +20,32 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 		return nil, err
 	}
 
+	// get the userID from the context
+	userID, err := auth.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	settings, err := withTransactionalMutation(ctx).TFASetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "tfasetting"})
 	}
 
-	return &model.TFASettingCreatePayload{TfaSetting: settings}, nil
+	// get the new settings with the owner so we can get the email later
+	settings, err = withTransactionalMutation(ctx).TFASetting.Query().
+		Where(tfasetting.OwnerID(userID)).
+		WithOwner(). // get the owner so we can get the email later
+		Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
+	}
+
+	qrCode, err := r.generateTFAQRCode(ctx, settings, settings.Edges.Owner.Email, userID)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
+	}
+
+	return &model.TFASettingCreatePayload{TfaSetting: settings, QRCode: &qrCode}, nil
 }
 
 // UpdateTFASetting is the resolver for the updateTFASetting field.
@@ -55,24 +73,23 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
-	out := &model.TFASettingUpdatePayload{TfaSetting: settings, RecoveryCodes: updatedSettings.RecoveryCodes}
-
-	if !utils.CheckForRequestedField(ctx, "qrCode") {
-		return out, nil
-	}
-
-	// generate a new QR code if it was requested
-	qrCode, err := r.db.TOTP.TOTPManager.TOTPQRString(&totp.User{
-		ID:            userID,
-		TFASecret:     *updatedSettings.TfaSecret,
-		Email:         sql.NullString{String: settings.Edges.Owner.Email, Valid: true},
-		IsTOTPAllowed: updatedSettings.TotpAllowed,
-	})
+	qrCode, err := r.generateTFAQRCode(ctx, updatedSettings, settings.Edges.Owner.Email, userID)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
-	out.QRCode = &qrCode
+	out := &model.TFASettingUpdatePayload{
+		TfaSetting: updatedSettings,
+		QRCode:     &qrCode,
+	}
+
+	gtx := graphql.GetOperationContext(ctx)
+	regenBackupCodes, _ := gtx.Variables["input"].(map[string]interface{})["regenBackupCodes"].(bool)
+
+	// only return the recovery codes if the TFA device has been verified or if the user requested new codes
+	if (input.Verified != nil && *input.Verified == true) || regenBackupCodes {
+		out.RecoveryCodes = updatedSettings.RecoveryCodes
+	}
 
 	return out, nil
 }
@@ -108,5 +125,6 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 
 // RegenBackupCodes is the resolver for the regenBackupCodes field.
 func (r *updateTFASettingInputResolver) RegenBackupCodes(ctx context.Context, obj *generated.UpdateTFASettingInput, data *bool) error {
+	// this is handled by the tfa settings hook
 	return nil
 }
