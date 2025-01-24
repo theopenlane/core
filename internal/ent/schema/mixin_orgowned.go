@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -101,12 +100,10 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			}
 
 			// set owner on create mutation
-			if m.Op() == ent.OpCreate {
-				if err := setOwnerIDField(ctx, m); err != nil {
-					log.Error().Err(err).Msg("failed to set owner id field")
+			if err := setOwnerIDField(ctx, m); err != nil {
+				log.Error().Err(err).Msg("failed to set owner id field")
 
-					return nil, err
-				}
+				return nil, err
 			}
 
 			retVal, err := next.Mutate(ctx, m)
@@ -114,28 +111,12 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return nil, err
 			}
 
-			id := ""
-			if m.Op() == ent.OpCreate {
-				// add organization owner editor relation to the object
-				id, err = hooks.GetObjectIDFromEntValue(retVal)
-				if err != nil {
-					log.Error().Err(err).Msg("failed to get object id from ent value")
+			// add organization owner editor relation to the object
+			id, err := hooks.GetObjectIDFromEntValue(retVal)
+			if err != nil {
+				log.Error().Err(err).Msg("failed to get object id from ent value")
 
-					return nil, err
-				}
-			}
-
-			if entx.CheckIsSoftDelete(ctx) || m.Op() == ent.OpDelete || m.Op() == ent.OpDeleteOne {
-				id, err = hooks.GetObjectIDFromEntDeleteValue(retVal)
-				if err != nil {
-					log.Error().Err(err).Msg("failed to get object id from ent delete value")
-
-					return nil, err
-				}
-			}
-
-			if id == "" {
-				return retVal, nil
+				return nil, err
 			}
 
 			if err := addOrganizationOwnerEditorRelation(ctx, m, id); err != nil {
