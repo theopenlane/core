@@ -418,7 +418,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 				}
 			}
 
-			// ensure the org owner has access to the control objective that was created by an api token
+			// ensure the org owner has access to the control that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetControlByID(testUser1.UserCtx, resp.CreateControl.Control.ID)
 				require.NoError(t, err)

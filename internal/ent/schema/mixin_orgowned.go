@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -95,6 +96,10 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if m.Op() != ent.OpCreate {
+				return next.Mutate(ctx, m)
+			}
+
 			// set owner on create mutation
 			if m.Op() == ent.OpCreate {
 				if err := setOwnerIDField(ctx, m); err != nil {
@@ -109,12 +114,28 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return nil, err
 			}
 
-			// add organization owner editor relation to the object
-			id, err := hooks.GetObjectIDFromEntValue(retVal)
-			if err != nil {
-				log.Error().Err(err).Msg("failed to get object id from ent value")
+			id := ""
+			if m.Op() == ent.OpCreate {
+				// add organization owner editor relation to the object
+				id, err = hooks.GetObjectIDFromEntValue(retVal)
+				if err != nil {
+					log.Error().Err(err).Msg("failed to get object id from ent value")
 
-				return nil, err
+					return nil, err
+				}
+			}
+
+			if entx.CheckIsSoftDelete(ctx) || m.Op() == ent.OpDelete || m.Op() == ent.OpDeleteOne {
+				id, err = hooks.GetObjectIDFromEntDeleteValue(retVal)
+				if err != nil {
+					log.Error().Err(err).Msg("failed to get object id from ent delete value")
+
+					return nil, err
+				}
+			}
+
+			if id == "" {
+				return retVal, nil
 			}
 
 			if err := addOrganizationOwnerEditorRelation(ctx, m, id); err != nil {
@@ -149,14 +170,13 @@ func setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 	return nil
 }
 
+// addOrganizationOwnerEditorRelation adds the organization owner as an editor to the object
 func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) error {
 	// always add the organization owner relationship as an editor
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get organization id from context: %w", err)
 	}
-
-	log.Info().Str("org_id", orgID).Msg("adding organization owner editor relation")
 
 	tr := fgax.TupleRequest{
 		SubjectType:     "organization",

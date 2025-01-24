@@ -368,7 +368,7 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 				}
 			}
 
-			// ensure the org owner has access to the control objective that was created by an api token
+			// ensure the org owner has access to the narrative that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetNarrativeByID(testUser1.UserCtx, resp.CreateNarrative.Narrative.ID)
 				require.NoError(t, err)

@@ -292,3 +292,4 @@ type task
     define assignee: [user]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program, organization, control, procedure, group, internal_policy, subcontrol, control_objective]
+    define editor: [organization#owner]

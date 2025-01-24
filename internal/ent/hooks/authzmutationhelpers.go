@@ -228,6 +228,26 @@ func GetObjectIDFromEntValue(m ent.Value) (string, error) {
 	return o.ID, nil
 }
 
+// GetObjectIDFromEntDeleteValue extracts the object deleted id from a generic ent value return type
+// this function should be called after the mutation has been successful
+func GetObjectIDFromEntDeleteValue(m ent.Value) (string, error) {
+	type objectIDer struct {
+		DeletedID string `json:"id"`
+	}
+
+	tmp, err := json.Marshal(m)
+	if err != nil {
+		return "", err
+	}
+
+	var o objectIDer
+	if err := json.Unmarshal(tmp, &o); err != nil {
+		return "", err
+	}
+
+	return o.DeletedID, nil
+}
+
 // getParentIDFromEntValue extracts the parent id from a generic ent value return type
 // if it is not set, it will return an empty string
 // this function does not ensure that the mutation was successful, it only extracts the id
