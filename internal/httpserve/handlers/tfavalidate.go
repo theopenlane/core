@@ -44,12 +44,6 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
-		log.Warn().Msg("tfa validation request but user does not have TFA enabled")
-
-		return h.InvalidInput(ctx, err)
-	}
-
 	if user.Edges.TfaSettings == nil || len(user.Edges.TfaSettings) != 1 || user.Edges.TfaSettings[0].TfaSecret == nil {
 		log.Warn().Msg("tfa validation request but user has no TFA settings")
 

@@ -263,7 +263,7 @@ func (h *Handler) getUserDetailsByID(ctx context.Context, userID string) (*ent.U
 func (h *Handler) getUserTFASettings(ctx context.Context, userID string) (*ent.User, error) {
 	user, err := transaction.FromContext(ctx).User.Query().Where(
 		user.ID(userID),
-	).WithTfaSettings().WithSetting().Only(ctx)
+	).WithTfaSettings().Only(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error retrieving tfa settings for user")
 
