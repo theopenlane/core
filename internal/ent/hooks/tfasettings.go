@@ -31,6 +31,7 @@ func HookEnableTFA() ent.Hook {
 			// check if the user has a TFA secret
 			if m.Op() != ent.OpCreate {
 				id, _ := m.ID() // get the ID of the TFA setting which will always be present on update
+
 				existingSetting, err := m.Client().TFASetting.Get(ctx, id)
 				if err != nil {
 					return nil, err
