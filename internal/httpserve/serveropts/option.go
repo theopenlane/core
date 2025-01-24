@@ -292,6 +292,9 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 		// set cookie config to be used
 		sessionConfig.CookieConfig = cc
 
+		// Add redis client to Handlers Config
+		s.Config.Handler.RedisClient = rc
+
 		// Make the cookie session store available
 		// to graph and REST endpoints
 		s.Config.Handler.SessionConfig = &sessionConfig
@@ -325,7 +328,6 @@ func WithOTP() ServerOption {
 					Version: 0,
 					Key:     s.Config.Settings.TOTP.Secret,
 				}),
-				totp.WithRedis(s.Config.Handler.RedisClient),
 			}
 
 			// append redis client if enabled
