@@ -6,8 +6,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -15,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 const (
@@ -95,11 +98,32 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			// set owner on create mutation
 			if m.Op() == ent.OpCreate {
 				if err := setOwnerIDField(ctx, m); err != nil {
+					log.Error().Err(err).Msg("failed to set owner id field")
+
 					return nil, err
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// add organization owner editor relation to the object
+			id, err := hooks.GetObjectIDFromEntValue(retVal)
+			if err != nil {
+				log.Error().Err(err).Msg("failed to get object id from ent value")
+
+				return nil, err
+			}
+
+			if err := addOrganizationOwnerEditorRelation(ctx, m, id); err != nil {
+				log.Error().Err(err).Msg("failed to add organization owner editor relation")
+
+				return nil, err
+			}
+
+			return retVal, err
 		})
 	}
 }
@@ -119,6 +143,33 @@ func setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 
 	// set owner on mutation
 	if err := m.SetField(ownerFieldName, orgID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) error {
+	// always add the organization owner relationship as an editor
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get organization id from context: %w", err)
+	}
+
+	log.Info().Str("org_id", orgID).Msg("adding organization owner editor relation")
+
+	tr := fgax.TupleRequest{
+		SubjectType:     "organization",
+		SubjectID:       orgID,
+		SubjectRelation: fgax.OwnerRelation,
+		ObjectID:        id,                                    // this is the object id being created
+		ObjectType:      hooks.GetObjectTypeFromEntMutation(m), // this is the object type being created
+		Relation:        fgax.EditorRelation,
+	}
+
+	t := fgax.GetTupleKey(tr)
+
+	if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{t}, nil); err != nil {
 		return err
 	}
 
