@@ -33,7 +33,7 @@ jobs:
     permissions:
       contents: write # To add assets to a release.
       id-token: write # To do keyless signing with cosign
-    runs-on: macos-latest
+    runs-on: macos-20250106.725
     steps:
       - name: Checkout
         uses: actions/checkout@v4
