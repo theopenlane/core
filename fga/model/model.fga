@@ -150,17 +150,18 @@ type control
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member]
-    define editor: [group#member]
+    define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
 # subcontrols are associated with an organization but do not inherit access from the organization
 # subcontrols inherit access from the their parent control(s)
 type subcontrol
   relations
     define can_view: [user, service] or can_edit or can_view from parent
-    define can_edit: [user, service] or can_edit from parent
-    define can_delete: [user, service] or can_delete from parent
+    define can_edit: [user, service] or editor or can_edit from parent
+    define can_delete: [user, service] or editor or can_delete from parent
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, control]
+    define editor: [organization#owner]
 # control objectives inherit access from the associated program or from associated groups
 # the control objective author will be assigned as an admin of the control objective
 type control_objective
@@ -171,7 +172,7 @@ type control_objective
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member]
-    define editor: [group#member]
+    define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
 # risks are associated with an organization but do not inherit access from the organization
 # the risk creator will be made the admin of the risk and all other access will be assigned via
@@ -184,7 +185,7 @@ type risk
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member] or editor
-    define editor: [group#member]
+    define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
 # narratives are associated with an organization but do not inherit access from the organization
 # the narrative creator will be made the admin of the narrative and all other access will be assigned via
@@ -197,7 +198,7 @@ type narrative
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member] or editor
-    define editor: [group#member]
+    define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
 # policies are always assigned to an organization and by default all org members can view
 # groups can be used to exclude users from being able to view a internal policy
@@ -291,3 +292,4 @@ type task
     define assignee: [user]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program, organization, control, procedure, group, internal_policy, subcontrol, control_objective]
+    define editor: [organization#owner]

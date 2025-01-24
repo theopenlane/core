@@ -122,7 +122,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 				return err
 			}
 		} else {
-			if err := addTokenEditPermissions(ctx, objID, getObjectTypeFromEntMutation(m)); err != nil {
+			if err := addTokenEditPermissions(ctx, objID, GetObjectTypeFromEntMutation(m)); err != nil {
 				return err
 			}
 		}
@@ -135,7 +135,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 			SubjectID:   org,
 			SubjectType: "organization",
 			ObjectID:    objID,
-			ObjectType:  getObjectTypeFromEntMutation(m),
+			ObjectType:  GetObjectTypeFromEntMutation(m),
 		}
 
 		log.Debug().Interface("tuple", req).Msg("creating relationship tuple")
@@ -204,7 +204,7 @@ func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
 		return nil
 	}
 
-	objType := getObjectTypeFromEntMutation(m)
+	objType := GetObjectTypeFromEntMutation(m)
 	object := fmt.Sprintf("%s:%s", objType, objID)
 
 	log.Debug().Str("object", object).Msg("deleting relationship tuples")

@@ -412,6 +412,14 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 					assert.Equal(t, viewerGroup.ID, edge.ID)
 				}
 			}
+
+			// ensure the org owner has access to the risk that was created by an api token
+			if tc.client == suite.client.apiWithToken {
+				res, err := suite.client.api.GetRiskByID(testUser1.UserCtx, resp.CreateRisk.Risk.ID)
+				require.NoError(t, err)
+				require.NotEmpty(t, res)
+				assert.Equal(t, resp.CreateRisk.Risk.ID, res.Risk.ID)
+			}
 		})
 	}
 }

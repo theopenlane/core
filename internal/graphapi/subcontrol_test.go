@@ -434,6 +434,14 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			} else {
 				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Details)
 			}
+
+			// ensure the org owner has access to the subcontrol that was created by an api token
+			if tc.client == suite.client.apiWithToken {
+				res, err := suite.client.api.GetSubcontrolByID(testUser1.UserCtx, resp.CreateSubcontrol.Subcontrol.ID)
+				require.NoError(t, err)
+				require.NotEmpty(t, res)
+				assert.Equal(t, resp.CreateSubcontrol.Subcontrol.ID, res.Subcontrol.ID)
+			}
 		})
 	}
 }

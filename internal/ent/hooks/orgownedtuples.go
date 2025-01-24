@@ -23,7 +23,7 @@ func HookOrgOwnedTuples(skipUser bool) ent.Hook {
 				return nil, err
 			}
 
-			objectID, err := getObjectIDFromEntValue(retVal)
+			objectID, err := GetObjectIDFromEntValue(retVal)
 			if err != nil {
 				return nil, err
 			}
@@ -47,7 +47,7 @@ func HookOrgOwnedTuples(skipUser bool) ent.Hook {
 					SubjectID:   a.SubjectID,
 					SubjectType: subject,
 					ObjectID:    objectID,                        // this is the object id being created
-					ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
+					ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 					Relation:    fgax.AdminRelation,
 				})
 

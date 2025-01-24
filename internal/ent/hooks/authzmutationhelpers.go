@@ -16,7 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
-func getObjectTypeFromEntMutation(m ent.Mutation) string {
+// GetObjectTypeFromEntMutation gets the object type from the ent mutation
+func GetObjectTypeFromEntMutation(m ent.Mutation) string {
 	return strcase.SnakeCase(m.Type())
 }
 
@@ -60,7 +61,7 @@ func createParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 		tr := fgax.TupleRequest{
 			SubjectType: subjectType,
 			ObjectID:    objectID,                        // this is the object id being created
-			ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
+			ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:    fgax.ParentRelation,
 		}
 
@@ -84,7 +85,7 @@ func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID str
 	tr := fgax.TupleRequest{
 		SubjectType: "organization",
 		ObjectID:    objectID,                        // this is the object id being created
-		ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
+		ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 		Relation:    fgax.ParentRelation,
 	}
 
@@ -110,7 +111,7 @@ func createTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 			SubjectType:     subjectType,
 			SubjectRelation: fgax.MemberRelation,
 			ObjectID:        objectID,                        // this is the object id being created
-			ObjectType:      getObjectTypeFromEntMutation(m), // this is the object type being created
+			ObjectType:      GetObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:        relation.String(),
 		}
 
@@ -166,7 +167,7 @@ func removeParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 		tr := fgax.TupleRequest{
 			SubjectType: subjectType,
 			ObjectID:    objectID,                        // this is the object id being created
-			ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
+			ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:    fgax.ParentRelation,
 		}
 
@@ -192,7 +193,7 @@ func removeTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 			SubjectType:     subjectType,
 			SubjectRelation: fgax.MemberRelation,
 			ObjectID:        objectID,                        // this is the object id being created
-			ObjectType:      getObjectTypeFromEntMutation(m), // this is the object type being created
+			ObjectType:      GetObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:        relation.String(),
 		}
 
@@ -207,9 +208,9 @@ func removeTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 	return removeTuples, nil
 }
 
-// getObjectIDFromEntValue extracts the object id from a generic ent value return type
+// GetObjectIDFromEntValue extracts the object id from a generic ent value return type
 // this function should be called after the mutation has been successful
-func getObjectIDFromEntValue(m ent.Value) (string, error) {
+func GetObjectIDFromEntValue(m ent.Value) (string, error) {
 	type objectIDer struct {
 		ID string `json:"id"`
 	}

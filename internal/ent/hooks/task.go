@@ -54,14 +54,14 @@ func HookTaskAssignee() ent.Hook {
 							SubjectID:   assignee,
 							SubjectType: "user",
 							ObjectID:    taskID,
-							ObjectType:  getObjectTypeFromEntMutation(m),
+							ObjectType:  GetObjectTypeFromEntMutation(m),
 							Relation:    "assignee",
 						})
 
 						// get the current assignee and remove them
 						resp, err := utils.AuthzClientFromContext(ctx).ListUserRequest(ctx, fgax.ListRequest{
 							ObjectID:   taskID,
-							ObjectType: getObjectTypeFromEntMutation(m),
+							ObjectType: GetObjectTypeFromEntMutation(m),
 							Relation:   "assignee",
 						})
 						if err != nil {
@@ -79,7 +79,7 @@ func HookTaskAssignee() ent.Hook {
 								SubjectID:   user.Object.Id,
 								SubjectType: user.Object.Type,
 								ObjectID:    taskID,
-								ObjectType:  getObjectTypeFromEntMutation(m),
+								ObjectType:  GetObjectTypeFromEntMutation(m),
 								Relation:    "assignee",
 							})
 

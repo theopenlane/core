@@ -419,6 +419,14 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 					assert.Equal(t, viewerGroup.ID, edge.ID)
 				}
 			}
+
+			// ensure the org owner has access to the control objective that was created by an api token
+			if tc.client == suite.client.apiWithToken {
+				res, err := suite.client.api.GetControlObjectiveByID(testUser1.UserCtx, resp.CreateControlObjective.ControlObjective.ID)
+				require.NoError(t, err)
+				require.NotEmpty(t, res)
+				assert.Equal(t, resp.CreateControlObjective.ControlObjective.ID, res.ControlObjective.ID)
+			}
 		})
 	}
 }
