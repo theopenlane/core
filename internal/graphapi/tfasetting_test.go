@@ -110,6 +110,15 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 			ctx:    testUser1.UserCtx,
 			errMsg: "tfasetting already exists",
 		},
+		{
+			name:   "create with not enabling totp should not return qr code",
+			userID: viewOnlyUser.ID,
+			input: openlaneclient.CreateTFASettingInput{
+				TotpAllowed: lo.ToPtr(false),
+			},
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -131,6 +140,13 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 
 			// Make sure provided values match
 			assert.Equal(t, tc.input.TotpAllowed, resp.CreateTFASetting.TfaSetting.TotpAllowed)
+
+			if *tc.input.TotpAllowed {
+				assert.NotEmpty(t, resp.CreateTFASetting.QRCode)
+			} else {
+				assert.Empty(t, resp.CreateTFASetting.QRCode)
+			}
+
 			require.NotEmpty(t, resp.CreateTFASetting.TfaSetting.Owner)
 			assert.Equal(t, tc.userID, resp.CreateTFASetting.TfaSetting.Owner.ID)
 
@@ -146,7 +162,11 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 	t := suite.T()
 
+	// create tfa settings for users
 	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, testUser1.ID)
+
+	// create one with not enabled by default
+	(&TFASettingBuilder{client: suite.client, totpAllowed: lo.ToPtr(false)}).MustNew(testUser2.UserCtx, t, testUser2.ID)
 
 	recoveryCodes := []string{}
 
@@ -160,7 +180,8 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 		{
 			name: "update verify",
 			input: openlaneclient.UpdateTFASettingInput{
-				Verified: lo.ToPtr(true),
+				TotpAllowed: lo.ToPtr(true),
+				Verified:    lo.ToPtr(true),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -190,6 +211,22 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
+		{
+			name: "update totp to false should clear settings",
+			input: openlaneclient.UpdateTFASettingInput{
+				TotpAllowed: lo.ToPtr(false),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "update TotpAllowed to true should enable TFA",
+			input: openlaneclient.UpdateTFASettingInput{
+				TotpAllowed: lo.ToPtr(true),
+			},
+			client: suite.client.api,
+			ctx:    testUser2.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -209,25 +246,36 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 			require.NotNil(t, resp)
 			require.NotNil(t, resp.UpdateTFASetting.TfaSetting)
 
-			// Make sure provided values match
-			assert.NotEmpty(t, resp.UpdateTFASetting.RecoveryCodes)
-
 			// backup codes should only be regenerated on explicit request
-			if tc.input.RegenBackupCodes != nil {
-				if *tc.input.RegenBackupCodes {
-					assert.NotEqual(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
-				} else {
-					assert.Equal(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
+			// and should only be returned on initial verification or regen request
+			if (tc.input.RegenBackupCodes != nil && *tc.input.RegenBackupCodes) ||
+				(tc.input.Verified != nil && *tc.input.Verified) {
+				// recovery codes should be returned
+				assert.NotEmpty(t, resp.UpdateTFASetting.RecoveryCodes)
+
+				if tc.input.RegenBackupCodes != nil {
+					if *tc.input.RegenBackupCodes {
+						assert.NotEqual(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
+					} else {
+						assert.Equal(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
+					}
 				}
+			} else {
+				assert.Empty(t, resp.UpdateTFASetting.RecoveryCodes)
 			}
 
-			// make sure user setting was not updated
+			// make sure user setting is updated correctly
 			userSettings, err := tc.client.GetAllUserSettings(tc.ctx)
 			require.NoError(t, err)
 			require.Len(t, userSettings.UserSettings.Edges, 1)
 
 			if resp.UpdateTFASetting.TfaSetting.Verified {
 				assert.True(t, *userSettings.UserSettings.Edges[0].Node.IsTfaEnabled)
+			}
+
+			// ensure TFA is disabled if totp is not allowed
+			if !*resp.UpdateTFASetting.TfaSetting.TotpAllowed {
+				assert.False(t, *userSettings.UserSettings.Edges[0].Node.IsTfaEnabled)
 			}
 
 			// set at the end so we can compare later

@@ -42764,9 +42764,16 @@ func (t *CreateTFASetting_CreateTFASetting_TfaSetting) GetVerified() bool {
 }
 
 type CreateTFASetting_CreateTFASetting struct {
+	QRCode     *string                                      "json:\"qrCode,omitempty\" graphql:\"qrCode\""
 	TfaSetting CreateTFASetting_CreateTFASetting_TfaSetting "json:\"tfaSetting\" graphql:\"tfaSetting\""
 }
 
+func (t *CreateTFASetting_CreateTFASetting) GetQRCode() *string {
+	if t == nil {
+		t = &CreateTFASetting_CreateTFASetting{}
+	}
+	return t.QRCode
+}
 func (t *CreateTFASetting_CreateTFASetting) GetTfaSetting() *CreateTFASetting_CreateTFASetting_TfaSetting {
 	if t == nil {
 		t = &CreateTFASetting_CreateTFASetting{}
@@ -61983,6 +61990,7 @@ const CreateTFASettingDocument = `mutation CreateTFASetting ($input: CreateTFASe
 				id
 			}
 		}
+		qrCode
 	}
 }
 `

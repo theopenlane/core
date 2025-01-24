@@ -918,6 +918,7 @@ type SubscriberUpdatePayload struct {
 type TFASettingCreatePayload struct {
 	// Created tfaSetting
 	TfaSetting *generated.TFASetting `json:"tfaSetting"`
+	QRCode     *string               `json:"qrCode,omitempty"`
 }
 
 // Return response for updateTFASetting mutation

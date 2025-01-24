@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -67,6 +68,8 @@ type UserCleanup struct {
 
 type TFASettingBuilder struct {
 	client *client
+
+	totpAllowed *bool
 }
 
 type OrgMemberBuilder struct {
@@ -383,8 +386,12 @@ func (u *UserCleanup) MustDelete(ctx context.Context, t *testing.T) {
 
 // MustNew tfa settings builder is used to create, without authz checks, tfa settings in the database
 func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T, userID string) *ent.TFASetting {
+	if tf.totpAllowed == nil {
+		tf.totpAllowed = lo.ToPtr(true)
+	}
+
 	return tf.client.db.TFASetting.Create().
-		SetTotpAllowed(true).
+		SetTotpAllowed(*tf.totpAllowed).
 		SetOwnerID(userID).
 		SaveX(ctx)
 }

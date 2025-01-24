@@ -27015,6 +27015,7 @@ type TFASettingCreatePayload {
 	Created tfaSetting
 	"""
 	tfaSetting: TFASetting!
+	qrCode: String
 }
 """
 An edge in a connection.
