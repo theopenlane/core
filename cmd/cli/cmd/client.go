@@ -167,17 +167,17 @@ func StoreAuthCookies(client *openlaneclient.OpenlaneClient) {
 // if the token is expired, but the refresh token is still valid, the
 // token will be refreshed
 func GetTokenFromKeyring(ctx context.Context) (*oauth2.Token, string, error) {
-	access, err := keyring.QueryOneKeyring(serviceName, accessTokenKey)
+	access, err := keyring.QueryKeyring(serviceName, accessTokenKey)
 	if err != nil {
 		return nil, "", fmt.Errorf("error fetching auth token: %w", err)
 	}
 
-	refresh, err := keyring.QueryOneKeyring(serviceName, refreshTokenKey)
+	refresh, err := keyring.QueryKeyring(serviceName, refreshTokenKey)
 	if err != nil {
 		return nil, "", fmt.Errorf("error fetching refresh token: %w", err)
 	}
 
-	session, err := keyring.QueryOneKeyring(serviceName, sessionKey)
+	session, err := keyring.QueryKeyring(serviceName, sessionKey)
 	if err != nil {
 		return nil, "", fmt.Errorf("error fetching session: %w", err)
 	}
@@ -213,12 +213,12 @@ func refreshToken(ctx context.Context, refresh string) (*oauth2.Token, error) {
 
 // StoreToken in local keyring
 func StoreToken(token *oauth2.Token) error {
-	err := keyring.SetAfterFirstUnlockKeying(serviceName, accessTokenKey, []byte(token.AccessToken))
+	err := keyring.SetKeying(serviceName, accessTokenKey, []byte(token.AccessToken))
 	if err != nil {
 		return fmt.Errorf("failed saving access token: %w", err)
 	}
 
-	err = keyring.SetAfterFirstUnlockKeying(serviceName, refreshTokenKey, []byte(token.RefreshToken))
+	err = keyring.SetKeying(serviceName, refreshTokenKey, []byte(token.RefreshToken))
 	if err != nil {
 		return fmt.Errorf("failed saving refresh token: %w", err)
 	}
@@ -228,7 +228,7 @@ func StoreToken(token *oauth2.Token) error {
 
 // StoreSession in local keyring
 func StoreSession(session string) error {
-	err := keyring.SetAfterFirstUnlockKeying(serviceName, sessionKey, []byte(session))
+	err := keyring.SetKeying(serviceName, sessionKey, []byte(session))
 	if err != nil {
 		return fmt.Errorf("failed saving session: %w", err)
 	}
