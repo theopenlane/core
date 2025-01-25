@@ -4,14 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"os"
-	"path"
 
-	"github.com/99designs/keyring"
 	"github.com/knadh/koanf/v2"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/utils/keyring"
 
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -169,30 +167,25 @@ func StoreAuthCookies(client *openlaneclient.OpenlaneClient) {
 // if the token is expired, but the refresh token is still valid, the
 // token will be refreshed
 func GetTokenFromKeyring(ctx context.Context) (*oauth2.Token, string, error) {
-	ring, err := GetKeyring()
-	if err != nil {
-		return nil, "", fmt.Errorf("error opening keyring: %w", err)
-	}
-
-	access, err := ring.Get(accessTokenKey)
+	access, err := keyring.QueryKeyring(serviceName, accessTokenKey)
 	if err != nil {
 		return nil, "", fmt.Errorf("error fetching auth token: %w", err)
 	}
 
-	refresh, err := ring.Get(refreshTokenKey)
+	refresh, err := keyring.QueryKeyring(serviceName, refreshTokenKey)
 	if err != nil {
 		return nil, "", fmt.Errorf("error fetching refresh token: %w", err)
 	}
 
-	session, err := ring.Get(sessionKey)
+	session, err := keyring.QueryKeyring(serviceName, sessionKey)
 	if err != nil {
-		return nil, "", fmt.Errorf("error fetching refresh token: %w", err)
+		return nil, "", fmt.Errorf("error fetching session: %w", err)
 	}
 
 	return &oauth2.Token{
-		AccessToken:  string(access.Data),
-		RefreshToken: string(refresh.Data),
-	}, string(session.Data), nil
+		AccessToken:  access,
+		RefreshToken: refresh,
+	}, session, nil
 }
 
 // refreshToken will refresh the oauth token using the refresh token
@@ -218,62 +211,14 @@ func refreshToken(ctx context.Context, refresh string) (*oauth2.Token, error) {
 	}, nil
 }
 
-// GetKeyring will return the already loaded keyring so that we don't prompt users for passwords multiple times
-func GetKeyring() (keyring.Keyring, error) {
-	var err error
-
-	if userKeyringLoaded {
-		return userKeyring, nil
-	}
-
-	cfgDir, err := os.UserConfigDir()
-	if err != nil {
-		return nil, err
-	}
-
-	userKeyring, err = keyring.Open(keyring.Config{
-		ServiceName: serviceName,
-
-		// MacOS keychain
-		KeychainTrustApplication: true,
-
-		// KDE Wallet
-		KWalletAppID:  serviceName,
-		KWalletFolder: serviceName,
-
-		// Windows
-		WinCredPrefix: serviceName,
-
-		// Fallback encrypted file
-		FileDir:          path.Join(cfgDir, serviceName, "keyring"),
-		FilePasswordFunc: keyring.TerminalPrompt,
-	})
-	if err == nil {
-		userKeyringLoaded = true
-	}
-
-	return userKeyring, err
-}
-
 // StoreToken in local keyring
 func StoreToken(token *oauth2.Token) error {
-	ring, err := GetKeyring()
-	if err != nil {
-		return fmt.Errorf("error opening keyring: %w", err)
-	}
-
-	err = ring.Set(keyring.Item{
-		Key:  accessTokenKey,
-		Data: []byte(token.AccessToken),
-	})
+	err := keyring.SetKeying(serviceName, accessTokenKey, []byte(token.AccessToken))
 	if err != nil {
 		return fmt.Errorf("failed saving access token: %w", err)
 	}
 
-	err = ring.Set(keyring.Item{
-		Key:  refreshTokenKey,
-		Data: []byte(token.RefreshToken),
-	})
+	err = keyring.SetKeying(serviceName, refreshTokenKey, []byte(token.RefreshToken))
 	if err != nil {
 		return fmt.Errorf("failed saving refresh token: %w", err)
 	}
@@ -283,15 +228,7 @@ func StoreToken(token *oauth2.Token) error {
 
 // StoreSession in local keyring
 func StoreSession(session string) error {
-	ring, err := GetKeyring()
-	if err != nil {
-		return fmt.Errorf("error opening keyring: %w", err)
-	}
-
-	err = ring.Set(keyring.Item{
-		Key:  sessionKey,
-		Data: []byte(session),
-	})
+	err := keyring.SetKeying(serviceName, sessionKey, []byte(session))
 	if err != nil {
 		return fmt.Errorf("failed saving session: %w", err)
 	}
