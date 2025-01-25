@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/99designs/keyring"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
@@ -38,11 +37,6 @@ var (
 	RootHost string
 	// GraphAPIHost contains the url for the graph api
 	GraphAPIHost string
-)
-
-var (
-	userKeyring       keyring.Keyring
-	userKeyringLoaded = false
 )
 
 // RootCmd represents the base command when called without any subcommands
