@@ -18,9 +18,13 @@ import (
 func (suite *GraphTestSuite) TestQueryEvidence() {
 	t := suite.T()
 
+	program := (&ProgramBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+
+	(&ProgramMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
+
 	// create an Evidence to be queried using adminUser
 	// org owner (testUser1) should automatically have access to the Evidence
-	evidence := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
 
 	// add test cases for querying the Evidence
 	testCases := []struct {
@@ -43,7 +47,7 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 			ctx:     testUser1.UserCtx,
 		},
 		{
-			name:     "read only user in organization, not authorized",
+			name:     "read only user in organization, authorized via program",
 			queryID:  evidence.ID,
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
