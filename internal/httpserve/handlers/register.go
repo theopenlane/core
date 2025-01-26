@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"net/http"
-	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
@@ -88,7 +87,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	}
 
 	// only return the token in development
-	if strings.Contains(ctx.Request().Host, "localhost") {
+	if h.IsDev {
 		out.Token = meowtoken.Token
 	}
 
