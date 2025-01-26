@@ -21,6 +21,8 @@ import (
 type Handler struct {
 	// IsTest is a flag to determine if the application is running in test mode and will mock external calls
 	IsTest bool
+	// IsDev is a flag to determine if the application is running in development mode
+	IsDev bool
 	// DBClient to interact with the database
 	DBClient *ent.Client
 	// RedisClient to interact with redis

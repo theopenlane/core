@@ -19,10 +19,10 @@ import (
 // =========
 
 type AuthData struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token,omitempty"`
-	Session      string `json:"session,omitempty"`
-	TokenType    string `json:"token_type,omitempty"`
+	AccessToken  string `json:"access_token" description:"The access token to be used for authentication"`
+	RefreshToken string `json:"refresh_token,omitempty" description:"The refresh token to be used to refresh the access token after it expires"`
+	Session      string `json:"session,omitempty" description:"The short-lived session token required for authentication"`
+	TokenType    string `json:"token_type,omitempty" description:"The type of token being returned" example:"bearer"`
 }
 
 // =========
@@ -31,8 +31,8 @@ type AuthData struct {
 
 // LoginRequest holds the login payload for the /login route
 type LoginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" description:"The email address associated with the existing account" example:"jsnow@example.com"`
+	Password string `json:"password" description:"The password associated with the account" example:"Wint3rIsC0ming123!"`
 }
 
 // LoginReply holds the response to LoginRequest
@@ -82,7 +82,7 @@ var ExampleLoginSuccessResponse = LoginReply{
 
 // RefreshRequest holds the fields that should be included on a request to the `/refresh` endpoint
 type RefreshRequest struct {
-	RefreshToken string `json:"refresh_token"`
+	RefreshToken string `json:"refresh_token" description:"The token to be used to refresh the access token after expiration"`
 }
 
 // RefreshReply holds the fields that are sent on a response to the `/refresh` endpoint
@@ -124,19 +124,19 @@ var ExampleRefreshSuccessResponse = RefreshReply{
 
 // RegisterRequest holds the fields that should be included on a request to the `/register` endpoint
 type RegisterRequest struct {
-	FirstName string `json:"first_name,omitempty"`
-	LastName  string `json:"last_name,omitempty"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
+	FirstName string `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
+	LastName  string `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
+	Email     string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	Password  string `json:"password" description:"The password to be used for authentication after registration" example:"Wint3rIsC0ming123!"`
 }
 
 // RegisterReply holds the fields that are sent on a response to the `/register` endpoint
 type RegisterReply struct {
 	rout.Reply
-	ID      string `json:"user_id"`
-	Email   string `json:"email"`
+	ID      string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	Email   string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	Message string `json:"message"`
-	Token   string `json:"token"`
+	Token   string `json:"token,omitempty" exclude:"true"` // only used for requests against local development, excluded from OpenAPI documentation
 }
 
 // Validate ensures the required fields are set on the RegisterRequest request
@@ -173,7 +173,6 @@ var ExampleRegisterSuccessResponse = RegisterReply{
 	ID:      "1234",
 	Email:   "",
 	Message: "Welcome to Openlane!",
-	Token:   "",
 }
 
 // =========
@@ -182,7 +181,7 @@ var ExampleRegisterSuccessResponse = RegisterReply{
 
 // SwitchOrganizationRequest contains the target organization ID being switched to for the /switch endpoint
 type SwitchOrganizationRequest struct {
-	TargetOrganizationID string `json:"target_organization_id"`
+	TargetOrganizationID string `json:"target_organization_id" description:"The ID of the organization to switch to" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 }
 
 // SwitchOrganizationReply holds the new authentication and session information for the user for the new organization
@@ -224,15 +223,14 @@ var ExampleSwitchSuccessReply = SwitchOrganizationReply{
 
 // VerifyRequest holds the fields that should be included on a request to the `/verify` endpoint
 type VerifyRequest struct {
-	Token string `query:"token"`
+	Token string `query:"token" description:"The token to be used to verify the email address, token is sent via email"`
 }
 
 // VerifyReply holds the fields that are sent on a response to the `/verify` endpoint
 type VerifyReply struct {
 	rout.Reply
-	ID      string `json:"user_id"`
-	Email   string `json:"email"`
-	Token   string `json:"token"`
+	ID      string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	Email   string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	Message string `json:"message,omitempty"`
 	AuthData
 }
@@ -258,7 +256,6 @@ var ExampleVerifySuccessResponse = VerifyReply{
 	},
 	ID:      ulids.New().String(),
 	Email:   "gregor.clegane@theopenlane.io",
-	Token:   "token",
 	Message: "Email has been verified",
 	AuthData: AuthData{
 		AccessToken:  "access_token",
@@ -274,7 +271,7 @@ var ExampleVerifySuccessResponse = VerifyReply{
 
 // ResendRequest contains fields for a resend email verification request to the `/resend` endpoint
 type ResendRequest struct {
-	Email string `json:"email"`
+	Email string `json:"email" description:"The email address to resend the verification email to, must match the email address on the existing account"`
 }
 
 // ResendReply holds the fields that are sent on a response to the `/resend` endpoint
@@ -311,7 +308,7 @@ var ExampleResendEmailSuccessResponse = ResendReply{
 
 // ForgotPasswordRequest contains fields for a forgot password request
 type ForgotPasswordRequest struct {
-	Email string `json:"email"`
+	Email string `json:"email" description:"The email address associated with the account to send the password reset email to" example:"jsnow@example.com"`
 }
 
 // ForgotPasswordReply contains fields for a forgot password response
@@ -348,8 +345,8 @@ var ExampleForgotPasswordSuccessResponse = ForgotPasswordReply{
 
 // ResetPasswordRequest contains user input required to reset a user's password using /password-reset endpoint
 type ResetPasswordRequest struct {
-	Password string `json:"password"`
-	Token    string `json:"token"`
+	Password string `json:"password" description:"The new password to be used for authentication"`
+	Token    string `json:"token" description:"The token to be used to reset the password, token is sent via email"`
 }
 
 // ResetPasswordReply is the response returned from a non-successful password reset request
@@ -395,8 +392,8 @@ var ExampleResetPasswordSuccessResponse = ResetPasswordReply{
 
 // WebauthnRegistrationRequest is the request to begin a webauthn login
 type WebauthnRegistrationRequest struct {
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	Email string `json:"email" description:"The email address associated with the account" example:"jsnow@example.com"`
+	Name  string `json:"name" description:"The name of the user" example:"Jon Snow"`
 }
 
 func (r *WebauthnRegistrationRequest) Validate() error {
@@ -438,8 +435,7 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 // WebauthnRegistrationResponse is the response after a successful webauthn registration
 type WebauthnRegistrationResponse struct {
 	rout.Reply
-	Message   string `json:"message,omitempty"`
-	TokenType string `json:"token_type"`
+	Message string `json:"message,omitempty"`
 	AuthData
 }
 
@@ -464,7 +460,7 @@ type WebauthnLoginResponse struct {
 
 // VerifySubscribeRequest holds the fields that should be included on a request to the `/subscribe/verify` endpoint
 type VerifySubscribeRequest struct {
-	Token string `query:"token"`
+	Token string `query:"token" description:"The token to be used to verify the subscription, token is sent via email"`
 }
 
 // VerifySubscribeReply holds the fields that are sent on a response to the `/subscribe/verify` endpoint
@@ -499,17 +495,17 @@ var ExampleVerifySubscriptionResponse = VerifySubscribeReply{
 
 // InviteRequest holds the fields that should be included on a request to the `/invite` endpoint
 type InviteRequest struct {
-	Token string `query:"token"`
+	Token string `query:"token" description:"The token to be used to accept the invitation, token is sent via email"`
 }
 
 // InviteReply holds the fields that are sent on a response to an accepted invitation
 type InviteReply struct {
 	rout.Reply
-	ID          string `json:"user_id"`
-	Email       string `json:"email"`
+	ID          string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	Email       string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	Message     string `json:"message"`
-	JoinedOrgID string `json:"joined_org_id"`
-	Role        string `json:"role"`
+	JoinedOrgID string `json:"joined_org_id" description:"The ID of the organization the user joined" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
+	Role        string `json:"role" description:"The role the user has in the organization" example:"admin"`
 	AuthData
 }
 
@@ -549,13 +545,13 @@ var ExampleInviteResponse = InviteReply{
 
 // OauthTokenRequest to authenticate an oauth user with the Server
 type OauthTokenRequest struct {
-	Name             string `json:"name"`
-	Email            string `json:"email"`
-	AuthProvider     string `json:"authProvider"`
-	ExternalUserID   string `json:"externalUserId"`
-	ExternalUserName string `json:"externalUserName"`
-	ClientToken      string `json:"clientToken"`
-	Image            string `json:"image,omitempty"`
+	Name             string `json:"name" description:"The name of the user" example:"Jon Snow"`
+	Email            string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	AuthProvider     string `json:"authProvider" description:"The provider used to authenticate the user, e.g. google, github, etc." example:"google"`
+	ExternalUserID   string `json:"externalUserId" description:"The ID of the user from the external provider" example:"1234567890"`
+	ExternalUserName string `json:"externalUserName" description:"The username of the user from the external provider" example:"jsnow"`
+	ClientToken      string `json:"clientToken" description:"The token provided by the external provider"`
+	Image            string `json:"image,omitempty" description:"The image URL of the user from the external provider"`
 }
 
 // =========
@@ -564,10 +560,10 @@ type OauthTokenRequest struct {
 
 // AccountAccessRequest holds the fields that should be included on a request to the `/account/access` endpoint
 type AccountAccessRequest struct {
-	ObjectID    string `json:"objectId"`
-	ObjectType  string `json:"objectType"`
-	Relation    string `json:"relation"`
-	SubjectType string `json:"subjectType,omitempty"`
+	ObjectID    string `json:"objectId" description:"The ID of the object to check access for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectType  string `json:"objectType" description:"The type of object to check access for, e.g. organization, program, procedure, etc" example:"organization"`
+	Relation    string `json:"relation" description:"The relation to check access for, e.g. can_view, can_edit" example:"can_view"`
+	SubjectType string `json:"subjectType,omitempty" description:"The type of subject to check access for, e.g. service, user" example:"user"`
 }
 
 // AccountAccessReply holds the fields that are sent on a response to the `/account/access` endpoint
@@ -617,10 +613,10 @@ var ExampleAccountAccessReply = AccountAccessReply{
 
 // AccountRolesRequest holds the fields that should be included on a request to the `/account/roles` endpoint
 type AccountRolesRequest struct {
-	ObjectID    string   `json:"objectId"`
-	ObjectType  string   `json:"objectType"`
-	SubjectType string   `json:"subjectType,omitempty"`
-	Relations   []string `json:"relations,omitempty"`
+	ObjectID    string   `json:"objectId" description:"The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectType  string   `json:"objectType" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
+	SubjectType string   `json:"subjectType,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
+	Relations   []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit" example:"can_view"`
 }
 
 // AccountRolesReply holds the fields that are sent on a response to the `/account/roles` endpoint
@@ -665,14 +661,14 @@ var ExampleAccountRolesReply = AccountRolesReply{
 
 // AccountRolesOrganizationRequest holds the fields that should be included on a request to the `/account/roles/organization` endpoint
 type AccountRolesOrganizationRequest struct {
-	ID string `param:"id"`
+	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // AccountRolesOrganizationReply holds the fields that are sent on a response to the `/account/roles/organization` endpoint
 type AccountRolesOrganizationReply struct {
 	rout.Reply
-	Roles          []string `json:"roles"`
-	OrganizationID string   `json:"organization_id"`
+	Roles          []string `json:"roles" description:"The roles the user has in the organization, e.g. can_view, can_edit" example:"can_view, can_edit"`
+	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // Validate ensures the required fields are set on the AccountAccessRequest
@@ -702,28 +698,28 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 
 // UploadFilesRequest holds the fields that should be included on a request to the `/upload` endpoint
 type UploadFilesRequest struct {
-	UploadFile multipart.FileHeader `form:"uploadFile"`
+	UploadFile multipart.FileHeader `form:"uploadFile" description:"The file to be uploaded"`
 }
 
 // UploadFilesReply holds the fields that are sent on a response to the `/upload` endpoint
 type UploadFilesReply struct {
 	rout.Reply
 	Message   string `json:"message,omitempty"`
-	FileCount int64  `json:"file_count,omitempty"`
-	Files     []File `json:"files,omitempty"`
+	FileCount int64  `json:"file_count,omitempty" description:"The number of files uploaded"`
+	Files     []File `json:"files,omitempty" description:"The files that were uploaded"`
 }
 
 // File holds the fields that are sent on a response to the `/upload` endpoint
 type File struct {
-	ID           string    `json:"id,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Size         int64     `json:"size,omitempty"`
-	MimeType     string    `json:"mime_type,omitempty"`
-	ContentType  string    `json:"content_type,omitempty"`
-	PresignedURL string    `json:"presigned_url,omitempty"`
-	MD5          []byte    `json:"md5,omitempty"`
-	CreatedAt    time.Time `json:"created_at,omitempty"`
-	UpdatedAt    time.Time `json:"updated_at,omitempty"`
+	ID           string    `json:"id,omitempty" description:"The ID of the uploaded file"`
+	Name         string    `json:"name,omitempty" description:"The name of the uploaded file"`
+	Size         int64     `json:"size,omitempty" description:"The size of the uploaded file in bytes"`
+	MimeType     string    `json:"mime_type,omitempty" description:"The mime type of the uploaded file"`
+	ContentType  string    `json:"content_type,omitempty" description:"The content type of the uploaded file"`
+	PresignedURL string    `json:"presigned_url,omitempty" description:"The presigned URL to download the file"`
+	MD5          []byte    `json:"md5,omitempty" description:"The MD5 hash of the uploaded file"`
+	CreatedAt    time.Time `json:"created_at,omitempty" description:"The time the file was uploaded"`
+	UpdatedAt    time.Time `json:"updated_at,omitempty" description:"The time the file was last updated"`
 }
 
 // ExampleUploadFileRequest is an example of a successful upload request for OpenAPI documentation
@@ -765,8 +761,8 @@ var ExampleUploadFilesSuccessResponse = UploadFilesReply{
 
 // TFARequest holds the payload for verifying the 2fa code (/2fa/validate)
 type TFARequest struct {
-	TOTPCode     string `json:"totp_code,omitempty"`
-	RecoveryCode string `json:"recovery_code,omitempty"`
+	TOTPCode     string `json:"totp_code,omitempty" description:"The TOTP code to validate, always takes precedence over recovery code" example:"113371"`
+	RecoveryCode string `json:"recovery_code,omitempty" description:"The recovery code to validate, only used if TOTP code is not provided" example:"8VM7AL91"`
 }
 
 // TFAReply holds the response to TFARequest

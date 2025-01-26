@@ -1,6 +1,8 @@
 package server
 
 import (
+	"reflect"
+
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 
@@ -18,7 +20,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	securityschemes := make(openapi3.SecuritySchemes)
 	examples := make(openapi3.Examples)
 
-	generator := openapi3gen.NewGenerator(openapi3gen.UseAllExportedFields())
+	generator := openapi3gen.NewGenerator(openapi3gen.UseAllExportedFields(), customizer)
 	for key, val := range openAPISchemas {
 		ref, err := generator.NewSchemaRefForValue(val, schemas)
 		if err != nil {
@@ -159,6 +161,25 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		},
 	}, nil
 }
+
+// customizer is a customizer function that allows for the modification of the generated schemas
+// this is used to ignore fields that are not required in the OAS specification
+// and to add additional metadata to the schema such as descriptions and examples
+var customizer = openapi3gen.SchemaCustomizer(func(name string, ft reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
+	if tag.Get("exclude") != "" && tag.Get("exclude") == "true" {
+		return &openapi3gen.ExcludeSchemaSentinel{}
+	}
+
+	if tag.Get("description") != "" {
+		schema.Description = tag.Get("description")
+	}
+
+	if tag.Get("example") != "" {
+		schema.Example = tag.Get("example")
+	}
+
+	return nil
+})
 
 // openAPISchemas is a mapping of types to auto generate schemas for - these specifically live under the OAS "schema" type so that we can simply make schemaRef's to them and not have to define them all individually in the OAS paths
 var openAPISchemas = map[string]any{

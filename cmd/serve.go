@@ -134,6 +134,9 @@ func serve(ctx context.Context) error {
 	// Add redis client to Handlers Config
 	so.Config.Handler.RedisClient = redisClient
 
+	// set dev flag
+	so.Config.Handler.IsDev = so.Config.Settings.Server.Dev
+
 	// add ready checks
 	so.AddServerOptions(
 		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),

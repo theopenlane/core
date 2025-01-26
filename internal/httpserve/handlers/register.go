@@ -84,7 +84,11 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		ID:      meowuser.ID,
 		Email:   meowuser.Email,
 		Message: "Welcome to Openlane!",
-		Token:   meowtoken.Token,
+	}
+
+	// only return the token in development
+	if h.IsDev {
+		out.Token = meowtoken.Token
 	}
 
 	return h.Created(ctx, out)

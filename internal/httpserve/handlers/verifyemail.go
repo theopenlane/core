@@ -91,8 +91,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 					Reply:   rout.Reply{Success: false},
 					ID:      meowtoken.ID,
 					Email:   user.Email,
-					Message: "Token expired, a new token has been issued. Please try again.",
-					Token:   meowtoken.Token,
+					Message: "Token expired, a new token has been issued. Please check your email and try again.",
 				}
 
 				return h.Created(ctx, out)
