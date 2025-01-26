@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -842,6 +843,21 @@ func (ou *OrganizationUpdate) AddSubcontrols(s ...*Subcontrol) *OrganizationUpda
 	return ou.AddSubcontrolIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (ou *OrganizationUpdate) AddEvidenceIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddEvidenceIDs(ids...)
+	return ou
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (ou *OrganizationUpdate) AddEvidence(e ...*Evidence) *OrganizationUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ou.AddEvidenceIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1628,6 +1644,27 @@ func (ou *OrganizationUpdate) RemoveSubcontrols(s ...*Subcontrol) *OrganizationU
 		ids[i] = s[i].ID
 	}
 	return ou.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (ou *OrganizationUpdate) ClearEvidence() *OrganizationUpdate {
+	ou.mutation.ClearEvidence()
+	return ou
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (ou *OrganizationUpdate) RemoveEvidenceIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveEvidenceIDs(ids...)
+	return ou
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (ou *OrganizationUpdate) RemoveEvidence(e ...*Evidence) *OrganizationUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ou.RemoveEvidenceIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -3620,6 +3657,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EvidenceTable,
+			Columns: []string{organization.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Evidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !ou.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EvidenceTable,
+			Columns: []string{organization.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EvidenceTable,
+			Columns: []string{organization.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4474,6 +4559,21 @@ func (ouo *OrganizationUpdateOne) AddSubcontrols(s ...*Subcontrol) *Organization
 	return ouo.AddSubcontrolIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (ouo *OrganizationUpdateOne) AddEvidenceIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddEvidenceIDs(ids...)
+	return ouo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (ouo *OrganizationUpdateOne) AddEvidence(e ...*Evidence) *OrganizationUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ouo.AddEvidenceIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -5260,6 +5360,27 @@ func (ouo *OrganizationUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *Organizat
 		ids[i] = s[i].ID
 	}
 	return ouo.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (ouo *OrganizationUpdateOne) ClearEvidence() *OrganizationUpdateOne {
+	ouo.mutation.ClearEvidence()
+	return ouo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveEvidenceIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveEvidenceIDs(ids...)
+	return ouo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (ouo *OrganizationUpdateOne) RemoveEvidence(e ...*Evidence) *OrganizationUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ouo.RemoveEvidenceIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -7277,6 +7398,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EvidenceTable,
+			Columns: []string{organization.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Evidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !ouo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EvidenceTable,
+			Columns: []string{organization.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EvidenceTable,
+			Columns: []string{organization.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

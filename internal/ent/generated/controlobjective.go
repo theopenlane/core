@@ -59,11 +59,14 @@ type ControlObjective struct {
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
 	// json data including details of the control objective
 	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlObjectiveQuery when eager-loading is set.
-	Edges                      ControlObjectiveEdges `json:"edges"`
-	control_control_objectives *string
-	selectValues               sql.SelectValues
+	Edges                       ControlObjectiveEdges `json:"edges"`
+	control_control_objectives  *string
+	evidence_control_objectives *string
+	selectValues                sql.SelectValues
 }
 
 // ControlObjectiveEdges holds the relations/edges for other nodes in the graph.
@@ -240,11 +243,13 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlobjective.FieldTags, controlobjective.FieldDetails:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks, controlobjective.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case controlobjective.ForeignKeys[0]: // control_control_objectives
+			values[i] = new(sql.NullString)
+		case controlobjective.ForeignKeys[1]: // evidence_control_objectives
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -391,12 +396,25 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case controlobjective.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				co.ExampleEvidence = value.String
+			}
 		case controlobjective.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_control_objectives", values[i])
 			} else if value.Valid {
 				co.control_control_objectives = new(string)
 				*co.control_control_objectives = value.String
+			}
+		case controlobjective.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_control_objectives", values[i])
+			} else if value.Valid {
+				co.evidence_control_objectives = new(string)
+				*co.evidence_control_objectives = value.String
 			}
 		default:
 			co.selectValues.Set(columns[i], values[i])
@@ -558,6 +576,9 @@ func (co *ControlObjective) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", co.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(co.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }

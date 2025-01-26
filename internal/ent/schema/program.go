@@ -93,6 +93,8 @@ func (Program) Edges() []ent.Edge {
 		edge.To("notes", Note.Type),
 		// programs can have 1:many associated files
 		edge.To("files", File.Type),
+		// programs can be many:many with evidence
+		edge.To("evidence", Evidence.Type),
 		// programs can have 1:many associated narratives
 		edge.To("narratives", Narrative.Type),
 		// programs can have 1:many associated action plans

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -366,6 +367,21 @@ func (tc *TaskCreate) AddProgram(p ...*Program) *TaskCreate {
 		ids[i] = p[i].ID
 	}
 	return tc.AddProgramIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (tc *TaskCreate) AddEvidenceIDs(ids ...string) *TaskCreate {
+	tc.mutation.AddEvidenceIDs(ids...)
+	return tc
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (tc *TaskCreate) AddEvidence(e ...*Evidence) *TaskCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return tc.AddEvidenceIDs(ids...)
 }
 
 // Mutation returns the TaskMutation object of the builder.
@@ -756,6 +772,23 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = tc.schemaConfig.ProgramTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   task.EvidenceTable,
+			Columns: task.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

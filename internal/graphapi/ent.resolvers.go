@@ -308,6 +308,38 @@ func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor
 	return res, err
 }
 
+// Evidences is the resolver for the evidences field.
+func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceWhereInput) (*generated.EvidenceConnection, error) {
+	res, err := withTransactionalMutation(ctx).Evidence.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEvidenceFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "evidence"})
+	}
+
+	return res, err
+}
+
+// EvidenceHistories is the resolver for the evidenceHistories field.
+func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceHistoryWhereInput) (*generated.EvidenceHistoryConnection, error) {
+	res, err := withTransactionalMutation(ctx).EvidenceHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEvidenceHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "evidencehistory"})
+	}
+
+	return res, err
+}
+
 // Files is the resolver for the files field.
 func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) (*generated.FileConnection, error) {
 	res, err := withTransactionalMutation(ctx).File.Query().Paginate(

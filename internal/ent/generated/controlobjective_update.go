@@ -353,6 +353,26 @@ func (cou *ControlObjectiveUpdate) ClearDetails() *ControlObjectiveUpdate {
 	return cou
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cou *ControlObjectiveUpdate) SetExampleEvidence(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetExampleEvidence(s)
+	return cou
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableExampleEvidence(s *string) *ControlObjectiveUpdate {
+	if s != nil {
+		cou.SetExampleEvidence(*s)
+	}
+	return cou
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (cou *ControlObjectiveUpdate) ClearExampleEvidence() *ControlObjectiveUpdate {
+	cou.mutation.ClearExampleEvidence()
+	return cou
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cou *ControlObjectiveUpdate) SetOwner(o *Organization) *ControlObjectiveUpdate {
 	return cou.SetOwnerID(o.ID)
@@ -982,6 +1002,12 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if cou.mutation.DetailsCleared() {
 		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := cou.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlobjective.FieldExampleEvidence, field.TypeString, value)
+	}
+	if cou.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(controlobjective.FieldExampleEvidence, field.TypeString)
 	}
 	if cou.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1924,6 +1950,26 @@ func (couo *ControlObjectiveUpdateOne) ClearDetails() *ControlObjectiveUpdateOne
 	return couo
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (couo *ControlObjectiveUpdateOne) SetExampleEvidence(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetExampleEvidence(s)
+	return couo
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableExampleEvidence(s *string) *ControlObjectiveUpdateOne {
+	if s != nil {
+		couo.SetExampleEvidence(*s)
+	}
+	return couo
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (couo *ControlObjectiveUpdateOne) ClearExampleEvidence() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearExampleEvidence()
+	return couo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (couo *ControlObjectiveUpdateOne) SetOwner(o *Organization) *ControlObjectiveUpdateOne {
 	return couo.SetOwnerID(o.ID)
@@ -2583,6 +2629,12 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	}
 	if couo.mutation.DetailsCleared() {
 		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := couo.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlobjective.FieldExampleEvidence, field.TypeString, value)
+	}
+	if couo.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(controlobjective.FieldExampleEvidence, field.TypeString)
 	}
 	if couo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

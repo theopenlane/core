@@ -7,6 +7,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+// GenericMutation is an interface for getting a mutation ID and type
+type GenericMutation interface {
+	ID() (id string, exists bool)
+	Type() string
+}
+
 // CheckForRequestedField checks if the requested field is in the list of fields
 func CheckForRequestedField(ctx context.Context, fieldName string) bool {
 	fields := GetPreloads(ctx)

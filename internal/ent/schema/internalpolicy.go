@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -41,6 +43,10 @@ func (InternalPolicy) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the policy"),
+		field.Time("review_due").
+			Comment("the date the policy should be reviewed, defaults to a year from creation date").
+			Default(time.Now().AddDate(1, 0, 0)).
+			Optional(),
 		field.String("policy_type").
 			Optional().
 			Comment("type of the policy"),

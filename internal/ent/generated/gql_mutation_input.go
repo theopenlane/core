@@ -513,6 +513,7 @@ type CreateControlInput struct {
 	Satisfies           *string
 	MappedFrameworks    *string
 	Details             map[string]interface{}
+	ExampleEvidence     *string
 	OwnerID             string
 	BlockedGroupIDs     []string
 	EditorIDs           []string
@@ -566,6 +567,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if v := i.ExampleEvidence; v != nil {
+		m.SetExampleEvidence(*v)
 	}
 	m.SetOwnerID(i.OwnerID)
 	if v := i.BlockedGroupIDs; len(v) > 0 {
@@ -640,6 +644,8 @@ type UpdateControlInput struct {
 	MappedFrameworks          *string
 	ClearDetails              bool
 	Details                   map[string]interface{}
+	ClearExampleEvidence      bool
+	ExampleEvidence           *string
 	OwnerID                   *string
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string
@@ -758,6 +764,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if i.ClearExampleEvidence {
+		m.ClearExampleEvidence()
+	}
+	if v := i.ExampleEvidence; v != nil {
+		m.SetExampleEvidence(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -898,6 +910,7 @@ type CreateControlObjectiveInput struct {
 	Source               *string
 	MappedFrameworks     *string
 	Details              map[string]interface{}
+	ExampleEvidence      *string
 	OwnerID              string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
@@ -948,6 +961,9 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if v := i.ExampleEvidence; v != nil {
+		m.SetExampleEvidence(*v)
 	}
 	m.SetOwnerID(i.OwnerID)
 	if v := i.BlockedGroupIDs; len(v) > 0 {
@@ -1020,6 +1036,8 @@ type UpdateControlObjectiveInput struct {
 	MappedFrameworks          *string
 	ClearDetails              bool
 	Details                   map[string]interface{}
+	ClearExampleEvidence      bool
+	ExampleEvidence           *string
 	OwnerID                   *string
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string
@@ -1132,6 +1150,12 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if i.ClearExampleEvidence {
+		m.ClearExampleEvidence()
+	}
+	if v := i.ExampleEvidence; v != nil {
+		m.SetExampleEvidence(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1884,6 +1908,244 @@ func (c *EventUpdate) SetInput(i UpdateEventInput) *EventUpdate {
 
 // SetInput applies the change-set in the UpdateEventInput on the EventUpdateOne builder.
 func (c *EventUpdateOne) SetInput(i UpdateEventInput) *EventUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateEvidenceInput represents a mutation input for creating evidences.
+type CreateEvidenceInput struct {
+	Tags                []string
+	Name                string
+	Description         *string
+	CollectionProcedure *string
+	CreationDate        *time.Time
+	RenewalDate         *time.Time
+	Source              *string
+	IsAutomated         *bool
+	URL                 *string
+	OwnerID             string
+	ControlObjectiveIDs []string
+	ControlIDs          []string
+	SubcontrolIDs       []string
+	FileIDs             []string
+	ProgramIDs          []string
+	TaskIDs             []string
+}
+
+// Mutate applies the CreateEvidenceInput on the EvidenceMutation builder.
+func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.CollectionProcedure; v != nil {
+		m.SetCollectionProcedure(*v)
+	}
+	if v := i.CreationDate; v != nil {
+		m.SetCreationDate(*v)
+	}
+	if v := i.RenewalDate; v != nil {
+		m.SetRenewalDate(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.IsAutomated; v != nil {
+		m.SetIsAutomated(*v)
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
+	m.SetOwnerID(i.OwnerID)
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateEvidenceInput on the EvidenceCreate builder.
+func (c *EvidenceCreate) SetInput(i CreateEvidenceInput) *EvidenceCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateEvidenceInput represents a mutation input for updating evidences.
+type UpdateEvidenceInput struct {
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	Name                      *string
+	ClearDescription          bool
+	Description               *string
+	ClearCollectionProcedure  bool
+	CollectionProcedure       *string
+	CreationDate              *time.Time
+	ClearRenewalDate          bool
+	RenewalDate               *time.Time
+	ClearSource               bool
+	Source                    *string
+	ClearIsAutomated          bool
+	IsAutomated               *bool
+	ClearURL                  bool
+	URL                       *string
+	OwnerID                   *string
+	ClearControlObjectives    bool
+	AddControlObjectiveIDs    []string
+	RemoveControlObjectiveIDs []string
+	ClearControls             bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
+	ClearSubcontrols          bool
+	AddSubcontrolIDs          []string
+	RemoveSubcontrolIDs       []string
+	ClearFiles                bool
+	AddFileIDs                []string
+	RemoveFileIDs             []string
+	ClearPrograms             bool
+	AddProgramIDs             []string
+	RemoveProgramIDs          []string
+	ClearTasks                bool
+	AddTaskIDs                []string
+	RemoveTaskIDs             []string
+}
+
+// Mutate applies the UpdateEvidenceInput on the EvidenceMutation builder.
+func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearCollectionProcedure {
+		m.ClearCollectionProcedure()
+	}
+	if v := i.CollectionProcedure; v != nil {
+		m.SetCollectionProcedure(*v)
+	}
+	if v := i.CreationDate; v != nil {
+		m.SetCreationDate(*v)
+	}
+	if i.ClearRenewalDate {
+		m.ClearRenewalDate()
+	}
+	if v := i.RenewalDate; v != nil {
+		m.SetRenewalDate(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearIsAutomated {
+		m.ClearIsAutomated()
+	}
+	if v := i.IsAutomated; v != nil {
+		m.SetIsAutomated(*v)
+	}
+	if i.ClearURL {
+		m.ClearURL()
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
+	}
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
+	}
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateEvidenceInput on the EvidenceUpdate builder.
+func (c *EvidenceUpdate) SetInput(i UpdateEvidenceInput) *EvidenceUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateEvidenceInput on the EvidenceUpdateOne builder.
+func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -3312,6 +3574,7 @@ type CreateInternalPolicyInput struct {
 	Name                string
 	Description         *string
 	Status              *string
+	ReviewDue           *time.Time
 	PolicyType          *string
 	Version             *string
 	PurposeAndScope     *string
@@ -3339,6 +3602,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
 	}
 	if v := i.PolicyType; v != nil {
 		m.SetPolicyType(*v)
@@ -3400,6 +3666,8 @@ type UpdateInternalPolicyInput struct {
 	Description               *string
 	ClearStatus               bool
 	Status                    *string
+	ClearReviewDue            bool
+	ReviewDue                 *time.Time
 	ClearPolicyType           bool
 	PolicyType                *string
 	ClearVersion              bool
@@ -3463,6 +3731,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearReviewDue {
+		m.ClearReviewDue()
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
 	}
 	if i.ClearPolicyType {
 		m.ClearPolicyType()
@@ -4138,6 +4412,7 @@ type CreateOrganizationInput struct {
 	NarrativeIDs               []string
 	ControlIDs                 []string
 	SubcontrolIDs              []string
+	EvidenceIDs                []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -4278,6 +4553,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -4408,6 +4686,9 @@ type UpdateOrganizationInput struct {
 	ClearSubcontrols                 bool
 	AddSubcontrolIDs                 []string
 	RemoveSubcontrolIDs              []string
+	ClearEvidence                    bool
+	AddEvidenceIDs                   []string
+	RemoveEvidenceIDs                []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -4772,6 +5053,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
 	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -5101,6 +5391,7 @@ type CreateProcedureInput struct {
 	Description       *string
 	Status            *string
 	ProcedureType     *string
+	ReviewDue         *time.Time
 	Version           *string
 	PurposeAndScope   *string
 	Background        *string
@@ -5131,6 +5422,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ProcedureType; v != nil {
 		m.SetProcedureType(*v)
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
 	}
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
@@ -5194,6 +5488,8 @@ type UpdateProcedureInput struct {
 	Status                  *string
 	ClearProcedureType      bool
 	ProcedureType           *string
+	ClearReviewDue          bool
+	ReviewDue               *time.Time
 	ClearVersion            bool
 	Version                 *string
 	ClearPurposeAndScope    bool
@@ -5263,6 +5559,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ProcedureType; v != nil {
 		m.SetProcedureType(*v)
+	}
+	if i.ClearReviewDue {
+		m.ClearReviewDue()
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
 	}
 	if i.ClearVersion {
 		m.ClearVersion()
@@ -5410,6 +5712,7 @@ type CreateProgramInput struct {
 	TaskIDs              []string
 	NoteIDs              []string
 	FileIDs              []string
+	EvidenceIDs          []string
 	NarrativeIDs         []string
 	ActionPlanIDs        []string
 	StandardIDs          []string
@@ -5481,6 +5784,9 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
 	}
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
@@ -5556,6 +5862,9 @@ type UpdateProgramInput struct {
 	ClearFiles                bool
 	AddFileIDs                []string
 	RemoveFileIDs             []string
+	ClearEvidence             bool
+	AddEvidenceIDs            []string
+	RemoveEvidenceIDs         []string
 	ClearNarratives           bool
 	AddNarrativeIDs           []string
 	RemoveNarrativeIDs        []string
@@ -5727,6 +6036,15 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
 	}
 	if i.ClearNarratives {
 		m.ClearNarratives()
@@ -6369,6 +6687,7 @@ type CreateSubcontrolInput struct {
 	ImplementationVerification     *string
 	ImplementationVerificationDate *time.Time
 	Details                        map[string]interface{}
+	ExampleEvidence                *string
 	OwnerID                        string
 	ControlIDs                     []string
 	UserIDs                        []string
@@ -6427,6 +6746,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if v := i.ExampleEvidence; v != nil {
+		m.SetExampleEvidence(*v)
 	}
 	m.SetOwnerID(i.OwnerID)
 	if v := i.ControlIDs; len(v) > 0 {
@@ -6488,6 +6810,8 @@ type UpdateSubcontrolInput struct {
 	ImplementationVerificationDate      *time.Time
 	ClearDetails                        bool
 	Details                             map[string]interface{}
+	ClearExampleEvidence                bool
+	ExampleEvidence                     *string
 	OwnerID                             *string
 	AddControlIDs                       []string
 	RemoveControlIDs                    []string
@@ -6607,6 +6931,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if i.ClearExampleEvidence {
+		m.ClearExampleEvidence()
+	}
+	if v := i.ExampleEvidence; v != nil {
+		m.SetExampleEvidence(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6834,6 +7164,7 @@ type CreateTaskInput struct {
 	ControlObjectiveIDs []string
 	SubcontrolIDs       []string
 	ProgramIDs          []string
+	EvidenceIDs         []string
 }
 
 // Mutate applies the CreateTaskInput on the TaskMutation builder.
@@ -6886,6 +7217,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTaskInput on the TaskCreate builder.
@@ -6935,6 +7269,9 @@ type UpdateTaskInput struct {
 	ClearProgram              bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
+	ClearEvidence             bool
+	AddEvidenceIDs            []string
+	RemoveEvidenceIDs         []string
 }
 
 // Mutate applies the UpdateTaskInput on the TaskMutation builder.
@@ -7055,6 +7392,15 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
 	}
 }
 

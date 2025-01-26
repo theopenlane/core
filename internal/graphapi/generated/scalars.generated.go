@@ -55,6 +55,27 @@ func (ec *executionContext) marshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋg
 	return res
 }
 
+func (ec *executionContext) unmarshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, v any) (*graphql.Upload, error) {
+	res, err := graphql.UnmarshalUpload(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, sel ast.SelectionSet, v *graphql.Upload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	res := graphql.MarshalUpload(*v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, v any) (models.Address, error) {
 	var res models.Address
 	err := res.UnmarshalGQL(v)
@@ -89,6 +110,44 @@ func (ec *executionContext) unmarshalOPrice2githubᚗcomᚋtheopenlaneᚋcoreᚋ
 
 func (ec *executionContext) marshalOPrice2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐPrice(ctx context.Context, sel ast.SelectionSet, v models.Price) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx context.Context, v any) ([]*graphql.Upload, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*graphql.Upload, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx context.Context, sel ast.SelectionSet, v []*graphql.Upload) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, v any) (*graphql.Upload, error) {

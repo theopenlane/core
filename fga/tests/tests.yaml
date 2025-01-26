@@ -702,3 +702,62 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: evidence
+    description: evidence are always with an organization, and can be linked to many objects within the system
+    tuples:
+      # Setup evidence object and relationships
+      - user: program:program-1
+        relation: parent
+        object: evidence:evidence-1
+      - user: user:ulid-admin
+        relation: can_delete
+        object: evidence:evidence-1
+      - user: task:task-1
+        relation: parent
+        object: evidence:evidence-1
+      - user: user:ulid-task-assignee
+        relation: assignee
+        object: task:task-1
+      - user: user:ulid-member
+        relation: member
+        object: program:program-1
+      - user: user:ulid-member
+        relation: member
+        object: organization:openlane
+      - user: user:group-editor
+        relation: member
+        object: group:editor-1
+      - user: group:editor-1#member
+        relation: editor
+        object: evidence:evidence-1
+      - user: organization:openlane
+        relation: parent
+        object: group:editor-1
+      - user: user:group-editor
+        relation: member
+        object: organization:openlane
+    check:
+      - user: user:ulid-admin # has can_delete permission on the evidence
+        object: evidence:evidence-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-task-assignee # assignee of the task that has access to the evidence via the task
+        object: evidence:evidence-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:ulid-member # member of the program that has access to the evidence via the program
+        object: evidence:evidence-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:group-editor # editor of the group that has access to the evidence
+        object: evidence:evidence-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true

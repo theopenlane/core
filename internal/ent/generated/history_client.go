@@ -32,6 +32,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.HistoryHooks[*EventMutation]() {
 		c.Event.Use(hook)
 	}
+	for _, hook := range history.HistoryHooks[*EvidenceMutation]() {
+		c.Evidence.Use(hook)
+	}
 	for _, hook := range history.HistoryHooks[*FileMutation]() {
 		c.File.Use(hook)
 	}

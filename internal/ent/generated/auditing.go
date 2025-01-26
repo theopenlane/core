@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
@@ -274,6 +275,9 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.Details, new.Details) {
 		changes = append(changes, NewChange(controlhistory.FieldDetails, ch.Details, new.Details))
 	}
+	if !reflect.DeepEqual(ch.ExampleEvidence, new.ExampleEvidence) {
+		changes = append(changes, NewChange(controlhistory.FieldExampleEvidence, ch.ExampleEvidence, new.ExampleEvidence))
+	}
 	return changes
 }
 
@@ -360,6 +364,9 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 	}
 	if !reflect.DeepEqual(coh.Details, new.Details) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldDetails, coh.Details, new.Details))
+	}
+	if !reflect.DeepEqual(coh.ExampleEvidence, new.ExampleEvidence) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldExampleEvidence, coh.ExampleEvidence, new.ExampleEvidence))
 	}
 	return changes
 }
@@ -615,6 +622,84 @@ func (eh *EventHistory) Diff(history *EventHistory) (*HistoryDiff[EventHistory],
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[EventHistory]{
+			Old:     history,
+			New:     eh,
+			Changes: history.changes(eh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (eh *EvidenceHistory) changes(new *EvidenceHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(eh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(evidencehistory.FieldCreatedAt, eh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(eh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(evidencehistory.FieldUpdatedAt, eh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(eh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(evidencehistory.FieldCreatedBy, eh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(eh.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(evidencehistory.FieldDisplayID, eh.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(eh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(evidencehistory.FieldDeletedAt, eh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(eh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(evidencehistory.FieldDeletedBy, eh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(eh.Tags, new.Tags) {
+		changes = append(changes, NewChange(evidencehistory.FieldTags, eh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(eh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(evidencehistory.FieldOwnerID, eh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(eh.Name, new.Name) {
+		changes = append(changes, NewChange(evidencehistory.FieldName, eh.Name, new.Name))
+	}
+	if !reflect.DeepEqual(eh.Description, new.Description) {
+		changes = append(changes, NewChange(evidencehistory.FieldDescription, eh.Description, new.Description))
+	}
+	if !reflect.DeepEqual(eh.CollectionProcedure, new.CollectionProcedure) {
+		changes = append(changes, NewChange(evidencehistory.FieldCollectionProcedure, eh.CollectionProcedure, new.CollectionProcedure))
+	}
+	if !reflect.DeepEqual(eh.CreationDate, new.CreationDate) {
+		changes = append(changes, NewChange(evidencehistory.FieldCreationDate, eh.CreationDate, new.CreationDate))
+	}
+	if !reflect.DeepEqual(eh.RenewalDate, new.RenewalDate) {
+		changes = append(changes, NewChange(evidencehistory.FieldRenewalDate, eh.RenewalDate, new.RenewalDate))
+	}
+	if !reflect.DeepEqual(eh.Source, new.Source) {
+		changes = append(changes, NewChange(evidencehistory.FieldSource, eh.Source, new.Source))
+	}
+	if !reflect.DeepEqual(eh.IsAutomated, new.IsAutomated) {
+		changes = append(changes, NewChange(evidencehistory.FieldIsAutomated, eh.IsAutomated, new.IsAutomated))
+	}
+	if !reflect.DeepEqual(eh.URL, new.URL) {
+		changes = append(changes, NewChange(evidencehistory.FieldURL, eh.URL, new.URL))
+	}
+	return changes
+}
+
+func (eh *EvidenceHistory) Diff(history *EvidenceHistory) (*HistoryDiff[EvidenceHistory], error) {
+	if eh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	ehUnix, historyUnix := eh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	ehOlder := ehUnix < historyUnix || (ehUnix == historyUnix && eh.ID < history.ID)
+	historyOlder := ehUnix > historyUnix || (ehUnix == historyUnix && eh.ID > history.ID)
+
+	if ehOlder {
+		return &HistoryDiff[EvidenceHistory]{
+			Old:     eh,
+			New:     history,
+			Changes: eh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[EvidenceHistory]{
 			Old:     history,
 			New:     eh,
 			Changes: history.changes(eh),
@@ -1053,6 +1138,9 @@ func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	}
 	if !reflect.DeepEqual(iph.Status, new.Status) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldStatus, iph.Status, new.Status))
+	}
+	if !reflect.DeepEqual(iph.ReviewDue, new.ReviewDue) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldReviewDue, iph.ReviewDue, new.ReviewDue))
 	}
 	if !reflect.DeepEqual(iph.PolicyType, new.PolicyType) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldPolicyType, iph.PolicyType, new.PolicyType))
@@ -1543,6 +1631,9 @@ func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	if !reflect.DeepEqual(ph.ProcedureType, new.ProcedureType) {
 		changes = append(changes, NewChange(procedurehistory.FieldProcedureType, ph.ProcedureType, new.ProcedureType))
 	}
+	if !reflect.DeepEqual(ph.ReviewDue, new.ReviewDue) {
+		changes = append(changes, NewChange(procedurehistory.FieldReviewDue, ph.ReviewDue, new.ReviewDue))
+	}
 	if !reflect.DeepEqual(ph.Version, new.Version) {
 		changes = append(changes, NewChange(procedurehistory.FieldVersion, ph.Version, new.Version))
 	}
@@ -1953,6 +2044,9 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	}
 	if !reflect.DeepEqual(sh.Details, new.Details) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDetails, sh.Details, new.Details))
+	}
+	if !reflect.DeepEqual(sh.ExampleEvidence, new.ExampleEvidence) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldExampleEvidence, sh.ExampleEvidence, new.ExampleEvidence))
 	}
 	return changes
 }
@@ -2373,6 +2467,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditEvidenceHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditFileHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -2586,6 +2686,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("EventHistory", "History") {
 		record, err = auditEventHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("EvidenceHistory", "History") {
+		record, err = auditEvidenceHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -3246,6 +3355,59 @@ func auditEventHistory(ctx context.Context, config config) ([][]string, error) {
 			default:
 				if i == 0 {
 					record.Changes = (&EventHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type evidencehistoryref struct {
+	Ref string
+}
+
+func auditEvidenceHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []evidencehistoryref
+	client := NewEvidenceHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(evidencehistory.ByRef()).
+		Select(evidencehistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(evidencehistory.Ref(currRef.Ref)).
+			Order(evidencehistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "EvidenceHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&EvidenceHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&EvidenceHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&EvidenceHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

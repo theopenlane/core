@@ -543,6 +543,54 @@ func (f EventHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m genera
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EventHistoryMutation", m)
 }
 
+// The EvidenceQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type EvidenceQueryRuleFunc func(context.Context, *generated.EvidenceQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f EvidenceQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EvidenceQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.EvidenceQuery", q)
+}
+
+// The EvidenceMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type EvidenceMutationRuleFunc func(context.Context, *generated.EvidenceMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f EvidenceMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.EvidenceMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EvidenceMutation", m)
+}
+
+// The EvidenceHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type EvidenceHistoryQueryRuleFunc func(context.Context, *generated.EvidenceHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f EvidenceHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EvidenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.EvidenceHistoryQuery", q)
+}
+
+// The EvidenceHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type EvidenceHistoryMutationRuleFunc func(context.Context, *generated.EvidenceHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f EvidenceHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.EvidenceHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EvidenceHistoryMutation", m)
+}
+
 // The FileQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type FileQueryRuleFunc func(context.Context, *generated.FileQuery) error
@@ -1862,6 +1910,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.EventHistoryQuery:
 		return q.Filter(), nil
+	case *generated.EvidenceQuery:
+		return q.Filter(), nil
+	case *generated.EvidenceHistoryQuery:
+		return q.Filter(), nil
 	case *generated.FileQuery:
 		return q.Filter(), nil
 	case *generated.FileHistoryQuery:
@@ -2008,6 +2060,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.EventMutation:
 		return m.Filter(), nil
 	case *generated.EventHistoryMutation:
+		return m.Filter(), nil
+	case *generated.EvidenceMutation:
+		return m.Filter(), nil
+	case *generated.EvidenceHistoryMutation:
 		return m.Filter(), nil
 	case *generated.FileMutation:
 		return m.Filter(), nil

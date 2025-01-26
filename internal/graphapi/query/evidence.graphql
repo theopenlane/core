@@ -1,0 +1,191 @@
+mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      tags
+      updatedAt
+      updatedBy
+      url
+      files {
+        id
+        presignedURL
+      }
+      programs {
+        id
+        displayID
+        name
+      }
+      tasks {
+        id
+        displayID
+      }
+    }
+  }
+}
+
+mutation DeleteEvidence($deleteEvidenceId: ID!) {
+  deleteEvidence(id: $deleteEvidenceId) {
+    deletedID
+  }
+}
+
+query GetAllEvidences {
+  evidences {
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        tags
+        updatedAt
+        updatedBy
+        url
+        files {
+          id
+          presignedURL
+        }
+        programs {
+          id
+          displayID
+          name
+        }
+        tasks {
+          id
+          displayID
+        }
+      }
+    }
+  }
+}
+
+query GetEvidenceByID($evidenceId: ID!) {
+  evidence(id: $evidenceId) {
+    collectionProcedure
+    createdAt
+    createdBy
+    creationDate
+    description
+    displayID
+    id
+    isAutomated
+    name
+    ownerID
+    renewalDate
+    source
+    tags
+    updatedAt
+    updatedBy
+    url
+    files {
+      id
+      presignedURL
+    }
+    programs {
+      id
+      displayID
+      name
+    }
+    tasks {
+      id
+      displayID
+    }
+  }
+}
+
+query GetEvidences($where: EvidenceWhereInput) {
+  evidences(where: $where) {
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        tags
+        updatedAt
+        updatedBy
+        url
+        files {
+          id
+          presignedURL
+        }
+        programs {
+          id
+          displayID
+          name
+        }
+        tasks {
+          id
+          displayID
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  updateEvidence(
+    id: $updateEvidenceId
+    input: $input
+    evidenceFiles: $evidenceFiles
+  ) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      tags
+      updatedAt
+      updatedBy
+      url
+      files {
+        id
+        presignedURL
+      }
+      programs {
+        id
+        displayID
+        name
+      }
+      tasks {
+        id
+        displayID
+      }
+    }
+  }
+}

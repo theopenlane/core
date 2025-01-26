@@ -365,6 +365,20 @@ func (shc *SubcontrolHistoryCreate) SetDetails(m map[string]interface{}) *Subcon
 	return shc
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (shc *SubcontrolHistoryCreate) SetExampleEvidence(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetExampleEvidence(s)
+	return shc
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableExampleEvidence(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetExampleEvidence(*s)
+	}
+	return shc
+}
+
 // SetID sets the "id" field.
 func (shc *SubcontrolHistoryCreate) SetID(s string) *SubcontrolHistoryCreate {
 	shc.mutation.SetID(s)
@@ -605,6 +619,10 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 	if value, ok := shc.mutation.Details(); ok {
 		_spec.SetField(subcontrolhistory.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if value, ok := shc.mutation.ExampleEvidence(); ok {
+		_spec.SetField(subcontrolhistory.FieldExampleEvidence, field.TypeString, value)
+		_node.ExampleEvidence = value
 	}
 	return _node, _spec
 }

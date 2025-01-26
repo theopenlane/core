@@ -88,6 +88,8 @@ type ProgramEdges struct {
 	Notes []*Note `json:"notes,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
@@ -100,9 +102,9 @@ type ProgramEdges struct {
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -116,6 +118,7 @@ type ProgramEdges struct {
 	namedTasks             map[string][]*Task
 	namedNotes             map[string][]*Note
 	namedFiles             map[string][]*File
+	namedEvidence          map[string][]*Evidence
 	namedNarratives        map[string][]*Narrative
 	namedActionPlans       map[string][]*ActionPlan
 	namedStandards         map[string][]*Standard
@@ -242,10 +245,19 @@ func (e ProgramEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[13] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -254,7 +266,7 @@ func (e ProgramEdges) NarrativesOrErr() ([]*Narrative, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -263,7 +275,7 @@ func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // StandardsOrErr returns the Standards value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) StandardsOrErr() ([]*Standard, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Standards, nil
 	}
 	return nil, &NotLoadedError{edge: "standards"}
@@ -272,7 +284,7 @@ func (e ProgramEdges) StandardsOrErr() ([]*Standard, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -281,7 +293,7 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -501,6 +513,11 @@ func (pr *Program) QueryNotes() *NoteQuery {
 // QueryFiles queries the "files" edge of the Program entity.
 func (pr *Program) QueryFiles() *FileQuery {
 	return NewProgramClient(pr.config).QueryFiles(pr)
+}
+
+// QueryEvidence queries the "evidence" edge of the Program entity.
+func (pr *Program) QueryEvidence() *EvidenceQuery {
+	return NewProgramClient(pr.config).QueryEvidence(pr)
 }
 
 // QueryNarratives queries the "narratives" edge of the Program entity.
@@ -890,6 +907,30 @@ func (pr *Program) appendNamedFiles(name string, edges ...*File) {
 		pr.Edges.namedFiles[name] = []*File{}
 	} else {
 		pr.Edges.namedFiles[name] = append(pr.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Program) NamedEvidence(name string) ([]*Evidence, error) {
+	if pr.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Program) appendNamedEvidence(name string, edges ...*Evidence) {
+	if pr.Edges.namedEvidence == nil {
+		pr.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		pr.Edges.namedEvidence[name] = append(pr.Edges.namedEvidence[name], edges...)
 	}
 }
 

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -414,6 +415,21 @@ func (tu *TaskUpdate) AddProgram(p ...*Program) *TaskUpdate {
 	return tu.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (tu *TaskUpdate) AddEvidenceIDs(ids ...string) *TaskUpdate {
+	tu.mutation.AddEvidenceIDs(ids...)
+	return tu
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (tu *TaskUpdate) AddEvidence(e ...*Evidence) *TaskUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return tu.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the TaskMutation object of the builder.
 func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
@@ -582,6 +598,27 @@ func (tu *TaskUpdate) RemoveProgram(p ...*Program) *TaskUpdate {
 		ids[i] = p[i].ID
 	}
 	return tu.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (tu *TaskUpdate) ClearEvidence() *TaskUpdate {
+	tu.mutation.ClearEvidence()
+	return tu
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (tu *TaskUpdate) RemoveEvidenceIDs(ids ...string) *TaskUpdate {
+	tu.mutation.RemoveEvidenceIDs(ids...)
+	return tu
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (tu *TaskUpdate) RemoveEvidence(e ...*Evidence) *TaskUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return tu.RemoveEvidenceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1178,6 +1215,54 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   task.EvidenceTable,
+			Columns: task.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.TaskEvidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !tu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   task.EvidenceTable,
+			Columns: task.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.TaskEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   task.EvidenceTable,
+			Columns: task.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.TaskEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = tu.schemaConfig.Task
 	ctx = internal.NewSchemaConfigContext(ctx, tu.schemaConfig)
 	_spec.AddModifiers(tu.modifiers...)
@@ -1574,6 +1659,21 @@ func (tuo *TaskUpdateOne) AddProgram(p ...*Program) *TaskUpdateOne {
 	return tuo.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (tuo *TaskUpdateOne) AddEvidenceIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.AddEvidenceIDs(ids...)
+	return tuo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (tuo *TaskUpdateOne) AddEvidence(e ...*Evidence) *TaskUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return tuo.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the TaskMutation object of the builder.
 func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
@@ -1742,6 +1842,27 @@ func (tuo *TaskUpdateOne) RemoveProgram(p ...*Program) *TaskUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return tuo.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (tuo *TaskUpdateOne) ClearEvidence() *TaskUpdateOne {
+	tuo.mutation.ClearEvidence()
+	return tuo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (tuo *TaskUpdateOne) RemoveEvidenceIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.RemoveEvidenceIDs(ids...)
+	return tuo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (tuo *TaskUpdateOne) RemoveEvidence(e ...*Evidence) *TaskUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return tuo.RemoveEvidenceIDs(ids...)
 }
 
 // Where appends a list predicates to the TaskUpdate builder.
@@ -2363,6 +2484,54 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			},
 		}
 		edge.Schema = tuo.schemaConfig.ProgramTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   task.EvidenceTable,
+			Columns: task.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.TaskEvidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !tuo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   task.EvidenceTable,
+			Columns: task.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.TaskEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   task.EvidenceTable,
+			Columns: task.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

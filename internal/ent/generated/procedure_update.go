@@ -224,6 +224,26 @@ func (pu *ProcedureUpdate) ClearProcedureType() *ProcedureUpdate {
 	return pu
 }
 
+// SetReviewDue sets the "review_due" field.
+func (pu *ProcedureUpdate) SetReviewDue(t time.Time) *ProcedureUpdate {
+	pu.mutation.SetReviewDue(t)
+	return pu
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableReviewDue(t *time.Time) *ProcedureUpdate {
+	if t != nil {
+		pu.SetReviewDue(*t)
+	}
+	return pu
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (pu *ProcedureUpdate) ClearReviewDue() *ProcedureUpdate {
+	pu.mutation.ClearReviewDue()
+	return pu
+}
+
 // SetVersion sets the "version" field.
 func (pu *ProcedureUpdate) SetVersion(s string) *ProcedureUpdate {
 	pu.mutation.SetVersion(s)
@@ -756,6 +776,12 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedure.FieldProcedureType, field.TypeString)
+	}
+	if value, ok := pu.mutation.ReviewDue(); ok {
+		_spec.SetField(procedure.FieldReviewDue, field.TypeTime, value)
+	}
+	if pu.mutation.ReviewDueCleared() {
+		_spec.ClearField(procedure.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := pu.mutation.Version(); ok {
 		_spec.SetField(procedure.FieldVersion, field.TypeString, value)
@@ -1410,6 +1436,26 @@ func (puo *ProcedureUpdateOne) ClearProcedureType() *ProcedureUpdateOne {
 	return puo
 }
 
+// SetReviewDue sets the "review_due" field.
+func (puo *ProcedureUpdateOne) SetReviewDue(t time.Time) *ProcedureUpdateOne {
+	puo.mutation.SetReviewDue(t)
+	return puo
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableReviewDue(t *time.Time) *ProcedureUpdateOne {
+	if t != nil {
+		puo.SetReviewDue(*t)
+	}
+	return puo
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (puo *ProcedureUpdateOne) ClearReviewDue() *ProcedureUpdateOne {
+	puo.mutation.ClearReviewDue()
+	return puo
+}
+
 // SetVersion sets the "version" field.
 func (puo *ProcedureUpdateOne) SetVersion(s string) *ProcedureUpdateOne {
 	puo.mutation.SetVersion(s)
@@ -1972,6 +2018,12 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	}
 	if puo.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedure.FieldProcedureType, field.TypeString)
+	}
+	if value, ok := puo.mutation.ReviewDue(); ok {
+		_spec.SetField(procedure.FieldReviewDue, field.TypeTime, value)
+	}
+	if puo.mutation.ReviewDueCleared() {
+		_spec.ClearField(procedure.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := puo.mutation.Version(); ok {
 		_spec.SetField(procedure.FieldVersion, field.TypeString, value)

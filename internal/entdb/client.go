@@ -178,6 +178,7 @@ func (c *client) runGooseMigrations() error {
 	migrationsDir := "migrations-goose-postgres"
 
 	if err := goose.Up(drv, migrationsDir); err != nil {
+		log.Error().Err(err).Msg("failed running goose migrations")
 		return err
 	}
 

@@ -61,10 +61,14 @@ type Control struct {
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
 	// json data including details of the control
 	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
 	Edges                      ControlEdges `json:"edges"`
 	control_objective_controls *string
+	evidence_controls          *string
+	evidence_subcontrols       *string
 	internal_policy_controls   *string
 	selectValues               sql.SelectValues
 }
@@ -243,13 +247,17 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldDetails:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks, control.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case control.ForeignKeys[0]: // control_objective_controls
 			values[i] = new(sql.NullString)
-		case control.ForeignKeys[1]: // internal_policy_controls
+		case control.ForeignKeys[1]: // evidence_controls
+			values[i] = new(sql.NullString)
+		case control.ForeignKeys[2]: // evidence_subcontrols
+			values[i] = new(sql.NullString)
+		case control.ForeignKeys[3]: // internal_policy_controls
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -402,6 +410,12 @@ func (c *Control) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case control.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				c.ExampleEvidence = value.String
+			}
 		case control.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_controls", values[i])
@@ -410,6 +424,20 @@ func (c *Control) assignValues(columns []string, values []any) error {
 				*c.control_objective_controls = value.String
 			}
 		case control.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_controls", values[i])
+			} else if value.Valid {
+				c.evidence_controls = new(string)
+				*c.evidence_controls = value.String
+			}
+		case control.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_subcontrols", values[i])
+			} else if value.Valid {
+				c.evidence_subcontrols = new(string)
+				*c.evidence_subcontrols = value.String
+			}
+		case control.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field internal_policy_controls", values[i])
 			} else if value.Valid {
@@ -579,6 +607,9 @@ func (c *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", c.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(c.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }

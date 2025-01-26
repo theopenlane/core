@@ -162,6 +162,11 @@ func MappedFrameworks(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldMappedFrameworks, v))
 }
 
+// ExampleEvidence applies equality check predicate on the "example_evidence" field. It's identical to ExampleEvidenceEQ.
+func ExampleEvidence(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldExampleEvidence, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldCreatedAt, v))
@@ -1500,6 +1505,81 @@ func DetailsIsNil() predicate.Control {
 // DetailsNotNil applies the NotNil predicate on the "details" field.
 func DetailsNotNil() predicate.Control {
 	return predicate.Control(sql.FieldNotNull(FieldDetails))
+}
+
+// ExampleEvidenceEQ applies the EQ predicate on the "example_evidence" field.
+func ExampleEvidenceEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceNEQ applies the NEQ predicate on the "example_evidence" field.
+func ExampleEvidenceNEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceIn applies the In predicate on the "example_evidence" field.
+func ExampleEvidenceIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldExampleEvidence, vs...))
+}
+
+// ExampleEvidenceNotIn applies the NotIn predicate on the "example_evidence" field.
+func ExampleEvidenceNotIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldExampleEvidence, vs...))
+}
+
+// ExampleEvidenceGT applies the GT predicate on the "example_evidence" field.
+func ExampleEvidenceGT(v string) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceGTE applies the GTE predicate on the "example_evidence" field.
+func ExampleEvidenceGTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceLT applies the LT predicate on the "example_evidence" field.
+func ExampleEvidenceLT(v string) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceLTE applies the LTE predicate on the "example_evidence" field.
+func ExampleEvidenceLTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceContains applies the Contains predicate on the "example_evidence" field.
+func ExampleEvidenceContains(v string) predicate.Control {
+	return predicate.Control(sql.FieldContains(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceHasPrefix applies the HasPrefix predicate on the "example_evidence" field.
+func ExampleEvidenceHasPrefix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasPrefix(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceHasSuffix applies the HasSuffix predicate on the "example_evidence" field.
+func ExampleEvidenceHasSuffix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasSuffix(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceIsNil applies the IsNil predicate on the "example_evidence" field.
+func ExampleEvidenceIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldExampleEvidence))
+}
+
+// ExampleEvidenceNotNil applies the NotNil predicate on the "example_evidence" field.
+func ExampleEvidenceNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldExampleEvidence))
+}
+
+// ExampleEvidenceEqualFold applies the EqualFold predicate on the "example_evidence" field.
+func ExampleEvidenceEqualFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldEqualFold(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceContainsFold applies the ContainsFold predicate on the "example_evidence" field.
+func ExampleEvidenceContainsFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldContainsFold(FieldExampleEvidence, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

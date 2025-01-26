@@ -24,6 +24,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -963,6 +965,129 @@ func init() {
 	eventhistoryDescID := eventhistoryFields[7].Descriptor()
 	// eventhistory.DefaultID holds the default value on creation for the id field.
 	eventhistory.DefaultID = eventhistoryDescID.Default.(func() string)
+	evidenceMixin := schema.Evidence{}.Mixin()
+	evidence.Policy = privacy.NewPolicies(schema.Evidence{})
+	evidence.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := evidence.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	evidenceMixinHooks0 := evidenceMixin[0].Hooks()
+	evidenceMixinHooks1 := evidenceMixin[1].Hooks()
+	evidenceMixinHooks2 := evidenceMixin[2].Hooks()
+	evidenceMixinHooks4 := evidenceMixin[4].Hooks()
+	evidenceHooks := schema.Evidence{}.Hooks()
+
+	evidence.Hooks[1] = evidenceMixinHooks0[0]
+
+	evidence.Hooks[2] = evidenceMixinHooks1[0]
+
+	evidence.Hooks[3] = evidenceMixinHooks2[0]
+
+	evidence.Hooks[4] = evidenceMixinHooks4[0]
+
+	evidence.Hooks[5] = evidenceMixinHooks4[1]
+
+	evidence.Hooks[6] = evidenceMixinHooks4[2]
+
+	evidence.Hooks[7] = evidenceHooks[0]
+	evidenceMixinInters2 := evidenceMixin[2].Interceptors()
+	evidenceMixinInters4 := evidenceMixin[4].Interceptors()
+	evidence.Interceptors[0] = evidenceMixinInters2[0]
+	evidence.Interceptors[1] = evidenceMixinInters4[0]
+	evidenceMixinFields0 := evidenceMixin[0].Fields()
+	_ = evidenceMixinFields0
+	evidenceMixinFields1 := evidenceMixin[1].Fields()
+	_ = evidenceMixinFields1
+	evidenceMixinFields3 := evidenceMixin[3].Fields()
+	_ = evidenceMixinFields3
+	evidenceMixinFields4 := evidenceMixin[4].Fields()
+	_ = evidenceMixinFields4
+	evidenceFields := schema.Evidence{}.Fields()
+	_ = evidenceFields
+	// evidenceDescCreatedAt is the schema descriptor for created_at field.
+	evidenceDescCreatedAt := evidenceMixinFields0[0].Descriptor()
+	// evidence.DefaultCreatedAt holds the default value on creation for the created_at field.
+	evidence.DefaultCreatedAt = evidenceDescCreatedAt.Default.(func() time.Time)
+	// evidenceDescUpdatedAt is the schema descriptor for updated_at field.
+	evidenceDescUpdatedAt := evidenceMixinFields0[1].Descriptor()
+	// evidence.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	evidence.DefaultUpdatedAt = evidenceDescUpdatedAt.Default.(func() time.Time)
+	// evidence.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	evidence.UpdateDefaultUpdatedAt = evidenceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// evidenceDescDisplayID is the schema descriptor for display_id field.
+	evidenceDescDisplayID := evidenceMixinFields1[1].Descriptor()
+	// evidence.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	evidence.DisplayIDValidator = evidenceDescDisplayID.Validators[0].(func(string) error)
+	// evidenceDescTags is the schema descriptor for tags field.
+	evidenceDescTags := evidenceMixinFields3[0].Descriptor()
+	// evidence.DefaultTags holds the default value on creation for the tags field.
+	evidence.DefaultTags = evidenceDescTags.Default.([]string)
+	// evidenceDescOwnerID is the schema descriptor for owner_id field.
+	evidenceDescOwnerID := evidenceMixinFields4[0].Descriptor()
+	// evidence.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	evidence.OwnerIDValidator = evidenceDescOwnerID.Validators[0].(func(string) error)
+	// evidenceDescName is the schema descriptor for name field.
+	evidenceDescName := evidenceFields[0].Descriptor()
+	// evidence.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	evidence.NameValidator = evidenceDescName.Validators[0].(func(string) error)
+	// evidenceDescCreationDate is the schema descriptor for creation_date field.
+	evidenceDescCreationDate := evidenceFields[3].Descriptor()
+	// evidence.DefaultCreationDate holds the default value on creation for the creation_date field.
+	evidence.DefaultCreationDate = evidenceDescCreationDate.Default.(func() time.Time)
+	// evidenceDescRenewalDate is the schema descriptor for renewal_date field.
+	evidenceDescRenewalDate := evidenceFields[4].Descriptor()
+	// evidence.DefaultRenewalDate holds the default value on creation for the renewal_date field.
+	evidence.DefaultRenewalDate = evidenceDescRenewalDate.Default.(time.Time)
+	// evidenceDescIsAutomated is the schema descriptor for is_automated field.
+	evidenceDescIsAutomated := evidenceFields[6].Descriptor()
+	// evidence.DefaultIsAutomated holds the default value on creation for the is_automated field.
+	evidence.DefaultIsAutomated = evidenceDescIsAutomated.Default.(bool)
+	// evidenceDescID is the schema descriptor for id field.
+	evidenceDescID := evidenceMixinFields1[0].Descriptor()
+	// evidence.DefaultID holds the default value on creation for the id field.
+	evidence.DefaultID = evidenceDescID.Default.(func() string)
+	evidencehistoryInters := schema.EvidenceHistory{}.Interceptors()
+	evidencehistory.Interceptors[0] = evidencehistoryInters[0]
+	evidencehistoryFields := schema.EvidenceHistory{}.Fields()
+	_ = evidencehistoryFields
+	// evidencehistoryDescHistoryTime is the schema descriptor for history_time field.
+	evidencehistoryDescHistoryTime := evidencehistoryFields[0].Descriptor()
+	// evidencehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	evidencehistory.DefaultHistoryTime = evidencehistoryDescHistoryTime.Default.(func() time.Time)
+	// evidencehistoryDescCreatedAt is the schema descriptor for created_at field.
+	evidencehistoryDescCreatedAt := evidencehistoryFields[3].Descriptor()
+	// evidencehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	evidencehistory.DefaultCreatedAt = evidencehistoryDescCreatedAt.Default.(func() time.Time)
+	// evidencehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	evidencehistoryDescUpdatedAt := evidencehistoryFields[4].Descriptor()
+	// evidencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	evidencehistory.DefaultUpdatedAt = evidencehistoryDescUpdatedAt.Default.(func() time.Time)
+	// evidencehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	evidencehistory.UpdateDefaultUpdatedAt = evidencehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// evidencehistoryDescTags is the schema descriptor for tags field.
+	evidencehistoryDescTags := evidencehistoryFields[11].Descriptor()
+	// evidencehistory.DefaultTags holds the default value on creation for the tags field.
+	evidencehistory.DefaultTags = evidencehistoryDescTags.Default.([]string)
+	// evidencehistoryDescCreationDate is the schema descriptor for creation_date field.
+	evidencehistoryDescCreationDate := evidencehistoryFields[16].Descriptor()
+	// evidencehistory.DefaultCreationDate holds the default value on creation for the creation_date field.
+	evidencehistory.DefaultCreationDate = evidencehistoryDescCreationDate.Default.(func() time.Time)
+	// evidencehistoryDescRenewalDate is the schema descriptor for renewal_date field.
+	evidencehistoryDescRenewalDate := evidencehistoryFields[17].Descriptor()
+	// evidencehistory.DefaultRenewalDate holds the default value on creation for the renewal_date field.
+	evidencehistory.DefaultRenewalDate = evidencehistoryDescRenewalDate.Default.(time.Time)
+	// evidencehistoryDescIsAutomated is the schema descriptor for is_automated field.
+	evidencehistoryDescIsAutomated := evidencehistoryFields[19].Descriptor()
+	// evidencehistory.DefaultIsAutomated holds the default value on creation for the is_automated field.
+	evidencehistory.DefaultIsAutomated = evidencehistoryDescIsAutomated.Default.(bool)
+	// evidencehistoryDescID is the schema descriptor for id field.
+	evidencehistoryDescID := evidencehistoryFields[7].Descriptor()
+	// evidencehistory.DefaultID holds the default value on creation for the id field.
+	evidencehistory.DefaultID = evidencehistoryDescID.Default.(func() string)
 	fileMixin := schema.File{}.Mixin()
 	file.Policy = privacy.NewPolicies(schema.File{})
 	file.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1516,6 +1641,10 @@ func init() {
 	internalpolicyDescName := internalpolicyFields[0].Descriptor()
 	// internalpolicy.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	internalpolicy.NameValidator = internalpolicyDescName.Validators[0].(func(string) error)
+	// internalpolicyDescReviewDue is the schema descriptor for review_due field.
+	internalpolicyDescReviewDue := internalpolicyFields[3].Descriptor()
+	// internalpolicy.DefaultReviewDue holds the default value on creation for the review_due field.
+	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(time.Time)
 	// internalpolicyDescID is the schema descriptor for id field.
 	internalpolicyDescID := internalpolicyMixinFields2[0].Descriptor()
 	// internalpolicy.DefaultID holds the default value on creation for the id field.
@@ -1542,6 +1671,10 @@ func init() {
 	internalpolicyhistoryDescTags := internalpolicyhistoryFields[11].Descriptor()
 	// internalpolicyhistory.DefaultTags holds the default value on creation for the tags field.
 	internalpolicyhistory.DefaultTags = internalpolicyhistoryDescTags.Default.([]string)
+	// internalpolicyhistoryDescReviewDue is the schema descriptor for review_due field.
+	internalpolicyhistoryDescReviewDue := internalpolicyhistoryFields[16].Descriptor()
+	// internalpolicyhistory.DefaultReviewDue holds the default value on creation for the review_due field.
+	internalpolicyhistory.DefaultReviewDue = internalpolicyhistoryDescReviewDue.Default.(time.Time)
 	// internalpolicyhistoryDescID is the schema descriptor for id field.
 	internalpolicyhistoryDescID := internalpolicyhistoryFields[9].Descriptor()
 	// internalpolicyhistory.DefaultID holds the default value on creation for the id field.
@@ -2448,6 +2581,10 @@ func init() {
 	procedureDescName := procedureFields[0].Descriptor()
 	// procedure.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	procedure.NameValidator = procedureDescName.Validators[0].(func(string) error)
+	// procedureDescReviewDue is the schema descriptor for review_due field.
+	procedureDescReviewDue := procedureFields[4].Descriptor()
+	// procedure.DefaultReviewDue holds the default value on creation for the review_due field.
+	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(time.Time)
 	// procedureDescID is the schema descriptor for id field.
 	procedureDescID := procedureMixinFields2[0].Descriptor()
 	// procedure.DefaultID holds the default value on creation for the id field.
@@ -2474,6 +2611,10 @@ func init() {
 	procedurehistoryDescTags := procedurehistoryFields[11].Descriptor()
 	// procedurehistory.DefaultTags holds the default value on creation for the tags field.
 	procedurehistory.DefaultTags = procedurehistoryDescTags.Default.([]string)
+	// procedurehistoryDescReviewDue is the schema descriptor for review_due field.
+	procedurehistoryDescReviewDue := procedurehistoryFields[17].Descriptor()
+	// procedurehistory.DefaultReviewDue holds the default value on creation for the review_due field.
+	procedurehistory.DefaultReviewDue = procedurehistoryDescReviewDue.Default.(time.Time)
 	// procedurehistoryDescID is the schema descriptor for id field.
 	procedurehistoryDescID := procedurehistoryFields[9].Descriptor()
 	// procedurehistory.DefaultID holds the default value on creation for the id field.

@@ -66,6 +66,9 @@ func (ControlObjective) Fields() []ent.Field {
 		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data including details of the control objective"),
+		field.Text("example_evidence").
+			Comment("example evidence to provide for the control").
+			Optional(),
 	}
 }
 

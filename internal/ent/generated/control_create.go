@@ -285,6 +285,20 @@ func (cc *ControlCreate) SetDetails(m map[string]interface{}) *ControlCreate {
 	return cc
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cc *ControlCreate) SetExampleEvidence(s string) *ControlCreate {
+	cc.mutation.SetExampleEvidence(s)
+	return cc
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableExampleEvidence(s *string) *ControlCreate {
+	if s != nil {
+		cc.SetExampleEvidence(*s)
+	}
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *ControlCreate) SetID(s string) *ControlCreate {
 	cc.mutation.SetID(s)
@@ -693,6 +707,10 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Details(); ok {
 		_spec.SetField(control.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if value, ok := cc.mutation.ExampleEvidence(); ok {
+		_spec.SetField(control.FieldExampleEvidence, field.TypeString, value)
+		_node.ExampleEvidence = value
 	}
 	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

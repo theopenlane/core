@@ -213,6 +213,20 @@ func (phc *ProcedureHistoryCreate) SetNillableProcedureType(s *string) *Procedur
 	return phc
 }
 
+// SetReviewDue sets the "review_due" field.
+func (phc *ProcedureHistoryCreate) SetReviewDue(t time.Time) *ProcedureHistoryCreate {
+	phc.mutation.SetReviewDue(t)
+	return phc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableReviewDue(t *time.Time) *ProcedureHistoryCreate {
+	if t != nil {
+		phc.SetReviewDue(*t)
+	}
+	return phc
+}
+
 // SetVersion sets the "version" field.
 func (phc *ProcedureHistoryCreate) SetVersion(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetVersion(s)
@@ -340,6 +354,10 @@ func (phc *ProcedureHistoryCreate) defaults() {
 		v := procedurehistory.DefaultTags
 		phc.mutation.SetTags(v)
 	}
+	if _, ok := phc.mutation.ReviewDue(); !ok {
+		v := procedurehistory.DefaultReviewDue
+		phc.mutation.SetReviewDue(v)
+	}
 	if _, ok := phc.mutation.ID(); !ok {
 		v := procedurehistory.DefaultID()
 		phc.mutation.SetID(v)
@@ -464,6 +482,10 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.ProcedureType(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureType, field.TypeString, value)
 		_node.ProcedureType = value
+	}
+	if value, ok := phc.mutation.ReviewDue(); ok {
+		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
 	}
 	if value, ok := phc.mutation.Version(); ok {
 		_spec.SetField(procedurehistory.FieldVersion, field.TypeString, value)

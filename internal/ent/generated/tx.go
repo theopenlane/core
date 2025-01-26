@@ -48,6 +48,10 @@ type Tx struct {
 	Event *EventClient
 	// EventHistory is the client for interacting with the EventHistory builders.
 	EventHistory *EventHistoryClient
+	// Evidence is the client for interacting with the Evidence builders.
+	Evidence *EvidenceClient
+	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
+	EvidenceHistory *EvidenceHistoryClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
 	// FileHistory is the client for interacting with the FileHistory builders.
@@ -301,6 +305,8 @@ func (tx *Tx) init() {
 	tx.EntityTypeHistory = NewEntityTypeHistoryClient(tx.config)
 	tx.Event = NewEventClient(tx.config)
 	tx.EventHistory = NewEventHistoryClient(tx.config)
+	tx.Evidence = NewEvidenceClient(tx.config)
+	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
 	tx.File = NewFileClient(tx.config)
 	tx.FileHistory = NewFileHistoryClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)

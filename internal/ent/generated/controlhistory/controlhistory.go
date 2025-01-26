@@ -65,6 +65,8 @@ const (
 	FieldMappedFrameworks = "mapped_frameworks"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
+	FieldExampleEvidence = "example_evidence"
 	// Table holds the table name of the controlhistory in the database.
 	Table = "control_history"
 )
@@ -96,6 +98,7 @@ var Columns = []string{
 	FieldSatisfies,
 	FieldMappedFrameworks,
 	FieldDetails,
+	FieldExampleEvidence,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -255,6 +258,11 @@ func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 // ByMappedFrameworks orders the results by the mapped_frameworks field.
 func ByMappedFrameworks(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappedFrameworks, opts...).ToFunc()
+}
+
+// ByExampleEvidence orders the results by the example_evidence field.
+func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
 }
 
 var (

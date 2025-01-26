@@ -620,6 +620,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDetails(details)
 	}
 
+	if exampleEvidence, exists := m.ExampleEvidence(); exists {
+		create = create.SetExampleEvidence(exampleEvidence)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -776,6 +780,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetails(control.Details)
 		}
 
+		if exampleEvidence, exists := m.ExampleEvidence(); exists {
+			create = create.SetExampleEvidence(exampleEvidence)
+		} else {
+			create = create.SetExampleEvidence(control.ExampleEvidence)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -829,6 +839,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSatisfies(control.Satisfies).
 			SetMappedFrameworks(control.MappedFrameworks).
 			SetDetails(control.Details).
+			SetExampleEvidence(control.ExampleEvidence).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -931,6 +942,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
+	}
+
+	if exampleEvidence, exists := m.ExampleEvidence(); exists {
+		create = create.SetExampleEvidence(exampleEvidence)
 	}
 
 	_, err := create.Save(ctx)
@@ -1083,6 +1098,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDetails(controlobjective.Details)
 		}
 
+		if exampleEvidence, exists := m.ExampleEvidence(); exists {
+			create = create.SetExampleEvidence(exampleEvidence)
+		} else {
+			create = create.SetExampleEvidence(controlobjective.ExampleEvidence)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1135,6 +1156,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetSource(controlobjective.Source).
 			SetMappedFrameworks(controlobjective.MappedFrameworks).
 			SetDetails(controlobjective.Details).
+			SetExampleEvidence(controlobjective.ExampleEvidence).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -1941,6 +1963,279 @@ func (m *EventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetCorrelationID(event.CorrelationID).
 			SetEventType(event.EventType).
 			SetMetadata(event.Metadata).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.EvidenceHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if collectionProcedure, exists := m.CollectionProcedure(); exists {
+		create = create.SetCollectionProcedure(collectionProcedure)
+	}
+
+	if creationDate, exists := m.CreationDate(); exists {
+		create = create.SetCreationDate(creationDate)
+	}
+
+	if renewalDate, exists := m.RenewalDate(); exists {
+		create = create.SetRenewalDate(renewalDate)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if isAutomated, exists := m.IsAutomated(); exists {
+		create = create.SetIsAutomated(isAutomated)
+	}
+
+	if url, exists := m.URL(); exists {
+		create = create.SetURL(url)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		evidence, err := client.Evidence.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.EvidenceHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(evidence.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(evidence.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(evidence.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(evidence.UpdatedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(evidence.DisplayID)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(evidence.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(evidence.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(evidence.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(evidence.OwnerID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(evidence.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(evidence.Description)
+		}
+
+		if collectionProcedure, exists := m.CollectionProcedure(); exists {
+			create = create.SetCollectionProcedure(collectionProcedure)
+		} else {
+			create = create.SetCollectionProcedure(evidence.CollectionProcedure)
+		}
+
+		if creationDate, exists := m.CreationDate(); exists {
+			create = create.SetCreationDate(creationDate)
+		} else {
+			create = create.SetCreationDate(evidence.CreationDate)
+		}
+
+		if renewalDate, exists := m.RenewalDate(); exists {
+			create = create.SetRenewalDate(renewalDate)
+		} else {
+			create = create.SetRenewalDate(evidence.RenewalDate)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(evidence.Source)
+		}
+
+		if isAutomated, exists := m.IsAutomated(); exists {
+			create = create.SetIsAutomated(isAutomated)
+		} else {
+			create = create.SetIsAutomated(evidence.IsAutomated)
+		}
+
+		if url, exists := m.URL(); exists {
+			create = create.SetURL(url)
+		} else {
+			create = create.SetURL(evidence.URL)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		evidence, err := client.Evidence.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.EvidenceHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(evidence.CreatedAt).
+			SetUpdatedAt(evidence.UpdatedAt).
+			SetCreatedBy(evidence.CreatedBy).
+			SetUpdatedBy(evidence.UpdatedBy).
+			SetDisplayID(evidence.DisplayID).
+			SetDeletedAt(evidence.DeletedAt).
+			SetDeletedBy(evidence.DeletedBy).
+			SetTags(evidence.Tags).
+			SetOwnerID(evidence.OwnerID).
+			SetName(evidence.Name).
+			SetDescription(evidence.Description).
+			SetCollectionProcedure(evidence.CollectionProcedure).
+			SetCreationDate(evidence.CreationDate).
+			SetRenewalDate(evidence.RenewalDate).
+			SetSource(evidence.Source).
+			SetIsAutomated(evidence.IsAutomated).
+			SetURL(evidence.URL).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -3387,6 +3682,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetStatus(status)
 	}
 
+	if reviewDue, exists := m.ReviewDue(); exists {
+		create = create.SetReviewDue(reviewDue)
+	}
+
 	if policyType, exists := m.PolicyType(); exists {
 		create = create.SetPolicyType(policyType)
 	}
@@ -3509,6 +3808,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetStatus(internalpolicy.Status)
 		}
 
+		if reviewDue, exists := m.ReviewDue(); exists {
+			create = create.SetReviewDue(reviewDue)
+		} else {
+			create = create.SetReviewDue(internalpolicy.ReviewDue)
+		}
+
 		if policyType, exists := m.PolicyType(); exists {
 			create = create.SetPolicyType(policyType)
 		} else {
@@ -3583,6 +3888,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetName(internalpolicy.Name).
 			SetDescription(internalpolicy.Description).
 			SetStatus(internalpolicy.Status).
+			SetReviewDue(internalpolicy.ReviewDue).
 			SetPolicyType(internalpolicy.PolicyType).
 			SetVersion(internalpolicy.Version).
 			SetPurposeAndScope(internalpolicy.PurposeAndScope).
@@ -5082,6 +5388,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetProcedureType(procedureType)
 	}
 
+	if reviewDue, exists := m.ReviewDue(); exists {
+		create = create.SetReviewDue(reviewDue)
+	}
+
 	if version, exists := m.Version(); exists {
 		create = create.SetVersion(version)
 	}
@@ -5210,6 +5520,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetProcedureType(procedure.ProcedureType)
 		}
 
+		if reviewDue, exists := m.ReviewDue(); exists {
+			create = create.SetReviewDue(reviewDue)
+		} else {
+			create = create.SetReviewDue(procedure.ReviewDue)
+		}
+
 		if version, exists := m.Version(); exists {
 			create = create.SetVersion(version)
 		} else {
@@ -5285,6 +5601,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDescription(procedure.Description).
 			SetStatus(procedure.Status).
 			SetProcedureType(procedure.ProcedureType).
+			SetReviewDue(procedure.ReviewDue).
 			SetVersion(procedure.Version).
 			SetPurposeAndScope(procedure.PurposeAndScope).
 			SetBackground(procedure.Background).
@@ -6440,6 +6757,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDetails(details)
 	}
 
+	if exampleEvidence, exists := m.ExampleEvidence(); exists {
+		create = create.SetExampleEvidence(exampleEvidence)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -6620,6 +6941,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDetails(subcontrol.Details)
 		}
 
+		if exampleEvidence, exists := m.ExampleEvidence(); exists {
+			create = create.SetExampleEvidence(exampleEvidence)
+		} else {
+			create = create.SetExampleEvidence(subcontrol.ExampleEvidence)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6677,6 +7004,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetImplementationVerification(subcontrol.ImplementationVerification).
 			SetImplementationVerificationDate(subcontrol.ImplementationVerificationDate).
 			SetDetails(subcontrol.Details).
+			SetExampleEvidence(subcontrol.ExampleEvidence).
 			Save(ctx)
 		if err != nil {
 			return err

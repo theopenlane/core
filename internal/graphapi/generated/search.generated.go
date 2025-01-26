@@ -348,6 +348,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -461,6 +463,8 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -799,6 +803,99 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EvidenceSearchResult_evidences(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceSearchResult) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EvidenceSearchResult_evidences(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Evidences, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.Evidence)
+	fc.Result = res
+	return ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EvidenceSearchResult_evidences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EvidenceSearchResult",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Evidence_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Evidence_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Evidence_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Evidence_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Evidence_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Evidence_displayID(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_Evidence_deletedAt(ctx, field)
+			case "deletedBy":
+				return ec.fieldContext_Evidence_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Evidence_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Evidence_ownerID(ctx, field)
+			case "name":
+				return ec.fieldContext_Evidence_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Evidence_description(ctx, field)
+			case "collectionProcedure":
+				return ec.fieldContext_Evidence_collectionProcedure(ctx, field)
+			case "creationDate":
+				return ec.fieldContext_Evidence_creationDate(ctx, field)
+			case "renewalDate":
+				return ec.fieldContext_Evidence_renewalDate(ctx, field)
+			case "source":
+				return ec.fieldContext_Evidence_source(ctx, field)
+			case "isAutomated":
+				return ec.fieldContext_Evidence_isAutomated(ctx, field)
+			case "url":
+				return ec.fieldContext_Evidence_url(ctx, field)
+			case "owner":
+				return ec.fieldContext_Evidence_owner(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Evidence_controlObjectives(ctx, field)
+			case "controls":
+				return ec.fieldContext_Evidence_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Evidence_subcontrols(ctx, field)
+			case "files":
+				return ec.fieldContext_Evidence_files(ctx, field)
+			case "programs":
+				return ec.fieldContext_Evidence_programs(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Evidence_tasks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
 	}
 	return fc, nil
@@ -1264,6 +1361,8 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "version":
@@ -1619,6 +1718,8 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Organization_evidence(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -1850,6 +1951,8 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "version":
 				return ec.fieldContext_Procedure_version(ctx, field)
 			case "purposeAndScope":
@@ -1983,6 +2086,8 @@ func (ec *executionContext) fieldContext_ProgramSearchResult_programs(_ context.
 				return ec.fieldContext_Program_notes(ctx, field)
 			case "files":
 				return ec.fieldContext_Program_files(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Program_evidence(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
@@ -2418,6 +2523,8 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
@@ -2606,6 +2713,8 @@ func (ec *executionContext) fieldContext_TaskSearchResult_tasks(_ context.Contex
 				return ec.fieldContext_Task_subcontrol(ctx, field)
 			case "program":
 				return ec.fieldContext_Task_program(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Task_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -2961,6 +3070,13 @@ func (ec *executionContext) _SearchResult(ctx context.Context, sel ast.Selection
 			return graphql.Null
 		}
 		return ec._EventSearchResult(ctx, sel, obj)
+	case model.EvidenceSearchResult:
+		return ec._EvidenceSearchResult(ctx, sel, &obj)
+	case *model.EvidenceSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._EvidenceSearchResult(ctx, sel, obj)
 	case model.FileSearchResult:
 		return ec._FileSearchResult(ctx, sel, &obj)
 	case *model.FileSearchResult:
@@ -3411,6 +3527,42 @@ func (ec *executionContext) _EventSearchResult(ctx context.Context, sel ast.Sele
 			out.Values[i] = graphql.MarshalString("EventSearchResult")
 		case "events":
 			out.Values[i] = ec._EventSearchResult_events(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var evidenceSearchResultImplementors = []string{"EvidenceSearchResult", "SearchResult"}
+
+func (ec *executionContext) _EvidenceSearchResult(ctx context.Context, sel ast.SelectionSet, obj *model.EvidenceSearchResult) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, evidenceSearchResultImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EvidenceSearchResult")
+		case "evidences":
+			out.Values[i] = ec._EvidenceSearchResult_evidences(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4322,6 +4474,13 @@ func (ec *executionContext) marshalOEventSearchResult2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._EventSearchResult(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOEvidenceSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceSearchResult) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._EvidenceSearchResult(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOFileSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.FileSearchResult) graphql.Marshaler {

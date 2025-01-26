@@ -66,8 +66,10 @@ type ControlHistory struct {
 	// mapped frameworks
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
 	// json data including details of the control
-	Details      map[string]interface{} `json:"details,omitempty"`
-	selectValues sql.SelectValues
+	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -79,7 +81,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldOwnerID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldOwnerID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks, controlhistory.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -252,6 +254,12 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case controlhistory.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				ch.ExampleEvidence = value.String
+			}
 		default:
 			ch.selectValues.Set(columns[i], values[i])
 		}
@@ -359,6 +367,9 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(ch.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }

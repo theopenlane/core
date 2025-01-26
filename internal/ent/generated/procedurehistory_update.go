@@ -216,6 +216,26 @@ func (phu *ProcedureHistoryUpdate) ClearProcedureType() *ProcedureHistoryUpdate 
 	return phu
 }
 
+// SetReviewDue sets the "review_due" field.
+func (phu *ProcedureHistoryUpdate) SetReviewDue(t time.Time) *ProcedureHistoryUpdate {
+	phu.mutation.SetReviewDue(t)
+	return phu
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableReviewDue(t *time.Time) *ProcedureHistoryUpdate {
+	if t != nil {
+		phu.SetReviewDue(*t)
+	}
+	return phu
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (phu *ProcedureHistoryUpdate) ClearReviewDue() *ProcedureHistoryUpdate {
+	phu.mutation.ClearReviewDue()
+	return phu
+}
+
 // SetVersion sets the "version" field.
 func (phu *ProcedureHistoryUpdate) SetVersion(s string) *ProcedureHistoryUpdate {
 	phu.mutation.SetVersion(s)
@@ -434,6 +454,12 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if phu.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureType, field.TypeString)
+	}
+	if value, ok := phu.mutation.ReviewDue(); ok {
+		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
+	}
+	if phu.mutation.ReviewDueCleared() {
+		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := phu.mutation.Version(); ok {
 		_spec.SetField(procedurehistory.FieldVersion, field.TypeString, value)
@@ -670,6 +696,26 @@ func (phuo *ProcedureHistoryUpdateOne) SetNillableProcedureType(s *string) *Proc
 // ClearProcedureType clears the value of the "procedure_type" field.
 func (phuo *ProcedureHistoryUpdateOne) ClearProcedureType() *ProcedureHistoryUpdateOne {
 	phuo.mutation.ClearProcedureType()
+	return phuo
+}
+
+// SetReviewDue sets the "review_due" field.
+func (phuo *ProcedureHistoryUpdateOne) SetReviewDue(t time.Time) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetReviewDue(t)
+	return phuo
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableReviewDue(t *time.Time) *ProcedureHistoryUpdateOne {
+	if t != nil {
+		phuo.SetReviewDue(*t)
+	}
+	return phuo
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearReviewDue() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearReviewDue()
 	return phuo
 }
 
@@ -921,6 +967,12 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	}
 	if phuo.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureType, field.TypeString)
+	}
+	if value, ok := phuo.mutation.ReviewDue(); ok {
+		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
+	}
+	if phuo.mutation.ReviewDueCleared() {
+		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := phuo.mutation.Version(); ok {
 		_spec.SetField(procedurehistory.FieldVersion, field.TypeString, value)

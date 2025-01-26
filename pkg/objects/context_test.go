@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/utils/contextx"
 )
 
 func TestWriteFilesToContext(t *testing.T) {
@@ -73,13 +74,16 @@ func TestWriteFilesToContext(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := context.WithValue(context.Background(), FileContextKey, tt.initialFiles)
+			fCtxKey := FileContextKey{Files: tt.initialFiles}
+			ctx := contextx.With(context.Background(), fCtxKey)
+
 			ctx = WriteFilesToContext(ctx, tt.newFiles)
 
-			result, ok := ctx.Value(FileContextKey).(Files)
+			result, ok := contextx.From[FileContextKey](ctx)
 			require.True(t, ok)
+			require.NotNil(t, result)
 
-			assert.Equal(t, tt.expectedResult, result)
+			assert.Equal(t, tt.expectedResult, result.Files)
 		})
 	}
 }
@@ -88,6 +92,7 @@ func TestFilesFromContext(t *testing.T) {
 		name           string
 		initialFiles   Files
 		expectedResult Files
+		errExpected    bool
 	}{
 		{
 			name:           "Files exist in context",
@@ -98,16 +103,24 @@ func TestFilesFromContext(t *testing.T) {
 			name:           "No files in context",
 			initialFiles:   nil,
 			expectedResult: nil,
+			errExpected:    true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := context.WithValue(context.Background(), FileContextKey, tt.initialFiles)
+			fCtxKey := FileContextKey{Files: tt.initialFiles}
+			ctx := contextx.With(context.Background(), fCtxKey)
 
 			result, err := FilesFromContext(ctx)
-			require.NoError(t, err)
+			if tt.errExpected {
+				require.Error(t, err)
+				assert.Equal(t, ErrNoFilesUploaded, err)
 
+				return
+			}
+
+			require.NoError(t, err)
 			assert.Equal(t, tt.expectedResult, result)
 		})
 	}
@@ -116,22 +129,21 @@ func TestFilesFromContext(t *testing.T) {
 func TestFilesFromContextWithKey(t *testing.T) {
 	tests := []struct {
 		name           string
-		initialFiles   Files
-		ctxKey         *ContextKey
+		ctxKey         FileContextKey
 		key            string
 		expectedResult []File
 		expectedError  error
 	}{
 		{
 			name: "Files exist for the given key",
-			initialFiles: Files{
-				"field1": {
-					{ID: "1", FieldName: "field1"},
-					{ID: "2", FieldName: "field1"},
-				},
-			},
-			ctxKey: FileContextKey,
-			key:    "field1",
+			ctxKey: FileContextKey{
+				Files{
+					"field1": {
+						{ID: "1", FieldName: "field1"},
+						{ID: "2", FieldName: "field1"},
+					},
+				}},
+			key: "field1",
 			expectedResult: []File{
 				{ID: "1", FieldName: "field1"},
 				{ID: "2", FieldName: "field1"},
@@ -140,28 +152,25 @@ func TestFilesFromContextWithKey(t *testing.T) {
 		},
 		{
 			name: "No files for the given key",
-			initialFiles: Files{
-				"field1": {
-					{ID: "1", FieldName: "field1"},
-				},
-			},
-			ctxKey:         FileContextKey,
+			ctxKey: FileContextKey{
+				Files{
+					"field1": {
+						{ID: "1", FieldName: "field1"},
+					},
+				}},
 			key:            "field2",
 			expectedResult: nil,
 			expectedError:  nil,
 		},
 		{
 			name:           "No files in context",
-			initialFiles:   nil,
-			ctxKey:         FileContextKey,
+			ctxKey:         FileContextKey{Files: nil},
 			key:            "field1",
 			expectedResult: nil,
-			expectedError:  nil,
+			expectedError:  ErrNoFilesUploaded,
 		},
 		{
 			name:           "No files in context, invalid key",
-			initialFiles:   nil,
-			ctxKey:         nil,
 			key:            "field1",
 			expectedResult: nil,
 			expectedError:  ErrNoFilesUploaded,
@@ -170,7 +179,7 @@ func TestFilesFromContextWithKey(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := context.WithValue(context.Background(), tt.ctxKey, tt.initialFiles)
+			ctx := contextx.With(context.Background(), tt.ctxKey)
 
 			result, err := FilesFromContextWithKey(ctx, tt.key)
 			if tt.expectedError != nil {
@@ -220,7 +229,8 @@ func TestGetFileIDsFromContext(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := context.WithValue(context.Background(), FileContextKey, tt.initialFiles)
+			fCtxKey := FileContextKey{Files: tt.initialFiles}
+			ctx := contextx.With(context.Background(), fCtxKey)
 
 			result := GetFileIDsFromContext(ctx)
 

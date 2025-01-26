@@ -197,7 +197,10 @@ var (
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_controls", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
@@ -209,19 +212,31 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "controls_control_objectives_controls",
-				Columns:    []*schema.Column{ControlsColumns[21]},
+				Columns:    []*schema.Column{ControlsColumns[22]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "controls_evidences_controls",
+				Columns:    []*schema.Column{ControlsColumns[23]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_evidences_subcontrols",
+				Columns:    []*schema.Column{ControlsColumns[24]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "controls_internal_policies_controls",
-				Columns:    []*schema.Column{ControlsColumns[22]},
+				Columns:    []*schema.Column{ControlsColumns[25]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_organizations_controls",
-				Columns:    []*schema.Column{ControlsColumns[23]},
+				Columns:    []*schema.Column{ControlsColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -230,7 +245,7 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[23]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[26]},
 			},
 		},
 	}
@@ -261,6 +276,7 @@ var (
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 	}
 	// ControlHistoryTable holds the schema information for the "control_history" table.
 	ControlHistoryTable = &schema.Table{
@@ -297,7 +313,9 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_control_objectives", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_control_objectives", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
@@ -308,13 +326,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "control_objectives_controls_control_objectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
+				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "control_objectives_evidences_control_objectives",
+				Columns:    []*schema.Column{ControlObjectivesColumns[22]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "control_objectives_organizations_control_objectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
+				Columns:    []*schema.Column{ControlObjectivesColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -323,7 +347,7 @@ var (
 			{
 				Name:    "controlobjective_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlObjectivesColumns[7], ControlObjectivesColumns[21]},
+				Columns: []*schema.Column{ControlObjectivesColumns[7], ControlObjectivesColumns[23]},
 			},
 		},
 	}
@@ -353,6 +377,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 	}
 	// ControlObjectiveHistoryTable holds the schema information for the "control_objective_history" table.
 	ControlObjectiveHistoryTable = &schema.Table{
@@ -673,6 +698,85 @@ var (
 			},
 		},
 	}
+	// EvidencesColumns holds the columns for the "evidences" table.
+	EvidencesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "collection_procedure", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "creation_date", Type: field.TypeTime},
+		{Name: "renewal_date", Type: field.TypeTime, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
+	}
+	// EvidencesTable holds the schema information for the "evidences" table.
+	EvidencesTable = &schema.Table{
+		Name:       "evidences",
+		Columns:    EvidencesColumns,
+		PrimaryKey: []*schema.Column{EvidencesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "evidences_organizations_evidence",
+				Columns:    []*schema.Column{EvidencesColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "evidence_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{EvidencesColumns[5], EvidencesColumns[17]},
+			},
+		},
+	}
+	// EvidenceHistoryColumns holds the columns for the "evidence_history" table.
+	EvidenceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "collection_procedure", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "creation_date", Type: field.TypeTime},
+		{Name: "renewal_date", Type: field.TypeTime, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "url", Type: field.TypeString, Nullable: true},
+	}
+	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
+	EvidenceHistoryTable = &schema.Table{
+		Name:       "evidence_history",
+		Columns:    EvidenceHistoryColumns,
+		PrimaryKey: []*schema.Column{EvidenceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "evidencehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{EvidenceHistoryColumns[1]},
+			},
+		},
+	}
 	// FilesColumns holds the columns for the "files" table.
 	FilesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -697,12 +801,21 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
+		{Name: "evidence_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
 		Name:       "files",
 		Columns:    FilesColumns,
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "files_evidences_files",
+				Columns:    []*schema.Column{FilesColumns[22]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// FileHistoryColumns holds the columns for the "file_history" table.
 	FileHistoryColumns = []*schema.Column{
@@ -1095,6 +1208,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "policy_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1110,7 +1224,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "internal_policies_organizations_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1119,7 +1233,7 @@ var (
 			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[17]},
+				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[18]},
 			},
 		},
 	}
@@ -1141,6 +1255,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "policy_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1741,6 +1856,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "procedure_type", Type: field.TypeString, Nullable: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1758,19 +1874,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "procedures_control_objectives_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[18]},
+				Columns:    []*schema.Column{ProceduresColumns[19]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_organizations_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[19]},
+				Columns:    []*schema.Column{ProceduresColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_standards_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[20]},
+				Columns:    []*schema.Column{ProceduresColumns[21]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1779,7 +1895,7 @@ var (
 			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[19]},
+				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[20]},
 			},
 		},
 	}
@@ -1802,6 +1918,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "procedure_type", Type: field.TypeString, Nullable: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2160,6 +2277,7 @@ var (
 		{Name: "implementation_verification", Type: field.TypeString, Nullable: true},
 		{Name: "implementation_verification_date", Type: field.TypeTime, Nullable: true},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "note_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -2172,19 +2290,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subcontrols_control_objectives_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[25]},
+				Columns:    []*schema.Column{SubcontrolsColumns[26]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_notes_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[26]},
+				Columns:    []*schema.Column{SubcontrolsColumns[27]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_organizations_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[27]},
+				Columns:    []*schema.Column{SubcontrolsColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -2193,7 +2311,7 @@ var (
 			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[27]},
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[28]},
 			},
 		},
 	}
@@ -2228,6 +2346,7 @@ var (
 		{Name: "implementation_verification", Type: field.TypeString, Nullable: true},
 		{Name: "implementation_verification_date", Type: field.TypeTime, Nullable: true},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 	}
 	// SubcontrolHistoryTable holds the schema information for the "subcontrol_history" table.
 	SubcontrolHistoryTable = &schema.Table{
@@ -4448,6 +4567,31 @@ var (
 			},
 		},
 	}
+	// ProgramEvidenceColumns holds the columns for the "program_evidence" table.
+	ProgramEvidenceColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "evidence_id", Type: field.TypeString},
+	}
+	// ProgramEvidenceTable holds the schema information for the "program_evidence" table.
+	ProgramEvidenceTable = &schema.Table{
+		Name:       "program_evidence",
+		Columns:    ProgramEvidenceColumns,
+		PrimaryKey: []*schema.Column{ProgramEvidenceColumns[0], ProgramEvidenceColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_evidence_program_id",
+				Columns:    []*schema.Column{ProgramEvidenceColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_evidence_evidence_id",
+				Columns:    []*schema.Column{ProgramEvidenceColumns[1]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProgramNarrativesColumns holds the columns for the "program_narratives" table.
 	ProgramNarrativesColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
@@ -4748,6 +4892,31 @@ var (
 			},
 		},
 	}
+	// TaskEvidenceColumns holds the columns for the "task_evidence" table.
+	TaskEvidenceColumns = []*schema.Column{
+		{Name: "task_id", Type: field.TypeString},
+		{Name: "evidence_id", Type: field.TypeString},
+	}
+	// TaskEvidenceTable holds the schema information for the "task_evidence" table.
+	TaskEvidenceTable = &schema.Table{
+		Name:       "task_evidence",
+		Columns:    TaskEvidenceColumns,
+		PrimaryKey: []*schema.Column{TaskEvidenceColumns[0], TaskEvidenceColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "task_evidence_task_id",
+				Columns:    []*schema.Column{TaskEvidenceColumns[0]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "task_evidence_evidence_id",
+				Columns:    []*schema.Column{TaskEvidenceColumns[1]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// TemplateFilesColumns holds the columns for the "template_files" table.
 	TemplateFilesColumns = []*schema.Column{
 		{Name: "template_id", Type: field.TypeString},
@@ -4918,6 +5087,8 @@ var (
 		EntityTypeHistoryTable,
 		EventsTable,
 		EventHistoryTable,
+		EvidencesTable,
+		EvidenceHistoryTable,
 		FilesTable,
 		FileHistoryTable,
 		GroupsTable,
@@ -5040,6 +5211,7 @@ var (
 		ProgramTasksTable,
 		ProgramNotesTable,
 		ProgramFilesTable,
+		ProgramEvidenceTable,
 		ProgramNarrativesTable,
 		ProgramActionPlansTable,
 		RiskBlockedGroupsTable,
@@ -5052,6 +5224,7 @@ var (
 		StandardProgramsTable,
 		SubcontrolTasksTable,
 		SubscriberEventsTable,
+		TaskEvidenceTable,
 		TemplateFilesTable,
 		UserFilesTable,
 		UserEventsTable,
@@ -5071,13 +5244,16 @@ func init() {
 		Table: "contact_history",
 	}
 	ControlsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
-	ControlsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
-	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[1].RefTable = EvidencesTable
+	ControlsTable.ForeignKeys[2].RefTable = EvidencesTable
+	ControlsTable.ForeignKeys[3].RefTable = InternalPoliciesTable
+	ControlsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
 	ControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
-	ControlObjectivesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	ControlObjectivesTable.ForeignKeys[1].RefTable = EvidencesTable
+	ControlObjectivesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
@@ -5100,6 +5276,11 @@ func init() {
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
+	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	EvidenceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "evidence_history",
+	}
+	FilesTable.ForeignKeys[0].RefTable = EvidencesTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -5351,6 +5532,8 @@ func init() {
 	ProgramNotesTable.ForeignKeys[1].RefTable = NotesTable
 	ProgramFilesTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramFilesTable.ForeignKeys[1].RefTable = FilesTable
+	ProgramEvidenceTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramEvidenceTable.ForeignKeys[1].RefTable = EvidencesTable
 	ProgramNarrativesTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProgramActionPlansTable.ForeignKeys[0].RefTable = ProgramsTable
@@ -5375,6 +5558,8 @@ func init() {
 	SubcontrolTasksTable.ForeignKeys[1].RefTable = TasksTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
+	TaskEvidenceTable.ForeignKeys[0].RefTable = TasksTable
+	TaskEvidenceTable.ForeignKeys[1].RefTable = EvidencesTable
 	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable
 	TemplateFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserFilesTable.ForeignKeys[0].RefTable = UsersTable

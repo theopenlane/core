@@ -44,6 +44,8 @@ type SchemaConfig struct {
 	EntityTypeHistory                    string // EntityTypeHistory table.
 	Event                                string // Event table.
 	EventHistory                         string // EventHistory table.
+	Evidence                             string // Evidence table.
+	EvidenceHistory                      string // EvidenceHistory table.
 	File                                 string // File table.
 	FileEvents                           string // File-events->Event table.
 	FileHistory                          string // FileHistory table.
@@ -127,6 +129,7 @@ type SchemaConfig struct {
 	ProgramTasks                         string // Program-tasks->Task table.
 	ProgramNotes                         string // Program-notes->Note table.
 	ProgramFiles                         string // Program-files->File table.
+	ProgramEvidence                      string // Program-evidence->Evidence table.
 	ProgramNarratives                    string // Program-narratives->Narrative table.
 	ProgramActionPlans                   string // Program-action_plans->ActionPlan table.
 	ProgramHistory                       string // ProgramHistory table.
@@ -151,6 +154,7 @@ type SchemaConfig struct {
 	SubscriberEvents                     string // Subscriber-events->Event table.
 	TFASetting                           string // TFASetting table.
 	Task                                 string // Task table.
+	TaskEvidence                         string // Task-evidence->Evidence table.
 	TaskHistory                          string // TaskHistory table.
 	Template                             string // Template table.
 	TemplateFiles                        string // Template-files->File table.

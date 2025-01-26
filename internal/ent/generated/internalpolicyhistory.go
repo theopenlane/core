@@ -49,6 +49,8 @@ type InternalPolicyHistory struct {
 	Description string `json:"description,omitempty"`
 	// status of the policy
 	Status string `json:"status,omitempty"`
+	// the date the policy should be reviewed, defaults to a year from creation date
+	ReviewDue time.Time `json:"review_due,omitempty"`
 	// type of the policy
 	PolicyType string `json:"policy_type,omitempty"`
 	// version of the policy
@@ -73,7 +75,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldDescription, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldVersion, internalpolicyhistory.FieldPurposeAndScope, internalpolicyhistory.FieldBackground:
 			values[i] = new(sql.NullString)
-		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt:
+		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -188,6 +190,12 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.Status = value.String
 			}
+		case internalpolicyhistory.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				iph.ReviewDue = value.Time
+			}
 		case internalpolicyhistory.FieldPolicyType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field policy_type", values[i])
@@ -300,6 +308,9 @@ func (iph *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(iph.Status)
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(iph.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("policy_type=")
 	builder.WriteString(iph.PolicyType)

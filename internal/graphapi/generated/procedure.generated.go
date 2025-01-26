@@ -93,6 +93,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "version":
 				return ec.fieldContext_Procedure_version(ctx, field)
 			case "purposeAndScope":
@@ -195,6 +197,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "version":
 				return ec.fieldContext_Procedure_version(ctx, field)
 			case "purposeAndScope":
@@ -341,6 +345,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "version":
 				return ec.fieldContext_Procedure_version(ctx, field)
 			case "purposeAndScope":

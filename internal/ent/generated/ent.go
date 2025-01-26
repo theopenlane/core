@@ -30,6 +30,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -160,6 +162,8 @@ func checkColumn(table, column string) error {
 			entitytypehistory.Table:          entitytypehistory.ValidColumn,
 			event.Table:                      event.ValidColumn,
 			eventhistory.Table:               eventhistory.ValidColumn,
+			evidence.Table:                   evidence.ValidColumn,
+			evidencehistory.Table:            evidencehistory.ValidColumn,
 			file.Table:                       file.ValidColumn,
 			filehistory.Table:                filehistory.ValidColumn,
 			group.Table:                      group.ValidColumn,

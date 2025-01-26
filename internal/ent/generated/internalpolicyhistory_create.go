@@ -199,6 +199,20 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableStatus(s *string) *InternalP
 	return iphc
 }
 
+// SetReviewDue sets the "review_due" field.
+func (iphc *InternalPolicyHistoryCreate) SetReviewDue(t time.Time) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetReviewDue(t)
+	return iphc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableReviewDue(t *time.Time) *InternalPolicyHistoryCreate {
+	if t != nil {
+		iphc.SetReviewDue(*t)
+	}
+	return iphc
+}
+
 // SetPolicyType sets the "policy_type" field.
 func (iphc *InternalPolicyHistoryCreate) SetPolicyType(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetPolicyType(s)
@@ -326,6 +340,10 @@ func (iphc *InternalPolicyHistoryCreate) defaults() {
 		v := internalpolicyhistory.DefaultTags
 		iphc.mutation.SetTags(v)
 	}
+	if _, ok := iphc.mutation.ReviewDue(); !ok {
+		v := internalpolicyhistory.DefaultReviewDue
+		iphc.mutation.SetReviewDue(v)
+	}
 	if _, ok := iphc.mutation.ID(); !ok {
 		v := internalpolicyhistory.DefaultID()
 		iphc.mutation.SetID(v)
@@ -446,6 +464,10 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 	if value, ok := iphc.mutation.Status(); ok {
 		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := iphc.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicyhistory.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
 	}
 	if value, ok := iphc.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)

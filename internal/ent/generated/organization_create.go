@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -865,6 +866,21 @@ func (oc *OrganizationCreate) AddSubcontrols(s ...*Subcontrol) *OrganizationCrea
 		ids[i] = s[i].ID
 	}
 	return oc.AddSubcontrolIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (oc *OrganizationCreate) AddEvidenceIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddEvidenceIDs(ids...)
+	return oc
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (oc *OrganizationCreate) AddEvidence(e ...*Evidence) *OrganizationCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return oc.AddEvidenceIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1751,6 +1767,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EvidenceTable,
+			Columns: []string{organization.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

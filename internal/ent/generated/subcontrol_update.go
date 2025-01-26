@@ -448,6 +448,26 @@ func (su *SubcontrolUpdate) ClearDetails() *SubcontrolUpdate {
 	return su
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (su *SubcontrolUpdate) SetExampleEvidence(s string) *SubcontrolUpdate {
+	su.mutation.SetExampleEvidence(s)
+	return su
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableExampleEvidence(s *string) *SubcontrolUpdate {
+	if s != nil {
+		su.SetExampleEvidence(*s)
+	}
+	return su
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (su *SubcontrolUpdate) ClearExampleEvidence() *SubcontrolUpdate {
+	su.mutation.ClearExampleEvidence()
+	return su
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (su *SubcontrolUpdate) SetOwner(o *Organization) *SubcontrolUpdate {
 	return su.SetOwnerID(o.ID)
@@ -844,6 +864,12 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := su.mutation.ExampleEvidence(); ok {
+		_spec.SetField(subcontrol.FieldExampleEvidence, field.TypeString, value)
+	}
+	if su.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(subcontrol.FieldExampleEvidence, field.TypeString)
 	}
 	if su.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1533,6 +1559,26 @@ func (suo *SubcontrolUpdateOne) ClearDetails() *SubcontrolUpdateOne {
 	return suo
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (suo *SubcontrolUpdateOne) SetExampleEvidence(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetExampleEvidence(s)
+	return suo
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableExampleEvidence(s *string) *SubcontrolUpdateOne {
+	if s != nil {
+		suo.SetExampleEvidence(*s)
+	}
+	return suo
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (suo *SubcontrolUpdateOne) ClearExampleEvidence() *SubcontrolUpdateOne {
+	suo.mutation.ClearExampleEvidence()
+	return suo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (suo *SubcontrolUpdateOne) SetOwner(o *Organization) *SubcontrolUpdateOne {
 	return suo.SetOwnerID(o.ID)
@@ -1959,6 +2005,12 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	}
 	if suo.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := suo.mutation.ExampleEvidence(); ok {
+		_spec.SetField(subcontrol.FieldExampleEvidence, field.TypeString, value)
+	}
+	if suo.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(subcontrol.FieldExampleEvidence, field.TypeString)
 	}
 	if suo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

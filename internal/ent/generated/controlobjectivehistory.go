@@ -64,8 +64,10 @@ type ControlObjectiveHistory struct {
 	// mapped frameworks
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
 	// json data including details of the control objective
-	Details      map[string]interface{} `json:"details,omitempty"`
-	selectValues sql.SelectValues
+	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -77,7 +79,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks, controlobjectivehistory.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -244,6 +246,12 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case controlobjectivehistory.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				coh.ExampleEvidence = value.String
+			}
 		default:
 			coh.selectValues.Set(columns[i], values[i])
 		}
@@ -348,6 +356,9 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", coh.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(coh.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }

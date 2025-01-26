@@ -196,6 +196,26 @@ func (iphu *InternalPolicyHistoryUpdate) ClearStatus() *InternalPolicyHistoryUpd
 	return iphu
 }
 
+// SetReviewDue sets the "review_due" field.
+func (iphu *InternalPolicyHistoryUpdate) SetReviewDue(t time.Time) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetReviewDue(t)
+	return iphu
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableReviewDue(t *time.Time) *InternalPolicyHistoryUpdate {
+	if t != nil {
+		iphu.SetReviewDue(*t)
+	}
+	return iphu
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearReviewDue() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearReviewDue()
+	return iphu
+}
+
 // SetPolicyType sets the "policy_type" field.
 func (iphu *InternalPolicyHistoryUpdate) SetPolicyType(s string) *InternalPolicyHistoryUpdate {
 	iphu.mutation.SetPolicyType(s)
@@ -408,6 +428,12 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if iphu.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeString)
+	}
+	if value, ok := iphu.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicyhistory.FieldReviewDue, field.TypeTime, value)
+	}
+	if iphu.mutation.ReviewDueCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := iphu.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)
@@ -624,6 +650,26 @@ func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableStatus(s *string) *Inter
 // ClearStatus clears the value of the "status" field.
 func (iphuo *InternalPolicyHistoryUpdateOne) ClearStatus() *InternalPolicyHistoryUpdateOne {
 	iphuo.mutation.ClearStatus()
+	return iphuo
+}
+
+// SetReviewDue sets the "review_due" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetReviewDue(t time.Time) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetReviewDue(t)
+	return iphuo
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableReviewDue(t *time.Time) *InternalPolicyHistoryUpdateOne {
+	if t != nil {
+		iphuo.SetReviewDue(*t)
+	}
+	return iphuo
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearReviewDue() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearReviewDue()
 	return iphuo
 }
 
@@ -869,6 +915,12 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if iphuo.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeString)
+	}
+	if value, ok := iphuo.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicyhistory.FieldReviewDue, field.TypeTime, value)
+	}
+	if iphuo.mutation.ReviewDueCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := iphuo.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)

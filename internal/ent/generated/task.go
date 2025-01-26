@@ -85,11 +85,13 @@ type TaskEdges struct {
 	Subcontrol []*Subcontrol `json:"subcontrol,omitempty"`
 	// Program holds the value of the program edge.
 	Program []*Program `json:"program,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [11]map[string]int
 
 	namedGroup            map[string][]*Group
 	namedInternalPolicy   map[string][]*InternalPolicy
@@ -98,6 +100,7 @@ type TaskEdges struct {
 	namedControlObjective map[string][]*ControlObjective
 	namedSubcontrol       map[string][]*Subcontrol
 	namedProgram          map[string][]*Program
+	namedEvidence         map[string][]*Evidence
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -194,6 +197,15 @@ func (e TaskEdges) ProgramOrErr() ([]*Program, error) {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
+}
+
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[10] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -401,6 +413,11 @@ func (t *Task) QuerySubcontrol() *SubcontrolQuery {
 // QueryProgram queries the "program" edge of the Task entity.
 func (t *Task) QueryProgram() *ProgramQuery {
 	return NewTaskClient(t.config).QueryProgram(t)
+}
+
+// QueryEvidence queries the "evidence" edge of the Task entity.
+func (t *Task) QueryEvidence() *EvidenceQuery {
+	return NewTaskClient(t.config).QueryEvidence(t)
 }
 
 // Update returns a builder for updating this Task.
@@ -648,6 +665,30 @@ func (t *Task) appendNamedProgram(name string, edges ...*Program) {
 		t.Edges.namedProgram[name] = []*Program{}
 	} else {
 		t.Edges.namedProgram[name] = append(t.Edges.namedProgram[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (t *Task) NamedEvidence(name string) ([]*Evidence, error) {
+	if t.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := t.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (t *Task) appendNamedEvidence(name string, edges ...*Evidence) {
+	if t.Edges.namedEvidence == nil {
+		t.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		t.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		t.Edges.namedEvidence[name] = append(t.Edges.namedEvidence[name], edges...)
 	}
 }
 

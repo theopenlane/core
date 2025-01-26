@@ -55,6 +55,8 @@ const (
 	FieldMappedFrameworks = "mapped_frameworks"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
+	FieldExampleEvidence = "example_evidence"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -183,12 +185,14 @@ var Columns = []string{
 	FieldSource,
 	FieldMappedFrameworks,
 	FieldDetails,
+	FieldExampleEvidence,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "control_objectives"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_control_objectives",
+	"evidence_control_objectives",
 }
 
 var (
@@ -356,6 +360,11 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 // ByMappedFrameworks orders the results by the mapped_frameworks field.
 func ByMappedFrameworks(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappedFrameworks, opts...).ToFunc()
+}
+
+// ByExampleEvidence orders the results by the example_evidence field.
+func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

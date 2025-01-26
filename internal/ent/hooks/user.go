@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	petname "github.com/dustinkirkland/golang-petname"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/entx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -75,14 +74,11 @@ func HookUser() ent.Hook {
 			// check for uploaded files (e.g. avatar image)
 			fileIDs := objects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
-				ctx, err := checkAvatarFile(ctx, m)
+				var err error
+
+				ctx, err = checkAvatarFile(ctx, m)
 				if err != nil {
 					return nil, err
-				}
-
-				ec, err := echocontext.EchoContextFromContext(ctx)
-				if err == nil {
-					ec.SetRequest(ec.Request().WithContext(ctx))
 				}
 
 				m.AddFileIDs(fileIDs...)

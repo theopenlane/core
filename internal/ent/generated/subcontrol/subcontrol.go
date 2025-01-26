@@ -65,6 +65,8 @@ const (
 	FieldImplementationVerificationDate = "implementation_verification_date"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
+	FieldExampleEvidence = "example_evidence"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -143,6 +145,7 @@ var Columns = []string{
 	FieldImplementationVerification,
 	FieldImplementationVerificationDate,
 	FieldDetails,
+	FieldExampleEvidence,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "subcontrols"
@@ -330,6 +333,11 @@ func ByImplementationVerification(opts ...sql.OrderTermOption) OrderOption {
 // ByImplementationVerificationDate orders the results by the implementation_verification_date field.
 func ByImplementationVerificationDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImplementationVerificationDate, opts...).ToFunc()
+}
+
+// ByExampleEvidence orders the results by the example_evidence field.
+func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

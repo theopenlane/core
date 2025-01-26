@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -474,6 +475,21 @@ func (pu *ProgramUpdate) AddFiles(f ...*File) *ProgramUpdate {
 	return pu.AddFileIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (pu *ProgramUpdate) AddEvidenceIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddEvidenceIDs(ids...)
+	return pu
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (pu *ProgramUpdate) AddEvidence(e ...*Evidence) *ProgramUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return pu.AddEvidenceIDs(ids...)
+}
+
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
 func (pu *ProgramUpdate) AddNarrativeIDs(ids ...string) *ProgramUpdate {
 	pu.mutation.AddNarrativeIDs(ids...)
@@ -810,6 +826,27 @@ func (pu *ProgramUpdate) RemoveFiles(f ...*File) *ProgramUpdate {
 		ids[i] = f[i].ID
 	}
 	return pu.RemoveFileIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (pu *ProgramUpdate) ClearEvidence() *ProgramUpdate {
+	pu.mutation.ClearEvidence()
+	return pu
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (pu *ProgramUpdate) RemoveEvidenceIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveEvidenceIDs(ids...)
+	return pu
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (pu *ProgramUpdate) RemoveEvidence(e ...*Evidence) *ProgramUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return pu.RemoveEvidenceIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
@@ -1678,6 +1715,54 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EvidenceTable,
+			Columns: program.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramEvidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !pu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EvidenceTable,
+			Columns: program.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EvidenceTable,
+			Columns: program.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if pu.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2388,6 +2473,21 @@ func (puo *ProgramUpdateOne) AddFiles(f ...*File) *ProgramUpdateOne {
 	return puo.AddFileIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (puo *ProgramUpdateOne) AddEvidenceIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddEvidenceIDs(ids...)
+	return puo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (puo *ProgramUpdateOne) AddEvidence(e ...*Evidence) *ProgramUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return puo.AddEvidenceIDs(ids...)
+}
+
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
 func (puo *ProgramUpdateOne) AddNarrativeIDs(ids ...string) *ProgramUpdateOne {
 	puo.mutation.AddNarrativeIDs(ids...)
@@ -2724,6 +2824,27 @@ func (puo *ProgramUpdateOne) RemoveFiles(f ...*File) *ProgramUpdateOne {
 		ids[i] = f[i].ID
 	}
 	return puo.RemoveFileIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (puo *ProgramUpdateOne) ClearEvidence() *ProgramUpdateOne {
+	puo.mutation.ClearEvidence()
+	return puo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (puo *ProgramUpdateOne) RemoveEvidenceIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveEvidenceIDs(ids...)
+	return puo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (puo *ProgramUpdateOne) RemoveEvidence(e ...*Evidence) *ProgramUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return puo.RemoveEvidenceIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
@@ -3617,6 +3738,54 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 			},
 		}
 		edge.Schema = puo.schemaConfig.ProgramFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EvidenceTable,
+			Columns: program.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramEvidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !puo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EvidenceTable,
+			Columns: program.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramEvidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EvidenceTable,
+			Columns: program.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

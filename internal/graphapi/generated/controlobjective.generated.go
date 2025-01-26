@@ -107,6 +107,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -221,6 +223,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -379,6 +383,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":

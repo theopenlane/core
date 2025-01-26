@@ -186,6 +186,20 @@ func (pc *ProcedureCreate) SetNillableProcedureType(s *string) *ProcedureCreate 
 	return pc
 }
 
+// SetReviewDue sets the "review_due" field.
+func (pc *ProcedureCreate) SetReviewDue(t time.Time) *ProcedureCreate {
+	pc.mutation.SetReviewDue(t)
+	return pc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableReviewDue(t *time.Time) *ProcedureCreate {
+	if t != nil {
+		pc.SetReviewDue(*t)
+	}
+	return pc
+}
+
 // SetVersion sets the "version" field.
 func (pc *ProcedureCreate) SetVersion(s string) *ProcedureCreate {
 	pc.mutation.SetVersion(s)
@@ -442,6 +456,10 @@ func (pc *ProcedureCreate) defaults() error {
 		v := procedure.DefaultTags
 		pc.mutation.SetTags(v)
 	}
+	if _, ok := pc.mutation.ReviewDue(); !ok {
+		v := procedure.DefaultReviewDue
+		pc.mutation.SetReviewDue(v)
+	}
 	if _, ok := pc.mutation.ID(); !ok {
 		if procedure.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized procedure.DefaultID (forgotten import generated/runtime?)")
@@ -558,6 +576,10 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ProcedureType(); ok {
 		_spec.SetField(procedure.FieldProcedureType, field.TypeString, value)
 		_node.ProcedureType = value
+	}
+	if value, ok := pc.mutation.ReviewDue(); ok {
+		_spec.SetField(procedure.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
 	}
 	if value, ok := pc.mutation.Version(); ok {
 		_spec.SetField(procedure.FieldVersion, field.TypeString, value)

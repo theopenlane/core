@@ -70,6 +70,8 @@ type Subcontrol struct {
 	ImplementationVerificationDate time.Time `json:"implementation_verification_date,omitempty"`
 	// json data details of the subcontrol
 	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
 	Edges                         SubcontrolEdges `json:"edges"`
@@ -169,7 +171,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subcontrol.FieldTags, subcontrol.FieldDetails:
 			values[i] = new([]byte)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldOwnerID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldOwnerID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification, subcontrol.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt, subcontrol.FieldImplementationDate, subcontrol.FieldImplementationVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -352,6 +354,12 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case subcontrol.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				s.ExampleEvidence = value.String
+			}
 		case subcontrol.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_subcontrols", values[i])
@@ -506,6 +514,9 @@ func (s *Subcontrol) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", s.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(s.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }

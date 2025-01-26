@@ -67,6 +67,13 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
+      ... on EvidenceSearchResult {
+        evidences {
+          displayID
+          id
+          tags
+        }
+      }
       ... on FileSearchResult {
         files {
           id

@@ -117,6 +117,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
@@ -227,6 +229,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
@@ -381,6 +385,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":

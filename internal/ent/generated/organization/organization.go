@@ -125,6 +125,8 @@ const (
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -368,6 +370,13 @@ const (
 	SubcontrolsInverseTable = "subcontrols"
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "owner_id"
+	// EvidenceTable is the table that holds the evidence relation/edge.
+	EvidenceTable = "evidences"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
+	// EvidenceColumn is the table column denoting the evidence relation/edge.
+	EvidenceColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1098,6 +1107,20 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1382,6 +1405,13 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EvidenceTable, EvidenceColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

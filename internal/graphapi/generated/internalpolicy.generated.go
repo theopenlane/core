@@ -91,6 +91,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "version":
@@ -191,6 +193,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "version":
@@ -335,6 +339,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "version":

@@ -27,6 +27,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -1197,6 +1199,11 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldDetails)
 				fieldSeen[control.FieldDetails] = struct{}{}
 			}
+		case "exampleEvidence":
+			if _, ok := fieldSeen[control.FieldExampleEvidence]; !ok {
+				selectedFields = append(selectedFields, control.FieldExampleEvidence)
+				fieldSeen[control.FieldExampleEvidence] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -1378,6 +1385,11 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldDetails)
 				fieldSeen[controlhistory.FieldDetails] = struct{}{}
+			}
+		case "exampleEvidence":
+			if _, ok := fieldSeen[controlhistory.FieldExampleEvidence]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldExampleEvidence)
+				fieldSeen[controlhistory.FieldExampleEvidence] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1712,6 +1724,11 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldDetails)
 				fieldSeen[controlobjective.FieldDetails] = struct{}{}
 			}
+		case "exampleEvidence":
+			if _, ok := fieldSeen[controlobjective.FieldExampleEvidence]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldExampleEvidence)
+				fieldSeen[controlobjective.FieldExampleEvidence] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -1888,6 +1905,11 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 			if _, ok := fieldSeen[controlobjectivehistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldDetails)
 				fieldSeen[controlobjectivehistory.FieldDetails] = struct{}{}
+			}
+		case "exampleEvidence":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldExampleEvidence]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldExampleEvidence)
+				fieldSeen[controlobjectivehistory.FieldExampleEvidence] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3299,6 +3321,408 @@ func newEventHistoryPaginateArgs(rv map[string]any) *eventhistoryPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*EventHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithEventHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (e *EvidenceQuery) CollectFields(ctx context.Context, satisfies ...string) (*EvidenceQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return e, nil
+	}
+	if err := e.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(evidence.Columns))
+		selectedFields = []string{evidence.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			e.withOwner = query
+			if _, ok := fieldSeen[evidence.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldOwnerID)
+				fieldSeen[evidence.FieldOwnerID] = struct{}{}
+			}
+
+		case "controlObjectives":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "controls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedControls(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedSubcontrols(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "tasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[evidence.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldCreatedAt)
+				fieldSeen[evidence.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[evidence.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldUpdatedAt)
+				fieldSeen[evidence.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[evidence.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldCreatedBy)
+				fieldSeen[evidence.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[evidence.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldUpdatedBy)
+				fieldSeen[evidence.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[evidence.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldDisplayID)
+				fieldSeen[evidence.FieldDisplayID] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[evidence.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldDeletedAt)
+				fieldSeen[evidence.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[evidence.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldDeletedBy)
+				fieldSeen[evidence.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[evidence.FieldTags]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldTags)
+				fieldSeen[evidence.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[evidence.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldOwnerID)
+				fieldSeen[evidence.FieldOwnerID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[evidence.FieldName]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldName)
+				fieldSeen[evidence.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[evidence.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldDescription)
+				fieldSeen[evidence.FieldDescription] = struct{}{}
+			}
+		case "collectionProcedure":
+			if _, ok := fieldSeen[evidence.FieldCollectionProcedure]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldCollectionProcedure)
+				fieldSeen[evidence.FieldCollectionProcedure] = struct{}{}
+			}
+		case "creationDate":
+			if _, ok := fieldSeen[evidence.FieldCreationDate]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldCreationDate)
+				fieldSeen[evidence.FieldCreationDate] = struct{}{}
+			}
+		case "renewalDate":
+			if _, ok := fieldSeen[evidence.FieldRenewalDate]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldRenewalDate)
+				fieldSeen[evidence.FieldRenewalDate] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[evidence.FieldSource]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldSource)
+				fieldSeen[evidence.FieldSource] = struct{}{}
+			}
+		case "isAutomated":
+			if _, ok := fieldSeen[evidence.FieldIsAutomated]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldIsAutomated)
+				fieldSeen[evidence.FieldIsAutomated] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[evidence.FieldURL]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldURL)
+				fieldSeen[evidence.FieldURL] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		e.Select(selectedFields...)
+	}
+	return nil
+}
+
+type evidencePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []EvidencePaginateOption
+}
+
+func newEvidencePaginateArgs(rv map[string]any) *evidencePaginateArgs {
+	args := &evidencePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*EvidenceWhereInput); ok {
+		args.opts = append(args.opts, WithEvidenceFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (eh *EvidenceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EvidenceHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return eh, nil
+	}
+	if err := eh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return eh, nil
+}
+
+func (eh *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(evidencehistory.Columns))
+		selectedFields = []string{evidencehistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[evidencehistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldHistoryTime)
+				fieldSeen[evidencehistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[evidencehistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldRef)
+				fieldSeen[evidencehistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[evidencehistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldOperation)
+				fieldSeen[evidencehistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[evidencehistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldCreatedAt)
+				fieldSeen[evidencehistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[evidencehistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldUpdatedAt)
+				fieldSeen[evidencehistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[evidencehistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldCreatedBy)
+				fieldSeen[evidencehistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[evidencehistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldUpdatedBy)
+				fieldSeen[evidencehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[evidencehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldDisplayID)
+				fieldSeen[evidencehistory.FieldDisplayID] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[evidencehistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldDeletedAt)
+				fieldSeen[evidencehistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[evidencehistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldDeletedBy)
+				fieldSeen[evidencehistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[evidencehistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldTags)
+				fieldSeen[evidencehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[evidencehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldOwnerID)
+				fieldSeen[evidencehistory.FieldOwnerID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[evidencehistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldName)
+				fieldSeen[evidencehistory.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[evidencehistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldDescription)
+				fieldSeen[evidencehistory.FieldDescription] = struct{}{}
+			}
+		case "collectionProcedure":
+			if _, ok := fieldSeen[evidencehistory.FieldCollectionProcedure]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldCollectionProcedure)
+				fieldSeen[evidencehistory.FieldCollectionProcedure] = struct{}{}
+			}
+		case "creationDate":
+			if _, ok := fieldSeen[evidencehistory.FieldCreationDate]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldCreationDate)
+				fieldSeen[evidencehistory.FieldCreationDate] = struct{}{}
+			}
+		case "renewalDate":
+			if _, ok := fieldSeen[evidencehistory.FieldRenewalDate]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldRenewalDate)
+				fieldSeen[evidencehistory.FieldRenewalDate] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[evidencehistory.FieldSource]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldSource)
+				fieldSeen[evidencehistory.FieldSource] = struct{}{}
+			}
+		case "isAutomated":
+			if _, ok := fieldSeen[evidencehistory.FieldIsAutomated]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldIsAutomated)
+				fieldSeen[evidencehistory.FieldIsAutomated] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[evidencehistory.FieldURL]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldURL)
+				fieldSeen[evidencehistory.FieldURL] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		eh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type evidencehistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []EvidenceHistoryPaginateOption
+}
+
+func newEvidenceHistoryPaginateArgs(rv map[string]any) *evidencehistoryPaginateArgs {
+	args := &evidencehistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*EvidenceHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithEvidenceHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -5978,6 +6402,11 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldStatus)
 				fieldSeen[internalpolicy.FieldStatus] = struct{}{}
 			}
+		case "reviewDue":
+			if _, ok := fieldSeen[internalpolicy.FieldReviewDue]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldReviewDue)
+				fieldSeen[internalpolicy.FieldReviewDue] = struct{}{}
+			}
 		case "policyType":
 			if _, ok := fieldSeen[internalpolicy.FieldPolicyType]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldPolicyType)
@@ -6139,6 +6568,11 @@ func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[internalpolicyhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldStatus)
 				fieldSeen[internalpolicyhistory.FieldStatus] = struct{}{}
+			}
+		case "reviewDue":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldReviewDue]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldReviewDue)
+				fieldSeen[internalpolicyhistory.FieldReviewDue] = struct{}{}
 			}
 		case "policyType":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldPolicyType]; !ok {
@@ -8253,6 +8687,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -9277,6 +9724,11 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldProcedureType)
 				fieldSeen[procedure.FieldProcedureType] = struct{}{}
 			}
+		case "reviewDue":
+			if _, ok := fieldSeen[procedure.FieldReviewDue]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldReviewDue)
+				fieldSeen[procedure.FieldReviewDue] = struct{}{}
+			}
 		case "version":
 			if _, ok := fieldSeen[procedure.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldVersion)
@@ -9443,6 +9895,11 @@ func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldProcedureType]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldProcedureType)
 				fieldSeen[procedurehistory.FieldProcedureType] = struct{}{}
+			}
+		case "reviewDue":
+			if _, ok := fieldSeen[procedurehistory.FieldReviewDue]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldReviewDue)
+				fieldSeen[procedurehistory.FieldReviewDue] = struct{}{}
 			}
 		case "version":
 			if _, ok := fieldSeen[procedurehistory.FieldVersion]; !ok {
@@ -9700,6 +10157,19 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				return err
 			}
 			pr.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -11347,6 +11817,11 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldDetails)
 				fieldSeen[subcontrol.FieldDetails] = struct{}{}
 			}
+		case "exampleEvidence":
+			if _, ok := fieldSeen[subcontrol.FieldExampleEvidence]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldExampleEvidence)
+				fieldSeen[subcontrol.FieldExampleEvidence] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -11548,6 +12023,11 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldDetails)
 				fieldSeen[subcontrolhistory.FieldDetails] = struct{}{}
+			}
+		case "exampleEvidence":
+			if _, ok := fieldSeen[subcontrolhistory.FieldExampleEvidence]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldExampleEvidence)
+				fieldSeen[subcontrolhistory.FieldExampleEvidence] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -12017,6 +12497,19 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			t.WithNamedProgram(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 		case "createdAt":

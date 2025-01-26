@@ -172,6 +172,20 @@ func (ipc *InternalPolicyCreate) SetNillableStatus(s *string) *InternalPolicyCre
 	return ipc
 }
 
+// SetReviewDue sets the "review_due" field.
+func (ipc *InternalPolicyCreate) SetReviewDue(t time.Time) *InternalPolicyCreate {
+	ipc.mutation.SetReviewDue(t)
+	return ipc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableReviewDue(t *time.Time) *InternalPolicyCreate {
+	if t != nil {
+		ipc.SetReviewDue(*t)
+	}
+	return ipc
+}
+
 // SetPolicyType sets the "policy_type" field.
 func (ipc *InternalPolicyCreate) SetPolicyType(s string) *InternalPolicyCreate {
 	ipc.mutation.SetPolicyType(s)
@@ -428,6 +442,10 @@ func (ipc *InternalPolicyCreate) defaults() error {
 		v := internalpolicy.DefaultTags
 		ipc.mutation.SetTags(v)
 	}
+	if _, ok := ipc.mutation.ReviewDue(); !ok {
+		v := internalpolicy.DefaultReviewDue
+		ipc.mutation.SetReviewDue(v)
+	}
 	if _, ok := ipc.mutation.ID(); !ok {
 		if internalpolicy.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultID (forgotten import generated/runtime?)")
@@ -540,6 +558,10 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	if value, ok := ipc.mutation.Status(); ok {
 		_spec.SetField(internalpolicy.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := ipc.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
 	}
 	if value, ok := ipc.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)

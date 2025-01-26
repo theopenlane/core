@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -93,6 +94,7 @@ type OrganizationQuery struct {
 	withNarratives                    *NarrativeQuery
 	withControls                      *ControlQuery
 	withSubcontrols                   *SubcontrolQuery
+	withEvidence                      *EvidenceQuery
 	withMembers                       *OrgMembershipQuery
 	loadTotal                         []func(context.Context, []*Organization) error
 	modifiers                         []func(*sql.Selector)
@@ -132,6 +134,7 @@ type OrganizationQuery struct {
 	withNamedNarratives               map[string]*NarrativeQuery
 	withNamedControls                 map[string]*ControlQuery
 	withNamedSubcontrols              map[string]*SubcontrolQuery
+	withNamedEvidence                 map[string]*EvidenceQuery
 	withNamedMembers                  map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1144,6 +1147,31 @@ func (oq *OrganizationQuery) QuerySubcontrols() *SubcontrolQuery {
 	return query
 }
 
+// QueryEvidence chains the current query on the "evidence" edge.
+func (oq *OrganizationQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EvidenceTable, organization.EvidenceColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1400,6 +1428,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withNarratives:               oq.withNarratives.Clone(),
 		withControls:                 oq.withControls.Clone(),
 		withSubcontrols:              oq.withSubcontrols.Clone(),
+		withEvidence:                 oq.withEvidence.Clone(),
 		withMembers:                  oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -1837,6 +1866,17 @@ func (oq *OrganizationQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *Or
 	return oq
 }
 
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithEvidence(opts ...func(*EvidenceQuery)) *OrganizationQuery {
+	query := (&EvidenceClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withEvidence = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1932,7 +1972,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [40]bool{
+		loadedTypes = [41]bool{
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -1972,6 +2012,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withNarratives != nil,
 			oq.withControls != nil,
 			oq.withSubcontrols != nil,
+			oq.withEvidence != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -2280,6 +2321,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withEvidence; query != nil {
+		if err := oq.loadEvidence(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Evidence = []*Evidence{} },
+			func(n *Organization, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -2536,6 +2584,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadSubcontrols(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedSubcontrols(name) },
 			func(n *Organization, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedEvidence {
+		if err := oq.loadEvidence(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedEvidence(name) },
+			func(n *Organization, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4178,6 +4233,36 @@ func (oq *OrganizationQuery) loadSubcontrols(ctx context.Context, query *Subcont
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Evidence)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(evidence.FieldOwnerID)
+	}
+	query.Where(predicate.Evidence(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.EvidenceColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -4814,6 +4899,20 @@ func (oq *OrganizationQuery) WithNamedSubcontrols(name string, opts ...func(*Sub
 		oq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
 	oq.withNamedSubcontrols[name] = query
+	return oq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *OrganizationQuery {
+	query := (&EvidenceClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedEvidence == nil {
+		oq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	oq.withNamedEvidence[name] = query
 	return oq
 }
 

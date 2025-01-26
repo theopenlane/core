@@ -63,6 +63,9 @@ type MutationResolver interface {
 	CreateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkCreatePayload, error)
 	UpdateEvent(ctx context.Context, id string, input generated.UpdateEventInput) (*model.EventUpdatePayload, error)
 	DeleteEvent(ctx context.Context, id string) (*model.EventDeletePayload, error)
+	CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceCreatePayload, error)
+	UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error)
+	DeleteEvidence(ctx context.Context, id string) (*model.EvidenceDeletePayload, error)
 	DeleteFile(ctx context.Context, id string) (*model.FileDeletePayload, error)
 	CreateGroup(ctx context.Context, input generated.CreateGroupInput) (*model.GroupCreatePayload, error)
 	CreateBulkGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error)
@@ -2203,6 +2206,57 @@ func (ec *executionContext) field_Mutation_createEvent_argsInput(
 	return zeroVal, nil
 }
 
+func (ec *executionContext) field_Mutation_createEvidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_createEvidence_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	arg1, err := ec.field_Mutation_createEvidence_argsEvidenceFiles(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["evidenceFiles"] = arg1
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_createEvidence_argsInput(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (generated.CreateEvidenceInput, error) {
+	if _, ok := rawArgs["input"]; !ok {
+		var zeroVal generated.CreateEvidenceInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNCreateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEvidenceInput(ctx, tmp)
+	}
+
+	var zeroVal generated.CreateEvidenceInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createEvidence_argsEvidenceFiles(
+	ctx context.Context,
+	rawArgs map[string]any,
+) ([]*graphql.Upload, error) {
+	if _, ok := rawArgs["evidenceFiles"]; !ok {
+		var zeroVal []*graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceFiles"))
+	if tmp, ok := rawArgs["evidenceFiles"]; ok {
+		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
+	}
+
+	var zeroVal []*graphql.Upload
+	return zeroVal, nil
+}
+
 func (ec *executionContext) field_Mutation_createFullProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -3212,6 +3266,34 @@ func (ec *executionContext) field_Mutation_deleteEvent_args(ctx context.Context,
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_deleteEvent_argsID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (string, error) {
+	if _, ok := rawArgs["id"]; !ok {
+		var zeroVal string
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["id"]; ok {
+		return ec.unmarshalNID2string(ctx, tmp)
+	}
+
+	var zeroVal string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteEvidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_deleteEvidence_argsID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_deleteEvidence_argsID(
 	ctx context.Context,
 	rawArgs map[string]any,
 ) (string, error) {
@@ -4352,6 +4434,80 @@ func (ec *executionContext) field_Mutation_updateEvent_argsInput(
 	}
 
 	var zeroVal generated.UpdateEventInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateEvidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_updateEvidence_argsID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := ec.field_Mutation_updateEvidence_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	arg2, err := ec.field_Mutation_updateEvidence_argsEvidenceFiles(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["evidenceFiles"] = arg2
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_updateEvidence_argsID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (string, error) {
+	if _, ok := rawArgs["id"]; !ok {
+		var zeroVal string
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["id"]; ok {
+		return ec.unmarshalNID2string(ctx, tmp)
+	}
+
+	var zeroVal string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateEvidence_argsInput(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (generated.UpdateEvidenceInput, error) {
+	if _, ok := rawArgs["input"]; !ok {
+		var zeroVal generated.UpdateEvidenceInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNUpdateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEvidenceInput(ctx, tmp)
+	}
+
+	var zeroVal generated.UpdateEvidenceInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateEvidence_argsEvidenceFiles(
+	ctx context.Context,
+	rawArgs map[string]any,
+) ([]*graphql.Upload, error) {
+	if _, ok := rawArgs["evidenceFiles"]; !ok {
+		var zeroVal []*graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceFiles"))
+	if tmp, ok := rawArgs["evidenceFiles"]; ok {
+		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
+	}
+
+	var zeroVal []*graphql.Upload
 	return zeroVal, nil
 }
 
@@ -8558,6 +8714,183 @@ func (ec *executionContext) fieldContext_Mutation_deleteEvent(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteEvent_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createEvidence(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createEvidence(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateEvidence(rctx, fc.Args["input"].(generated.CreateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.EvidenceCreatePayload)
+	fc.Result = res
+	return ec.marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createEvidence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "evidence":
+				return ec.fieldContext_EvidenceCreatePayload_evidence(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EvidenceCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createEvidence_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateEvidence(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateEvidence(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateEvidence(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.EvidenceUpdatePayload)
+	fc.Result = res
+	return ec.marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateEvidence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "evidence":
+				return ec.fieldContext_EvidenceUpdatePayload_evidence(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EvidenceUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateEvidence_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteEvidence(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteEvidence(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteEvidence(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.EvidenceDeletePayload)
+	fc.Result = res
+	return ec.marshalNEvidenceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteEvidence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedID":
+				return ec.fieldContext_EvidenceDeletePayload_deletedID(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EvidenceDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteEvidence_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -16031,6 +16364,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteEvent":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteEvent(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createEvidence":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createEvidence(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateEvidence":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateEvidence(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteEvidence":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteEvidence(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

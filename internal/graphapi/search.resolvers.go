@@ -27,6 +27,7 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 		entityResults              []*generated.Entity
 		entitytypeResults          []*generated.EntityType
 		eventResults               []*generated.Event
+		evidenceResults            []*generated.Evidence
 		fileResults                []*generated.File
 		groupResults               []*generated.Group
 		groupsettingResults        []*generated.GroupSetting
@@ -109,6 +110,13 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 		func() {
 			var err error
 			eventResults, err = searchEvents(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			evidenceResults, err = searchEvidences(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -327,6 +335,13 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 		})
 
 		resultCount += len(eventResults)
+	}
+	if len(evidenceResults) > 0 {
+		nodes = append(nodes, model.EvidenceSearchResult{
+			Evidences: evidenceResults,
+		})
+
+		resultCount += len(evidenceResults)
 	}
 	if len(fileResults) > 0 {
 		nodes = append(nodes, model.FileSearchResult{
@@ -580,6 +595,18 @@ func (r *queryResolver) EventSearch(ctx context.Context, query string) (*model.E
 	// return the results
 	return &model.EventSearchResult{
 		Events: eventResults,
+	}, nil
+}
+func (r *queryResolver) EvidenceSearch(ctx context.Context, query string) (*model.EvidenceSearchResult, error) {
+	evidenceResults, err := searchEvidences(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &model.EvidenceSearchResult{
+		Evidences: evidenceResults,
 	}, nil
 }
 func (r *queryResolver) FileSearch(ctx context.Context, query string) (*model.FileSearchResult, error) {

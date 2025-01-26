@@ -51,6 +51,8 @@ type ProcedureHistory struct {
 	Status string `json:"status,omitempty"`
 	// type of the procedure
 	ProcedureType string `json:"procedure_type,omitempty"`
+	// the date the procedure should be reviewed, defaults to a year from creation date
+	ReviewDue time.Time `json:"review_due,omitempty"`
 	// version of the procedure
 	Version string `json:"version,omitempty"`
 	// purpose and scope
@@ -75,7 +77,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldDescription, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldVersion, procedurehistory.FieldPurposeAndScope, procedurehistory.FieldBackground, procedurehistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
-		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt:
+		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -196,6 +198,12 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.ProcedureType = value.String
 			}
+		case procedurehistory.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				ph.ReviewDue = value.Time
+			}
 		case procedurehistory.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
@@ -311,6 +319,9 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("procedure_type=")
 	builder.WriteString(ph.ProcedureType)
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(ph.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(ph.Version)

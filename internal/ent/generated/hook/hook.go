@@ -225,6 +225,30 @@ func (f EventHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gen
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EventHistoryMutation", m)
 }
 
+// The EvidenceFunc type is an adapter to allow the use of ordinary
+// function as Evidence mutator.
+type EvidenceFunc func(context.Context, *generated.EvidenceMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EvidenceFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.EvidenceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EvidenceMutation", m)
+}
+
+// The EvidenceHistoryFunc type is an adapter to allow the use of ordinary
+// function as EvidenceHistory mutator.
+type EvidenceHistoryFunc func(context.Context, *generated.EvidenceHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EvidenceHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.EvidenceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EvidenceHistoryMutation", m)
+}
+
 // The FileFunc type is an adapter to allow the use of ordinary
 // function as File mutator.
 type FileFunc func(context.Context, *generated.FileMutation) (generated.Value, error)
