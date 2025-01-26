@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
@@ -84,7 +85,11 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		ID:      meowuser.ID,
 		Email:   meowuser.Email,
 		Message: "Welcome to Openlane!",
-		Token:   meowtoken.Token,
+	}
+
+	// only return the token in development
+	if strings.Contains(ctx.Request().Host, "localhost") {
+		out.Token = meowtoken.Token
 	}
 
 	return h.Created(ctx, out)

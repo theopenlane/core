@@ -69,7 +69,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			email:           "elf@theopenlane.io",
 			tokenSet:        true,
 			ttl:             expiredTTL,
-			expectedMessage: "Token expired, a new token has been issued. Please try again",
+			expectedMessage: "Token expired, a new token has been issued. Please check your email and try again.",
 			expectedStatus:  http.StatusCreated,
 		},
 	}
