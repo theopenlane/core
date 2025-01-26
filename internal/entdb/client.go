@@ -179,6 +179,7 @@ func (c *client) runGooseMigrations() error {
 
 	if err := goose.Up(drv, migrationsDir); err != nil {
 		log.Error().Err(err).Msg("failed running goose migrations")
+
 		return err
 	}
 

@@ -13969,6 +13969,24 @@ func (t *GetAllEvidences_Evidences_Edges_Node_Programs) GetName() string {
 	return t.Name
 }
 
+type GetAllEvidences_Evidences_Edges_Node_Tasks struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetAllEvidences_Evidences_Edges_Node_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Tasks{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_Tasks) GetID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Tasks{}
+	}
+	return t.ID
+}
+
 type GetAllEvidences_Evidences_Edges_Node struct {
 	CollectionProcedure *string                                          "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	CreatedAt           *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -13985,6 +14003,7 @@ type GetAllEvidences_Evidences_Edges_Node struct {
 	RenewalDate         *time.Time                                       "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                          "json:\"source,omitempty\" graphql:\"source\""
 	Tags                []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*GetAllEvidences_Evidences_Edges_Node_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
 	UpdatedAt           *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy           *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	URL                 *string                                          "json:\"url,omitempty\" graphql:\"url\""
@@ -14080,6 +14099,12 @@ func (t *GetAllEvidences_Evidences_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetAllEvidences_Evidences_Edges_Node) GetTasks() []*GetAllEvidences_Evidences_Edges_Node_Tasks {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node{}
+	}
+	return t.Tasks
+}
 func (t *GetAllEvidences_Evidences_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllEvidences_Evidences_Edges_Node{}
@@ -14164,6 +14189,24 @@ func (t *GetEvidenceByID_Evidence_Programs) GetName() string {
 	return t.Name
 }
 
+type GetEvidenceByID_Evidence_Tasks struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetEvidenceByID_Evidence_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Tasks{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidenceByID_Evidence_Tasks) GetID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Tasks{}
+	}
+	return t.ID
+}
+
 type GetEvidenceByID_Evidence struct {
 	CollectionProcedure *string                              "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	CreatedAt           *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -14180,6 +14223,7 @@ type GetEvidenceByID_Evidence struct {
 	RenewalDate         *time.Time                           "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                              "json:\"source,omitempty\" graphql:\"source\""
 	Tags                []string                             "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*GetEvidenceByID_Evidence_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
 	UpdatedAt           *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy           *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	URL                 *string                              "json:\"url,omitempty\" graphql:\"url\""
@@ -14275,6 +14319,12 @@ func (t *GetEvidenceByID_Evidence) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetEvidenceByID_Evidence) GetTasks() []*GetEvidenceByID_Evidence_Tasks {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return t.Tasks
+}
 func (t *GetEvidenceByID_Evidence) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetEvidenceByID_Evidence{}
@@ -14337,6 +14387,24 @@ func (t *GetEvidences_Evidences_Edges_Node_Programs) GetName() string {
 	return t.Name
 }
 
+type GetEvidences_Evidences_Edges_Node_Tasks struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetEvidences_Evidences_Edges_Node_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Tasks{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidences_Evidences_Edges_Node_Tasks) GetID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Tasks{}
+	}
+	return t.ID
+}
+
 type GetEvidences_Evidences_Edges_Node struct {
 	CollectionProcedure *string                                       "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	CreatedAt           *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -14353,6 +14421,7 @@ type GetEvidences_Evidences_Edges_Node struct {
 	RenewalDate         *time.Time                                    "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                       "json:\"source,omitempty\" graphql:\"source\""
 	Tags                []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*GetEvidences_Evidences_Edges_Node_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
 	UpdatedAt           *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy           *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	URL                 *string                                       "json:\"url,omitempty\" graphql:\"url\""
@@ -14448,6 +14517,12 @@ func (t *GetEvidences_Evidences_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetEvidences_Evidences_Edges_Node) GetTasks() []*GetEvidences_Evidences_Edges_Node_Tasks {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node{}
+	}
+	return t.Tasks
+}
 func (t *GetEvidences_Evidences_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetEvidences_Evidences_Edges_Node{}
@@ -14532,6 +14607,24 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence_Programs) GetName() string {
 	return t.Name
 }
 
+type UpdateEvidence_UpdateEvidence_Evidence_Tasks struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Tasks{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Tasks) GetID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Tasks{}
+	}
+	return t.ID
+}
+
 type UpdateEvidence_UpdateEvidence_Evidence struct {
 	CollectionProcedure *string                                            "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	CreatedAt           *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -14548,6 +14641,7 @@ type UpdateEvidence_UpdateEvidence_Evidence struct {
 	RenewalDate         *time.Time                                         "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                            "json:\"source,omitempty\" graphql:\"source\""
 	Tags                []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*UpdateEvidence_UpdateEvidence_Evidence_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
 	UpdatedAt           *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy           *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	URL                 *string                                            "json:\"url,omitempty\" graphql:\"url\""
@@ -14642,6 +14736,12 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence) GetTags() []string {
 		t = &UpdateEvidence_UpdateEvidence_Evidence{}
 	}
 	return t.Tags
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence) GetTasks() []*UpdateEvidence_UpdateEvidence_Evidence_Tasks {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence{}
+	}
+	return t.Tasks
 }
 func (t *UpdateEvidence_UpdateEvidence_Evidence) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -54597,6 +54697,10 @@ const GetAllEvidencesDocument = `query GetAllEvidences {
 					displayID
 					name
 				}
+				tasks {
+					id
+					displayID
+				}
 			}
 		}
 	}
@@ -54644,6 +54748,10 @@ const GetEvidenceByIDDocument = `query GetEvidenceByID ($evidenceId: ID!) {
 			id
 			displayID
 			name
+		}
+		tasks {
+			id
+			displayID
 		}
 	}
 }
@@ -54695,6 +54803,10 @@ const GetEvidencesDocument = `query GetEvidences ($where: EvidenceWhereInput) {
 					displayID
 					name
 				}
+				tasks {
+					id
+					displayID
+				}
 			}
 		}
 	}
@@ -54745,6 +54857,10 @@ const UpdateEvidenceDocument = `mutation UpdateEvidence ($updateEvidenceId: ID!,
 				id
 				displayID
 				name
+			}
+			tasks {
+				id
+				displayID
 			}
 		}
 	}

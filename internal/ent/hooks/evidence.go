@@ -46,8 +46,9 @@ func checkEvidenceFiles[T utils.GenericMutation](ctx context.Context, m T) (cont
 		return ctx, nil
 	}
 
-	// this should always be true, but check just in case
+	// set the parent ID and type for the file(s)
 	for i, f := range file {
+		// this should always be true, but check just in case
 		if f.FieldName == key {
 			file[i].Parent.ID, _ = m.ID()
 			file[i].Parent.Type = m.Type()

@@ -64,7 +64,7 @@ func (Evidence) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"control_id", "subcontrol_id", "control_objective_id", "program_id"},
+			FieldNames:            []string{"control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id"}, // used to create parent tuples for the evidence
 			WithOrganizationOwner: true,
 			Ref:                   "evidence",
 		})}
