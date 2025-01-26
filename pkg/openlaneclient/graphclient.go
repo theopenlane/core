@@ -13767,26 +13767,125 @@ func (t *CreateEvidence_CreateEvidence_Evidence_Tasks) GetID() string {
 	return t.ID
 }
 
+type CreateEvidence_CreateEvidence_Evidence_Controls struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Controls{}
+	}
+	return t.DisplayID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Controls) GetFamily() *string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Controls{}
+	}
+	return t.Family
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Controls) GetID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Controls{}
+	}
+	return t.ID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Controls) GetName() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Controls{}
+	}
+	return t.Name
+}
+
+type CreateEvidence_CreateEvidence_Evidence_Subcontrols struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Subcontrols{}
+	}
+	return t.DisplayID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Subcontrols{}
+	}
+	return t.Family
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Subcontrols) GetID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Subcontrols) GetName() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Subcontrols{}
+	}
+	return t.Name
+}
+
+type CreateEvidence_CreateEvidence_Evidence_ControlObjectives struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.DisplayID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_ControlObjectives) GetFamily() *string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.Family
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_ControlObjectives) GetID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.ID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_ControlObjectives) GetName() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.Name
+}
+
 type CreateEvidence_CreateEvidence_Evidence struct {
-	CollectionProcedure *string                                            "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
-	CreatedAt           *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CreationDate        time.Time                                          "json:\"creationDate\" graphql:\"creationDate\""
-	Description         *string                                            "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID           string                                             "json:\"displayID\" graphql:\"displayID\""
-	Files               []*CreateEvidence_CreateEvidence_Evidence_Files    "json:\"files,omitempty\" graphql:\"files\""
-	ID                  string                                             "json:\"id\" graphql:\"id\""
-	IsAutomated         *bool                                              "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
-	Name                string                                             "json:\"name\" graphql:\"name\""
-	OwnerID             string                                             "json:\"ownerID\" graphql:\"ownerID\""
-	Programs            []*CreateEvidence_CreateEvidence_Evidence_Programs "json:\"programs,omitempty\" graphql:\"programs\""
-	RenewalDate         *time.Time                                         "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
-	Source              *string                                            "json:\"source,omitempty\" graphql:\"source\""
-	Tags                []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
-	Tasks               []*CreateEvidence_CreateEvidence_Evidence_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
-	UpdatedAt           *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URL                 *string                                            "json:\"url,omitempty\" graphql:\"url\""
+	CollectionProcedure *string                                                     "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
+	ControlObjectives   []*CreateEvidence_CreateEvidence_Evidence_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls            []*CreateEvidence_CreateEvidence_Evidence_Controls          "json:\"controls,omitempty\" graphql:\"controls\""
+	CreatedAt           *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreationDate        time.Time                                                   "json:\"creationDate\" graphql:\"creationDate\""
+	Description         *string                                                     "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID           string                                                      "json:\"displayID\" graphql:\"displayID\""
+	Files               []*CreateEvidence_CreateEvidence_Evidence_Files             "json:\"files,omitempty\" graphql:\"files\""
+	ID                  string                                                      "json:\"id\" graphql:\"id\""
+	IsAutomated         *bool                                                       "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
+	Name                string                                                      "json:\"name\" graphql:\"name\""
+	OwnerID             string                                                      "json:\"ownerID\" graphql:\"ownerID\""
+	Programs            []*CreateEvidence_CreateEvidence_Evidence_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
+	RenewalDate         *time.Time                                                  "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
+	Source              *string                                                     "json:\"source,omitempty\" graphql:\"source\""
+	Subcontrols         []*CreateEvidence_CreateEvidence_Evidence_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Tags                []string                                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*CreateEvidence_CreateEvidence_Evidence_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
+	UpdatedAt           *time.Time                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URL                 *string                                                     "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *CreateEvidence_CreateEvidence_Evidence) GetCollectionProcedure() *string {
@@ -13794,6 +13893,18 @@ func (t *CreateEvidence_CreateEvidence_Evidence) GetCollectionProcedure() *strin
 		t = &CreateEvidence_CreateEvidence_Evidence{}
 	}
 	return t.CollectionProcedure
+}
+func (t *CreateEvidence_CreateEvidence_Evidence) GetControlObjectives() []*CreateEvidence_CreateEvidence_Evidence_ControlObjectives {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence{}
+	}
+	return t.ControlObjectives
+}
+func (t *CreateEvidence_CreateEvidence_Evidence) GetControls() []*CreateEvidence_CreateEvidence_Evidence_Controls {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence{}
+	}
+	return t.Controls
 }
 func (t *CreateEvidence_CreateEvidence_Evidence) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -13872,6 +13983,12 @@ func (t *CreateEvidence_CreateEvidence_Evidence) GetSource() *string {
 		t = &CreateEvidence_CreateEvidence_Evidence{}
 	}
 	return t.Source
+}
+func (t *CreateEvidence_CreateEvidence_Evidence) GetSubcontrols() []*CreateEvidence_CreateEvidence_Evidence_Subcontrols {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence{}
+	}
+	return t.Subcontrols
 }
 func (t *CreateEvidence_CreateEvidence_Evidence) GetTags() []string {
 	if t == nil {
@@ -13987,26 +14104,125 @@ func (t *GetAllEvidences_Evidences_Edges_Node_Tasks) GetID() string {
 	return t.ID
 }
 
+type GetAllEvidences_Evidences_Edges_Node_Controls struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllEvidences_Evidences_Edges_Node_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_Controls) GetFamily() *string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.Family
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_Controls) GetID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.ID
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_Controls) GetName() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.Name
+}
+
+type GetAllEvidences_Evidences_Edges_Node_Subcontrols struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllEvidences_Evidences_Edges_Node_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.Family
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_Subcontrols) GetID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_Subcontrols) GetName() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.Name
+}
+
+type GetAllEvidences_Evidences_Edges_Node_ControlObjectives struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllEvidences_Evidences_Edges_Node_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_ControlObjectives) GetFamily() *string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.Family
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_ControlObjectives) GetID() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.ID
+}
+func (t *GetAllEvidences_Evidences_Edges_Node_ControlObjectives) GetName() string {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.Name
+}
+
 type GetAllEvidences_Evidences_Edges_Node struct {
-	CollectionProcedure *string                                          "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
-	CreatedAt           *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CreationDate        time.Time                                        "json:\"creationDate\" graphql:\"creationDate\""
-	Description         *string                                          "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID           string                                           "json:\"displayID\" graphql:\"displayID\""
-	Files               []*GetAllEvidences_Evidences_Edges_Node_Files    "json:\"files,omitempty\" graphql:\"files\""
-	ID                  string                                           "json:\"id\" graphql:\"id\""
-	IsAutomated         *bool                                            "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
-	Name                string                                           "json:\"name\" graphql:\"name\""
-	OwnerID             string                                           "json:\"ownerID\" graphql:\"ownerID\""
-	Programs            []*GetAllEvidences_Evidences_Edges_Node_Programs "json:\"programs,omitempty\" graphql:\"programs\""
-	RenewalDate         *time.Time                                       "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
-	Source              *string                                          "json:\"source,omitempty\" graphql:\"source\""
-	Tags                []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
-	Tasks               []*GetAllEvidences_Evidences_Edges_Node_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
-	UpdatedAt           *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URL                 *string                                          "json:\"url,omitempty\" graphql:\"url\""
+	CollectionProcedure *string                                                   "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
+	ControlObjectives   []*GetAllEvidences_Evidences_Edges_Node_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls            []*GetAllEvidences_Evidences_Edges_Node_Controls          "json:\"controls,omitempty\" graphql:\"controls\""
+	CreatedAt           *time.Time                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreationDate        time.Time                                                 "json:\"creationDate\" graphql:\"creationDate\""
+	Description         *string                                                   "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID           string                                                    "json:\"displayID\" graphql:\"displayID\""
+	Files               []*GetAllEvidences_Evidences_Edges_Node_Files             "json:\"files,omitempty\" graphql:\"files\""
+	ID                  string                                                    "json:\"id\" graphql:\"id\""
+	IsAutomated         *bool                                                     "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
+	Name                string                                                    "json:\"name\" graphql:\"name\""
+	OwnerID             string                                                    "json:\"ownerID\" graphql:\"ownerID\""
+	Programs            []*GetAllEvidences_Evidences_Edges_Node_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
+	RenewalDate         *time.Time                                                "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
+	Source              *string                                                   "json:\"source,omitempty\" graphql:\"source\""
+	Subcontrols         []*GetAllEvidences_Evidences_Edges_Node_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Tags                []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*GetAllEvidences_Evidences_Edges_Node_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
+	UpdatedAt           *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URL                 *string                                                   "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *GetAllEvidences_Evidences_Edges_Node) GetCollectionProcedure() *string {
@@ -14014,6 +14230,18 @@ func (t *GetAllEvidences_Evidences_Edges_Node) GetCollectionProcedure() *string 
 		t = &GetAllEvidences_Evidences_Edges_Node{}
 	}
 	return t.CollectionProcedure
+}
+func (t *GetAllEvidences_Evidences_Edges_Node) GetControlObjectives() []*GetAllEvidences_Evidences_Edges_Node_ControlObjectives {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node{}
+	}
+	return t.ControlObjectives
+}
+func (t *GetAllEvidences_Evidences_Edges_Node) GetControls() []*GetAllEvidences_Evidences_Edges_Node_Controls {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node{}
+	}
+	return t.Controls
 }
 func (t *GetAllEvidences_Evidences_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -14092,6 +14320,12 @@ func (t *GetAllEvidences_Evidences_Edges_Node) GetSource() *string {
 		t = &GetAllEvidences_Evidences_Edges_Node{}
 	}
 	return t.Source
+}
+func (t *GetAllEvidences_Evidences_Edges_Node) GetSubcontrols() []*GetAllEvidences_Evidences_Edges_Node_Subcontrols {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node{}
+	}
+	return t.Subcontrols
 }
 func (t *GetAllEvidences_Evidences_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -14207,26 +14441,125 @@ func (t *GetEvidenceByID_Evidence_Tasks) GetID() string {
 	return t.ID
 }
 
+type GetEvidenceByID_Evidence_Controls struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidenceByID_Evidence_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Controls{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidenceByID_Evidence_Controls) GetFamily() *string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Controls{}
+	}
+	return t.Family
+}
+func (t *GetEvidenceByID_Evidence_Controls) GetID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Controls{}
+	}
+	return t.ID
+}
+func (t *GetEvidenceByID_Evidence_Controls) GetName() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Controls{}
+	}
+	return t.Name
+}
+
+type GetEvidenceByID_Evidence_Subcontrols struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidenceByID_Evidence_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Subcontrols{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidenceByID_Evidence_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Subcontrols{}
+	}
+	return t.Family
+}
+func (t *GetEvidenceByID_Evidence_Subcontrols) GetID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *GetEvidenceByID_Evidence_Subcontrols) GetName() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Subcontrols{}
+	}
+	return t.Name
+}
+
+type GetEvidenceByID_Evidence_ControlObjectives struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidenceByID_Evidence_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_ControlObjectives{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidenceByID_Evidence_ControlObjectives) GetFamily() *string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_ControlObjectives{}
+	}
+	return t.Family
+}
+func (t *GetEvidenceByID_Evidence_ControlObjectives) GetID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_ControlObjectives{}
+	}
+	return t.ID
+}
+func (t *GetEvidenceByID_Evidence_ControlObjectives) GetName() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_ControlObjectives{}
+	}
+	return t.Name
+}
+
 type GetEvidenceByID_Evidence struct {
-	CollectionProcedure *string                              "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
-	CreatedAt           *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CreationDate        time.Time                            "json:\"creationDate\" graphql:\"creationDate\""
-	Description         *string                              "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID           string                               "json:\"displayID\" graphql:\"displayID\""
-	Files               []*GetEvidenceByID_Evidence_Files    "json:\"files,omitempty\" graphql:\"files\""
-	ID                  string                               "json:\"id\" graphql:\"id\""
-	IsAutomated         *bool                                "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
-	Name                string                               "json:\"name\" graphql:\"name\""
-	OwnerID             string                               "json:\"ownerID\" graphql:\"ownerID\""
-	Programs            []*GetEvidenceByID_Evidence_Programs "json:\"programs,omitempty\" graphql:\"programs\""
-	RenewalDate         *time.Time                           "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
-	Source              *string                              "json:\"source,omitempty\" graphql:\"source\""
-	Tags                []string                             "json:\"tags,omitempty\" graphql:\"tags\""
-	Tasks               []*GetEvidenceByID_Evidence_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
-	UpdatedAt           *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URL                 *string                              "json:\"url,omitempty\" graphql:\"url\""
+	CollectionProcedure *string                                       "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
+	ControlObjectives   []*GetEvidenceByID_Evidence_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls            []*GetEvidenceByID_Evidence_Controls          "json:\"controls,omitempty\" graphql:\"controls\""
+	CreatedAt           *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreationDate        time.Time                                     "json:\"creationDate\" graphql:\"creationDate\""
+	Description         *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID           string                                        "json:\"displayID\" graphql:\"displayID\""
+	Files               []*GetEvidenceByID_Evidence_Files             "json:\"files,omitempty\" graphql:\"files\""
+	ID                  string                                        "json:\"id\" graphql:\"id\""
+	IsAutomated         *bool                                         "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
+	Name                string                                        "json:\"name\" graphql:\"name\""
+	OwnerID             string                                        "json:\"ownerID\" graphql:\"ownerID\""
+	Programs            []*GetEvidenceByID_Evidence_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
+	RenewalDate         *time.Time                                    "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
+	Source              *string                                       "json:\"source,omitempty\" graphql:\"source\""
+	Subcontrols         []*GetEvidenceByID_Evidence_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Tags                []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*GetEvidenceByID_Evidence_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
+	UpdatedAt           *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URL                 *string                                       "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *GetEvidenceByID_Evidence) GetCollectionProcedure() *string {
@@ -14234,6 +14567,18 @@ func (t *GetEvidenceByID_Evidence) GetCollectionProcedure() *string {
 		t = &GetEvidenceByID_Evidence{}
 	}
 	return t.CollectionProcedure
+}
+func (t *GetEvidenceByID_Evidence) GetControlObjectives() []*GetEvidenceByID_Evidence_ControlObjectives {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return t.ControlObjectives
+}
+func (t *GetEvidenceByID_Evidence) GetControls() []*GetEvidenceByID_Evidence_Controls {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return t.Controls
 }
 func (t *GetEvidenceByID_Evidence) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -14312,6 +14657,12 @@ func (t *GetEvidenceByID_Evidence) GetSource() *string {
 		t = &GetEvidenceByID_Evidence{}
 	}
 	return t.Source
+}
+func (t *GetEvidenceByID_Evidence) GetSubcontrols() []*GetEvidenceByID_Evidence_Subcontrols {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return t.Subcontrols
 }
 func (t *GetEvidenceByID_Evidence) GetTags() []string {
 	if t == nil {
@@ -14405,26 +14756,125 @@ func (t *GetEvidences_Evidences_Edges_Node_Tasks) GetID() string {
 	return t.ID
 }
 
+type GetEvidences_Evidences_Edges_Node_Controls struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidences_Evidences_Edges_Node_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidences_Evidences_Edges_Node_Controls) GetFamily() *string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.Family
+}
+func (t *GetEvidences_Evidences_Edges_Node_Controls) GetID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.ID
+}
+func (t *GetEvidences_Evidences_Edges_Node_Controls) GetName() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Controls{}
+	}
+	return t.Name
+}
+
+type GetEvidences_Evidences_Edges_Node_Subcontrols struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidences_Evidences_Edges_Node_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidences_Evidences_Edges_Node_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.Family
+}
+func (t *GetEvidences_Evidences_Edges_Node_Subcontrols) GetID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *GetEvidences_Evidences_Edges_Node_Subcontrols) GetName() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_Subcontrols{}
+	}
+	return t.Name
+}
+
+type GetEvidences_Evidences_Edges_Node_ControlObjectives struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidences_Evidences_Edges_Node_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidences_Evidences_Edges_Node_ControlObjectives) GetFamily() *string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.Family
+}
+func (t *GetEvidences_Evidences_Edges_Node_ControlObjectives) GetID() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.ID
+}
+func (t *GetEvidences_Evidences_Edges_Node_ControlObjectives) GetName() string {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node_ControlObjectives{}
+	}
+	return t.Name
+}
+
 type GetEvidences_Evidences_Edges_Node struct {
-	CollectionProcedure *string                                       "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
-	CreatedAt           *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CreationDate        time.Time                                     "json:\"creationDate\" graphql:\"creationDate\""
-	Description         *string                                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID           string                                        "json:\"displayID\" graphql:\"displayID\""
-	Files               []*GetEvidences_Evidences_Edges_Node_Files    "json:\"files,omitempty\" graphql:\"files\""
-	ID                  string                                        "json:\"id\" graphql:\"id\""
-	IsAutomated         *bool                                         "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
-	Name                string                                        "json:\"name\" graphql:\"name\""
-	OwnerID             string                                        "json:\"ownerID\" graphql:\"ownerID\""
-	Programs            []*GetEvidences_Evidences_Edges_Node_Programs "json:\"programs,omitempty\" graphql:\"programs\""
-	RenewalDate         *time.Time                                    "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
-	Source              *string                                       "json:\"source,omitempty\" graphql:\"source\""
-	Tags                []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
-	Tasks               []*GetEvidences_Evidences_Edges_Node_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
-	UpdatedAt           *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URL                 *string                                       "json:\"url,omitempty\" graphql:\"url\""
+	CollectionProcedure *string                                                "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
+	ControlObjectives   []*GetEvidences_Evidences_Edges_Node_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls            []*GetEvidences_Evidences_Edges_Node_Controls          "json:\"controls,omitempty\" graphql:\"controls\""
+	CreatedAt           *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreationDate        time.Time                                              "json:\"creationDate\" graphql:\"creationDate\""
+	Description         *string                                                "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID           string                                                 "json:\"displayID\" graphql:\"displayID\""
+	Files               []*GetEvidences_Evidences_Edges_Node_Files             "json:\"files,omitempty\" graphql:\"files\""
+	ID                  string                                                 "json:\"id\" graphql:\"id\""
+	IsAutomated         *bool                                                  "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
+	Name                string                                                 "json:\"name\" graphql:\"name\""
+	OwnerID             string                                                 "json:\"ownerID\" graphql:\"ownerID\""
+	Programs            []*GetEvidences_Evidences_Edges_Node_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
+	RenewalDate         *time.Time                                             "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
+	Source              *string                                                "json:\"source,omitempty\" graphql:\"source\""
+	Subcontrols         []*GetEvidences_Evidences_Edges_Node_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Tags                []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*GetEvidences_Evidences_Edges_Node_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
+	UpdatedAt           *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URL                 *string                                                "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *GetEvidences_Evidences_Edges_Node) GetCollectionProcedure() *string {
@@ -14432,6 +14882,18 @@ func (t *GetEvidences_Evidences_Edges_Node) GetCollectionProcedure() *string {
 		t = &GetEvidences_Evidences_Edges_Node{}
 	}
 	return t.CollectionProcedure
+}
+func (t *GetEvidences_Evidences_Edges_Node) GetControlObjectives() []*GetEvidences_Evidences_Edges_Node_ControlObjectives {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node{}
+	}
+	return t.ControlObjectives
+}
+func (t *GetEvidences_Evidences_Edges_Node) GetControls() []*GetEvidences_Evidences_Edges_Node_Controls {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node{}
+	}
+	return t.Controls
 }
 func (t *GetEvidences_Evidences_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -14510,6 +14972,12 @@ func (t *GetEvidences_Evidences_Edges_Node) GetSource() *string {
 		t = &GetEvidences_Evidences_Edges_Node{}
 	}
 	return t.Source
+}
+func (t *GetEvidences_Evidences_Edges_Node) GetSubcontrols() []*GetEvidences_Evidences_Edges_Node_Subcontrols {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node{}
+	}
+	return t.Subcontrols
 }
 func (t *GetEvidences_Evidences_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -14625,26 +15093,125 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence_Tasks) GetID() string {
 	return t.ID
 }
 
+type UpdateEvidence_UpdateEvidence_Evidence_Controls struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Controls{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Controls) GetFamily() *string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Controls{}
+	}
+	return t.Family
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Controls) GetID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Controls{}
+	}
+	return t.ID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Controls) GetName() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Controls{}
+	}
+	return t.Name
+}
+
+type UpdateEvidence_UpdateEvidence_Evidence_Subcontrols struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Subcontrols) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Subcontrols{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Subcontrols{}
+	}
+	return t.Family
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Subcontrols) GetID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Subcontrols) GetName() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Subcontrols{}
+	}
+	return t.Name
+}
+
+type UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives struct {
+	DisplayID string  "json:\"displayID\" graphql:\"displayID\""
+	Family    *string "json:\"family,omitempty\" graphql:\"family\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	Name      string  "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives) GetFamily() *string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.Family
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives) GetID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.ID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives) GetName() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives{}
+	}
+	return t.Name
+}
+
 type UpdateEvidence_UpdateEvidence_Evidence struct {
-	CollectionProcedure *string                                            "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
-	CreatedAt           *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CreationDate        time.Time                                          "json:\"creationDate\" graphql:\"creationDate\""
-	Description         *string                                            "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID           string                                             "json:\"displayID\" graphql:\"displayID\""
-	Files               []*UpdateEvidence_UpdateEvidence_Evidence_Files    "json:\"files,omitempty\" graphql:\"files\""
-	ID                  string                                             "json:\"id\" graphql:\"id\""
-	IsAutomated         *bool                                              "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
-	Name                string                                             "json:\"name\" graphql:\"name\""
-	OwnerID             string                                             "json:\"ownerID\" graphql:\"ownerID\""
-	Programs            []*UpdateEvidence_UpdateEvidence_Evidence_Programs "json:\"programs,omitempty\" graphql:\"programs\""
-	RenewalDate         *time.Time                                         "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
-	Source              *string                                            "json:\"source,omitempty\" graphql:\"source\""
-	Tags                []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
-	Tasks               []*UpdateEvidence_UpdateEvidence_Evidence_Tasks    "json:\"tasks,omitempty\" graphql:\"tasks\""
-	UpdatedAt           *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URL                 *string                                            "json:\"url,omitempty\" graphql:\"url\""
+	CollectionProcedure *string                                                     "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
+	ControlObjectives   []*UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls            []*UpdateEvidence_UpdateEvidence_Evidence_Controls          "json:\"controls,omitempty\" graphql:\"controls\""
+	CreatedAt           *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CreationDate        time.Time                                                   "json:\"creationDate\" graphql:\"creationDate\""
+	Description         *string                                                     "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID           string                                                      "json:\"displayID\" graphql:\"displayID\""
+	Files               []*UpdateEvidence_UpdateEvidence_Evidence_Files             "json:\"files,omitempty\" graphql:\"files\""
+	ID                  string                                                      "json:\"id\" graphql:\"id\""
+	IsAutomated         *bool                                                       "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
+	Name                string                                                      "json:\"name\" graphql:\"name\""
+	OwnerID             string                                                      "json:\"ownerID\" graphql:\"ownerID\""
+	Programs            []*UpdateEvidence_UpdateEvidence_Evidence_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
+	RenewalDate         *time.Time                                                  "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
+	Source              *string                                                     "json:\"source,omitempty\" graphql:\"source\""
+	Subcontrols         []*UpdateEvidence_UpdateEvidence_Evidence_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Tags                []string                                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	Tasks               []*UpdateEvidence_UpdateEvidence_Evidence_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
+	UpdatedAt           *time.Time                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URL                 *string                                                     "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *UpdateEvidence_UpdateEvidence_Evidence) GetCollectionProcedure() *string {
@@ -14652,6 +15219,18 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence) GetCollectionProcedure() *strin
 		t = &UpdateEvidence_UpdateEvidence_Evidence{}
 	}
 	return t.CollectionProcedure
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence) GetControlObjectives() []*UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence{}
+	}
+	return t.ControlObjectives
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence) GetControls() []*UpdateEvidence_UpdateEvidence_Evidence_Controls {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence{}
+	}
+	return t.Controls
 }
 func (t *UpdateEvidence_UpdateEvidence_Evidence) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -14730,6 +15309,12 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence) GetSource() *string {
 		t = &UpdateEvidence_UpdateEvidence_Evidence{}
 	}
 	return t.Source
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence) GetSubcontrols() []*UpdateEvidence_UpdateEvidence_Evidence_Subcontrols {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence{}
+	}
+	return t.Subcontrols
 }
 func (t *UpdateEvidence_UpdateEvidence_Evidence) GetTags() []string {
 	if t == nil {
@@ -54621,6 +55206,24 @@ const CreateEvidenceDocument = `mutation CreateEvidence ($input: CreateEvidenceI
 				id
 				displayID
 			}
+			controls {
+				id
+				displayID
+				name
+				family
+			}
+			subcontrols {
+				id
+				displayID
+				name
+				family
+			}
+			controlObjectives {
+				id
+				displayID
+				name
+				family
+			}
 		}
 	}
 }
@@ -54701,6 +55304,24 @@ const GetAllEvidencesDocument = `query GetAllEvidences {
 					id
 					displayID
 				}
+				controls {
+					id
+					displayID
+					name
+					family
+				}
+				subcontrols {
+					id
+					displayID
+					name
+					family
+				}
+				controlObjectives {
+					id
+					displayID
+					name
+					family
+				}
 			}
 		}
 	}
@@ -54752,6 +55373,24 @@ const GetEvidenceByIDDocument = `query GetEvidenceByID ($evidenceId: ID!) {
 		tasks {
 			id
 			displayID
+		}
+		controls {
+			id
+			displayID
+			name
+			family
+		}
+		subcontrols {
+			id
+			displayID
+			name
+			family
+		}
+		controlObjectives {
+			id
+			displayID
+			name
+			family
 		}
 	}
 }
@@ -54807,6 +55446,24 @@ const GetEvidencesDocument = `query GetEvidences ($where: EvidenceWhereInput) {
 					id
 					displayID
 				}
+				controls {
+					id
+					displayID
+					name
+					family
+				}
+				subcontrols {
+					id
+					displayID
+					name
+					family
+				}
+				controlObjectives {
+					id
+					displayID
+					name
+					family
+				}
 			}
 		}
 	}
@@ -54861,6 +55518,24 @@ const UpdateEvidenceDocument = `mutation UpdateEvidence ($updateEvidenceId: ID!,
 			tasks {
 				id
 				displayID
+			}
+			controls {
+				id
+				displayID
+				name
+				family
+			}
+			subcontrols {
+				id
+				displayID
+				name
+				family
+			}
+			controlObjectives {
+				id
+				displayID
+				name
+				family
 			}
 		}
 	}

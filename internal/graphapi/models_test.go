@@ -302,6 +302,7 @@ type EvidenceBuilder struct {
 	// Fields
 	Name      string
 	ProgramID string
+	ControlID string
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database
@@ -1010,9 +1011,13 @@ func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 	mutation := c.client.db.Evidence.Create().
 		SetName(c.Name)
 
-	// if c.ProgramID != "" {
-	// 	mutation.AddProgramIDs(c.ProgramID)
-	// }
+	if c.ProgramID != "" {
+		mutation.AddProgramIDs(c.ProgramID)
+	}
+
+	if c.ControlID != "" {
+		mutation.AddControlIDs(c.ControlID)
+	}
 
 	control := mutation.
 		SaveX(ctx)

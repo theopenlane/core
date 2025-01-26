@@ -22,9 +22,13 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 
 	(&ProgramMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
 
+	control := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
+
 	// create an Evidence to be queried using adminUser
 	// org owner (testUser1) should automatically have access to the Evidence
 	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
+
+	evidenceControl := (&EvidenceBuilder{client: suite.client, ControlID: control.ID}).MustNew(testUser1.UserCtx, t)
 
 	// add test cases for querying the Evidence
 	testCases := []struct {
@@ -35,8 +39,14 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 		errorMsg string
 	}{
 		{
-			name:    "happy path",
+			name:    "happy path, creator of the evidence",
 			queryID: evidence.ID,
+			client:  suite.client.api,
+			ctx:     adminUser.UserCtx,
+		},
+		{
+			name:    "happy path, permissions via control",
+			queryID: evidenceControl.ID,
 			client:  suite.client.api,
 			ctx:     adminUser.UserCtx,
 		},
@@ -49,6 +59,13 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 		{
 			name:     "read only user in organization, authorized via program",
 			queryID:  evidence.ID,
+			client:   suite.client.api,
+			ctx:      viewOnlyUser.UserCtx,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "read only user in organization, not authorized",
+			queryID:  evidenceControl.ID,
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
 			errorMsg: notFoundErrorMsg,

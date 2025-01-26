@@ -30,6 +30,24 @@ mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!])
         id
         displayID
       }
+      controls {
+        id
+        displayID
+        name
+        family
+      }
+      subcontrols {
+        id
+        displayID
+        name
+        family
+      }
+      controlObjectives {
+        id
+        displayID
+        name
+        family
+      }
     }
   }
 }
@@ -73,6 +91,24 @@ query GetAllEvidences {
           id
           displayID
         }
+        controls {
+          id
+          displayID
+          name
+          family
+        }
+        subcontrols {
+          id
+          displayID
+          name
+          family
+        }
+        controlObjectives {
+          id
+          displayID
+          name
+          family
+        }
       }
     }
   }
@@ -109,6 +145,24 @@ query GetEvidenceByID($evidenceId: ID!) {
       id
       displayID
     }
+    controls {
+      id
+      displayID
+      name
+      family
+    }
+    subcontrols {
+      id
+      displayID
+      name
+      family
+    }
+    controlObjectives {
+      id
+      displayID
+      name
+      family
+    }
   }
 }
 
@@ -144,6 +198,24 @@ query GetEvidences($where: EvidenceWhereInput) {
         tasks {
           id
           displayID
+        }
+        controls {
+          id
+          displayID
+          name
+          family
+        }
+        subcontrols {
+          id
+          displayID
+          name
+          family
+        }
+        controlObjectives {
+          id
+          displayID
+          name
+          family
         }
       }
     }
@@ -185,6 +257,24 @@ mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $e
       tasks {
         id
         displayID
+      }
+      controls {
+        id
+        displayID
+        name
+        family
+      }
+      subcontrols {
+        id
+        displayID
+        name
+        family
+      }
+      controlObjectives {
+        id
+        displayID
+        name
+        family
       }
     }
   }

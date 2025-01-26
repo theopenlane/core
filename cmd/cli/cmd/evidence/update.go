@@ -29,6 +29,9 @@ func init() {
 	updateCmd.Flags().StringP("name", "n", "", "name of the evidence")
 	updateCmd.Flags().StringP("description", "d", "", "description of the evidence")
 	updateCmd.Flags().StringArrayP("add-programs", "p", []string{}, "program of the evidence")
+	updateCmd.Flags().StringArray("add-controls", []string{}, "ids of controls to link to the evidence")
+	updateCmd.Flags().StringArray("add-subcontrols", []string{}, "ids of subcontrols to link to the evidence")
+	updateCmd.Flags().StringArray("add-control-objectives", []string{}, "ids of control objectives to link to the evidence")
 	updateCmd.Flags().StringP("collection-procedure", "c", "", "steps taken to collect the evidence")
 	updateCmd.Flags().StringP("source", "s", "", "system source of the evidence")
 	updateCmd.Flags().BoolP("is-automated", "a", false, "whether the evidence was collected automatically")
@@ -48,6 +51,9 @@ func updateValidation() (id string, input openlaneclient.UpdateEvidenceInput, up
 	name := cmd.Config.String("name")
 	description := cmd.Config.String("description")
 	programs := cmd.Config.Strings("add-programs")
+	controls := cmd.Config.Strings("add-controls")
+	subcontrols := cmd.Config.Strings("add-subcontrols")
+	controlObjectives := cmd.Config.Strings("add-control-objectives")
 	collectionProcedure := cmd.Config.String("collection-procedure")
 	source := cmd.Config.String("source")
 	isAutomated := cmd.Config.Bool("is-automated")
@@ -64,6 +70,18 @@ func updateValidation() (id string, input openlaneclient.UpdateEvidenceInput, up
 
 	if len(programs) > 0 {
 		input.AddProgramIDs = programs
+	}
+
+	if len(controls) > 0 {
+		input.AddControlIDs = controls
+	}
+
+	if len(subcontrols) > 0 {
+		input.AddSubcontrolIDs = subcontrols
+	}
+
+	if len(controlObjectives) > 0 {
+		input.AddControlObjectiveIDs = controlObjectives
 	}
 
 	if collectionProcedure != "" {

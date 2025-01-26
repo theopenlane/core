@@ -27,6 +27,9 @@ func init() {
 	createCmd.Flags().StringP("name", "n", "", "name of the evidence")
 	createCmd.Flags().StringP("description", "d", "", "description of the evidence")
 	createCmd.Flags().StringArrayP("programs", "p", []string{}, "program of the evidence")
+	createCmd.Flags().StringArray("controls", []string{}, "ids of controls to link to the evidence")
+	createCmd.Flags().StringArray("subcontrols", []string{}, "ids of subcontrols to link to the evidence")
+	createCmd.Flags().StringArray("control-objectives", []string{}, "ids of control objectives to link to the evidence")
 	createCmd.Flags().StringP("collection-procedure", "c", "", "steps taken to collect the evidence")
 	createCmd.Flags().StringP("source", "s", "", "system source of the evidence")
 	createCmd.Flags().BoolP("is-automated", "a", false, "whether the evidence was collected automatically")
@@ -41,6 +44,9 @@ func createValidation() (input openlaneclient.CreateEvidenceInput, uploads []*gr
 	input.Name = cmd.Config.String("name")
 	description := cmd.Config.String("description")
 	programs := cmd.Config.Strings("programs")
+	controls := cmd.Config.Strings("controls")
+	subcontrols := cmd.Config.Strings("subcontrols")
+	controlObjectives := cmd.Config.Strings("control-objectives")
 	collectionProcedure := cmd.Config.String("collection-procedure")
 	source := cmd.Config.String("source")
 	isAutomated := cmd.Config.Bool("is-automated")
@@ -57,6 +63,18 @@ func createValidation() (input openlaneclient.CreateEvidenceInput, uploads []*gr
 
 	if len(programs) > 0 {
 		input.ProgramIDs = programs
+	}
+
+	if len(controls) > 0 {
+		input.ControlIDs = controls
+	}
+
+	if len(subcontrols) > 0 {
+		input.SubcontrolIDs = subcontrols
+	}
+
+	if len(controlObjectives) > 0 {
+		input.ControlObjectiveIDs = controlObjectives
 	}
 
 	if collectionProcedure != "" {
