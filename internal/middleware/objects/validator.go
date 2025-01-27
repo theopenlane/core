@@ -22,6 +22,8 @@ var validMimeTypes = map[string][]string{
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx
 		"application/x-vnd.oasis.opendocument.spreadsheet",                  // open document spreadsheet
 		"text/csv",
+		"application/x-yaml", "application/x-yaml charset=utf-8", "text/yaml",
+		"application/json", "application/json charset=utf-8",
 	},
 }
 
