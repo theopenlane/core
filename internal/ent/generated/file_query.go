@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -48,7 +49,7 @@ type FileQuery struct {
 	withDocumentData             *DocumentDataQuery
 	withEvents                   *EventQuery
 	withProgram                  *ProgramQuery
-	withFKs                      bool
+	withEvidence                 *EvidenceQuery
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
 	withNamedUser                map[string]*UserQuery
@@ -62,6 +63,7 @@ type FileQuery struct {
 	withNamedDocumentData        map[string]*DocumentDataQuery
 	withNamedEvents              map[string]*EventQuery
 	withNamedProgram             map[string]*ProgramQuery
+	withNamedEvidence            map[string]*EvidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -373,6 +375,31 @@ func (fq *FileQuery) QueryProgram() *ProgramQuery {
 	return query
 }
 
+// QueryEvidence chains the current query on the "evidence" edge.
+func (fq *FileQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.EvidenceTable, file.EvidencePrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (fq *FileQuery) First(ctx context.Context) (*File, error) {
@@ -576,6 +603,7 @@ func (fq *FileQuery) Clone() *FileQuery {
 		withDocumentData:        fq.withDocumentData.Clone(),
 		withEvents:              fq.withEvents.Clone(),
 		withProgram:             fq.withProgram.Clone(),
+		withEvidence:            fq.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       fq.sql.Clone(),
 		path:      fq.path,
@@ -704,6 +732,17 @@ func (fq *FileQuery) WithProgram(opts ...func(*ProgramQuery)) *FileQuery {
 	return fq
 }
 
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithEvidence(opts ...func(*EvidenceQuery)) *FileQuery {
+	query := (&EvidenceClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withEvidence = query
+	return fq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -787,9 +826,8 @@ func (fq *FileQuery) prepareQuery(ctx context.Context) error {
 func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, error) {
 	var (
 		nodes       = []*File{}
-		withFKs     = fq.withFKs
 		_spec       = fq.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [12]bool{
 			fq.withUser != nil,
 			fq.withOrganization != nil,
 			fq.withGroup != nil,
@@ -801,11 +839,9 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			fq.withDocumentData != nil,
 			fq.withEvents != nil,
 			fq.withProgram != nil,
+			fq.withEvidence != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, file.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*File).scanValues(nil, columns)
 	}
@@ -908,6 +944,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := fq.withEvidence; query != nil {
+		if err := fq.loadEvidence(ctx, query, nodes,
+			func(n *File) { n.Edges.Evidence = []*Evidence{} },
+			func(n *File, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range fq.withNamedUser {
 		if err := fq.loadUser(ctx, query, nodes,
 			func(n *File) { n.appendNamedUser(name) },
@@ -982,6 +1025,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := fq.loadProgram(ctx, query, nodes,
 			func(n *File) { n.appendNamedProgram(name) },
 			func(n *File, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedEvidence {
+		if err := fq.loadEvidence(ctx, query, nodes,
+			func(n *File) { n.appendNamedEvidence(name) },
+			func(n *File, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1675,6 +1725,68 @@ func (fq *FileQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes
 	}
 	return nil
 }
+func (fq *FileQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*File, init func(*File), assign func(*File, *Evidence)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.EvidenceTable)
+		joinT.Schema(fq.schemaConfig.EvidenceFiles)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(file.EvidencePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.EvidencePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.EvidencePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (fq *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fq.querySpec()
@@ -1925,6 +2037,20 @@ func (fq *FileQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) 
 		fq.withNamedProgram = make(map[string]*ProgramQuery)
 	}
 	fq.withNamedProgram[name] = query
+	return fq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *FileQuery {
+	query := (&EvidenceClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedEvidence == nil {
+		fq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	fq.withNamedEvidence[name] = query
 	return fq
 }
 

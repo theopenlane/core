@@ -1959,6 +1959,35 @@ func HasProgramsWith(preds ...predicate.Program) predicate.Control {
 	})
 }
 
+// HasEvidence applies the HasEdge predicate on the "evidence" edge.
+func HasEvidence() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControls
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
+func HasEvidenceWith(preds ...predicate.Evidence) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newEvidenceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControls
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Control) predicate.Control {
 	return predicate.Control(sql.AndPredicates(predicates...))

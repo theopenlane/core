@@ -68,7 +68,7 @@ type EvidenceEdges struct {
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
-	Subcontrols []*Control `json:"subcontrols,omitempty"`
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -83,7 +83,7 @@ type EvidenceEdges struct {
 
 	namedControlObjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
-	namedSubcontrols       map[string][]*Control
+	namedSubcontrols       map[string][]*Subcontrol
 	namedFiles             map[string][]*File
 	namedPrograms          map[string][]*Program
 	namedTasks             map[string][]*Task
@@ -120,7 +120,7 @@ func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
 
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
-func (e EvidenceEdges) SubcontrolsOrErr() ([]*Control, error) {
+func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	if e.loadedTypes[3] {
 		return e.Subcontrols, nil
 	}
@@ -321,7 +321,7 @@ func (e *Evidence) QueryControls() *ControlQuery {
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the Evidence entity.
-func (e *Evidence) QuerySubcontrols() *ControlQuery {
+func (e *Evidence) QuerySubcontrols() *SubcontrolQuery {
 	return NewEvidenceClient(e.config).QuerySubcontrols(e)
 }
 
@@ -467,7 +467,7 @@ func (e *Evidence) appendNamedControls(name string, edges ...*Control) {
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Evidence) NamedSubcontrols(name string) ([]*Control, error) {
+func (e *Evidence) NamedSubcontrols(name string) ([]*Subcontrol, error) {
 	if e.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
@@ -478,12 +478,12 @@ func (e *Evidence) NamedSubcontrols(name string) ([]*Control, error) {
 	return nodes, nil
 }
 
-func (e *Evidence) appendNamedSubcontrols(name string, edges ...*Control) {
+func (e *Evidence) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 	if e.Edges.namedSubcontrols == nil {
-		e.Edges.namedSubcontrols = make(map[string][]*Control)
+		e.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedSubcontrols[name] = []*Control{}
+		e.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
 		e.Edges.namedSubcontrols[name] = append(e.Edges.namedSubcontrols[name], edges...)
 	}

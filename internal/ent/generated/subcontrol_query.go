@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -38,6 +39,7 @@ type SubcontrolQuery struct {
 	withTasks         *TaskQuery
 	withNotes         *NoteQuery
 	withPrograms      *ProgramQuery
+	withEvidence      *EvidenceQuery
 	withFKs           bool
 	loadTotal         []func(context.Context, []*Subcontrol) error
 	modifiers         []func(*sql.Selector)
@@ -45,6 +47,7 @@ type SubcontrolQuery struct {
 	withNamedUser     map[string]*UserQuery
 	withNamedTasks    map[string]*TaskQuery
 	withNamedPrograms map[string]*ProgramQuery
+	withNamedEvidence map[string]*EvidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -225,6 +228,31 @@ func (sq *SubcontrolQuery) QueryPrograms() *ProgramQuery {
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidence chains the current query on the "evidence" edge.
+func (sq *SubcontrolQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -429,6 +457,7 @@ func (sq *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withTasks:    sq.withTasks.Clone(),
 		withNotes:    sq.withNotes.Clone(),
 		withPrograms: sq.withPrograms.Clone(),
+		withEvidence: sq.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
@@ -499,6 +528,17 @@ func (sq *SubcontrolQuery) WithPrograms(opts ...func(*ProgramQuery)) *Subcontrol
 		opt(query)
 	}
 	sq.withPrograms = query
+	return sq
+}
+
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithEvidence(opts ...func(*EvidenceQuery)) *SubcontrolQuery {
+	query := (&EvidenceClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withEvidence = query
 	return sq
 }
 
@@ -587,13 +627,14 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			sq.withOwner != nil,
 			sq.withControls != nil,
 			sq.withUser != nil,
 			sq.withTasks != nil,
 			sq.withNotes != nil,
 			sq.withPrograms != nil,
+			sq.withEvidence != nil,
 		}
 	)
 	if sq.withNotes != nil {
@@ -665,6 +706,13 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := sq.withEvidence; query != nil {
+		if err := sq.loadEvidence(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Evidence = []*Evidence{} },
+			func(n *Subcontrol, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range sq.withNamedControls {
 		if err := sq.loadControls(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedControls(name) },
@@ -690,6 +738,13 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := sq.loadPrograms(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedPrograms(name) },
 			func(n *Subcontrol, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedEvidence {
+		if err := sq.loadEvidence(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedEvidence(name) },
+			func(n *Subcontrol, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1010,6 +1065,68 @@ func (sq *SubcontrolQuery) loadPrograms(ctx context.Context, query *ProgramQuery
 	}
 	return nil
 }
+func (sq *SubcontrolQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Evidence)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.EvidenceTable)
+		joinT.Schema(sq.schemaConfig.EvidenceSubcontrols)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(subcontrol.EvidencePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(subcontrol.EvidencePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.EvidencePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (sq *SubcontrolQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := sq.querySpec()
@@ -1165,6 +1282,20 @@ func (sq *SubcontrolQuery) WithNamedPrograms(name string, opts ...func(*ProgramQ
 		sq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	sq.withNamedPrograms[name] = query
+	return sq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *SubcontrolQuery {
+	query := (&EvidenceClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedEvidence == nil {
+		sq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	sq.withNamedEvidence[name] = query
 	return sq
 }
 

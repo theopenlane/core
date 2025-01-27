@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -325,17 +326,17 @@ func (eu *EvidenceUpdate) AddControls(c ...*Control) *EvidenceUpdate {
 	return eu.AddControlIDs(ids...)
 }
 
-// AddSubcontrolIDs adds the "subcontrols" edge to the Control entity by IDs.
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (eu *EvidenceUpdate) AddSubcontrolIDs(ids ...string) *EvidenceUpdate {
 	eu.mutation.AddSubcontrolIDs(ids...)
 	return eu
 }
 
-// AddSubcontrols adds the "subcontrols" edges to the Control entity.
-func (eu *EvidenceUpdate) AddSubcontrols(c ...*Control) *EvidenceUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (eu *EvidenceUpdate) AddSubcontrols(s ...*Subcontrol) *EvidenceUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return eu.AddSubcontrolIDs(ids...)
 }
@@ -438,23 +439,23 @@ func (eu *EvidenceUpdate) RemoveControls(c ...*Control) *EvidenceUpdate {
 	return eu.RemoveControlIDs(ids...)
 }
 
-// ClearSubcontrols clears all "subcontrols" edges to the Control entity.
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
 func (eu *EvidenceUpdate) ClearSubcontrols() *EvidenceUpdate {
 	eu.mutation.ClearSubcontrols()
 	return eu
 }
 
-// RemoveSubcontrolIDs removes the "subcontrols" edge to Control entities by IDs.
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
 func (eu *EvidenceUpdate) RemoveSubcontrolIDs(ids ...string) *EvidenceUpdate {
 	eu.mutation.RemoveSubcontrolIDs(ids...)
 	return eu
 }
 
-// RemoveSubcontrols removes "subcontrols" edges to Control entities.
-func (eu *EvidenceUpdate) RemoveSubcontrols(c ...*Control) *EvidenceUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (eu *EvidenceUpdate) RemoveSubcontrols(s ...*Subcontrol) *EvidenceUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return eu.RemoveSubcontrolIDs(ids...)
 }
@@ -716,30 +717,30 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.ControlObjective
+		edge.Schema = eu.schemaConfig.EvidenceControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eu.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !eu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.ControlObjective
+		edge.Schema = eu.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -747,16 +748,16 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := eu.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.ControlObjective
+		edge.Schema = eu.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -764,30 +765,30 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Control
+		edge.Schema = eu.schemaConfig.EvidenceControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !eu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Control
+		edge.Schema = eu.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -795,16 +796,16 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := eu.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Control
+		edge.Schema = eu.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -812,30 +813,30 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Control
+		edge.Schema = eu.schemaConfig.EvidenceSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !eu.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Control
+		edge.Schema = eu.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -843,16 +844,16 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := eu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Control
+		edge.Schema = eu.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -860,30 +861,30 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.File
+		edge.Schema = eu.schemaConfig.EvidenceFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !eu.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.File
+		edge.Schema = eu.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -891,16 +892,16 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := eu.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.File
+		edge.Schema = eu.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1313,17 +1314,17 @@ func (euo *EvidenceUpdateOne) AddControls(c ...*Control) *EvidenceUpdateOne {
 	return euo.AddControlIDs(ids...)
 }
 
-// AddSubcontrolIDs adds the "subcontrols" edge to the Control entity by IDs.
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (euo *EvidenceUpdateOne) AddSubcontrolIDs(ids ...string) *EvidenceUpdateOne {
 	euo.mutation.AddSubcontrolIDs(ids...)
 	return euo
 }
 
-// AddSubcontrols adds the "subcontrols" edges to the Control entity.
-func (euo *EvidenceUpdateOne) AddSubcontrols(c ...*Control) *EvidenceUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (euo *EvidenceUpdateOne) AddSubcontrols(s ...*Subcontrol) *EvidenceUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return euo.AddSubcontrolIDs(ids...)
 }
@@ -1426,23 +1427,23 @@ func (euo *EvidenceUpdateOne) RemoveControls(c ...*Control) *EvidenceUpdateOne {
 	return euo.RemoveControlIDs(ids...)
 }
 
-// ClearSubcontrols clears all "subcontrols" edges to the Control entity.
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
 func (euo *EvidenceUpdateOne) ClearSubcontrols() *EvidenceUpdateOne {
 	euo.mutation.ClearSubcontrols()
 	return euo
 }
 
-// RemoveSubcontrolIDs removes the "subcontrols" edge to Control entities by IDs.
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
 func (euo *EvidenceUpdateOne) RemoveSubcontrolIDs(ids ...string) *EvidenceUpdateOne {
 	euo.mutation.RemoveSubcontrolIDs(ids...)
 	return euo
 }
 
-// RemoveSubcontrols removes "subcontrols" edges to Control entities.
-func (euo *EvidenceUpdateOne) RemoveSubcontrols(c ...*Control) *EvidenceUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (euo *EvidenceUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *EvidenceUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return euo.RemoveSubcontrolIDs(ids...)
 }
@@ -1734,30 +1735,30 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if euo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.ControlObjective
+		edge.Schema = euo.schemaConfig.EvidenceControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := euo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !euo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.ControlObjective
+		edge.Schema = euo.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1765,16 +1766,16 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if nodes := euo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.ControlObjective
+		edge.Schema = euo.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1782,30 +1783,30 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if euo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Control
+		edge.Schema = euo.schemaConfig.EvidenceControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := euo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !euo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Control
+		edge.Schema = euo.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1813,16 +1814,16 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if nodes := euo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Control
+		edge.Schema = euo.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1830,30 +1831,30 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if euo.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Control
+		edge.Schema = euo.schemaConfig.EvidenceSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := euo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !euo.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Control
+		edge.Schema = euo.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1861,16 +1862,16 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if nodes := euo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Control
+		edge.Schema = euo.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1878,30 +1879,30 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if euo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.File
+		edge.Schema = euo.schemaConfig.EvidenceFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := euo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !euo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.File
+		edge.Schema = euo.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1909,16 +1910,16 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if nodes := euo.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.File
+		edge.Schema = euo.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -260,6 +260,18 @@ func (c *Control) Programs(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
+func (c *Control) Evidence(ctx context.Context) (result []*Evidence, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedEvidence(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.EvidenceOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryEvidence().All(ctx)
+	}
+	return result, err
+}
+
 func (co *ControlObjective) Owner(ctx context.Context) (*Organization, error) {
 	result, err := co.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -408,6 +420,18 @@ func (co *ControlObjective) Programs(ctx context.Context) (result []*Program, er
 	}
 	if IsNotLoaded(err) {
 		result, err = co.QueryPrograms().All(ctx)
+	}
+	return result, err
+}
+
+func (co *ControlObjective) Evidence(ctx context.Context) (result []*Evidence, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = co.NamedEvidence(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = co.Edges.EvidenceOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = co.QueryEvidence().All(ctx)
 	}
 	return result, err
 }
@@ -700,7 +724,7 @@ func (e *Evidence) Controls(ctx context.Context) (result []*Control, err error) 
 	return result, err
 }
 
-func (e *Evidence) Subcontrols(ctx context.Context) (result []*Control, err error) {
+func (e *Evidence) Subcontrols(ctx context.Context) (result []*Subcontrol, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = e.NamedSubcontrols(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
@@ -876,6 +900,18 @@ func (f *File) Program(ctx context.Context) (result []*Program, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = f.QueryProgram().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Evidence(ctx context.Context) (result []*Evidence, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedEvidence(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.EvidenceOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryEvidence().All(ctx)
 	}
 	return result, err
 }
@@ -2809,6 +2845,18 @@ func (s *Subcontrol) Programs(ctx context.Context) (result []*Program, err error
 	}
 	if IsNotLoaded(err) {
 		result, err = s.QueryPrograms().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Subcontrol) Evidence(ctx context.Context) (result []*Evidence, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedEvidence(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.EvidenceOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryEvidence().All(ctx)
 	}
 	return result, err
 }

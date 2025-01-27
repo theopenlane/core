@@ -1715,6 +1715,7 @@ type Control implements Node {
   actionPlans: [ActionPlan!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -2347,6 +2348,7 @@ type ControlObjective implements Node {
   narratives: [Narrative!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -3274,6 +3276,11 @@ input ControlObjectiveWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -3700,6 +3707,11 @@ input ControlWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -3884,6 +3896,7 @@ input CreateControlInput {
   actionPlanIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3955,6 +3968,7 @@ input CreateControlObjectiveInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -4167,6 +4181,7 @@ input CreateFileInput {
   documentDatumIDs: [ID!]
   eventIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -4940,6 +4955,7 @@ input CreateSubcontrolInput {
   taskIDs: [ID!]
   notesID: ID
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -7342,7 +7358,7 @@ type Evidence implements Node {
   owner: Organization!
   controlObjectives: [ControlObjective!]
   controls: [Control!]
-  subcontrols: [Control!]
+  subcontrols: [Subcontrol!]
   files: [File!]
   programs: [Program!]
   tasks: [Task!]
@@ -8057,7 +8073,7 @@ input EvidenceWhereInput {
   subcontrols edge predicates
   """
   hasSubcontrols: Boolean
-  hasSubcontrolsWith: [ControlWhereInput!]
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   files edge predicates
   """
@@ -8146,6 +8162,7 @@ type File implements Node {
   documentData: [DocumentData!]
   events: [Event!]
   program: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -9036,6 +9053,11 @@ input FileWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -23055,6 +23077,7 @@ type Subcontrol implements Node {
   tasks: [Task!]
   notes: Note
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -24127,6 +24150,11 @@ input SubcontrolWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -26261,6 +26289,9 @@ input UpdateControlInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -26369,6 +26400,9 @@ input UpdateControlObjectiveInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -26688,6 +26722,9 @@ input UpdateFileInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -27825,6 +27862,9 @@ input UpdateSubcontrolInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.

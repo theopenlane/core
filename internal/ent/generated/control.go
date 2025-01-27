@@ -67,8 +67,6 @@ type Control struct {
 	// The values are being populated by the ControlQuery when eager-loading is set.
 	Edges                      ControlEdges `json:"edges"`
 	control_objective_controls *string
-	evidence_controls          *string
-	evidence_subcontrols       *string
 	internal_policy_controls   *string
 	selectValues               sql.SelectValues
 }
@@ -101,11 +99,13 @@ type ControlEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -119,6 +119,7 @@ type ControlEdges struct {
 	namedActionPlans       map[string][]*ActionPlan
 	namedTasks             map[string][]*Task
 	namedPrograms          map[string][]*Program
+	namedEvidence          map[string][]*Evidence
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -240,6 +241,15 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[13] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Control) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -253,11 +263,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case control.ForeignKeys[0]: // control_objective_controls
 			values[i] = new(sql.NullString)
-		case control.ForeignKeys[1]: // evidence_controls
-			values[i] = new(sql.NullString)
-		case control.ForeignKeys[2]: // evidence_subcontrols
-			values[i] = new(sql.NullString)
-		case control.ForeignKeys[3]: // internal_policy_controls
+		case control.ForeignKeys[1]: // internal_policy_controls
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -425,20 +431,6 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			}
 		case control.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field evidence_controls", values[i])
-			} else if value.Valid {
-				c.evidence_controls = new(string)
-				*c.evidence_controls = value.String
-			}
-		case control.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field evidence_subcontrols", values[i])
-			} else if value.Valid {
-				c.evidence_subcontrols = new(string)
-				*c.evidence_subcontrols = value.String
-			}
-		case control.ForeignKeys[3]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field internal_policy_controls", values[i])
 			} else if value.Valid {
 				c.internal_policy_controls = new(string)
@@ -520,6 +512,11 @@ func (c *Control) QueryTasks() *TaskQuery {
 // QueryPrograms queries the "programs" edge of the Control entity.
 func (c *Control) QueryPrograms() *ProgramQuery {
 	return NewControlClient(c.config).QueryPrograms(c)
+}
+
+// QueryEvidence queries the "evidence" edge of the Control entity.
+func (c *Control) QueryEvidence() *EvidenceQuery {
+	return NewControlClient(c.config).QueryEvidence(c)
 }
 
 // Update returns a builder for updating this Control.
@@ -899,6 +896,30 @@ func (c *Control) appendNamedPrograms(name string, edges ...*Program) {
 		c.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		c.Edges.namedPrograms[name] = append(c.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedEvidence(name string) ([]*Evidence, error) {
+	if c.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedEvidence(name string, edges ...*Evidence) {
+	if c.Edges.namedEvidence == nil {
+		c.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		c.Edges.namedEvidence[name] = append(c.Edges.namedEvidence[name], edges...)
 	}
 }
 

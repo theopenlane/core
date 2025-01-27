@@ -131,6 +131,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -243,6 +245,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -399,6 +403,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},

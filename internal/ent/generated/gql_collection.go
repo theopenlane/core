@@ -1094,6 +1094,19 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			c.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[control.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, control.FieldCreatedAt)
@@ -1622,6 +1635,19 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				return err
 			}
 			co.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -3392,12 +3418,12 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: e.config}).Query()
+				query = (&SubcontrolClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
 				return err
 			}
-			e.WithNamedSubcontrols(alias, func(wq *ControlQuery) {
+			e.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -3889,6 +3915,19 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			f.WithNamedProgram(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -11690,6 +11729,19 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				return err
 			}
 			s.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 		case "createdAt":

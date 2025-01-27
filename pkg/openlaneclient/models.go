@@ -1495,6 +1495,7 @@ type Control struct {
 	ActionPlans       []*ActionPlan       `json:"actionPlans,omitempty"`
 	Tasks             []*Task             `json:"tasks,omitempty"`
 	Programs          []*Program          `json:"programs,omitempty"`
+	Evidence          []*Evidence         `json:"evidence,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -2002,6 +2003,7 @@ type ControlObjective struct {
 	Narratives       []*Narrative      `json:"narratives,omitempty"`
 	Tasks            []*Task           `json:"tasks,omitempty"`
 	Programs         []*Program        `json:"programs,omitempty"`
+	Evidence         []*Evidence       `json:"evidence,omitempty"`
 }
 
 func (ControlObjective) IsNode() {}
@@ -2788,6 +2790,9 @@ type ControlObjectiveWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// evidence edge predicates
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 type ControlSearchResult struct {
@@ -3157,6 +3162,9 @@ type ControlWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// evidence edge predicates
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -3269,6 +3277,7 @@ type CreateControlInput struct {
 	ActionPlanIDs       []string `json:"actionPlanIDs,omitempty"`
 	TaskIDs             []string `json:"taskIDs,omitempty"`
 	ProgramIDs          []string `json:"programIDs,omitempty"`
+	EvidenceIDs         []string `json:"evidenceIDs,omitempty"`
 }
 
 // CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3313,6 +3322,7 @@ type CreateControlObjectiveInput struct {
 	NarrativeIDs      []string `json:"narrativeIDs,omitempty"`
 	TaskIDs           []string `json:"taskIDs,omitempty"`
 	ProgramIDs        []string `json:"programIDs,omitempty"`
+	EvidenceIDs       []string `json:"evidenceIDs,omitempty"`
 }
 
 type CreateControlWithSubcontrolsInput struct {
@@ -3459,6 +3469,7 @@ type CreateFileInput struct {
 	DocumentDatumIDs       []string `json:"documentDatumIDs,omitempty"`
 	EventIDs               []string `json:"eventIDs,omitempty"`
 	ProgramIDs             []string `json:"programIDs,omitempty"`
+	EvidenceIDs            []string `json:"evidenceIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -3991,6 +4002,7 @@ type CreateSubcontrolInput struct {
 	TaskIDs         []string `json:"taskIDs,omitempty"`
 	NotesID         *string  `json:"notesID,omitempty"`
 	ProgramIDs      []string `json:"programIDs,omitempty"`
+	EvidenceIDs     []string `json:"evidenceIDs,omitempty"`
 }
 
 // CreateSubscriberInput is used for create Subscriber object.
@@ -5967,7 +5979,7 @@ type Evidence struct {
 	Owner             *Organization       `json:"owner"`
 	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
 	Controls          []*Control          `json:"controls,omitempty"`
-	Subcontrols       []*Control          `json:"subcontrols,omitempty"`
+	Subcontrols       []*Subcontrol       `json:"subcontrols,omitempty"`
 	Files             []*File             `json:"files,omitempty"`
 	Programs          []*Program          `json:"programs,omitempty"`
 	Tasks             []*Task             `json:"tasks,omitempty"`
@@ -6578,8 +6590,8 @@ type EvidenceWhereInput struct {
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 	// subcontrols edge predicates
-	HasSubcontrols     *bool                `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*ControlWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -6637,6 +6649,7 @@ type File struct {
 	DocumentData        []*DocumentData        `json:"documentData,omitempty"`
 	Events              []*Event               `json:"events,omitempty"`
 	Program             []*Program             `json:"program,omitempty"`
+	Evidence            []*Evidence            `json:"evidence,omitempty"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -7377,6 +7390,9 @@ type FileWhereInput struct {
 	// program edge predicates
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
 	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+	// evidence edge predicates
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 type Group struct {
@@ -17241,6 +17257,7 @@ type Subcontrol struct {
 	Tasks           []*Task       `json:"tasks,omitempty"`
 	Notes           *Note         `json:"notes,omitempty"`
 	Programs        []*Program    `json:"programs,omitempty"`
+	Evidence        []*Evidence   `json:"evidence,omitempty"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -18156,6 +18173,9 @@ type SubcontrolWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// evidence edge predicates
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 type Subscriber struct {
@@ -19877,6 +19897,9 @@ type UpdateControlInput struct {
 	AddProgramIDs             []string `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs          []string `json:"removeProgramIDs,omitempty"`
 	ClearPrograms             *bool    `json:"clearPrograms,omitempty"`
+	AddEvidenceIDs            []string `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs         []string `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence             *bool    `json:"clearEvidence,omitempty"`
 }
 
 // UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -19958,6 +19981,9 @@ type UpdateControlObjectiveInput struct {
 	AddProgramIDs           []string `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs        []string `json:"removeProgramIDs,omitempty"`
 	ClearPrograms           *bool    `json:"clearPrograms,omitempty"`
+	AddEvidenceIDs          []string `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs       []string `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence           *bool    `json:"clearEvidence,omitempty"`
 }
 
 // UpdateDocumentDataInput is used for update DocumentData object.
@@ -20206,6 +20232,9 @@ type UpdateFileInput struct {
 	AddProgramIDs                []string `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs             []string `json:"removeProgramIDs,omitempty"`
 	ClearProgram                 *bool    `json:"clearProgram,omitempty"`
+	AddEvidenceIDs               []string `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs            []string `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence                *bool    `json:"clearEvidence,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -21099,6 +21128,9 @@ type UpdateSubcontrolInput struct {
 	AddProgramIDs        []string `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs     []string `json:"removeProgramIDs,omitempty"`
 	ClearPrograms        *bool    `json:"clearPrograms,omitempty"`
+	AddEvidenceIDs       []string `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs    []string `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence        *bool    `json:"clearEvidence,omitempty"`
 }
 
 // UpdateSubscriberInput is used for update Subscriber object.

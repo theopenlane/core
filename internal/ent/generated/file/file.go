@@ -79,6 +79,8 @@ const (
 	EdgeEvents = "events"
 	// EdgeProgram holds the string denoting the program edge name in mutations.
 	EdgeProgram = "program"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -136,6 +138,11 @@ const (
 	// ProgramInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramInverseTable = "programs"
+	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
+	EvidenceTable = "evidence_files"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -162,12 +169,6 @@ var Columns = []string{
 	FieldStorageVolume,
 	FieldStoragePath,
 	FieldFileContents,
-}
-
-// ForeignKeys holds the SQL foreign-keys that are owned by the "files"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"evidence_files",
 }
 
 var (
@@ -204,17 +205,15 @@ var (
 	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
 	// primary key for the program relation (M2M).
 	ProgramPrimaryKey = []string{"program_id", "file_id"}
+	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
+	// primary key for the evidence relation (M2M).
+	EvidencePrimaryKey = []string{"evidence_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -502,6 +501,20 @@ func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -577,5 +590,12 @@ func newProgramStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
 	)
 }

@@ -376,6 +376,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ControlObjective_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -491,6 +493,8 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Control_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -1001,6 +1005,8 @@ func (ec *executionContext) fieldContext_FileSearchResult_files(_ context.Contex
 				return ec.fieldContext_File_events(ctx, field)
 			case "program":
 				return ec.fieldContext_File_program(ctx, field)
+			case "evidence":
+				return ec.fieldContext_File_evidence(ctx, field)
 			case "presignedURL":
 				return ec.fieldContext_File_presignedURL(ctx, field)
 			}
@@ -2537,6 +2543,8 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},

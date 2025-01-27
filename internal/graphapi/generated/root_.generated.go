@@ -308,6 +308,7 @@ type ComplexityRoot struct {
 		Details           func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
 		Editors           func(childComplexity int) int
+		Evidence          func(childComplexity int) int
 		ExampleEvidence   func(childComplexity int) int
 		Family            func(childComplexity int) int
 		ID                func(childComplexity int) int
@@ -409,6 +410,7 @@ type ComplexityRoot struct {
 		Details              func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
+		Evidence             func(childComplexity int) int
 		ExampleEvidence      func(childComplexity int) int
 		Family               func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -936,6 +938,7 @@ type ComplexityRoot struct {
 		DocumentData          func(childComplexity int) int
 		Entity                func(childComplexity int) int
 		Events                func(childComplexity int) int
+		Evidence              func(childComplexity int) int
 		Group                 func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
@@ -2960,6 +2963,7 @@ type ComplexityRoot struct {
 		Description                    func(childComplexity int) int
 		Details                        func(childComplexity int) int
 		DisplayID                      func(childComplexity int) int
+		Evidence                       func(childComplexity int) int
 		ExampleEvidence                func(childComplexity int) int
 		Family                         func(childComplexity int) int
 		ID                             func(childComplexity int) int
@@ -4638,6 +4642,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.Editors(childComplexity), true
 
+	case "Control.evidence":
+		if e.complexity.Control.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Control.Evidence(childComplexity), true
+
 	case "Control.exampleEvidence":
 		if e.complexity.Control.ExampleEvidence == nil {
 			break
@@ -5155,6 +5166,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjective.Editors(childComplexity), true
+
+	case "ControlObjective.evidence":
+		if e.complexity.ControlObjective.Evidence == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.Evidence(childComplexity), true
 
 	case "ControlObjective.exampleEvidence":
 		if e.complexity.ControlObjective.ExampleEvidence == nil {
@@ -7416,6 +7434,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.File.Events(childComplexity), true
+
+	case "File.evidence":
+		if e.complexity.File.Evidence == nil {
+			break
+		}
+
+		return e.complexity.File.Evidence(childComplexity), true
 
 	case "File.group":
 		if e.complexity.File.Group == nil {
@@ -19049,6 +19074,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.DisplayID(childComplexity), true
 
+	case "Subcontrol.evidence":
+		if e.complexity.Subcontrol.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Evidence(childComplexity), true
+
 	case "Subcontrol.exampleEvidence":
 		if e.complexity.Subcontrol.ExampleEvidence == nil {
 			break
@@ -24514,6 +24546,7 @@ type Control implements Node {
   actionPlans: [ActionPlan!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -25146,6 +25179,7 @@ type ControlObjective implements Node {
   narratives: [Narrative!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -26073,6 +26107,11 @@ input ControlObjectiveWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -26499,6 +26538,11 @@ input ControlWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -26683,6 +26727,7 @@ input CreateControlInput {
   actionPlanIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -26754,6 +26799,7 @@ input CreateControlObjectiveInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -26966,6 +27012,7 @@ input CreateFileInput {
   documentDatumIDs: [ID!]
   eventIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -27739,6 +27786,7 @@ input CreateSubcontrolInput {
   taskIDs: [ID!]
   notesID: ID
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -30141,7 +30189,7 @@ type Evidence implements Node {
   owner: Organization!
   controlObjectives: [ControlObjective!]
   controls: [Control!]
-  subcontrols: [Control!]
+  subcontrols: [Subcontrol!]
   files: [File!]
   programs: [Program!]
   tasks: [Task!]
@@ -30856,7 +30904,7 @@ input EvidenceWhereInput {
   subcontrols edge predicates
   """
   hasSubcontrols: Boolean
-  hasSubcontrolsWith: [ControlWhereInput!]
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   files edge predicates
   """
@@ -30945,6 +30993,7 @@ type File implements Node {
   documentData: [DocumentData!]
   events: [Event!]
   program: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -31835,6 +31884,11 @@ input FileWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -45854,6 +45908,7 @@ type Subcontrol implements Node {
   tasks: [Task!]
   notes: Note
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -46926,6 +46981,11 @@ input SubcontrolWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -49060,6 +49120,9 @@ input UpdateControlInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -49168,6 +49231,9 @@ input UpdateControlObjectiveInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -49487,6 +49553,9 @@ input UpdateFileInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -50624,6 +50693,9 @@ input UpdateSubcontrolInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.

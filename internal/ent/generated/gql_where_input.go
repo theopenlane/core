@@ -4892,6 +4892,10 @@ type ControlWhereInput struct {
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+
+	// "evidence" edge predicates.
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -6066,6 +6070,24 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, control.HasProgramsWith(with...))
+	}
+	if i.HasEvidence != nil {
+		p := control.HasEvidence()
+		if !*i.HasEvidence {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEvidenceWith) > 0 {
+		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		for _, w := range i.HasEvidenceWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEvidenceWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasEvidenceWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -7851,6 +7873,10 @@ type ControlObjectiveWhereInput struct {
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+
+	// "evidence" edge predicates.
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8980,6 +9006,24 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, controlobjective.HasProgramsWith(with...))
+	}
+	if i.HasEvidence != nil {
+		p := controlobjective.HasEvidence()
+		if !*i.HasEvidence {
+			p = controlobjective.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEvidenceWith) > 0 {
+		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		for _, w := range i.HasEvidenceWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEvidenceWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlobjective.HasEvidenceWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -16337,8 +16381,8 @@ type EvidenceWhereInput struct {
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
 	// "subcontrols" edge predicates.
-	HasSubcontrols     *bool                `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*ControlWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
@@ -17105,7 +17149,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasSubcontrolsWith))
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -18595,6 +18639,10 @@ type FileWhereInput struct {
 	// "program" edge predicates.
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
 	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+
+	// "evidence" edge predicates.
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -19658,6 +19706,24 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, file.HasProgramWith(with...))
+	}
+	if i.HasEvidence != nil {
+		p := file.HasEvidence()
+		if !*i.HasEvidence {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEvidenceWith) > 0 {
+		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		for _, w := range i.HasEvidenceWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEvidenceWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasEvidenceWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -53948,6 +54014,10 @@ type SubcontrolWhereInput struct {
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+
+	// "evidence" edge predicates.
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -55146,6 +55216,24 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, subcontrol.HasProgramsWith(with...))
+	}
+	if i.HasEvidence != nil {
+		p := subcontrol.HasEvidence()
+		if !*i.HasEvidence {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEvidenceWith) > 0 {
+		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		for _, w := range i.HasEvidenceWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEvidenceWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasEvidenceWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

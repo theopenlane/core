@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
@@ -281,17 +282,17 @@ func (ec *EvidenceCreate) AddControls(c ...*Control) *EvidenceCreate {
 	return ec.AddControlIDs(ids...)
 }
 
-// AddSubcontrolIDs adds the "subcontrols" edge to the Control entity by IDs.
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (ec *EvidenceCreate) AddSubcontrolIDs(ids ...string) *EvidenceCreate {
 	ec.mutation.AddSubcontrolIDs(ids...)
 	return ec
 }
 
-// AddSubcontrols adds the "subcontrols" edges to the Control entity.
-func (ec *EvidenceCreate) AddSubcontrols(c ...*Control) *EvidenceCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ec *EvidenceCreate) AddSubcontrols(s ...*Subcontrol) *EvidenceCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return ec.AddSubcontrolIDs(ids...)
 }
@@ -573,16 +574,16 @@ func (ec *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	}
 	if nodes := ec.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.ControlObjective
+		edge.Schema = ec.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -590,16 +591,16 @@ func (ec *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	}
 	if nodes := ec.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.Control
+		edge.Schema = ec.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -607,16 +608,16 @@ func (ec *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	}
 	if nodes := ec.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.Control
+		edge.Schema = ec.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -624,16 +625,16 @@ func (ec *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	}
 	if nodes := ec.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.File
+		edge.Schema = ec.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

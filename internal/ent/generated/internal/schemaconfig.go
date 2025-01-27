@@ -45,6 +45,10 @@ type SchemaConfig struct {
 	Event                                string // Event table.
 	EventHistory                         string // EventHistory table.
 	Evidence                             string // Evidence table.
+	EvidenceControlObjectives            string // Evidence-control_objectives->ControlObjective table.
+	EvidenceControls                     string // Evidence-controls->Control table.
+	EvidenceSubcontrols                  string // Evidence-subcontrols->Subcontrol table.
+	EvidenceFiles                        string // Evidence-files->File table.
 	EvidenceHistory                      string // EvidenceHistory table.
 	File                                 string // File table.
 	FileEvents                           string // File-events->Event table.

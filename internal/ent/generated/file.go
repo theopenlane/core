@@ -62,9 +62,8 @@ type File struct {
 	FileContents []byte `json:"file_contents,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
-	Edges          FileEdges `json:"edges"`
-	evidence_files *string
-	selectValues   sql.SelectValues
+	Edges        FileEdges `json:"edges"`
+	selectValues sql.SelectValues
 
 	PresignedURL string `json:"presignedURL,omitempty"`
 }
@@ -93,11 +92,13 @@ type FileEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// Program holds the value of the program edge.
 	Program []*Program `json:"program,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -110,6 +111,7 @@ type FileEdges struct {
 	namedDocumentData        map[string][]*DocumentData
 	namedEvents              map[string][]*Event
 	namedProgram             map[string][]*Program
+	namedEvidence            map[string][]*Evidence
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -211,6 +213,15 @@ func (e FileEdges) ProgramOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "program"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[11] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*File) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -224,8 +235,6 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case file.ForeignKeys[0]: // evidence_files
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -375,13 +384,6 @@ func (f *File) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				f.FileContents = *value
 			}
-		case file.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field evidence_files", values[i])
-			} else if value.Valid {
-				f.evidence_files = new(string)
-				*f.evidence_files = value.String
-			}
 		default:
 			f.selectValues.Set(columns[i], values[i])
 		}
@@ -448,6 +450,11 @@ func (f *File) QueryEvents() *EventQuery {
 // QueryProgram queries the "program" edge of the File entity.
 func (f *File) QueryProgram() *ProgramQuery {
 	return NewFileClient(f.config).QueryProgram(f)
+}
+
+// QueryEvidence queries the "evidence" edge of the File entity.
+func (f *File) QueryEvidence() *EvidenceQuery {
+	return NewFileClient(f.config).QueryEvidence(f)
 }
 
 // Update returns a builder for updating this File.
@@ -800,6 +807,30 @@ func (f *File) appendNamedProgram(name string, edges ...*Program) {
 		f.Edges.namedProgram[name] = []*Program{}
 	} else {
 		f.Edges.namedProgram[name] = append(f.Edges.namedProgram[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (f *File) NamedEvidence(name string) ([]*Evidence, error) {
+	if f.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := f.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (f *File) appendNamedEvidence(name string, edges ...*Evidence) {
+	if f.Edges.namedEvidence == nil {
+		f.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		f.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		f.Edges.namedEvidence[name] = append(f.Edges.namedEvidence[name], edges...)
 	}
 }
 

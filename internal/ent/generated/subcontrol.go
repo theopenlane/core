@@ -94,16 +94,19 @@ type SubcontrolEdges struct {
 	Notes *Note `json:"notes,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedControls map[string][]*Control
 	namedUser     map[string][]*User
 	namedTasks    map[string][]*Task
 	namedPrograms map[string][]*Program
+	namedEvidence map[string][]*Evidence
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -162,6 +165,15 @@ func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
+}
+
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[6] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -417,6 +429,11 @@ func (s *Subcontrol) QueryPrograms() *ProgramQuery {
 	return NewSubcontrolClient(s.config).QueryPrograms(s)
 }
 
+// QueryEvidence queries the "evidence" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryEvidence() *EvidenceQuery {
+	return NewSubcontrolClient(s.config).QueryEvidence(s)
+}
+
 // Update returns a builder for updating this Subcontrol.
 // Note that you need to call Subcontrol.Unwrap() before calling this method if this Subcontrol
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -614,6 +631,30 @@ func (s *Subcontrol) appendNamedPrograms(name string, edges ...*Program) {
 		s.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		s.Edges.namedPrograms[name] = append(s.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedEvidence(name string) ([]*Evidence, error) {
+	if s.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedEvidence(name string, edges ...*Evidence) {
+	if s.Edges.namedEvidence == nil {
+		s.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		s.Edges.namedEvidence[name] = append(s.Edges.namedEvidence[name], edges...)
 	}
 }
 

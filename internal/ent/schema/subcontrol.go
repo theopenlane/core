@@ -97,6 +97,8 @@ func (Subcontrol) Edges() []ent.Edge {
 			Ref("subcontrols"),
 		edge.From("programs", Program.Type).
 			Ref("subcontrols"),
+		edge.From("evidence", Evidence.Type).
+			Ref("subcontrols"),
 	}
 }
 

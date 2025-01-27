@@ -7914,6 +7914,9 @@ type ControlMutation struct {
 	programs                  map[string]struct{}
 	removedprograms           map[string]struct{}
 	clearedprograms           bool
+	evidence                  map[string]struct{}
+	removedevidence           map[string]struct{}
+	clearedevidence           bool
 	done                      bool
 	oldValue                  func(context.Context) (*Control, error)
 	predicates                []predicate.Control
@@ -9753,6 +9756,60 @@ func (m *ControlMutation) ResetPrograms() {
 	m.removedprograms = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *ControlMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *ControlMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *ControlMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *ControlMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *ControlMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *ControlMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *ControlMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the ControlMutation builder.
 func (m *ControlMutation) Where(ps ...predicate.Control) {
 	m.predicates = append(m.predicates, ps...)
@@ -10360,7 +10417,7 @@ func (m *ControlMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.owner != nil {
 		edges = append(edges, control.EdgeOwner)
 	}
@@ -10399,6 +10456,9 @@ func (m *ControlMutation) AddedEdges() []string {
 	}
 	if m.programs != nil {
 		edges = append(edges, control.EdgePrograms)
+	}
+	if m.evidence != nil {
+		edges = append(edges, control.EdgeEvidence)
 	}
 	return edges
 }
@@ -10483,13 +10543,19 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, control.EdgeBlockedGroups)
 	}
@@ -10525,6 +10591,9 @@ func (m *ControlMutation) RemovedEdges() []string {
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, control.EdgePrograms)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, control.EdgeEvidence)
 	}
 	return edges
 }
@@ -10605,13 +10674,19 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.clearedowner {
 		edges = append(edges, control.EdgeOwner)
 	}
@@ -10651,6 +10726,9 @@ func (m *ControlMutation) ClearedEdges() []string {
 	if m.clearedprograms {
 		edges = append(edges, control.EdgePrograms)
 	}
+	if m.clearedevidence {
+		edges = append(edges, control.EdgeEvidence)
+	}
 	return edges
 }
 
@@ -10684,6 +10762,8 @@ func (m *ControlMutation) EdgeCleared(name string) bool {
 		return m.clearedtasks
 	case control.EdgePrograms:
 		return m.clearedprograms
+	case control.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -10741,6 +10821,9 @@ func (m *ControlMutation) ResetEdge(name string) error {
 		return nil
 	case control.EdgePrograms:
 		m.ResetPrograms()
+		return nil
+	case control.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown Control edge %s", name)
@@ -12840,6 +12923,9 @@ type ControlObjectiveMutation struct {
 	programs                 map[string]struct{}
 	removedprograms          map[string]struct{}
 	clearedprograms          bool
+	evidence                 map[string]struct{}
+	removedevidence          map[string]struct{}
+	clearedevidence          bool
 	done                     bool
 	oldValue                 func(context.Context) (*ControlObjective, error)
 	predicates               []predicate.ControlObjective
@@ -14630,6 +14716,60 @@ func (m *ControlObjectiveMutation) ResetPrograms() {
 	m.removedprograms = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *ControlObjectiveMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *ControlObjectiveMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *ControlObjectiveMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *ControlObjectiveMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *ControlObjectiveMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *ControlObjectiveMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *ControlObjectiveMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the ControlObjectiveMutation builder.
 func (m *ControlObjectiveMutation) Where(ps ...predicate.ControlObjective) {
 	m.predicates = append(m.predicates, ps...)
@@ -15214,7 +15354,7 @@ func (m *ControlObjectiveMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlObjectiveMutation) AddedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.owner != nil {
 		edges = append(edges, controlobjective.EdgeOwner)
 	}
@@ -15253,6 +15393,9 @@ func (m *ControlObjectiveMutation) AddedEdges() []string {
 	}
 	if m.programs != nil {
 		edges = append(edges, controlobjective.EdgePrograms)
+	}
+	if m.evidence != nil {
+		edges = append(edges, controlobjective.EdgeEvidence)
 	}
 	return edges
 }
@@ -15337,13 +15480,19 @@ func (m *ControlObjectiveMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case controlobjective.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlObjectiveMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, controlobjective.EdgeBlockedGroups)
 	}
@@ -15379,6 +15528,9 @@ func (m *ControlObjectiveMutation) RemovedEdges() []string {
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, controlobjective.EdgePrograms)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, controlobjective.EdgeEvidence)
 	}
 	return edges
 }
@@ -15459,13 +15611,19 @@ func (m *ControlObjectiveMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case controlobjective.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlObjectiveMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.clearedowner {
 		edges = append(edges, controlobjective.EdgeOwner)
 	}
@@ -15505,6 +15663,9 @@ func (m *ControlObjectiveMutation) ClearedEdges() []string {
 	if m.clearedprograms {
 		edges = append(edges, controlobjective.EdgePrograms)
 	}
+	if m.clearedevidence {
+		edges = append(edges, controlobjective.EdgeEvidence)
+	}
 	return edges
 }
 
@@ -15538,6 +15699,8 @@ func (m *ControlObjectiveMutation) EdgeCleared(name string) bool {
 		return m.clearedtasks
 	case controlobjective.EdgePrograms:
 		return m.clearedprograms
+	case controlobjective.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -15595,6 +15758,9 @@ func (m *ControlObjectiveMutation) ResetEdge(name string) error {
 		return nil
 	case controlobjective.EdgePrograms:
 		m.ResetPrograms()
+		return nil
+	case controlobjective.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective edge %s", name)
@@ -30569,7 +30735,7 @@ func (m *EvidenceMutation) ResetControls() {
 	m.removedcontrols = nil
 }
 
-// AddSubcontrolIDs adds the "subcontrols" edge to the Control entity by ids.
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
 func (m *EvidenceMutation) AddSubcontrolIDs(ids ...string) {
 	if m.subcontrols == nil {
 		m.subcontrols = make(map[string]struct{})
@@ -30579,17 +30745,17 @@ func (m *EvidenceMutation) AddSubcontrolIDs(ids ...string) {
 	}
 }
 
-// ClearSubcontrols clears the "subcontrols" edge to the Control entity.
+// ClearSubcontrols clears the "subcontrols" edge to the Subcontrol entity.
 func (m *EvidenceMutation) ClearSubcontrols() {
 	m.clearedsubcontrols = true
 }
 
-// SubcontrolsCleared reports if the "subcontrols" edge to the Control entity was cleared.
+// SubcontrolsCleared reports if the "subcontrols" edge to the Subcontrol entity was cleared.
 func (m *EvidenceMutation) SubcontrolsCleared() bool {
 	return m.clearedsubcontrols
 }
 
-// RemoveSubcontrolIDs removes the "subcontrols" edge to the Control entity by IDs.
+// RemoveSubcontrolIDs removes the "subcontrols" edge to the Subcontrol entity by IDs.
 func (m *EvidenceMutation) RemoveSubcontrolIDs(ids ...string) {
 	if m.removedsubcontrols == nil {
 		m.removedsubcontrols = make(map[string]struct{})
@@ -30600,7 +30766,7 @@ func (m *EvidenceMutation) RemoveSubcontrolIDs(ids ...string) {
 	}
 }
 
-// RemovedSubcontrols returns the removed IDs of the "subcontrols" edge to the Control entity.
+// RemovedSubcontrols returns the removed IDs of the "subcontrols" edge to the Subcontrol entity.
 func (m *EvidenceMutation) RemovedSubcontrolsIDs() (ids []string) {
 	for id := range m.removedsubcontrols {
 		ids = append(ids, id)
@@ -33209,6 +33375,9 @@ type FileMutation struct {
 	program                     map[string]struct{}
 	removedprogram              map[string]struct{}
 	clearedprogram              bool
+	evidence                    map[string]struct{}
+	removedevidence             map[string]struct{}
+	clearedevidence             bool
 	done                        bool
 	oldValue                    func(context.Context) (*File, error)
 	predicates                  []predicate.File
@@ -34960,6 +35129,60 @@ func (m *FileMutation) ResetProgram() {
 	m.removedprogram = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *FileMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *FileMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *FileMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *FileMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *FileMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *FileMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *FileMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the FileMutation builder.
 func (m *FileMutation) Where(ps ...predicate.File) {
 	m.predicates = append(m.predicates, ps...)
@@ -35571,7 +35794,7 @@ func (m *FileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.user != nil {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -35604,6 +35827,9 @@ func (m *FileMutation) AddedEdges() []string {
 	}
 	if m.program != nil {
 		edges = append(edges, file.EdgeProgram)
+	}
+	if m.evidence != nil {
+		edges = append(edges, file.EdgeEvidence)
 	}
 	return edges
 }
@@ -35678,13 +35904,19 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.removeduser != nil {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -35717,6 +35949,9 @@ func (m *FileMutation) RemovedEdges() []string {
 	}
 	if m.removedprogram != nil {
 		edges = append(edges, file.EdgeProgram)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, file.EdgeEvidence)
 	}
 	return edges
 }
@@ -35791,13 +36026,19 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.cleareduser {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -35831,6 +36072,9 @@ func (m *FileMutation) ClearedEdges() []string {
 	if m.clearedprogram {
 		edges = append(edges, file.EdgeProgram)
 	}
+	if m.clearedevidence {
+		edges = append(edges, file.EdgeEvidence)
+	}
 	return edges
 }
 
@@ -35860,6 +36104,8 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.clearedevents
 	case file.EdgeProgram:
 		return m.clearedprogram
+	case file.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -35908,6 +36154,9 @@ func (m *FileMutation) ResetEdge(name string) error {
 		return nil
 	case file.EdgeProgram:
 		m.ResetProgram()
+		return nil
+	case file.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown File edge %s", name)
@@ -101058,6 +101307,9 @@ type SubcontrolMutation struct {
 	programs                         map[string]struct{}
 	removedprograms                  map[string]struct{}
 	clearedprograms                  bool
+	evidence                         map[string]struct{}
+	removedevidence                  map[string]struct{}
+	clearedevidence                  bool
 	done                             bool
 	oldValue                         func(context.Context) (*Subcontrol, error)
 	predicates                       []predicate.Subcontrol
@@ -102700,6 +102952,60 @@ func (m *SubcontrolMutation) ResetPrograms() {
 	m.removedprograms = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *SubcontrolMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *SubcontrolMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *SubcontrolMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *SubcontrolMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *SubcontrolMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *SubcontrolMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *SubcontrolMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the SubcontrolMutation builder.
 func (m *SubcontrolMutation) Where(ps ...predicate.Subcontrol) {
 	m.predicates = append(m.predicates, ps...)
@@ -103399,7 +103705,7 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubcontrolMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.owner != nil {
 		edges = append(edges, subcontrol.EdgeOwner)
 	}
@@ -103417,6 +103723,9 @@ func (m *SubcontrolMutation) AddedEdges() []string {
 	}
 	if m.programs != nil {
 		edges = append(edges, subcontrol.EdgePrograms)
+	}
+	if m.evidence != nil {
+		edges = append(edges, subcontrol.EdgeEvidence)
 	}
 	return edges
 }
@@ -103457,13 +103766,19 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubcontrolMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedcontrols != nil {
 		edges = append(edges, subcontrol.EdgeControls)
 	}
@@ -103475,6 +103790,9 @@ func (m *SubcontrolMutation) RemovedEdges() []string {
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, subcontrol.EdgePrograms)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, subcontrol.EdgeEvidence)
 	}
 	return edges
 }
@@ -103507,13 +103825,19 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubcontrolMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedowner {
 		edges = append(edges, subcontrol.EdgeOwner)
 	}
@@ -103531,6 +103855,9 @@ func (m *SubcontrolMutation) ClearedEdges() []string {
 	}
 	if m.clearedprograms {
 		edges = append(edges, subcontrol.EdgePrograms)
+	}
+	if m.clearedevidence {
+		edges = append(edges, subcontrol.EdgeEvidence)
 	}
 	return edges
 }
@@ -103551,6 +103878,8 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 		return m.clearednotes
 	case subcontrol.EdgePrograms:
 		return m.clearedprograms
+	case subcontrol.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -103590,6 +103919,9 @@ func (m *SubcontrolMutation) ResetEdge(name string) error {
 		return nil
 	case subcontrol.EdgePrograms:
 		m.ResetPrograms()
+		return nil
+	case subcontrol.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol edge %s", name)

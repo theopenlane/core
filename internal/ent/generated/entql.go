@@ -2459,6 +2459,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"evidence",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+		},
+		"Control",
+		"Evidence",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2613,6 +2625,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ControlObjective",
 		"Program",
+	)
+	graph.MustAddE(
+		"evidence",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+		},
+		"ControlObjective",
+		"Evidence",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2917,10 +2941,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"control_objectives",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlObjectivesTable,
-			Columns: []string{evidence.ControlObjectivesColumn},
+			Columns: evidence.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 		},
 		"Evidence",
@@ -2929,10 +2953,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"controls",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.ControlsTable,
-			Columns: []string{evidence.ControlsColumn},
+			Columns: evidence.ControlsPrimaryKey,
 			Bidi:    false,
 		},
 		"Evidence",
@@ -2941,22 +2965,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"subcontrols",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.SubcontrolsTable,
-			Columns: []string{evidence.SubcontrolsColumn},
+			Columns: evidence.SubcontrolsPrimaryKey,
 			Bidi:    false,
 		},
 		"Evidence",
-		"Control",
+		"Subcontrol",
 	)
 	graph.MustAddE(
 		"files",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   evidence.FilesTable,
-			Columns: []string{evidence.FilesColumn},
+			Columns: evidence.FilesPrimaryKey,
 			Bidi:    false,
 		},
 		"Evidence",
@@ -3117,6 +3141,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"Program",
+	)
+	graph.MustAddE(
+		"evidence",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Evidence",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5183,6 +5219,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"evidence",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Evidence",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -6719,6 +6767,20 @@ func (f *ControlFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	})))
 }
 
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *ControlFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (chq *ControlHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	chq.predicates = append(chq.predicates, pred)
@@ -7205,6 +7267,20 @@ func (f *ControlObjectiveFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *ControlObjectiveFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *ControlObjectiveFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *ControlObjectiveFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -8775,7 +8851,7 @@ func (f *EvidenceFilter) WhereHasSubcontrols() {
 }
 
 // WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
-func (f *EvidenceFilter) WhereHasSubcontrolsWith(preds ...predicate.Control) {
+func (f *EvidenceFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -9258,6 +9334,20 @@ func (f *FileFilter) WhereHasProgram() {
 // WhereHasProgramWith applies a predicate to check if query has an edge program with a given conditions (other predicates).
 func (f *FileFilter) WhereHasProgramWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("program", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *FileFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *FileFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16311,6 +16401,20 @@ func (f *SubcontrolFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *SubcontrolFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

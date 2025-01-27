@@ -22,11 +22,12 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 
 	(&ProgramMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
 
-	control := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
-
 	// create an Evidence to be queried using adminUser
 	// org owner (testUser1) should automatically have access to the Evidence
 	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
+
+	// create a control to be queried using adminUser that access is granted via the control
+	control := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	evidenceControl := (&EvidenceBuilder{client: suite.client, ControlID: control.ID}).MustNew(testUser1.UserCtx, t)
 
@@ -57,11 +58,10 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 			ctx:     testUser1.UserCtx,
 		},
 		{
-			name:     "read only user in organization, authorized via program",
-			queryID:  evidence.ID,
-			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			name:    "read only user in organization, authorized via program",
+			queryID: evidence.ID,
+			client:  suite.client.api,
+			ctx:     viewOnlyUser.UserCtx,
 		},
 		{
 			name:     "read only user in organization, not authorized",
@@ -193,6 +193,14 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 	txtFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
 	require.NoError(t, err)
 
+	// create edges to be used in the test cases
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	controlObjective1 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	controlObjective2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	subcontrol1 := (&SubcontrolBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	subcontrol2 := (&SubcontrolBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEvidenceInput
@@ -222,6 +230,9 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 				URL:                 lo.ToPtr("https://example.com/my-evidence.png"),
 				ProgramIDs:          []string{program.ID},
 				TaskIDs:             []string{task.ID},
+				ControlIDs:          []string{control1.ID, control2.ID},
+				ControlObjectiveIDs: []string{controlObjective1.ID, controlObjective2.ID},
+				SubcontrolIDs:       []string{subcontrol1.ID, subcontrol2.ID},
 			},
 			files: []*graphql.Upload{
 				{
@@ -251,6 +262,9 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 				RenewalDate:         lo.ToPtr(time.Now().Add(365 * 24 * time.Hour)),
 				IsAutomated:         lo.ToPtr(true),
 				URL:                 lo.ToPtr("https://example.com/my-evidence.png"),
+				ControlIDs:          []string{control1.ID, control2.ID},                   // ensure the same controls can be added to multiple evidences
+				ControlObjectiveIDs: []string{controlObjective1.ID, controlObjective2.ID}, // ensure the same control objectives can be added to multiple evidences
+				SubcontrolIDs:       []string{subcontrol1.ID, subcontrol2.ID},             // ensure the same subcontrols can be added to multiple evidences
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -391,6 +405,12 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 			} else {
 				assert.Empty(t, resp.CreateEvidence.Evidence.Files)
 			}
+
+			// attempt to retrieve the created evidence by org owner, no matter who created it
+			// the org owner should have access to it
+			resp2, err := suite.client.api.GetEvidenceByID(testUser1.UserCtx, resp.CreateEvidence.Evidence.ID)
+			require.NoError(t, err)
+			require.NotNil(t, resp2)
 		})
 	}
 }

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -558,6 +559,21 @@ func (cou *ControlObjectiveUpdate) AddPrograms(p ...*Program) *ControlObjectiveU
 	return cou.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (cou *ControlObjectiveUpdate) AddEvidenceIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddEvidenceIDs(ids...)
+	return cou
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (cou *ControlObjectiveUpdate) AddEvidence(e ...*Evidence) *ControlObjectiveUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cou.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (cou *ControlObjectiveUpdate) Mutation() *ControlObjectiveMutation {
 	return cou.mutation
@@ -819,6 +835,27 @@ func (cou *ControlObjectiveUpdate) RemovePrograms(p ...*Program) *ControlObjecti
 		ids[i] = p[i].ID
 	}
 	return cou.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (cou *ControlObjectiveUpdate) ClearEvidence() *ControlObjectiveUpdate {
+	cou.mutation.ClearEvidence()
+	return cou
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveEvidenceIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveEvidenceIDs(ids...)
+	return cou
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (cou *ControlObjectiveUpdate) RemoveEvidence(e ...*Evidence) *ControlObjectiveUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cou.RemoveEvidenceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1616,6 +1653,54 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cou.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !cou.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = cou.schemaConfig.ControlObjective
 	ctx = internal.NewSchemaConfigContext(ctx, cou.schemaConfig)
 	_spec.AddModifiers(cou.modifiers...)
@@ -2155,6 +2240,21 @@ func (couo *ControlObjectiveUpdateOne) AddPrograms(p ...*Program) *ControlObject
 	return couo.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddEvidenceIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddEvidenceIDs(ids...)
+	return couo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (couo *ControlObjectiveUpdateOne) AddEvidence(e ...*Evidence) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return couo.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (couo *ControlObjectiveUpdateOne) Mutation() *ControlObjectiveMutation {
 	return couo.mutation
@@ -2416,6 +2516,27 @@ func (couo *ControlObjectiveUpdateOne) RemovePrograms(p ...*Program) *ControlObj
 		ids[i] = p[i].ID
 	}
 	return couo.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (couo *ControlObjectiveUpdateOne) ClearEvidence() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearEvidence()
+	return couo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveEvidenceIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveEvidenceIDs(ids...)
+	return couo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (couo *ControlObjectiveUpdateOne) RemoveEvidence(e ...*Evidence) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return couo.RemoveEvidenceIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlObjectiveUpdate builder.
@@ -3238,6 +3359,54 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 			},
 		}
 		edge.Schema = couo.schemaConfig.ProgramControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !couo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

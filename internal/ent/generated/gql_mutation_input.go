@@ -527,6 +527,7 @@ type CreateControlInput struct {
 	ActionPlanIDs       []string
 	TaskIDs             []string
 	ProgramIDs          []string
+	EvidenceIDs         []string
 }
 
 // Mutate applies the CreateControlInput on the ControlMutation builder.
@@ -608,6 +609,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateControlInput on the ControlCreate builder.
@@ -683,6 +687,9 @@ type UpdateControlInput struct {
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
+	ClearEvidence             bool
+	AddEvidenceIDs            []string
+	RemoveEvidenceIDs         []string
 }
 
 // Mutate applies the UpdateControlInput on the ControlMutation builder.
@@ -882,6 +889,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
 	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateControlInput on the ControlUpdate builder.
@@ -924,6 +940,7 @@ type CreateControlObjectiveInput struct {
 	NarrativeIDs         []string
 	TaskIDs              []string
 	ProgramIDs           []string
+	EvidenceIDs          []string
 }
 
 // Mutate applies the CreateControlObjectiveInput on the ControlObjectiveMutation builder.
@@ -1002,6 +1019,9 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateControlObjectiveInput on the ControlObjectiveCreate builder.
@@ -1075,6 +1095,9 @@ type UpdateControlObjectiveInput struct {
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
+	ClearEvidence             bool
+	AddEvidenceIDs            []string
+	RemoveEvidenceIDs         []string
 }
 
 // Mutate applies the UpdateControlObjectiveInput on the ControlObjectiveMutation builder.
@@ -1267,6 +1290,15 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
 	}
 }
 
@@ -2177,6 +2209,7 @@ type CreateFileInput struct {
 	DocumentDatumIDs       []string
 	EventIDs               []string
 	ProgramIDs             []string
+	EvidenceIDs            []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -2250,6 +2283,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -2319,6 +2355,9 @@ type UpdateFileInput struct {
 	ClearProgram                 bool
 	AddProgramIDs                []string
 	RemoveProgramIDs             []string
+	ClearEvidence                bool
+	AddEvidenceIDs               []string
+	RemoveEvidenceIDs            []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -2499,6 +2538,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
 	}
 }
 
@@ -6694,6 +6742,7 @@ type CreateSubcontrolInput struct {
 	TaskIDs                        []string
 	NotesID                        *string
 	ProgramIDs                     []string
+	EvidenceIDs                    []string
 }
 
 // Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
@@ -6766,6 +6815,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSubcontrolInput on the SubcontrolCreate builder.
@@ -6826,6 +6878,9 @@ type UpdateSubcontrolInput struct {
 	ClearPrograms                       bool
 	AddProgramIDs                       []string
 	RemoveProgramIDs                    []string
+	ClearEvidence                       bool
+	AddEvidenceIDs                      []string
+	RemoveEvidenceIDs                   []string
 }
 
 // Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
@@ -6979,6 +7034,15 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
 	}
 }
 

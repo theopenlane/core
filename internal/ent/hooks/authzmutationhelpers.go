@@ -239,16 +239,15 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 	// check if the edges were set on the mutation
 	edges := m.AddedEdges()
 	for _, e := range edges {
-		parentEdge := strings.ReplaceAll(parentField, "_id", "")
-		// check if the edge is the parent field or the parent field pluralized
-		if e == parentEdge || e == parentEdge+"s" {
+		foundEdge := checkForEdge(parentField, e)
+		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids
 			field := goUpper.ToGo(parentField)
 			if m.Op() != ent.OpCreate {
 				field = "Add" + field
 			}
 
-			return parseGraphqlInputForEdgeIDs(ctx, field)
+			return parseMutationForAddedEdgeIDs(ctx, foundEdge, field, m)
 		}
 	}
 
@@ -266,19 +265,73 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 	// check if the edges were set on the mutation
 	edges := m.RemovedEdges()
 	for _, e := range edges {
-		parentEdge := strings.ReplaceAll(parentField, "_id", "")
-		if e == parentEdge || e == parentEdge+"s" {
+		foundEdge := checkForEdge(parentField, e)
+
+		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids
 			field := goUpper.ToGo(parentField)
 			if m.Op() != ent.OpCreate {
 				field = "Remove" + field
 			}
 
-			return parseGraphqlInputForEdgeIDs(ctx, field)
+			return parseMutationForRemovedEdgeIDs(ctx, foundEdge, field, m)
 		}
 	}
 
 	return nil, nil
+}
+
+// checkForEdge checks if the edge field is the parent field or the parent field pluralized
+// or not an set edge at all
+func checkForEdge(parentField, edgeField string) string {
+	parentEdge := strings.ReplaceAll(parentField, "_id", "")
+	pluralEdge := parentEdge + "s"
+	foundEdge := ""
+
+	// determine if the edge is the parent field or the parent field pluralized
+	if edgeField == parentEdge {
+		foundEdge = parentEdge
+	} else if edgeField == pluralEdge {
+		foundEdge = pluralEdge
+	}
+
+	return foundEdge
+}
+
+// parseMutationForAddedEdgeIDs parses the mutation to get the ids for the parent edge by first checking the mutation
+// and then the graphql input
+func parseMutationForAddedEdgeIDs(ctx context.Context, parentEdge, parentField string, m ent.Mutation) ([]string, error) {
+	val := m.AddedIDs(parentEdge)
+
+	if len(val) == 0 {
+		return parseGraphqlInputForEdgeIDs(ctx, parentField)
+	}
+
+	ids := []string{}
+
+	for _, v := range val {
+		ids = append(ids, v.(string))
+	}
+
+	return ids, nil
+}
+
+// parseMutationForRemovedEdgeIDs parses the mutation to get the ids removed for the parent field by first checking the mutation
+// and then the graphql input
+func parseMutationForRemovedEdgeIDs(ctx context.Context, parentEdge, parentField string, m ent.Mutation) ([]string, error) {
+	val := m.RemovedIDs(parentEdge)
+
+	if len(val) == 0 {
+		return parseGraphqlInputForEdgeIDs(ctx, parentField)
+	}
+
+	ids := []string{}
+
+	for _, v := range val {
+		ids = append(ids, v.(string))
+	}
+
+	return ids, nil
 }
 
 // parseGraphqlInputForEdgeIDs parses the graphql input to get the ids for the parent field

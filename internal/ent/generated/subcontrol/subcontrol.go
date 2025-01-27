@@ -79,6 +79,8 @@ const (
 	EdgeNotes = "notes"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// Table holds the table name of the subcontrol in the database.
 	Table = "subcontrols"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -115,6 +117,11 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
+	EvidenceTable = "evidence_subcontrols"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
 )
 
 // Columns holds all SQL columns for subcontrol fields.
@@ -168,6 +175,9 @@ var (
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "subcontrol_id"}
+	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
+	// primary key for the evidence relation (M2M).
+	EvidencePrimaryKey = []string{"evidence_id", "subcontrol_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -409,6 +419,20 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -449,5 +473,12 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
 	)
 }

@@ -72,34 +72,26 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// ControlObjectivesTable is the table that holds the control_objectives relation/edge.
-	ControlObjectivesTable = "control_objectives"
+	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
+	ControlObjectivesTable = "evidence_control_objectives"
 	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
 	ControlObjectivesInverseTable = "control_objectives"
-	// ControlObjectivesColumn is the table column denoting the control_objectives relation/edge.
-	ControlObjectivesColumn = "evidence_control_objectives"
-	// ControlsTable is the table that holds the controls relation/edge.
-	ControlsTable = "controls"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "evidence_controls"
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// ControlsColumn is the table column denoting the controls relation/edge.
-	ControlsColumn = "evidence_controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
-	SubcontrolsTable = "controls"
-	// SubcontrolsInverseTable is the table name for the Control entity.
-	// It exists in this package in order to avoid circular dependency with the "control" package.
-	SubcontrolsInverseTable = "controls"
-	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
-	SubcontrolsColumn = "evidence_subcontrols"
-	// FilesTable is the table that holds the files relation/edge.
-	FilesTable = "files"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "evidence_subcontrols"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "evidence_files"
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
-	// FilesColumn is the table column denoting the files relation/edge.
-	FilesColumn = "evidence_files"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_evidence"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -135,6 +127,18 @@ var Columns = []string{
 }
 
 var (
+	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
+	// primary key for the control_objectives relation (M2M).
+	ControlObjectivesPrimaryKey = []string{"evidence_id", "control_objective_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"evidence_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"evidence_id", "subcontrol_id"}
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"evidence_id", "file_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "evidence_id"}
@@ -375,28 +379,28 @@ func newControlObjectivesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ControlObjectivesTable, ControlObjectivesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
 	)
 }
 func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
 func newFilesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

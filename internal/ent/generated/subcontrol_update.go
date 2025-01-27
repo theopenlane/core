@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -552,6 +553,21 @@ func (su *SubcontrolUpdate) AddPrograms(p ...*Program) *SubcontrolUpdate {
 	return su.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (su *SubcontrolUpdate) AddEvidenceIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.AddEvidenceIDs(ids...)
+	return su
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (su *SubcontrolUpdate) AddEvidence(e ...*Evidence) *SubcontrolUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return su.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (su *SubcontrolUpdate) Mutation() *SubcontrolMutation {
 	return su.mutation
@@ -651,6 +667,27 @@ func (su *SubcontrolUpdate) RemovePrograms(p ...*Program) *SubcontrolUpdate {
 		ids[i] = p[i].ID
 	}
 	return su.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (su *SubcontrolUpdate) ClearEvidence() *SubcontrolUpdate {
+	su.mutation.ClearEvidence()
+	return su
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (su *SubcontrolUpdate) RemoveEvidenceIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.RemoveEvidenceIDs(ids...)
+	return su
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (su *SubcontrolUpdate) RemoveEvidence(e ...*Evidence) *SubcontrolUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return su.RemoveEvidenceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1120,6 +1157,54 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = su.schemaConfig.ProgramSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.EvidenceSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !su.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.EvidenceSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1663,6 +1748,21 @@ func (suo *SubcontrolUpdateOne) AddPrograms(p ...*Program) *SubcontrolUpdateOne 
 	return suo.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (suo *SubcontrolUpdateOne) AddEvidenceIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.AddEvidenceIDs(ids...)
+	return suo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (suo *SubcontrolUpdateOne) AddEvidence(e ...*Evidence) *SubcontrolUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return suo.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (suo *SubcontrolUpdateOne) Mutation() *SubcontrolMutation {
 	return suo.mutation
@@ -1762,6 +1862,27 @@ func (suo *SubcontrolUpdateOne) RemovePrograms(p ...*Program) *SubcontrolUpdateO
 		ids[i] = p[i].ID
 	}
 	return suo.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (suo *SubcontrolUpdateOne) ClearEvidence() *SubcontrolUpdateOne {
+	suo.mutation.ClearEvidence()
+	return suo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (suo *SubcontrolUpdateOne) RemoveEvidenceIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.RemoveEvidenceIDs(ids...)
+	return suo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (suo *SubcontrolUpdateOne) RemoveEvidence(e ...*Evidence) *SubcontrolUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return suo.RemoveEvidenceIDs(ids...)
 }
 
 // Where appends a list predicates to the SubcontrolUpdate builder.
@@ -2261,6 +2382,54 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 			},
 		}
 		edge.Schema = suo.schemaConfig.ProgramSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.EvidenceSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !suo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.EvidenceSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

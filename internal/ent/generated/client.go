@@ -2179,6 +2179,25 @@ func (c *ControlClient) QueryPrograms(co *Control) *ProgramQuery {
 	return query
 }
 
+// QueryEvidence queries the evidence edge of a Control.
+func (c *ControlClient) QueryEvidence(co *Control) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.EvidenceTable, control.EvidencePrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ControlClient) Hooks() []Hook {
 	hooks := c.hooks.Control
@@ -2689,6 +2708,25 @@ func (c *ControlObjectiveClient) QueryPrograms(co *ControlObjective) *ProgramQue
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramControlObjectives
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryEvidence(co *ControlObjective) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.EvidenceTable, controlobjective.EvidencePrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4656,11 +4694,11 @@ func (c *EvidenceClient) QueryControlObjectives(e *Evidence) *ControlObjectiveQu
 		step := sqlgraph.NewStep(
 			sqlgraph.From(evidence.Table, evidence.FieldID, id),
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlObjectivesTable, evidence.ControlObjectivesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlObjectivesTable, evidence.ControlObjectivesPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4675,11 +4713,11 @@ func (c *EvidenceClient) QueryControls(e *Evidence) *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(evidence.Table, evidence.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlsTable, evidence.ControlsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlsTable, evidence.ControlsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.EvidenceControls
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4687,18 +4725,18 @@ func (c *EvidenceClient) QueryControls(e *Evidence) *ControlQuery {
 }
 
 // QuerySubcontrols queries the subcontrols edge of a Evidence.
-func (c *EvidenceClient) QuerySubcontrols(e *Evidence) *ControlQuery {
-	query := (&ControlClient{config: c.config}).Query()
+func (c *EvidenceClient) QuerySubcontrols(e *Evidence) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(evidence.Table, evidence.FieldID, id),
-			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, evidence.SubcontrolsTable, evidence.SubcontrolsColumn),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.SubcontrolsTable, evidence.SubcontrolsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4713,11 +4751,11 @@ func (c *EvidenceClient) QueryFiles(e *Evidence) *FileQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(evidence.Table, evidence.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, evidence.FilesTable, evidence.FilesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.FilesTable, evidence.FilesPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.EvidenceFiles
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5234,6 +5272,25 @@ func (c *FileClient) QueryProgram(f *File) *ProgramQuery {
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a File.
+func (c *FileClient) QueryEvidence(f *File) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.EvidenceTable, file.EvidencePrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceFiles
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13746,6 +13803,25 @@ func (c *SubcontrolClient) QueryPrograms(s *Subcontrol) *ProgramQuery {
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a Subcontrol.
+func (c *SubcontrolClient) QueryEvidence(s *Subcontrol) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}

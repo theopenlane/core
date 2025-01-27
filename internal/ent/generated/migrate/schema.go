@@ -199,8 +199,6 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
-		{Name: "evidence_controls", Type: field.TypeString, Nullable: true},
-		{Name: "evidence_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
@@ -217,26 +215,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_evidences_controls",
-				Columns:    []*schema.Column{ControlsColumns[23]},
-				RefColumns: []*schema.Column{EvidencesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "controls_evidences_subcontrols",
-				Columns:    []*schema.Column{ControlsColumns[24]},
-				RefColumns: []*schema.Column{EvidencesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "controls_internal_policies_controls",
-				Columns:    []*schema.Column{ControlsColumns[25]},
+				Columns:    []*schema.Column{ControlsColumns[23]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_organizations_controls",
-				Columns:    []*schema.Column{ControlsColumns[26]},
+				Columns:    []*schema.Column{ControlsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -245,7 +231,7 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[26]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[24]},
 			},
 		},
 	}
@@ -315,7 +301,6 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_control_objectives", Type: field.TypeString, Nullable: true},
-		{Name: "evidence_control_objectives", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
@@ -331,14 +316,8 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "control_objectives_evidences_control_objectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[22]},
-				RefColumns: []*schema.Column{EvidencesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "control_objectives_organizations_control_objectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[23]},
+				Columns:    []*schema.Column{ControlObjectivesColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -347,7 +326,7 @@ var (
 			{
 				Name:    "controlobjective_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlObjectivesColumns[7], ControlObjectivesColumns[23]},
+				Columns: []*schema.Column{ControlObjectivesColumns[7], ControlObjectivesColumns[22]},
 			},
 		},
 	}
@@ -801,21 +780,12 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
-		{Name: "evidence_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
 		Name:       "files",
 		Columns:    FilesColumns,
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "files_evidences_files",
-				Columns:    []*schema.Column{FilesColumns[22]},
-				RefColumns: []*schema.Column{EvidencesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
 	}
 	// FileHistoryColumns holds the columns for the "file_history" table.
 	FileHistoryColumns = []*schema.Column{
@@ -3292,6 +3262,106 @@ var (
 			},
 		},
 	}
+	// EvidenceControlObjectivesColumns holds the columns for the "evidence_control_objectives" table.
+	EvidenceControlObjectivesColumns = []*schema.Column{
+		{Name: "evidence_id", Type: field.TypeString},
+		{Name: "control_objective_id", Type: field.TypeString},
+	}
+	// EvidenceControlObjectivesTable holds the schema information for the "evidence_control_objectives" table.
+	EvidenceControlObjectivesTable = &schema.Table{
+		Name:       "evidence_control_objectives",
+		Columns:    EvidenceControlObjectivesColumns,
+		PrimaryKey: []*schema.Column{EvidenceControlObjectivesColumns[0], EvidenceControlObjectivesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "evidence_control_objectives_evidence_id",
+				Columns:    []*schema.Column{EvidenceControlObjectivesColumns[0]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "evidence_control_objectives_control_objective_id",
+				Columns:    []*schema.Column{EvidenceControlObjectivesColumns[1]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EvidenceControlsColumns holds the columns for the "evidence_controls" table.
+	EvidenceControlsColumns = []*schema.Column{
+		{Name: "evidence_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+	}
+	// EvidenceControlsTable holds the schema information for the "evidence_controls" table.
+	EvidenceControlsTable = &schema.Table{
+		Name:       "evidence_controls",
+		Columns:    EvidenceControlsColumns,
+		PrimaryKey: []*schema.Column{EvidenceControlsColumns[0], EvidenceControlsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "evidence_controls_evidence_id",
+				Columns:    []*schema.Column{EvidenceControlsColumns[0]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "evidence_controls_control_id",
+				Columns:    []*schema.Column{EvidenceControlsColumns[1]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EvidenceSubcontrolsColumns holds the columns for the "evidence_subcontrols" table.
+	EvidenceSubcontrolsColumns = []*schema.Column{
+		{Name: "evidence_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// EvidenceSubcontrolsTable holds the schema information for the "evidence_subcontrols" table.
+	EvidenceSubcontrolsTable = &schema.Table{
+		Name:       "evidence_subcontrols",
+		Columns:    EvidenceSubcontrolsColumns,
+		PrimaryKey: []*schema.Column{EvidenceSubcontrolsColumns[0], EvidenceSubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "evidence_subcontrols_evidence_id",
+				Columns:    []*schema.Column{EvidenceSubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "evidence_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{EvidenceSubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EvidenceFilesColumns holds the columns for the "evidence_files" table.
+	EvidenceFilesColumns = []*schema.Column{
+		{Name: "evidence_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// EvidenceFilesTable holds the schema information for the "evidence_files" table.
+	EvidenceFilesTable = &schema.Table{
+		Name:       "evidence_files",
+		Columns:    EvidenceFilesColumns,
+		PrimaryKey: []*schema.Column{EvidenceFilesColumns[0], EvidenceFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "evidence_files_evidence_id",
+				Columns:    []*schema.Column{EvidenceFilesColumns[0]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "evidence_files_file_id",
+				Columns:    []*schema.Column{EvidenceFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// FileEventsColumns holds the columns for the "file_events" table.
 	FileEventsColumns = []*schema.Column{
 		{Name: "file_id", Type: field.TypeString},
@@ -5160,6 +5230,10 @@ var (
 		EntityContactsTable,
 		EntityDocumentsTable,
 		EntityFilesTable,
+		EvidenceControlObjectivesTable,
+		EvidenceControlsTable,
+		EvidenceSubcontrolsTable,
+		EvidenceFilesTable,
 		FileEventsTable,
 		GroupEventsTable,
 		GroupFilesTable,
@@ -5244,16 +5318,13 @@ func init() {
 		Table: "contact_history",
 	}
 	ControlsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
-	ControlsTable.ForeignKeys[1].RefTable = EvidencesTable
-	ControlsTable.ForeignKeys[2].RefTable = EvidencesTable
-	ControlsTable.ForeignKeys[3].RefTable = InternalPoliciesTable
-	ControlsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
 	ControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
-	ControlObjectivesTable.ForeignKeys[1].RefTable = EvidencesTable
-	ControlObjectivesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ControlObjectivesTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
@@ -5280,7 +5351,6 @@ func init() {
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
 	}
-	FilesTable.ForeignKeys[0].RefTable = EvidencesTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -5430,6 +5500,14 @@ func init() {
 	EntityDocumentsTable.ForeignKeys[1].RefTable = DocumentDataTable
 	EntityFilesTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityFilesTable.ForeignKeys[1].RefTable = FilesTable
+	EvidenceControlObjectivesTable.ForeignKeys[0].RefTable = EvidencesTable
+	EvidenceControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	EvidenceControlsTable.ForeignKeys[0].RefTable = EvidencesTable
+	EvidenceControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	EvidenceSubcontrolsTable.ForeignKeys[0].RefTable = EvidencesTable
+	EvidenceSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	EvidenceFilesTable.ForeignKeys[0].RefTable = EvidencesTable
+	EvidenceFilesTable.ForeignKeys[1].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[0].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupEventsTable.ForeignKeys[0].RefTable = GroupsTable

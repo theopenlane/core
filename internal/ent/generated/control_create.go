@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -498,6 +499,21 @@ func (cc *ControlCreate) AddPrograms(p ...*Program) *ControlCreate {
 	return cc.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (cc *ControlCreate) AddEvidenceIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddEvidenceIDs(ids...)
+	return cc
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (cc *ControlCreate) AddEvidence(e ...*Evidence) *ControlCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cc.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the ControlMutation object of the builder.
 func (cc *ControlCreate) Mutation() *ControlMutation {
 	return cc.mutation
@@ -929,6 +945,23 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.ProgramControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

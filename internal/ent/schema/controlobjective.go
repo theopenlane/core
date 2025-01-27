@@ -87,6 +87,8 @@ func (ControlObjective) Edges() []ent.Edge {
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
 			Ref("control_objectives"),
+		edge.From("evidence", Evidence.Type).
+			Ref("control_objectives"),
 	}
 }
 

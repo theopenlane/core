@@ -75,7 +75,7 @@ func (Evidence) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("control_objectives", ControlObjective.Type),
 		edge.To("controls", Control.Type),
-		edge.To("subcontrols", Control.Type),
+		edge.To("subcontrols", Subcontrol.Type),
 		edge.To("files", File.Type),
 		edge.From("programs", Program.Type).
 			Ref("evidence"),
