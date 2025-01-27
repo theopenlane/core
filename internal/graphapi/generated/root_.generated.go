@@ -3018,6 +3018,7 @@ type ComplexityRoot struct {
 
 	TFASettingCreatePayload struct {
 		QRCode     func(childComplexity int) int
+		TfaSecret  func(childComplexity int) int
 		TfaSetting func(childComplexity int) int
 	}
 
@@ -3029,6 +3030,7 @@ type ComplexityRoot struct {
 	TFASettingUpdatePayload struct {
 		QRCode        func(childComplexity int) int
 		RecoveryCodes func(childComplexity int) int
+		TfaSecret     func(childComplexity int) int
 		TfaSetting    func(childComplexity int) int
 	}
 
@@ -19088,6 +19090,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TFASettingCreatePayload.QRCode(childComplexity), true
 
+	case "TFASettingCreatePayload.tfaSecret":
+		if e.complexity.TFASettingCreatePayload.TfaSecret == nil {
+			break
+		}
+
+		return e.complexity.TFASettingCreatePayload.TfaSecret(childComplexity), true
+
 	case "TFASettingCreatePayload.tfaSetting":
 		if e.complexity.TFASettingCreatePayload.TfaSetting == nil {
 			break
@@ -19122,6 +19131,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TFASettingUpdatePayload.RecoveryCodes(childComplexity), true
+
+	case "TFASettingUpdatePayload.tfaSecret":
+		if e.complexity.TFASettingUpdatePayload.TfaSecret == nil {
+			break
+		}
+
+		return e.complexity.TFASettingUpdatePayload.TfaSecret(childComplexity), true
 
 	case "TFASettingUpdatePayload.tfaSetting":
 		if e.complexity.TFASettingUpdatePayload.TfaSetting == nil {
@@ -53607,11 +53623,13 @@ type TemplateBulkCreatePayload {
     templates: [Template!]
 }`, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {
+    tfaSecret: String
     qrCode: String
     recoveryCodes: [String!]
 }
 
 extend type TFASettingCreatePayload {
+    tfaSecret: String
     qrCode: String
 }
 `, BuiltIn: false},

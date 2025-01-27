@@ -1,8 +1,10 @@
 extend type TFASettingUpdatePayload {
+    tfaSecret: String
     qrCode: String
     recoveryCodes: [String!]
 }
 
 extend type TFASettingCreatePayload {
+    tfaSecret: String
     qrCode: String
 }

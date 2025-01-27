@@ -15036,6 +15036,8 @@ func (ec *executionContext) fieldContext_Mutation_createTFASetting(ctx context.C
 			switch field.Name {
 			case "tfaSetting":
 				return ec.fieldContext_TFASettingCreatePayload_tfaSetting(ctx, field)
+			case "tfaSecret":
+				return ec.fieldContext_TFASettingCreatePayload_tfaSecret(ctx, field)
 			case "qrCode":
 				return ec.fieldContext_TFASettingCreatePayload_qrCode(ctx, field)
 			}
@@ -15097,6 +15099,8 @@ func (ec *executionContext) fieldContext_Mutation_updateTFASetting(ctx context.C
 			switch field.Name {
 			case "tfaSetting":
 				return ec.fieldContext_TFASettingUpdatePayload_tfaSetting(ctx, field)
+			case "tfaSecret":
+				return ec.fieldContext_TFASettingUpdatePayload_tfaSecret(ctx, field)
 			case "qrCode":
 				return ec.fieldContext_TFASettingUpdatePayload_qrCode(ctx, field)
 			case "recoveryCodes":

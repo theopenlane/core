@@ -33,3 +33,22 @@ func (r *mutationResolver) generateTFAQRCode(ctx context.Context, settings *gene
 
 	return qrCode, nil
 }
+
+// getDecryptedTFASecret returns the TFA secret for the user, decrypted
+func (r *mutationResolver) getDecryptedTFASecret(ctx context.Context, settings *generated.TFASetting) (string, error) {
+	if !utils.CheckForRequestedField(ctx, "tfaSecret") {
+		return "", nil
+	}
+
+	if !settings.TotpAllowed || settings.TfaSecret == nil {
+		return "", nil
+	}
+
+	// generate a new QR code if it was requested
+	secret, err := r.db.TOTP.TOTPManager.TOTPDecryptedSecret(*settings.TfaSecret)
+	if err != nil {
+		return "", err
+	}
+
+	return secret, nil
+}

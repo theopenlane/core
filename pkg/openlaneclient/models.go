@@ -17558,6 +17558,7 @@ type TFASettingConnection struct {
 type TFASettingCreatePayload struct {
 	// Created tfaSetting
 	TfaSetting *TFASetting `json:"tfaSetting"`
+	TfaSecret  *string     `json:"tfaSecret,omitempty"`
 	QRCode     *string     `json:"qrCode,omitempty"`
 }
 
@@ -17573,6 +17574,7 @@ type TFASettingEdge struct {
 type TFASettingUpdatePayload struct {
 	// Updated tfaSetting
 	TfaSetting    *TFASetting `json:"tfaSetting"`
+	TfaSecret     *string     `json:"tfaSecret,omitempty"`
 	QRCode        *string     `json:"qrCode,omitempty"`
 	RecoveryCodes []string    `json:"recoveryCodes,omitempty"`
 }
