@@ -59,7 +59,7 @@ func HookTaskAssignee() ent.Hook {
 						})
 
 						// get the current assignee and remove them
-						resp, err := utils.AuthzClientFromContext(ctx).ListUserRequest(ctx, fgax.ListRequest{
+						resp, err := utils.AuthzClient(ctx, m).ListUserRequest(ctx, fgax.ListRequest{
 							ObjectID:   taskID,
 							ObjectType: GetObjectTypeFromEntMutation(m),
 							Relation:   "assignee",

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
@@ -387,7 +388,7 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 }
 
 // addTokenEditPermissions adds the edit permissions for the api token to the object
-func addTokenEditPermissions(ctx context.Context, oID string, objectType string) error {
+func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID string, objectType string) error {
 	// get auth info from context
 	ac, err := auth.GetAuthenticatedUserContext(ctx)
 	if err != nil {
@@ -407,7 +408,7 @@ func addTokenEditPermissions(ctx context.Context, oID string, objectType string)
 	log.Debug().Interface("request", req).
 		Msg("creating edit tuples for api token")
 
-	if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
 		log.Error().Err(err).Msg("failed to create relationship tuple")
 
 		return ErrInternalServerError

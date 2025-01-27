@@ -68,7 +68,7 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 
 			// write the tuples to the authz service
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
-				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
 					return nil, err
 				}
 
@@ -120,7 +120,7 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 
 			// write the tuples to the authz service
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
-				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
 					return nil, err
 				}
 

@@ -390,7 +390,7 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 	anotherAdminUser := suite.userBuilder(context.Background())
 	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the narrative
 	res, err := suite.client.api.GetNarrativeByID(anotherAdminUser.UserCtx, narrative.ID)
@@ -408,7 +408,7 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 			name: "happy path, update field",
 			request: openlaneclient.UpdateNarrativeInput{
 				Description:  lo.ToPtr("Updated description"),
-				AddViewerIDs: []string{testUser1.GroupID},
+				AddViewerIDs: []string{groupMember.GroupID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -480,9 +480,15 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 
 			if len(tc.request.AddViewerIDs) > 0 {
 				require.Len(t, resp.UpdateNarrative.Narrative.Viewers, 1)
+				found := false
 				for _, edge := range resp.UpdateNarrative.Narrative.Viewers {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
+					if edge.ID == tc.request.AddViewerIDs[0] {
+						found = true
+						break
+					}
 				}
+
+				assert.True(t, found)
 
 				// ensure the user has access to the narrative now
 				res, err := suite.client.api.GetNarrativeByID(anotherAdminUser.UserCtx, narrative.ID)

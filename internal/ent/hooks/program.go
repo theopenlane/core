@@ -48,7 +48,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 				return err
 			}
 		} else {
-			if err := addTokenEditPermissions(ctx, objID, GetObjectTypeFromEntMutation(m)); err != nil {
+			if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
 				return err
 			}
 		}

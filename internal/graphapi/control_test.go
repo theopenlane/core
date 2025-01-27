@@ -444,7 +444,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 	anotherAdminUser := suite.userBuilder(context.Background())
 	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the control
 	res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)
@@ -462,8 +462,8 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			name: "happy path, update field",
 			request: openlaneclient.UpdateControlInput{
 				Description:   lo.ToPtr("Updated description"),
-				AddProgramIDs: []string{program1.ID, program2.ID}, // add multiple programs
-				AddViewerIDs:  []string{testUser1.GroupID},
+				AddProgramIDs: []string{program1.ID, program2.ID}, // add multiple programs (one already associated)
+				AddViewerIDs:  []string{groupMember.GroupID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -572,9 +572,15 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 
 			if len(tc.request.AddViewerIDs) > 0 {
 				require.Len(t, resp.UpdateControl.Control.Viewers, 1)
+				found := false
 				for _, edge := range resp.UpdateControl.Control.Viewers {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
+					if edge.ID == tc.request.AddViewerIDs[0] {
+						found = true
+						break
+					}
 				}
+
+				assert.True(t, found)
 
 				// ensure the user has access to the control now
 				res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)

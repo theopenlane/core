@@ -122,7 +122,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 				return err
 			}
 		} else {
-			if err := addTokenEditPermissions(ctx, objID, GetObjectTypeFromEntMutation(m)); err != nil {
+			if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
 				return err
 			}
 		}
