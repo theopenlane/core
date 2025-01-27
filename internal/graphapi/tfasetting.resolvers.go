@@ -45,7 +45,12 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
-	return &model.TFASettingCreatePayload{TfaSetting: settings, QRCode: &qrCode}, nil
+	secret, err := r.getDecryptedTFASecret(ctx, settings)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
+	}
+
+	return &model.TFASettingCreatePayload{TfaSetting: settings, QRCode: &qrCode, TfaSecret: &secret}, nil
 }
 
 // UpdateTFASetting is the resolver for the updateTFASetting field.
@@ -78,9 +83,15 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
+	secret, err := r.getDecryptedTFASecret(ctx, updatedSettings)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
+	}
+
 	out := &model.TFASettingUpdatePayload{
 		TfaSetting: updatedSettings,
 		QRCode:     &qrCode,
+		TfaSecret:  &secret,
 	}
 
 	gtx := graphql.GetOperationContext(ctx)

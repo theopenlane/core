@@ -918,6 +918,7 @@ type SubscriberUpdatePayload struct {
 type TFASettingCreatePayload struct {
 	// Created tfaSetting
 	TfaSetting *generated.TFASetting `json:"tfaSetting"`
+	TfaSecret  *string               `json:"tfaSecret,omitempty"`
 	QRCode     *string               `json:"qrCode,omitempty"`
 }
 
@@ -925,6 +926,7 @@ type TFASettingCreatePayload struct {
 type TFASettingUpdatePayload struct {
 	// Updated tfaSetting
 	TfaSetting    *generated.TFASetting `json:"tfaSetting"`
+	TfaSecret     *string               `json:"tfaSecret,omitempty"`
 	QRCode        *string               `json:"qrCode,omitempty"`
 	RecoveryCodes []string              `json:"recoveryCodes,omitempty"`
 }

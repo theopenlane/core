@@ -328,6 +328,8 @@ func WithOTP() ServerOption {
 					Version: 0,
 					Key:     s.Config.Settings.TOTP.Secret,
 				}),
+				totp.WithRecoveryCodeLength(s.Config.Settings.TOTP.RecoveryCodeLength),
+				totp.WithRecoveryCodeCount(s.Config.Settings.TOTP.RecoveryCodeCount),
 			}
 
 			// append redis client if enabled

@@ -143,8 +143,10 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 
 			if *tc.input.TotpAllowed {
 				assert.NotEmpty(t, resp.CreateTFASetting.QRCode)
+				assert.NotEmpty(t, resp.CreateTFASetting.TfaSecret)
 			} else {
 				assert.Empty(t, resp.CreateTFASetting.QRCode)
+				assert.Empty(t, resp.CreateTFASetting.TfaSecret)
 			}
 
 			require.NotEmpty(t, resp.CreateTFASetting.TfaSetting.Owner)
@@ -262,6 +264,14 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 				}
 			} else {
 				assert.Empty(t, resp.UpdateTFASetting.RecoveryCodes)
+			}
+
+			if tc.input.TotpAllowed == nil || *tc.input.TotpAllowed {
+				assert.NotEmpty(t, resp.UpdateTFASetting.QRCode)
+				assert.NotEmpty(t, resp.UpdateTFASetting.TfaSecret)
+			} else if !*tc.input.TotpAllowed { // settings were cleared
+				assert.Empty(t, resp.UpdateTFASetting.QRCode)
+				assert.Empty(t, resp.UpdateTFASetting.TfaSecret)
 			}
 
 			// make sure user setting is updated correctly

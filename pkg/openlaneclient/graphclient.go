@@ -42765,6 +42765,7 @@ func (t *CreateTFASetting_CreateTFASetting_TfaSetting) GetVerified() bool {
 
 type CreateTFASetting_CreateTFASetting struct {
 	QRCode     *string                                      "json:\"qrCode,omitempty\" graphql:\"qrCode\""
+	TfaSecret  *string                                      "json:\"tfaSecret,omitempty\" graphql:\"tfaSecret\""
 	TfaSetting CreateTFASetting_CreateTFASetting_TfaSetting "json:\"tfaSetting\" graphql:\"tfaSetting\""
 }
 
@@ -42773,6 +42774,12 @@ func (t *CreateTFASetting_CreateTFASetting) GetQRCode() *string {
 		t = &CreateTFASetting_CreateTFASetting{}
 	}
 	return t.QRCode
+}
+func (t *CreateTFASetting_CreateTFASetting) GetTfaSecret() *string {
+	if t == nil {
+		t = &CreateTFASetting_CreateTFASetting{}
+	}
+	return t.TfaSecret
 }
 func (t *CreateTFASetting_CreateTFASetting) GetTfaSetting() *CreateTFASetting_CreateTFASetting_TfaSetting {
 	if t == nil {
@@ -42896,6 +42903,7 @@ func (t *UpdateTFASetting_UpdateTFASetting_TfaSetting) GetVerified() bool {
 type UpdateTFASetting_UpdateTFASetting struct {
 	QRCode        *string                                      "json:\"qrCode,omitempty\" graphql:\"qrCode\""
 	RecoveryCodes []string                                     "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
+	TfaSecret     *string                                      "json:\"tfaSecret,omitempty\" graphql:\"tfaSecret\""
 	TfaSetting    UpdateTFASetting_UpdateTFASetting_TfaSetting "json:\"tfaSetting\" graphql:\"tfaSetting\""
 }
 
@@ -42910,6 +42918,12 @@ func (t *UpdateTFASetting_UpdateTFASetting) GetRecoveryCodes() []string {
 		t = &UpdateTFASetting_UpdateTFASetting{}
 	}
 	return t.RecoveryCodes
+}
+func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSecret() *string {
+	if t == nil {
+		t = &UpdateTFASetting_UpdateTFASetting{}
+	}
+	return t.TfaSecret
 }
 func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_UpdateTFASetting_TfaSetting {
 	if t == nil {
@@ -61991,6 +62005,7 @@ const CreateTFASettingDocument = `mutation CreateTFASetting ($input: CreateTFASe
 			}
 		}
 		qrCode
+		tfaSecret
 	}
 }
 `
@@ -62075,6 +62090,7 @@ const UpdateTFASettingDocument = `mutation UpdateTFASetting ($input: UpdateTFASe
 			verified
 		}
 		qrCode
+		tfaSecret
 		recoveryCodes
 	}
 }

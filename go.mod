@@ -54,7 +54,7 @@ require (
 	github.com/riverqueue/river v0.15.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.15.0
 	github.com/rs/zerolog v1.33.0
-	github.com/samber/lo v1.48.0
+	github.com/samber/lo v1.49.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
 	github.com/sebdah/goldie/v2 v2.5.5
 	github.com/spf13/cobra v1.8.1
@@ -67,7 +67,7 @@ require (
 	github.com/theopenlane/entx v0.4.3
 	github.com/theopenlane/gqlgen-plugins v0.4.4
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.7.1
+	github.com/theopenlane/iam v0.7.3
 	github.com/theopenlane/newman v0.1.2
 	github.com/theopenlane/riverboat v0.0.7
 	github.com/theopenlane/utils v0.4.3

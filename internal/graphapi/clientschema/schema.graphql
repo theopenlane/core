@@ -27015,6 +27015,7 @@ type TFASettingCreatePayload {
 	Created tfaSetting
 	"""
 	tfaSetting: TFASetting!
+	tfaSecret: String
 	qrCode: String
 }
 """
@@ -27038,6 +27039,7 @@ type TFASettingUpdatePayload {
 	Updated tfaSetting
 	"""
 	tfaSetting: TFASetting!
+	tfaSecret: String
 	qrCode: String
 	recoveryCodes: [String!]
 }
