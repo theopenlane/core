@@ -39,7 +39,7 @@ type LoginRequest struct {
 type LoginReply struct {
 	rout.Reply
 	AuthData
-	TFAEnabled bool   `json:"2fa_enable"`
+	TFAEnabled bool   `json:"tfa_enabled,omitempty"`
 	Message    string `json:"message"`
 }
 
