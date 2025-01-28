@@ -227,7 +227,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
+			ctx:    testUser1.UserCtx,
 		},
 	}
 
@@ -272,6 +272,9 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 			} else if !*tc.input.TotpAllowed { // settings were cleared
 				assert.Empty(t, resp.UpdateTFASetting.QRCode)
 				assert.Empty(t, resp.UpdateTFASetting.TfaSecret)
+				assert.Empty(t, resp.UpdateTFASetting.RecoveryCodes)
+				assert.False(t, resp.UpdateTFASetting.TfaSetting.Verified)
+				assert.False(t, *resp.UpdateTFASetting.TfaSetting.TotpAllowed)
 			}
 
 			// make sure user setting is updated correctly
