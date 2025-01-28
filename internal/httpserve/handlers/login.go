@@ -73,9 +73,10 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	}
 
 	out := models.LoginReply{
-		Reply:    rout.Reply{Success: true},
-		Message:  "success",
-		AuthData: *auth,
+		Reply:      rout.Reply{Success: true},
+		TFAEnabled: user.Edges.Setting.IsTfaEnabled,
+		Message:    "success",
+		AuthData:   *auth,
 	}
 
 	return h.Success(ctx, out)

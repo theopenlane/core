@@ -39,7 +39,8 @@ type LoginRequest struct {
 type LoginReply struct {
 	rout.Reply
 	AuthData
-	Message string `json:"message"`
+	TFAEnabled bool   `json:"2fa_enable"`
+	Message    string `json:"message"`
 }
 
 // Validate ensures the required fields are set on the LoginRequest request
@@ -68,6 +69,7 @@ var ExampleLoginSuccessResponse = LoginReply{
 	Reply: rout.Reply{
 		Success: true,
 	},
+	TFAEnabled: true,
 	AuthData: AuthData{
 		AccessToken:  "access_token",
 		RefreshToken: "refresh_token",
