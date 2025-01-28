@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -27,20 +26,6 @@ func HookUserSetting() ent.Hook {
 			org, ok := m.DefaultOrgID()
 			if ok && !allowDefaultOrgUpdate(ctx, m, org) {
 				return nil, rout.InvalidField(rout.ErrOrganizationNotFound)
-			}
-
-			// delete tfa setting if tfa is disabled
-			tfaEnabled, ok := m.IsTfaEnabled()
-			if ok && !tfaEnabled {
-				userID, err := auth.GetUserIDFromContext(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				_, err = m.Client().TFASetting.Delete().Where(tfasetting.OwnerID(userID)).Exec(ctx)
-				if err != nil {
-					return nil, err
-				}
 			}
 
 			return next.Mutate(ctx, m)
