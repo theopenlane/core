@@ -41,6 +41,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 	userSetting := suite.db.UserSetting.Create().
 		SetEmailConfirmed(true).
+		SetIsTfaEnabled(true).
 		SaveX(ctx)
 
 	_ = suite.db.User.Create().
@@ -150,6 +151,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
+				assert.True(t, out.TFAEnabled) // we set the user to have TFA enabled in the tests
 			} else {
 				assert.Contains(t, out.Error, tc.expectedErr.Error())
 			}

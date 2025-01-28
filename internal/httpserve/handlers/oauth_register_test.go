@@ -122,6 +122,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 				assert.NotNil(t, out.AccessToken)
 				assert.NotNil(t, out.RefreshToken)
 				assert.True(t, out.Success)
+				assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
 				assert.Equal(t, "Bearer", out.TokenType)
 			}
 		})
