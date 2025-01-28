@@ -361,6 +361,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**createNewModel**|`boolean`|force create a new model<br/>|no|
 |**modelFile**|`string`|path to the fga model file<br/>|no|
 |[**credentials**](#authzcredentials)|`object`||no|
+|**ignoreDuplicateKeyError**|`boolean`|ignore duplicate key error<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="authzcredentials"></a>

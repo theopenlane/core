@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -59,14 +58,11 @@ func HookOrganization() ent.Hook {
 			// check for uploaded files (e.g. avatar image)
 			fileIDs := objects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
-				ctx, err := checkAvatarFile(ctx, m)
+				var err error
+
+				ctx, err = checkAvatarFile(ctx, m)
 				if err != nil {
 					return nil, err
-				}
-
-				ec, err := echocontext.EchoContextFromContext(ctx)
-				if err == nil {
-					ec.SetRequest(ec.Request().WithContext(ctx))
 				}
 
 				m.AddFileIDs(fileIDs...)
@@ -430,7 +426,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 
 	// if this was created with an API token, do not create an owner but add the service tuple to fga
 	if auth.IsAPITokenAuthentication(ctx) {
-		return addTokenEditPermissions(ctx, oID, GetObjectTypeFromEntMutation(m))
+		return addTokenEditPermissions(ctx, m, oID, GetObjectTypeFromEntMutation(m))
 	}
 
 	// get userID from context

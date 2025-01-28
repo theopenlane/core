@@ -342,6 +342,26 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearDetails() *ControlObjectiveHisto
 	return cohu
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetExampleEvidence(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetExampleEvidence(s)
+	return cohu
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableExampleEvidence(s *string) *ControlObjectiveHistoryUpdate {
+	if s != nil {
+		cohu.SetExampleEvidence(*s)
+	}
+	return cohu
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearExampleEvidence() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearExampleEvidence()
+	return cohu
+}
+
 // Mutation returns the ControlObjectiveHistoryMutation object of the builder.
 func (cohu *ControlObjectiveHistoryUpdate) Mutation() *ControlObjectiveHistoryMutation {
 	return cohu.mutation
@@ -507,6 +527,12 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	}
 	if cohu.mutation.DetailsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := cohu.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlobjectivehistory.FieldExampleEvidence, field.TypeString, value)
+	}
+	if cohu.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldExampleEvidence, field.TypeString)
 	}
 	_spec.Node.Schema = cohu.schemaConfig.ControlObjectiveHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cohu.schemaConfig)
@@ -842,6 +868,26 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDetails() *ControlObjectiveH
 	return cohuo
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetExampleEvidence(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetExampleEvidence(s)
+	return cohuo
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableExampleEvidence(s *string) *ControlObjectiveHistoryUpdateOne {
+	if s != nil {
+		cohuo.SetExampleEvidence(*s)
+	}
+	return cohuo
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearExampleEvidence() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearExampleEvidence()
+	return cohuo
+}
+
 // Mutation returns the ControlObjectiveHistoryMutation object of the builder.
 func (cohuo *ControlObjectiveHistoryUpdateOne) Mutation() *ControlObjectiveHistoryMutation {
 	return cohuo.mutation
@@ -1037,6 +1083,12 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if cohuo.mutation.DetailsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := cohuo.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlobjectivehistory.FieldExampleEvidence, field.TypeString, value)
+	}
+	if cohuo.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldExampleEvidence, field.TypeString)
 	}
 	_spec.Node.Schema = cohuo.schemaConfig.ControlObjectiveHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cohuo.schemaConfig)

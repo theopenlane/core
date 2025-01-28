@@ -38,6 +38,8 @@ func init() {
 
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the control")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the control")
+	updateCmd.Flags().StringSliceP("add-editors", "e", []string{}, "group ID(s) given editor access to the control")
+	updateCmd.Flags().StringSliceP("add-viewers", "w", []string{}, "group ID(s) given viewer access to the control")
 }
 
 // updateValidation validates the required fields for the command
@@ -112,6 +114,16 @@ func updateValidation() (id string, input openlaneclient.UpdateControlInput, err
 	removePrograms := cmd.Config.Strings("remove-programs")
 	if len(removePrograms) > 0 {
 		input.RemoveProgramIDs = removePrograms
+	}
+
+	addEditors := cmd.Config.Strings("add-editors")
+	if len(addEditors) > 0 {
+		input.AddEditorIDs = addEditors
+	}
+
+	addViewers := cmd.Config.Strings("add-viewers")
+	if len(addViewers) > 0 {
+		input.AddViewerIDs = addViewers
 	}
 
 	return id, input, nil

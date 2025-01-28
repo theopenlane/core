@@ -296,6 +296,15 @@ type SubcontrolBuilder struct {
 	ControlID string
 }
 
+type EvidenceBuilder struct {
+	client *client
+
+	// Fields
+	Name      string
+	ProgramID string
+	ControlID string
+}
+
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
@@ -986,4 +995,32 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 		SaveX(ctx)
 
 	return sc
+}
+
+// MustNew control builder is used to create, without authz checks, controls in the database
+func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Evidence {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// add client to context
+	ctx = ent.NewContext(ctx, c.client.db)
+
+	if c.Name == "" {
+		c.Name = gofakeit.AppName()
+	}
+
+	mutation := c.client.db.Evidence.Create().
+		SetName(c.Name)
+
+	if c.ProgramID != "" {
+		mutation.AddProgramIDs(c.ProgramID)
+	}
+
+	if c.ControlID != "" {
+		mutation.AddControlIDs(c.ControlID)
+	}
+
+	control := mutation.
+		SaveX(ctx)
+
+	return control
 }

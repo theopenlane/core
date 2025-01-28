@@ -94,6 +94,8 @@ func (File) Edges() []ent.Edge {
 		edge.To("events", Event.Type),
 		edge.From("program", Program.Type).
 			Ref("files"),
+		edge.From("evidence", Evidence.Type).
+			Ref("files"),
 	}
 }
 

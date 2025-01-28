@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -198,6 +199,7 @@ func adminSearchControls(ctx context.Context, query string) ([]*generated.Contro
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(details)::text LIKE $17", likeQuery)) // search by Details
 			},
+			control.ExampleEvidenceContainsFold(query), // search by ExampleEvidence
 		),
 	).All(ctx)
 }
@@ -245,6 +247,7 @@ func adminSearchControlObjectives(ctx context.Context, query string) ([]*generat
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(details)::text LIKE $16", likeQuery)) // search by Details
 			},
+			controlobjective.ExampleEvidenceContainsFold(query), // search by ExampleEvidence
 		),
 	).All(ctx)
 }
@@ -380,6 +383,41 @@ func adminSearchEvents(ctx context.Context, query string) ([]*generated.Event, e
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(metadata)::text LIKE $6", likeQuery)) // search by Metadata
 			},
+		),
+	).All(ctx)
+}
+
+// searchEvidence searches for Evidence based on the query string looking for matches
+func searchEvidences(ctx context.Context, query string) ([]*generated.Evidence, error) {
+	return withTransactionalMutation(ctx).Evidence.Query().Where(
+		evidence.Or(
+			evidence.DisplayID(query), // search equal to DisplayID
+			evidence.ID(query),        // search equal to ID
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+			},
+		),
+	).All(ctx)
+}
+
+// searchEvidence searches for Evidence based on the query string looking for matches
+func adminSearchEvidences(ctx context.Context, query string) ([]*generated.Evidence, error) {
+	return withTransactionalMutation(ctx).Evidence.Query().Where(
+		evidence.Or(
+			evidence.ID(query),                    // search equal to ID
+			evidence.DisplayID(query),             // search equal to DisplayID
+			evidence.DeletedByContainsFold(query), // search by DeletedBy
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+			},
+			evidence.OwnerIDContainsFold(query),             // search by OwnerID
+			evidence.NameContainsFold(query),                // search by Name
+			evidence.DescriptionContainsFold(query),         // search by Description
+			evidence.CollectionProcedureContainsFold(query), // search by CollectionProcedure
+			evidence.SourceContainsFold(query),              // search by Source
+			evidence.URLContainsFold(query),                 // search by URL
 		),
 	).All(ctx)
 }
@@ -953,6 +991,7 @@ func adminSearchSubcontrols(ctx context.Context, query string) ([]*generated.Sub
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(details)::text LIKE $19", likeQuery)) // search by Details
 			},
+			subcontrol.ExampleEvidenceContainsFold(query), // search by ExampleEvidence
 		),
 	).All(ctx)
 }

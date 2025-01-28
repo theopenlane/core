@@ -81,6 +81,15 @@ extend type Query{
         query: String!
     ): EventSearchResult
     """
+    Search across Evidence objects
+    """
+    evidenceSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EvidenceSearchResult
+    """
     Search across File objects
     """
     fileSearch(
@@ -271,6 +280,7 @@ union SearchResult =
   | EntitySearchResult
   | EntityTypeSearchResult
   | EventSearchResult
+  | EvidenceSearchResult
   | FileSearchResult
   | GroupSearchResult
   | GroupSettingSearchResult
@@ -362,6 +372,10 @@ type  EntityTypeSearchResult {
 
 type  EventSearchResult {
    events: [ Event!]
+}
+
+type  EvidenceSearchResult {
+   evidences: [ Evidence!]
 }
 
 type  FileSearchResult {

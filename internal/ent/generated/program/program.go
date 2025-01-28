@@ -78,6 +78,8 @@ const (
 	EdgeNotes = "notes"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// EdgeNarratives holds the string denoting the narratives edge name in mutations.
 	EdgeNarratives = "narratives"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
@@ -157,6 +159,11 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
+	EvidenceTable = "program_evidence"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
 	// NarrativesTable is the table that holds the narratives relation/edge. The primary key declared below.
 	NarrativesTable = "program_narratives"
 	// NarrativesInverseTable is the table name for the Narrative entity.
@@ -245,6 +252,9 @@ var (
 	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
 	// primary key for the files relation (M2M).
 	FilesPrimaryKey = []string{"program_id", "file_id"}
+	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
+	// primary key for the evidence relation (M2M).
+	EvidencePrimaryKey = []string{"program_id", "evidence_id"}
 	// NarrativesPrimaryKey and NarrativesColumn2 are the table columns denoting the
 	// primary key for the narratives relation (M2M).
 	NarrativesPrimaryKey = []string{"program_id", "narrative_id"}
@@ -577,6 +587,20 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByNarrativesCount orders the results by narratives count.
 func ByNarrativesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -735,6 +759,13 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, EvidenceTable, EvidencePrimaryKey...),
 	)
 }
 func newNarrativesStep() *sqlgraph.Step {

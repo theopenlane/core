@@ -33,6 +33,8 @@ func init() {
 	createCmd.Flags().StringP("source", "o", "", "source of the control objective")
 	createCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks")
 	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the control objective")
+	createCmd.Flags().StringSliceP("editors", "e", []string{}, "group ID(s) given editor access to the control objective")
+	createCmd.Flags().StringSliceP("viewers", "w", []string{}, "group ID(s) given viewer access to the control objective")
 }
 
 // createValidation validates the required fields for the command
@@ -89,6 +91,16 @@ func createValidation() (input openlaneclient.CreateControlObjectiveInput, err e
 	mappedFrameworks := cmd.Config.String("mapped-frameworks")
 	if mappedFrameworks != "" {
 		input.MappedFrameworks = &mappedFrameworks
+	}
+
+	viewerGroupIDs := cmd.Config.Strings("viewers")
+	if len(viewerGroupIDs) > 0 {
+		input.ViewerIDs = viewerGroupIDs
+	}
+
+	editorGroupIDs := cmd.Config.Strings("editors")
+	if len(editorGroupIDs) > 0 {
+		input.EditorIDs = editorGroupIDs
 	}
 
 	return input, nil

@@ -81,6 +81,15 @@ extend type Query{
         query: String!
     ): EventSearchResult
     """
+    Search across Evidence objects
+    """
+    adminEvidenceSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EvidenceSearchResult
+    """
     Search across File objects
     """
     adminFileSearch(

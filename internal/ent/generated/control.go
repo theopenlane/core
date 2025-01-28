@@ -61,6 +61,8 @@ type Control struct {
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
 	// json data including details of the control
 	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
 	Edges                      ControlEdges `json:"edges"`
@@ -97,11 +99,13 @@ type ControlEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -115,6 +119,7 @@ type ControlEdges struct {
 	namedActionPlans       map[string][]*ActionPlan
 	namedTasks             map[string][]*Task
 	namedPrograms          map[string][]*Program
+	namedEvidence          map[string][]*Evidence
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -236,6 +241,15 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[13] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Control) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -243,7 +257,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldDetails:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks, control.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -402,6 +416,12 @@ func (c *Control) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case control.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				c.ExampleEvidence = value.String
+			}
 		case control.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_controls", values[i])
@@ -494,6 +514,11 @@ func (c *Control) QueryPrograms() *ProgramQuery {
 	return NewControlClient(c.config).QueryPrograms(c)
 }
 
+// QueryEvidence queries the "evidence" edge of the Control entity.
+func (c *Control) QueryEvidence() *EvidenceQuery {
+	return NewControlClient(c.config).QueryEvidence(c)
+}
+
 // Update returns a builder for updating this Control.
 // Note that you need to call Control.Unwrap() before calling this method if this Control
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -579,6 +604,9 @@ func (c *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", c.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(c.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -868,6 +896,30 @@ func (c *Control) appendNamedPrograms(name string, edges ...*Program) {
 		c.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		c.Edges.namedPrograms[name] = append(c.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedEvidence(name string) ([]*Evidence, error) {
+	if c.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedEvidence(name string, edges ...*Evidence) {
+	if c.Edges.namedEvidence == nil {
+		c.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		c.Edges.namedEvidence[name] = append(c.Edges.namedEvidence[name], edges...)
 	}
 }
 

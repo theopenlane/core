@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -50,6 +51,7 @@ type ControlObjectiveQuery struct {
 	withNarratives            *NarrativeQuery
 	withTasks                 *TaskQuery
 	withPrograms              *ProgramQuery
+	withEvidence              *EvidenceQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*ControlObjective) error
 	modifiers                 []func(*sql.Selector)
@@ -65,6 +67,7 @@ type ControlObjectiveQuery struct {
 	withNamedNarratives       map[string]*NarrativeQuery
 	withNamedTasks            map[string]*TaskQuery
 	withNamedPrograms         map[string]*ProgramQuery
+	withNamedEvidence         map[string]*EvidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -426,6 +429,31 @@ func (coq *ControlObjectiveQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryEvidence chains the current query on the "evidence" edge.
+func (coq *ControlObjectiveQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: coq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := coq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := coq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.EvidenceTable, controlobjective.EvidencePrimaryKey...),
+		)
+		schemaConfig := coq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first ControlObjective entity from the query.
 // Returns a *NotFoundError when no ControlObjective was found.
 func (coq *ControlObjectiveQuery) First(ctx context.Context) (*ControlObjective, error) {
@@ -631,6 +659,7 @@ func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
 		withNarratives:       coq.withNarratives.Clone(),
 		withTasks:            coq.withTasks.Clone(),
 		withPrograms:         coq.withPrograms.Clone(),
+		withEvidence:         coq.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       coq.sql.Clone(),
 		path:      coq.path,
@@ -781,6 +810,17 @@ func (coq *ControlObjectiveQuery) WithPrograms(opts ...func(*ProgramQuery)) *Con
 	return coq
 }
 
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithEvidence(opts ...func(*EvidenceQuery)) *ControlObjectiveQuery {
+	query := (&EvidenceClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	coq.withEvidence = query
+	return coq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -866,7 +906,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		nodes       = []*ControlObjective{}
 		withFKs     = coq.withFKs
 		_spec       = coq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			coq.withOwner != nil,
 			coq.withBlockedGroups != nil,
 			coq.withEditors != nil,
@@ -880,6 +920,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			coq.withNarratives != nil,
 			coq.withTasks != nil,
 			coq.withPrograms != nil,
+			coq.withEvidence != nil,
 		}
 	)
 	if withFKs {
@@ -1000,6 +1041,13 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			return nil, err
 		}
 	}
+	if query := coq.withEvidence; query != nil {
+		if err := coq.loadEvidence(ctx, query, nodes,
+			func(n *ControlObjective) { n.Edges.Evidence = []*Evidence{} },
+			func(n *ControlObjective, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range coq.withNamedBlockedGroups {
 		if err := coq.loadBlockedGroups(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedBlockedGroups(name) },
@@ -1081,6 +1129,13 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		if err := coq.loadPrograms(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedPrograms(name) },
 			func(n *ControlObjective, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range coq.withNamedEvidence {
+		if err := coq.loadEvidence(ctx, query, nodes,
+			func(n *ControlObjective) { n.appendNamedEvidence(name) },
+			func(n *ControlObjective, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1741,6 +1796,68 @@ func (coq *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *Progr
 	}
 	return nil
 }
+func (coq *ControlObjectiveQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Evidence)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlObjective)
+	nids := make(map[string]map[*ControlObjective]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlobjective.EvidenceTable)
+		joinT.Schema(coq.schemaConfig.EvidenceControlObjectives)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(controlobjective.EvidencePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(controlobjective.EvidencePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlobjective.EvidencePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlObjective]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (coq *ControlObjectiveQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := coq.querySpec()
@@ -2008,6 +2125,20 @@ func (coq *ControlObjectiveQuery) WithNamedPrograms(name string, opts ...func(*P
 		coq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	coq.withNamedPrograms[name] = query
+	return coq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *ControlObjectiveQuery {
+	query := (&EvidenceClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if coq.withNamedEvidence == nil {
+		coq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	coq.withNamedEvidence[name] = query
 	return coq
 }
 

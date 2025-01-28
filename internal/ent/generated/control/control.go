@@ -57,6 +57,8 @@ const (
 	FieldMappedFrameworks = "mapped_frameworks"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
+	FieldExampleEvidence = "example_evidence"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -83,6 +85,8 @@ const (
 	EdgeTasks = "tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// Table holds the table name of the control in the database.
 	Table = "controls"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -154,6 +158,11 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
+	EvidenceTable = "evidence_controls"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
 )
 
 // Columns holds all SQL columns for control fields.
@@ -180,6 +189,7 @@ var Columns = []string{
 	FieldSatisfies,
 	FieldMappedFrameworks,
 	FieldDetails,
+	FieldExampleEvidence,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "controls"
@@ -223,6 +233,9 @@ var (
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "control_id"}
+	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
+	// primary key for the evidence relation (M2M).
+	EvidencePrimaryKey = []string{"evidence_id", "control_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -368,6 +381,11 @@ func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 // ByMappedFrameworks orders the results by the mapped_frameworks field.
 func ByMappedFrameworks(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappedFrameworks, opts...).ToFunc()
+}
+
+// ByExampleEvidence orders the results by the example_evidence field.
+func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -544,6 +562,20 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -633,5 +665,12 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
 	)
 }

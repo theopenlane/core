@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -464,6 +465,21 @@ func (fc *FileCreate) AddProgram(p ...*Program) *FileCreate {
 	return fc.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (fc *FileCreate) AddEvidenceIDs(ids ...string) *FileCreate {
+	fc.mutation.AddEvidenceIDs(ids...)
+	return fc
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (fc *FileCreate) AddEvidence(e ...*Evidence) *FileCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fc.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fc *FileCreate) Mutation() *FileMutation {
 	return fc.mutation
@@ -852,6 +868,23 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = fc.schemaConfig.ProgramFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

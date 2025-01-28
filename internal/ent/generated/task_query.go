@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -45,6 +46,7 @@ type TaskQuery struct {
 	withControlObjective      *ControlObjectiveQuery
 	withSubcontrol            *SubcontrolQuery
 	withProgram               *ProgramQuery
+	withEvidence              *EvidenceQuery
 	loadTotal                 []func(context.Context, []*Task) error
 	modifiers                 []func(*sql.Selector)
 	withNamedGroup            map[string]*GroupQuery
@@ -54,6 +56,7 @@ type TaskQuery struct {
 	withNamedControlObjective map[string]*ControlObjectiveQuery
 	withNamedSubcontrol       map[string]*SubcontrolQuery
 	withNamedProgram          map[string]*ProgramQuery
+	withNamedEvidence         map[string]*EvidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -340,6 +343,31 @@ func (tq *TaskQuery) QueryProgram() *ProgramQuery {
 	return query
 }
 
+// QueryEvidence chains the current query on the "evidence" edge.
+func (tq *TaskQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, task.EvidenceTable, task.EvidencePrimaryKey...),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.TaskEvidence
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Task entity from the query.
 // Returns a *NotFoundError when no Task was found.
 func (tq *TaskQuery) First(ctx context.Context) (*Task, error) {
@@ -542,6 +570,7 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 		withControlObjective: tq.withControlObjective.Clone(),
 		withSubcontrol:       tq.withSubcontrol.Clone(),
 		withProgram:          tq.withProgram.Clone(),
+		withEvidence:         tq.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
 		path:      tq.path,
@@ -659,6 +688,17 @@ func (tq *TaskQuery) WithProgram(opts ...func(*ProgramQuery)) *TaskQuery {
 	return tq
 }
 
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithEvidence(opts ...func(*EvidenceQuery)) *TaskQuery {
+	query := (&EvidenceClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withEvidence = query
+	return tq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -743,7 +783,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	var (
 		nodes       = []*Task{}
 		_spec       = tq.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
 			tq.withOwner != nil,
 			tq.withAssigner != nil,
 			tq.withAssignee != nil,
@@ -754,6 +794,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			tq.withControlObjective != nil,
 			tq.withSubcontrol != nil,
 			tq.withProgram != nil,
+			tq.withEvidence != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -846,6 +887,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
+	if query := tq.withEvidence; query != nil {
+		if err := tq.loadEvidence(ctx, query, nodes,
+			func(n *Task) { n.Edges.Evidence = []*Evidence{} },
+			func(n *Task, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range tq.withNamedGroup {
 		if err := tq.loadGroup(ctx, query, nodes,
 			func(n *Task) { n.appendNamedGroup(name) },
@@ -892,6 +940,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		if err := tq.loadProgram(ctx, query, nodes,
 			func(n *Task) { n.appendNamedProgram(name) },
 			func(n *Task, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedEvidence {
+		if err := tq.loadEvidence(ctx, query, nodes,
+			func(n *Task) { n.appendNamedEvidence(name) },
+			func(n *Task, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1424,6 +1479,68 @@ func (tq *TaskQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes
 	}
 	return nil
 }
+func (tq *TaskQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Task, init func(*Task), assign func(*Task, *Evidence)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Task)
+	nids := make(map[string]map[*Task]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(task.EvidenceTable)
+		joinT.Schema(tq.schemaConfig.TaskEvidence)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(task.EvidencePrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(task.EvidencePrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(task.EvidencePrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Task]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (tq *TaskQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := tq.querySpec()
@@ -1627,6 +1744,20 @@ func (tq *TaskQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) 
 		tq.withNamedProgram = make(map[string]*ProgramQuery)
 	}
 	tq.withNamedProgram[name] = query
+	return tq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *TaskQuery {
+	query := (&EvidenceClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedEvidence == nil {
+		tq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	tq.withNamedEvidence[name] = query
 	return tq
 }
 

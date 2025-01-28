@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -50,6 +51,7 @@ type ControlQuery struct {
 	withActionPlans            *ActionPlanQuery
 	withTasks                  *TaskQuery
 	withPrograms               *ProgramQuery
+	withEvidence               *EvidenceQuery
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*Control) error
 	modifiers                  []func(*sql.Selector)
@@ -65,6 +67,7 @@ type ControlQuery struct {
 	withNamedActionPlans       map[string]*ActionPlanQuery
 	withNamedTasks             map[string]*TaskQuery
 	withNamedPrograms          map[string]*ProgramQuery
+	withNamedEvidence          map[string]*EvidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -426,6 +429,31 @@ func (cq *ControlQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryEvidence chains the current query on the "evidence" edge.
+func (cq *ControlQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.EvidenceTable, control.EvidencePrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControls
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Control entity from the query.
 // Returns a *NotFoundError when no Control was found.
 func (cq *ControlQuery) First(ctx context.Context) (*Control, error) {
@@ -631,6 +659,7 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withActionPlans:       cq.withActionPlans.Clone(),
 		withTasks:             cq.withTasks.Clone(),
 		withPrograms:          cq.withPrograms.Clone(),
+		withEvidence:          cq.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
@@ -781,6 +810,17 @@ func (cq *ControlQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlQuery 
 	return cq
 }
 
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithEvidence(opts ...func(*EvidenceQuery)) *ControlQuery {
+	query := (&EvidenceClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withEvidence = query
+	return cq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -866,7 +906,7 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			cq.withOwner != nil,
 			cq.withBlockedGroups != nil,
 			cq.withEditors != nil,
@@ -880,6 +920,7 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withActionPlans != nil,
 			cq.withTasks != nil,
 			cq.withPrograms != nil,
+			cq.withEvidence != nil,
 		}
 	)
 	if withFKs {
@@ -1000,6 +1041,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := cq.withEvidence; query != nil {
+		if err := cq.loadEvidence(ctx, query, nodes,
+			func(n *Control) { n.Edges.Evidence = []*Evidence{} },
+			func(n *Control, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedBlockedGroups {
 		if err := cq.loadBlockedGroups(ctx, query, nodes,
 			func(n *Control) { n.appendNamedBlockedGroups(name) },
@@ -1081,6 +1129,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadPrograms(ctx, query, nodes,
 			func(n *Control) { n.appendNamedPrograms(name) },
 			func(n *Control, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedEvidence {
+		if err := cq.loadEvidence(ctx, query, nodes,
+			func(n *Control) { n.appendNamedEvidence(name) },
+			func(n *Control, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1834,6 +1889,68 @@ func (cq *ControlQuery) loadPrograms(ctx context.Context, query *ProgramQuery, n
 	}
 	return nil
 }
+func (cq *ControlQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Control, init func(*Control), assign func(*Control, *Evidence)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.EvidenceTable)
+		joinT.Schema(cq.schemaConfig.EvidenceControls)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(control.EvidencePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.EvidencePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.EvidencePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cq *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
@@ -2101,6 +2218,20 @@ func (cq *ControlQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuer
 		cq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	cq.withNamedPrograms[name] = query
+	return cq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *ControlQuery {
+	query := (&EvidenceClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedEvidence == nil {
+		cq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	cq.withNamedEvidence[name] = query
 	return cq
 }
 

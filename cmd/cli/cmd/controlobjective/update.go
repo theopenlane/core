@@ -34,8 +34,10 @@ func init() {
 	updateCmd.Flags().StringP("class", "l", "", "class associated with the control objective")
 	updateCmd.Flags().StringP("source", "o", "", "source of the control objective")
 	updateCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks")
-	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the risk")
-	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the risk")
+	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the control objective")
+	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the control objective")
+	updateCmd.Flags().StringSliceP("add-editors", "e", []string{}, "group ID(s) given editor access to the control objective")
+	updateCmd.Flags().StringSliceP("add-viewers", "w", []string{}, "group ID(s) given viewer access to the control objective")
 }
 
 // updateValidation validates the required fields for the command
@@ -105,6 +107,16 @@ func updateValidation() (id string, input openlaneclient.UpdateControlObjectiveI
 	mappedFrameworks := cmd.Config.String("mapped-frameworks")
 	if mappedFrameworks != "" {
 		input.MappedFrameworks = &mappedFrameworks
+	}
+
+	viewerGroupIDs := cmd.Config.Strings("add-viewers")
+	if len(viewerGroupIDs) > 0 {
+		input.AddViewerIDs = viewerGroupIDs
+	}
+
+	editorGroupIDs := cmd.Config.Strings("add-editors")
+	if len(editorGroupIDs) > 0 {
+		input.AddEditorIDs = editorGroupIDs
 	}
 
 	return id, input, nil

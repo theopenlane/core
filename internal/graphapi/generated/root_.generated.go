@@ -308,6 +308,8 @@ type ComplexityRoot struct {
 		Details           func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
 		Editors           func(childComplexity int) int
+		Evidence          func(childComplexity int) int
+		ExampleEvidence   func(childComplexity int) int
 		Family            func(childComplexity int) int
 		ID                func(childComplexity int) int
 		MappedFrameworks  func(childComplexity int) int
@@ -365,6 +367,7 @@ type ComplexityRoot struct {
 		Description      func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
+		ExampleEvidence  func(childComplexity int) int
 		Family           func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
@@ -407,6 +410,8 @@ type ComplexityRoot struct {
 		Details              func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
+		Evidence             func(childComplexity int) int
+		ExampleEvidence      func(childComplexity int) int
 		Family               func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		InternalPolicies     func(childComplexity int) int
@@ -464,6 +469,7 @@ type ComplexityRoot struct {
 		Description          func(childComplexity int) int
 		Details              func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
+		ExampleEvidence      func(childComplexity int) int
 		Family               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -826,6 +832,100 @@ type ComplexityRoot struct {
 		Event func(childComplexity int) int
 	}
 
+	Evidence struct {
+		CollectionProcedure func(childComplexity int) int
+		ControlObjectives   func(childComplexity int) int
+		Controls            func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		CreationDate        func(childComplexity int) int
+		DeletedAt           func(childComplexity int) int
+		DeletedBy           func(childComplexity int) int
+		Description         func(childComplexity int) int
+		DisplayID           func(childComplexity int) int
+		Files               func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		IsAutomated         func(childComplexity int) int
+		Name                func(childComplexity int) int
+		Owner               func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
+		Programs            func(childComplexity int) int
+		RenewalDate         func(childComplexity int) int
+		Source              func(childComplexity int) int
+		Subcontrols         func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		Tasks               func(childComplexity int) int
+		URL                 func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
+	}
+
+	EvidenceBulkCreatePayload struct {
+		Evidences func(childComplexity int) int
+	}
+
+	EvidenceConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	EvidenceCreatePayload struct {
+		Evidence func(childComplexity int) int
+	}
+
+	EvidenceDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	EvidenceEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	EvidenceHistory struct {
+		CollectionProcedure func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		CreationDate        func(childComplexity int) int
+		DeletedAt           func(childComplexity int) int
+		DeletedBy           func(childComplexity int) int
+		Description         func(childComplexity int) int
+		DisplayID           func(childComplexity int) int
+		HistoryTime         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		IsAutomated         func(childComplexity int) int
+		Name                func(childComplexity int) int
+		Operation           func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
+		Ref                 func(childComplexity int) int
+		RenewalDate         func(childComplexity int) int
+		Source              func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		URL                 func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
+	}
+
+	EvidenceHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	EvidenceHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	EvidenceSearchResult struct {
+		Evidences func(childComplexity int) int
+	}
+
+	EvidenceUpdatePayload struct {
+		Evidence func(childComplexity int) int
+	}
+
 	File struct {
 		CategoryType          func(childComplexity int) int
 		Contact               func(childComplexity int) int
@@ -838,6 +938,7 @@ type ComplexityRoot struct {
 		DocumentData          func(childComplexity int) int
 		Entity                func(childComplexity int) int
 		Events                func(childComplexity int) int
+		Evidence              func(childComplexity int) int
 		Group                 func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
@@ -1356,6 +1457,7 @@ type ComplexityRoot struct {
 		Procedures        func(childComplexity int) int
 		Programs          func(childComplexity int) int
 		PurposeAndScope   func(childComplexity int) int
+		ReviewDue         func(childComplexity int) int
 		Status            func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		Tasks             func(childComplexity int) int
@@ -1404,6 +1506,7 @@ type ComplexityRoot struct {
 		PolicyType      func(childComplexity int) int
 		PurposeAndScope func(childComplexity int) int
 		Ref             func(childComplexity int) int
+		ReviewDue       func(childComplexity int) int
 		Status          func(childComplexity int) int
 		Tags            func(childComplexity int) int
 		UpdatedAt       func(childComplexity int) int
@@ -1549,6 +1652,7 @@ type ComplexityRoot struct {
 		CreateEntity                     func(childComplexity int, input generated.CreateEntityInput) int
 		CreateEntityType                 func(childComplexity int, input generated.CreateEntityTypeInput) int
 		CreateEvent                      func(childComplexity int, input generated.CreateEventInput) int
+		CreateEvidence                   func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
 		CreateFullProgram                func(childComplexity int, input model.CreateFullProgramInput) int
 		CreateGroup                      func(childComplexity int, input generated.CreateGroupInput) int
 		CreateGroupMembership            func(childComplexity int, input generated.CreateGroupMembershipInput) int
@@ -1584,6 +1688,7 @@ type ComplexityRoot struct {
 		DeleteEntity                     func(childComplexity int, id string) int
 		DeleteEntityType                 func(childComplexity int, id string) int
 		DeleteEvent                      func(childComplexity int, id string) int
+		DeleteEvidence                   func(childComplexity int, id string) int
 		DeleteFile                       func(childComplexity int, id string) int
 		DeleteGroup                      func(childComplexity int, id string) int
 		DeleteGroupMembership            func(childComplexity int, id string) int
@@ -1616,6 +1721,7 @@ type ComplexityRoot struct {
 		UpdateEntity                     func(childComplexity int, id string, input generated.UpdateEntityInput) int
 		UpdateEntityType                 func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                      func(childComplexity int, id string, input generated.UpdateEventInput) int
+		UpdateEvidence                   func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
 		UpdateGroup                      func(childComplexity int, id string, input generated.UpdateGroupInput) int
 		UpdateGroupMembership            func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting               func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
@@ -1955,6 +2061,7 @@ type ComplexityRoot struct {
 		Entities                 func(childComplexity int) int
 		EntityTypes              func(childComplexity int) int
 		Events                   func(childComplexity int) int
+		Evidence                 func(childComplexity int) int
 		Files                    func(childComplexity int) int
 		GroupCreators            func(childComplexity int) int
 		Groups                   func(childComplexity int) int
@@ -2221,6 +2328,7 @@ type ComplexityRoot struct {
 		ProcedureType    func(childComplexity int) int
 		Programs         func(childComplexity int) int
 		PurposeAndScope  func(childComplexity int) int
+		ReviewDue        func(childComplexity int) int
 		Risks            func(childComplexity int) int
 		Satisfies        func(childComplexity int) int
 		Status           func(childComplexity int) int
@@ -2271,6 +2379,7 @@ type ComplexityRoot struct {
 		ProcedureType   func(childComplexity int) int
 		PurposeAndScope func(childComplexity int) int
 		Ref             func(childComplexity int) int
+		ReviewDue       func(childComplexity int) int
 		Satisfies       func(childComplexity int) int
 		Status          func(childComplexity int) int
 		Tags            func(childComplexity int) int
@@ -2314,6 +2423,7 @@ type ComplexityRoot struct {
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
 		EndDate              func(childComplexity int) int
+		Evidence             func(childComplexity int) int
 		Files                func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		InternalPolicies     func(childComplexity int) int
@@ -2489,6 +2599,7 @@ type ComplexityRoot struct {
 		AdminEntitySearch              func(childComplexity int, query string) int
 		AdminEntityTypeSearch          func(childComplexity int, query string) int
 		AdminEventSearch               func(childComplexity int, query string) int
+		AdminEvidenceSearch            func(childComplexity int, query string) int
 		AdminFileSearch                func(childComplexity int, query string) int
 		AdminGroupSearch               func(childComplexity int, query string) int
 		AdminGroupSettingSearch        func(childComplexity int, query string) int
@@ -2539,6 +2650,10 @@ type ComplexityRoot struct {
 		EventHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventHistoryWhereInput) int
 		EventSearch                    func(childComplexity int, query string) int
 		Events                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
+		Evidence                       func(childComplexity int, id string) int
+		EvidenceHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceHistoryWhereInput) int
+		EvidenceSearch                 func(childComplexity int, query string) int
+		Evidences                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceWhereInput) int
 		File                           func(childComplexity int, id string) int
 		FileHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileHistoryWhereInput) int
 		FileSearch                     func(childComplexity int, query string) int
@@ -2848,6 +2963,8 @@ type ComplexityRoot struct {
 		Description                    func(childComplexity int) int
 		Details                        func(childComplexity int) int
 		DisplayID                      func(childComplexity int) int
+		Evidence                       func(childComplexity int) int
+		ExampleEvidence                func(childComplexity int) int
 		Family                         func(childComplexity int) int
 		ID                             func(childComplexity int) int
 		ImplementationDate             func(childComplexity int) int
@@ -2905,6 +3022,7 @@ type ComplexityRoot struct {
 		Description                    func(childComplexity int) int
 		Details                        func(childComplexity int) int
 		DisplayID                      func(childComplexity int) int
+		ExampleEvidence                func(childComplexity int) int
 		Family                         func(childComplexity int) int
 		HistoryTime                    func(childComplexity int) int
 		ID                             func(childComplexity int) int
@@ -3050,6 +3168,7 @@ type ComplexityRoot struct {
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		Due              func(childComplexity int) int
+		Evidence         func(childComplexity int) int
 		Group            func(childComplexity int) int
 		ID               func(childComplexity int) int
 		InternalPolicy   func(childComplexity int) int
@@ -4523,6 +4642,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.Editors(childComplexity), true
 
+	case "Control.evidence":
+		if e.complexity.Control.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Control.Evidence(childComplexity), true
+
+	case "Control.exampleEvidence":
+		if e.complexity.Control.ExampleEvidence == nil {
+			break
+		}
+
+		return e.complexity.Control.ExampleEvidence(childComplexity), true
+
 	case "Control.family":
 		if e.complexity.Control.Family == nil {
 			break
@@ -4796,6 +4929,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.DisplayID(childComplexity), true
 
+	case "ControlHistory.exampleEvidence":
+		if e.complexity.ControlHistory.ExampleEvidence == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ExampleEvidence(childComplexity), true
+
 	case "ControlHistory.family":
 		if e.complexity.ControlHistory.Family == nil {
 			break
@@ -5026,6 +5166,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjective.Editors(childComplexity), true
+
+	case "ControlObjective.evidence":
+		if e.complexity.ControlObjective.Evidence == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.Evidence(childComplexity), true
+
+	case "ControlObjective.exampleEvidence":
+		if e.complexity.ControlObjective.ExampleEvidence == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.ExampleEvidence(childComplexity), true
 
 	case "ControlObjective.family":
 		if e.complexity.ControlObjective.Family == nil {
@@ -5299,6 +5453,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjectiveHistory.DisplayID(childComplexity), true
+
+	case "ControlObjectiveHistory.exampleEvidence":
+		if e.complexity.ControlObjectiveHistory.ExampleEvidence == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.ExampleEvidence(childComplexity), true
 
 	case "ControlObjectiveHistory.family":
 		if e.complexity.ControlObjectiveHistory.Family == nil {
@@ -6770,6 +6931,433 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EventUpdatePayload.Event(childComplexity), true
 
+	case "Evidence.collectionProcedure":
+		if e.complexity.Evidence.CollectionProcedure == nil {
+			break
+		}
+
+		return e.complexity.Evidence.CollectionProcedure(childComplexity), true
+
+	case "Evidence.controlObjectives":
+		if e.complexity.Evidence.ControlObjectives == nil {
+			break
+		}
+
+		return e.complexity.Evidence.ControlObjectives(childComplexity), true
+
+	case "Evidence.controls":
+		if e.complexity.Evidence.Controls == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Controls(childComplexity), true
+
+	case "Evidence.createdAt":
+		if e.complexity.Evidence.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Evidence.CreatedAt(childComplexity), true
+
+	case "Evidence.createdBy":
+		if e.complexity.Evidence.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Evidence.CreatedBy(childComplexity), true
+
+	case "Evidence.creationDate":
+		if e.complexity.Evidence.CreationDate == nil {
+			break
+		}
+
+		return e.complexity.Evidence.CreationDate(childComplexity), true
+
+	case "Evidence.deletedAt":
+		if e.complexity.Evidence.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.Evidence.DeletedAt(childComplexity), true
+
+	case "Evidence.deletedBy":
+		if e.complexity.Evidence.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.Evidence.DeletedBy(childComplexity), true
+
+	case "Evidence.description":
+		if e.complexity.Evidence.Description == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Description(childComplexity), true
+
+	case "Evidence.displayID":
+		if e.complexity.Evidence.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Evidence.DisplayID(childComplexity), true
+
+	case "Evidence.files":
+		if e.complexity.Evidence.Files == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Files(childComplexity), true
+
+	case "Evidence.id":
+		if e.complexity.Evidence.ID == nil {
+			break
+		}
+
+		return e.complexity.Evidence.ID(childComplexity), true
+
+	case "Evidence.isAutomated":
+		if e.complexity.Evidence.IsAutomated == nil {
+			break
+		}
+
+		return e.complexity.Evidence.IsAutomated(childComplexity), true
+
+	case "Evidence.name":
+		if e.complexity.Evidence.Name == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Name(childComplexity), true
+
+	case "Evidence.owner":
+		if e.complexity.Evidence.Owner == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Owner(childComplexity), true
+
+	case "Evidence.ownerID":
+		if e.complexity.Evidence.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Evidence.OwnerID(childComplexity), true
+
+	case "Evidence.programs":
+		if e.complexity.Evidence.Programs == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Programs(childComplexity), true
+
+	case "Evidence.renewalDate":
+		if e.complexity.Evidence.RenewalDate == nil {
+			break
+		}
+
+		return e.complexity.Evidence.RenewalDate(childComplexity), true
+
+	case "Evidence.source":
+		if e.complexity.Evidence.Source == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Source(childComplexity), true
+
+	case "Evidence.subcontrols":
+		if e.complexity.Evidence.Subcontrols == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Subcontrols(childComplexity), true
+
+	case "Evidence.tags":
+		if e.complexity.Evidence.Tags == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Tags(childComplexity), true
+
+	case "Evidence.tasks":
+		if e.complexity.Evidence.Tasks == nil {
+			break
+		}
+
+		return e.complexity.Evidence.Tasks(childComplexity), true
+
+	case "Evidence.url":
+		if e.complexity.Evidence.URL == nil {
+			break
+		}
+
+		return e.complexity.Evidence.URL(childComplexity), true
+
+	case "Evidence.updatedAt":
+		if e.complexity.Evidence.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Evidence.UpdatedAt(childComplexity), true
+
+	case "Evidence.updatedBy":
+		if e.complexity.Evidence.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Evidence.UpdatedBy(childComplexity), true
+
+	case "EvidenceBulkCreatePayload.evidences":
+		if e.complexity.EvidenceBulkCreatePayload.Evidences == nil {
+			break
+		}
+
+		return e.complexity.EvidenceBulkCreatePayload.Evidences(childComplexity), true
+
+	case "EvidenceConnection.edges":
+		if e.complexity.EvidenceConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.EvidenceConnection.Edges(childComplexity), true
+
+	case "EvidenceConnection.pageInfo":
+		if e.complexity.EvidenceConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.EvidenceConnection.PageInfo(childComplexity), true
+
+	case "EvidenceConnection.totalCount":
+		if e.complexity.EvidenceConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.EvidenceConnection.TotalCount(childComplexity), true
+
+	case "EvidenceCreatePayload.evidence":
+		if e.complexity.EvidenceCreatePayload.Evidence == nil {
+			break
+		}
+
+		return e.complexity.EvidenceCreatePayload.Evidence(childComplexity), true
+
+	case "EvidenceDeletePayload.deletedID":
+		if e.complexity.EvidenceDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.EvidenceDeletePayload.DeletedID(childComplexity), true
+
+	case "EvidenceEdge.cursor":
+		if e.complexity.EvidenceEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.EvidenceEdge.Cursor(childComplexity), true
+
+	case "EvidenceEdge.node":
+		if e.complexity.EvidenceEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.EvidenceEdge.Node(childComplexity), true
+
+	case "EvidenceHistory.collectionProcedure":
+		if e.complexity.EvidenceHistory.CollectionProcedure == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.CollectionProcedure(childComplexity), true
+
+	case "EvidenceHistory.createdAt":
+		if e.complexity.EvidenceHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.CreatedAt(childComplexity), true
+
+	case "EvidenceHistory.createdBy":
+		if e.complexity.EvidenceHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.CreatedBy(childComplexity), true
+
+	case "EvidenceHistory.creationDate":
+		if e.complexity.EvidenceHistory.CreationDate == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.CreationDate(childComplexity), true
+
+	case "EvidenceHistory.deletedAt":
+		if e.complexity.EvidenceHistory.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.DeletedAt(childComplexity), true
+
+	case "EvidenceHistory.deletedBy":
+		if e.complexity.EvidenceHistory.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.DeletedBy(childComplexity), true
+
+	case "EvidenceHistory.description":
+		if e.complexity.EvidenceHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.Description(childComplexity), true
+
+	case "EvidenceHistory.displayID":
+		if e.complexity.EvidenceHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.DisplayID(childComplexity), true
+
+	case "EvidenceHistory.historyTime":
+		if e.complexity.EvidenceHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.HistoryTime(childComplexity), true
+
+	case "EvidenceHistory.id":
+		if e.complexity.EvidenceHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.ID(childComplexity), true
+
+	case "EvidenceHistory.isAutomated":
+		if e.complexity.EvidenceHistory.IsAutomated == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.IsAutomated(childComplexity), true
+
+	case "EvidenceHistory.name":
+		if e.complexity.EvidenceHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.Name(childComplexity), true
+
+	case "EvidenceHistory.operation":
+		if e.complexity.EvidenceHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.Operation(childComplexity), true
+
+	case "EvidenceHistory.ownerID":
+		if e.complexity.EvidenceHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.OwnerID(childComplexity), true
+
+	case "EvidenceHistory.ref":
+		if e.complexity.EvidenceHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.Ref(childComplexity), true
+
+	case "EvidenceHistory.renewalDate":
+		if e.complexity.EvidenceHistory.RenewalDate == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.RenewalDate(childComplexity), true
+
+	case "EvidenceHistory.source":
+		if e.complexity.EvidenceHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.Source(childComplexity), true
+
+	case "EvidenceHistory.tags":
+		if e.complexity.EvidenceHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.Tags(childComplexity), true
+
+	case "EvidenceHistory.url":
+		if e.complexity.EvidenceHistory.URL == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.URL(childComplexity), true
+
+	case "EvidenceHistory.updatedAt":
+		if e.complexity.EvidenceHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.UpdatedAt(childComplexity), true
+
+	case "EvidenceHistory.updatedBy":
+		if e.complexity.EvidenceHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.UpdatedBy(childComplexity), true
+
+	case "EvidenceHistoryConnection.edges":
+		if e.complexity.EvidenceHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistoryConnection.Edges(childComplexity), true
+
+	case "EvidenceHistoryConnection.pageInfo":
+		if e.complexity.EvidenceHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistoryConnection.PageInfo(childComplexity), true
+
+	case "EvidenceHistoryConnection.totalCount":
+		if e.complexity.EvidenceHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistoryConnection.TotalCount(childComplexity), true
+
+	case "EvidenceHistoryEdge.cursor":
+		if e.complexity.EvidenceHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistoryEdge.Cursor(childComplexity), true
+
+	case "EvidenceHistoryEdge.node":
+		if e.complexity.EvidenceHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistoryEdge.Node(childComplexity), true
+
+	case "EvidenceSearchResult.evidences":
+		if e.complexity.EvidenceSearchResult.Evidences == nil {
+			break
+		}
+
+		return e.complexity.EvidenceSearchResult.Evidences(childComplexity), true
+
+	case "EvidenceUpdatePayload.evidence":
+		if e.complexity.EvidenceUpdatePayload.Evidence == nil {
+			break
+		}
+
+		return e.complexity.EvidenceUpdatePayload.Evidence(childComplexity), true
+
 	case "File.categoryType":
 		if e.complexity.File.CategoryType == nil {
 			break
@@ -6846,6 +7434,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.File.Events(childComplexity), true
+
+	case "File.evidence":
+		if e.complexity.File.Evidence == nil {
+			break
+		}
+
+		return e.complexity.File.Evidence(childComplexity), true
 
 	case "File.group":
 		if e.complexity.File.Group == nil {
@@ -9192,6 +9787,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InternalPolicy.PurposeAndScope(childComplexity), true
 
+	case "InternalPolicy.reviewDue":
+		if e.complexity.InternalPolicy.ReviewDue == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ReviewDue(childComplexity), true
+
 	case "InternalPolicy.status":
 		if e.complexity.InternalPolicy.Status == nil {
 			break
@@ -9401,6 +10003,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.InternalPolicyHistory.Ref(childComplexity), true
+
+	case "InternalPolicyHistory.reviewDue":
+		if e.complexity.InternalPolicyHistory.ReviewDue == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ReviewDue(childComplexity), true
 
 	case "InternalPolicyHistory.status":
 		if e.complexity.InternalPolicyHistory.Status == nil {
@@ -10525,6 +11134,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateEvent(childComplexity, args["input"].(generated.CreateEventInput)), true
 
+	case "Mutation.createEvidence":
+		if e.complexity.Mutation.CreateEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createEvidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateEvidence(childComplexity, args["input"].(generated.CreateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.createFullProgram":
 		if e.complexity.Mutation.CreateFullProgram == nil {
 			break
@@ -10945,6 +11566,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteEvent(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteEvidence":
+		if e.complexity.Mutation.DeleteEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteEvidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteEvidence(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteFile":
 		if e.complexity.Mutation.DeleteFile == nil {
 			break
@@ -11328,6 +11961,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateEvent(childComplexity, args["id"].(string), args["input"].(generated.UpdateEventInput)), true
+
+	case "Mutation.updateEvidence":
+		if e.complexity.Mutation.UpdateEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateEvidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateEvidence(childComplexity, args["id"].(string), args["input"].(generated.UpdateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateGroup":
 		if e.complexity.Mutation.UpdateGroup == nil {
@@ -13092,6 +13737,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.Events(childComplexity), true
 
+	case "Organization.evidence":
+		if e.complexity.Organization.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Organization.Evidence(childComplexity), true
+
 	case "Organization.files":
 		if e.complexity.Organization.Files == nil {
 			break
@@ -14303,6 +14955,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Procedure.PurposeAndScope(childComplexity), true
 
+	case "Procedure.reviewDue":
+		if e.complexity.Procedure.ReviewDue == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ReviewDue(childComplexity), true
+
 	case "Procedure.risks":
 		if e.complexity.Procedure.Risks == nil {
 			break
@@ -14527,6 +15186,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProcedureHistory.Ref(childComplexity), true
 
+	case "ProcedureHistory.reviewDue":
+		if e.complexity.ProcedureHistory.ReviewDue == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.ReviewDue(childComplexity), true
+
 	case "ProcedureHistory.satisfies":
 		if e.complexity.ProcedureHistory.Satisfies == nil {
 			break
@@ -14722,6 +15388,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Program.EndDate(childComplexity), true
+
+	case "Program.evidence":
+		if e.complexity.Program.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Program.Evidence(childComplexity), true
 
 	case "Program.files":
 		if e.complexity.Program.Files == nil {
@@ -15587,6 +16260,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.AdminEventSearch(childComplexity, args["query"].(string)), true
 
+	case "Query.adminEvidenceSearch":
+		if e.complexity.Query.AdminEvidenceSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminEvidenceSearch_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminEvidenceSearch(childComplexity, args["query"].(string)), true
+
 	case "Query.adminFileSearch":
 		if e.complexity.Query.AdminFileSearch == nil {
 			break
@@ -16186,6 +16871,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
+
+	case "Query.evidence":
+		if e.complexity.Query.Evidence == nil {
+			break
+		}
+
+		args, err := ec.field_Query_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Evidence(childComplexity, args["id"].(string)), true
+
+	case "Query.evidenceHistories":
+		if e.complexity.Query.EvidenceHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_evidenceHistories_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EvidenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EvidenceHistoryWhereInput)), true
+
+	case "Query.evidenceSearch":
+		if e.complexity.Query.EvidenceSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_evidenceSearch_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EvidenceSearch(childComplexity, args["query"].(string)), true
+
+	case "Query.evidences":
+		if e.complexity.Query.Evidences == nil {
+			break
+		}
+
+		args, err := ec.field_Query_evidences_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Evidences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "Query.file":
 		if e.complexity.Query.File == nil {
@@ -18341,6 +19074,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.DisplayID(childComplexity), true
 
+	case "Subcontrol.evidence":
+		if e.complexity.Subcontrol.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Evidence(childComplexity), true
+
+	case "Subcontrol.exampleEvidence":
+		if e.complexity.Subcontrol.ExampleEvidence == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ExampleEvidence(childComplexity), true
+
 	case "Subcontrol.family":
 		if e.complexity.Subcontrol.Family == nil {
 			break
@@ -18613,6 +19360,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SubcontrolHistory.DisplayID(childComplexity), true
+
+	case "SubcontrolHistory.exampleEvidence":
+		if e.complexity.SubcontrolHistory.ExampleEvidence == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ExampleEvidence(childComplexity), true
 
 	case "SubcontrolHistory.family":
 		if e.complexity.SubcontrolHistory.Family == nil {
@@ -19250,6 +20004,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Task.Due(childComplexity), true
+
+	case "Task.evidence":
+		if e.complexity.Task.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Task.Evidence(childComplexity), true
 
 	case "Task.group":
 		if e.complexity.Task.Group == nil {
@@ -20861,6 +21622,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateEntityInput,
 		ec.unmarshalInputCreateEntityTypeInput,
 		ec.unmarshalInputCreateEventInput,
+		ec.unmarshalInputCreateEvidenceInput,
 		ec.unmarshalInputCreateFileInput,
 		ec.unmarshalInputCreateFullProgramInput,
 		ec.unmarshalInputCreateGroupInput,
@@ -20902,6 +21664,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputEntityWhereInput,
 		ec.unmarshalInputEventHistoryWhereInput,
 		ec.unmarshalInputEventWhereInput,
+		ec.unmarshalInputEvidenceHistoryWhereInput,
+		ec.unmarshalInputEvidenceWhereInput,
 		ec.unmarshalInputFileHistoryWhereInput,
 		ec.unmarshalInputFileWhereInput,
 		ec.unmarshalInputGroupHistoryOrder,
@@ -20967,6 +21731,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
 		ec.unmarshalInputUpdateEventInput,
+		ec.unmarshalInputUpdateEvidenceInput,
 		ec.unmarshalInputUpdateFileInput,
 		ec.unmarshalInputUpdateGroupInput,
 		ec.unmarshalInputUpdateGroupMembershipInput,
@@ -21281,6 +22046,15 @@ type ActionPlanBulkCreatePayload {
         """
         query: String!
     ): EventSearchResult
+    """
+    Search across Evidence objects
+    """
+    adminEvidenceSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EvidenceSearchResult
     """
     Search across File objects
     """
@@ -23746,6 +24520,10 @@ type Control implements Node {
   json data including details of the control
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -23768,6 +24546,7 @@ type Control implements Node {
   actionPlans: [ActionPlan!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -23870,6 +24649,10 @@ type ControlHistory implements Node {
   json data including details of the control
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
 }
 """
 A connection to a list of items.
@@ -24287,6 +25070,24 @@ input ControlHistoryWhereInput {
   mappedFrameworksNotNil: Boolean
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
+  """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
 }
 type ControlObjective implements Node {
   id: ID!
@@ -24352,6 +25153,10 @@ type ControlObjective implements Node {
   json data including details of the control objective
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -24374,6 +25179,7 @@ type ControlObjective implements Node {
   narratives: [Narrative!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -24472,6 +25278,10 @@ type ControlObjectiveHistory implements Node {
   json data including details of the control objective
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
 }
 """
 A connection to a list of items.
@@ -24871,6 +25681,24 @@ input ControlObjectiveHistoryWhereInput {
   mappedFrameworksNotNil: Boolean
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
+  """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
 }
 """
 ControlObjectiveWhereInput is used for filtering ControlObjective objects.
@@ -25197,6 +26025,24 @@ input ControlObjectiveWhereInput {
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
   """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -25261,6 +26107,11 @@ input ControlObjectiveWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -25605,6 +26456,24 @@ input ControlWhereInput {
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
   """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -25669,6 +26538,11 @@ input ControlWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -25836,6 +26710,10 @@ input CreateControlInput {
   json data including details of the control
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   ownerID: ID!
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -25849,6 +26727,7 @@ input CreateControlInput {
   actionPlanIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -25903,6 +26782,10 @@ input CreateControlObjectiveInput {
   json data including details of the control objective
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   ownerID: ID!
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -25916,6 +26799,7 @@ input CreateControlObjectiveInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -26011,6 +26895,55 @@ input CreateEventInput {
   fileIDs: [ID!]
 }
 """
+CreateEvidenceInput is used for create Evidence object.
+Input was generated by ent.
+"""
+input CreateEvidenceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the name of the evidence
+  """
+  name: String!
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+  ownerID: ID!
+  controlObjectiveIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  fileIDs: [ID!]
+  programIDs: [ID!]
+  taskIDs: [ID!]
+}
+"""
 CreateFileInput is used for create File object.
 Input was generated by ent.
 """
@@ -26079,6 +27012,7 @@ input CreateFileInput {
   documentDatumIDs: [ID!]
   eventIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -26254,6 +27188,10 @@ input CreateInternalPolicyInput {
   status of the policy
   """
   status: String
+  """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
   """
   type of the policy
   """
@@ -26451,6 +27389,7 @@ input CreateOrganizationInput {
   narrativeIDs: [ID!]
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -26549,6 +27488,10 @@ input CreateProcedureInput {
   """
   procedureType: String
   """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  """
   version of the procedure
   """
   version: String
@@ -26632,6 +27575,7 @@ input CreateProgramInput {
   taskIDs: [ID!]
   noteIDs: [ID!]
   fileIDs: [ID!]
+  evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
   standardIDs: [ID!]
@@ -26832,12 +27776,17 @@ input CreateSubcontrolInput {
   json data details of the subcontrol
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   ownerID: ID!
   controlIDs: [ID!]!
   userIDs: [ID!]
   taskIDs: [ID!]
   notesID: ID
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -26917,6 +27866,7 @@ input CreateTaskInput {
   controlObjectiveIDs: [ID!]
   subcontrolIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateTemplateInput is used for create Template object.
@@ -29184,6 +30134,793 @@ input EventWhereInput {
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
 }
+type Evidence implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID!
+  """
+  the name of the evidence
+  """
+  name: String!
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time!
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+  owner: Organization!
+  controlObjectives: [ControlObjective!]
+  controls: [Control!]
+  subcontrols: [Subcontrol!]
+  files: [File!]
+  programs: [Program!]
+  tasks: [Task!]
+}
+"""
+A connection to a list of items.
+"""
+type EvidenceConnection {
+  """
+  A list of edges.
+  """
+  edges: [EvidenceEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EvidenceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Evidence
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type EvidenceHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: EvidenceHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String!
+  """
+  the name of the evidence
+  """
+  name: String!
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time!
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+}
+"""
+A connection to a list of items.
+"""
+type EvidenceHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [EvidenceHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EvidenceHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EvidenceHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EvidenceHistoryOpType is enum for the field operation
+"""
+enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
+Input was generated by ent.
+"""
+input EvidenceHistoryWhereInput {
+  not: EvidenceHistoryWhereInput
+  and: [EvidenceHistoryWhereInput!]
+  or: [EvidenceHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: EvidenceHistoryOpType
+  operationNEQ: EvidenceHistoryOpType
+  operationIn: [EvidenceHistoryOpType!]
+  operationNotIn: [EvidenceHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  collection_procedure field predicates
+  """
+  collectionProcedure: String
+  collectionProcedureNEQ: String
+  collectionProcedureIn: [String!]
+  collectionProcedureNotIn: [String!]
+  collectionProcedureGT: String
+  collectionProcedureGTE: String
+  collectionProcedureLT: String
+  collectionProcedureLTE: String
+  collectionProcedureContains: String
+  collectionProcedureHasPrefix: String
+  collectionProcedureHasSuffix: String
+  collectionProcedureIsNil: Boolean
+  collectionProcedureNotNil: Boolean
+  collectionProcedureEqualFold: String
+  collectionProcedureContainsFold: String
+  """
+  creation_date field predicates
+  """
+  creationDate: Time
+  creationDateNEQ: Time
+  creationDateIn: [Time!]
+  creationDateNotIn: [Time!]
+  creationDateGT: Time
+  creationDateGTE: Time
+  creationDateLT: Time
+  creationDateLTE: Time
+  """
+  renewal_date field predicates
+  """
+  renewalDate: Time
+  renewalDateNEQ: Time
+  renewalDateIn: [Time!]
+  renewalDateNotIn: [Time!]
+  renewalDateGT: Time
+  renewalDateGTE: Time
+  renewalDateLT: Time
+  renewalDateLTE: Time
+  renewalDateIsNil: Boolean
+  renewalDateNotNil: Boolean
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  is_automated field predicates
+  """
+  isAutomated: Boolean
+  isAutomatedNEQ: Boolean
+  isAutomatedIsNil: Boolean
+  isAutomatedNotNil: Boolean
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+}
+"""
+EvidenceWhereInput is used for filtering Evidence objects.
+Input was generated by ent.
+"""
+input EvidenceWhereInput {
+  not: EvidenceWhereInput
+  and: [EvidenceWhereInput!]
+  or: [EvidenceWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  collection_procedure field predicates
+  """
+  collectionProcedure: String
+  collectionProcedureNEQ: String
+  collectionProcedureIn: [String!]
+  collectionProcedureNotIn: [String!]
+  collectionProcedureGT: String
+  collectionProcedureGTE: String
+  collectionProcedureLT: String
+  collectionProcedureLTE: String
+  collectionProcedureContains: String
+  collectionProcedureHasPrefix: String
+  collectionProcedureHasSuffix: String
+  collectionProcedureIsNil: Boolean
+  collectionProcedureNotNil: Boolean
+  collectionProcedureEqualFold: String
+  collectionProcedureContainsFold: String
+  """
+  creation_date field predicates
+  """
+  creationDate: Time
+  creationDateNEQ: Time
+  creationDateIn: [Time!]
+  creationDateNotIn: [Time!]
+  creationDateGT: Time
+  creationDateGTE: Time
+  creationDateLT: Time
+  creationDateLTE: Time
+  """
+  renewal_date field predicates
+  """
+  renewalDate: Time
+  renewalDateNEQ: Time
+  renewalDateIn: [Time!]
+  renewalDateNotIn: [Time!]
+  renewalDateGT: Time
+  renewalDateGTE: Time
+  renewalDateLT: Time
+  renewalDateLTE: Time
+  renewalDateIsNil: Boolean
+  renewalDateNotNil: Boolean
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  is_automated field predicates
+  """
+  isAutomated: Boolean
+  isAutomatedNEQ: Boolean
+  isAutomatedIsNil: Boolean
+  isAutomatedNotNil: Boolean
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  control_objectives edge predicates
+  """
+  hasControlObjectives: Boolean
+  hasControlObjectivesWith: [ControlObjectiveWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+}
 type File implements Node {
   id: ID!
   createdAt: Time
@@ -29256,6 +30993,7 @@ type File implements Node {
   documentData: [DocumentData!]
   events: [Event!]
   program: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -30146,6 +31884,11 @@ input FileWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -33032,6 +34775,10 @@ type InternalPolicy implements Node {
   """
   status: String
   """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  """
   type of the policy
   """
   policyType: String
@@ -33132,6 +34879,10 @@ type InternalPolicyHistory implements Node {
   status of the policy
   """
   status: String
+  """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
   """
   type of the policy
   """
@@ -33428,6 +35179,19 @@ input InternalPolicyHistoryWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
+  """
   policy_type field predicates
   """
   policyType: String
@@ -33700,6 +35464,19 @@ input InternalPolicyWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
   """
   policy_type field predicates
   """
@@ -36574,6 +38351,7 @@ type Organization implements Node {
   narratives: [Narrative!]
   controls: [Control!]
   subcontrols: [Subcontrol!]
+  evidence: [Evidence!]
   members: [OrgMembership!]
 }
 """
@@ -38044,6 +39822,11 @@ input OrganizationWhereInput {
   hasSubcontrols: Boolean
   hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -38344,6 +40127,10 @@ type Procedure implements Node {
   """
   procedureType: String
   """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  """
   version of the procedure
   """
   version: String
@@ -38448,6 +40235,10 @@ type ProcedureHistory implements Node {
   type of the procedure
   """
   procedureType: String
+  """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
   """
   version of the procedure
   """
@@ -38762,6 +40553,19 @@ input ProcedureHistoryWhereInput {
   procedureTypeEqualFold: String
   procedureTypeContainsFold: String
   """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
+  """
   version field predicates
   """
   version: String
@@ -39053,6 +40857,19 @@ input ProcedureWhereInput {
   procedureTypeEqualFold: String
   procedureTypeContainsFold: String
   """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
+  """
   version field predicates
   """
   version: String
@@ -39244,6 +41061,7 @@ type Program implements Node {
   tasks: [Task!]
   notes: [Note!]
   files: [File!]
+  evidence: [Evidence!]
   narratives: [Narrative!]
   actionPlans: [ActionPlan!]
   """
@@ -40383,6 +42201,11 @@ input ProgramWhereInput {
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
   """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
   narratives edge predicates
   """
   hasNarratives: Boolean
@@ -40889,6 +42712,58 @@ type Query {
     """
     where: EventHistoryWhereInput
   ): EventHistoryConnection!
+  evidences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  evidenceHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for EvidenceHistories returned from the connection.
+    """
+    where: EvidenceHistoryWhereInput
+  ): EvidenceHistoryConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -44023,12 +45898,17 @@ type Subcontrol implements Node {
   json data details of the subcontrol
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   owner: Organization!
   controls: [Control!]!
   user: [User!]
   tasks: [Task!]
   notes: Note
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -44147,6 +46027,10 @@ type SubcontrolHistory implements Node {
   json data details of the subcontrol
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
 }
 """
 A connection to a list of items.
@@ -44626,6 +46510,24 @@ input SubcontrolHistoryWhereInput {
   implementationVerificationDateLTE: Time
   implementationVerificationDateIsNil: Boolean
   implementationVerificationDateNotNil: Boolean
+  """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -45032,6 +46934,24 @@ input SubcontrolWhereInput {
   implementationVerificationDateIsNil: Boolean
   implementationVerificationDateNotNil: Boolean
   """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -45061,6 +46981,11 @@ input SubcontrolWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -45569,6 +47494,7 @@ type Task implements Node {
   controlObjective: [ControlObjective!]
   subcontrol: [Subcontrol!]
   program: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -46331,6 +48257,11 @@ input TaskWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Template implements Node {
   id: ID!
@@ -47147,6 +49078,11 @@ input UpdateControlInput {
   """
   details: Map
   clearDetails: Boolean
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
+  clearExampleEvidence: Boolean
   ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
@@ -47184,6 +49120,9 @@ input UpdateControlInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -47250,6 +49189,11 @@ input UpdateControlObjectiveInput {
   """
   details: Map
   clearDetails: Boolean
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
+  clearExampleEvidence: Boolean
   ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
@@ -47287,6 +49231,9 @@ input UpdateControlObjectiveInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -47435,6 +49382,75 @@ input UpdateEventInput {
   clearFile: Boolean
 }
 """
+UpdateEvidenceInput is used for update Evidence object.
+Input was generated by ent.
+"""
+input UpdateEvidenceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the name of the evidence
+  """
+  name: String
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  clearCollectionProcedure: Boolean
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  clearRenewalDate: Boolean
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  clearSource: Boolean
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  clearIsAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+  clearURL: Boolean
+  ownerID: ID
+  addControlObjectiveIDs: [ID!]
+  removeControlObjectiveIDs: [ID!]
+  clearControlObjectives: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+}
+"""
 UpdateFileInput is used for update File object.
 Input was generated by ent.
 """
@@ -47537,6 +49553,9 @@ input UpdateFileInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -47802,6 +49821,11 @@ input UpdateInternalPolicyInput {
   """
   status: String
   clearStatus: Boolean
+  """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  clearReviewDue: Boolean
   """
   type of the policy
   """
@@ -48114,6 +50138,9 @@ input UpdateOrganizationInput {
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -48234,6 +50261,11 @@ input UpdateProcedureInput {
   """
   procedureType: String
   clearProcedureType: Boolean
+  """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  clearReviewDue: Boolean
   """
   version of the procedure
   """
@@ -48370,6 +50402,9 @@ input UpdateProgramInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
   addNarrativeIDs: [ID!]
   removeNarrativeIDs: [ID!]
   clearNarratives: Boolean
@@ -48639,6 +50674,11 @@ input UpdateSubcontrolInput {
   """
   details: Map
   clearDetails: Boolean
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
+  clearExampleEvidence: Boolean
   ownerID: ID
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
@@ -48653,6 +50693,9 @@ input UpdateSubcontrolInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -48763,6 +50806,9 @@ input UpdateTaskInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateTemplateInput is used for update Template object.
@@ -50860,6 +52906,93 @@ type EventBulkCreatePayload {
     """
     events: [Event!]
 }`, BuiltIn: false},
+	{Name: "../schema/evidence.graphql", Input: `extend type Query {
+    """
+    Look up evidence by ID
+    """
+     evidence(
+        """
+        ID of the evidence
+        """
+        id: ID!
+    ):  Evidence!
+}
+
+extend type Mutation{
+    """
+    Create a new evidence
+    """
+    createEvidence(
+        """
+        values of the evidence
+        """
+        input: CreateEvidenceInput!
+        evidenceFiles: [Upload!]
+    ): EvidenceCreatePayload!
+    """
+    Update an existing evidence
+    """
+    updateEvidence(
+        """
+        ID of the evidence
+        """
+        id: ID!
+        """
+        New values for the evidence
+        """
+        input: UpdateEvidenceInput!
+        evidenceFiles: [Upload!]
+    ): EvidenceUpdatePayload!
+    """
+    Delete an existing evidence
+    """
+    deleteEvidence(
+        """
+        ID of the evidence
+        """
+        id: ID!
+    ): EvidenceDeletePayload!
+}
+
+"""
+Return response for createEvidence mutation
+"""
+type EvidenceCreatePayload {
+    """
+    Created evidence
+    """
+    evidence: Evidence!
+}
+
+"""
+Return response for updateEvidence mutation
+"""
+type EvidenceUpdatePayload {
+    """
+    Updated evidence
+    """
+    evidence: Evidence!
+}
+
+"""
+Return response for deleteEvidence mutation
+"""
+type EvidenceDeletePayload {
+    """
+    Deleted evidence ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEvidence mutation
+"""
+type EvidenceBulkCreatePayload {
+    """
+    Created evidences
+    """
+    evidences: [Evidence!]
+}`, BuiltIn: false},
 	{Name: "../schema/file.graphql", Input: `extend type Query {
     """
     Look up file by ID
@@ -52738,6 +54871,15 @@ scalar Price`, BuiltIn: false},
         query: String!
     ): EventSearchResult
     """
+    Search across Evidence objects
+    """
+    evidenceSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EvidenceSearchResult
+    """
     Search across File objects
     """
     fileSearch(
@@ -52928,6 +55070,7 @@ union SearchResult =
   | EntitySearchResult
   | EntityTypeSearchResult
   | EventSearchResult
+  | EvidenceSearchResult
   | FileSearchResult
   | GroupSearchResult
   | GroupSettingSearchResult
@@ -53019,6 +55162,10 @@ type  EntityTypeSearchResult {
 
 type  EventSearchResult {
    events: [ Event!]
+}
+
+type  EvidenceSearchResult {
+   evidences: [ Evidence!]
 }
 
 type  FileSearchResult {

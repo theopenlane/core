@@ -122,6 +122,11 @@ func Status(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldStatus, v))
 }
 
+// ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
+func ReviewDue(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldReviewDue, v))
+}
+
 // PolicyType applies equality check predicate on the "policy_type" field. It's identical to PolicyTypeEQ.
 func PolicyType(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldPolicyType, v))
@@ -880,6 +885,56 @@ func StatusEqualFold(v string) predicate.InternalPolicy {
 // StatusContainsFold applies the ContainsFold predicate on the "status" field.
 func StatusContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// ReviewDueEQ applies the EQ predicate on the "review_due" field.
+func ReviewDueEQ(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldReviewDue, v))
+}
+
+// ReviewDueNEQ applies the NEQ predicate on the "review_due" field.
+func ReviewDueNEQ(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldReviewDue, v))
+}
+
+// ReviewDueIn applies the In predicate on the "review_due" field.
+func ReviewDueIn(vs ...time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldReviewDue, vs...))
+}
+
+// ReviewDueNotIn applies the NotIn predicate on the "review_due" field.
+func ReviewDueNotIn(vs ...time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldReviewDue, vs...))
+}
+
+// ReviewDueGT applies the GT predicate on the "review_due" field.
+func ReviewDueGT(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldReviewDue, v))
+}
+
+// ReviewDueGTE applies the GTE predicate on the "review_due" field.
+func ReviewDueGTE(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldReviewDue, v))
+}
+
+// ReviewDueLT applies the LT predicate on the "review_due" field.
+func ReviewDueLT(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldReviewDue, v))
+}
+
+// ReviewDueLTE applies the LTE predicate on the "review_due" field.
+func ReviewDueLTE(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldReviewDue, v))
+}
+
+// ReviewDueIsNil applies the IsNil predicate on the "review_due" field.
+func ReviewDueIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldReviewDue))
+}
+
+// ReviewDueNotNil applies the NotNil predicate on the "review_due" field.
+func ReviewDueNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldReviewDue))
 }
 
 // PolicyTypeEQ applies the EQ predicate on the "policy_type" field.

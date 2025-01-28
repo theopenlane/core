@@ -53,7 +53,7 @@ func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privac
 				Relation:    relation,
 			}
 
-			access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
+			access, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac)
 			if err != nil {
 				return privacy.Skipf("unable to check access, %s", err.Error())
 			}

@@ -45,6 +45,8 @@ type Procedure struct {
 	Status string `json:"status,omitempty"`
 	// type of the procedure
 	ProcedureType string `json:"procedure_type,omitempty"`
+	// the date the procedure should be reviewed, defaults to a year from creation date
+	ReviewDue time.Time `json:"review_due,omitempty"`
 	// version of the procedure
 	Version string `json:"version,omitempty"`
 	// purpose and scope
@@ -191,7 +193,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldDescription, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldVersion, procedure.FieldPurposeAndScope, procedure.FieldBackground, procedure.FieldSatisfies:
 			values[i] = new(sql.NullString)
-		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt:
+		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case procedure.ForeignKeys[0]: // control_objective_procedures
 			values[i] = new(sql.NullString)
@@ -297,6 +299,12 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field procedure_type", values[i])
 			} else if value.Valid {
 				pr.ProcedureType = value.String
+			}
+		case procedure.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				pr.ReviewDue = value.Time
 			}
 		case procedure.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -463,6 +471,9 @@ func (pr *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("procedure_type=")
 	builder.WriteString(pr.ProcedureType)
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(pr.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(pr.Version)

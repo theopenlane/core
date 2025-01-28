@@ -41,6 +41,8 @@ const (
 	FieldStatus = "status"
 	// FieldProcedureType holds the string denoting the procedure_type field in the database.
 	FieldProcedureType = "procedure_type"
+	// FieldReviewDue holds the string denoting the review_due field in the database.
+	FieldReviewDue = "review_due"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
 	// FieldPurposeAndScope holds the string denoting the purpose_and_scope field in the database.
@@ -136,6 +138,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldStatus,
 	FieldProcedureType,
+	FieldReviewDue,
 	FieldVersion,
 	FieldPurposeAndScope,
 	FieldBackground,
@@ -215,6 +218,8 @@ var (
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultReviewDue holds the default value on creation for the "review_due" field.
+	DefaultReviewDue time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -285,6 +290,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByProcedureType orders the results by the procedure_type field.
 func ByProcedureType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProcedureType, opts...).ToFunc()
+}
+
+// ByReviewDue orders the results by the review_due field.
+func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewDue, opts...).ToFunc()
 }
 
 // ByVersion orders the results by the version field.

@@ -8,6 +8,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
+	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
@@ -64,8 +65,9 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 		uploads := []objects.FileUpload{}
 
 		for k, v := range op.Variables {
-			up, ok := v.(graphql.Upload)
-			if ok {
+			ups := getUploadsFromRequest(v)
+
+			for _, up := range ups {
 				fileUpload := &objects.FileUpload{
 					File:        up.File,
 					Filename:    up.Filename,
@@ -116,6 +118,29 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 
 		return field, nil
 	}
+}
+
+// getUploadsFromRequest returns the uploads from the request
+// this is used to get the uploads from the variables in the request
+func getUploadsFromRequest(v any) []graphql.Upload {
+	switch v := v.(type) {
+	case []graphql.Upload:
+		return v
+	case graphql.Upload:
+		return []graphql.Upload{v}
+	case []interface{}:
+		uploads := []graphql.Upload{}
+
+		for _, i := range v {
+			if u, ok := i.(graphql.Upload); ok {
+				uploads = append(uploads, u)
+			}
+		}
+
+		return uploads
+	}
+
+	return nil
 }
 
 // withPool returns the existing pool or creates a new one if it does not exist
@@ -208,8 +233,7 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *objec
 	// loop through the arguments in the request
 	for _, arg := range rctx.Field.Arguments {
 		// check if the argument is an upload
-		if arg.Value != nil && arg.Value.ExpectedType != nil &&
-			arg.Value.ExpectedType.NamedType == "Upload" {
+		if argIsUpload(arg) {
 			// check if the argument name matches the key
 			if arg.Name == key {
 				upload.CorrelatedObjectType = stripOperation(rctx.Field.Name)
@@ -221,6 +245,23 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *objec
 	}
 
 	return upload, ErrUnableToDetermineObjectType
+}
+
+// argIsUpload checks if the argument is an upload
+func argIsUpload(arg *ast.Argument) bool {
+	if arg == nil || arg.Value == nil || arg.Value.ExpectedType == nil {
+		return false
+	}
+
+	if arg.Value.ExpectedType.NamedType == "Upload" {
+		return true
+	}
+
+	if arg.Value.ExpectedType.Elem != nil && arg.Value.ExpectedType.Elem.NamedType == "Upload" {
+		return true
+	}
+
+	return false
 }
 
 // stripOperation strips the operation from the field name, e.g. updateUser becomes user

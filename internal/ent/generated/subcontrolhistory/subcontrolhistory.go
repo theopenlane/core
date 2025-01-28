@@ -73,6 +73,8 @@ const (
 	FieldImplementationVerificationDate = "implementation_verification_date"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
+	FieldExampleEvidence = "example_evidence"
 	// Table holds the table name of the subcontrolhistory in the database.
 	Table = "subcontrol_history"
 )
@@ -108,6 +110,7 @@ var Columns = []string{
 	FieldImplementationVerification,
 	FieldImplementationVerificationDate,
 	FieldDetails,
+	FieldExampleEvidence,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -287,6 +290,11 @@ func ByImplementationVerification(opts ...sql.OrderTermOption) OrderOption {
 // ByImplementationVerificationDate orders the results by the implementation_verification_date field.
 func ByImplementationVerificationDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImplementationVerificationDate, opts...).ToFunc()
+}
+
+// ByExampleEvidence orders the results by the example_evidence field.
+func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
 }
 
 var (

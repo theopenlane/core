@@ -69,6 +69,9 @@ func (Control) Fields() []ent.Field {
 		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data including details of the control"),
+		field.Text("example_evidence").
+			Comment("example evidence to provide for the control").
+			Optional(),
 	}
 }
 
@@ -85,6 +88,8 @@ func (Control) Edges() []ent.Edge {
 		edge.To("action_plans", ActionPlan.Type),
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
+			Ref("controls"),
+		edge.From("evidence", Evidence.Type).
 			Ref("controls"),
 	}
 }
@@ -114,9 +119,7 @@ func (Control) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType: "control", // check access to the control for update/delete
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 

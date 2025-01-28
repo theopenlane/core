@@ -24,7 +24,13 @@ func NewMutationPolicyWithoutNil(source privacy.MutationPolicy) privacy.Mutation
 	return newSlice
 }
 
+// MutationClient is an interface that can be implemented by a mutation to return the ent client
+type MutationClient interface {
+	Client() *generated.Client
+}
+
 // AuthzClientFromContext returns the authz client from the context if it exists
+// this is useful when you need to get the client from the context directly
 func AuthzClientFromContext(ctx context.Context) *fgax.Client {
 	client := generated.FromContext(ctx)
 	if client != nil {
@@ -34,6 +40,22 @@ func AuthzClientFromContext(ctx context.Context) *fgax.Client {
 	tx := transaction.FromContext(ctx)
 	if tx != nil {
 		return &tx.Authz
+	}
+
+	return nil
+}
+
+// AuthzClient returns the authz client from the context if it exists, otherwise it will
+// attempt to get the client from the mutation if it implements the `MutationClient` interface
+func AuthzClient(ctx context.Context, m generated.Mutation) *fgax.Client {
+	client := AuthzClientFromContext(ctx)
+	if client != nil {
+		return client
+	}
+
+	mut, ok := m.(MutationClient)
+	if ok && mut.Client() != nil {
+		return &mut.Client().Authz
 	}
 
 	return nil

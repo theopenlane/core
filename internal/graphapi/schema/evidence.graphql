@@ -1,0 +1,87 @@
+extend type Query {
+    """
+    Look up evidence by ID
+    """
+     evidence(
+        """
+        ID of the evidence
+        """
+        id: ID!
+    ):  Evidence!
+}
+
+extend type Mutation{
+    """
+    Create a new evidence
+    """
+    createEvidence(
+        """
+        values of the evidence
+        """
+        input: CreateEvidenceInput!
+        evidenceFiles: [Upload!]
+    ): EvidenceCreatePayload!
+    """
+    Update an existing evidence
+    """
+    updateEvidence(
+        """
+        ID of the evidence
+        """
+        id: ID!
+        """
+        New values for the evidence
+        """
+        input: UpdateEvidenceInput!
+        evidenceFiles: [Upload!]
+    ): EvidenceUpdatePayload!
+    """
+    Delete an existing evidence
+    """
+    deleteEvidence(
+        """
+        ID of the evidence
+        """
+        id: ID!
+    ): EvidenceDeletePayload!
+}
+
+"""
+Return response for createEvidence mutation
+"""
+type EvidenceCreatePayload {
+    """
+    Created evidence
+    """
+    evidence: Evidence!
+}
+
+"""
+Return response for updateEvidence mutation
+"""
+type EvidenceUpdatePayload {
+    """
+    Updated evidence
+    """
+    evidence: Evidence!
+}
+
+"""
+Return response for deleteEvidence mutation
+"""
+type EvidenceDeletePayload {
+    """
+    Deleted evidence ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEvidence mutation
+"""
+type EvidenceBulkCreatePayload {
+    """
+    Created evidences
+    """
+    evidences: [Evidence!]
+}

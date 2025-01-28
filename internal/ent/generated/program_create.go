@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -448,6 +449,21 @@ func (pc *ProgramCreate) AddFiles(f ...*File) *ProgramCreate {
 		ids[i] = f[i].ID
 	}
 	return pc.AddFileIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (pc *ProgramCreate) AddEvidenceIDs(ids ...string) *ProgramCreate {
+	pc.mutation.AddEvidenceIDs(ids...)
+	return pc
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (pc *ProgramCreate) AddEvidence(e ...*Evidence) *ProgramCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return pc.AddEvidenceIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
@@ -963,6 +979,23 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = pc.schemaConfig.ProgramFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EvidenceTable,
+			Columns: program.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

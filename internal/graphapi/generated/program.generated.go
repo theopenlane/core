@@ -127,6 +127,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_notes(ctx, field)
 			case "files":
 				return ec.fieldContext_Program_files(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Program_evidence(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
@@ -245,6 +247,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_notes(ctx, field)
 			case "files":
 				return ec.fieldContext_Program_files(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Program_evidence(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
@@ -407,6 +411,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_notes(ctx, field)
 			case "files":
 				return ec.fieldContext_Program_files(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Program_evidence(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
@@ -406,6 +407,52 @@ func (ehq *EventHistoryQuery) AsOf(ctx context.Context, time time.Time) (*EventH
 	return ehq.
 		Where(eventhistory.HistoryTimeLTE(time)).
 		Order(eventhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (e *Evidence) History() *EvidenceHistoryQuery {
+	historyClient := NewEvidenceHistoryClient(e.config)
+	return historyClient.Query().Where(evidencehistory.Ref(e.ID))
+}
+
+func (eh *EvidenceHistory) Next(ctx context.Context) (*EvidenceHistory, error) {
+	client := NewEvidenceHistoryClient(eh.config)
+	return client.Query().
+		Where(
+			evidencehistory.Ref(eh.Ref),
+			evidencehistory.HistoryTimeGT(eh.HistoryTime),
+		).
+		Order(evidencehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (eh *EvidenceHistory) Prev(ctx context.Context) (*EvidenceHistory, error) {
+	client := NewEvidenceHistoryClient(eh.config)
+	return client.Query().
+		Where(
+			evidencehistory.Ref(eh.Ref),
+			evidencehistory.HistoryTimeLT(eh.HistoryTime),
+		).
+		Order(evidencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ehq *EvidenceHistoryQuery) Earliest(ctx context.Context) (*EvidenceHistory, error) {
+	return ehq.
+		Order(evidencehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ehq *EvidenceHistoryQuery) Latest(ctx context.Context) (*EvidenceHistory, error) {
+	return ehq.
+		Order(evidencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ehq *EvidenceHistoryQuery) AsOf(ctx context.Context, time time.Time) (*EvidenceHistory, error) {
+	return ehq.
+		Where(evidencehistory.HistoryTimeLTE(time)).
+		Order(evidencehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

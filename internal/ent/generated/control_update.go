@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -373,6 +374,26 @@ func (cu *ControlUpdate) ClearDetails() *ControlUpdate {
 	return cu
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cu *ControlUpdate) SetExampleEvidence(s string) *ControlUpdate {
+	cu.mutation.SetExampleEvidence(s)
+	return cu
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cu *ControlUpdate) SetNillableExampleEvidence(s *string) *ControlUpdate {
+	if s != nil {
+		cu.SetExampleEvidence(*s)
+	}
+	return cu
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (cu *ControlUpdate) ClearExampleEvidence() *ControlUpdate {
+	cu.mutation.ClearExampleEvidence()
+	return cu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cu *ControlUpdate) SetOwner(o *Organization) *ControlUpdate {
 	return cu.SetOwnerID(o.ID)
@@ -556,6 +577,21 @@ func (cu *ControlUpdate) AddPrograms(p ...*Program) *ControlUpdate {
 		ids[i] = p[i].ID
 	}
 	return cu.AddProgramIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (cu *ControlUpdate) AddEvidenceIDs(ids ...string) *ControlUpdate {
+	cu.mutation.AddEvidenceIDs(ids...)
+	return cu
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (cu *ControlUpdate) AddEvidence(e ...*Evidence) *ControlUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cu.AddEvidenceIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -821,6 +857,27 @@ func (cu *ControlUpdate) RemovePrograms(p ...*Program) *ControlUpdate {
 	return cu.RemoveProgramIDs(ids...)
 }
 
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (cu *ControlUpdate) ClearEvidence() *ControlUpdate {
+	cu.mutation.ClearEvidence()
+	return cu
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (cu *ControlUpdate) RemoveEvidenceIDs(ids ...string) *ControlUpdate {
+	cu.mutation.RemoveEvidenceIDs(ids...)
+	return cu
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (cu *ControlUpdate) RemoveEvidence(e ...*Evidence) *ControlUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cu.RemoveEvidenceIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *ControlUpdate) Save(ctx context.Context) (int, error) {
 	if err := cu.defaults(); err != nil {
@@ -1008,6 +1065,12 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.DetailsCleared() {
 		_spec.ClearField(control.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := cu.mutation.ExampleEvidence(); ok {
+		_spec.SetField(control.FieldExampleEvidence, field.TypeString, value)
+	}
+	if cu.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(control.FieldExampleEvidence, field.TypeString)
 	}
 	if cu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1616,6 +1679,54 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.EvidenceControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !cu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.EvidenceControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.EvidenceControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = cu.schemaConfig.Control
 	ctx = internal.NewSchemaConfigContext(ctx, cu.schemaConfig)
 	_spec.AddModifiers(cu.modifiers...)
@@ -1970,6 +2081,26 @@ func (cuo *ControlUpdateOne) ClearDetails() *ControlUpdateOne {
 	return cuo
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cuo *ControlUpdateOne) SetExampleEvidence(s string) *ControlUpdateOne {
+	cuo.mutation.SetExampleEvidence(s)
+	return cuo
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cuo *ControlUpdateOne) SetNillableExampleEvidence(s *string) *ControlUpdateOne {
+	if s != nil {
+		cuo.SetExampleEvidence(*s)
+	}
+	return cuo
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (cuo *ControlUpdateOne) ClearExampleEvidence() *ControlUpdateOne {
+	cuo.mutation.ClearExampleEvidence()
+	return cuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cuo *ControlUpdateOne) SetOwner(o *Organization) *ControlUpdateOne {
 	return cuo.SetOwnerID(o.ID)
@@ -2153,6 +2284,21 @@ func (cuo *ControlUpdateOne) AddPrograms(p ...*Program) *ControlUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return cuo.AddProgramIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (cuo *ControlUpdateOne) AddEvidenceIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.AddEvidenceIDs(ids...)
+	return cuo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (cuo *ControlUpdateOne) AddEvidence(e ...*Evidence) *ControlUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cuo.AddEvidenceIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -2418,6 +2564,27 @@ func (cuo *ControlUpdateOne) RemovePrograms(p ...*Program) *ControlUpdateOne {
 	return cuo.RemoveProgramIDs(ids...)
 }
 
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (cuo *ControlUpdateOne) ClearEvidence() *ControlUpdateOne {
+	cuo.mutation.ClearEvidence()
+	return cuo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (cuo *ControlUpdateOne) RemoveEvidenceIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.RemoveEvidenceIDs(ids...)
+	return cuo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (cuo *ControlUpdateOne) RemoveEvidence(e ...*Evidence) *ControlUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cuo.RemoveEvidenceIDs(ids...)
+}
+
 // Where appends a list predicates to the ControlUpdate builder.
 func (cuo *ControlUpdateOne) Where(ps ...predicate.Control) *ControlUpdateOne {
 	cuo.mutation.Where(ps...)
@@ -2635,6 +2802,12 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	}
 	if cuo.mutation.DetailsCleared() {
 		_spec.ClearField(control.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := cuo.mutation.ExampleEvidence(); ok {
+		_spec.SetField(control.FieldExampleEvidence, field.TypeString, value)
+	}
+	if cuo.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(control.FieldExampleEvidence, field.TypeString)
 	}
 	if cuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3238,6 +3411,54 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			},
 		}
 		edge.Schema = cuo.schemaConfig.ProgramControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.EvidenceControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !cuo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.EvidenceControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

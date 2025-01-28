@@ -204,6 +204,26 @@ func (ipu *InternalPolicyUpdate) ClearStatus() *InternalPolicyUpdate {
 	return ipu
 }
 
+// SetReviewDue sets the "review_due" field.
+func (ipu *InternalPolicyUpdate) SetReviewDue(t time.Time) *InternalPolicyUpdate {
+	ipu.mutation.SetReviewDue(t)
+	return ipu
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableReviewDue(t *time.Time) *InternalPolicyUpdate {
+	if t != nil {
+		ipu.SetReviewDue(*t)
+	}
+	return ipu
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (ipu *InternalPolicyUpdate) ClearReviewDue() *InternalPolicyUpdate {
+	ipu.mutation.ClearReviewDue()
+	return ipu
+}
+
 // SetPolicyType sets the "policy_type" field.
 func (ipu *InternalPolicyUpdate) SetPolicyType(s string) *InternalPolicyUpdate {
 	ipu.mutation.SetPolicyType(s)
@@ -730,6 +750,12 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeString)
+	}
+	if value, ok := ipu.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
+	}
+	if ipu.mutation.ReviewDueCleared() {
+		_spec.ClearField(internalpolicy.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := ipu.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
@@ -1364,6 +1390,26 @@ func (ipuo *InternalPolicyUpdateOne) ClearStatus() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
+// SetReviewDue sets the "review_due" field.
+func (ipuo *InternalPolicyUpdateOne) SetReviewDue(t time.Time) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetReviewDue(t)
+	return ipuo
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableReviewDue(t *time.Time) *InternalPolicyUpdateOne {
+	if t != nil {
+		ipuo.SetReviewDue(*t)
+	}
+	return ipuo
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (ipuo *InternalPolicyUpdateOne) ClearReviewDue() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearReviewDue()
+	return ipuo
+}
+
 // SetPolicyType sets the "policy_type" field.
 func (ipuo *InternalPolicyUpdateOne) SetPolicyType(s string) *InternalPolicyUpdateOne {
 	ipuo.mutation.SetPolicyType(s)
@@ -1920,6 +1966,12 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeString)
+	}
+	if value, ok := ipuo.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
+	}
+	if ipuo.mutation.ReviewDueCleared() {
+		_spec.ClearField(internalpolicy.FieldReviewDue, field.TypeTime)
 	}
 	if value, ok := ipuo.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)

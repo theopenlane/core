@@ -135,6 +135,11 @@ func ProcedureType(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldProcedureType, v))
 }
 
+// ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
+func ReviewDue(v time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldReviewDue, v))
+}
+
 // Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
 func Version(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldVersion, v))
@@ -1103,6 +1108,56 @@ func ProcedureTypeEqualFold(v string) predicate.ProcedureHistory {
 // ProcedureTypeContainsFold applies the ContainsFold predicate on the "procedure_type" field.
 func ProcedureTypeContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldProcedureType, v))
+}
+
+// ReviewDueEQ applies the EQ predicate on the "review_due" field.
+func ReviewDueEQ(v time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldReviewDue, v))
+}
+
+// ReviewDueNEQ applies the NEQ predicate on the "review_due" field.
+func ReviewDueNEQ(v time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldReviewDue, v))
+}
+
+// ReviewDueIn applies the In predicate on the "review_due" field.
+func ReviewDueIn(vs ...time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldReviewDue, vs...))
+}
+
+// ReviewDueNotIn applies the NotIn predicate on the "review_due" field.
+func ReviewDueNotIn(vs ...time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldReviewDue, vs...))
+}
+
+// ReviewDueGT applies the GT predicate on the "review_due" field.
+func ReviewDueGT(v time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldReviewDue, v))
+}
+
+// ReviewDueGTE applies the GTE predicate on the "review_due" field.
+func ReviewDueGTE(v time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldReviewDue, v))
+}
+
+// ReviewDueLT applies the LT predicate on the "review_due" field.
+func ReviewDueLT(v time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldReviewDue, v))
+}
+
+// ReviewDueLTE applies the LTE predicate on the "review_due" field.
+func ReviewDueLTE(v time.Time) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldReviewDue, v))
+}
+
+// ReviewDueIsNil applies the IsNil predicate on the "review_due" field.
+func ReviewDueIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldReviewDue))
+}
+
+// ReviewDueNotNil applies the NotNil predicate on the "review_due" field.
+func ReviewDueNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldReviewDue))
 }
 
 // VersionEQ applies the EQ predicate on the "version" field.

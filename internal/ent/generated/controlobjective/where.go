@@ -157,6 +157,11 @@ func MappedFrameworks(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldMappedFrameworks, v))
 }
 
+// ExampleEvidence applies equality check predicate on the "example_evidence" field. It's identical to ExampleEvidenceEQ.
+func ExampleEvidence(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldExampleEvidence, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldCreatedAt, v))
@@ -1422,6 +1427,81 @@ func DetailsNotNil() predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldNotNull(FieldDetails))
 }
 
+// ExampleEvidenceEQ applies the EQ predicate on the "example_evidence" field.
+func ExampleEvidenceEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceNEQ applies the NEQ predicate on the "example_evidence" field.
+func ExampleEvidenceNEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNEQ(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceIn applies the In predicate on the "example_evidence" field.
+func ExampleEvidenceIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIn(FieldExampleEvidence, vs...))
+}
+
+// ExampleEvidenceNotIn applies the NotIn predicate on the "example_evidence" field.
+func ExampleEvidenceNotIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotIn(FieldExampleEvidence, vs...))
+}
+
+// ExampleEvidenceGT applies the GT predicate on the "example_evidence" field.
+func ExampleEvidenceGT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGT(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceGTE applies the GTE predicate on the "example_evidence" field.
+func ExampleEvidenceGTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGTE(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceLT applies the LT predicate on the "example_evidence" field.
+func ExampleEvidenceLT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLT(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceLTE applies the LTE predicate on the "example_evidence" field.
+func ExampleEvidenceLTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLTE(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceContains applies the Contains predicate on the "example_evidence" field.
+func ExampleEvidenceContains(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContains(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceHasPrefix applies the HasPrefix predicate on the "example_evidence" field.
+func ExampleEvidenceHasPrefix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasPrefix(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceHasSuffix applies the HasSuffix predicate on the "example_evidence" field.
+func ExampleEvidenceHasSuffix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasSuffix(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceIsNil applies the IsNil predicate on the "example_evidence" field.
+func ExampleEvidenceIsNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIsNull(FieldExampleEvidence))
+}
+
+// ExampleEvidenceNotNil applies the NotNil predicate on the "example_evidence" field.
+func ExampleEvidenceNotNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotNull(FieldExampleEvidence))
+}
+
+// ExampleEvidenceEqualFold applies the EqualFold predicate on the "example_evidence" field.
+func ExampleEvidenceEqualFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEqualFold(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceContainsFold applies the ContainsFold predicate on the "example_evidence" field.
+func ExampleEvidenceContainsFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContainsFold(FieldExampleEvidence, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.ControlObjective {
 	return predicate.ControlObjective(func(s *sql.Selector) {
@@ -1791,6 +1871,35 @@ func HasProgramsWith(preds ...predicate.Program) predicate.ControlObjective {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramControlObjectives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvidence applies the HasEdge predicate on the "evidence" edge.
+func HasEvidence() predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
+func HasEvidenceWith(preds ...predicate.Evidence) predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := newEvidenceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

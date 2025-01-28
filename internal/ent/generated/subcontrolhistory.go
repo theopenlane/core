@@ -74,8 +74,10 @@ type SubcontrolHistory struct {
 	// date the subcontrol implementation was verified
 	ImplementationVerificationDate time.Time `json:"implementation_verification_date,omitempty"`
 	// json data details of the subcontrol
-	Details      map[string]interface{} `json:"details,omitempty"`
-	selectValues sql.SelectValues
+	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -87,7 +89,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldName, subcontrolhistory.FieldDescription, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSubcontrolType, subcontrolhistory.FieldVersion, subcontrolhistory.FieldSubcontrolNumber, subcontrolhistory.FieldFamily, subcontrolhistory.FieldClass, subcontrolhistory.FieldSource, subcontrolhistory.FieldMappedFrameworks, subcontrolhistory.FieldImplementationEvidence, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationVerification:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldName, subcontrolhistory.FieldDescription, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSubcontrolType, subcontrolhistory.FieldVersion, subcontrolhistory.FieldSubcontrolNumber, subcontrolhistory.FieldFamily, subcontrolhistory.FieldClass, subcontrolhistory.FieldSource, subcontrolhistory.FieldMappedFrameworks, subcontrolhistory.FieldImplementationEvidence, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationVerification, subcontrolhistory.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt, subcontrolhistory.FieldImplementationDate, subcontrolhistory.FieldImplementationVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -284,6 +286,12 @@ func (sh *SubcontrolHistory) assignValues(columns []string, values []any) error 
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case subcontrolhistory.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				sh.ExampleEvidence = value.String
+			}
 		default:
 			sh.selectValues.Set(columns[i], values[i])
 		}
@@ -403,6 +411,9 @@ func (sh *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(sh.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }

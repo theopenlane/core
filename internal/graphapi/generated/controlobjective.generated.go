@@ -107,6 +107,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -133,6 +135,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ControlObjective_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -221,6 +225,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -247,6 +253,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ControlObjective_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -379,6 +387,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -405,6 +415,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ControlObjective_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},

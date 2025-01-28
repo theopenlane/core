@@ -435,7 +435,7 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 	anotherAdminUser := suite.userBuilder(context.Background())
 	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the risk
 	res, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
@@ -453,7 +453,7 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 			name: "happy path, update field",
 			request: openlaneclient.UpdateRiskInput{
 				Description:  lo.ToPtr("Updated description"),
-				AddViewerIDs: []string{testUser1.GroupID},
+				AddViewerIDs: []string{groupMember.GroupID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -539,9 +539,15 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 
 			if len(tc.request.AddViewerIDs) > 0 {
 				require.Len(t, resp.UpdateRisk.Risk.Viewers, 1)
+				found := false
 				for _, edge := range resp.UpdateRisk.Risk.Viewers {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
+					if edge.ID == tc.request.AddViewerIDs[0] {
+						found = true
+						break
+					}
 				}
+
+				assert.True(t, found)
 
 				// ensure the user has access to the risk now
 				res, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)

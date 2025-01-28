@@ -76,6 +76,9 @@ func (Subcontrol) Fields() []ent.Field {
 		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data details of the subcontrol"),
+		field.Text("example_evidence").
+			Comment("example evidence to provide for the control").
+			Optional(),
 	}
 }
 
@@ -93,6 +96,8 @@ func (Subcontrol) Edges() []ent.Edge {
 			Unique().
 			Ref("subcontrols"),
 		edge.From("programs", Program.Type).
+			Ref("subcontrols"),
+		edge.From("evidence", Evidence.Type).
 			Ref("subcontrols"),
 	}
 }

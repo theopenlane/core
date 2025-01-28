@@ -39,6 +39,8 @@ const (
 	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldReviewDue holds the string denoting the review_due field in the database.
+	FieldReviewDue = "review_due"
 	// FieldPolicyType holds the string denoting the policy_type field in the database.
 	FieldPolicyType = "policy_type"
 	// FieldVersion holds the string denoting the version field in the database.
@@ -135,6 +137,7 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldStatus,
+	FieldReviewDue,
 	FieldPolicyType,
 	FieldVersion,
 	FieldPurposeAndScope,
@@ -199,6 +202,8 @@ var (
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultReviewDue holds the default value on creation for the "review_due" field.
+	DefaultReviewDue time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -264,6 +269,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByReviewDue orders the results by the review_due field.
+func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewDue, opts...).ToFunc()
 }
 
 // ByPolicyType orders the results by the policy_type field.

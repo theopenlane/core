@@ -26,6 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -167,6 +169,16 @@ var eventhistoryImplementors = []string{"EventHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*EventHistory) IsNode() {}
+
+var evidenceImplementors = []string{"Evidence", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Evidence) IsNode() {}
+
+var evidencehistoryImplementors = []string{"EvidenceHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*EvidenceHistory) IsNode() {}
 
 var fileImplementors = []string{"File", "Node"}
 
@@ -625,6 +637,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(eventhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, eventhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case evidence.Table:
+		query := c.Evidence.Query().
+			Where(evidence.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, evidenceImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case evidencehistory.Table:
+		query := c.EvidenceHistory.Query().
+			Where(evidencehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, evidencehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1412,6 +1442,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.EventHistory.Query().
 			Where(eventhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, eventhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case evidence.Table:
+		query := c.Evidence.Query().
+			Where(evidence.IDIn(ids...))
+		query, err := query.CollectFields(ctx, evidenceImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case evidencehistory.Table:
+		query := c.EvidenceHistory.Query().
+			Where(evidencehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, evidencehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

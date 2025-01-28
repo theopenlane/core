@@ -92,6 +92,7 @@ data:
   CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.core.authz.credentials.audience }}
   CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.core.authz.credentials.issuer }}
   CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.core.authz.credentials.scopes }}
+  CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: {{ .Values.core.authz.ignoreDuplicateKeyError | default true }}
   CORE_DB_DEBUG: {{ .Values.core.db.debug | default false }}
   CORE_DB_DATABASENAME: {{ .Values.core.db.databaseName | default "openlane" }}
   CORE_DB_DRIVERNAME: {{ .Values.core.db.driverName | default "pgx" }}

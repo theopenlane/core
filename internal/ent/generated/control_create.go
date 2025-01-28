@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -285,6 +286,20 @@ func (cc *ControlCreate) SetDetails(m map[string]interface{}) *ControlCreate {
 	return cc
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cc *ControlCreate) SetExampleEvidence(s string) *ControlCreate {
+	cc.mutation.SetExampleEvidence(s)
+	return cc
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableExampleEvidence(s *string) *ControlCreate {
+	if s != nil {
+		cc.SetExampleEvidence(*s)
+	}
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *ControlCreate) SetID(s string) *ControlCreate {
 	cc.mutation.SetID(s)
@@ -482,6 +497,21 @@ func (cc *ControlCreate) AddPrograms(p ...*Program) *ControlCreate {
 		ids[i] = p[i].ID
 	}
 	return cc.AddProgramIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (cc *ControlCreate) AddEvidenceIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddEvidenceIDs(ids...)
+	return cc
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (cc *ControlCreate) AddEvidence(e ...*Evidence) *ControlCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cc.AddEvidenceIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -693,6 +723,10 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Details(); ok {
 		_spec.SetField(control.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if value, ok := cc.mutation.ExampleEvidence(); ok {
+		_spec.SetField(control.FieldExampleEvidence, field.TypeString, value)
+		_node.ExampleEvidence = value
 	}
 	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -911,6 +945,23 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.ProgramControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.EvidenceTable,
+			Columns: control.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

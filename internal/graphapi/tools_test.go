@@ -190,6 +190,23 @@ func expectUpload(t *testing.T, mockStore objects.Storage, expectedUploads []gra
 	}
 }
 
+// expectUploadNillable sets up the mock object store to expect an upload and related operations
+func expectUploadNillable(t *testing.T, mockStore objects.Storage, expectedUploads []*graphql.Upload) {
+	require.NotNil(t, mockStore)
+
+	ms, ok := mockStore.(*mock_objects.MockStorage)
+	require.True(t, ok)
+
+	mockScheme := "file://"
+
+	for _, upload := range expectedUploads {
+		ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
+		ms.EXPECT().Upload(mock.Anything, mock.Anything, mock.Anything).Return(&objects.UploadedFileMetadata{
+			Size: upload.Size,
+		}, nil).Times(1)
+	}
+}
+
 // expectUploadCheckOnly sets up the mock object store to expect an upload check only operation
 // but fails before the upload is attempted
 func expectUploadCheckOnly(t *testing.T, mockStore objects.Storage) {

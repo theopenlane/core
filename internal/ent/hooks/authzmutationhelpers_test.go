@@ -152,3 +152,56 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 		})
 	}
 }
+
+func TestCheckForEdge(t *testing.T) {
+	tests := []struct {
+		name        string
+		parentField string
+		edgeField   string
+		want        string
+	}{
+		{
+			name:        "edge matches parent field",
+			parentField: "parent_id",
+			edgeField:   "parent",
+			want:        "parent",
+		},
+		{
+			name:        "edge matches pluralized parent field",
+			parentField: "parent_id",
+			edgeField:   "parents",
+			want:        "parents",
+		},
+		{
+			name:        "edge does not match parent field",
+			parentField: "parent_id",
+			edgeField:   "child",
+			want:        "",
+		},
+		{
+			name:        "edge does not match pluralized parent field",
+			parentField: "parent_id",
+			edgeField:   "children",
+			want:        "",
+		},
+		{
+			name:        "edge matches parent field without _id",
+			parentField: "parent",
+			edgeField:   "parent",
+			want:        "parent",
+		},
+		{
+			name:        "edge matches pluralized parent field without _id",
+			parentField: "parent",
+			edgeField:   "parents",
+			want:        "parents",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := checkForEdge(tt.parentField, tt.edgeField)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}

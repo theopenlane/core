@@ -1,0 +1,281 @@
+mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      tags
+      updatedAt
+      updatedBy
+      url
+      files {
+        id
+        presignedURL
+      }
+      programs {
+        id
+        displayID
+        name
+      }
+      tasks {
+        id
+        displayID
+      }
+      controls {
+        id
+        displayID
+        name
+        family
+      }
+      subcontrols {
+        id
+        displayID
+        name
+        family
+      }
+      controlObjectives {
+        id
+        displayID
+        name
+        family
+      }
+    }
+  }
+}
+
+mutation DeleteEvidence($deleteEvidenceId: ID!) {
+  deleteEvidence(id: $deleteEvidenceId) {
+    deletedID
+  }
+}
+
+query GetAllEvidences {
+  evidences {
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        tags
+        updatedAt
+        updatedBy
+        url
+        files {
+          id
+          presignedURL
+        }
+        programs {
+          id
+          displayID
+          name
+        }
+        tasks {
+          id
+          displayID
+        }
+        controls {
+          id
+          displayID
+          name
+          family
+        }
+        subcontrols {
+          id
+          displayID
+          name
+          family
+        }
+        controlObjectives {
+          id
+          displayID
+          name
+          family
+        }
+      }
+    }
+  }
+}
+
+query GetEvidenceByID($evidenceId: ID!) {
+  evidence(id: $evidenceId) {
+    collectionProcedure
+    createdAt
+    createdBy
+    creationDate
+    description
+    displayID
+    id
+    isAutomated
+    name
+    ownerID
+    renewalDate
+    source
+    tags
+    updatedAt
+    updatedBy
+    url
+    files {
+      id
+      presignedURL
+    }
+    programs {
+      id
+      displayID
+      name
+    }
+    tasks {
+      id
+      displayID
+    }
+    controls {
+      id
+      displayID
+      name
+      family
+    }
+    subcontrols {
+      id
+      displayID
+      name
+      family
+    }
+    controlObjectives {
+      id
+      displayID
+      name
+      family
+    }
+  }
+}
+
+query GetEvidences($where: EvidenceWhereInput) {
+  evidences(where: $where) {
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        tags
+        updatedAt
+        updatedBy
+        url
+        files {
+          id
+          presignedURL
+        }
+        programs {
+          id
+          displayID
+          name
+        }
+        tasks {
+          id
+          displayID
+        }
+        controls {
+          id
+          displayID
+          name
+          family
+        }
+        subcontrols {
+          id
+          displayID
+          name
+          family
+        }
+        controlObjectives {
+          id
+          displayID
+          name
+          family
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  updateEvidence(
+    id: $updateEvidenceId
+    input: $input
+    evidenceFiles: $evidenceFiles
+  ) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      tags
+      updatedAt
+      updatedBy
+      url
+      files {
+        id
+        presignedURL
+      }
+      programs {
+        id
+        displayID
+        name
+      }
+      tasks {
+        id
+        displayID
+      }
+      controls {
+        id
+        displayID
+        name
+        family
+      }
+      subcontrols {
+        id
+        displayID
+        name
+        family
+      }
+      controlObjectives {
+        id
+        displayID
+        name
+        family
+      }
+    }
+  }
+}

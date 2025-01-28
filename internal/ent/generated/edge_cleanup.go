@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -148,6 +149,18 @@ func EventEdgeCleanup(ctx context.Context, id string) error {
 
 func EventHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup eventhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func EvidenceEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidence edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func EvidenceHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidencehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -471,6 +484,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", subcontrolCount).Msg("deleting subcontrol")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Evidence.Query().Where((evidence.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if evidenceCount, err := FromContext(ctx).Evidence.Delete().Where(evidence.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", evidenceCount).Msg("deleting evidence")
 			return err
 		}
 	}

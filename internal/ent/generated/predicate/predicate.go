@@ -60,6 +60,12 @@ type Event func(*sql.Selector)
 // EventHistory is the predicate function for eventhistory builders.
 type EventHistory func(*sql.Selector)
 
+// Evidence is the predicate function for evidence builders.
+type Evidence func(*sql.Selector)
+
+// EvidenceHistory is the predicate function for evidencehistory builders.
+type EvidenceHistory func(*sql.Selector)
+
 // File is the predicate function for file builders.
 type File func(*sql.Selector)
 

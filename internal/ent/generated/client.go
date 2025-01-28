@@ -37,6 +37,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -146,6 +148,10 @@ type Client struct {
 	Event *EventClient
 	// EventHistory is the client for interacting with the EventHistory builders.
 	EventHistory *EventHistoryClient
+	// Evidence is the client for interacting with the Evidence builders.
+	Evidence *EvidenceClient
+	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
+	EvidenceHistory *EvidenceHistoryClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
 	// FileHistory is the client for interacting with the FileHistory builders.
@@ -288,6 +294,8 @@ func (c *Client) init() {
 	c.EntityTypeHistory = NewEntityTypeHistoryClient(c.config)
 	c.Event = NewEventClient(c.config)
 	c.EventHistory = NewEventHistoryClient(c.config)
+	c.Evidence = NewEvidenceClient(c.config)
+	c.EvidenceHistory = NewEvidenceHistoryClient(c.config)
 	c.File = NewFileClient(c.config)
 	c.FileHistory = NewFileHistoryClient(c.config)
 	c.Group = NewGroupClient(c.config)
@@ -527,6 +535,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		EntityTypeHistory:          NewEntityTypeHistoryClient(cfg),
 		Event:                      NewEventClient(cfg),
 		EventHistory:               NewEventHistoryClient(cfg),
+		Evidence:                   NewEvidenceClient(cfg),
+		EvidenceHistory:            NewEvidenceHistoryClient(cfg),
 		File:                       NewFileClient(cfg),
 		FileHistory:                NewFileHistoryClient(cfg),
 		Group:                      NewGroupClient(cfg),
@@ -616,6 +626,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		EntityTypeHistory:          NewEntityTypeHistoryClient(cfg),
 		Event:                      NewEventClient(cfg),
 		EventHistory:               NewEventHistoryClient(cfg),
+		Evidence:                   NewEvidenceClient(cfg),
+		EvidenceHistory:            NewEvidenceHistoryClient(cfg),
 		File:                       NewFileClient(cfg),
 		FileHistory:                NewFileHistoryClient(cfg),
 		Group:                      NewGroupClient(cfg),
@@ -701,19 +713,19 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Control, c.ControlHistory, c.ControlObjective, c.ControlObjectiveHistory,
 		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
 		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
-		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.Narrative, c.NarrativeHistory, c.Note,
-		c.NoteHistory, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
+		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
+		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgSubscription, c.OrgSubscriptionHistory,
+		c.Organization, c.OrganizationHistory, c.OrganizationSetting,
+		c.OrganizationSettingHistory, c.PasswordResetToken, c.PersonalAccessToken,
+		c.Procedure, c.ProcedureHistory, c.Program, c.ProgramHistory,
+		c.ProgramMembership, c.ProgramMembershipHistory, c.Risk, c.RiskHistory,
+		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
+		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -727,19 +739,19 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Control, c.ControlHistory, c.ControlObjective, c.ControlObjectiveHistory,
 		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
 		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
-		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.Narrative, c.NarrativeHistory, c.Note,
-		c.NoteHistory, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
+		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
+		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgSubscription, c.OrgSubscriptionHistory,
+		c.Organization, c.OrganizationHistory, c.OrganizationSetting,
+		c.OrganizationSettingHistory, c.PasswordResetToken, c.PersonalAccessToken,
+		c.Procedure, c.ProcedureHistory, c.Program, c.ProgramHistory,
+		c.ProgramMembership, c.ProgramMembershipHistory, c.Risk, c.RiskHistory,
+		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
+		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -856,6 +868,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Event.mutate(ctx, m)
 	case *EventHistoryMutation:
 		return c.EventHistory.mutate(ctx, m)
+	case *EvidenceMutation:
+		return c.Evidence.mutate(ctx, m)
+	case *EvidenceHistoryMutation:
+		return c.EvidenceHistory.mutate(ctx, m)
 	case *FileMutation:
 		return c.File.mutate(ctx, m)
 	case *FileHistoryMutation:
@@ -2163,6 +2179,25 @@ func (c *ControlClient) QueryPrograms(co *Control) *ProgramQuery {
 	return query
 }
 
+// QueryEvidence queries the evidence edge of a Control.
+func (c *ControlClient) QueryEvidence(co *Control) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.EvidenceTable, control.EvidencePrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ControlClient) Hooks() []Hook {
 	hooks := c.hooks.Control
@@ -2673,6 +2708,25 @@ func (c *ControlObjectiveClient) QueryPrograms(co *ControlObjective) *ProgramQue
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramControlObjectives
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryEvidence(co *ControlObjective) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.EvidenceTable, controlobjective.EvidencePrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4505,6 +4559,408 @@ func (c *EventHistoryClient) mutate(ctx context.Context, m *EventHistoryMutation
 	}
 }
 
+// EvidenceClient is a client for the Evidence schema.
+type EvidenceClient struct {
+	config
+}
+
+// NewEvidenceClient returns a client for the Evidence from the given config.
+func NewEvidenceClient(c config) *EvidenceClient {
+	return &EvidenceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `evidence.Hooks(f(g(h())))`.
+func (c *EvidenceClient) Use(hooks ...Hook) {
+	c.hooks.Evidence = append(c.hooks.Evidence, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `evidence.Intercept(f(g(h())))`.
+func (c *EvidenceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Evidence = append(c.inters.Evidence, interceptors...)
+}
+
+// Create returns a builder for creating a Evidence entity.
+func (c *EvidenceClient) Create() *EvidenceCreate {
+	mutation := newEvidenceMutation(c.config, OpCreate)
+	return &EvidenceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Evidence entities.
+func (c *EvidenceClient) CreateBulk(builders ...*EvidenceCreate) *EvidenceCreateBulk {
+	return &EvidenceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EvidenceClient) MapCreateBulk(slice any, setFunc func(*EvidenceCreate, int)) *EvidenceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EvidenceCreateBulk{err: fmt.Errorf("calling to EvidenceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EvidenceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EvidenceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Evidence.
+func (c *EvidenceClient) Update() *EvidenceUpdate {
+	mutation := newEvidenceMutation(c.config, OpUpdate)
+	return &EvidenceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EvidenceClient) UpdateOne(e *Evidence) *EvidenceUpdateOne {
+	mutation := newEvidenceMutation(c.config, OpUpdateOne, withEvidence(e))
+	return &EvidenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EvidenceClient) UpdateOneID(id string) *EvidenceUpdateOne {
+	mutation := newEvidenceMutation(c.config, OpUpdateOne, withEvidenceID(id))
+	return &EvidenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Evidence.
+func (c *EvidenceClient) Delete() *EvidenceDelete {
+	mutation := newEvidenceMutation(c.config, OpDelete)
+	return &EvidenceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EvidenceClient) DeleteOne(e *Evidence) *EvidenceDeleteOne {
+	return c.DeleteOneID(e.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EvidenceClient) DeleteOneID(id string) *EvidenceDeleteOne {
+	builder := c.Delete().Where(evidence.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EvidenceDeleteOne{builder}
+}
+
+// Query returns a query builder for Evidence.
+func (c *EvidenceClient) Query() *EvidenceQuery {
+	return &EvidenceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEvidence},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Evidence entity by its id.
+func (c *EvidenceClient) Get(ctx context.Context, id string) (*Evidence, error) {
+	return c.Query().Where(evidence.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EvidenceClient) GetX(ctx context.Context, id string) *Evidence {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Evidence.
+func (c *EvidenceClient) QueryOwner(e *Evidence) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, evidence.OwnerTable, evidence.OwnerColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Evidence
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlObjectives queries the control_objectives edge of a Evidence.
+func (c *EvidenceClient) QueryControlObjectives(e *Evidence) *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlObjectivesTable, evidence.ControlObjectivesPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Evidence.
+func (c *EvidenceClient) QueryControls(e *Evidence) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlsTable, evidence.ControlsPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.EvidenceControls
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a Evidence.
+func (c *EvidenceClient) QuerySubcontrols(e *Evidence) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.SubcontrolsTable, evidence.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Evidence.
+func (c *EvidenceClient) QueryFiles(e *Evidence) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.FilesTable, evidence.FilesPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.EvidenceFiles
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a Evidence.
+func (c *EvidenceClient) QueryPrograms(e *Evidence) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, evidence.ProgramsTable, evidence.ProgramsPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramEvidence
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Evidence.
+func (c *EvidenceClient) QueryTasks(e *Evidence) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, evidence.TasksTable, evidence.TasksPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.TaskEvidence
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EvidenceClient) Hooks() []Hook {
+	hooks := c.hooks.Evidence
+	return append(hooks[:len(hooks):len(hooks)], evidence.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *EvidenceClient) Interceptors() []Interceptor {
+	inters := c.inters.Evidence
+	return append(inters[:len(inters):len(inters)], evidence.Interceptors[:]...)
+}
+
+func (c *EvidenceClient) mutate(ctx context.Context, m *EvidenceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EvidenceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EvidenceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EvidenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EvidenceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Evidence mutation op: %q", m.Op())
+	}
+}
+
+// EvidenceHistoryClient is a client for the EvidenceHistory schema.
+type EvidenceHistoryClient struct {
+	config
+}
+
+// NewEvidenceHistoryClient returns a client for the EvidenceHistory from the given config.
+func NewEvidenceHistoryClient(c config) *EvidenceHistoryClient {
+	return &EvidenceHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `evidencehistory.Hooks(f(g(h())))`.
+func (c *EvidenceHistoryClient) Use(hooks ...Hook) {
+	c.hooks.EvidenceHistory = append(c.hooks.EvidenceHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `evidencehistory.Intercept(f(g(h())))`.
+func (c *EvidenceHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EvidenceHistory = append(c.inters.EvidenceHistory, interceptors...)
+}
+
+// Create returns a builder for creating a EvidenceHistory entity.
+func (c *EvidenceHistoryClient) Create() *EvidenceHistoryCreate {
+	mutation := newEvidenceHistoryMutation(c.config, OpCreate)
+	return &EvidenceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EvidenceHistory entities.
+func (c *EvidenceHistoryClient) CreateBulk(builders ...*EvidenceHistoryCreate) *EvidenceHistoryCreateBulk {
+	return &EvidenceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EvidenceHistoryClient) MapCreateBulk(slice any, setFunc func(*EvidenceHistoryCreate, int)) *EvidenceHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EvidenceHistoryCreateBulk{err: fmt.Errorf("calling to EvidenceHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EvidenceHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EvidenceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EvidenceHistory.
+func (c *EvidenceHistoryClient) Update() *EvidenceHistoryUpdate {
+	mutation := newEvidenceHistoryMutation(c.config, OpUpdate)
+	return &EvidenceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EvidenceHistoryClient) UpdateOne(eh *EvidenceHistory) *EvidenceHistoryUpdateOne {
+	mutation := newEvidenceHistoryMutation(c.config, OpUpdateOne, withEvidenceHistory(eh))
+	return &EvidenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EvidenceHistoryClient) UpdateOneID(id string) *EvidenceHistoryUpdateOne {
+	mutation := newEvidenceHistoryMutation(c.config, OpUpdateOne, withEvidenceHistoryID(id))
+	return &EvidenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EvidenceHistory.
+func (c *EvidenceHistoryClient) Delete() *EvidenceHistoryDelete {
+	mutation := newEvidenceHistoryMutation(c.config, OpDelete)
+	return &EvidenceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EvidenceHistoryClient) DeleteOne(eh *EvidenceHistory) *EvidenceHistoryDeleteOne {
+	return c.DeleteOneID(eh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EvidenceHistoryClient) DeleteOneID(id string) *EvidenceHistoryDeleteOne {
+	builder := c.Delete().Where(evidencehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EvidenceHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for EvidenceHistory.
+func (c *EvidenceHistoryClient) Query() *EvidenceHistoryQuery {
+	return &EvidenceHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEvidenceHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EvidenceHistory entity by its id.
+func (c *EvidenceHistoryClient) Get(ctx context.Context, id string) (*EvidenceHistory, error) {
+	return c.Query().Where(evidencehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EvidenceHistoryClient) GetX(ctx context.Context, id string) *EvidenceHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *EvidenceHistoryClient) Hooks() []Hook {
+	return c.hooks.EvidenceHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *EvidenceHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.EvidenceHistory
+	return append(inters[:len(inters):len(inters)], evidencehistory.Interceptors[:]...)
+}
+
+func (c *EvidenceHistoryClient) mutate(ctx context.Context, m *EvidenceHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EvidenceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EvidenceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EvidenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EvidenceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown EvidenceHistory mutation op: %q", m.Op())
+	}
+}
+
 // FileClient is a client for the File schema.
 type FileClient struct {
 	config
@@ -4816,6 +5272,25 @@ func (c *FileClient) QueryProgram(f *File) *ProgramQuery {
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a File.
+func (c *FileClient) QueryEvidence(f *File) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.EvidenceTable, file.EvidencePrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceFiles
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10080,6 +10555,25 @@ func (c *OrganizationClient) QuerySubcontrols(o *Organization) *SubcontrolQuery 
 	return query
 }
 
+// QueryEvidence queries the evidence edge of a Organization.
+func (c *OrganizationClient) QueryEvidence(o *Organization) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EvidenceTable, organization.EvidenceColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -11708,6 +12202,25 @@ func (c *ProgramClient) QueryFiles(pr *Program) *FileQuery {
 	return query
 }
 
+// QueryEvidence queries the evidence edge of a Program.
+func (c *ProgramClient) QueryEvidence(pr *Program) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.EvidenceTable, program.EvidencePrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.ProgramEvidence
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryNarratives queries the narratives edge of a Program.
 func (c *ProgramClient) QueryNarratives(pr *Program) *NarrativeQuery {
 	query := (&NarrativeClient{config: c.config}).Query()
@@ -13296,6 +13809,25 @@ func (c *SubcontrolClient) QueryPrograms(s *Subcontrol) *ProgramQuery {
 	return query
 }
 
+// QueryEvidence queries the evidence edge of a Subcontrol.
+func (c *SubcontrolClient) QueryEvidence(s *Subcontrol) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SubcontrolClient) Hooks() []Hook {
 	hooks := c.hooks.Subcontrol
@@ -14076,6 +14608,25 @@ func (c *TaskClient) QueryProgram(t *Task) *ProgramQuery {
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramTasks
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a Task.
+func (c *TaskClient) QueryEvidence(t *Task) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, task.EvidenceTable, task.EvidencePrimaryKey...),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.TaskEvidence
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -15685,35 +16236,35 @@ type (
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
 		ControlHistory, ControlObjective, ControlObjectiveHistory, DocumentData,
 		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, EventHistory, File, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
-		InternalPolicyHistory, Invite, Narrative, NarrativeHistory, Note, NoteHistory,
-		OrgMembership, OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory,
-		Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
-		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Hook
+		EntityTypeHistory, Event, EventHistory, Evidence, EvidenceHistory, File,
+		FileHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
+		GroupSetting, GroupSettingHistory, Hush, HushHistory, Integration,
+		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, Narrative,
+		NarrativeHistory, Note, NoteHistory, OrgMembership, OrgMembershipHistory,
+		OrgSubscription, OrgSubscriptionHistory, Organization, OrganizationHistory,
+		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
+		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
+		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
+		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
+		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
 		ControlHistory, ControlObjective, ControlObjectiveHistory, DocumentData,
 		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, EventHistory, File, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
-		InternalPolicyHistory, Invite, Narrative, NarrativeHistory, Note, NoteHistory,
-		OrgMembership, OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory,
-		Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
-		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Interceptor
+		EntityTypeHistory, Event, EventHistory, Evidence, EvidenceHistory, File,
+		FileHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
+		GroupSetting, GroupSettingHistory, Hush, HushHistory, Integration,
+		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, Narrative,
+		NarrativeHistory, Note, NoteHistory, OrgMembership, OrgMembershipHistory,
+		OrgSubscription, OrgSubscriptionHistory, Organization, OrganizationHistory,
+		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
+		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
+		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
+		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
+		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

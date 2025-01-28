@@ -30,6 +30,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -115,6 +117,8 @@ const (
 	TypeEntityTypeHistory          = "EntityTypeHistory"
 	TypeEvent                      = "Event"
 	TypeEventHistory               = "EventHistory"
+	TypeEvidence                   = "Evidence"
+	TypeEvidenceHistory            = "EvidenceHistory"
 	TypeFile                       = "File"
 	TypeFileHistory                = "FileHistory"
 	TypeGroup                      = "Group"
@@ -7870,6 +7874,7 @@ type ControlMutation struct {
 	satisfies                 *string
 	mapped_frameworks         *string
 	details                   *map[string]interface{}
+	example_evidence          *string
 	clearedFields             map[string]struct{}
 	owner                     *string
 	clearedowner              bool
@@ -7909,6 +7914,9 @@ type ControlMutation struct {
 	programs                  map[string]struct{}
 	removedprograms           map[string]struct{}
 	clearedprograms           bool
+	evidence                  map[string]struct{}
+	removedevidence           map[string]struct{}
+	clearedevidence           bool
 	done                      bool
 	oldValue                  func(context.Context) (*Control, error)
 	predicates                []predicate.Control
@@ -9024,6 +9032,55 @@ func (m *ControlMutation) ResetDetails() {
 	delete(m.clearedFields, control.FieldDetails)
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (m *ControlMutation) SetExampleEvidence(s string) {
+	m.example_evidence = &s
+}
+
+// ExampleEvidence returns the value of the "example_evidence" field in the mutation.
+func (m *ControlMutation) ExampleEvidence() (r string, exists bool) {
+	v := m.example_evidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExampleEvidence returns the old "example_evidence" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldExampleEvidence(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExampleEvidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExampleEvidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExampleEvidence: %w", err)
+	}
+	return oldValue.ExampleEvidence, nil
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (m *ControlMutation) ClearExampleEvidence() {
+	m.example_evidence = nil
+	m.clearedFields[control.FieldExampleEvidence] = struct{}{}
+}
+
+// ExampleEvidenceCleared returns if the "example_evidence" field was cleared in this mutation.
+func (m *ControlMutation) ExampleEvidenceCleared() bool {
+	_, ok := m.clearedFields[control.FieldExampleEvidence]
+	return ok
+}
+
+// ResetExampleEvidence resets all changes to the "example_evidence" field.
+func (m *ControlMutation) ResetExampleEvidence() {
+	m.example_evidence = nil
+	delete(m.clearedFields, control.FieldExampleEvidence)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *ControlMutation) ClearOwner() {
 	m.clearedowner = true
@@ -9699,6 +9756,60 @@ func (m *ControlMutation) ResetPrograms() {
 	m.removedprograms = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *ControlMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *ControlMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *ControlMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *ControlMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *ControlMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *ControlMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *ControlMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the ControlMutation builder.
 func (m *ControlMutation) Where(ps ...predicate.Control) {
 	m.predicates = append(m.predicates, ps...)
@@ -9733,7 +9844,7 @@ func (m *ControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, control.FieldCreatedAt)
 	}
@@ -9797,6 +9908,9 @@ func (m *ControlMutation) Fields() []string {
 	if m.details != nil {
 		fields = append(fields, control.FieldDetails)
 	}
+	if m.example_evidence != nil {
+		fields = append(fields, control.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -9847,6 +9961,8 @@ func (m *ControlMutation) Field(name string) (ent.Value, bool) {
 		return m.MappedFrameworks()
 	case control.FieldDetails:
 		return m.Details()
+	case control.FieldExampleEvidence:
+		return m.ExampleEvidence()
 	}
 	return nil, false
 }
@@ -9898,6 +10014,8 @@ func (m *ControlMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldMappedFrameworks(ctx)
 	case control.FieldDetails:
 		return m.OldDetails(ctx)
+	case control.FieldExampleEvidence:
+		return m.OldExampleEvidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown Control field %s", name)
 }
@@ -10054,6 +10172,13 @@ func (m *ControlMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDetails(v)
 		return nil
+	case control.FieldExampleEvidence:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExampleEvidence(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Control field %s", name)
 }
@@ -10138,6 +10263,9 @@ func (m *ControlMutation) ClearedFields() []string {
 	if m.FieldCleared(control.FieldDetails) {
 		fields = append(fields, control.FieldDetails)
 	}
+	if m.FieldCleared(control.FieldExampleEvidence) {
+		fields = append(fields, control.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -10205,6 +10333,9 @@ func (m *ControlMutation) ClearField(name string) error {
 		return nil
 	case control.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case control.FieldExampleEvidence:
+		m.ClearExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown Control nullable field %s", name)
@@ -10277,13 +10408,16 @@ func (m *ControlMutation) ResetField(name string) error {
 	case control.FieldDetails:
 		m.ResetDetails()
 		return nil
+	case control.FieldExampleEvidence:
+		m.ResetExampleEvidence()
+		return nil
 	}
 	return fmt.Errorf("unknown Control field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.owner != nil {
 		edges = append(edges, control.EdgeOwner)
 	}
@@ -10322,6 +10456,9 @@ func (m *ControlMutation) AddedEdges() []string {
 	}
 	if m.programs != nil {
 		edges = append(edges, control.EdgePrograms)
+	}
+	if m.evidence != nil {
+		edges = append(edges, control.EdgeEvidence)
 	}
 	return edges
 }
@@ -10406,13 +10543,19 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, control.EdgeBlockedGroups)
 	}
@@ -10448,6 +10591,9 @@ func (m *ControlMutation) RemovedEdges() []string {
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, control.EdgePrograms)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, control.EdgeEvidence)
 	}
 	return edges
 }
@@ -10528,13 +10674,19 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.clearedowner {
 		edges = append(edges, control.EdgeOwner)
 	}
@@ -10574,6 +10726,9 @@ func (m *ControlMutation) ClearedEdges() []string {
 	if m.clearedprograms {
 		edges = append(edges, control.EdgePrograms)
 	}
+	if m.clearedevidence {
+		edges = append(edges, control.EdgeEvidence)
+	}
 	return edges
 }
 
@@ -10607,6 +10762,8 @@ func (m *ControlMutation) EdgeCleared(name string) bool {
 		return m.clearedtasks
 	case control.EdgePrograms:
 		return m.clearedprograms
+	case control.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -10665,6 +10822,9 @@ func (m *ControlMutation) ResetEdge(name string) error {
 	case control.EdgePrograms:
 		m.ResetPrograms()
 		return nil
+	case control.EdgeEvidence:
+		m.ResetEvidence()
+		return nil
 	}
 	return fmt.Errorf("unknown Control edge %s", name)
 }
@@ -10700,6 +10860,7 @@ type ControlHistoryMutation struct {
 	satisfies         *string
 	mapped_frameworks *string
 	details           *map[string]interface{}
+	example_evidence  *string
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*ControlHistory, error)
@@ -11937,6 +12098,55 @@ func (m *ControlHistoryMutation) ResetDetails() {
 	delete(m.clearedFields, controlhistory.FieldDetails)
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (m *ControlHistoryMutation) SetExampleEvidence(s string) {
+	m.example_evidence = &s
+}
+
+// ExampleEvidence returns the value of the "example_evidence" field in the mutation.
+func (m *ControlHistoryMutation) ExampleEvidence() (r string, exists bool) {
+	v := m.example_evidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExampleEvidence returns the old "example_evidence" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldExampleEvidence(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExampleEvidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExampleEvidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExampleEvidence: %w", err)
+	}
+	return oldValue.ExampleEvidence, nil
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (m *ControlHistoryMutation) ClearExampleEvidence() {
+	m.example_evidence = nil
+	m.clearedFields[controlhistory.FieldExampleEvidence] = struct{}{}
+}
+
+// ExampleEvidenceCleared returns if the "example_evidence" field was cleared in this mutation.
+func (m *ControlHistoryMutation) ExampleEvidenceCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldExampleEvidence]
+	return ok
+}
+
+// ResetExampleEvidence resets all changes to the "example_evidence" field.
+func (m *ControlHistoryMutation) ResetExampleEvidence() {
+	m.example_evidence = nil
+	delete(m.clearedFields, controlhistory.FieldExampleEvidence)
+}
+
 // Where appends a list predicates to the ControlHistoryMutation builder.
 func (m *ControlHistoryMutation) Where(ps ...predicate.ControlHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -11971,7 +12181,7 @@ func (m *ControlHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 25)
 	if m.history_time != nil {
 		fields = append(fields, controlhistory.FieldHistoryTime)
 	}
@@ -12044,6 +12254,9 @@ func (m *ControlHistoryMutation) Fields() []string {
 	if m.details != nil {
 		fields = append(fields, controlhistory.FieldDetails)
 	}
+	if m.example_evidence != nil {
+		fields = append(fields, controlhistory.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -12100,6 +12313,8 @@ func (m *ControlHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.MappedFrameworks()
 	case controlhistory.FieldDetails:
 		return m.Details()
+	case controlhistory.FieldExampleEvidence:
+		return m.ExampleEvidence()
 	}
 	return nil, false
 }
@@ -12157,6 +12372,8 @@ func (m *ControlHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldMappedFrameworks(ctx)
 	case controlhistory.FieldDetails:
 		return m.OldDetails(ctx)
+	case controlhistory.FieldExampleEvidence:
+		return m.OldExampleEvidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown ControlHistory field %s", name)
 }
@@ -12334,6 +12551,13 @@ func (m *ControlHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDetails(v)
 		return nil
+	case controlhistory.FieldExampleEvidence:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExampleEvidence(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ControlHistory field %s", name)
 }
@@ -12421,6 +12645,9 @@ func (m *ControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlhistory.FieldDetails) {
 		fields = append(fields, controlhistory.FieldDetails)
 	}
+	if m.FieldCleared(controlhistory.FieldExampleEvidence) {
+		fields = append(fields, controlhistory.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -12491,6 +12718,9 @@ func (m *ControlHistoryMutation) ClearField(name string) error {
 		return nil
 	case controlhistory.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case controlhistory.FieldExampleEvidence:
+		m.ClearExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlHistory nullable field %s", name)
@@ -12572,6 +12802,9 @@ func (m *ControlHistoryMutation) ResetField(name string) error {
 	case controlhistory.FieldDetails:
 		m.ResetDetails()
 		return nil
+	case controlhistory.FieldExampleEvidence:
+		m.ResetExampleEvidence()
+		return nil
 	}
 	return fmt.Errorf("unknown ControlHistory field %s", name)
 }
@@ -12650,6 +12883,7 @@ type ControlObjectiveMutation struct {
 	source                   *string
 	mapped_frameworks        *string
 	details                  *map[string]interface{}
+	example_evidence         *string
 	clearedFields            map[string]struct{}
 	owner                    *string
 	clearedowner             bool
@@ -12689,6 +12923,9 @@ type ControlObjectiveMutation struct {
 	programs                 map[string]struct{}
 	removedprograms          map[string]struct{}
 	clearedprograms          bool
+	evidence                 map[string]struct{}
+	removedevidence          map[string]struct{}
+	clearedevidence          bool
 	done                     bool
 	oldValue                 func(context.Context) (*ControlObjective, error)
 	predicates               []predicate.ControlObjective
@@ -13755,6 +13992,55 @@ func (m *ControlObjectiveMutation) ResetDetails() {
 	delete(m.clearedFields, controlobjective.FieldDetails)
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (m *ControlObjectiveMutation) SetExampleEvidence(s string) {
+	m.example_evidence = &s
+}
+
+// ExampleEvidence returns the value of the "example_evidence" field in the mutation.
+func (m *ControlObjectiveMutation) ExampleEvidence() (r string, exists bool) {
+	v := m.example_evidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExampleEvidence returns the old "example_evidence" field's value of the ControlObjective entity.
+// If the ControlObjective object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveMutation) OldExampleEvidence(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExampleEvidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExampleEvidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExampleEvidence: %w", err)
+	}
+	return oldValue.ExampleEvidence, nil
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (m *ControlObjectiveMutation) ClearExampleEvidence() {
+	m.example_evidence = nil
+	m.clearedFields[controlobjective.FieldExampleEvidence] = struct{}{}
+}
+
+// ExampleEvidenceCleared returns if the "example_evidence" field was cleared in this mutation.
+func (m *ControlObjectiveMutation) ExampleEvidenceCleared() bool {
+	_, ok := m.clearedFields[controlobjective.FieldExampleEvidence]
+	return ok
+}
+
+// ResetExampleEvidence resets all changes to the "example_evidence" field.
+func (m *ControlObjectiveMutation) ResetExampleEvidence() {
+	m.example_evidence = nil
+	delete(m.clearedFields, controlobjective.FieldExampleEvidence)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *ControlObjectiveMutation) ClearOwner() {
 	m.clearedowner = true
@@ -14430,6 +14716,60 @@ func (m *ControlObjectiveMutation) ResetPrograms() {
 	m.removedprograms = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *ControlObjectiveMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *ControlObjectiveMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *ControlObjectiveMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *ControlObjectiveMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *ControlObjectiveMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *ControlObjectiveMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *ControlObjectiveMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the ControlObjectiveMutation builder.
 func (m *ControlObjectiveMutation) Where(ps ...predicate.ControlObjective) {
 	m.predicates = append(m.predicates, ps...)
@@ -14464,7 +14804,7 @@ func (m *ControlObjectiveMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlObjectiveMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, controlobjective.FieldCreatedAt)
 	}
@@ -14525,6 +14865,9 @@ func (m *ControlObjectiveMutation) Fields() []string {
 	if m.details != nil {
 		fields = append(fields, controlobjective.FieldDetails)
 	}
+	if m.example_evidence != nil {
+		fields = append(fields, controlobjective.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -14573,6 +14916,8 @@ func (m *ControlObjectiveMutation) Field(name string) (ent.Value, bool) {
 		return m.MappedFrameworks()
 	case controlobjective.FieldDetails:
 		return m.Details()
+	case controlobjective.FieldExampleEvidence:
+		return m.ExampleEvidence()
 	}
 	return nil, false
 }
@@ -14622,6 +14967,8 @@ func (m *ControlObjectiveMutation) OldField(ctx context.Context, name string) (e
 		return m.OldMappedFrameworks(ctx)
 	case controlobjective.FieldDetails:
 		return m.OldDetails(ctx)
+	case controlobjective.FieldExampleEvidence:
+		return m.OldExampleEvidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown ControlObjective field %s", name)
 }
@@ -14771,6 +15118,13 @@ func (m *ControlObjectiveMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetDetails(v)
 		return nil
+	case controlobjective.FieldExampleEvidence:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExampleEvidence(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective field %s", name)
 }
@@ -14852,6 +15206,9 @@ func (m *ControlObjectiveMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjective.FieldDetails) {
 		fields = append(fields, controlobjective.FieldDetails)
 	}
+	if m.FieldCleared(controlobjective.FieldExampleEvidence) {
+		fields = append(fields, controlobjective.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -14916,6 +15273,9 @@ func (m *ControlObjectiveMutation) ClearField(name string) error {
 		return nil
 	case controlobjective.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case controlobjective.FieldExampleEvidence:
+		m.ClearExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective nullable field %s", name)
@@ -14985,13 +15345,16 @@ func (m *ControlObjectiveMutation) ResetField(name string) error {
 	case controlobjective.FieldDetails:
 		m.ResetDetails()
 		return nil
+	case controlobjective.FieldExampleEvidence:
+		m.ResetExampleEvidence()
+		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlObjectiveMutation) AddedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.owner != nil {
 		edges = append(edges, controlobjective.EdgeOwner)
 	}
@@ -15030,6 +15393,9 @@ func (m *ControlObjectiveMutation) AddedEdges() []string {
 	}
 	if m.programs != nil {
 		edges = append(edges, controlobjective.EdgePrograms)
+	}
+	if m.evidence != nil {
+		edges = append(edges, controlobjective.EdgeEvidence)
 	}
 	return edges
 }
@@ -15114,13 +15480,19 @@ func (m *ControlObjectiveMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case controlobjective.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlObjectiveMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, controlobjective.EdgeBlockedGroups)
 	}
@@ -15156,6 +15528,9 @@ func (m *ControlObjectiveMutation) RemovedEdges() []string {
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, controlobjective.EdgePrograms)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, controlobjective.EdgeEvidence)
 	}
 	return edges
 }
@@ -15236,13 +15611,19 @@ func (m *ControlObjectiveMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case controlobjective.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlObjectiveMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.clearedowner {
 		edges = append(edges, controlobjective.EdgeOwner)
 	}
@@ -15282,6 +15663,9 @@ func (m *ControlObjectiveMutation) ClearedEdges() []string {
 	if m.clearedprograms {
 		edges = append(edges, controlobjective.EdgePrograms)
 	}
+	if m.clearedevidence {
+		edges = append(edges, controlobjective.EdgeEvidence)
+	}
 	return edges
 }
 
@@ -15315,6 +15699,8 @@ func (m *ControlObjectiveMutation) EdgeCleared(name string) bool {
 		return m.clearedtasks
 	case controlobjective.EdgePrograms:
 		return m.clearedprograms
+	case controlobjective.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -15373,6 +15759,9 @@ func (m *ControlObjectiveMutation) ResetEdge(name string) error {
 	case controlobjective.EdgePrograms:
 		m.ResetPrograms()
 		return nil
+	case controlobjective.EdgeEvidence:
+		m.ResetEvidence()
+		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective edge %s", name)
 }
@@ -15407,6 +15796,7 @@ type ControlObjectiveHistoryMutation struct {
 	source                 *string
 	mapped_frameworks      *string
 	details                *map[string]interface{}
+	example_evidence       *string
 	clearedFields          map[string]struct{}
 	done                   bool
 	oldValue               func(context.Context) (*ControlObjectiveHistory, error)
@@ -16595,6 +16985,55 @@ func (m *ControlObjectiveHistoryMutation) ResetDetails() {
 	delete(m.clearedFields, controlobjectivehistory.FieldDetails)
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (m *ControlObjectiveHistoryMutation) SetExampleEvidence(s string) {
+	m.example_evidence = &s
+}
+
+// ExampleEvidence returns the value of the "example_evidence" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) ExampleEvidence() (r string, exists bool) {
+	v := m.example_evidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExampleEvidence returns the old "example_evidence" field's value of the ControlObjectiveHistory entity.
+// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveHistoryMutation) OldExampleEvidence(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExampleEvidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExampleEvidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExampleEvidence: %w", err)
+	}
+	return oldValue.ExampleEvidence, nil
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (m *ControlObjectiveHistoryMutation) ClearExampleEvidence() {
+	m.example_evidence = nil
+	m.clearedFields[controlobjectivehistory.FieldExampleEvidence] = struct{}{}
+}
+
+// ExampleEvidenceCleared returns if the "example_evidence" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) ExampleEvidenceCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldExampleEvidence]
+	return ok
+}
+
+// ResetExampleEvidence resets all changes to the "example_evidence" field.
+func (m *ControlObjectiveHistoryMutation) ResetExampleEvidence() {
+	m.example_evidence = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldExampleEvidence)
+}
+
 // Where appends a list predicates to the ControlObjectiveHistoryMutation builder.
 func (m *ControlObjectiveHistoryMutation) Where(ps ...predicate.ControlObjectiveHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -16629,7 +17068,7 @@ func (m *ControlObjectiveHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlObjectiveHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 24)
 	if m.history_time != nil {
 		fields = append(fields, controlobjectivehistory.FieldHistoryTime)
 	}
@@ -16699,6 +17138,9 @@ func (m *ControlObjectiveHistoryMutation) Fields() []string {
 	if m.details != nil {
 		fields = append(fields, controlobjectivehistory.FieldDetails)
 	}
+	if m.example_evidence != nil {
+		fields = append(fields, controlobjectivehistory.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -16753,6 +17195,8 @@ func (m *ControlObjectiveHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.MappedFrameworks()
 	case controlobjectivehistory.FieldDetails:
 		return m.Details()
+	case controlobjectivehistory.FieldExampleEvidence:
+		return m.ExampleEvidence()
 	}
 	return nil, false
 }
@@ -16808,6 +17252,8 @@ func (m *ControlObjectiveHistoryMutation) OldField(ctx context.Context, name str
 		return m.OldMappedFrameworks(ctx)
 	case controlobjectivehistory.FieldDetails:
 		return m.OldDetails(ctx)
+	case controlobjectivehistory.FieldExampleEvidence:
+		return m.OldExampleEvidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown ControlObjectiveHistory field %s", name)
 }
@@ -16978,6 +17424,13 @@ func (m *ControlObjectiveHistoryMutation) SetField(name string, value ent.Value)
 		}
 		m.SetDetails(v)
 		return nil
+	case controlobjectivehistory.FieldExampleEvidence:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExampleEvidence(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ControlObjectiveHistory field %s", name)
 }
@@ -17062,6 +17515,9 @@ func (m *ControlObjectiveHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjectivehistory.FieldDetails) {
 		fields = append(fields, controlobjectivehistory.FieldDetails)
 	}
+	if m.FieldCleared(controlobjectivehistory.FieldExampleEvidence) {
+		fields = append(fields, controlobjectivehistory.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -17129,6 +17585,9 @@ func (m *ControlObjectiveHistoryMutation) ClearField(name string) error {
 		return nil
 	case controlobjectivehistory.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case controlobjectivehistory.FieldExampleEvidence:
+		m.ClearExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjectiveHistory nullable field %s", name)
@@ -17206,6 +17665,9 @@ func (m *ControlObjectiveHistoryMutation) ResetField(name string) error {
 		return nil
 	case controlobjectivehistory.FieldDetails:
 		m.ResetDetails()
+		return nil
+	case controlobjectivehistory.FieldExampleEvidence:
+		m.ResetExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjectiveHistory field %s", name)
@@ -29188,6 +29650,3667 @@ func (m *EventHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown EventHistory edge %s", name)
 }
 
+// EvidenceMutation represents an operation that mutates the Evidence nodes in the graph.
+type EvidenceMutation struct {
+	config
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	display_id                *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	name                      *string
+	description               *string
+	collection_procedure      *string
+	creation_date             *time.Time
+	renewal_date              *time.Time
+	source                    *string
+	is_automated              *bool
+	url                       *string
+	clearedFields             map[string]struct{}
+	owner                     *string
+	clearedowner              bool
+	control_objectives        map[string]struct{}
+	removedcontrol_objectives map[string]struct{}
+	clearedcontrol_objectives bool
+	controls                  map[string]struct{}
+	removedcontrols           map[string]struct{}
+	clearedcontrols           bool
+	subcontrols               map[string]struct{}
+	removedsubcontrols        map[string]struct{}
+	clearedsubcontrols        bool
+	files                     map[string]struct{}
+	removedfiles              map[string]struct{}
+	clearedfiles              bool
+	programs                  map[string]struct{}
+	removedprograms           map[string]struct{}
+	clearedprograms           bool
+	tasks                     map[string]struct{}
+	removedtasks              map[string]struct{}
+	clearedtasks              bool
+	done                      bool
+	oldValue                  func(context.Context) (*Evidence, error)
+	predicates                []predicate.Evidence
+}
+
+var _ ent.Mutation = (*EvidenceMutation)(nil)
+
+// evidenceOption allows management of the mutation configuration using functional options.
+type evidenceOption func(*EvidenceMutation)
+
+// newEvidenceMutation creates new mutation for the Evidence entity.
+func newEvidenceMutation(c config, op Op, opts ...evidenceOption) *EvidenceMutation {
+	m := &EvidenceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeEvidence,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withEvidenceID sets the ID field of the mutation.
+func withEvidenceID(id string) evidenceOption {
+	return func(m *EvidenceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Evidence
+		)
+		m.oldValue = func(ctx context.Context) (*Evidence, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Evidence.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withEvidence sets the old Evidence of the mutation.
+func withEvidence(node *Evidence) evidenceOption {
+	return func(m *EvidenceMutation) {
+		m.oldValue = func(context.Context) (*Evidence, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m EvidenceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m EvidenceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Evidence entities.
+func (m *EvidenceMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *EvidenceMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *EvidenceMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Evidence.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *EvidenceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *EvidenceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *EvidenceMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[evidence.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *EvidenceMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *EvidenceMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, evidence.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *EvidenceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *EvidenceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *EvidenceMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[evidence.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *EvidenceMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *EvidenceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, evidence.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *EvidenceMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *EvidenceMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *EvidenceMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[evidence.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *EvidenceMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *EvidenceMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, evidence.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *EvidenceMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *EvidenceMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *EvidenceMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[evidence.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *EvidenceMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *EvidenceMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, evidence.FieldUpdatedBy)
+}
+
+// SetDisplayID sets the "display_id" field.
+func (m *EvidenceMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *EvidenceMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *EvidenceMutation) ResetDisplayID() {
+	m.display_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *EvidenceMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *EvidenceMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *EvidenceMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[evidence.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *EvidenceMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *EvidenceMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, evidence.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *EvidenceMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *EvidenceMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *EvidenceMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[evidence.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *EvidenceMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *EvidenceMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, evidence.FieldDeletedBy)
+}
+
+// SetTags sets the "tags" field.
+func (m *EvidenceMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *EvidenceMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *EvidenceMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *EvidenceMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *EvidenceMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[evidence.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *EvidenceMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *EvidenceMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, evidence.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *EvidenceMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *EvidenceMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *EvidenceMutation) ResetOwnerID() {
+	m.owner = nil
+}
+
+// SetName sets the "name" field.
+func (m *EvidenceMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *EvidenceMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *EvidenceMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *EvidenceMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *EvidenceMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *EvidenceMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[evidence.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *EvidenceMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *EvidenceMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, evidence.FieldDescription)
+}
+
+// SetCollectionProcedure sets the "collection_procedure" field.
+func (m *EvidenceMutation) SetCollectionProcedure(s string) {
+	m.collection_procedure = &s
+}
+
+// CollectionProcedure returns the value of the "collection_procedure" field in the mutation.
+func (m *EvidenceMutation) CollectionProcedure() (r string, exists bool) {
+	v := m.collection_procedure
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCollectionProcedure returns the old "collection_procedure" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldCollectionProcedure(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCollectionProcedure is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCollectionProcedure requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCollectionProcedure: %w", err)
+	}
+	return oldValue.CollectionProcedure, nil
+}
+
+// ClearCollectionProcedure clears the value of the "collection_procedure" field.
+func (m *EvidenceMutation) ClearCollectionProcedure() {
+	m.collection_procedure = nil
+	m.clearedFields[evidence.FieldCollectionProcedure] = struct{}{}
+}
+
+// CollectionProcedureCleared returns if the "collection_procedure" field was cleared in this mutation.
+func (m *EvidenceMutation) CollectionProcedureCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldCollectionProcedure]
+	return ok
+}
+
+// ResetCollectionProcedure resets all changes to the "collection_procedure" field.
+func (m *EvidenceMutation) ResetCollectionProcedure() {
+	m.collection_procedure = nil
+	delete(m.clearedFields, evidence.FieldCollectionProcedure)
+}
+
+// SetCreationDate sets the "creation_date" field.
+func (m *EvidenceMutation) SetCreationDate(t time.Time) {
+	m.creation_date = &t
+}
+
+// CreationDate returns the value of the "creation_date" field in the mutation.
+func (m *EvidenceMutation) CreationDate() (r time.Time, exists bool) {
+	v := m.creation_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreationDate returns the old "creation_date" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldCreationDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreationDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreationDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreationDate: %w", err)
+	}
+	return oldValue.CreationDate, nil
+}
+
+// ResetCreationDate resets all changes to the "creation_date" field.
+func (m *EvidenceMutation) ResetCreationDate() {
+	m.creation_date = nil
+}
+
+// SetRenewalDate sets the "renewal_date" field.
+func (m *EvidenceMutation) SetRenewalDate(t time.Time) {
+	m.renewal_date = &t
+}
+
+// RenewalDate returns the value of the "renewal_date" field in the mutation.
+func (m *EvidenceMutation) RenewalDate() (r time.Time, exists bool) {
+	v := m.renewal_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRenewalDate returns the old "renewal_date" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldRenewalDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRenewalDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRenewalDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRenewalDate: %w", err)
+	}
+	return oldValue.RenewalDate, nil
+}
+
+// ClearRenewalDate clears the value of the "renewal_date" field.
+func (m *EvidenceMutation) ClearRenewalDate() {
+	m.renewal_date = nil
+	m.clearedFields[evidence.FieldRenewalDate] = struct{}{}
+}
+
+// RenewalDateCleared returns if the "renewal_date" field was cleared in this mutation.
+func (m *EvidenceMutation) RenewalDateCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldRenewalDate]
+	return ok
+}
+
+// ResetRenewalDate resets all changes to the "renewal_date" field.
+func (m *EvidenceMutation) ResetRenewalDate() {
+	m.renewal_date = nil
+	delete(m.clearedFields, evidence.FieldRenewalDate)
+}
+
+// SetSource sets the "source" field.
+func (m *EvidenceMutation) SetSource(s string) {
+	m.source = &s
+}
+
+// Source returns the value of the "source" field in the mutation.
+func (m *EvidenceMutation) Source() (r string, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSource returns the old "source" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldSource(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSource is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSource requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSource: %w", err)
+	}
+	return oldValue.Source, nil
+}
+
+// ClearSource clears the value of the "source" field.
+func (m *EvidenceMutation) ClearSource() {
+	m.source = nil
+	m.clearedFields[evidence.FieldSource] = struct{}{}
+}
+
+// SourceCleared returns if the "source" field was cleared in this mutation.
+func (m *EvidenceMutation) SourceCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldSource]
+	return ok
+}
+
+// ResetSource resets all changes to the "source" field.
+func (m *EvidenceMutation) ResetSource() {
+	m.source = nil
+	delete(m.clearedFields, evidence.FieldSource)
+}
+
+// SetIsAutomated sets the "is_automated" field.
+func (m *EvidenceMutation) SetIsAutomated(b bool) {
+	m.is_automated = &b
+}
+
+// IsAutomated returns the value of the "is_automated" field in the mutation.
+func (m *EvidenceMutation) IsAutomated() (r bool, exists bool) {
+	v := m.is_automated
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsAutomated returns the old "is_automated" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldIsAutomated(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsAutomated is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsAutomated requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsAutomated: %w", err)
+	}
+	return oldValue.IsAutomated, nil
+}
+
+// ClearIsAutomated clears the value of the "is_automated" field.
+func (m *EvidenceMutation) ClearIsAutomated() {
+	m.is_automated = nil
+	m.clearedFields[evidence.FieldIsAutomated] = struct{}{}
+}
+
+// IsAutomatedCleared returns if the "is_automated" field was cleared in this mutation.
+func (m *EvidenceMutation) IsAutomatedCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldIsAutomated]
+	return ok
+}
+
+// ResetIsAutomated resets all changes to the "is_automated" field.
+func (m *EvidenceMutation) ResetIsAutomated() {
+	m.is_automated = nil
+	delete(m.clearedFields, evidence.FieldIsAutomated)
+}
+
+// SetURL sets the "url" field.
+func (m *EvidenceMutation) SetURL(s string) {
+	m.url = &s
+}
+
+// URL returns the value of the "url" field in the mutation.
+func (m *EvidenceMutation) URL() (r string, exists bool) {
+	v := m.url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldURL returns the old "url" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+	}
+	return oldValue.URL, nil
+}
+
+// ClearURL clears the value of the "url" field.
+func (m *EvidenceMutation) ClearURL() {
+	m.url = nil
+	m.clearedFields[evidence.FieldURL] = struct{}{}
+}
+
+// URLCleared returns if the "url" field was cleared in this mutation.
+func (m *EvidenceMutation) URLCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldURL]
+	return ok
+}
+
+// ResetURL resets all changes to the "url" field.
+func (m *EvidenceMutation) ResetURL() {
+	m.url = nil
+	delete(m.clearedFields, evidence.FieldURL)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *EvidenceMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[evidence.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *EvidenceMutation) OwnerCleared() bool {
+	return m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *EvidenceMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *EvidenceMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by ids.
+func (m *EvidenceMutation) AddControlObjectiveIDs(ids ...string) {
+	if m.control_objectives == nil {
+		m.control_objectives = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.control_objectives[ids[i]] = struct{}{}
+	}
+}
+
+// ClearControlObjectives clears the "control_objectives" edge to the ControlObjective entity.
+func (m *EvidenceMutation) ClearControlObjectives() {
+	m.clearedcontrol_objectives = true
+}
+
+// ControlObjectivesCleared reports if the "control_objectives" edge to the ControlObjective entity was cleared.
+func (m *EvidenceMutation) ControlObjectivesCleared() bool {
+	return m.clearedcontrol_objectives
+}
+
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to the ControlObjective entity by IDs.
+func (m *EvidenceMutation) RemoveControlObjectiveIDs(ids ...string) {
+	if m.removedcontrol_objectives == nil {
+		m.removedcontrol_objectives = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.control_objectives, ids[i])
+		m.removedcontrol_objectives[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedControlObjectives returns the removed IDs of the "control_objectives" edge to the ControlObjective entity.
+func (m *EvidenceMutation) RemovedControlObjectivesIDs() (ids []string) {
+	for id := range m.removedcontrol_objectives {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ControlObjectivesIDs returns the "control_objectives" edge IDs in the mutation.
+func (m *EvidenceMutation) ControlObjectivesIDs() (ids []string) {
+	for id := range m.control_objectives {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetControlObjectives resets all changes to the "control_objectives" edge.
+func (m *EvidenceMutation) ResetControlObjectives() {
+	m.control_objectives = nil
+	m.clearedcontrol_objectives = false
+	m.removedcontrol_objectives = nil
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by ids.
+func (m *EvidenceMutation) AddControlIDs(ids ...string) {
+	if m.controls == nil {
+		m.controls = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.controls[ids[i]] = struct{}{}
+	}
+}
+
+// ClearControls clears the "controls" edge to the Control entity.
+func (m *EvidenceMutation) ClearControls() {
+	m.clearedcontrols = true
+}
+
+// ControlsCleared reports if the "controls" edge to the Control entity was cleared.
+func (m *EvidenceMutation) ControlsCleared() bool {
+	return m.clearedcontrols
+}
+
+// RemoveControlIDs removes the "controls" edge to the Control entity by IDs.
+func (m *EvidenceMutation) RemoveControlIDs(ids ...string) {
+	if m.removedcontrols == nil {
+		m.removedcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.controls, ids[i])
+		m.removedcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedControls returns the removed IDs of the "controls" edge to the Control entity.
+func (m *EvidenceMutation) RemovedControlsIDs() (ids []string) {
+	for id := range m.removedcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ControlsIDs returns the "controls" edge IDs in the mutation.
+func (m *EvidenceMutation) ControlsIDs() (ids []string) {
+	for id := range m.controls {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetControls resets all changes to the "controls" edge.
+func (m *EvidenceMutation) ResetControls() {
+	m.controls = nil
+	m.clearedcontrols = false
+	m.removedcontrols = nil
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
+func (m *EvidenceMutation) AddSubcontrolIDs(ids ...string) {
+	if m.subcontrols == nil {
+		m.subcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.subcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSubcontrols clears the "subcontrols" edge to the Subcontrol entity.
+func (m *EvidenceMutation) ClearSubcontrols() {
+	m.clearedsubcontrols = true
+}
+
+// SubcontrolsCleared reports if the "subcontrols" edge to the Subcontrol entity was cleared.
+func (m *EvidenceMutation) SubcontrolsCleared() bool {
+	return m.clearedsubcontrols
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to the Subcontrol entity by IDs.
+func (m *EvidenceMutation) RemoveSubcontrolIDs(ids ...string) {
+	if m.removedsubcontrols == nil {
+		m.removedsubcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.subcontrols, ids[i])
+		m.removedsubcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSubcontrols returns the removed IDs of the "subcontrols" edge to the Subcontrol entity.
+func (m *EvidenceMutation) RemovedSubcontrolsIDs() (ids []string) {
+	for id := range m.removedsubcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SubcontrolsIDs returns the "subcontrols" edge IDs in the mutation.
+func (m *EvidenceMutation) SubcontrolsIDs() (ids []string) {
+	for id := range m.subcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSubcontrols resets all changes to the "subcontrols" edge.
+func (m *EvidenceMutation) ResetSubcontrols() {
+	m.subcontrols = nil
+	m.clearedsubcontrols = false
+	m.removedsubcontrols = nil
+}
+
+// AddFileIDs adds the "files" edge to the File entity by ids.
+func (m *EvidenceMutation) AddFileIDs(ids ...string) {
+	if m.files == nil {
+		m.files = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.files[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFiles clears the "files" edge to the File entity.
+func (m *EvidenceMutation) ClearFiles() {
+	m.clearedfiles = true
+}
+
+// FilesCleared reports if the "files" edge to the File entity was cleared.
+func (m *EvidenceMutation) FilesCleared() bool {
+	return m.clearedfiles
+}
+
+// RemoveFileIDs removes the "files" edge to the File entity by IDs.
+func (m *EvidenceMutation) RemoveFileIDs(ids ...string) {
+	if m.removedfiles == nil {
+		m.removedfiles = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.files, ids[i])
+		m.removedfiles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFiles returns the removed IDs of the "files" edge to the File entity.
+func (m *EvidenceMutation) RemovedFilesIDs() (ids []string) {
+	for id := range m.removedfiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FilesIDs returns the "files" edge IDs in the mutation.
+func (m *EvidenceMutation) FilesIDs() (ids []string) {
+	for id := range m.files {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFiles resets all changes to the "files" edge.
+func (m *EvidenceMutation) ResetFiles() {
+	m.files = nil
+	m.clearedfiles = false
+	m.removedfiles = nil
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *EvidenceMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *EvidenceMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *EvidenceMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *EvidenceMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *EvidenceMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *EvidenceMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *EvidenceMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by ids.
+func (m *EvidenceMutation) AddTaskIDs(ids ...string) {
+	if m.tasks == nil {
+		m.tasks = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.tasks[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTasks clears the "tasks" edge to the Task entity.
+func (m *EvidenceMutation) ClearTasks() {
+	m.clearedtasks = true
+}
+
+// TasksCleared reports if the "tasks" edge to the Task entity was cleared.
+func (m *EvidenceMutation) TasksCleared() bool {
+	return m.clearedtasks
+}
+
+// RemoveTaskIDs removes the "tasks" edge to the Task entity by IDs.
+func (m *EvidenceMutation) RemoveTaskIDs(ids ...string) {
+	if m.removedtasks == nil {
+		m.removedtasks = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.tasks, ids[i])
+		m.removedtasks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTasks returns the removed IDs of the "tasks" edge to the Task entity.
+func (m *EvidenceMutation) RemovedTasksIDs() (ids []string) {
+	for id := range m.removedtasks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TasksIDs returns the "tasks" edge IDs in the mutation.
+func (m *EvidenceMutation) TasksIDs() (ids []string) {
+	for id := range m.tasks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTasks resets all changes to the "tasks" edge.
+func (m *EvidenceMutation) ResetTasks() {
+	m.tasks = nil
+	m.clearedtasks = false
+	m.removedtasks = nil
+}
+
+// Where appends a list predicates to the EvidenceMutation builder.
+func (m *EvidenceMutation) Where(ps ...predicate.Evidence) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the EvidenceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *EvidenceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Evidence, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *EvidenceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *EvidenceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Evidence).
+func (m *EvidenceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *EvidenceMutation) Fields() []string {
+	fields := make([]string, 0, 17)
+	if m.created_at != nil {
+		fields = append(fields, evidence.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, evidence.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, evidence.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, evidence.FieldUpdatedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, evidence.FieldDisplayID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, evidence.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, evidence.FieldDeletedBy)
+	}
+	if m.tags != nil {
+		fields = append(fields, evidence.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, evidence.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, evidence.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, evidence.FieldDescription)
+	}
+	if m.collection_procedure != nil {
+		fields = append(fields, evidence.FieldCollectionProcedure)
+	}
+	if m.creation_date != nil {
+		fields = append(fields, evidence.FieldCreationDate)
+	}
+	if m.renewal_date != nil {
+		fields = append(fields, evidence.FieldRenewalDate)
+	}
+	if m.source != nil {
+		fields = append(fields, evidence.FieldSource)
+	}
+	if m.is_automated != nil {
+		fields = append(fields, evidence.FieldIsAutomated)
+	}
+	if m.url != nil {
+		fields = append(fields, evidence.FieldURL)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *EvidenceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case evidence.FieldCreatedAt:
+		return m.CreatedAt()
+	case evidence.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case evidence.FieldCreatedBy:
+		return m.CreatedBy()
+	case evidence.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case evidence.FieldDisplayID:
+		return m.DisplayID()
+	case evidence.FieldDeletedAt:
+		return m.DeletedAt()
+	case evidence.FieldDeletedBy:
+		return m.DeletedBy()
+	case evidence.FieldTags:
+		return m.Tags()
+	case evidence.FieldOwnerID:
+		return m.OwnerID()
+	case evidence.FieldName:
+		return m.Name()
+	case evidence.FieldDescription:
+		return m.Description()
+	case evidence.FieldCollectionProcedure:
+		return m.CollectionProcedure()
+	case evidence.FieldCreationDate:
+		return m.CreationDate()
+	case evidence.FieldRenewalDate:
+		return m.RenewalDate()
+	case evidence.FieldSource:
+		return m.Source()
+	case evidence.FieldIsAutomated:
+		return m.IsAutomated()
+	case evidence.FieldURL:
+		return m.URL()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *EvidenceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case evidence.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case evidence.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case evidence.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case evidence.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case evidence.FieldDisplayID:
+		return m.OldDisplayID(ctx)
+	case evidence.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case evidence.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case evidence.FieldTags:
+		return m.OldTags(ctx)
+	case evidence.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case evidence.FieldName:
+		return m.OldName(ctx)
+	case evidence.FieldDescription:
+		return m.OldDescription(ctx)
+	case evidence.FieldCollectionProcedure:
+		return m.OldCollectionProcedure(ctx)
+	case evidence.FieldCreationDate:
+		return m.OldCreationDate(ctx)
+	case evidence.FieldRenewalDate:
+		return m.OldRenewalDate(ctx)
+	case evidence.FieldSource:
+		return m.OldSource(ctx)
+	case evidence.FieldIsAutomated:
+		return m.OldIsAutomated(ctx)
+	case evidence.FieldURL:
+		return m.OldURL(ctx)
+	}
+	return nil, fmt.Errorf("unknown Evidence field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EvidenceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case evidence.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case evidence.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case evidence.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case evidence.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case evidence.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
+		return nil
+	case evidence.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case evidence.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case evidence.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case evidence.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case evidence.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case evidence.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case evidence.FieldCollectionProcedure:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCollectionProcedure(v)
+		return nil
+	case evidence.FieldCreationDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreationDate(v)
+		return nil
+	case evidence.FieldRenewalDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRenewalDate(v)
+		return nil
+	case evidence.FieldSource:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSource(v)
+		return nil
+	case evidence.FieldIsAutomated:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsAutomated(v)
+		return nil
+	case evidence.FieldURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetURL(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Evidence field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *EvidenceMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *EvidenceMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EvidenceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Evidence numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *EvidenceMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(evidence.FieldCreatedAt) {
+		fields = append(fields, evidence.FieldCreatedAt)
+	}
+	if m.FieldCleared(evidence.FieldUpdatedAt) {
+		fields = append(fields, evidence.FieldUpdatedAt)
+	}
+	if m.FieldCleared(evidence.FieldCreatedBy) {
+		fields = append(fields, evidence.FieldCreatedBy)
+	}
+	if m.FieldCleared(evidence.FieldUpdatedBy) {
+		fields = append(fields, evidence.FieldUpdatedBy)
+	}
+	if m.FieldCleared(evidence.FieldDeletedAt) {
+		fields = append(fields, evidence.FieldDeletedAt)
+	}
+	if m.FieldCleared(evidence.FieldDeletedBy) {
+		fields = append(fields, evidence.FieldDeletedBy)
+	}
+	if m.FieldCleared(evidence.FieldTags) {
+		fields = append(fields, evidence.FieldTags)
+	}
+	if m.FieldCleared(evidence.FieldDescription) {
+		fields = append(fields, evidence.FieldDescription)
+	}
+	if m.FieldCleared(evidence.FieldCollectionProcedure) {
+		fields = append(fields, evidence.FieldCollectionProcedure)
+	}
+	if m.FieldCleared(evidence.FieldRenewalDate) {
+		fields = append(fields, evidence.FieldRenewalDate)
+	}
+	if m.FieldCleared(evidence.FieldSource) {
+		fields = append(fields, evidence.FieldSource)
+	}
+	if m.FieldCleared(evidence.FieldIsAutomated) {
+		fields = append(fields, evidence.FieldIsAutomated)
+	}
+	if m.FieldCleared(evidence.FieldURL) {
+		fields = append(fields, evidence.FieldURL)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *EvidenceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *EvidenceMutation) ClearField(name string) error {
+	switch name {
+	case evidence.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case evidence.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case evidence.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case evidence.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case evidence.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case evidence.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case evidence.FieldTags:
+		m.ClearTags()
+		return nil
+	case evidence.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case evidence.FieldCollectionProcedure:
+		m.ClearCollectionProcedure()
+		return nil
+	case evidence.FieldRenewalDate:
+		m.ClearRenewalDate()
+		return nil
+	case evidence.FieldSource:
+		m.ClearSource()
+		return nil
+	case evidence.FieldIsAutomated:
+		m.ClearIsAutomated()
+		return nil
+	case evidence.FieldURL:
+		m.ClearURL()
+		return nil
+	}
+	return fmt.Errorf("unknown Evidence nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *EvidenceMutation) ResetField(name string) error {
+	switch name {
+	case evidence.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case evidence.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case evidence.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case evidence.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case evidence.FieldDisplayID:
+		m.ResetDisplayID()
+		return nil
+	case evidence.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case evidence.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case evidence.FieldTags:
+		m.ResetTags()
+		return nil
+	case evidence.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case evidence.FieldName:
+		m.ResetName()
+		return nil
+	case evidence.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case evidence.FieldCollectionProcedure:
+		m.ResetCollectionProcedure()
+		return nil
+	case evidence.FieldCreationDate:
+		m.ResetCreationDate()
+		return nil
+	case evidence.FieldRenewalDate:
+		m.ResetRenewalDate()
+		return nil
+	case evidence.FieldSource:
+		m.ResetSource()
+		return nil
+	case evidence.FieldIsAutomated:
+		m.ResetIsAutomated()
+		return nil
+	case evidence.FieldURL:
+		m.ResetURL()
+		return nil
+	}
+	return fmt.Errorf("unknown Evidence field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *EvidenceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 7)
+	if m.owner != nil {
+		edges = append(edges, evidence.EdgeOwner)
+	}
+	if m.control_objectives != nil {
+		edges = append(edges, evidence.EdgeControlObjectives)
+	}
+	if m.controls != nil {
+		edges = append(edges, evidence.EdgeControls)
+	}
+	if m.subcontrols != nil {
+		edges = append(edges, evidence.EdgeSubcontrols)
+	}
+	if m.files != nil {
+		edges = append(edges, evidence.EdgeFiles)
+	}
+	if m.programs != nil {
+		edges = append(edges, evidence.EdgePrograms)
+	}
+	if m.tasks != nil {
+		edges = append(edges, evidence.EdgeTasks)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *EvidenceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case evidence.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case evidence.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.control_objectives))
+		for id := range m.control_objectives {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeControls:
+		ids := make([]ent.Value, 0, len(m.controls))
+		for id := range m.controls {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.subcontrols))
+		for id := range m.subcontrols {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.files))
+		for id := range m.files {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeTasks:
+		ids := make([]ent.Value, 0, len(m.tasks))
+		for id := range m.tasks {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *EvidenceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 7)
+	if m.removedcontrol_objectives != nil {
+		edges = append(edges, evidence.EdgeControlObjectives)
+	}
+	if m.removedcontrols != nil {
+		edges = append(edges, evidence.EdgeControls)
+	}
+	if m.removedsubcontrols != nil {
+		edges = append(edges, evidence.EdgeSubcontrols)
+	}
+	if m.removedfiles != nil {
+		edges = append(edges, evidence.EdgeFiles)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, evidence.EdgePrograms)
+	}
+	if m.removedtasks != nil {
+		edges = append(edges, evidence.EdgeTasks)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *EvidenceMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case evidence.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objectives))
+		for id := range m.removedcontrol_objectives {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeControls:
+		ids := make([]ent.Value, 0, len(m.removedcontrols))
+		for id := range m.removedcontrols {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.removedsubcontrols))
+		for id := range m.removedsubcontrols {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.removedfiles))
+		for id := range m.removedfiles {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeTasks:
+		ids := make([]ent.Value, 0, len(m.removedtasks))
+		for id := range m.removedtasks {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *EvidenceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 7)
+	if m.clearedowner {
+		edges = append(edges, evidence.EdgeOwner)
+	}
+	if m.clearedcontrol_objectives {
+		edges = append(edges, evidence.EdgeControlObjectives)
+	}
+	if m.clearedcontrols {
+		edges = append(edges, evidence.EdgeControls)
+	}
+	if m.clearedsubcontrols {
+		edges = append(edges, evidence.EdgeSubcontrols)
+	}
+	if m.clearedfiles {
+		edges = append(edges, evidence.EdgeFiles)
+	}
+	if m.clearedprograms {
+		edges = append(edges, evidence.EdgePrograms)
+	}
+	if m.clearedtasks {
+		edges = append(edges, evidence.EdgeTasks)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *EvidenceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case evidence.EdgeOwner:
+		return m.clearedowner
+	case evidence.EdgeControlObjectives:
+		return m.clearedcontrol_objectives
+	case evidence.EdgeControls:
+		return m.clearedcontrols
+	case evidence.EdgeSubcontrols:
+		return m.clearedsubcontrols
+	case evidence.EdgeFiles:
+		return m.clearedfiles
+	case evidence.EdgePrograms:
+		return m.clearedprograms
+	case evidence.EdgeTasks:
+		return m.clearedtasks
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *EvidenceMutation) ClearEdge(name string) error {
+	switch name {
+	case evidence.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown Evidence unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *EvidenceMutation) ResetEdge(name string) error {
+	switch name {
+	case evidence.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case evidence.EdgeControlObjectives:
+		m.ResetControlObjectives()
+		return nil
+	case evidence.EdgeControls:
+		m.ResetControls()
+		return nil
+	case evidence.EdgeSubcontrols:
+		m.ResetSubcontrols()
+		return nil
+	case evidence.EdgeFiles:
+		m.ResetFiles()
+		return nil
+	case evidence.EdgePrograms:
+		m.ResetPrograms()
+		return nil
+	case evidence.EdgeTasks:
+		m.ResetTasks()
+		return nil
+	}
+	return fmt.Errorf("unknown Evidence edge %s", name)
+}
+
+// EvidenceHistoryMutation represents an operation that mutates the EvidenceHistory nodes in the graph.
+type EvidenceHistoryMutation struct {
+	config
+	op                   Op
+	typ                  string
+	id                   *string
+	history_time         *time.Time
+	ref                  *string
+	operation            *history.OpType
+	created_at           *time.Time
+	updated_at           *time.Time
+	created_by           *string
+	updated_by           *string
+	display_id           *string
+	deleted_at           *time.Time
+	deleted_by           *string
+	tags                 *[]string
+	appendtags           []string
+	owner_id             *string
+	name                 *string
+	description          *string
+	collection_procedure *string
+	creation_date        *time.Time
+	renewal_date         *time.Time
+	source               *string
+	is_automated         *bool
+	url                  *string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*EvidenceHistory, error)
+	predicates           []predicate.EvidenceHistory
+}
+
+var _ ent.Mutation = (*EvidenceHistoryMutation)(nil)
+
+// evidencehistoryOption allows management of the mutation configuration using functional options.
+type evidencehistoryOption func(*EvidenceHistoryMutation)
+
+// newEvidenceHistoryMutation creates new mutation for the EvidenceHistory entity.
+func newEvidenceHistoryMutation(c config, op Op, opts ...evidencehistoryOption) *EvidenceHistoryMutation {
+	m := &EvidenceHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeEvidenceHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withEvidenceHistoryID sets the ID field of the mutation.
+func withEvidenceHistoryID(id string) evidencehistoryOption {
+	return func(m *EvidenceHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *EvidenceHistory
+		)
+		m.oldValue = func(ctx context.Context) (*EvidenceHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().EvidenceHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withEvidenceHistory sets the old EvidenceHistory of the mutation.
+func withEvidenceHistory(node *EvidenceHistory) evidencehistoryOption {
+	return func(m *EvidenceHistoryMutation) {
+		m.oldValue = func(context.Context) (*EvidenceHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m EvidenceHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m EvidenceHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of EvidenceHistory entities.
+func (m *EvidenceHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *EvidenceHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *EvidenceHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().EvidenceHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *EvidenceHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *EvidenceHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *EvidenceHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *EvidenceHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *EvidenceHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *EvidenceHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[evidencehistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *EvidenceHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, evidencehistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *EvidenceHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *EvidenceHistoryMutation) Operation() (r history.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *EvidenceHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *EvidenceHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *EvidenceHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *EvidenceHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[evidencehistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *EvidenceHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, evidencehistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *EvidenceHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *EvidenceHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *EvidenceHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[evidencehistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *EvidenceHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, evidencehistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *EvidenceHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *EvidenceHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *EvidenceHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[evidencehistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *EvidenceHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, evidencehistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *EvidenceHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *EvidenceHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *EvidenceHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[evidencehistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *EvidenceHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, evidencehistory.FieldUpdatedBy)
+}
+
+// SetDisplayID sets the "display_id" field.
+func (m *EvidenceHistoryMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *EvidenceHistoryMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *EvidenceHistoryMutation) ResetDisplayID() {
+	m.display_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *EvidenceHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *EvidenceHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *EvidenceHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[evidencehistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *EvidenceHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, evidencehistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *EvidenceHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *EvidenceHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *EvidenceHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[evidencehistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *EvidenceHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, evidencehistory.FieldDeletedBy)
+}
+
+// SetTags sets the "tags" field.
+func (m *EvidenceHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *EvidenceHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *EvidenceHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *EvidenceHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *EvidenceHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[evidencehistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *EvidenceHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, evidencehistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *EvidenceHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *EvidenceHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *EvidenceHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+}
+
+// SetName sets the "name" field.
+func (m *EvidenceHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *EvidenceHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *EvidenceHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *EvidenceHistoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *EvidenceHistoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *EvidenceHistoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[evidencehistory.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *EvidenceHistoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, evidencehistory.FieldDescription)
+}
+
+// SetCollectionProcedure sets the "collection_procedure" field.
+func (m *EvidenceHistoryMutation) SetCollectionProcedure(s string) {
+	m.collection_procedure = &s
+}
+
+// CollectionProcedure returns the value of the "collection_procedure" field in the mutation.
+func (m *EvidenceHistoryMutation) CollectionProcedure() (r string, exists bool) {
+	v := m.collection_procedure
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCollectionProcedure returns the old "collection_procedure" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldCollectionProcedure(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCollectionProcedure is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCollectionProcedure requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCollectionProcedure: %w", err)
+	}
+	return oldValue.CollectionProcedure, nil
+}
+
+// ClearCollectionProcedure clears the value of the "collection_procedure" field.
+func (m *EvidenceHistoryMutation) ClearCollectionProcedure() {
+	m.collection_procedure = nil
+	m.clearedFields[evidencehistory.FieldCollectionProcedure] = struct{}{}
+}
+
+// CollectionProcedureCleared returns if the "collection_procedure" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) CollectionProcedureCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldCollectionProcedure]
+	return ok
+}
+
+// ResetCollectionProcedure resets all changes to the "collection_procedure" field.
+func (m *EvidenceHistoryMutation) ResetCollectionProcedure() {
+	m.collection_procedure = nil
+	delete(m.clearedFields, evidencehistory.FieldCollectionProcedure)
+}
+
+// SetCreationDate sets the "creation_date" field.
+func (m *EvidenceHistoryMutation) SetCreationDate(t time.Time) {
+	m.creation_date = &t
+}
+
+// CreationDate returns the value of the "creation_date" field in the mutation.
+func (m *EvidenceHistoryMutation) CreationDate() (r time.Time, exists bool) {
+	v := m.creation_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreationDate returns the old "creation_date" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldCreationDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreationDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreationDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreationDate: %w", err)
+	}
+	return oldValue.CreationDate, nil
+}
+
+// ResetCreationDate resets all changes to the "creation_date" field.
+func (m *EvidenceHistoryMutation) ResetCreationDate() {
+	m.creation_date = nil
+}
+
+// SetRenewalDate sets the "renewal_date" field.
+func (m *EvidenceHistoryMutation) SetRenewalDate(t time.Time) {
+	m.renewal_date = &t
+}
+
+// RenewalDate returns the value of the "renewal_date" field in the mutation.
+func (m *EvidenceHistoryMutation) RenewalDate() (r time.Time, exists bool) {
+	v := m.renewal_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRenewalDate returns the old "renewal_date" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldRenewalDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRenewalDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRenewalDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRenewalDate: %w", err)
+	}
+	return oldValue.RenewalDate, nil
+}
+
+// ClearRenewalDate clears the value of the "renewal_date" field.
+func (m *EvidenceHistoryMutation) ClearRenewalDate() {
+	m.renewal_date = nil
+	m.clearedFields[evidencehistory.FieldRenewalDate] = struct{}{}
+}
+
+// RenewalDateCleared returns if the "renewal_date" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) RenewalDateCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldRenewalDate]
+	return ok
+}
+
+// ResetRenewalDate resets all changes to the "renewal_date" field.
+func (m *EvidenceHistoryMutation) ResetRenewalDate() {
+	m.renewal_date = nil
+	delete(m.clearedFields, evidencehistory.FieldRenewalDate)
+}
+
+// SetSource sets the "source" field.
+func (m *EvidenceHistoryMutation) SetSource(s string) {
+	m.source = &s
+}
+
+// Source returns the value of the "source" field in the mutation.
+func (m *EvidenceHistoryMutation) Source() (r string, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSource returns the old "source" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldSource(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSource is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSource requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSource: %w", err)
+	}
+	return oldValue.Source, nil
+}
+
+// ClearSource clears the value of the "source" field.
+func (m *EvidenceHistoryMutation) ClearSource() {
+	m.source = nil
+	m.clearedFields[evidencehistory.FieldSource] = struct{}{}
+}
+
+// SourceCleared returns if the "source" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) SourceCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldSource]
+	return ok
+}
+
+// ResetSource resets all changes to the "source" field.
+func (m *EvidenceHistoryMutation) ResetSource() {
+	m.source = nil
+	delete(m.clearedFields, evidencehistory.FieldSource)
+}
+
+// SetIsAutomated sets the "is_automated" field.
+func (m *EvidenceHistoryMutation) SetIsAutomated(b bool) {
+	m.is_automated = &b
+}
+
+// IsAutomated returns the value of the "is_automated" field in the mutation.
+func (m *EvidenceHistoryMutation) IsAutomated() (r bool, exists bool) {
+	v := m.is_automated
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsAutomated returns the old "is_automated" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldIsAutomated(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsAutomated is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsAutomated requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsAutomated: %w", err)
+	}
+	return oldValue.IsAutomated, nil
+}
+
+// ClearIsAutomated clears the value of the "is_automated" field.
+func (m *EvidenceHistoryMutation) ClearIsAutomated() {
+	m.is_automated = nil
+	m.clearedFields[evidencehistory.FieldIsAutomated] = struct{}{}
+}
+
+// IsAutomatedCleared returns if the "is_automated" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) IsAutomatedCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldIsAutomated]
+	return ok
+}
+
+// ResetIsAutomated resets all changes to the "is_automated" field.
+func (m *EvidenceHistoryMutation) ResetIsAutomated() {
+	m.is_automated = nil
+	delete(m.clearedFields, evidencehistory.FieldIsAutomated)
+}
+
+// SetURL sets the "url" field.
+func (m *EvidenceHistoryMutation) SetURL(s string) {
+	m.url = &s
+}
+
+// URL returns the value of the "url" field in the mutation.
+func (m *EvidenceHistoryMutation) URL() (r string, exists bool) {
+	v := m.url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldURL returns the old "url" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+	}
+	return oldValue.URL, nil
+}
+
+// ClearURL clears the value of the "url" field.
+func (m *EvidenceHistoryMutation) ClearURL() {
+	m.url = nil
+	m.clearedFields[evidencehistory.FieldURL] = struct{}{}
+}
+
+// URLCleared returns if the "url" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) URLCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldURL]
+	return ok
+}
+
+// ResetURL resets all changes to the "url" field.
+func (m *EvidenceHistoryMutation) ResetURL() {
+	m.url = nil
+	delete(m.clearedFields, evidencehistory.FieldURL)
+}
+
+// Where appends a list predicates to the EvidenceHistoryMutation builder.
+func (m *EvidenceHistoryMutation) Where(ps ...predicate.EvidenceHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the EvidenceHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *EvidenceHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.EvidenceHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *EvidenceHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *EvidenceHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (EvidenceHistory).
+func (m *EvidenceHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *EvidenceHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 20)
+	if m.history_time != nil {
+		fields = append(fields, evidencehistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, evidencehistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, evidencehistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, evidencehistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, evidencehistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, evidencehistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, evidencehistory.FieldUpdatedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, evidencehistory.FieldDisplayID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, evidencehistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, evidencehistory.FieldDeletedBy)
+	}
+	if m.tags != nil {
+		fields = append(fields, evidencehistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, evidencehistory.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, evidencehistory.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, evidencehistory.FieldDescription)
+	}
+	if m.collection_procedure != nil {
+		fields = append(fields, evidencehistory.FieldCollectionProcedure)
+	}
+	if m.creation_date != nil {
+		fields = append(fields, evidencehistory.FieldCreationDate)
+	}
+	if m.renewal_date != nil {
+		fields = append(fields, evidencehistory.FieldRenewalDate)
+	}
+	if m.source != nil {
+		fields = append(fields, evidencehistory.FieldSource)
+	}
+	if m.is_automated != nil {
+		fields = append(fields, evidencehistory.FieldIsAutomated)
+	}
+	if m.url != nil {
+		fields = append(fields, evidencehistory.FieldURL)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *EvidenceHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case evidencehistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case evidencehistory.FieldRef:
+		return m.Ref()
+	case evidencehistory.FieldOperation:
+		return m.Operation()
+	case evidencehistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case evidencehistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case evidencehistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case evidencehistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case evidencehistory.FieldDisplayID:
+		return m.DisplayID()
+	case evidencehistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case evidencehistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case evidencehistory.FieldTags:
+		return m.Tags()
+	case evidencehistory.FieldOwnerID:
+		return m.OwnerID()
+	case evidencehistory.FieldName:
+		return m.Name()
+	case evidencehistory.FieldDescription:
+		return m.Description()
+	case evidencehistory.FieldCollectionProcedure:
+		return m.CollectionProcedure()
+	case evidencehistory.FieldCreationDate:
+		return m.CreationDate()
+	case evidencehistory.FieldRenewalDate:
+		return m.RenewalDate()
+	case evidencehistory.FieldSource:
+		return m.Source()
+	case evidencehistory.FieldIsAutomated:
+		return m.IsAutomated()
+	case evidencehistory.FieldURL:
+		return m.URL()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *EvidenceHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case evidencehistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case evidencehistory.FieldRef:
+		return m.OldRef(ctx)
+	case evidencehistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case evidencehistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case evidencehistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case evidencehistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case evidencehistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case evidencehistory.FieldDisplayID:
+		return m.OldDisplayID(ctx)
+	case evidencehistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case evidencehistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case evidencehistory.FieldTags:
+		return m.OldTags(ctx)
+	case evidencehistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case evidencehistory.FieldName:
+		return m.OldName(ctx)
+	case evidencehistory.FieldDescription:
+		return m.OldDescription(ctx)
+	case evidencehistory.FieldCollectionProcedure:
+		return m.OldCollectionProcedure(ctx)
+	case evidencehistory.FieldCreationDate:
+		return m.OldCreationDate(ctx)
+	case evidencehistory.FieldRenewalDate:
+		return m.OldRenewalDate(ctx)
+	case evidencehistory.FieldSource:
+		return m.OldSource(ctx)
+	case evidencehistory.FieldIsAutomated:
+		return m.OldIsAutomated(ctx)
+	case evidencehistory.FieldURL:
+		return m.OldURL(ctx)
+	}
+	return nil, fmt.Errorf("unknown EvidenceHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EvidenceHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case evidencehistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case evidencehistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case evidencehistory.FieldOperation:
+		v, ok := value.(history.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case evidencehistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case evidencehistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case evidencehistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case evidencehistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case evidencehistory.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
+		return nil
+	case evidencehistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case evidencehistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case evidencehistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case evidencehistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case evidencehistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case evidencehistory.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case evidencehistory.FieldCollectionProcedure:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCollectionProcedure(v)
+		return nil
+	case evidencehistory.FieldCreationDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreationDate(v)
+		return nil
+	case evidencehistory.FieldRenewalDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRenewalDate(v)
+		return nil
+	case evidencehistory.FieldSource:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSource(v)
+		return nil
+	case evidencehistory.FieldIsAutomated:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsAutomated(v)
+		return nil
+	case evidencehistory.FieldURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetURL(v)
+		return nil
+	}
+	return fmt.Errorf("unknown EvidenceHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *EvidenceHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *EvidenceHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EvidenceHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown EvidenceHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *EvidenceHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(evidencehistory.FieldRef) {
+		fields = append(fields, evidencehistory.FieldRef)
+	}
+	if m.FieldCleared(evidencehistory.FieldCreatedAt) {
+		fields = append(fields, evidencehistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(evidencehistory.FieldUpdatedAt) {
+		fields = append(fields, evidencehistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(evidencehistory.FieldCreatedBy) {
+		fields = append(fields, evidencehistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(evidencehistory.FieldUpdatedBy) {
+		fields = append(fields, evidencehistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(evidencehistory.FieldDeletedAt) {
+		fields = append(fields, evidencehistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(evidencehistory.FieldDeletedBy) {
+		fields = append(fields, evidencehistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(evidencehistory.FieldTags) {
+		fields = append(fields, evidencehistory.FieldTags)
+	}
+	if m.FieldCleared(evidencehistory.FieldDescription) {
+		fields = append(fields, evidencehistory.FieldDescription)
+	}
+	if m.FieldCleared(evidencehistory.FieldCollectionProcedure) {
+		fields = append(fields, evidencehistory.FieldCollectionProcedure)
+	}
+	if m.FieldCleared(evidencehistory.FieldRenewalDate) {
+		fields = append(fields, evidencehistory.FieldRenewalDate)
+	}
+	if m.FieldCleared(evidencehistory.FieldSource) {
+		fields = append(fields, evidencehistory.FieldSource)
+	}
+	if m.FieldCleared(evidencehistory.FieldIsAutomated) {
+		fields = append(fields, evidencehistory.FieldIsAutomated)
+	}
+	if m.FieldCleared(evidencehistory.FieldURL) {
+		fields = append(fields, evidencehistory.FieldURL)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *EvidenceHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *EvidenceHistoryMutation) ClearField(name string) error {
+	switch name {
+	case evidencehistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case evidencehistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case evidencehistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case evidencehistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case evidencehistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case evidencehistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case evidencehistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case evidencehistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case evidencehistory.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case evidencehistory.FieldCollectionProcedure:
+		m.ClearCollectionProcedure()
+		return nil
+	case evidencehistory.FieldRenewalDate:
+		m.ClearRenewalDate()
+		return nil
+	case evidencehistory.FieldSource:
+		m.ClearSource()
+		return nil
+	case evidencehistory.FieldIsAutomated:
+		m.ClearIsAutomated()
+		return nil
+	case evidencehistory.FieldURL:
+		m.ClearURL()
+		return nil
+	}
+	return fmt.Errorf("unknown EvidenceHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *EvidenceHistoryMutation) ResetField(name string) error {
+	switch name {
+	case evidencehistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case evidencehistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case evidencehistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case evidencehistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case evidencehistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case evidencehistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case evidencehistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case evidencehistory.FieldDisplayID:
+		m.ResetDisplayID()
+		return nil
+	case evidencehistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case evidencehistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case evidencehistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case evidencehistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case evidencehistory.FieldName:
+		m.ResetName()
+		return nil
+	case evidencehistory.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case evidencehistory.FieldCollectionProcedure:
+		m.ResetCollectionProcedure()
+		return nil
+	case evidencehistory.FieldCreationDate:
+		m.ResetCreationDate()
+		return nil
+	case evidencehistory.FieldRenewalDate:
+		m.ResetRenewalDate()
+		return nil
+	case evidencehistory.FieldSource:
+		m.ResetSource()
+		return nil
+	case evidencehistory.FieldIsAutomated:
+		m.ResetIsAutomated()
+		return nil
+	case evidencehistory.FieldURL:
+		m.ResetURL()
+		return nil
+	}
+	return fmt.Errorf("unknown EvidenceHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *EvidenceHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *EvidenceHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *EvidenceHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *EvidenceHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *EvidenceHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *EvidenceHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *EvidenceHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown EvidenceHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *EvidenceHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown EvidenceHistory edge %s", name)
+}
+
 // FileMutation represents an operation that mutates the File nodes in the graph.
 type FileMutation struct {
 	config
@@ -29252,6 +33375,9 @@ type FileMutation struct {
 	program                     map[string]struct{}
 	removedprogram              map[string]struct{}
 	clearedprogram              bool
+	evidence                    map[string]struct{}
+	removedevidence             map[string]struct{}
+	clearedevidence             bool
 	done                        bool
 	oldValue                    func(context.Context) (*File, error)
 	predicates                  []predicate.File
@@ -31003,6 +35129,60 @@ func (m *FileMutation) ResetProgram() {
 	m.removedprogram = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *FileMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *FileMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *FileMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *FileMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *FileMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *FileMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *FileMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the FileMutation builder.
 func (m *FileMutation) Where(ps ...predicate.File) {
 	m.predicates = append(m.predicates, ps...)
@@ -31614,7 +35794,7 @@ func (m *FileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.user != nil {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -31647,6 +35827,9 @@ func (m *FileMutation) AddedEdges() []string {
 	}
 	if m.program != nil {
 		edges = append(edges, file.EdgeProgram)
+	}
+	if m.evidence != nil {
+		edges = append(edges, file.EdgeEvidence)
 	}
 	return edges
 }
@@ -31721,13 +35904,19 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.removeduser != nil {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -31760,6 +35949,9 @@ func (m *FileMutation) RemovedEdges() []string {
 	}
 	if m.removedprogram != nil {
 		edges = append(edges, file.EdgeProgram)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, file.EdgeEvidence)
 	}
 	return edges
 }
@@ -31834,13 +36026,19 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.cleareduser {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -31874,6 +36072,9 @@ func (m *FileMutation) ClearedEdges() []string {
 	if m.clearedprogram {
 		edges = append(edges, file.EdgeProgram)
 	}
+	if m.clearedevidence {
+		edges = append(edges, file.EdgeEvidence)
+	}
 	return edges
 }
 
@@ -31903,6 +36104,8 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.clearedevents
 	case file.EdgeProgram:
 		return m.clearedprogram
+	case file.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -31951,6 +36154,9 @@ func (m *FileMutation) ResetEdge(name string) error {
 		return nil
 	case file.EdgeProgram:
 		m.ResetProgram()
+		return nil
+	case file.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown File edge %s", name)
@@ -49513,6 +53719,7 @@ type InternalPolicyMutation struct {
 	name                      *string
 	description               *string
 	status                    *string
+	review_due                *time.Time
 	policy_type               *string
 	version                   *string
 	purpose_and_scope         *string
@@ -50230,6 +54437,55 @@ func (m *InternalPolicyMutation) StatusCleared() bool {
 func (m *InternalPolicyMutation) ResetStatus() {
 	m.status = nil
 	delete(m.clearedFields, internalpolicy.FieldStatus)
+}
+
+// SetReviewDue sets the "review_due" field.
+func (m *InternalPolicyMutation) SetReviewDue(t time.Time) {
+	m.review_due = &t
+}
+
+// ReviewDue returns the value of the "review_due" field in the mutation.
+func (m *InternalPolicyMutation) ReviewDue() (r time.Time, exists bool) {
+	v := m.review_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewDue returns the old "review_due" field's value of the InternalPolicy entity.
+// If the InternalPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *InternalPolicyMutation) OldReviewDue(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewDue: %w", err)
+	}
+	return oldValue.ReviewDue, nil
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (m *InternalPolicyMutation) ClearReviewDue() {
+	m.review_due = nil
+	m.clearedFields[internalpolicy.FieldReviewDue] = struct{}{}
+}
+
+// ReviewDueCleared returns if the "review_due" field was cleared in this mutation.
+func (m *InternalPolicyMutation) ReviewDueCleared() bool {
+	_, ok := m.clearedFields[internalpolicy.FieldReviewDue]
+	return ok
+}
+
+// ResetReviewDue resets all changes to the "review_due" field.
+func (m *InternalPolicyMutation) ResetReviewDue() {
+	m.review_due = nil
+	delete(m.clearedFields, internalpolicy.FieldReviewDue)
 }
 
 // SetPolicyType sets the "policy_type" field.
@@ -50970,7 +55226,7 @@ func (m *InternalPolicyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *InternalPolicyMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, internalpolicy.FieldCreatedAt)
 	}
@@ -51006,6 +55262,9 @@ func (m *InternalPolicyMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, internalpolicy.FieldStatus)
+	}
+	if m.review_due != nil {
+		fields = append(fields, internalpolicy.FieldReviewDue)
 	}
 	if m.policy_type != nil {
 		fields = append(fields, internalpolicy.FieldPolicyType)
@@ -51054,6 +55313,8 @@ func (m *InternalPolicyMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case internalpolicy.FieldStatus:
 		return m.Status()
+	case internalpolicy.FieldReviewDue:
+		return m.ReviewDue()
 	case internalpolicy.FieldPolicyType:
 		return m.PolicyType()
 	case internalpolicy.FieldVersion:
@@ -51097,6 +55358,8 @@ func (m *InternalPolicyMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldDescription(ctx)
 	case internalpolicy.FieldStatus:
 		return m.OldStatus(ctx)
+	case internalpolicy.FieldReviewDue:
+		return m.OldReviewDue(ctx)
 	case internalpolicy.FieldPolicyType:
 		return m.OldPolicyType(ctx)
 	case internalpolicy.FieldVersion:
@@ -51200,6 +55463,13 @@ func (m *InternalPolicyMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case internalpolicy.FieldReviewDue:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewDue(v)
+		return nil
 	case internalpolicy.FieldPolicyType:
 		v, ok := value.(string)
 		if !ok {
@@ -51295,6 +55565,9 @@ func (m *InternalPolicyMutation) ClearedFields() []string {
 	if m.FieldCleared(internalpolicy.FieldStatus) {
 		fields = append(fields, internalpolicy.FieldStatus)
 	}
+	if m.FieldCleared(internalpolicy.FieldReviewDue) {
+		fields = append(fields, internalpolicy.FieldReviewDue)
+	}
 	if m.FieldCleared(internalpolicy.FieldPolicyType) {
 		fields = append(fields, internalpolicy.FieldPolicyType)
 	}
@@ -51354,6 +55627,9 @@ func (m *InternalPolicyMutation) ClearField(name string) error {
 	case internalpolicy.FieldStatus:
 		m.ClearStatus()
 		return nil
+	case internalpolicy.FieldReviewDue:
+		m.ClearReviewDue()
+		return nil
 	case internalpolicy.FieldPolicyType:
 		m.ClearPolicyType()
 		return nil
@@ -51412,6 +55688,9 @@ func (m *InternalPolicyMutation) ResetField(name string) error {
 		return nil
 	case internalpolicy.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case internalpolicy.FieldReviewDue:
+		m.ResetReviewDue()
 		return nil
 	case internalpolicy.FieldPolicyType:
 		m.ResetPolicyType()
@@ -51738,6 +56017,7 @@ type InternalPolicyHistoryMutation struct {
 	name              *string
 	description       *string
 	status            *string
+	review_due        *time.Time
 	policy_type       *string
 	version           *string
 	purpose_and_scope *string
@@ -52552,6 +56832,55 @@ func (m *InternalPolicyHistoryMutation) ResetStatus() {
 	delete(m.clearedFields, internalpolicyhistory.FieldStatus)
 }
 
+// SetReviewDue sets the "review_due" field.
+func (m *InternalPolicyHistoryMutation) SetReviewDue(t time.Time) {
+	m.review_due = &t
+}
+
+// ReviewDue returns the value of the "review_due" field in the mutation.
+func (m *InternalPolicyHistoryMutation) ReviewDue() (r time.Time, exists bool) {
+	v := m.review_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewDue returns the old "review_due" field's value of the InternalPolicyHistory entity.
+// If the InternalPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *InternalPolicyHistoryMutation) OldReviewDue(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewDue: %w", err)
+	}
+	return oldValue.ReviewDue, nil
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (m *InternalPolicyHistoryMutation) ClearReviewDue() {
+	m.review_due = nil
+	m.clearedFields[internalpolicyhistory.FieldReviewDue] = struct{}{}
+}
+
+// ReviewDueCleared returns if the "review_due" field was cleared in this mutation.
+func (m *InternalPolicyHistoryMutation) ReviewDueCleared() bool {
+	_, ok := m.clearedFields[internalpolicyhistory.FieldReviewDue]
+	return ok
+}
+
+// ResetReviewDue resets all changes to the "review_due" field.
+func (m *InternalPolicyHistoryMutation) ResetReviewDue() {
+	m.review_due = nil
+	delete(m.clearedFields, internalpolicyhistory.FieldReviewDue)
+}
+
 // SetPolicyType sets the "policy_type" field.
 func (m *InternalPolicyHistoryMutation) SetPolicyType(s string) {
 	m.policy_type = &s
@@ -52831,7 +57160,7 @@ func (m *InternalPolicyHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *InternalPolicyHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.history_time != nil {
 		fields = append(fields, internalpolicyhistory.FieldHistoryTime)
 	}
@@ -52876,6 +57205,9 @@ func (m *InternalPolicyHistoryMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, internalpolicyhistory.FieldStatus)
+	}
+	if m.review_due != nil {
+		fields = append(fields, internalpolicyhistory.FieldReviewDue)
 	}
 	if m.policy_type != nil {
 		fields = append(fields, internalpolicyhistory.FieldPolicyType)
@@ -52930,6 +57262,8 @@ func (m *InternalPolicyHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case internalpolicyhistory.FieldStatus:
 		return m.Status()
+	case internalpolicyhistory.FieldReviewDue:
+		return m.ReviewDue()
 	case internalpolicyhistory.FieldPolicyType:
 		return m.PolicyType()
 	case internalpolicyhistory.FieldVersion:
@@ -52979,6 +57313,8 @@ func (m *InternalPolicyHistoryMutation) OldField(ctx context.Context, name strin
 		return m.OldDescription(ctx)
 	case internalpolicyhistory.FieldStatus:
 		return m.OldStatus(ctx)
+	case internalpolicyhistory.FieldReviewDue:
+		return m.OldReviewDue(ctx)
 	case internalpolicyhistory.FieldPolicyType:
 		return m.OldPolicyType(ctx)
 	case internalpolicyhistory.FieldVersion:
@@ -53103,6 +57439,13 @@ func (m *InternalPolicyHistoryMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetStatus(v)
 		return nil
+	case internalpolicyhistory.FieldReviewDue:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewDue(v)
+		return nil
 	case internalpolicyhistory.FieldPolicyType:
 		v, ok := value.(string)
 		if !ok {
@@ -53201,6 +57544,9 @@ func (m *InternalPolicyHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(internalpolicyhistory.FieldStatus) {
 		fields = append(fields, internalpolicyhistory.FieldStatus)
 	}
+	if m.FieldCleared(internalpolicyhistory.FieldReviewDue) {
+		fields = append(fields, internalpolicyhistory.FieldReviewDue)
+	}
 	if m.FieldCleared(internalpolicyhistory.FieldPolicyType) {
 		fields = append(fields, internalpolicyhistory.FieldPolicyType)
 	}
@@ -53262,6 +57608,9 @@ func (m *InternalPolicyHistoryMutation) ClearField(name string) error {
 		return nil
 	case internalpolicyhistory.FieldStatus:
 		m.ClearStatus()
+		return nil
+	case internalpolicyhistory.FieldReviewDue:
+		m.ClearReviewDue()
 		return nil
 	case internalpolicyhistory.FieldPolicyType:
 		m.ClearPolicyType()
@@ -53330,6 +57679,9 @@ func (m *InternalPolicyHistoryMutation) ResetField(name string) error {
 		return nil
 	case internalpolicyhistory.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case internalpolicyhistory.FieldReviewDue:
+		m.ResetReviewDue()
 		return nil
 	case internalpolicyhistory.FieldPolicyType:
 		m.ResetPolicyType()
@@ -66311,6 +70663,9 @@ type OrganizationMutation struct {
 	subcontrols                       map[string]struct{}
 	removedsubcontrols                map[string]struct{}
 	clearedsubcontrols                bool
+	evidence                          map[string]struct{}
+	removedevidence                   map[string]struct{}
+	clearedevidence                   bool
 	members                           map[string]struct{}
 	removedmembers                    map[string]struct{}
 	clearedmembers                    bool
@@ -69247,6 +73602,60 @@ func (m *OrganizationMutation) ResetSubcontrols() {
 	m.removedsubcontrols = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *OrganizationMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *OrganizationMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *OrganizationMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *OrganizationMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *OrganizationMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *OrganizationMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *OrganizationMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by ids.
 func (m *OrganizationMutation) AddMemberIDs(ids ...string) {
 	if m.members == nil {
@@ -69770,7 +74179,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 40)
+	edges := make([]string, 0, 41)
 	if m.control_creators != nil {
 		edges = append(edges, organization.EdgeControlCreators)
 	}
@@ -69887,6 +74296,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.subcontrols != nil {
 		edges = append(edges, organization.EdgeSubcontrols)
+	}
+	if m.evidence != nil {
+		edges = append(edges, organization.EdgeEvidence)
 	}
 	if m.members != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -70126,6 +74538,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.members))
 		for id := range m.members {
@@ -70138,7 +74556,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 40)
+	edges := make([]string, 0, 41)
 	if m.removedcontrol_creators != nil {
 		edges = append(edges, organization.EdgeControlCreators)
 	}
@@ -70246,6 +74664,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedsubcontrols != nil {
 		edges = append(edges, organization.EdgeSubcontrols)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, organization.EdgeEvidence)
 	}
 	if m.removedmembers != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -70473,6 +74894,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.removedmembers))
 		for id := range m.removedmembers {
@@ -70485,7 +74912,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 40)
+	edges := make([]string, 0, 41)
 	if m.clearedcontrol_creators {
 		edges = append(edges, organization.EdgeControlCreators)
 	}
@@ -70603,6 +75030,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedsubcontrols {
 		edges = append(edges, organization.EdgeSubcontrols)
 	}
+	if m.clearedevidence {
+		edges = append(edges, organization.EdgeEvidence)
+	}
 	if m.clearedmembers {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -70691,6 +75121,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedcontrols
 	case organization.EdgeSubcontrols:
 		return m.clearedsubcontrols
+	case organization.EdgeEvidence:
+		return m.clearedevidence
 	case organization.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -70834,6 +75266,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeSubcontrols:
 		m.ResetSubcontrols()
+		return nil
+	case organization.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	case organization.EdgeMembers:
 		m.ResetMembers()
@@ -78244,6 +82679,7 @@ type ProcedureMutation struct {
 	description              *string
 	status                   *string
 	procedure_type           *string
+	review_due               *time.Time
 	version                  *string
 	purpose_and_scope        *string
 	background               *string
@@ -79012,6 +83448,55 @@ func (m *ProcedureMutation) ResetProcedureType() {
 	delete(m.clearedFields, procedure.FieldProcedureType)
 }
 
+// SetReviewDue sets the "review_due" field.
+func (m *ProcedureMutation) SetReviewDue(t time.Time) {
+	m.review_due = &t
+}
+
+// ReviewDue returns the value of the "review_due" field in the mutation.
+func (m *ProcedureMutation) ReviewDue() (r time.Time, exists bool) {
+	v := m.review_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewDue returns the old "review_due" field's value of the Procedure entity.
+// If the Procedure object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcedureMutation) OldReviewDue(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewDue: %w", err)
+	}
+	return oldValue.ReviewDue, nil
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (m *ProcedureMutation) ClearReviewDue() {
+	m.review_due = nil
+	m.clearedFields[procedure.FieldReviewDue] = struct{}{}
+}
+
+// ReviewDueCleared returns if the "review_due" field was cleared in this mutation.
+func (m *ProcedureMutation) ReviewDueCleared() bool {
+	_, ok := m.clearedFields[procedure.FieldReviewDue]
+	return ok
+}
+
+// ResetReviewDue resets all changes to the "review_due" field.
+func (m *ProcedureMutation) ResetReviewDue() {
+	m.review_due = nil
+	delete(m.clearedFields, procedure.FieldReviewDue)
+}
+
 // SetVersion sets the "version" field.
 func (m *ProcedureMutation) SetVersion(s string) {
 	m.version = &s
@@ -79750,7 +84235,7 @@ func (m *ProcedureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcedureMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, procedure.FieldCreatedAt)
 	}
@@ -79789,6 +84274,9 @@ func (m *ProcedureMutation) Fields() []string {
 	}
 	if m.procedure_type != nil {
 		fields = append(fields, procedure.FieldProcedureType)
+	}
+	if m.review_due != nil {
+		fields = append(fields, procedure.FieldReviewDue)
 	}
 	if m.version != nil {
 		fields = append(fields, procedure.FieldVersion)
@@ -79839,6 +84327,8 @@ func (m *ProcedureMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case procedure.FieldProcedureType:
 		return m.ProcedureType()
+	case procedure.FieldReviewDue:
+		return m.ReviewDue()
 	case procedure.FieldVersion:
 		return m.Version()
 	case procedure.FieldPurposeAndScope:
@@ -79884,6 +84374,8 @@ func (m *ProcedureMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldStatus(ctx)
 	case procedure.FieldProcedureType:
 		return m.OldProcedureType(ctx)
+	case procedure.FieldReviewDue:
+		return m.OldReviewDue(ctx)
 	case procedure.FieldVersion:
 		return m.OldVersion(ctx)
 	case procedure.FieldPurposeAndScope:
@@ -79994,6 +84486,13 @@ func (m *ProcedureMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetProcedureType(v)
 		return nil
+	case procedure.FieldReviewDue:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewDue(v)
+		return nil
 	case procedure.FieldVersion:
 		v, ok := value.(string)
 		if !ok {
@@ -80092,6 +84591,9 @@ func (m *ProcedureMutation) ClearedFields() []string {
 	if m.FieldCleared(procedure.FieldProcedureType) {
 		fields = append(fields, procedure.FieldProcedureType)
 	}
+	if m.FieldCleared(procedure.FieldReviewDue) {
+		fields = append(fields, procedure.FieldReviewDue)
+	}
 	if m.FieldCleared(procedure.FieldVersion) {
 		fields = append(fields, procedure.FieldVersion)
 	}
@@ -80154,6 +84656,9 @@ func (m *ProcedureMutation) ClearField(name string) error {
 	case procedure.FieldProcedureType:
 		m.ClearProcedureType()
 		return nil
+	case procedure.FieldReviewDue:
+		m.ClearReviewDue()
+		return nil
 	case procedure.FieldVersion:
 		m.ClearVersion()
 		return nil
@@ -80215,6 +84720,9 @@ func (m *ProcedureMutation) ResetField(name string) error {
 		return nil
 	case procedure.FieldProcedureType:
 		m.ResetProcedureType()
+		return nil
+	case procedure.FieldReviewDue:
+		m.ResetReviewDue()
 		return nil
 	case procedure.FieldVersion:
 		m.ResetVersion()
@@ -80542,6 +85050,7 @@ type ProcedureHistoryMutation struct {
 	description       *string
 	status            *string
 	procedure_type    *string
+	review_due        *time.Time
 	version           *string
 	purpose_and_scope *string
 	background        *string
@@ -81405,6 +85914,55 @@ func (m *ProcedureHistoryMutation) ResetProcedureType() {
 	delete(m.clearedFields, procedurehistory.FieldProcedureType)
 }
 
+// SetReviewDue sets the "review_due" field.
+func (m *ProcedureHistoryMutation) SetReviewDue(t time.Time) {
+	m.review_due = &t
+}
+
+// ReviewDue returns the value of the "review_due" field in the mutation.
+func (m *ProcedureHistoryMutation) ReviewDue() (r time.Time, exists bool) {
+	v := m.review_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewDue returns the old "review_due" field's value of the ProcedureHistory entity.
+// If the ProcedureHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcedureHistoryMutation) OldReviewDue(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewDue: %w", err)
+	}
+	return oldValue.ReviewDue, nil
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (m *ProcedureHistoryMutation) ClearReviewDue() {
+	m.review_due = nil
+	m.clearedFields[procedurehistory.FieldReviewDue] = struct{}{}
+}
+
+// ReviewDueCleared returns if the "review_due" field was cleared in this mutation.
+func (m *ProcedureHistoryMutation) ReviewDueCleared() bool {
+	_, ok := m.clearedFields[procedurehistory.FieldReviewDue]
+	return ok
+}
+
+// ResetReviewDue resets all changes to the "review_due" field.
+func (m *ProcedureHistoryMutation) ResetReviewDue() {
+	m.review_due = nil
+	delete(m.clearedFields, procedurehistory.FieldReviewDue)
+}
+
 // SetVersion sets the "version" field.
 func (m *ProcedureHistoryMutation) SetVersion(s string) {
 	m.version = &s
@@ -81684,7 +86242,7 @@ func (m *ProcedureHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcedureHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.history_time != nil {
 		fields = append(fields, procedurehistory.FieldHistoryTime)
 	}
@@ -81732,6 +86290,9 @@ func (m *ProcedureHistoryMutation) Fields() []string {
 	}
 	if m.procedure_type != nil {
 		fields = append(fields, procedurehistory.FieldProcedureType)
+	}
+	if m.review_due != nil {
+		fields = append(fields, procedurehistory.FieldReviewDue)
 	}
 	if m.version != nil {
 		fields = append(fields, procedurehistory.FieldVersion)
@@ -81788,6 +86349,8 @@ func (m *ProcedureHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case procedurehistory.FieldProcedureType:
 		return m.ProcedureType()
+	case procedurehistory.FieldReviewDue:
+		return m.ReviewDue()
 	case procedurehistory.FieldVersion:
 		return m.Version()
 	case procedurehistory.FieldPurposeAndScope:
@@ -81839,6 +86402,8 @@ func (m *ProcedureHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldStatus(ctx)
 	case procedurehistory.FieldProcedureType:
 		return m.OldProcedureType(ctx)
+	case procedurehistory.FieldReviewDue:
+		return m.OldReviewDue(ctx)
 	case procedurehistory.FieldVersion:
 		return m.OldVersion(ctx)
 	case procedurehistory.FieldPurposeAndScope:
@@ -81970,6 +86535,13 @@ func (m *ProcedureHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetProcedureType(v)
 		return nil
+	case procedurehistory.FieldReviewDue:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewDue(v)
+		return nil
 	case procedurehistory.FieldVersion:
 		v, ok := value.(string)
 		if !ok {
@@ -82071,6 +86643,9 @@ func (m *ProcedureHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(procedurehistory.FieldProcedureType) {
 		fields = append(fields, procedurehistory.FieldProcedureType)
 	}
+	if m.FieldCleared(procedurehistory.FieldReviewDue) {
+		fields = append(fields, procedurehistory.FieldReviewDue)
+	}
 	if m.FieldCleared(procedurehistory.FieldVersion) {
 		fields = append(fields, procedurehistory.FieldVersion)
 	}
@@ -82135,6 +86710,9 @@ func (m *ProcedureHistoryMutation) ClearField(name string) error {
 		return nil
 	case procedurehistory.FieldProcedureType:
 		m.ClearProcedureType()
+		return nil
+	case procedurehistory.FieldReviewDue:
+		m.ClearReviewDue()
 		return nil
 	case procedurehistory.FieldVersion:
 		m.ClearVersion()
@@ -82206,6 +86784,9 @@ func (m *ProcedureHistoryMutation) ResetField(name string) error {
 		return nil
 	case procedurehistory.FieldProcedureType:
 		m.ResetProcedureType()
+		return nil
+	case procedurehistory.FieldReviewDue:
+		m.ResetReviewDue()
 		return nil
 	case procedurehistory.FieldVersion:
 		m.ResetVersion()
@@ -82336,6 +86917,9 @@ type ProgramMutation struct {
 	files                     map[string]struct{}
 	removedfiles              map[string]struct{}
 	clearedfiles              bool
+	evidence                  map[string]struct{}
+	removedevidence           map[string]struct{}
+	clearedevidence           bool
 	narratives                map[string]struct{}
 	removednarratives         map[string]struct{}
 	clearednarratives         bool
@@ -83906,6 +88490,60 @@ func (m *ProgramMutation) ResetFiles() {
 	m.removedfiles = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *ProgramMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *ProgramMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *ProgramMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *ProgramMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *ProgramMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *ProgramMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *ProgramMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by ids.
 func (m *ProgramMutation) AddNarrativeIDs(ids ...string) {
 	if m.narratives == nil {
@@ -84650,7 +89288,7 @@ func (m *ProgramMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProgramMutation) AddedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.owner != nil {
 		edges = append(edges, program.EdgeOwner)
 	}
@@ -84689,6 +89327,9 @@ func (m *ProgramMutation) AddedEdges() []string {
 	}
 	if m.files != nil {
 		edges = append(edges, program.EdgeFiles)
+	}
+	if m.evidence != nil {
+		edges = append(edges, program.EdgeEvidence)
 	}
 	if m.narratives != nil {
 		edges = append(edges, program.EdgeNarratives)
@@ -84788,6 +89429,12 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case program.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	case program.EdgeNarratives:
 		ids := make([]ent.Value, 0, len(m.narratives))
 		for id := range m.narratives {
@@ -84824,7 +89471,7 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProgramMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, program.EdgeBlockedGroups)
 	}
@@ -84860,6 +89507,9 @@ func (m *ProgramMutation) RemovedEdges() []string {
 	}
 	if m.removedfiles != nil {
 		edges = append(edges, program.EdgeFiles)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, program.EdgeEvidence)
 	}
 	if m.removednarratives != nil {
 		edges = append(edges, program.EdgeNarratives)
@@ -84955,6 +89605,12 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case program.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	case program.EdgeNarratives:
 		ids := make([]ent.Value, 0, len(m.removednarratives))
 		for id := range m.removednarratives {
@@ -84991,7 +89647,7 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProgramMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.clearedowner {
 		edges = append(edges, program.EdgeOwner)
 	}
@@ -85030,6 +89686,9 @@ func (m *ProgramMutation) ClearedEdges() []string {
 	}
 	if m.clearedfiles {
 		edges = append(edges, program.EdgeFiles)
+	}
+	if m.clearedevidence {
+		edges = append(edges, program.EdgeEvidence)
 	}
 	if m.clearednarratives {
 		edges = append(edges, program.EdgeNarratives)
@@ -85079,6 +89738,8 @@ func (m *ProgramMutation) EdgeCleared(name string) bool {
 		return m.clearednotes
 	case program.EdgeFiles:
 		return m.clearedfiles
+	case program.EdgeEvidence:
+		return m.clearedevidence
 	case program.EdgeNarratives:
 		return m.clearednarratives
 	case program.EdgeActionPlans:
@@ -85146,6 +89807,9 @@ func (m *ProgramMutation) ResetEdge(name string) error {
 		return nil
 	case program.EdgeFiles:
 		m.ResetFiles()
+		return nil
+	case program.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	case program.EdgeNarratives:
 		m.ResetNarratives()
@@ -96625,6 +101289,7 @@ type SubcontrolMutation struct {
 	implementation_verification      *string
 	implementation_verification_date *time.Time
 	details                          *map[string]interface{}
+	example_evidence                 *string
 	clearedFields                    map[string]struct{}
 	owner                            *string
 	clearedowner                     bool
@@ -96642,6 +101307,9 @@ type SubcontrolMutation struct {
 	programs                         map[string]struct{}
 	removedprograms                  map[string]struct{}
 	clearedprograms                  bool
+	evidence                         map[string]struct{}
+	removedevidence                  map[string]struct{}
+	clearedevidence                  bool
 	done                             bool
 	oldValue                         func(context.Context) (*Subcontrol, error)
 	predicates                       []predicate.Subcontrol
@@ -97953,6 +102621,55 @@ func (m *SubcontrolMutation) ResetDetails() {
 	delete(m.clearedFields, subcontrol.FieldDetails)
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (m *SubcontrolMutation) SetExampleEvidence(s string) {
+	m.example_evidence = &s
+}
+
+// ExampleEvidence returns the value of the "example_evidence" field in the mutation.
+func (m *SubcontrolMutation) ExampleEvidence() (r string, exists bool) {
+	v := m.example_evidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExampleEvidence returns the old "example_evidence" field's value of the Subcontrol entity.
+// If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolMutation) OldExampleEvidence(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExampleEvidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExampleEvidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExampleEvidence: %w", err)
+	}
+	return oldValue.ExampleEvidence, nil
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (m *SubcontrolMutation) ClearExampleEvidence() {
+	m.example_evidence = nil
+	m.clearedFields[subcontrol.FieldExampleEvidence] = struct{}{}
+}
+
+// ExampleEvidenceCleared returns if the "example_evidence" field was cleared in this mutation.
+func (m *SubcontrolMutation) ExampleEvidenceCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldExampleEvidence]
+	return ok
+}
+
+// ResetExampleEvidence resets all changes to the "example_evidence" field.
+func (m *SubcontrolMutation) ResetExampleEvidence() {
+	m.example_evidence = nil
+	delete(m.clearedFields, subcontrol.FieldExampleEvidence)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *SubcontrolMutation) ClearOwner() {
 	m.clearedowner = true
@@ -98235,6 +102952,60 @@ func (m *SubcontrolMutation) ResetPrograms() {
 	m.removedprograms = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *SubcontrolMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *SubcontrolMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *SubcontrolMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *SubcontrolMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *SubcontrolMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *SubcontrolMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *SubcontrolMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the SubcontrolMutation builder.
 func (m *SubcontrolMutation) Where(ps ...predicate.Subcontrol) {
 	m.predicates = append(m.predicates, ps...)
@@ -98269,7 +103040,7 @@ func (m *SubcontrolMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 26)
 	if m.created_at != nil {
 		fields = append(fields, subcontrol.FieldCreatedAt)
 	}
@@ -98345,6 +103116,9 @@ func (m *SubcontrolMutation) Fields() []string {
 	if m.details != nil {
 		fields = append(fields, subcontrol.FieldDetails)
 	}
+	if m.example_evidence != nil {
+		fields = append(fields, subcontrol.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -98403,6 +103177,8 @@ func (m *SubcontrolMutation) Field(name string) (ent.Value, bool) {
 		return m.ImplementationVerificationDate()
 	case subcontrol.FieldDetails:
 		return m.Details()
+	case subcontrol.FieldExampleEvidence:
+		return m.ExampleEvidence()
 	}
 	return nil, false
 }
@@ -98462,6 +103238,8 @@ func (m *SubcontrolMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldImplementationVerificationDate(ctx)
 	case subcontrol.FieldDetails:
 		return m.OldDetails(ctx)
+	case subcontrol.FieldExampleEvidence:
+		return m.OldExampleEvidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown Subcontrol field %s", name)
 }
@@ -98646,6 +103424,13 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDetails(v)
 		return nil
+	case subcontrol.FieldExampleEvidence:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExampleEvidence(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol field %s", name)
 }
@@ -98742,6 +103527,9 @@ func (m *SubcontrolMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrol.FieldDetails) {
 		fields = append(fields, subcontrol.FieldDetails)
 	}
+	if m.FieldCleared(subcontrol.FieldExampleEvidence) {
+		fields = append(fields, subcontrol.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -98821,6 +103609,9 @@ func (m *SubcontrolMutation) ClearField(name string) error {
 		return nil
 	case subcontrol.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case subcontrol.FieldExampleEvidence:
+		m.ClearExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol nullable field %s", name)
@@ -98905,13 +103696,16 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 	case subcontrol.FieldDetails:
 		m.ResetDetails()
 		return nil
+	case subcontrol.FieldExampleEvidence:
+		m.ResetExampleEvidence()
+		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubcontrolMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.owner != nil {
 		edges = append(edges, subcontrol.EdgeOwner)
 	}
@@ -98929,6 +103723,9 @@ func (m *SubcontrolMutation) AddedEdges() []string {
 	}
 	if m.programs != nil {
 		edges = append(edges, subcontrol.EdgePrograms)
+	}
+	if m.evidence != nil {
+		edges = append(edges, subcontrol.EdgeEvidence)
 	}
 	return edges
 }
@@ -98969,13 +103766,19 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubcontrolMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedcontrols != nil {
 		edges = append(edges, subcontrol.EdgeControls)
 	}
@@ -98987,6 +103790,9 @@ func (m *SubcontrolMutation) RemovedEdges() []string {
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, subcontrol.EdgePrograms)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, subcontrol.EdgeEvidence)
 	}
 	return edges
 }
@@ -99019,13 +103825,19 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubcontrolMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedowner {
 		edges = append(edges, subcontrol.EdgeOwner)
 	}
@@ -99043,6 +103855,9 @@ func (m *SubcontrolMutation) ClearedEdges() []string {
 	}
 	if m.clearedprograms {
 		edges = append(edges, subcontrol.EdgePrograms)
+	}
+	if m.clearedevidence {
+		edges = append(edges, subcontrol.EdgeEvidence)
 	}
 	return edges
 }
@@ -99063,6 +103878,8 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 		return m.clearednotes
 	case subcontrol.EdgePrograms:
 		return m.clearedprograms
+	case subcontrol.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -99103,6 +103920,9 @@ func (m *SubcontrolMutation) ResetEdge(name string) error {
 	case subcontrol.EdgePrograms:
 		m.ResetPrograms()
 		return nil
+	case subcontrol.EdgeEvidence:
+		m.ResetEvidence()
+		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol edge %s", name)
 }
@@ -99142,6 +103962,7 @@ type SubcontrolHistoryMutation struct {
 	implementation_verification      *string
 	implementation_verification_date *time.Time
 	details                          *map[string]interface{}
+	example_evidence                 *string
 	clearedFields                    map[string]struct{}
 	done                             bool
 	oldValue                         func(context.Context) (*SubcontrolHistory, error)
@@ -100575,6 +105396,55 @@ func (m *SubcontrolHistoryMutation) ResetDetails() {
 	delete(m.clearedFields, subcontrolhistory.FieldDetails)
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (m *SubcontrolHistoryMutation) SetExampleEvidence(s string) {
+	m.example_evidence = &s
+}
+
+// ExampleEvidence returns the value of the "example_evidence" field in the mutation.
+func (m *SubcontrolHistoryMutation) ExampleEvidence() (r string, exists bool) {
+	v := m.example_evidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExampleEvidence returns the old "example_evidence" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldExampleEvidence(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExampleEvidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExampleEvidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExampleEvidence: %w", err)
+	}
+	return oldValue.ExampleEvidence, nil
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (m *SubcontrolHistoryMutation) ClearExampleEvidence() {
+	m.example_evidence = nil
+	m.clearedFields[subcontrolhistory.FieldExampleEvidence] = struct{}{}
+}
+
+// ExampleEvidenceCleared returns if the "example_evidence" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) ExampleEvidenceCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldExampleEvidence]
+	return ok
+}
+
+// ResetExampleEvidence resets all changes to the "example_evidence" field.
+func (m *SubcontrolHistoryMutation) ResetExampleEvidence() {
+	m.example_evidence = nil
+	delete(m.clearedFields, subcontrolhistory.FieldExampleEvidence)
+}
+
 // Where appends a list predicates to the SubcontrolHistoryMutation builder.
 func (m *SubcontrolHistoryMutation) Where(ps ...predicate.SubcontrolHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -100609,7 +105479,7 @@ func (m *SubcontrolHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 29)
 	if m.history_time != nil {
 		fields = append(fields, subcontrolhistory.FieldHistoryTime)
 	}
@@ -100694,6 +105564,9 @@ func (m *SubcontrolHistoryMutation) Fields() []string {
 	if m.details != nil {
 		fields = append(fields, subcontrolhistory.FieldDetails)
 	}
+	if m.example_evidence != nil {
+		fields = append(fields, subcontrolhistory.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -100758,6 +105631,8 @@ func (m *SubcontrolHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ImplementationVerificationDate()
 	case subcontrolhistory.FieldDetails:
 		return m.Details()
+	case subcontrolhistory.FieldExampleEvidence:
+		return m.ExampleEvidence()
 	}
 	return nil, false
 }
@@ -100823,6 +105698,8 @@ func (m *SubcontrolHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldImplementationVerificationDate(ctx)
 	case subcontrolhistory.FieldDetails:
 		return m.OldDetails(ctx)
+	case subcontrolhistory.FieldExampleEvidence:
+		return m.OldExampleEvidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown SubcontrolHistory field %s", name)
 }
@@ -101028,6 +105905,13 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetDetails(v)
 		return nil
+	case subcontrolhistory.FieldExampleEvidence:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExampleEvidence(v)
+		return nil
 	}
 	return fmt.Errorf("unknown SubcontrolHistory field %s", name)
 }
@@ -101127,6 +106011,9 @@ func (m *SubcontrolHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrolhistory.FieldDetails) {
 		fields = append(fields, subcontrolhistory.FieldDetails)
 	}
+	if m.FieldCleared(subcontrolhistory.FieldExampleEvidence) {
+		fields = append(fields, subcontrolhistory.FieldExampleEvidence)
+	}
 	return fields
 }
 
@@ -101209,6 +106096,9 @@ func (m *SubcontrolHistoryMutation) ClearField(name string) error {
 		return nil
 	case subcontrolhistory.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case subcontrolhistory.FieldExampleEvidence:
+		m.ClearExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown SubcontrolHistory nullable field %s", name)
@@ -101301,6 +106191,9 @@ func (m *SubcontrolHistoryMutation) ResetField(name string) error {
 		return nil
 	case subcontrolhistory.FieldDetails:
 		m.ResetDetails()
+		return nil
+	case subcontrolhistory.FieldExampleEvidence:
+		m.ResetExampleEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown SubcontrolHistory field %s", name)
@@ -104158,6 +109051,9 @@ type TaskMutation struct {
 	program                  map[string]struct{}
 	removedprogram           map[string]struct{}
 	clearedprogram           bool
+	evidence                 map[string]struct{}
+	removedevidence          map[string]struct{}
+	clearedevidence          bool
 	done                     bool
 	oldValue                 func(context.Context) (*Task, error)
 	predicates               []predicate.Task
@@ -105546,6 +110442,60 @@ func (m *TaskMutation) ResetProgram() {
 	m.removedprogram = nil
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
+func (m *TaskMutation) AddEvidenceIDs(ids ...string) {
+	if m.evidence == nil {
+		m.evidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.evidence[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (m *TaskMutation) ClearEvidence() {
+	m.clearedevidence = true
+}
+
+// EvidenceCleared reports if the "evidence" edge to the Evidence entity was cleared.
+func (m *TaskMutation) EvidenceCleared() bool {
+	return m.clearedevidence
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to the Evidence entity by IDs.
+func (m *TaskMutation) RemoveEvidenceIDs(ids ...string) {
+	if m.removedevidence == nil {
+		m.removedevidence = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.evidence, ids[i])
+		m.removedevidence[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvidence returns the removed IDs of the "evidence" edge to the Evidence entity.
+func (m *TaskMutation) RemovedEvidenceIDs() (ids []string) {
+	for id := range m.removedevidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EvidenceIDs returns the "evidence" edge IDs in the mutation.
+func (m *TaskMutation) EvidenceIDs() (ids []string) {
+	for id := range m.evidence {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvidence resets all changes to the "evidence" edge.
+func (m *TaskMutation) ResetEvidence() {
+	m.evidence = nil
+	m.clearedevidence = false
+	m.removedevidence = nil
+}
+
 // Where appends a list predicates to the TaskMutation builder.
 func (m *TaskMutation) Where(ps ...predicate.Task) {
 	m.predicates = append(m.predicates, ps...)
@@ -106043,7 +110993,7 @@ func (m *TaskMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TaskMutation) AddedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.owner != nil {
 		edges = append(edges, task.EdgeOwner)
 	}
@@ -106073,6 +111023,9 @@ func (m *TaskMutation) AddedEdges() []string {
 	}
 	if m.program != nil {
 		edges = append(edges, task.EdgeProgram)
+	}
+	if m.evidence != nil {
+		edges = append(edges, task.EdgeEvidence)
 	}
 	return edges
 }
@@ -106135,13 +111088,19 @@ func (m *TaskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case task.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.evidence))
+		for id := range m.evidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TaskMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.removedgroup != nil {
 		edges = append(edges, task.EdgeGroup)
 	}
@@ -106162,6 +111121,9 @@ func (m *TaskMutation) RemovedEdges() []string {
 	}
 	if m.removedprogram != nil {
 		edges = append(edges, task.EdgeProgram)
+	}
+	if m.removedevidence != nil {
+		edges = append(edges, task.EdgeEvidence)
 	}
 	return edges
 }
@@ -106212,13 +111174,19 @@ func (m *TaskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case task.EdgeEvidence:
+		ids := make([]ent.Value, 0, len(m.removedevidence))
+		for id := range m.removedevidence {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TaskMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.clearedowner {
 		edges = append(edges, task.EdgeOwner)
 	}
@@ -106249,6 +111217,9 @@ func (m *TaskMutation) ClearedEdges() []string {
 	if m.clearedprogram {
 		edges = append(edges, task.EdgeProgram)
 	}
+	if m.clearedevidence {
+		edges = append(edges, task.EdgeEvidence)
+	}
 	return edges
 }
 
@@ -106276,6 +111247,8 @@ func (m *TaskMutation) EdgeCleared(name string) bool {
 		return m.clearedsubcontrol
 	case task.EdgeProgram:
 		return m.clearedprogram
+	case task.EdgeEvidence:
+		return m.clearedevidence
 	}
 	return false
 }
@@ -106330,6 +111303,9 @@ func (m *TaskMutation) ResetEdge(name string) error {
 		return nil
 	case task.EdgeProgram:
 		m.ResetProgram()
+		return nil
+	case task.EdgeEvidence:
+		m.ResetEvidence()
 		return nil
 	}
 	return fmt.Errorf("unknown Task edge %s", name)

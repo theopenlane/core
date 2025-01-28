@@ -109,6 +109,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -135,6 +137,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Control_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -225,6 +229,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -251,6 +257,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Control_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -385,6 +393,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
+			case "exampleEvidence":
+				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -411,6 +421,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Control_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},

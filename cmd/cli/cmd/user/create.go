@@ -85,7 +85,7 @@ func create(ctx context.Context) error {
 	client, err := cmd.TokenAuth(ctx, cmd.Config)
 	if err != nil || client == nil {
 		// setup http client
-		client, err := cmd.SetupClientWithAuth(ctx)
+		client, err = cmd.SetupClientWithAuth(ctx)
 		cobra.CheckErr(err)
 		defer cmd.StoreSessionCookies(client)
 	}

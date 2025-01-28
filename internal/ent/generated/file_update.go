@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -566,6 +567,21 @@ func (fu *FileUpdate) AddProgram(p ...*Program) *FileUpdate {
 	return fu.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (fu *FileUpdate) AddEvidenceIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddEvidenceIDs(ids...)
+	return fu
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (fu *FileUpdate) AddEvidence(e ...*Evidence) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
@@ -800,6 +816,27 @@ func (fu *FileUpdate) RemoveProgram(p ...*Program) *FileUpdate {
 		ids[i] = p[i].ID
 	}
 	return fu.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (fu *FileUpdate) ClearEvidence() *FileUpdate {
+	fu.mutation.ClearEvidence()
+	return fu
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (fu *FileUpdate) RemoveEvidenceIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveEvidenceIDs(ids...)
+	return fu
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (fu *FileUpdate) RemoveEvidence(e ...*Evidence) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.RemoveEvidenceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1527,6 +1564,54 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.EvidenceFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !fu.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = fu.schemaConfig.File
 	ctx = internal.NewSchemaConfigContext(ctx, fu.schemaConfig)
 	_spec.AddModifiers(fu.modifiers...)
@@ -2074,6 +2159,21 @@ func (fuo *FileUpdateOne) AddProgram(p ...*Program) *FileUpdateOne {
 	return fuo.AddProgramIDs(ids...)
 }
 
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (fuo *FileUpdateOne) AddEvidenceIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddEvidenceIDs(ids...)
+	return fuo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (fuo *FileUpdateOne) AddEvidence(e ...*Evidence) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.AddEvidenceIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
@@ -2308,6 +2408,27 @@ func (fuo *FileUpdateOne) RemoveProgram(p ...*Program) *FileUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return fuo.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (fuo *FileUpdateOne) ClearEvidence() *FileUpdateOne {
+	fuo.mutation.ClearEvidence()
+	return fuo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (fuo *FileUpdateOne) RemoveEvidenceIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveEvidenceIDs(ids...)
+	return fuo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (fuo *FileUpdateOne) RemoveEvidence(e ...*Evidence) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.RemoveEvidenceIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -3060,6 +3181,54 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			},
 		}
 		edge.Schema = fuo.schemaConfig.ProgramFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.EvidenceFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !fuo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.EvidenceTable,
+			Columns: file.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

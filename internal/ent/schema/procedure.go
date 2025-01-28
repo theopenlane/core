@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -44,6 +46,10 @@ func (Procedure) Fields() []ent.Field {
 		field.String("procedure_type").
 			Optional().
 			Comment("type of the procedure"),
+		field.Time("review_due").
+			Comment("the date the procedure should be reviewed, defaults to a year from creation date").
+			Default(time.Now().AddDate(1, 0, 0)).
+			Optional(),
 		field.String("version").
 			Optional().
 			Comment("version of the procedure"),

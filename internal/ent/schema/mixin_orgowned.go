@@ -170,7 +170,7 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 
 	t := fgax.GetTupleKey(tr)
 
-	if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{t}, nil); err != nil {
+	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{t}, nil); err != nil {
 		return err
 	}
 

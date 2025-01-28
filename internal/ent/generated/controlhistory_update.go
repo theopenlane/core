@@ -362,6 +362,26 @@ func (chu *ControlHistoryUpdate) ClearDetails() *ControlHistoryUpdate {
 	return chu
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (chu *ControlHistoryUpdate) SetExampleEvidence(s string) *ControlHistoryUpdate {
+	chu.mutation.SetExampleEvidence(s)
+	return chu
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableExampleEvidence(s *string) *ControlHistoryUpdate {
+	if s != nil {
+		chu.SetExampleEvidence(*s)
+	}
+	return chu
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (chu *ControlHistoryUpdate) ClearExampleEvidence() *ControlHistoryUpdate {
+	chu.mutation.ClearExampleEvidence()
+	return chu
+}
+
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (chu *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
 	return chu.mutation
@@ -533,6 +553,12 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if chu.mutation.DetailsCleared() {
 		_spec.ClearField(controlhistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := chu.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlhistory.FieldExampleEvidence, field.TypeString, value)
+	}
+	if chu.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(controlhistory.FieldExampleEvidence, field.TypeString)
 	}
 	_spec.Node.Schema = chu.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, chu.schemaConfig)
@@ -888,6 +914,26 @@ func (chuo *ControlHistoryUpdateOne) ClearDetails() *ControlHistoryUpdateOne {
 	return chuo
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (chuo *ControlHistoryUpdateOne) SetExampleEvidence(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetExampleEvidence(s)
+	return chuo
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableExampleEvidence(s *string) *ControlHistoryUpdateOne {
+	if s != nil {
+		chuo.SetExampleEvidence(*s)
+	}
+	return chuo
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (chuo *ControlHistoryUpdateOne) ClearExampleEvidence() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearExampleEvidence()
+	return chuo
+}
+
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (chuo *ControlHistoryUpdateOne) Mutation() *ControlHistoryMutation {
 	return chuo.mutation
@@ -1089,6 +1135,12 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	}
 	if chuo.mutation.DetailsCleared() {
 		_spec.ClearField(controlhistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := chuo.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlhistory.FieldExampleEvidence, field.TypeString, value)
+	}
+	if chuo.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(controlhistory.FieldExampleEvidence, field.TypeString)
 	}
 	_spec.Node.Schema = chuo.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, chuo.schemaConfig)

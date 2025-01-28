@@ -1689,6 +1689,10 @@ type Control implements Node {
   json data including details of the control
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -1711,6 +1715,7 @@ type Control implements Node {
   actionPlans: [ActionPlan!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -1813,6 +1818,10 @@ type ControlHistory implements Node {
   json data including details of the control
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
 }
 """
 A connection to a list of items.
@@ -2230,6 +2239,24 @@ input ControlHistoryWhereInput {
   mappedFrameworksNotNil: Boolean
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
+  """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
 }
 type ControlObjective implements Node {
   id: ID!
@@ -2295,6 +2322,10 @@ type ControlObjective implements Node {
   json data including details of the control objective
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -2317,6 +2348,7 @@ type ControlObjective implements Node {
   narratives: [Narrative!]
   tasks: [Task!]
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -2415,6 +2447,10 @@ type ControlObjectiveHistory implements Node {
   json data including details of the control objective
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
 }
 """
 A connection to a list of items.
@@ -2814,6 +2850,24 @@ input ControlObjectiveHistoryWhereInput {
   mappedFrameworksNotNil: Boolean
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
+  """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
 }
 """
 ControlObjectiveWhereInput is used for filtering ControlObjective objects.
@@ -3140,6 +3194,24 @@ input ControlObjectiveWhereInput {
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
   """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -3204,6 +3276,11 @@ input ControlObjectiveWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -3548,6 +3625,24 @@ input ControlWhereInput {
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
   """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -3612,6 +3707,11 @@ input ControlWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -3779,6 +3879,10 @@ input CreateControlInput {
   json data including details of the control
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   ownerID: ID!
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -3792,6 +3896,7 @@ input CreateControlInput {
   actionPlanIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3846,6 +3951,10 @@ input CreateControlObjectiveInput {
   json data including details of the control objective
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   ownerID: ID!
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -3859,6 +3968,7 @@ input CreateControlObjectiveInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -3954,6 +4064,55 @@ input CreateEventInput {
   fileIDs: [ID!]
 }
 """
+CreateEvidenceInput is used for create Evidence object.
+Input was generated by ent.
+"""
+input CreateEvidenceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the name of the evidence
+  """
+  name: String!
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+  ownerID: ID!
+  controlObjectiveIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  fileIDs: [ID!]
+  programIDs: [ID!]
+  taskIDs: [ID!]
+}
+"""
 CreateFileInput is used for create File object.
 Input was generated by ent.
 """
@@ -4022,6 +4181,7 @@ input CreateFileInput {
   documentDatumIDs: [ID!]
   eventIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -4197,6 +4357,10 @@ input CreateInternalPolicyInput {
   status of the policy
   """
   status: String
+  """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
   """
   type of the policy
   """
@@ -4394,6 +4558,7 @@ input CreateOrganizationInput {
   narrativeIDs: [ID!]
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -4492,6 +4657,10 @@ input CreateProcedureInput {
   """
   procedureType: String
   """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  """
   version of the procedure
   """
   version: String
@@ -4575,6 +4744,7 @@ input CreateProgramInput {
   taskIDs: [ID!]
   noteIDs: [ID!]
   fileIDs: [ID!]
+  evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
   standardIDs: [ID!]
@@ -4775,12 +4945,17 @@ input CreateSubcontrolInput {
   json data details of the subcontrol
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   ownerID: ID!
   controlIDs: [ID!]!
   userIDs: [ID!]
   taskIDs: [ID!]
   notesID: ID
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -4860,6 +5035,7 @@ input CreateTaskInput {
   controlObjectiveIDs: [ID!]
   subcontrolIDs: [ID!]
   programIDs: [ID!]
+  evidenceIDs: [ID!]
 }
 """
 CreateTemplateInput is used for create Template object.
@@ -7127,6 +7303,793 @@ input EventWhereInput {
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
 }
+type Evidence implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID!
+  """
+  the name of the evidence
+  """
+  name: String!
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time!
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+  owner: Organization!
+  controlObjectives: [ControlObjective!]
+  controls: [Control!]
+  subcontrols: [Subcontrol!]
+  files: [File!]
+  programs: [Program!]
+  tasks: [Task!]
+}
+"""
+A connection to a list of items.
+"""
+type EvidenceConnection {
+  """
+  A list of edges.
+  """
+  edges: [EvidenceEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EvidenceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Evidence
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type EvidenceHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: EvidenceHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String!
+  """
+  the name of the evidence
+  """
+  name: String!
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time!
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+}
+"""
+A connection to a list of items.
+"""
+type EvidenceHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [EvidenceHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EvidenceHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EvidenceHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EvidenceHistoryOpType is enum for the field operation
+"""
+enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
+Input was generated by ent.
+"""
+input EvidenceHistoryWhereInput {
+  not: EvidenceHistoryWhereInput
+  and: [EvidenceHistoryWhereInput!]
+  or: [EvidenceHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: EvidenceHistoryOpType
+  operationNEQ: EvidenceHistoryOpType
+  operationIn: [EvidenceHistoryOpType!]
+  operationNotIn: [EvidenceHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  collection_procedure field predicates
+  """
+  collectionProcedure: String
+  collectionProcedureNEQ: String
+  collectionProcedureIn: [String!]
+  collectionProcedureNotIn: [String!]
+  collectionProcedureGT: String
+  collectionProcedureGTE: String
+  collectionProcedureLT: String
+  collectionProcedureLTE: String
+  collectionProcedureContains: String
+  collectionProcedureHasPrefix: String
+  collectionProcedureHasSuffix: String
+  collectionProcedureIsNil: Boolean
+  collectionProcedureNotNil: Boolean
+  collectionProcedureEqualFold: String
+  collectionProcedureContainsFold: String
+  """
+  creation_date field predicates
+  """
+  creationDate: Time
+  creationDateNEQ: Time
+  creationDateIn: [Time!]
+  creationDateNotIn: [Time!]
+  creationDateGT: Time
+  creationDateGTE: Time
+  creationDateLT: Time
+  creationDateLTE: Time
+  """
+  renewal_date field predicates
+  """
+  renewalDate: Time
+  renewalDateNEQ: Time
+  renewalDateIn: [Time!]
+  renewalDateNotIn: [Time!]
+  renewalDateGT: Time
+  renewalDateGTE: Time
+  renewalDateLT: Time
+  renewalDateLTE: Time
+  renewalDateIsNil: Boolean
+  renewalDateNotNil: Boolean
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  is_automated field predicates
+  """
+  isAutomated: Boolean
+  isAutomatedNEQ: Boolean
+  isAutomatedIsNil: Boolean
+  isAutomatedNotNil: Boolean
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+}
+"""
+EvidenceWhereInput is used for filtering Evidence objects.
+Input was generated by ent.
+"""
+input EvidenceWhereInput {
+  not: EvidenceWhereInput
+  and: [EvidenceWhereInput!]
+  or: [EvidenceWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  collection_procedure field predicates
+  """
+  collectionProcedure: String
+  collectionProcedureNEQ: String
+  collectionProcedureIn: [String!]
+  collectionProcedureNotIn: [String!]
+  collectionProcedureGT: String
+  collectionProcedureGTE: String
+  collectionProcedureLT: String
+  collectionProcedureLTE: String
+  collectionProcedureContains: String
+  collectionProcedureHasPrefix: String
+  collectionProcedureHasSuffix: String
+  collectionProcedureIsNil: Boolean
+  collectionProcedureNotNil: Boolean
+  collectionProcedureEqualFold: String
+  collectionProcedureContainsFold: String
+  """
+  creation_date field predicates
+  """
+  creationDate: Time
+  creationDateNEQ: Time
+  creationDateIn: [Time!]
+  creationDateNotIn: [Time!]
+  creationDateGT: Time
+  creationDateGTE: Time
+  creationDateLT: Time
+  creationDateLTE: Time
+  """
+  renewal_date field predicates
+  """
+  renewalDate: Time
+  renewalDateNEQ: Time
+  renewalDateIn: [Time!]
+  renewalDateNotIn: [Time!]
+  renewalDateGT: Time
+  renewalDateGTE: Time
+  renewalDateLT: Time
+  renewalDateLTE: Time
+  renewalDateIsNil: Boolean
+  renewalDateNotNil: Boolean
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  is_automated field predicates
+  """
+  isAutomated: Boolean
+  isAutomatedNEQ: Boolean
+  isAutomatedIsNil: Boolean
+  isAutomatedNotNil: Boolean
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  control_objectives edge predicates
+  """
+  hasControlObjectives: Boolean
+  hasControlObjectivesWith: [ControlObjectiveWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+}
 type File implements Node {
   id: ID!
   createdAt: Time
@@ -7199,6 +8162,7 @@ type File implements Node {
   documentData: [DocumentData!]
   events: [Event!]
   program: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -8089,6 +9053,11 @@ input FileWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -10975,6 +11944,10 @@ type InternalPolicy implements Node {
   """
   status: String
   """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  """
   type of the policy
   """
   policyType: String
@@ -11075,6 +12048,10 @@ type InternalPolicyHistory implements Node {
   status of the policy
   """
   status: String
+  """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
   """
   type of the policy
   """
@@ -11371,6 +12348,19 @@ input InternalPolicyHistoryWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
+  """
   policy_type field predicates
   """
   policyType: String
@@ -11643,6 +12633,19 @@ input InternalPolicyWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
   """
   policy_type field predicates
   """
@@ -14517,6 +15520,7 @@ type Organization implements Node {
   narratives: [Narrative!]
   controls: [Control!]
   subcontrols: [Subcontrol!]
+  evidence: [Evidence!]
   members: [OrgMembership!]
 }
 """
@@ -15987,6 +16991,11 @@ input OrganizationWhereInput {
   hasSubcontrols: Boolean
   hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -16287,6 +17296,10 @@ type Procedure implements Node {
   """
   procedureType: String
   """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  """
   version of the procedure
   """
   version: String
@@ -16391,6 +17404,10 @@ type ProcedureHistory implements Node {
   type of the procedure
   """
   procedureType: String
+  """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
   """
   version of the procedure
   """
@@ -16705,6 +17722,19 @@ input ProcedureHistoryWhereInput {
   procedureTypeEqualFold: String
   procedureTypeContainsFold: String
   """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
+  """
   version field predicates
   """
   version: String
@@ -16996,6 +18026,19 @@ input ProcedureWhereInput {
   procedureTypeEqualFold: String
   procedureTypeContainsFold: String
   """
+  review_due field predicates
+  """
+  reviewDue: Time
+  reviewDueNEQ: Time
+  reviewDueIn: [Time!]
+  reviewDueNotIn: [Time!]
+  reviewDueGT: Time
+  reviewDueGTE: Time
+  reviewDueLT: Time
+  reviewDueLTE: Time
+  reviewDueIsNil: Boolean
+  reviewDueNotNil: Boolean
+  """
   version field predicates
   """
   version: String
@@ -17187,6 +18230,7 @@ type Program implements Node {
   tasks: [Task!]
   notes: [Note!]
   files: [File!]
+  evidence: [Evidence!]
   narratives: [Narrative!]
   actionPlans: [ActionPlan!]
   """
@@ -18326,6 +19370,11 @@ input ProgramWhereInput {
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
   """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
   narratives edge predicates
   """
   hasNarratives: Boolean
@@ -18832,6 +19881,58 @@ type Query {
     """
     where: EventHistoryWhereInput
   ): EventHistoryConnection!
+  evidences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  evidenceHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for EvidenceHistories returned from the connection.
+    """
+    where: EvidenceHistoryWhereInput
+  ): EvidenceHistoryConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -21966,12 +23067,17 @@ type Subcontrol implements Node {
   json data details of the subcontrol
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
   owner: Organization!
   controls: [Control!]!
   user: [User!]
   tasks: [Task!]
   notes: Note
   programs: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -22090,6 +23196,10 @@ type SubcontrolHistory implements Node {
   json data details of the subcontrol
   """
   details: Map
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
 }
 """
 A connection to a list of items.
@@ -22569,6 +23679,24 @@ input SubcontrolHistoryWhereInput {
   implementationVerificationDateLTE: Time
   implementationVerificationDateIsNil: Boolean
   implementationVerificationDateNotNil: Boolean
+  """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -22975,6 +24103,24 @@ input SubcontrolWhereInput {
   implementationVerificationDateIsNil: Boolean
   implementationVerificationDateNotNil: Boolean
   """
+  example_evidence field predicates
+  """
+  exampleEvidence: String
+  exampleEvidenceNEQ: String
+  exampleEvidenceIn: [String!]
+  exampleEvidenceNotIn: [String!]
+  exampleEvidenceGT: String
+  exampleEvidenceGTE: String
+  exampleEvidenceLT: String
+  exampleEvidenceLTE: String
+  exampleEvidenceContains: String
+  exampleEvidenceHasPrefix: String
+  exampleEvidenceHasSuffix: String
+  exampleEvidenceIsNil: Boolean
+  exampleEvidenceNotNil: Boolean
+  exampleEvidenceEqualFold: String
+  exampleEvidenceContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -23004,6 +24150,11 @@ input SubcontrolWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -23512,6 +24663,7 @@ type Task implements Node {
   controlObjective: [ControlObjective!]
   subcontrol: [Subcontrol!]
   program: [Program!]
+  evidence: [Evidence!]
 }
 """
 A connection to a list of items.
@@ -24274,6 +25426,11 @@ input TaskWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }
 type Template implements Node {
   id: ID!
@@ -25090,6 +26247,11 @@ input UpdateControlInput {
   """
   details: Map
   clearDetails: Boolean
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
+  clearExampleEvidence: Boolean
   ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
@@ -25127,6 +26289,9 @@ input UpdateControlInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -25193,6 +26358,11 @@ input UpdateControlObjectiveInput {
   """
   details: Map
   clearDetails: Boolean
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
+  clearExampleEvidence: Boolean
   ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
@@ -25230,6 +26400,9 @@ input UpdateControlObjectiveInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -25378,6 +26551,75 @@ input UpdateEventInput {
   clearFile: Boolean
 }
 """
+UpdateEvidenceInput is used for update Evidence object.
+Input was generated by ent.
+"""
+input UpdateEvidenceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the name of the evidence
+  """
+  name: String
+  """
+  the description of the evidence, what is contained in the uploaded file(s) or url(s)
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  description of how the evidence was collected
+  """
+  collectionProcedure: String
+  clearCollectionProcedure: Boolean
+  """
+  the date the evidence was retrieved
+  """
+  creationDate: Time
+  """
+  the date the evidence should be renewed, defaults to a year from entry date
+  """
+  renewalDate: Time
+  clearRenewalDate: Boolean
+  """
+  the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
+  """
+  source: String
+  clearSource: Boolean
+  """
+  whether the evidence was automatically generated
+  """
+  isAutomated: Boolean
+  clearIsAutomated: Boolean
+  """
+  the url of the evidence if not uploaded directly to the system
+  """
+  url: String
+  clearURL: Boolean
+  ownerID: ID
+  addControlObjectiveIDs: [ID!]
+  removeControlObjectiveIDs: [ID!]
+  clearControlObjectives: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+}
+"""
 UpdateFileInput is used for update File object.
 Input was generated by ent.
 """
@@ -25480,6 +26722,9 @@ input UpdateFileInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -25745,6 +26990,11 @@ input UpdateInternalPolicyInput {
   """
   status: String
   clearStatus: Boolean
+  """
+  the date the policy should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  clearReviewDue: Boolean
   """
   type of the policy
   """
@@ -26057,6 +27307,9 @@ input UpdateOrganizationInput {
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -26177,6 +27430,11 @@ input UpdateProcedureInput {
   """
   procedureType: String
   clearProcedureType: Boolean
+  """
+  the date the procedure should be reviewed, defaults to a year from creation date
+  """
+  reviewDue: Time
+  clearReviewDue: Boolean
   """
   version of the procedure
   """
@@ -26313,6 +27571,9 @@ input UpdateProgramInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
   addNarrativeIDs: [ID!]
   removeNarrativeIDs: [ID!]
   clearNarratives: Boolean
@@ -26582,6 +27843,11 @@ input UpdateSubcontrolInput {
   """
   details: Map
   clearDetails: Boolean
+  """
+  example evidence to provide for the control
+  """
+  exampleEvidence: String
+  clearExampleEvidence: Boolean
   ownerID: ID
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
@@ -26596,6 +27862,9 @@ input UpdateSubcontrolInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -26706,6 +27975,9 @@ input UpdateTaskInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
 }
 """
 UpdateTemplateInput is used for update Template object.

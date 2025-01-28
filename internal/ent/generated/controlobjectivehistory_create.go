@@ -295,6 +295,20 @@ func (cohc *ControlObjectiveHistoryCreate) SetDetails(m map[string]interface{}) 
 	return cohc
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (cohc *ControlObjectiveHistoryCreate) SetExampleEvidence(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetExampleEvidence(s)
+	return cohc
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableExampleEvidence(s *string) *ControlObjectiveHistoryCreate {
+	if s != nil {
+		cohc.SetExampleEvidence(*s)
+	}
+	return cohc
+}
+
 // SetID sets the "id" field.
 func (cohc *ControlObjectiveHistoryCreate) SetID(s string) *ControlObjectiveHistoryCreate {
 	cohc.mutation.SetID(s)
@@ -515,6 +529,10 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 	if value, ok := cohc.mutation.Details(); ok {
 		_spec.SetField(controlobjectivehistory.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if value, ok := cohc.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlobjectivehistory.FieldExampleEvidence, field.TypeString, value)
+		_node.ExampleEvidence = value
 	}
 	return _node, _spec
 }

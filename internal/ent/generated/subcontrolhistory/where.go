@@ -190,6 +190,11 @@ func ImplementationVerificationDate(v time.Time) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationVerificationDate, v))
 }
 
+// ExampleEvidence applies equality check predicate on the "example_evidence" field. It's identical to ExampleEvidenceEQ.
+func ExampleEvidence(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldExampleEvidence, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1913,6 +1918,81 @@ func DetailsIsNil() predicate.SubcontrolHistory {
 // DetailsNotNil applies the NotNil predicate on the "details" field.
 func DetailsNotNil() predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldDetails))
+}
+
+// ExampleEvidenceEQ applies the EQ predicate on the "example_evidence" field.
+func ExampleEvidenceEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceNEQ applies the NEQ predicate on the "example_evidence" field.
+func ExampleEvidenceNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceIn applies the In predicate on the "example_evidence" field.
+func ExampleEvidenceIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldExampleEvidence, vs...))
+}
+
+// ExampleEvidenceNotIn applies the NotIn predicate on the "example_evidence" field.
+func ExampleEvidenceNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldExampleEvidence, vs...))
+}
+
+// ExampleEvidenceGT applies the GT predicate on the "example_evidence" field.
+func ExampleEvidenceGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceGTE applies the GTE predicate on the "example_evidence" field.
+func ExampleEvidenceGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceLT applies the LT predicate on the "example_evidence" field.
+func ExampleEvidenceLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceLTE applies the LTE predicate on the "example_evidence" field.
+func ExampleEvidenceLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceContains applies the Contains predicate on the "example_evidence" field.
+func ExampleEvidenceContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceHasPrefix applies the HasPrefix predicate on the "example_evidence" field.
+func ExampleEvidenceHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceHasSuffix applies the HasSuffix predicate on the "example_evidence" field.
+func ExampleEvidenceHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceIsNil applies the IsNil predicate on the "example_evidence" field.
+func ExampleEvidenceIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldExampleEvidence))
+}
+
+// ExampleEvidenceNotNil applies the NotNil predicate on the "example_evidence" field.
+func ExampleEvidenceNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldExampleEvidence))
+}
+
+// ExampleEvidenceEqualFold applies the EqualFold predicate on the "example_evidence" field.
+func ExampleEvidenceEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldExampleEvidence, v))
+}
+
+// ExampleEvidenceContainsFold applies the ContainsFold predicate on the "example_evidence" field.
+func ExampleEvidenceContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldExampleEvidence, v))
 }
 
 // And groups predicates with the AND operator between them.

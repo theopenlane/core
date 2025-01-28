@@ -347,6 +347,36 @@ type EventUpdatePayload struct {
 	Event *generated.Event `json:"event"`
 }
 
+// Return response for createBulkEvidence mutation
+type EvidenceBulkCreatePayload struct {
+	// Created evidences
+	Evidences []*generated.Evidence `json:"evidences,omitempty"`
+}
+
+// Return response for createEvidence mutation
+type EvidenceCreatePayload struct {
+	// Created evidence
+	Evidence *generated.Evidence `json:"evidence"`
+}
+
+// Return response for deleteEvidence mutation
+type EvidenceDeletePayload struct {
+	// Deleted evidence ID
+	DeletedID string `json:"deletedID"`
+}
+
+type EvidenceSearchResult struct {
+	Evidences []*generated.Evidence `json:"evidences,omitempty"`
+}
+
+func (EvidenceSearchResult) IsSearchResult() {}
+
+// Return response for updateEvidence mutation
+type EvidenceUpdatePayload struct {
+	// Updated evidence
+	Evidence *generated.Evidence `json:"evidence"`
+}
+
 // Return response for deleteFile mutation
 type FileDeletePayload struct {
 	// Deleted file ID

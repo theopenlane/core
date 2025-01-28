@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -55,6 +56,7 @@ type ProgramQuery struct {
 	withTasks                  *TaskQuery
 	withNotes                  *NoteQuery
 	withFiles                  *FileQuery
+	withEvidence               *EvidenceQuery
 	withNarratives             *NarrativeQuery
 	withActionPlans            *ActionPlanQuery
 	withStandards              *StandardQuery
@@ -74,6 +76,7 @@ type ProgramQuery struct {
 	withNamedTasks             map[string]*TaskQuery
 	withNamedNotes             map[string]*NoteQuery
 	withNamedFiles             map[string]*FileQuery
+	withNamedEvidence          map[string]*EvidenceQuery
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedActionPlans       map[string]*ActionPlanQuery
 	withNamedStandards         map[string]*StandardQuery
@@ -440,6 +443,31 @@ func (pq *ProgramQuery) QueryFiles() *FileQuery {
 	return query
 }
 
+// QueryEvidence chains the current query on the "evidence" edge.
+func (pq *ProgramQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.EvidenceTable, program.EvidencePrimaryKey...),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.ProgramEvidence
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryNarratives chains the current query on the "narratives" edge.
 func (pq *ProgramQuery) QueryNarratives() *NarrativeQuery {
 	query := (&NarrativeClient{config: pq.config}).Query()
@@ -770,6 +798,7 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 		withTasks:             pq.withTasks.Clone(),
 		withNotes:             pq.withNotes.Clone(),
 		withFiles:             pq.withFiles.Clone(),
+		withEvidence:          pq.withEvidence.Clone(),
 		withNarratives:        pq.withNarratives.Clone(),
 		withActionPlans:       pq.withActionPlans.Clone(),
 		withStandards:         pq.withStandards.Clone(),
@@ -925,6 +954,17 @@ func (pq *ProgramQuery) WithFiles(opts ...func(*FileQuery)) *ProgramQuery {
 	return pq
 }
 
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithEvidence(opts ...func(*EvidenceQuery)) *ProgramQuery {
+	query := (&EvidenceClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withEvidence = query
+	return pq
+}
+
 // WithNarratives tells the query-builder to eager-load the nodes that are connected to
 // the "narratives" edge. The optional arguments are used to configure the query builder of the edge.
 func (pq *ProgramQuery) WithNarratives(opts ...func(*NarrativeQuery)) *ProgramQuery {
@@ -1064,7 +1104,7 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	var (
 		nodes       = []*Program{}
 		_spec       = pq.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [19]bool{
 			pq.withOwner != nil,
 			pq.withBlockedGroups != nil,
 			pq.withEditors != nil,
@@ -1078,6 +1118,7 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			pq.withTasks != nil,
 			pq.withNotes != nil,
 			pq.withFiles != nil,
+			pq.withEvidence != nil,
 			pq.withNarratives != nil,
 			pq.withActionPlans != nil,
 			pq.withStandards != nil,
@@ -1200,6 +1241,13 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
+	if query := pq.withEvidence; query != nil {
+		if err := pq.loadEvidence(ctx, query, nodes,
+			func(n *Program) { n.Edges.Evidence = []*Evidence{} },
+			func(n *Program, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withNarratives; query != nil {
 		if err := pq.loadNarratives(ctx, query, nodes,
 			func(n *Program) { n.Edges.Narratives = []*Narrative{} },
@@ -1316,6 +1364,13 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		if err := pq.loadFiles(ctx, query, nodes,
 			func(n *Program) { n.appendNamedFiles(name) },
 			func(n *Program, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedEvidence {
+		if err := pq.loadEvidence(ctx, query, nodes,
+			func(n *Program) { n.appendNamedEvidence(name) },
+			func(n *Program, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2135,6 +2190,68 @@ func (pq *ProgramQuery) loadFiles(ctx context.Context, query *FileQuery, nodes [
 	}
 	return nil
 }
+func (pq *ProgramQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Program, init func(*Program), assign func(*Program, *Evidence)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Program)
+	nids := make(map[string]map[*Program]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(program.EvidenceTable)
+		joinT.Schema(pq.schemaConfig.ProgramEvidence)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(program.EvidencePrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(program.EvidencePrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(program.EvidencePrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Program]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (pq *ProgramQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*Program, init func(*Program), assign func(*Program, *Narrative)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Program)
@@ -2681,6 +2798,20 @@ func (pq *ProgramQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *P
 		pq.withNamedFiles = make(map[string]*FileQuery)
 	}
 	pq.withNamedFiles[name] = query
+	return pq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *ProgramQuery {
+	query := (&EvidenceClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedEvidence == nil {
+		pq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	pq.withNamedEvidence[name] = query
 	return pq
 }
 

@@ -59,6 +59,8 @@ type ControlObjective struct {
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
 	// json data including details of the control objective
 	Details map[string]interface{} `json:"details,omitempty"`
+	// example evidence to provide for the control
+	ExampleEvidence string `json:"example_evidence,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlObjectiveQuery when eager-loading is set.
 	Edges                      ControlObjectiveEdges `json:"edges"`
@@ -94,11 +96,13 @@ type ControlObjectiveEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -112,6 +116,7 @@ type ControlObjectiveEdges struct {
 	namedNarratives       map[string][]*Narrative
 	namedTasks            map[string][]*Task
 	namedPrograms         map[string][]*Program
+	namedEvidence         map[string][]*Evidence
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -233,6 +238,15 @@ func (e ControlObjectiveEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[13] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -240,7 +254,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlobjective.FieldTags, controlobjective.FieldDetails:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks, controlobjective.FieldExampleEvidence:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -391,6 +405,12 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case controlobjective.FieldExampleEvidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value.Valid {
+				co.ExampleEvidence = value.String
+			}
 		case controlobjective.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_control_objectives", values[i])
@@ -476,6 +496,11 @@ func (co *ControlObjective) QueryPrograms() *ProgramQuery {
 	return NewControlObjectiveClient(co.config).QueryPrograms(co)
 }
 
+// QueryEvidence queries the "evidence" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryEvidence() *EvidenceQuery {
+	return NewControlObjectiveClient(co.config).QueryEvidence(co)
+}
+
 // Update returns a builder for updating this ControlObjective.
 // Note that you need to call ControlObjective.Unwrap() before calling this method if this ControlObjective
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -558,6 +583,9 @@ func (co *ControlObjective) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", co.Details))
+	builder.WriteString(", ")
+	builder.WriteString("example_evidence=")
+	builder.WriteString(co.ExampleEvidence)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -847,6 +875,30 @@ func (co *ControlObjective) appendNamedPrograms(name string, edges ...*Program) 
 		co.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		co.Edges.namedPrograms[name] = append(co.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (co *ControlObjective) NamedEvidence(name string) ([]*Evidence, error) {
+	if co.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := co.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (co *ControlObjective) appendNamedEvidence(name string, edges ...*Evidence) {
+	if co.Edges.namedEvidence == nil {
+		co.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		co.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		co.Edges.namedEvidence[name] = append(co.Edges.namedEvidence[name], edges...)
 	}
 }
 

@@ -442,6 +442,26 @@ func (shu *SubcontrolHistoryUpdate) ClearDetails() *SubcontrolHistoryUpdate {
 	return shu
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (shu *SubcontrolHistoryUpdate) SetExampleEvidence(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetExampleEvidence(s)
+	return shu
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableExampleEvidence(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetExampleEvidence(*s)
+	}
+	return shu
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (shu *SubcontrolHistoryUpdate) ClearExampleEvidence() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearExampleEvidence()
+	return shu
+}
+
 // Mutation returns the SubcontrolHistoryMutation object of the builder.
 func (shu *SubcontrolHistoryUpdate) Mutation() *SubcontrolHistoryMutation {
 	return shu.mutation
@@ -637,6 +657,12 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	}
 	if shu.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := shu.mutation.ExampleEvidence(); ok {
+		_spec.SetField(subcontrolhistory.FieldExampleEvidence, field.TypeString, value)
+	}
+	if shu.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(subcontrolhistory.FieldExampleEvidence, field.TypeString)
 	}
 	_spec.Node.Schema = shu.schemaConfig.SubcontrolHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shu.schemaConfig)
@@ -1072,6 +1098,26 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearDetails() *SubcontrolHistoryUpdateO
 	return shuo
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetExampleEvidence(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetExampleEvidence(s)
+	return shuo
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableExampleEvidence(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetExampleEvidence(*s)
+	}
+	return shuo
+}
+
+// ClearExampleEvidence clears the value of the "example_evidence" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearExampleEvidence() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearExampleEvidence()
+	return shuo
+}
+
 // Mutation returns the SubcontrolHistoryMutation object of the builder.
 func (shuo *SubcontrolHistoryUpdateOne) Mutation() *SubcontrolHistoryMutation {
 	return shuo.mutation
@@ -1297,6 +1343,12 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	}
 	if shuo.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := shuo.mutation.ExampleEvidence(); ok {
+		_spec.SetField(subcontrolhistory.FieldExampleEvidence, field.TypeString, value)
+	}
+	if shuo.mutation.ExampleEvidenceCleared() {
+		_spec.ClearField(subcontrolhistory.FieldExampleEvidence, field.TypeString)
 	}
 	_spec.Node.Schema = shuo.schemaConfig.SubcontrolHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shuo.schemaConfig)

@@ -43,6 +43,8 @@ type InternalPolicy struct {
 	Description string `json:"description,omitempty"`
 	// status of the policy
 	Status string `json:"status,omitempty"`
+	// the date the policy should be reviewed, defaults to a year from creation date
+	ReviewDue time.Time `json:"review_due,omitempty"`
 	// type of the policy
 	PolicyType string `json:"policy_type,omitempty"`
 	// version of the policy
@@ -187,7 +189,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
 			values[i] = new(sql.NullString)
-		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt:
+		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -283,6 +285,12 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				ip.Status = value.String
+			}
+		case internalpolicy.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				ip.ReviewDue = value.Time
 			}
 		case internalpolicy.FieldPolicyType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -432,6 +440,9 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(ip.Status)
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(ip.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("policy_type=")
 	builder.WriteString(ip.PolicyType)

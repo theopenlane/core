@@ -26,6 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -621,6 +623,60 @@ func (f TraverseEventHistory) Traverse(ctx context.Context, q generated.Query) e
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.EventHistoryQuery", q)
+}
+
+// The EvidenceFunc type is an adapter to allow the use of ordinary function as a Querier.
+type EvidenceFunc func(context.Context, *generated.EvidenceQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f EvidenceFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.EvidenceQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EvidenceQuery", q)
+}
+
+// The TraverseEvidence type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseEvidence func(context.Context, *generated.EvidenceQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseEvidence) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseEvidence) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EvidenceQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.EvidenceQuery", q)
+}
+
+// The EvidenceHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type EvidenceHistoryFunc func(context.Context, *generated.EvidenceHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f EvidenceHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.EvidenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EvidenceHistoryQuery", q)
+}
+
+// The TraverseEvidenceHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseEvidenceHistory func(context.Context, *generated.EvidenceHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseEvidenceHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseEvidenceHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EvidenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.EvidenceHistoryQuery", q)
 }
 
 // The FileFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2066,6 +2122,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.EventQuery, predicate.Event, event.OrderOption]{typ: generated.TypeEvent, tq: q}, nil
 	case *generated.EventHistoryQuery:
 		return &query[*generated.EventHistoryQuery, predicate.EventHistory, eventhistory.OrderOption]{typ: generated.TypeEventHistory, tq: q}, nil
+	case *generated.EvidenceQuery:
+		return &query[*generated.EvidenceQuery, predicate.Evidence, evidence.OrderOption]{typ: generated.TypeEvidence, tq: q}, nil
+	case *generated.EvidenceHistoryQuery:
+		return &query[*generated.EvidenceHistoryQuery, predicate.EvidenceHistory, evidencehistory.OrderOption]{typ: generated.TypeEvidenceHistory, tq: q}, nil
 	case *generated.FileQuery:
 		return &query[*generated.FileQuery, predicate.File, file.OrderOption]{typ: generated.TypeFile, tq: q}, nil
 	case *generated.FileHistoryQuery:

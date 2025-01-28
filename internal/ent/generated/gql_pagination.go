@@ -31,6 +31,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -4616,6 +4618,504 @@ func (eh *EventHistory) ToEdge(order *EventHistoryOrder) *EventHistoryEdge {
 		order = DefaultEventHistoryOrder
 	}
 	return &EventHistoryEdge{
+		Node:   eh,
+		Cursor: order.Field.toCursor(eh),
+	}
+}
+
+// EvidenceEdge is the edge representation of Evidence.
+type EvidenceEdge struct {
+	Node   *Evidence `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// EvidenceConnection is the connection containing edges to Evidence.
+type EvidenceConnection struct {
+	Edges      []*EvidenceEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+func (c *EvidenceConnection) build(nodes []*Evidence, pager *evidencePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Evidence
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Evidence {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Evidence {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*EvidenceEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &EvidenceEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// EvidencePaginateOption enables pagination customization.
+type EvidencePaginateOption func(*evidencePager) error
+
+// WithEvidenceOrder configures pagination ordering.
+func WithEvidenceOrder(order *EvidenceOrder) EvidencePaginateOption {
+	if order == nil {
+		order = DefaultEvidenceOrder
+	}
+	o := *order
+	return func(pager *evidencePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultEvidenceOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithEvidenceFilter configures pagination filter.
+func WithEvidenceFilter(filter func(*EvidenceQuery) (*EvidenceQuery, error)) EvidencePaginateOption {
+	return func(pager *evidencePager) error {
+		if filter == nil {
+			return errors.New("EvidenceQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type evidencePager struct {
+	reverse bool
+	order   *EvidenceOrder
+	filter  func(*EvidenceQuery) (*EvidenceQuery, error)
+}
+
+func newEvidencePager(opts []EvidencePaginateOption, reverse bool) (*evidencePager, error) {
+	pager := &evidencePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultEvidenceOrder
+	}
+	return pager, nil
+}
+
+func (p *evidencePager) applyFilter(query *EvidenceQuery) (*EvidenceQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *evidencePager) toCursor(e *Evidence) Cursor {
+	return p.order.Field.toCursor(e)
+}
+
+func (p *evidencePager) applyCursors(query *EvidenceQuery, after, before *Cursor) (*EvidenceQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultEvidenceOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *evidencePager) applyOrder(query *EvidenceQuery) *EvidenceQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultEvidenceOrder.Field {
+		query = query.Order(DefaultEvidenceOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *evidencePager) orderExpr(query *EvidenceQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultEvidenceOrder.Field {
+			b.Comma().Ident(DefaultEvidenceOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Evidence.
+func (e *EvidenceQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...EvidencePaginateOption,
+) (*EvidenceConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newEvidencePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if e, err = pager.applyFilter(e); err != nil {
+		return nil, err
+	}
+	conn := &EvidenceConnection{Edges: []*EvidenceEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := e.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if e, err = pager.applyCursors(e, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		e.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := e.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	e = pager.applyOrder(e)
+	nodes, err := e.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// EvidenceOrderField defines the ordering field of Evidence.
+type EvidenceOrderField struct {
+	// Value extracts the ordering value from the given Evidence.
+	Value    func(*Evidence) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) evidence.OrderOption
+	toCursor func(*Evidence) Cursor
+}
+
+// EvidenceOrder defines the ordering of Evidence.
+type EvidenceOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *EvidenceOrderField `json:"field"`
+}
+
+// DefaultEvidenceOrder is the default ordering of Evidence.
+var DefaultEvidenceOrder = &EvidenceOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &EvidenceOrderField{
+		Value: func(e *Evidence) (ent.Value, error) {
+			return e.ID, nil
+		},
+		column: evidence.FieldID,
+		toTerm: evidence.ByID,
+		toCursor: func(e *Evidence) Cursor {
+			return Cursor{ID: e.ID}
+		},
+	},
+}
+
+// ToEdge converts Evidence into EvidenceEdge.
+func (e *Evidence) ToEdge(order *EvidenceOrder) *EvidenceEdge {
+	if order == nil {
+		order = DefaultEvidenceOrder
+	}
+	return &EvidenceEdge{
+		Node:   e,
+		Cursor: order.Field.toCursor(e),
+	}
+}
+
+// EvidenceHistoryEdge is the edge representation of EvidenceHistory.
+type EvidenceHistoryEdge struct {
+	Node   *EvidenceHistory `json:"node"`
+	Cursor Cursor           `json:"cursor"`
+}
+
+// EvidenceHistoryConnection is the connection containing edges to EvidenceHistory.
+type EvidenceHistoryConnection struct {
+	Edges      []*EvidenceHistoryEdge `json:"edges"`
+	PageInfo   PageInfo               `json:"pageInfo"`
+	TotalCount int                    `json:"totalCount"`
+}
+
+func (c *EvidenceHistoryConnection) build(nodes []*EvidenceHistory, pager *evidencehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *EvidenceHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *EvidenceHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *EvidenceHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*EvidenceHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &EvidenceHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// EvidenceHistoryPaginateOption enables pagination customization.
+type EvidenceHistoryPaginateOption func(*evidencehistoryPager) error
+
+// WithEvidenceHistoryOrder configures pagination ordering.
+func WithEvidenceHistoryOrder(order *EvidenceHistoryOrder) EvidenceHistoryPaginateOption {
+	if order == nil {
+		order = DefaultEvidenceHistoryOrder
+	}
+	o := *order
+	return func(pager *evidencehistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultEvidenceHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithEvidenceHistoryFilter configures pagination filter.
+func WithEvidenceHistoryFilter(filter func(*EvidenceHistoryQuery) (*EvidenceHistoryQuery, error)) EvidenceHistoryPaginateOption {
+	return func(pager *evidencehistoryPager) error {
+		if filter == nil {
+			return errors.New("EvidenceHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type evidencehistoryPager struct {
+	reverse bool
+	order   *EvidenceHistoryOrder
+	filter  func(*EvidenceHistoryQuery) (*EvidenceHistoryQuery, error)
+}
+
+func newEvidenceHistoryPager(opts []EvidenceHistoryPaginateOption, reverse bool) (*evidencehistoryPager, error) {
+	pager := &evidencehistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultEvidenceHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *evidencehistoryPager) applyFilter(query *EvidenceHistoryQuery) (*EvidenceHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *evidencehistoryPager) toCursor(eh *EvidenceHistory) Cursor {
+	return p.order.Field.toCursor(eh)
+}
+
+func (p *evidencehistoryPager) applyCursors(query *EvidenceHistoryQuery, after, before *Cursor) (*EvidenceHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultEvidenceHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *evidencehistoryPager) applyOrder(query *EvidenceHistoryQuery) *EvidenceHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultEvidenceHistoryOrder.Field {
+		query = query.Order(DefaultEvidenceHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *evidencehistoryPager) orderExpr(query *EvidenceHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultEvidenceHistoryOrder.Field {
+			b.Comma().Ident(DefaultEvidenceHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to EvidenceHistory.
+func (eh *EvidenceHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...EvidenceHistoryPaginateOption,
+) (*EvidenceHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newEvidenceHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if eh, err = pager.applyFilter(eh); err != nil {
+		return nil, err
+	}
+	conn := &EvidenceHistoryConnection{Edges: []*EvidenceHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := eh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if eh, err = pager.applyCursors(eh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		eh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := eh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	eh = pager.applyOrder(eh)
+	nodes, err := eh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// EvidenceHistoryOrderField defines the ordering field of EvidenceHistory.
+type EvidenceHistoryOrderField struct {
+	// Value extracts the ordering value from the given EvidenceHistory.
+	Value    func(*EvidenceHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) evidencehistory.OrderOption
+	toCursor func(*EvidenceHistory) Cursor
+}
+
+// EvidenceHistoryOrder defines the ordering of EvidenceHistory.
+type EvidenceHistoryOrder struct {
+	Direction OrderDirection             `json:"direction"`
+	Field     *EvidenceHistoryOrderField `json:"field"`
+}
+
+// DefaultEvidenceHistoryOrder is the default ordering of EvidenceHistory.
+var DefaultEvidenceHistoryOrder = &EvidenceHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &EvidenceHistoryOrderField{
+		Value: func(eh *EvidenceHistory) (ent.Value, error) {
+			return eh.ID, nil
+		},
+		column: evidencehistory.FieldID,
+		toTerm: evidencehistory.ByID,
+		toCursor: func(eh *EvidenceHistory) Cursor {
+			return Cursor{ID: eh.ID}
+		},
+	},
+}
+
+// ToEdge converts EvidenceHistory into EvidenceHistoryEdge.
+func (eh *EvidenceHistory) ToEdge(order *EvidenceHistoryOrder) *EvidenceHistoryEdge {
+	if order == nil {
+		order = DefaultEvidenceHistoryOrder
+	}
+	return &EvidenceHistoryEdge{
 		Node:   eh,
 		Cursor: order.Field.toCursor(eh),
 	}

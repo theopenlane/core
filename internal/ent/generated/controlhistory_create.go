@@ -309,6 +309,20 @@ func (chc *ControlHistoryCreate) SetDetails(m map[string]interface{}) *ControlHi
 	return chc
 }
 
+// SetExampleEvidence sets the "example_evidence" field.
+func (chc *ControlHistoryCreate) SetExampleEvidence(s string) *ControlHistoryCreate {
+	chc.mutation.SetExampleEvidence(s)
+	return chc
+}
+
+// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableExampleEvidence(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetExampleEvidence(*s)
+	}
+	return chc
+}
+
 // SetID sets the "id" field.
 func (chc *ControlHistoryCreate) SetID(s string) *ControlHistoryCreate {
 	chc.mutation.SetID(s)
@@ -533,6 +547,10 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 	if value, ok := chc.mutation.Details(); ok {
 		_spec.SetField(controlhistory.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if value, ok := chc.mutation.ExampleEvidence(); ok {
+		_spec.SetField(controlhistory.FieldExampleEvidence, field.TypeString, value)
+		_node.ExampleEvidence = value
 	}
 	return _node, _spec
 }

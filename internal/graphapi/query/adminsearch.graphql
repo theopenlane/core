@@ -57,6 +57,7 @@ query AdminSearch($query: String!) {
           satisfies
           mappedFrameworks
           details
+          exampleEvidence
         }
       }
       ... on ControlObjectiveSearchResult {
@@ -77,6 +78,7 @@ query AdminSearch($query: String!) {
           source
           mappedFrameworks
           details
+          exampleEvidence
         }
       }
       ... on DocumentDataSearchResult {
@@ -120,6 +122,20 @@ query AdminSearch($query: String!) {
           correlationID
           eventType
           metadata
+        }
+      }
+      ... on EvidenceSearchResult {
+        evidences {
+          id
+          displayID
+          deletedBy
+          tags
+          ownerID
+          name
+          description
+          collectionProcedure
+          source
+          url
         }
       }
       ... on FileSearchResult {
@@ -332,6 +348,7 @@ query AdminSearch($query: String!) {
           implementationStatus
           implementationVerification
           details
+          exampleEvidence
         }
       }
       ... on SubscriberSearchResult {
