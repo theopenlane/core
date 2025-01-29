@@ -94,8 +94,8 @@ func HookVerifyTFA() ent.Hook {
 			if ok && !totpAllowed {
 				// if TOTP is not allowed, clear the TFA settings
 				m.SetVerified(false)
-				m.SetRecoveryCodes(nil)
-				m.SetTfaSecret("")
+				m.ClearRecoveryCodes()
+				m.ClearTfaSecret()
 
 				// disable TFA on the user settings
 				if err := setUserTFASetting(ctx, m, false); err != nil {
