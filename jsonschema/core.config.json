@@ -753,6 +753,9 @@
           "type": "integer"
         },
         "RetryPolicy": true,
+        "SkipUnknownJobCheck": {
+          "type": "boolean"
+        },
         "TestOnly": {
           "type": "boolean"
         },
