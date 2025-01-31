@@ -6,7 +6,6 @@ query GetAllGroupSettings {
         joinPolicy
         syncToGithub
         syncToSlack
-        tags
         visibility
         group {
           id
@@ -27,7 +26,6 @@ query GetGroupSettingByID($groupSettingId: ID!) {
     joinPolicy
     syncToGithub
     syncToSlack
-    tags
     visibility
     group {
       id
@@ -48,7 +46,6 @@ query GetGroupSettings($where: GroupSettingWhereInput!) {
         joinPolicy
         syncToGithub
         syncToSlack
-        tags
         visibility
         group {
           id
@@ -70,7 +67,6 @@ mutation UpdateGroupSetting($updateGroupSettingId: ID!, $input: UpdateGroupSetti
       joinPolicy
       syncToGithub
       syncToSlack
-      tags
       visibility
       group {
         id

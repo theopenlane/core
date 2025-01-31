@@ -78,12 +78,6 @@ func (gsc *GroupSettingCreate) SetNillableUpdatedBy(s *string) *GroupSettingCrea
 	return gsc
 }
 
-// SetTags sets the "tags" field.
-func (gsc *GroupSettingCreate) SetTags(s []string) *GroupSettingCreate {
-	gsc.mutation.SetTags(s)
-	return gsc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (gsc *GroupSettingCreate) SetDeletedAt(t time.Time) *GroupSettingCreate {
 	gsc.mutation.SetDeletedAt(t)
@@ -252,10 +246,6 @@ func (gsc *GroupSettingCreate) defaults() error {
 		v := groupsetting.DefaultUpdatedAt()
 		gsc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gsc.mutation.Tags(); !ok {
-		v := groupsetting.DefaultTags
-		gsc.mutation.SetTags(v)
-	}
 	if _, ok := gsc.mutation.Visibility(); !ok {
 		v := groupsetting.DefaultVisibility
 		gsc.mutation.SetVisibility(v)
@@ -351,10 +341,6 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 	if value, ok := gsc.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupsetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := gsc.mutation.Tags(); ok {
-		_spec.SetField(groupsetting.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
 	}
 	if value, ok := gsc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)

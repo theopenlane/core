@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -101,24 +100,6 @@ func (nhu *NoteHistoryUpdate) SetNillableDeletedBy(s *string) *NoteHistoryUpdate
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (nhu *NoteHistoryUpdate) ClearDeletedBy() *NoteHistoryUpdate {
 	nhu.mutation.ClearDeletedBy()
-	return nhu
-}
-
-// SetTags sets the "tags" field.
-func (nhu *NoteHistoryUpdate) SetTags(s []string) *NoteHistoryUpdate {
-	nhu.mutation.SetTags(s)
-	return nhu
-}
-
-// AppendTags appends s to the "tags" field.
-func (nhu *NoteHistoryUpdate) AppendTags(s []string) *NoteHistoryUpdate {
-	nhu.mutation.AppendTags(s)
-	return nhu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (nhu *NoteHistoryUpdate) ClearTags() *NoteHistoryUpdate {
-	nhu.mutation.ClearTags()
 	return nhu
 }
 
@@ -245,17 +226,6 @@ func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nhu.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nhu.mutation.Tags(); ok {
-		_spec.SetField(notehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := nhu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, notehistory.FieldTags, value)
-		})
-	}
-	if nhu.mutation.TagsCleared() {
-		_spec.ClearField(notehistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := nhu.mutation.OwnerID(); ok {
 		_spec.SetField(notehistory.FieldOwnerID, field.TypeString, value)
 	}
@@ -358,24 +328,6 @@ func (nhuo *NoteHistoryUpdateOne) SetNillableDeletedBy(s *string) *NoteHistoryUp
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (nhuo *NoteHistoryUpdateOne) ClearDeletedBy() *NoteHistoryUpdateOne {
 	nhuo.mutation.ClearDeletedBy()
-	return nhuo
-}
-
-// SetTags sets the "tags" field.
-func (nhuo *NoteHistoryUpdateOne) SetTags(s []string) *NoteHistoryUpdateOne {
-	nhuo.mutation.SetTags(s)
-	return nhuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (nhuo *NoteHistoryUpdateOne) AppendTags(s []string) *NoteHistoryUpdateOne {
-	nhuo.mutation.AppendTags(s)
-	return nhuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (nhuo *NoteHistoryUpdateOne) ClearTags() *NoteHistoryUpdateOne {
-	nhuo.mutation.ClearTags()
 	return nhuo
 }
 
@@ -531,17 +483,6 @@ func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHisto
 	}
 	if nhuo.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := nhuo.mutation.Tags(); ok {
-		_spec.SetField(notehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := nhuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, notehistory.FieldTags, value)
-		})
-	}
-	if nhuo.mutation.TagsCleared() {
-		_spec.ClearField(notehistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := nhuo.mutation.OwnerID(); ok {
 		_spec.SetField(notehistory.FieldOwnerID, field.TypeString, value)

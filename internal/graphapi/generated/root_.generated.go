@@ -1034,6 +1034,7 @@ type ComplexityRoot struct {
 		DeletedAt                     func(childComplexity int) int
 		DeletedBy                     func(childComplexity int) int
 		Description                   func(childComplexity int) int
+		DisplayID                     func(childComplexity int) int
 		DisplayName                   func(childComplexity int) int
 		Events                        func(childComplexity int) int
 		Files                         func(childComplexity int) int
@@ -1103,6 +1104,7 @@ type ComplexityRoot struct {
 		DeletedAt       func(childComplexity int) int
 		DeletedBy       func(childComplexity int) int
 		Description     func(childComplexity int) int
+		DisplayID       func(childComplexity int) int
 		DisplayName     func(childComplexity int) int
 		GravatarLogoURL func(childComplexity int) int
 		HistoryTime     func(childComplexity int) int
@@ -1214,7 +1216,6 @@ type ComplexityRoot struct {
 		JoinPolicy   func(childComplexity int) int
 		SyncToGithub func(childComplexity int) int
 		SyncToSlack  func(childComplexity int) int
-		Tags         func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 		Visibility   func(childComplexity int) int
@@ -1256,7 +1257,6 @@ type ComplexityRoot struct {
 		Ref          func(childComplexity int) int
 		SyncToGithub func(childComplexity int) int
 		SyncToSlack  func(childComplexity int) int
-		Tags         func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 		Visibility   func(childComplexity int) int
@@ -1271,10 +1271,6 @@ type ComplexityRoot struct {
 	GroupSettingHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
-	}
-
-	GroupSettingSearchResult struct {
-		GroupSettings func(childComplexity int) int
 	}
 
 	GroupSettingUpdatePayload struct {
@@ -1848,7 +1844,6 @@ type ComplexityRoot struct {
 		OwnerID     func(childComplexity int) int
 		Program     func(childComplexity int) int
 		Subcontrols func(childComplexity int) int
-		Tags        func(childComplexity int) int
 		Text        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
@@ -1876,7 +1871,6 @@ type ComplexityRoot struct {
 		Operation   func(childComplexity int) int
 		OwnerID     func(childComplexity int) int
 		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
 		Text        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
@@ -2602,7 +2596,6 @@ type ComplexityRoot struct {
 		AdminEvidenceSearch            func(childComplexity int, query string) int
 		AdminFileSearch                func(childComplexity int, query string) int
 		AdminGroupSearch               func(childComplexity int, query string) int
-		AdminGroupSettingSearch        func(childComplexity int, query string) int
 		AdminIntegrationSearch         func(childComplexity int, query string) int
 		AdminInternalPolicySearch      func(childComplexity int, query string) int
 		AdminNarrativeSearch           func(childComplexity int, query string) int
@@ -2666,7 +2659,6 @@ type ComplexityRoot struct {
 		GroupSearch                    func(childComplexity int, query string) int
 		GroupSetting                   func(childComplexity int, id string) int
 		GroupSettingHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingHistoryWhereInput) int
-		GroupSettingSearch             func(childComplexity int, query string) int
 		GroupSettings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingWhereInput) int
 		Groups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupOrder, where *generated.GroupWhereInput) int
 		Hush                           func(childComplexity int, id string) int
@@ -7939,6 +7931,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.Description(childComplexity), true
 
+	case "Group.displayID":
+		if e.complexity.Group.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Group.DisplayID(childComplexity), true
+
 	case "Group.displayName":
 		if e.complexity.Group.DisplayName == nil {
 			break
@@ -8295,6 +8294,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupHistory.Description(childComplexity), true
+
+	case "GroupHistory.displayID":
+		if e.complexity.GroupHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.DisplayID(childComplexity), true
 
 	case "GroupHistory.displayName":
 		if e.complexity.GroupHistory.DisplayName == nil {
@@ -8779,13 +8785,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupSetting.SyncToSlack(childComplexity), true
 
-	case "GroupSetting.tags":
-		if e.complexity.GroupSetting.Tags == nil {
-			break
-		}
-
-		return e.complexity.GroupSetting.Tags(childComplexity), true
-
 	case "GroupSetting.updatedAt":
 		if e.complexity.GroupSetting.UpdatedAt == nil {
 			break
@@ -8947,13 +8946,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupSettingHistory.SyncToSlack(childComplexity), true
 
-	case "GroupSettingHistory.tags":
-		if e.complexity.GroupSettingHistory.Tags == nil {
-			break
-		}
-
-		return e.complexity.GroupSettingHistory.Tags(childComplexity), true
-
 	case "GroupSettingHistory.updatedAt":
 		if e.complexity.GroupSettingHistory.UpdatedAt == nil {
 			break
@@ -9009,13 +9001,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupSettingHistoryEdge.Node(childComplexity), true
-
-	case "GroupSettingSearchResult.groupSettings":
-		if e.complexity.GroupSettingSearchResult.GroupSettings == nil {
-			break
-		}
-
-		return e.complexity.GroupSettingSearchResult.GroupSettings(childComplexity), true
 
 	case "GroupSettingUpdatePayload.groupSetting":
 		if e.complexity.GroupSettingUpdatePayload.GroupSetting == nil {
@@ -12724,13 +12709,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Note.Subcontrols(childComplexity), true
 
-	case "Note.tags":
-		if e.complexity.Note.Tags == nil {
-			break
-		}
-
-		return e.complexity.Note.Tags(childComplexity), true
-
 	case "Note.text":
 		if e.complexity.Note.Text == nil {
 			break
@@ -12856,13 +12834,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NoteHistory.Ref(childComplexity), true
-
-	case "NoteHistory.tags":
-		if e.complexity.NoteHistory.Tags == nil {
-			break
-		}
-
-		return e.complexity.NoteHistory.Tags(childComplexity), true
 
 	case "NoteHistory.text":
 		if e.complexity.NoteHistory.Text == nil {
@@ -16296,18 +16267,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.AdminGroupSearch(childComplexity, args["query"].(string)), true
 
-	case "Query.adminGroupSettingSearch":
-		if e.complexity.Query.AdminGroupSettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminGroupSettingSearch_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminGroupSettingSearch(childComplexity, args["query"].(string)), true
-
 	case "Query.adminIntegrationSearch":
 		if e.complexity.Query.AdminIntegrationSearch == nil {
 			break
@@ -17063,18 +17022,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GroupSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.GroupSettingHistoryWhereInput)), true
-
-	case "Query.groupSettingSearch":
-		if e.complexity.Query.GroupSettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_groupSettingSearch_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GroupSettingSearch(childComplexity, args["query"].(string)), true
 
 	case "Query.groupSettings":
 		if e.complexity.Query.GroupSettings == nil {
@@ -22074,15 +22021,6 @@ type ActionPlanBulkCreatePayload {
         query: String!
     ): GroupSearchResult
     """
-    Search across GroupSetting objects
-    """
-    adminGroupSettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): GroupSettingSearchResult
-    """
     Search across Integration objects
     """
     adminIntegrationSearch(
@@ -27072,7 +27010,7 @@ input CreateGroupInput {
   narrativeEditorIDs: [ID!]
   narrativeBlockedGroupIDs: [ID!]
   narrativeViewerIDs: [ID!]
-  settingID: ID!
+  settingID: ID
   userIDs: [ID!]
   eventIDs: [ID!]
   integrationIDs: [ID!]
@@ -27094,10 +27032,6 @@ CreateGroupSettingInput is used for create GroupSetting object.
 Input was generated by ent.
 """
 input CreateGroupSettingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
   """
   whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
   """
@@ -27291,10 +27225,6 @@ CreateNoteInput is used for create Note object.
 Input was generated by ent.
 """
 input CreateNoteInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
   """
   the text of the note
   """
@@ -31899,6 +31829,10 @@ type Group implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -31959,7 +31893,7 @@ type Group implements Node {
   narrativeEditors: [Narrative!]
   narrativeBlockedGroups: [Narrative!]
   narrativeViewers: [Narrative!]
-  setting: GroupSetting!
+  setting: GroupSetting
   users: [User!]
   events: [Event!]
   integrations: [Integration!]
@@ -32008,6 +31942,10 @@ type GroupHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
   """
   tags associated with the object
   """
@@ -32249,6 +32187,22 @@ input GroupHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -32757,10 +32711,6 @@ type GroupSetting implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
   deletedAt: Time
   deletedBy: String
   """
@@ -32824,10 +32774,6 @@ type GroupSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
   deletedAt: Time
   deletedBy: String
   """
@@ -33398,6 +33344,22 @@ input GroupWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -36565,10 +36527,6 @@ type Note implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -36626,10 +36584,6 @@ type NoteHistory implements Node {
   displayID: String!
   deletedAt: Time
   deletedBy: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
   """
   the organization id that owns the object
   """
@@ -49678,6 +49632,7 @@ input UpdateGroupInput {
   removeNarrativeViewerIDs: [ID!]
   clearNarrativeViewers: Boolean
   settingID: ID
+  clearSetting: Boolean
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUsers: Boolean
@@ -49709,12 +49664,6 @@ UpdateGroupSettingInput is used for update GroupSetting object.
 Input was generated by ent.
 """
 input UpdateGroupSettingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
   """
   whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
   """
@@ -49964,12 +49913,6 @@ UpdateNoteInput is used for update Note object.
 Input was generated by ent.
 """
 input UpdateNoteInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
   """
   the text of the note
   """
@@ -54898,15 +54841,6 @@ scalar Price`, BuiltIn: false},
         query: String!
     ): GroupSearchResult
     """
-    Search across GroupSetting objects
-    """
-    groupSettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): GroupSettingSearchResult
-    """
     Search across Integration objects
     """
     integrationSearch(
@@ -55073,7 +55007,6 @@ union SearchResult =
   | EvidenceSearchResult
   | FileSearchResult
   | GroupSearchResult
-  | GroupSettingSearchResult
   | IntegrationSearchResult
   | InternalPolicySearchResult
   | NarrativeSearchResult
@@ -55174,10 +55107,6 @@ type  FileSearchResult {
 
 type  GroupSearchResult {
    groups: [ Group!]
-}
-
-type  GroupSettingSearchResult {
-   groupSettings: [ GroupSetting!]
 }
 
 type  IntegrationSearchResult {

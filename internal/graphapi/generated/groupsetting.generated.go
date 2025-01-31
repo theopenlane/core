@@ -75,8 +75,6 @@ func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSett
 				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
 			case "deletedBy":
@@ -149,8 +147,6 @@ func (ec *executionContext) fieldContext_GroupSettingCreatePayload_groupSetting(
 				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
 			case "deletedBy":
@@ -267,8 +263,6 @@ func (ec *executionContext) fieldContext_GroupSettingUpdatePayload_groupSetting(
 				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
 			case "deletedBy":

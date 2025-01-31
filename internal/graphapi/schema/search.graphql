@@ -108,15 +108,6 @@ extend type Query{
         query: String!
     ): GroupSearchResult
     """
-    Search across GroupSetting objects
-    """
-    groupSettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): GroupSettingSearchResult
-    """
     Search across Integration objects
     """
     integrationSearch(
@@ -283,7 +274,6 @@ union SearchResult =
   | EvidenceSearchResult
   | FileSearchResult
   | GroupSearchResult
-  | GroupSettingSearchResult
   | IntegrationSearchResult
   | InternalPolicySearchResult
   | NarrativeSearchResult
@@ -384,10 +374,6 @@ type  FileSearchResult {
 
 type  GroupSearchResult {
    groups: [ Group!]
-}
-
-type  GroupSettingSearchResult {
-   groupSettings: [ GroupSetting!]
 }
 
 type  IntegrationSearchResult {

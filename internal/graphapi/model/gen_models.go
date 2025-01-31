@@ -455,12 +455,6 @@ type GroupSettingDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type GroupSettingSearchResult struct {
-	GroupSettings []*generated.GroupSetting `json:"groupSettings,omitempty"`
-}
-
-func (GroupSettingSearchResult) IsSearchResult() {}
-
 // Return response for updateGroupSetting mutation
 type GroupSettingUpdatePayload struct {
 	// Updated groupSetting

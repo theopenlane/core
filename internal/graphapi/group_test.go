@@ -431,7 +431,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
-				Setting: openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
+				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
 					JoinPolicy: enums.JoinPolicyOpen,
 				},
 			},

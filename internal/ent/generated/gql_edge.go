@@ -1265,7 +1265,7 @@ func (gr *Group) Setting(ctx context.Context) (*GroupSetting, error) {
 	if IsNotLoaded(err) {
 		result, err = gr.QuerySetting().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (gr *Group) Users(ctx context.Context) (result []*User, err error) {

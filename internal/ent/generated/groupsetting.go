@@ -3,7 +3,6 @@
 package generated
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -28,8 +27,6 @@ type GroupSetting struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -77,8 +74,6 @@ func (*GroupSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case groupsetting.FieldTags:
-			values[i] = new([]byte)
 		case groupsetting.FieldSyncToSlack, groupsetting.FieldSyncToGithub:
 			values[i] = new(sql.NullBool)
 		case groupsetting.FieldID, groupsetting.FieldCreatedBy, groupsetting.FieldUpdatedBy, groupsetting.FieldDeletedBy, groupsetting.FieldVisibility, groupsetting.FieldJoinPolicy, groupsetting.FieldGroupID:
@@ -129,14 +124,6 @@ func (gs *GroupSetting) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				gs.UpdatedBy = value.String
-			}
-		case groupsetting.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &gs.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
 			}
 		case groupsetting.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -232,9 +219,6 @@ func (gs *GroupSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(gs.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", gs.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(gs.DeletedAt.Format(time.ANSIC))

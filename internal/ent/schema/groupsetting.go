@@ -49,7 +49,10 @@ func (GroupSetting) Fields() []ent.Field {
 // Edges of the GroupSetting
 func (GroupSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("group", Group.Type).Ref("setting").Field("group_id").Unique(),
+		edge.From("group", Group.Type).
+			Ref("setting").
+			Field("group_id").
+			Unique(),
 	}
 }
 
@@ -68,7 +71,6 @@ func (GroupSetting) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
-		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
 	}
 }

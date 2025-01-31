@@ -145,12 +145,6 @@ func (nhc *NoteHistoryCreate) SetNillableDeletedBy(s *string) *NoteHistoryCreate
 	return nhc
 }
 
-// SetTags sets the "tags" field.
-func (nhc *NoteHistoryCreate) SetTags(s []string) *NoteHistoryCreate {
-	nhc.mutation.SetTags(s)
-	return nhc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (nhc *NoteHistoryCreate) SetOwnerID(s string) *NoteHistoryCreate {
 	nhc.mutation.SetOwnerID(s)
@@ -231,10 +225,6 @@ func (nhc *NoteHistoryCreate) defaults() {
 	if _, ok := nhc.mutation.UpdatedAt(); !ok {
 		v := notehistory.DefaultUpdatedAt()
 		nhc.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := nhc.mutation.Tags(); !ok {
-		v := notehistory.DefaultTags
-		nhc.mutation.SetTags(v)
 	}
 	if _, ok := nhc.mutation.ID(); !ok {
 		v := notehistory.DefaultID()
@@ -336,10 +326,6 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 	if value, ok := nhc.mutation.DeletedBy(); ok {
 		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := nhc.mutation.Tags(); ok {
-		_spec.SetField(notehistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
 	}
 	if value, ok := nhc.mutation.OwnerID(); ok {
 		_spec.SetField(notehistory.FieldOwnerID, field.TypeString, value)

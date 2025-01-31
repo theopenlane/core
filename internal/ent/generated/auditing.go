@@ -815,6 +815,9 @@ func (gh *GroupHistory) changes(new *GroupHistory) []Change {
 	if !reflect.DeepEqual(gh.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(grouphistory.FieldDeletedBy, gh.DeletedBy, new.DeletedBy))
 	}
+	if !reflect.DeepEqual(gh.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(grouphistory.FieldDisplayID, gh.DisplayID, new.DisplayID))
+	}
 	if !reflect.DeepEqual(gh.Tags, new.Tags) {
 		changes = append(changes, NewChange(grouphistory.FieldTags, gh.Tags, new.Tags))
 	}
@@ -931,9 +934,6 @@ func (gsh *GroupSettingHistory) changes(new *GroupSettingHistory) []Change {
 	}
 	if !reflect.DeepEqual(gsh.CreatedBy, new.CreatedBy) {
 		changes = append(changes, NewChange(groupsettinghistory.FieldCreatedBy, gsh.CreatedBy, new.CreatedBy))
-	}
-	if !reflect.DeepEqual(gsh.Tags, new.Tags) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldTags, gsh.Tags, new.Tags))
 	}
 	if !reflect.DeepEqual(gsh.DeletedAt, new.DeletedAt) {
 		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedAt, gsh.DeletedAt, new.DeletedAt))
@@ -1270,9 +1270,6 @@ func (nh *NoteHistory) changes(new *NoteHistory) []Change {
 	}
 	if !reflect.DeepEqual(nh.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(notehistory.FieldDeletedBy, nh.DeletedBy, new.DeletedBy))
-	}
-	if !reflect.DeepEqual(nh.Tags, new.Tags) {
-		changes = append(changes, NewChange(notehistory.FieldTags, nh.Tags, new.Tags))
 	}
 	if !reflect.DeepEqual(nh.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(notehistory.FieldOwnerID, nh.OwnerID, new.OwnerID))

@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -464,12 +463,13 @@ func adminSearchFiles(ctx context.Context, query string) ([]*generated.File, err
 func searchGroups(ctx context.Context, query string) ([]*generated.Group, error) {
 	return withTransactionalMutation(ctx).Group.Query().Where(
 		group.Or(
+			group.DisplayID(query),               // search equal to DisplayID
 			group.DisplayNameContainsFold(query), // search by DisplayName
 			group.ID(query),                      // search equal to ID
 			group.NameContainsFold(query),        // search by Name
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 			},
 		),
 	).All(ctx)
@@ -481,41 +481,14 @@ func adminSearchGroups(ctx context.Context, query string) ([]*generated.Group, e
 		group.Or(
 			group.DeletedByContainsFold(query), // search by DeletedBy
 			group.ID(query),                    // search equal to ID
+			group.DisplayID(query),             // search equal to DisplayID
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 			},
 			group.OwnerIDContainsFold(query),     // search by OwnerID
 			group.NameContainsFold(query),        // search by Name
 			group.DisplayNameContainsFold(query), // search by DisplayName
-		),
-	).All(ctx)
-}
-
-// searchGroupSetting searches for GroupSetting based on the query string looking for matches
-func searchGroupSettings(ctx context.Context, query string) ([]*generated.GroupSetting, error) {
-	return withTransactionalMutation(ctx).GroupSetting.Query().Where(
-		groupsetting.Or(
-			groupsetting.ID(query), // search equal to ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchGroupSetting searches for GroupSetting based on the query string looking for matches
-func adminSearchGroupSettings(ctx context.Context, query string) ([]*generated.GroupSetting, error) {
-	return withTransactionalMutation(ctx).GroupSetting.Query().Where(
-		groupsetting.Or(
-			groupsetting.ID(query), // search equal to ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-			groupsetting.DeletedByContainsFold(query), // search by DeletedBy
-			groupsetting.GroupIDContainsFold(query),   // search by GroupID
 		),
 	).All(ctx)
 }

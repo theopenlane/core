@@ -2599,7 +2599,7 @@ type CreateGroupInput struct {
 	NarrativeEditorIDs              []string
 	NarrativeBlockedGroupIDs        []string
 	NarrativeViewerIDs              []string
-	SettingID                       string
+	SettingID                       *string
 	UserIDs                         []string
 	EventIDs                        []string
 	IntegrationIDs                  []string
@@ -2712,7 +2712,9 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.NarrativeViewerIDs; len(v) > 0 {
 		m.AddNarrativeViewerIDs(v...)
 	}
-	m.SetSettingID(i.SettingID)
+	if v := i.SettingID; v != nil {
+		m.SetSettingID(*v)
+	}
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
 	}
@@ -2835,6 +2837,7 @@ type UpdateGroupInput struct {
 	ClearNarrativeViewers                 bool
 	AddNarrativeViewerIDs                 []string
 	RemoveNarrativeViewerIDs              []string
+	ClearSetting                          bool
 	SettingID                             *string
 	ClearUsers                            bool
 	AddUserIDs                            []string
@@ -3146,6 +3149,9 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RemoveNarrativeViewerIDs; len(v) > 0 {
 		m.RemoveNarrativeViewerIDs(v...)
 	}
+	if i.ClearSetting {
+		m.ClearSetting()
+	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
@@ -3272,7 +3278,6 @@ func (c *GroupMembershipUpdateOne) SetInput(i UpdateGroupMembershipInput) *Group
 
 // CreateGroupSettingInput represents a mutation input for creating groupsettings.
 type CreateGroupSettingInput struct {
-	Tags         []string
 	Visibility   *enums.Visibility
 	JoinPolicy   *enums.JoinPolicy
 	SyncToSlack  *bool
@@ -3282,9 +3287,6 @@ type CreateGroupSettingInput struct {
 
 // Mutate applies the CreateGroupSettingInput on the GroupSettingMutation builder.
 func (i *CreateGroupSettingInput) Mutate(m *GroupSettingMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)
 	}
@@ -3310,9 +3312,6 @@ func (c *GroupSettingCreate) SetInput(i CreateGroupSettingInput) *GroupSettingCr
 
 // UpdateGroupSettingInput represents a mutation input for updating groupsettings.
 type UpdateGroupSettingInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
 	Visibility        *enums.Visibility
 	JoinPolicy        *enums.JoinPolicy
 	ClearSyncToSlack  bool
@@ -3325,15 +3324,6 @@ type UpdateGroupSettingInput struct {
 
 // Mutate applies the UpdateGroupSettingInput on the GroupSettingMutation builder.
 func (i *UpdateGroupSettingInput) Mutate(m *GroupSettingMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)
 	}
@@ -4240,7 +4230,6 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Tags          []string
 	Text          string
 	OwnerID       *string
 	EntityID      *string
@@ -4250,9 +4239,6 @@ type CreateNoteInput struct {
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
 func (i *CreateNoteInput) Mutate(m *NoteMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
 	m.SetText(i.Text)
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4276,9 +4262,6 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	ClearTags           bool
-	Tags                []string
-	AppendTags          []string
 	Text                *string
 	ClearOwner          bool
 	OwnerID             *string
@@ -4294,15 +4277,6 @@ type UpdateNoteInput struct {
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
 func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
 	if v := i.Text; v != nil {
 		m.SetText(*v)
 	}

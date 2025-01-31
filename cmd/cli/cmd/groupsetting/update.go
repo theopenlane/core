@@ -27,7 +27,6 @@ func init() {
 	updateCmd.Flags().StringP("join-policy", "j", "", "join policy of the group")
 	updateCmd.Flags().BoolP("sync-to-slack", "s", false, "sync group members to slack")
 	updateCmd.Flags().BoolP("sync-to-github", "g", false, "sync group members to github")
-	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the group")
 }
 
 // updateValidation validates the input flags provided by the user
@@ -45,11 +44,6 @@ func updateValidation() (id string, input openlaneclient.UpdateGroupSettingInput
 	joinPolicy := cmd.Config.String("join-policy")
 	if joinPolicy != "" {
 		input.JoinPolicy = enums.ToGroupJoinPolicy(joinPolicy)
-	}
-
-	tags := cmd.Config.Strings("tags")
-	if len(tags) > 0 {
-		input.Tags = tags
 	}
 
 	syncToSlack := cmd.Config.Bool("sync-to-slack")

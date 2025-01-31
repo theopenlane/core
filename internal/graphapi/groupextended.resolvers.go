@@ -21,7 +21,7 @@ func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj 
 		return err
 	}
 
-	obj.SettingID = groupSettings.ID
+	obj.SettingID = &groupSettings.ID
 
 	return nil
 }

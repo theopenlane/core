@@ -29,8 +29,6 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldText holds the string denoting the text field in the database.
@@ -83,7 +81,6 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldDeletedAt,
 	FieldDeletedBy,
-	FieldTags,
 	FieldOwnerID,
 	FieldText,
 }
@@ -132,8 +129,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	DisplayIDValidator func(string) error
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// TextValidator is a validator for the "text" field. It is called by the builders before save.

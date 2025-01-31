@@ -12,7 +12,6 @@ query GetAllGroupSettingHistories {
         ref
         syncToGithub
         syncToSlack
-        tags
         updatedAt
         updatedBy
         visibility
@@ -35,7 +34,6 @@ query GetGroupSettingHistories($where: GroupSettingHistoryWhereInput) {
         ref
         syncToGithub
         syncToSlack
-        tags
         updatedAt
         updatedBy
         visibility

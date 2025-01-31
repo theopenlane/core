@@ -108,15 +108,6 @@ extend type Query{
         query: String!
     ): GroupSearchResult
     """
-    Search across GroupSetting objects
-    """
-    adminGroupSettingSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): GroupSettingSearchResult
-    """
     Search across Integration objects
     """
     adminIntegrationSearch(

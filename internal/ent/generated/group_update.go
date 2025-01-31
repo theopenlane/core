@@ -676,6 +676,14 @@ func (gu *GroupUpdate) SetSettingID(id string) *GroupUpdate {
 	return gu
 }
 
+// SetNillableSettingID sets the "setting" edge to the GroupSetting entity by ID if the given value is not nil.
+func (gu *GroupUpdate) SetNillableSettingID(id *string) *GroupUpdate {
+	if id != nil {
+		gu = gu.SetSettingID(*id)
+	}
+	return gu
+}
+
 // SetSetting sets the "setting" edge to the GroupSetting entity.
 func (gu *GroupUpdate) SetSetting(g *GroupSetting) *GroupUpdate {
 	return gu.SetSettingID(g.ID)
@@ -1560,9 +1568,6 @@ func (gu *GroupUpdate) check() error {
 		if err := group.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Group.display_name": %w`, err)}
 		}
-	}
-	if gu.mutation.SettingCleared() && len(gu.mutation.SettingIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Group.setting"`)
 	}
 	return nil
 }
@@ -4021,6 +4026,14 @@ func (guo *GroupUpdateOne) SetSettingID(id string) *GroupUpdateOne {
 	return guo
 }
 
+// SetNillableSettingID sets the "setting" edge to the GroupSetting entity by ID if the given value is not nil.
+func (guo *GroupUpdateOne) SetNillableSettingID(id *string) *GroupUpdateOne {
+	if id != nil {
+		guo = guo.SetSettingID(*id)
+	}
+	return guo
+}
+
 // SetSetting sets the "setting" edge to the GroupSetting entity.
 func (guo *GroupUpdateOne) SetSetting(g *GroupSetting) *GroupUpdateOne {
 	return guo.SetSettingID(g.ID)
@@ -4918,9 +4931,6 @@ func (guo *GroupUpdateOne) check() error {
 		if err := group.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Group.display_name": %w`, err)}
 		}
-	}
-	if guo.mutation.SettingCleared() && len(guo.mutation.SettingIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Group.setting"`)
 	}
 	return nil
 }

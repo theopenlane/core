@@ -38200,6 +38200,7 @@ type GroupMutation struct {
 	updated_by                              *string
 	deleted_at                              *time.Time
 	deleted_by                              *string
+	display_id                              *string
 	tags                                    *[]string
 	appendtags                              []string
 	name                                    *string
@@ -38716,6 +38717,42 @@ func (m *GroupMutation) DeletedByCleared() bool {
 func (m *GroupMutation) ResetDeletedBy() {
 	m.deleted_by = nil
 	delete(m.clearedFields, group.FieldDeletedBy)
+}
+
+// SetDisplayID sets the "display_id" field.
+func (m *GroupMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *GroupMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *GroupMutation) ResetDisplayID() {
+	m.display_id = nil
 }
 
 // SetTags sets the "tags" field.
@@ -41036,7 +41073,7 @@ func (m *GroupMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, group.FieldCreatedAt)
 	}
@@ -41054,6 +41091,9 @@ func (m *GroupMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, group.FieldDeletedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, group.FieldDisplayID)
 	}
 	if m.tags != nil {
 		fields = append(fields, group.FieldTags)
@@ -41099,6 +41139,8 @@ func (m *GroupMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedAt()
 	case group.FieldDeletedBy:
 		return m.DeletedBy()
+	case group.FieldDisplayID:
+		return m.DisplayID()
 	case group.FieldTags:
 		return m.Tags()
 	case group.FieldOwnerID:
@@ -41136,6 +41178,8 @@ func (m *GroupMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldDeletedAt(ctx)
 	case group.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
+	case group.FieldDisplayID:
+		return m.OldDisplayID(ctx)
 	case group.FieldTags:
 		return m.OldTags(ctx)
 	case group.FieldOwnerID:
@@ -41202,6 +41246,13 @@ func (m *GroupMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedBy(v)
+		return nil
+	case group.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
 		return nil
 	case group.FieldTags:
 		v, ok := value.([]string)
@@ -41400,6 +41451,9 @@ func (m *GroupMutation) ResetField(name string) error {
 		return nil
 	case group.FieldDeletedBy:
 		m.ResetDeletedBy()
+		return nil
+	case group.FieldDisplayID:
+		m.ResetDisplayID()
 		return nil
 	case group.FieldTags:
 		m.ResetTags()
@@ -42422,6 +42476,7 @@ type GroupHistoryMutation struct {
 	updated_by        *string
 	deleted_at        *time.Time
 	deleted_by        *string
+	display_id        *string
 	tags              *[]string
 	appendtags        []string
 	owner_id          *string
@@ -42956,6 +43011,42 @@ func (m *GroupHistoryMutation) ResetDeletedBy() {
 	delete(m.clearedFields, grouphistory.FieldDeletedBy)
 }
 
+// SetDisplayID sets the "display_id" field.
+func (m *GroupHistoryMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *GroupHistoryMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *GroupHistoryMutation) ResetDisplayID() {
+	m.display_id = nil
+}
+
 // SetTags sets the "tags" field.
 func (m *GroupHistoryMutation) SetTags(s []string) {
 	m.tags = &s
@@ -43372,7 +43463,7 @@ func (m *GroupHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.history_time != nil {
 		fields = append(fields, grouphistory.FieldHistoryTime)
 	}
@@ -43399,6 +43490,9 @@ func (m *GroupHistoryMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, grouphistory.FieldDeletedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, grouphistory.FieldDisplayID)
 	}
 	if m.tags != nil {
 		fields = append(fields, grouphistory.FieldTags)
@@ -43450,6 +43544,8 @@ func (m *GroupHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedAt()
 	case grouphistory.FieldDeletedBy:
 		return m.DeletedBy()
+	case grouphistory.FieldDisplayID:
+		return m.DisplayID()
 	case grouphistory.FieldTags:
 		return m.Tags()
 	case grouphistory.FieldOwnerID:
@@ -43493,6 +43589,8 @@ func (m *GroupHistoryMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldDeletedAt(ctx)
 	case grouphistory.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
+	case grouphistory.FieldDisplayID:
+		return m.OldDisplayID(ctx)
 	case grouphistory.FieldTags:
 		return m.OldTags(ctx)
 	case grouphistory.FieldOwnerID:
@@ -43580,6 +43678,13 @@ func (m *GroupHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedBy(v)
+		return nil
+	case grouphistory.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
 		return nil
 	case grouphistory.FieldTags:
 		v, ok := value.([]string)
@@ -43793,6 +43898,9 @@ func (m *GroupHistoryMutation) ResetField(name string) error {
 		return nil
 	case grouphistory.FieldDeletedBy:
 		m.ResetDeletedBy()
+		return nil
+	case grouphistory.FieldDisplayID:
+		m.ResetDisplayID()
 		return nil
 	case grouphistory.FieldTags:
 		m.ResetTags()
@@ -46067,8 +46175,6 @@ type GroupSettingMutation struct {
 	updated_at     *time.Time
 	created_by     *string
 	updated_by     *string
-	tags           *[]string
-	appendtags     []string
 	deleted_at     *time.Time
 	deleted_by     *string
 	visibility     *enums.Visibility
@@ -46381,71 +46487,6 @@ func (m *GroupSettingMutation) UpdatedByCleared() bool {
 func (m *GroupSettingMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, groupsetting.FieldUpdatedBy)
-}
-
-// SetTags sets the "tags" field.
-func (m *GroupSettingMutation) SetTags(s []string) {
-	m.tags = &s
-	m.appendtags = nil
-}
-
-// Tags returns the value of the "tags" field in the mutation.
-func (m *GroupSettingMutation) Tags() (r []string, exists bool) {
-	v := m.tags
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTags returns the old "tags" field's value of the GroupSetting entity.
-// If the GroupSetting object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GroupSettingMutation) OldTags(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTags is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTags requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTags: %w", err)
-	}
-	return oldValue.Tags, nil
-}
-
-// AppendTags adds s to the "tags" field.
-func (m *GroupSettingMutation) AppendTags(s []string) {
-	m.appendtags = append(m.appendtags, s...)
-}
-
-// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
-func (m *GroupSettingMutation) AppendedTags() ([]string, bool) {
-	if len(m.appendtags) == 0 {
-		return nil, false
-	}
-	return m.appendtags, true
-}
-
-// ClearTags clears the value of the "tags" field.
-func (m *GroupSettingMutation) ClearTags() {
-	m.tags = nil
-	m.appendtags = nil
-	m.clearedFields[groupsetting.FieldTags] = struct{}{}
-}
-
-// TagsCleared returns if the "tags" field was cleared in this mutation.
-func (m *GroupSettingMutation) TagsCleared() bool {
-	_, ok := m.clearedFields[groupsetting.FieldTags]
-	return ok
-}
-
-// ResetTags resets all changes to the "tags" field.
-func (m *GroupSettingMutation) ResetTags() {
-	m.tags = nil
-	m.appendtags = nil
-	delete(m.clearedFields, groupsetting.FieldTags)
 }
 
 // SetDeletedAt sets the "deleted_at" field.
@@ -46826,7 +46867,7 @@ func (m *GroupSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupSettingMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, groupsetting.FieldCreatedAt)
 	}
@@ -46838,9 +46879,6 @@ func (m *GroupSettingMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, groupsetting.FieldUpdatedBy)
-	}
-	if m.tags != nil {
-		fields = append(fields, groupsetting.FieldTags)
 	}
 	if m.deleted_at != nil {
 		fields = append(fields, groupsetting.FieldDeletedAt)
@@ -46879,8 +46917,6 @@ func (m *GroupSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedBy()
 	case groupsetting.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case groupsetting.FieldTags:
-		return m.Tags()
 	case groupsetting.FieldDeletedAt:
 		return m.DeletedAt()
 	case groupsetting.FieldDeletedBy:
@@ -46912,8 +46948,6 @@ func (m *GroupSettingMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldCreatedBy(ctx)
 	case groupsetting.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case groupsetting.FieldTags:
-		return m.OldTags(ctx)
 	case groupsetting.FieldDeletedAt:
 		return m.OldDeletedAt(ctx)
 	case groupsetting.FieldDeletedBy:
@@ -46964,13 +46998,6 @@ func (m *GroupSettingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
-		return nil
-	case groupsetting.FieldTags:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTags(v)
 		return nil
 	case groupsetting.FieldDeletedAt:
 		v, ok := value.(time.Time)
@@ -47063,9 +47090,6 @@ func (m *GroupSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(groupsetting.FieldUpdatedBy) {
 		fields = append(fields, groupsetting.FieldUpdatedBy)
 	}
-	if m.FieldCleared(groupsetting.FieldTags) {
-		fields = append(fields, groupsetting.FieldTags)
-	}
 	if m.FieldCleared(groupsetting.FieldDeletedAt) {
 		fields = append(fields, groupsetting.FieldDeletedAt)
 	}
@@ -47107,9 +47131,6 @@ func (m *GroupSettingMutation) ClearField(name string) error {
 	case groupsetting.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case groupsetting.FieldTags:
-		m.ClearTags()
-		return nil
 	case groupsetting.FieldDeletedAt:
 		m.ClearDeletedAt()
 		return nil
@@ -47144,9 +47165,6 @@ func (m *GroupSettingMutation) ResetField(name string) error {
 		return nil
 	case groupsetting.FieldUpdatedBy:
 		m.ResetUpdatedBy()
-		return nil
-	case groupsetting.FieldTags:
-		m.ResetTags()
 		return nil
 	case groupsetting.FieldDeletedAt:
 		m.ResetDeletedAt()
@@ -47260,8 +47278,6 @@ type GroupSettingHistoryMutation struct {
 	updated_at     *time.Time
 	created_by     *string
 	updated_by     *string
-	tags           *[]string
-	appendtags     []string
 	deleted_at     *time.Time
 	deleted_by     *string
 	visibility     *enums.Visibility
@@ -47696,71 +47712,6 @@ func (m *GroupSettingHistoryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, groupsettinghistory.FieldUpdatedBy)
 }
 
-// SetTags sets the "tags" field.
-func (m *GroupSettingHistoryMutation) SetTags(s []string) {
-	m.tags = &s
-	m.appendtags = nil
-}
-
-// Tags returns the value of the "tags" field in the mutation.
-func (m *GroupSettingHistoryMutation) Tags() (r []string, exists bool) {
-	v := m.tags
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTags returns the old "tags" field's value of the GroupSettingHistory entity.
-// If the GroupSettingHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GroupSettingHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTags is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTags requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTags: %w", err)
-	}
-	return oldValue.Tags, nil
-}
-
-// AppendTags adds s to the "tags" field.
-func (m *GroupSettingHistoryMutation) AppendTags(s []string) {
-	m.appendtags = append(m.appendtags, s...)
-}
-
-// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
-func (m *GroupSettingHistoryMutation) AppendedTags() ([]string, bool) {
-	if len(m.appendtags) == 0 {
-		return nil, false
-	}
-	return m.appendtags, true
-}
-
-// ClearTags clears the value of the "tags" field.
-func (m *GroupSettingHistoryMutation) ClearTags() {
-	m.tags = nil
-	m.appendtags = nil
-	m.clearedFields[groupsettinghistory.FieldTags] = struct{}{}
-}
-
-// TagsCleared returns if the "tags" field was cleared in this mutation.
-func (m *GroupSettingHistoryMutation) TagsCleared() bool {
-	_, ok := m.clearedFields[groupsettinghistory.FieldTags]
-	return ok
-}
-
-// ResetTags resets all changes to the "tags" field.
-func (m *GroupSettingHistoryMutation) ResetTags() {
-	m.tags = nil
-	m.appendtags = nil
-	delete(m.clearedFields, groupsettinghistory.FieldTags)
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (m *GroupSettingHistoryMutation) SetDeletedAt(t time.Time) {
 	m.deleted_at = &t
@@ -48112,7 +48063,7 @@ func (m *GroupSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 14)
 	if m.history_time != nil {
 		fields = append(fields, groupsettinghistory.FieldHistoryTime)
 	}
@@ -48133,9 +48084,6 @@ func (m *GroupSettingHistoryMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, groupsettinghistory.FieldUpdatedBy)
-	}
-	if m.tags != nil {
-		fields = append(fields, groupsettinghistory.FieldTags)
 	}
 	if m.deleted_at != nil {
 		fields = append(fields, groupsettinghistory.FieldDeletedAt)
@@ -48180,8 +48128,6 @@ func (m *GroupSettingHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedBy()
 	case groupsettinghistory.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case groupsettinghistory.FieldTags:
-		return m.Tags()
 	case groupsettinghistory.FieldDeletedAt:
 		return m.DeletedAt()
 	case groupsettinghistory.FieldDeletedBy:
@@ -48219,8 +48165,6 @@ func (m *GroupSettingHistoryMutation) OldField(ctx context.Context, name string)
 		return m.OldCreatedBy(ctx)
 	case groupsettinghistory.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case groupsettinghistory.FieldTags:
-		return m.OldTags(ctx)
 	case groupsettinghistory.FieldDeletedAt:
 		return m.OldDeletedAt(ctx)
 	case groupsettinghistory.FieldDeletedBy:
@@ -48292,13 +48236,6 @@ func (m *GroupSettingHistoryMutation) SetField(name string, value ent.Value) err
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
-		return nil
-	case groupsettinghistory.FieldTags:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTags(v)
 		return nil
 	case groupsettinghistory.FieldDeletedAt:
 		v, ok := value.(time.Time)
@@ -48394,9 +48331,6 @@ func (m *GroupSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(groupsettinghistory.FieldUpdatedBy) {
 		fields = append(fields, groupsettinghistory.FieldUpdatedBy)
 	}
-	if m.FieldCleared(groupsettinghistory.FieldTags) {
-		fields = append(fields, groupsettinghistory.FieldTags)
-	}
 	if m.FieldCleared(groupsettinghistory.FieldDeletedAt) {
 		fields = append(fields, groupsettinghistory.FieldDeletedAt)
 	}
@@ -48441,9 +48375,6 @@ func (m *GroupSettingHistoryMutation) ClearField(name string) error {
 	case groupsettinghistory.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case groupsettinghistory.FieldTags:
-		m.ClearTags()
-		return nil
 	case groupsettinghistory.FieldDeletedAt:
 		m.ClearDeletedAt()
 		return nil
@@ -48487,9 +48418,6 @@ func (m *GroupSettingHistoryMutation) ResetField(name string) error {
 		return nil
 	case groupsettinghistory.FieldUpdatedBy:
 		m.ResetUpdatedBy()
-		return nil
-	case groupsettinghistory.FieldTags:
-		m.ResetTags()
 		return nil
 	case groupsettinghistory.FieldDeletedAt:
 		m.ResetDeletedAt()
@@ -62481,8 +62409,6 @@ type NoteMutation struct {
 	display_id         *string
 	deleted_at         *time.Time
 	deleted_by         *string
-	tags               *[]string
-	appendtags         []string
 	text               *string
 	clearedFields      map[string]struct{}
 	owner              *string
@@ -62934,71 +62860,6 @@ func (m *NoteMutation) ResetDeletedBy() {
 	delete(m.clearedFields, note.FieldDeletedBy)
 }
 
-// SetTags sets the "tags" field.
-func (m *NoteMutation) SetTags(s []string) {
-	m.tags = &s
-	m.appendtags = nil
-}
-
-// Tags returns the value of the "tags" field in the mutation.
-func (m *NoteMutation) Tags() (r []string, exists bool) {
-	v := m.tags
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTags returns the old "tags" field's value of the Note entity.
-// If the Note object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NoteMutation) OldTags(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTags is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTags requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTags: %w", err)
-	}
-	return oldValue.Tags, nil
-}
-
-// AppendTags adds s to the "tags" field.
-func (m *NoteMutation) AppendTags(s []string) {
-	m.appendtags = append(m.appendtags, s...)
-}
-
-// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
-func (m *NoteMutation) AppendedTags() ([]string, bool) {
-	if len(m.appendtags) == 0 {
-		return nil, false
-	}
-	return m.appendtags, true
-}
-
-// ClearTags clears the value of the "tags" field.
-func (m *NoteMutation) ClearTags() {
-	m.tags = nil
-	m.appendtags = nil
-	m.clearedFields[note.FieldTags] = struct{}{}
-}
-
-// TagsCleared returns if the "tags" field was cleared in this mutation.
-func (m *NoteMutation) TagsCleared() bool {
-	_, ok := m.clearedFields[note.FieldTags]
-	return ok
-}
-
-// ResetTags resets all changes to the "tags" field.
-func (m *NoteMutation) ResetTags() {
-	m.tags = nil
-	m.appendtags = nil
-	delete(m.clearedFields, note.FieldTags)
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (m *NoteMutation) SetOwnerID(s string) {
 	m.owner = &s
@@ -63292,7 +63153,7 @@ func (m *NoteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NoteMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, note.FieldCreatedAt)
 	}
@@ -63313,9 +63174,6 @@ func (m *NoteMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, note.FieldDeletedBy)
-	}
-	if m.tags != nil {
-		fields = append(fields, note.FieldTags)
 	}
 	if m.owner != nil {
 		fields = append(fields, note.FieldOwnerID)
@@ -63345,8 +63203,6 @@ func (m *NoteMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedAt()
 	case note.FieldDeletedBy:
 		return m.DeletedBy()
-	case note.FieldTags:
-		return m.Tags()
 	case note.FieldOwnerID:
 		return m.OwnerID()
 	case note.FieldText:
@@ -63374,8 +63230,6 @@ func (m *NoteMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDeletedAt(ctx)
 	case note.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
-	case note.FieldTags:
-		return m.OldTags(ctx)
 	case note.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case note.FieldText:
@@ -63437,13 +63291,6 @@ func (m *NoteMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedBy(v)
-		return nil
-	case note.FieldTags:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTags(v)
 		return nil
 	case note.FieldOwnerID:
 		v, ok := value.(string)
@@ -63507,9 +63354,6 @@ func (m *NoteMutation) ClearedFields() []string {
 	if m.FieldCleared(note.FieldDeletedBy) {
 		fields = append(fields, note.FieldDeletedBy)
 	}
-	if m.FieldCleared(note.FieldTags) {
-		fields = append(fields, note.FieldTags)
-	}
 	if m.FieldCleared(note.FieldOwnerID) {
 		fields = append(fields, note.FieldOwnerID)
 	}
@@ -63545,9 +63389,6 @@ func (m *NoteMutation) ClearField(name string) error {
 	case note.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
-	case note.FieldTags:
-		m.ClearTags()
-		return nil
 	case note.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -63579,9 +63420,6 @@ func (m *NoteMutation) ResetField(name string) error {
 		return nil
 	case note.FieldDeletedBy:
 		m.ResetDeletedBy()
-		return nil
-	case note.FieldTags:
-		m.ResetTags()
 		return nil
 	case note.FieldOwnerID:
 		m.ResetOwnerID()
@@ -63755,8 +63593,6 @@ type NoteHistoryMutation struct {
 	display_id    *string
 	deleted_at    *time.Time
 	deleted_by    *string
-	tags          *[]string
-	appendtags    []string
 	owner_id      *string
 	text          *string
 	clearedFields map[string]struct{}
@@ -64320,71 +64156,6 @@ func (m *NoteHistoryMutation) ResetDeletedBy() {
 	delete(m.clearedFields, notehistory.FieldDeletedBy)
 }
 
-// SetTags sets the "tags" field.
-func (m *NoteHistoryMutation) SetTags(s []string) {
-	m.tags = &s
-	m.appendtags = nil
-}
-
-// Tags returns the value of the "tags" field in the mutation.
-func (m *NoteHistoryMutation) Tags() (r []string, exists bool) {
-	v := m.tags
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTags returns the old "tags" field's value of the NoteHistory entity.
-// If the NoteHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NoteHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTags is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTags requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTags: %w", err)
-	}
-	return oldValue.Tags, nil
-}
-
-// AppendTags adds s to the "tags" field.
-func (m *NoteHistoryMutation) AppendTags(s []string) {
-	m.appendtags = append(m.appendtags, s...)
-}
-
-// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
-func (m *NoteHistoryMutation) AppendedTags() ([]string, bool) {
-	if len(m.appendtags) == 0 {
-		return nil, false
-	}
-	return m.appendtags, true
-}
-
-// ClearTags clears the value of the "tags" field.
-func (m *NoteHistoryMutation) ClearTags() {
-	m.tags = nil
-	m.appendtags = nil
-	m.clearedFields[notehistory.FieldTags] = struct{}{}
-}
-
-// TagsCleared returns if the "tags" field was cleared in this mutation.
-func (m *NoteHistoryMutation) TagsCleared() bool {
-	_, ok := m.clearedFields[notehistory.FieldTags]
-	return ok
-}
-
-// ResetTags resets all changes to the "tags" field.
-func (m *NoteHistoryMutation) ResetTags() {
-	m.tags = nil
-	m.appendtags = nil
-	delete(m.clearedFields, notehistory.FieldTags)
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (m *NoteHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -64504,7 +64275,7 @@ func (m *NoteHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NoteHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 12)
 	if m.history_time != nil {
 		fields = append(fields, notehistory.FieldHistoryTime)
 	}
@@ -64534,9 +64305,6 @@ func (m *NoteHistoryMutation) Fields() []string {
 	}
 	if m.deleted_by != nil {
 		fields = append(fields, notehistory.FieldDeletedBy)
-	}
-	if m.tags != nil {
-		fields = append(fields, notehistory.FieldTags)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, notehistory.FieldOwnerID)
@@ -64572,8 +64340,6 @@ func (m *NoteHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedAt()
 	case notehistory.FieldDeletedBy:
 		return m.DeletedBy()
-	case notehistory.FieldTags:
-		return m.Tags()
 	case notehistory.FieldOwnerID:
 		return m.OwnerID()
 	case notehistory.FieldText:
@@ -64607,8 +64373,6 @@ func (m *NoteHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDeletedAt(ctx)
 	case notehistory.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
-	case notehistory.FieldTags:
-		return m.OldTags(ctx)
 	case notehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case notehistory.FieldText:
@@ -64692,13 +64456,6 @@ func (m *NoteHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDeletedBy(v)
 		return nil
-	case notehistory.FieldTags:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTags(v)
-		return nil
 	case notehistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -64764,9 +64521,6 @@ func (m *NoteHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(notehistory.FieldDeletedBy) {
 		fields = append(fields, notehistory.FieldDeletedBy)
 	}
-	if m.FieldCleared(notehistory.FieldTags) {
-		fields = append(fields, notehistory.FieldTags)
-	}
 	if m.FieldCleared(notehistory.FieldOwnerID) {
 		fields = append(fields, notehistory.FieldOwnerID)
 	}
@@ -64804,9 +64558,6 @@ func (m *NoteHistoryMutation) ClearField(name string) error {
 		return nil
 	case notehistory.FieldDeletedBy:
 		m.ClearDeletedBy()
-		return nil
-	case notehistory.FieldTags:
-		m.ClearTags()
 		return nil
 	case notehistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -64848,9 +64599,6 @@ func (m *NoteHistoryMutation) ResetField(name string) error {
 		return nil
 	case notehistory.FieldDeletedBy:
 		m.ResetDeletedBy()
-		return nil
-	case notehistory.FieldTags:
-		m.ResetTags()
 		return nil
 	case notehistory.FieldOwnerID:
 		m.ResetOwnerID()

@@ -139,6 +139,12 @@ func (ghc *GroupHistoryCreate) SetNillableDeletedBy(s *string) *GroupHistoryCrea
 	return ghc
 }
 
+// SetDisplayID sets the "display_id" field.
+func (ghc *GroupHistoryCreate) SetDisplayID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetDisplayID(s)
+	return ghc
+}
+
 // SetTags sets the "tags" field.
 func (ghc *GroupHistoryCreate) SetTags(s []string) *GroupHistoryCreate {
 	ghc.mutation.SetTags(s)
@@ -327,6 +333,9 @@ func (ghc *GroupHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "GroupHistory.operation": %w`, err)}
 		}
 	}
+	if _, ok := ghc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "GroupHistory.display_id"`)}
+	}
 	if _, ok := ghc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "GroupHistory.name"`)}
 	}
@@ -404,6 +413,10 @@ func (ghc *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec
 	if value, ok := ghc.mutation.DeletedBy(); ok {
 		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ghc.mutation.DisplayID(); ok {
+		_spec.SetField(grouphistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := ghc.mutation.Tags(); ok {
 		_spec.SetField(grouphistory.FieldTags, field.TypeJSON, value)
