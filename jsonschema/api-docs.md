@@ -436,6 +436,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**ReindexerSchedule**||||
 |**RescueStuckJobsAfter**|`integer`|||
 |**RetryPolicy**||||
+|**SkipUnknownJobCheck**|`boolean`|||
 |**TestOnly**|`boolean`|||
 |[**Workers**](#jobqueueriverconfworkers)|`object`|||
 |[**WorkerMiddleware**](#jobqueueriverconfworkermiddleware)|`array`|||

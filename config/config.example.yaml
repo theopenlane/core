@@ -102,6 +102,7 @@ jobQueue:
         ReindexerSchedule: null
         RescueStuckJobsAfter: 0
         RetryPolicy: null
+        SkipUnknownJobCheck: false
         TestOnly: false
         WorkerMiddleware: null
         Workers: null
