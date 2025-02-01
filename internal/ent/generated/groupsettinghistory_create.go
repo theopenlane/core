@@ -112,12 +112,6 @@ func (gshc *GroupSettingHistoryCreate) SetNillableUpdatedBy(s *string) *GroupSet
 	return gshc
 }
 
-// SetTags sets the "tags" field.
-func (gshc *GroupSettingHistoryCreate) SetTags(s []string) *GroupSettingHistoryCreate {
-	gshc.mutation.SetTags(s)
-	return gshc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (gshc *GroupSettingHistoryCreate) SetDeletedAt(t time.Time) *GroupSettingHistoryCreate {
 	gshc.mutation.SetDeletedAt(t)
@@ -277,10 +271,6 @@ func (gshc *GroupSettingHistoryCreate) defaults() {
 		v := groupsettinghistory.DefaultUpdatedAt()
 		gshc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gshc.mutation.Tags(); !ok {
-		v := groupsettinghistory.DefaultTags
-		gshc.mutation.SetTags(v)
-	}
 	if _, ok := gshc.mutation.Visibility(); !ok {
 		v := groupsettinghistory.DefaultVisibility
 		gshc.mutation.SetVisibility(v)
@@ -395,10 +385,6 @@ func (gshc *GroupSettingHistoryCreate) createSpec() (*GroupSettingHistory, *sqlg
 	if value, ok := gshc.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupsettinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := gshc.mutation.Tags(); ok {
-		_spec.SetField(groupsettinghistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
 	}
 	if value, ok := gshc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsettinghistory.FieldDeletedAt, field.TypeTime, value)

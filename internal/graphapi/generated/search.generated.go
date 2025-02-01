@@ -1066,6 +1066,8 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Group_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Group_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Group_tags(ctx, field)
 			case "ownerID":
@@ -1156,77 +1158,6 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_members(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Group", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _GroupSettingSearchResult_groupSettings(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingSearchResult) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupSettingSearchResult_groupSettings(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GroupSettings, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.GroupSetting)
-	fc.Result = res
-	return ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_GroupSettingSearchResult_groupSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupSettingSearchResult",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_GroupSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_GroupSetting_tags(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupSetting_deletedBy(ctx, field)
-			case "visibility":
-				return ec.fieldContext_GroupSetting_visibility(ctx, field)
-			case "joinPolicy":
-				return ec.fieldContext_GroupSetting_joinPolicy(ctx, field)
-			case "syncToSlack":
-				return ec.fieldContext_GroupSetting_syncToSlack(ctx, field)
-			case "syncToGithub":
-				return ec.fieldContext_GroupSetting_syncToGithub(ctx, field)
-			case "groupID":
-				return ec.fieldContext_GroupSetting_groupID(ctx, field)
-			case "group":
-				return ec.fieldContext_GroupSetting_group(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
 		},
 	}
 	return fc, nil
@@ -3099,13 +3030,6 @@ func (ec *executionContext) _SearchResult(ctx context.Context, sel ast.Selection
 			return graphql.Null
 		}
 		return ec._GroupSearchResult(ctx, sel, obj)
-	case model.GroupSettingSearchResult:
-		return ec._GroupSettingSearchResult(ctx, sel, &obj)
-	case *model.GroupSettingSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._GroupSettingSearchResult(ctx, sel, obj)
 	case model.IntegrationSearchResult:
 		return ec._IntegrationSearchResult(ctx, sel, &obj)
 	case *model.IntegrationSearchResult:
@@ -3643,42 +3567,6 @@ func (ec *executionContext) _GroupSearchResult(ctx context.Context, sel ast.Sele
 			out.Values[i] = graphql.MarshalString("GroupSearchResult")
 		case "groups":
 			out.Values[i] = ec._GroupSearchResult_groups(ctx, field, obj)
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
-var groupSettingSearchResultImplementors = []string{"GroupSettingSearchResult", "SearchResult"}
-
-func (ec *executionContext) _GroupSettingSearchResult(ctx context.Context, sel ast.SelectionSet, obj *model.GroupSettingSearchResult) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, groupSettingSearchResultImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GroupSettingSearchResult")
-		case "groupSettings":
-			out.Values[i] = ec._GroupSettingSearchResult_groupSettings(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4503,13 +4391,6 @@ func (ec *executionContext) marshalOGroupSearchResult2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._GroupSearchResult(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOGroupSettingSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingSearchResult) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._GroupSettingSearchResult(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOIntegrationSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIntegrationSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.IntegrationSearchResult) graphql.Marshaler {

@@ -2328,6 +2328,7 @@ func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult) GetFiles() []*AdminSear
 
 type AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
@@ -2340,6 +2341,12 @@ func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDeletedBy() 
 		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.DisplayID
 }
 func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
 	if t == nil {
@@ -2381,49 +2388,6 @@ func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult) GetGroups() []*AdminSe
 		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult{}
 	}
 	return t.Groups
-}
-
-type AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	GroupID   *string  "json:\"groupID,omitempty\" graphql:\"groupID\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
-	}
-	return t.DeletedBy
-}
-func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetGroupID() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
-	}
-	return t.GroupID
-}
-func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
-	}
-	return t.ID
-}
-func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetTags() []string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
-	}
-	return t.Tags
-}
-
-type AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult struct {
-	GroupSettings []*AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings "json:\"groupSettings,omitempty\" graphql:\"groupSettings\""
-}
-
-func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult) GetGroupSettings() []*AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult{}
-	}
-	return t.GroupSettings
 }
 
 type AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations struct {
@@ -3870,7 +3834,6 @@ type AdminSearch_AdminSearch_Nodes struct {
 	EvidenceSearchResult            AdminSearch_AdminSearch_Nodes_EvidenceSearchResult            "graphql:\"... on EvidenceSearchResult\""
 	FileSearchResult                AdminSearch_AdminSearch_Nodes_FileSearchResult                "graphql:\"... on FileSearchResult\""
 	GroupSearchResult               AdminSearch_AdminSearch_Nodes_GroupSearchResult               "graphql:\"... on GroupSearchResult\""
-	GroupSettingSearchResult        AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult        "graphql:\"... on GroupSettingSearchResult\""
 	IntegrationSearchResult         AdminSearch_AdminSearch_Nodes_IntegrationSearchResult         "graphql:\"... on IntegrationSearchResult\""
 	InternalPolicySearchResult      AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult      "graphql:\"... on InternalPolicySearchResult\""
 	NarrativeSearchResult           AdminSearch_AdminSearch_Nodes_NarrativeSearchResult           "graphql:\"... on NarrativeSearchResult\""
@@ -3961,12 +3924,6 @@ func (t *AdminSearch_AdminSearch_Nodes) GetGroupSearchResult() *AdminSearch_Admi
 		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.GroupSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetGroupSettingSearchResult() *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.GroupSettingSearchResult
 }
 func (t *AdminSearch_AdminSearch_Nodes) GetIntegrationSearchResult() *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult {
 	if t == nil {
@@ -16525,7 +16482,6 @@ type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting struct {
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -16552,12 +16508,6 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting) GetSyncToSlack() 
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting{}
 	}
 	return t.SyncToSlack
-}
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting{}
-	}
-	return t.Tags
 }
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -16624,7 +16574,7 @@ type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups struct {
 	Members     []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                                  "json:\"name\" graphql:\"name\""
 	Owner       *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting    "json:\"setting\" graphql:\"setting\""
+	Setting     *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -16674,7 +16624,7 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetSetting() *CreateBulkC
 	if t == nil {
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
 	}
-	return &t.Setting
+	return t.Setting
 }
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetTags() []string {
 	if t == nil {
@@ -16717,7 +16667,6 @@ type CreateBulkGroup_CreateBulkGroup_Groups_Setting struct {
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -16744,12 +16693,6 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups_Setting) GetSyncToSlack() *bool 
 		t = &CreateBulkGroup_CreateBulkGroup_Groups_Setting{}
 	}
 	return t.SyncToSlack
-}
-func (t *CreateBulkGroup_CreateBulkGroup_Groups_Setting) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkGroup_CreateBulkGroup_Groups_Setting{}
-	}
-	return t.Tags
 }
 func (t *CreateBulkGroup_CreateBulkGroup_Groups_Setting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -16816,7 +16759,7 @@ type CreateBulkGroup_CreateBulkGroup_Groups struct {
 	Members     []*CreateBulkGroup_CreateBulkGroup_Groups_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                            "json:\"name\" graphql:\"name\""
 	Owner       *CreateBulkGroup_CreateBulkGroup_Groups_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     CreateBulkGroup_CreateBulkGroup_Groups_Setting    "json:\"setting\" graphql:\"setting\""
+	Setting     *CreateBulkGroup_CreateBulkGroup_Groups_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -16866,7 +16809,7 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetSetting() *CreateBulkGroup_C
 	if t == nil {
 		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
 	}
-	return &t.Setting
+	return t.Setting
 }
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetTags() []string {
 	if t == nil {
@@ -16909,7 +16852,6 @@ type CreateGroup_CreateGroup_Group_Setting struct {
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
@@ -16936,12 +16878,6 @@ func (t *CreateGroup_CreateGroup_Group_Setting) GetSyncToSlack() *bool {
 		t = &CreateGroup_CreateGroup_Group_Setting{}
 	}
 	return t.SyncToSlack
-}
-func (t *CreateGroup_CreateGroup_Group_Setting) GetTags() []string {
-	if t == nil {
-		t = &CreateGroup_CreateGroup_Group_Setting{}
-	}
-	return t.Tags
 }
 func (t *CreateGroup_CreateGroup_Group_Setting) GetVisibility() *enums.Visibility {
 	if t == nil {
@@ -17008,7 +16944,7 @@ type CreateGroup_CreateGroup_Group struct {
 	Members     []*CreateGroup_CreateGroup_Group_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                   "json:\"name\" graphql:\"name\""
 	Owner       *CreateGroup_CreateGroup_Group_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     CreateGroup_CreateGroup_Group_Setting    "json:\"setting\" graphql:\"setting\""
+	Setting     *CreateGroup_CreateGroup_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -17058,7 +16994,7 @@ func (t *CreateGroup_CreateGroup_Group) GetSetting() *CreateGroup_CreateGroup_Gr
 	if t == nil {
 		t = &CreateGroup_CreateGroup_Group{}
 	}
-	return &t.Setting
+	return t.Setting
 }
 func (t *CreateGroup_CreateGroup_Group) GetTags() []string {
 	if t == nil {
@@ -17114,7 +17050,6 @@ type GetAllGroups_Groups_Edges_Node_Setting struct {
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
@@ -17155,12 +17090,6 @@ func (t *GetAllGroups_Groups_Edges_Node_Setting) GetSyncToSlack() *bool {
 		t = &GetAllGroups_Groups_Edges_Node_Setting{}
 	}
 	return t.SyncToSlack
-}
-func (t *GetAllGroups_Groups_Edges_Node_Setting) GetTags() []string {
-	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_Setting{}
-	}
-	return t.Tags
 }
 func (t *GetAllGroups_Groups_Edges_Node_Setting) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -17242,7 +17171,7 @@ type GetAllGroups_Groups_Edges_Node struct {
 	Members     []*GetAllGroups_Groups_Edges_Node_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                    "json:\"name\" graphql:\"name\""
 	Owner       *GetAllGroups_Groups_Edges_Node_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     GetAllGroups_Groups_Edges_Node_Setting    "json:\"setting\" graphql:\"setting\""
+	Setting     *GetAllGroups_Groups_Edges_Node_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -17312,7 +17241,7 @@ func (t *GetAllGroups_Groups_Edges_Node) GetSetting() *GetAllGroups_Groups_Edges
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node{}
 	}
-	return &t.Setting
+	return t.Setting
 }
 func (t *GetAllGroups_Groups_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -17380,7 +17309,6 @@ type GetGroupByID_Group_Setting struct {
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
@@ -17421,12 +17349,6 @@ func (t *GetGroupByID_Group_Setting) GetSyncToSlack() *bool {
 		t = &GetGroupByID_Group_Setting{}
 	}
 	return t.SyncToSlack
-}
-func (t *GetGroupByID_Group_Setting) GetTags() []string {
-	if t == nil {
-		t = &GetGroupByID_Group_Setting{}
-	}
-	return t.Tags
 }
 func (t *GetGroupByID_Group_Setting) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -17508,7 +17430,7 @@ type GetGroupByID_Group struct {
 	Members     []*GetGroupByID_Group_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                        "json:\"name\" graphql:\"name\""
 	Owner       *GetGroupByID_Group_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     GetGroupByID_Group_Setting    "json:\"setting\" graphql:\"setting\""
+	Setting     *GetGroupByID_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -17578,7 +17500,7 @@ func (t *GetGroupByID_Group) GetSetting() *GetGroupByID_Group_Setting {
 	if t == nil {
 		t = &GetGroupByID_Group{}
 	}
-	return &t.Setting
+	return t.Setting
 }
 func (t *GetGroupByID_Group) GetTags() []string {
 	if t == nil {
@@ -17624,7 +17546,6 @@ type GetGroups_Groups_Edges_Node_Setting struct {
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
@@ -17665,12 +17586,6 @@ func (t *GetGroups_Groups_Edges_Node_Setting) GetSyncToSlack() *bool {
 		t = &GetGroups_Groups_Edges_Node_Setting{}
 	}
 	return t.SyncToSlack
-}
-func (t *GetGroups_Groups_Edges_Node_Setting) GetTags() []string {
-	if t == nil {
-		t = &GetGroups_Groups_Edges_Node_Setting{}
-	}
-	return t.Tags
 }
 func (t *GetGroups_Groups_Edges_Node_Setting) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -17752,7 +17667,7 @@ type GetGroups_Groups_Edges_Node struct {
 	Members     []*GetGroups_Groups_Edges_Node_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                 "json:\"name\" graphql:\"name\""
 	Owner       *GetGroups_Groups_Edges_Node_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     GetGroups_Groups_Edges_Node_Setting    "json:\"setting\" graphql:\"setting\""
+	Setting     *GetGroups_Groups_Edges_Node_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -17822,7 +17737,7 @@ func (t *GetGroups_Groups_Edges_Node) GetSetting() *GetGroups_Groups_Edges_Node_
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node{}
 	}
-	return &t.Setting
+	return t.Setting
 }
 func (t *GetGroups_Groups_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -17890,7 +17805,6 @@ type UpdateGroup_UpdateGroup_Group_Setting struct {
 	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
@@ -17931,12 +17845,6 @@ func (t *UpdateGroup_UpdateGroup_Group_Setting) GetSyncToSlack() *bool {
 		t = &UpdateGroup_UpdateGroup_Group_Setting{}
 	}
 	return t.SyncToSlack
-}
-func (t *UpdateGroup_UpdateGroup_Group_Setting) GetTags() []string {
-	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Setting{}
-	}
-	return t.Tags
 }
 func (t *UpdateGroup_UpdateGroup_Group_Setting) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -18015,7 +17923,7 @@ type UpdateGroup_UpdateGroup_Group struct {
 	Members     []*UpdateGroup_UpdateGroup_Group_Members "json:\"members,omitempty\" graphql:\"members\""
 	Name        string                                   "json:\"name\" graphql:\"name\""
 	Owner       *UpdateGroup_UpdateGroup_Group_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     UpdateGroup_UpdateGroup_Group_Setting    "json:\"setting\" graphql:\"setting\""
+	Setting     *UpdateGroup_UpdateGroup_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags        []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -18065,7 +17973,7 @@ func (t *UpdateGroup_UpdateGroup_Group) GetSetting() *UpdateGroup_UpdateGroup_Gr
 	if t == nil {
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
-	return &t.Setting
+	return t.Setting
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetTags() []string {
 	if t == nil {
@@ -19171,7 +19079,6 @@ type GetAllGroupSettings_GroupSettings_Edges_Node struct {
 	JoinPolicy   enums.JoinPolicy                                    "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool                                               "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool                                               "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility                                    "json:\"visibility\" graphql:\"visibility\""
@@ -19218,12 +19125,6 @@ func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetSyncToSlack() *bool {
 		t = &GetAllGroupSettings_GroupSettings_Edges_Node{}
 	}
 	return t.SyncToSlack
-}
-func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetAllGroupSettings_GroupSettings_Edges_Node{}
-	}
-	return t.Tags
 }
 func (t *GetAllGroupSettings_GroupSettings_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -19292,7 +19193,6 @@ type GetGroupSettingByID_GroupSetting struct {
 	JoinPolicy   enums.JoinPolicy                        "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool                                   "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool                                   "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility                        "json:\"visibility\" graphql:\"visibility\""
@@ -19340,12 +19240,6 @@ func (t *GetGroupSettingByID_GroupSetting) GetSyncToSlack() *bool {
 	}
 	return t.SyncToSlack
 }
-func (t *GetGroupSettingByID_GroupSetting) GetTags() []string {
-	if t == nil {
-		t = &GetGroupSettingByID_GroupSetting{}
-	}
-	return t.Tags
-}
 func (t *GetGroupSettingByID_GroupSetting) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetGroupSettingByID_GroupSetting{}
@@ -19391,7 +19285,6 @@ type GetGroupSettings_GroupSettings_Edges_Node struct {
 	JoinPolicy   enums.JoinPolicy                                 "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool                                            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool                                            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility                                 "json:\"visibility\" graphql:\"visibility\""
@@ -19438,12 +19331,6 @@ func (t *GetGroupSettings_GroupSettings_Edges_Node) GetSyncToSlack() *bool {
 		t = &GetGroupSettings_GroupSettings_Edges_Node{}
 	}
 	return t.SyncToSlack
-}
-func (t *GetGroupSettings_GroupSettings_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetGroupSettings_GroupSettings_Edges_Node{}
-	}
-	return t.Tags
 }
 func (t *GetGroupSettings_GroupSettings_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -19512,7 +19399,6 @@ type UpdateGroupSetting_UpdateGroupSetting_GroupSetting struct {
 	JoinPolicy   enums.JoinPolicy                                          "json:\"joinPolicy\" graphql:\"joinPolicy\""
 	SyncToGithub *bool                                                     "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool                                                     "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility                                          "json:\"visibility\" graphql:\"visibility\""
@@ -19560,12 +19446,6 @@ func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetSyncToSlack() *b
 	}
 	return t.SyncToSlack
 }
-func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetTags() []string {
-	if t == nil {
-		t = &UpdateGroupSetting_UpdateGroupSetting_GroupSetting{}
-	}
-	return t.Tags
-}
 func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateGroupSetting_UpdateGroupSetting_GroupSetting{}
@@ -19607,7 +19487,6 @@ type GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
 	Ref          *string          "json:\"ref,omitempty\" graphql:\"ref\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
@@ -19673,12 +19552,6 @@ func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetSyncTo
 	}
 	return t.SyncToSlack
 }
-func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node{}
-	}
-	return t.Tags
-}
 func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node{}
@@ -19731,7 +19604,6 @@ type GetGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
 	Ref          *string          "json:\"ref,omitempty\" graphql:\"ref\""
 	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
 	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
@@ -19796,12 +19668,6 @@ func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetSyncToSla
 		t = &GetGroupSettingHistories_GroupSettingHistories_Edges_Node{}
 	}
 	return t.SyncToSlack
-}
-func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetGroupSettingHistories_GroupSettingHistories_Edges_Node{}
-	}
-	return t.Tags
 }
 func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -25243,7 +25109,6 @@ type GetAllNoteHistories_NoteHistories_Edges_Node struct {
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	Text        string         "json:\"text\" graphql:\"text\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -25290,12 +25155,6 @@ func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetRef() *string {
 		t = &GetAllNoteHistories_NoteHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetAllNoteHistories_NoteHistories_Edges_Node{}
-	}
-	return t.Tags
 }
 func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetText() string {
 	if t == nil {
@@ -25346,7 +25205,6 @@ type GetNoteHistories_NoteHistories_Edges_Node struct {
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	Text        string         "json:\"text\" graphql:\"text\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -25393,12 +25251,6 @@ func (t *GetNoteHistories_NoteHistories_Edges_Node) GetRef() *string {
 		t = &GetNoteHistories_NoteHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetNoteHistories_NoteHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetNoteHistories_NoteHistories_Edges_Node{}
-	}
-	return t.Tags
 }
 func (t *GetNoteHistories_NoteHistories_Edges_Node) GetText() string {
 	if t == nil {
@@ -38104,12 +37956,19 @@ func (t *GlobalSearch_Search_Nodes_FileSearchResult) GetFiles() []*GlobalSearch_
 }
 
 type GlobalSearch_Search_Nodes_GroupSearchResult_Groups struct {
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.DisplayID
+}
 func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
@@ -38144,35 +38003,6 @@ func (t *GlobalSearch_Search_Nodes_GroupSearchResult) GetGroups() []*GlobalSearc
 		t = &GlobalSearch_Search_Nodes_GroupSearchResult{}
 	}
 	return t.Groups
-}
-
-type GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings) GetID() string {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings{}
-	}
-	return t.ID
-}
-func (t *GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings) GetTags() []string {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings{}
-	}
-	return t.Tags
-}
-
-type GlobalSearch_Search_Nodes_GroupSettingSearchResult struct {
-	GroupSettings []*GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings "json:\"groupSettings,omitempty\" graphql:\"groupSettings\""
-}
-
-func (t *GlobalSearch_Search_Nodes_GroupSettingSearchResult) GetGroupSettings() []*GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSettingSearchResult{}
-	}
-	return t.GroupSettings
 }
 
 type GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations struct {
@@ -38891,7 +38721,6 @@ type GlobalSearch_Search_Nodes struct {
 	EvidenceSearchResult            GlobalSearch_Search_Nodes_EvidenceSearchResult            "graphql:\"... on EvidenceSearchResult\""
 	FileSearchResult                GlobalSearch_Search_Nodes_FileSearchResult                "graphql:\"... on FileSearchResult\""
 	GroupSearchResult               GlobalSearch_Search_Nodes_GroupSearchResult               "graphql:\"... on GroupSearchResult\""
-	GroupSettingSearchResult        GlobalSearch_Search_Nodes_GroupSettingSearchResult        "graphql:\"... on GroupSettingSearchResult\""
 	IntegrationSearchResult         GlobalSearch_Search_Nodes_IntegrationSearchResult         "graphql:\"... on IntegrationSearchResult\""
 	InternalPolicySearchResult      GlobalSearch_Search_Nodes_InternalPolicySearchResult      "graphql:\"... on InternalPolicySearchResult\""
 	NarrativeSearchResult           GlobalSearch_Search_Nodes_NarrativeSearchResult           "graphql:\"... on NarrativeSearchResult\""
@@ -38982,12 +38811,6 @@ func (t *GlobalSearch_Search_Nodes) GetGroupSearchResult() *GlobalSearch_Search_
 		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.GroupSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetGroupSettingSearchResult() *GlobalSearch_Search_Nodes_GroupSettingSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.GroupSettingSearchResult
 }
 func (t *GlobalSearch_Search_Nodes) GetIntegrationSearchResult() *GlobalSearch_Search_Nodes_IntegrationSearchResult {
 	if t == nil {
@@ -51869,18 +51692,11 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				groups {
 					deletedBy
 					id
+					displayID
 					tags
 					ownerID
 					name
 					displayName
-				}
-			}
-			... on GroupSettingSearchResult {
-				groupSettings {
-					id
-					tags
-					deletedBy
-					groupID
 				}
 			}
 			... on IntegrationSearchResult {
@@ -55921,7 +55737,6 @@ const CreateBulkCSVGroupDocument = `mutation CreateBulkCSVGroup ($input: Upload!
 				joinPolicy
 				syncToGithub
 				syncToSlack
-				tags
 				visibility
 			}
 			members {
@@ -55973,7 +55788,6 @@ const CreateBulkGroupDocument = `mutation CreateBulkGroup ($input: [CreateGroupI
 				joinPolicy
 				syncToGithub
 				syncToSlack
-				tags
 				visibility
 			}
 			members {
@@ -56025,7 +55839,6 @@ const CreateGroupDocument = `mutation CreateGroup ($input: CreateGroupInput!) {
 				joinPolicy
 				syncToGithub
 				syncToSlack
-				tags
 				visibility
 			}
 			members {
@@ -56105,7 +55918,6 @@ const GetAllGroupsDocument = `query GetAllGroups {
 					joinPolicy
 					syncToGithub
 					syncToSlack
-					tags
 					updatedAt
 					updatedBy
 					visibility
@@ -56164,7 +55976,6 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 			joinPolicy
 			syncToGithub
 			syncToSlack
-			tags
 			updatedAt
 			updatedBy
 			visibility
@@ -56225,7 +56036,6 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 					joinPolicy
 					syncToGithub
 					syncToSlack
-					tags
 					updatedAt
 					updatedBy
 					visibility
@@ -56286,7 +56096,6 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 				joinPolicy
 				syncToGithub
 				syncToSlack
-				tags
 				updatedAt
 				updatedBy
 				visibility
@@ -56714,7 +56523,6 @@ const GetAllGroupSettingsDocument = `query GetAllGroupSettings {
 				joinPolicy
 				syncToGithub
 				syncToSlack
-				tags
 				visibility
 				group {
 					id
@@ -56751,7 +56559,6 @@ const GetGroupSettingByIDDocument = `query GetGroupSettingByID ($groupSettingId:
 		joinPolicy
 		syncToGithub
 		syncToSlack
-		tags
 		visibility
 		group {
 			id
@@ -56790,7 +56597,6 @@ const GetGroupSettingsDocument = `query GetGroupSettings ($where: GroupSettingWh
 				joinPolicy
 				syncToGithub
 				syncToSlack
-				tags
 				visibility
 				group {
 					id
@@ -56830,7 +56636,6 @@ const UpdateGroupSettingDocument = `mutation UpdateGroupSetting ($updateGroupSet
 			joinPolicy
 			syncToGithub
 			syncToSlack
-			tags
 			visibility
 			group {
 				id
@@ -56877,7 +56682,6 @@ const GetAllGroupSettingHistoriesDocument = `query GetAllGroupSettingHistories {
 				ref
 				syncToGithub
 				syncToSlack
-				tags
 				updatedAt
 				updatedBy
 				visibility
@@ -56916,7 +56720,6 @@ const GetGroupSettingHistoriesDocument = `query GetGroupSettingHistories ($where
 				ref
 				syncToGithub
 				syncToSlack
-				tags
 				updatedAt
 				updatedBy
 				visibility
@@ -58798,7 +58601,6 @@ const GetAllNoteHistoriesDocument = `query GetAllNoteHistories {
 				operation
 				ownerID
 				ref
-				tags
 				text
 				updatedAt
 				updatedBy
@@ -58834,7 +58636,6 @@ const GetNoteHistoriesDocument = `query GetNoteHistories ($where: NoteHistoryWhe
 				operation
 				ownerID
 				ref
-				tags
 				text
 				updatedAt
 				updatedBy
@@ -62675,15 +62476,10 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on GroupSearchResult {
 				groups {
+					displayID
 					displayName
 					id
 					name
-					tags
-				}
-			}
-			... on GroupSettingSearchResult {
-				groupSettings {
-					id
 					tags
 				}
 			}

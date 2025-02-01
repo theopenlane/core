@@ -16,7 +16,6 @@ mutation CreateBulkCSVGroup($input: Upload!) {
         joinPolicy
         syncToGithub
         syncToSlack
-        tags
         visibility
       }
       members {
@@ -50,7 +49,6 @@ mutation CreateBulkGroup($input: [CreateGroupInput!]) {
         joinPolicy
         syncToGithub
         syncToSlack
-        tags
         visibility
       }
       members {
@@ -84,7 +82,6 @@ mutation CreateGroup($input: CreateGroupInput!) {
         joinPolicy
         syncToGithub
         syncToSlack
-        tags
         visibility
       }
       members {
@@ -128,7 +125,6 @@ query GetAllGroups {
           joinPolicy
           syncToGithub
           syncToSlack
-          tags
           updatedAt
           updatedBy
           visibility
@@ -171,7 +167,6 @@ query GetGroupByID($groupId: ID!) {
       joinPolicy
       syncToGithub
       syncToSlack
-      tags
       updatedAt
       updatedBy
       visibility
@@ -214,7 +209,6 @@ query GetGroups($where: GroupWhereInput) {
           joinPolicy
           syncToGithub
           syncToSlack
-          tags
           updatedAt
           updatedBy
           visibility
@@ -257,7 +251,6 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
         joinPolicy
         syncToGithub
         syncToSlack
-        tags
         updatedAt
         updatedBy
         visibility

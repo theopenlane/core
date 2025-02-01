@@ -695,16 +695,6 @@ func DeletedByContainsFold(v string) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.NoteHistory {
-	return predicate.NoteHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.NoteHistory {
-	return predicate.NoteHistory(sql.FieldNotNull(FieldTags))
-}
-
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldEQ(FieldOwnerID, v))

@@ -506,16 +506,6 @@ func UpdatedByContainsFold(v string) predicate.GroupSettingHistory {
 	return predicate.GroupSettingHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.GroupSettingHistory {
-	return predicate.GroupSettingHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.GroupSettingHistory {
-	return predicate.GroupSettingHistory(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.GroupSettingHistory {
 	return predicate.GroupSettingHistory(sql.FieldEQ(FieldDeletedAt, v))

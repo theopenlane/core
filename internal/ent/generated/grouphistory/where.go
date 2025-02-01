@@ -105,6 +105,11 @@ func DeletedBy(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
+func DisplayID(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldDisplayID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -648,6 +653,71 @@ func DeletedByEqualFold(v string) predicate.GroupHistory {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// DisplayIDEQ applies the EQ predicate on the "display_id" field.
+func DisplayIDEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldDisplayID, v))
+}
+
+// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
+func DisplayIDNEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNEQ(FieldDisplayID, v))
+}
+
+// DisplayIDIn applies the In predicate on the "display_id" field.
+func DisplayIDIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIn(FieldDisplayID, vs...))
+}
+
+// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
+func DisplayIDNotIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotIn(FieldDisplayID, vs...))
+}
+
+// DisplayIDGT applies the GT predicate on the "display_id" field.
+func DisplayIDGT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGT(FieldDisplayID, v))
+}
+
+// DisplayIDGTE applies the GTE predicate on the "display_id" field.
+func DisplayIDGTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGTE(FieldDisplayID, v))
+}
+
+// DisplayIDLT applies the LT predicate on the "display_id" field.
+func DisplayIDLT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLT(FieldDisplayID, v))
+}
+
+// DisplayIDLTE applies the LTE predicate on the "display_id" field.
+func DisplayIDLTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLTE(FieldDisplayID, v))
+}
+
+// DisplayIDContains applies the Contains predicate on the "display_id" field.
+func DisplayIDContains(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContains(FieldDisplayID, v))
+}
+
+// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
+func DisplayIDHasPrefix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasPrefix(FieldDisplayID, v))
+}
+
+// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
+func DisplayIDHasSuffix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasSuffix(FieldDisplayID, v))
+}
+
+// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
+func DisplayIDEqualFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEqualFold(FieldDisplayID, v))
+}
+
+// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
+func DisplayIDContainsFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
 // TagsIsNil applies the IsNil predicate on the "tags" field.

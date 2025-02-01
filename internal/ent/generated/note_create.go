@@ -114,12 +114,6 @@ func (nc *NoteCreate) SetNillableDeletedBy(s *string) *NoteCreate {
 	return nc
 }
 
-// SetTags sets the "tags" field.
-func (nc *NoteCreate) SetTags(s []string) *NoteCreate {
-	nc.mutation.SetTags(s)
-	return nc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (nc *NoteCreate) SetOwnerID(s string) *NoteCreate {
 	nc.mutation.SetOwnerID(s)
@@ -259,10 +253,6 @@ func (nc *NoteCreate) defaults() error {
 		v := note.DefaultUpdatedAt()
 		nc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := nc.mutation.Tags(); !ok {
-		v := note.DefaultTags
-		nc.mutation.SetTags(v)
-	}
 	if _, ok := nc.mutation.ID(); !ok {
 		if note.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized note.DefaultID (forgotten import generated/runtime?)")
@@ -359,10 +349,6 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 	if value, ok := nc.mutation.DeletedBy(); ok {
 		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
-	}
-	if value, ok := nc.mutation.Tags(); ok {
-		_spec.SetField(note.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
 	}
 	if value, ok := nc.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)

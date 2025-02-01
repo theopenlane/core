@@ -552,16 +552,6 @@ func DeletedByContainsFold(v string) predicate.Note {
 	return predicate.Note(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.Note {
-	return predicate.Note(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.Note {
-	return predicate.Note(sql.FieldNotNull(FieldTags))
-}
-
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.Note {
 	return predicate.Note(sql.FieldEQ(FieldOwnerID, v))

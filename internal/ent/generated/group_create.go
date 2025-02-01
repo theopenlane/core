@@ -119,6 +119,12 @@ func (gc *GroupCreate) SetNillableDeletedBy(s *string) *GroupCreate {
 	return gc
 }
 
+// SetDisplayID sets the "display_id" field.
+func (gc *GroupCreate) SetDisplayID(s string) *GroupCreate {
+	gc.mutation.SetDisplayID(s)
+	return gc
+}
+
 // SetTags sets the "tags" field.
 func (gc *GroupCreate) SetTags(s []string) *GroupCreate {
 	gc.mutation.SetTags(s)
@@ -660,6 +666,14 @@ func (gc *GroupCreate) SetSettingID(id string) *GroupCreate {
 	return gc
 }
 
+// SetNillableSettingID sets the "setting" edge to the GroupSetting entity by ID if the given value is not nil.
+func (gc *GroupCreate) SetNillableSettingID(id *string) *GroupCreate {
+	if id != nil {
+		gc = gc.SetSettingID(*id)
+	}
+	return gc
+}
+
 // SetSetting sets the "setting" edge to the GroupSetting entity.
 func (gc *GroupCreate) SetSetting(g *GroupSetting) *GroupCreate {
 	return gc.SetSettingID(g.ID)
@@ -830,6 +844,14 @@ func (gc *GroupCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (gc *GroupCreate) check() error {
+	if _, ok := gc.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Group.display_id"`)}
+	}
+	if v, ok := gc.mutation.DisplayID(); ok {
+		if err := group.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Group.display_id": %w`, err)}
+		}
+	}
 	if v, ok := gc.mutation.OwnerID(); ok {
 		if err := group.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Group.owner_id": %w`, err)}
@@ -850,9 +872,6 @@ func (gc *GroupCreate) check() error {
 		if err := group.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Group.display_name": %w`, err)}
 		}
-	}
-	if len(gc.mutation.SettingIDs()) == 0 {
-		return &ValidationError{Name: "setting", err: errors.New(`generated: missing required edge "Group.setting"`)}
 	}
 	return nil
 }
@@ -913,6 +932,10 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	if value, ok := gc.mutation.DeletedBy(); ok {
 		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := gc.mutation.DisplayID(); ok {
+		_spec.SetField(group.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := gc.mutation.Tags(); ok {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)

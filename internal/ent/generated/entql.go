@@ -748,6 +748,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldUpdatedBy:       {Type: field.TypeString, Column: group.FieldUpdatedBy},
 			group.FieldDeletedAt:       {Type: field.TypeTime, Column: group.FieldDeletedAt},
 			group.FieldDeletedBy:       {Type: field.TypeString, Column: group.FieldDeletedBy},
+			group.FieldDisplayID:       {Type: field.TypeString, Column: group.FieldDisplayID},
 			group.FieldTags:            {Type: field.TypeJSON, Column: group.FieldTags},
 			group.FieldOwnerID:         {Type: field.TypeString, Column: group.FieldOwnerID},
 			group.FieldName:            {Type: field.TypeString, Column: group.FieldName},
@@ -778,6 +779,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldUpdatedBy:       {Type: field.TypeString, Column: grouphistory.FieldUpdatedBy},
 			grouphistory.FieldDeletedAt:       {Type: field.TypeTime, Column: grouphistory.FieldDeletedAt},
 			grouphistory.FieldDeletedBy:       {Type: field.TypeString, Column: grouphistory.FieldDeletedBy},
+			grouphistory.FieldDisplayID:       {Type: field.TypeString, Column: grouphistory.FieldDisplayID},
 			grouphistory.FieldTags:            {Type: field.TypeJSON, Column: grouphistory.FieldTags},
 			grouphistory.FieldOwnerID:         {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
 			grouphistory.FieldName:            {Type: field.TypeString, Column: grouphistory.FieldName},
@@ -850,7 +852,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsetting.FieldUpdatedAt:    {Type: field.TypeTime, Column: groupsetting.FieldUpdatedAt},
 			groupsetting.FieldCreatedBy:    {Type: field.TypeString, Column: groupsetting.FieldCreatedBy},
 			groupsetting.FieldUpdatedBy:    {Type: field.TypeString, Column: groupsetting.FieldUpdatedBy},
-			groupsetting.FieldTags:         {Type: field.TypeJSON, Column: groupsetting.FieldTags},
 			groupsetting.FieldDeletedAt:    {Type: field.TypeTime, Column: groupsetting.FieldDeletedAt},
 			groupsetting.FieldDeletedBy:    {Type: field.TypeString, Column: groupsetting.FieldDeletedBy},
 			groupsetting.FieldVisibility:   {Type: field.TypeEnum, Column: groupsetting.FieldVisibility},
@@ -878,7 +879,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsettinghistory.FieldUpdatedAt:    {Type: field.TypeTime, Column: groupsettinghistory.FieldUpdatedAt},
 			groupsettinghistory.FieldCreatedBy:    {Type: field.TypeString, Column: groupsettinghistory.FieldCreatedBy},
 			groupsettinghistory.FieldUpdatedBy:    {Type: field.TypeString, Column: groupsettinghistory.FieldUpdatedBy},
-			groupsettinghistory.FieldTags:         {Type: field.TypeJSON, Column: groupsettinghistory.FieldTags},
 			groupsettinghistory.FieldDeletedAt:    {Type: field.TypeTime, Column: groupsettinghistory.FieldDeletedAt},
 			groupsettinghistory.FieldDeletedBy:    {Type: field.TypeString, Column: groupsettinghistory.FieldDeletedBy},
 			groupsettinghistory.FieldVisibility:   {Type: field.TypeEnum, Column: groupsettinghistory.FieldVisibility},
@@ -1156,7 +1156,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			note.FieldDisplayID: {Type: field.TypeString, Column: note.FieldDisplayID},
 			note.FieldDeletedAt: {Type: field.TypeTime, Column: note.FieldDeletedAt},
 			note.FieldDeletedBy: {Type: field.TypeString, Column: note.FieldDeletedBy},
-			note.FieldTags:      {Type: field.TypeJSON, Column: note.FieldTags},
 			note.FieldOwnerID:   {Type: field.TypeString, Column: note.FieldOwnerID},
 			note.FieldText:      {Type: field.TypeString, Column: note.FieldText},
 		},
@@ -1182,7 +1181,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notehistory.FieldDisplayID:   {Type: field.TypeString, Column: notehistory.FieldDisplayID},
 			notehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: notehistory.FieldDeletedAt},
 			notehistory.FieldDeletedBy:   {Type: field.TypeString, Column: notehistory.FieldDeletedBy},
-			notehistory.FieldTags:        {Type: field.TypeJSON, Column: notehistory.FieldTags},
 			notehistory.FieldOwnerID:     {Type: field.TypeString, Column: notehistory.FieldOwnerID},
 			notehistory.FieldText:        {Type: field.TypeString, Column: notehistory.FieldText},
 		},
@@ -9584,6 +9582,11 @@ func (f *GroupFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(group.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *GroupFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(group.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *GroupFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(group.FieldTags))
@@ -10213,6 +10216,11 @@ func (f *GroupHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *GroupHistoryFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *GroupHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(grouphistory.FieldTags))
@@ -10554,11 +10562,6 @@ func (f *GroupSettingFilter) WhereUpdatedBy(p entql.StringP) {
 	f.Where(p.Field(groupsetting.FieldUpdatedBy))
 }
 
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *GroupSettingFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(groupsetting.FieldTags))
-}
-
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
 func (f *GroupSettingFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(groupsetting.FieldDeletedAt))
@@ -10681,11 +10684,6 @@ func (f *GroupSettingHistoryFilter) WhereCreatedBy(p entql.StringP) {
 // WhereUpdatedBy applies the entql string predicate on the updated_by field.
 func (f *GroupSettingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
 	f.Where(p.Field(groupsettinghistory.FieldUpdatedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *GroupSettingHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(groupsettinghistory.FieldTags))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -12187,11 +12185,6 @@ func (f *NoteFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(note.FieldDeletedBy))
 }
 
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *NoteFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(note.FieldTags))
-}
-
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *NoteFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(note.FieldOwnerID))
@@ -12346,11 +12339,6 @@ func (f *NoteHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 // WhereDeletedBy applies the entql string predicate on the deleted_by field.
 func (f *NoteHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(notehistory.FieldDeletedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *NoteHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(notehistory.FieldTags))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.

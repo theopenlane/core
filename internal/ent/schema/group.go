@@ -77,7 +77,6 @@ func (Group) Fields() []ent.Field {
 func (Group) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("setting", GroupSetting.Type).
-			Required().
 			Unique().
 			Annotations(
 				entx.CascadeAnnotationField("Group"),
@@ -97,7 +96,7 @@ func (Group) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
+		emixin.NewIDMixinWithPrefixedID("GRP"),
 		emixin.TagMixin{},
 		NewOrgOwnMixinWithRef("groups"),
 		// add group based create permissions, back reference to the organization

@@ -50,7 +50,7 @@ func (r *mutationResolver) UpdateGroupSetting(ctx context.Context, id string, in
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input)
 
 	res, err = req.Save(ctx)
 	if err != nil {

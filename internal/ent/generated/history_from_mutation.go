@@ -2601,6 +2601,10 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
 	}
@@ -2699,6 +2703,12 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(group.DeletedBy)
 		}
 
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(group.DisplayID)
+		}
+
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
@@ -2785,6 +2795,7 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(group.UpdatedBy).
 			SetDeletedAt(group.DeletedAt).
 			SetDeletedBy(group.DeletedBy).
+			SetDisplayID(group.DisplayID).
 			SetTags(group.Tags).
 			SetOwnerID(group.OwnerID).
 			SetName(group.Name).
@@ -3018,10 +3029,6 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -3104,12 +3111,6 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(groupsetting.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(groupsetting.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -3188,7 +3189,6 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(groupsetting.UpdatedAt).
 			SetCreatedBy(groupsetting.CreatedBy).
 			SetUpdatedBy(groupsetting.UpdatedBy).
-			SetTags(groupsetting.Tags).
 			SetDeletedAt(groupsetting.DeletedAt).
 			SetDeletedBy(groupsetting.DeletedBy).
 			SetVisibility(groupsetting.Visibility).
@@ -4175,10 +4175,6 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -4259,12 +4255,6 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(note.DeletedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(note.Tags)
-		}
-
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -4316,7 +4306,6 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(note.DisplayID).
 			SetDeletedAt(note.DeletedAt).
 			SetDeletedBy(note.DeletedBy).
-			SetTags(note.Tags).
 			SetOwnerID(note.OwnerID).
 			SetText(note.Text).
 			Save(ctx)

@@ -1182,6 +1182,7 @@ func init() {
 	}
 	groupMixinHooks0 := groupMixin[0].Hooks()
 	groupMixinHooks1 := groupMixin[1].Hooks()
+	groupMixinHooks2 := groupMixin[2].Hooks()
 	groupMixinHooks4 := groupMixin[4].Hooks()
 	groupHooks := schema.Group{}.Hooks()
 
@@ -1189,13 +1190,15 @@ func init() {
 
 	group.Hooks[2] = groupMixinHooks1[0]
 
-	group.Hooks[3] = groupMixinHooks4[0]
+	group.Hooks[3] = groupMixinHooks2[0]
 
-	group.Hooks[4] = groupHooks[0]
+	group.Hooks[4] = groupMixinHooks4[0]
 
-	group.Hooks[5] = groupHooks[1]
+	group.Hooks[5] = groupHooks[0]
 
-	group.Hooks[6] = groupHooks[2]
+	group.Hooks[6] = groupHooks[1]
+
+	group.Hooks[7] = groupHooks[2]
 	groupMixinInters1 := groupMixin[1].Interceptors()
 	groupMixinInters4 := groupMixin[4].Interceptors()
 	groupInters := schema.Group{}.Interceptors()
@@ -1222,6 +1225,10 @@ func init() {
 	group.DefaultUpdatedAt = groupDescUpdatedAt.Default.(func() time.Time)
 	// group.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	group.UpdateDefaultUpdatedAt = groupDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// groupDescDisplayID is the schema descriptor for display_id field.
+	groupDescDisplayID := groupMixinFields2[1].Descriptor()
+	// group.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	group.DisplayIDValidator = groupDescDisplayID.Validators[0].(func(string) error)
 	// groupDescTags is the schema descriptor for tags field.
 	groupDescTags := groupMixinFields3[0].Descriptor()
 	// group.DefaultTags holds the default value on creation for the tags field.
@@ -1267,15 +1274,15 @@ func init() {
 	// grouphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	grouphistory.UpdateDefaultUpdatedAt = grouphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// grouphistoryDescTags is the schema descriptor for tags field.
-	grouphistoryDescTags := grouphistoryFields[10].Descriptor()
+	grouphistoryDescTags := grouphistoryFields[11].Descriptor()
 	// grouphistory.DefaultTags holds the default value on creation for the tags field.
 	grouphistory.DefaultTags = grouphistoryDescTags.Default.([]string)
 	// grouphistoryDescIsManaged is the schema descriptor for is_managed field.
-	grouphistoryDescIsManaged := grouphistoryFields[14].Descriptor()
+	grouphistoryDescIsManaged := grouphistoryFields[15].Descriptor()
 	// grouphistory.DefaultIsManaged holds the default value on creation for the is_managed field.
 	grouphistory.DefaultIsManaged = grouphistoryDescIsManaged.Default.(bool)
 	// grouphistoryDescDisplayName is the schema descriptor for display_name field.
-	grouphistoryDescDisplayName := grouphistoryFields[17].Descriptor()
+	grouphistoryDescDisplayName := grouphistoryFields[18].Descriptor()
 	// grouphistory.DefaultDisplayName holds the default value on creation for the display_name field.
 	grouphistory.DefaultDisplayName = grouphistoryDescDisplayName.Default.(string)
 	// grouphistoryDescID is the schema descriptor for id field.
@@ -1356,19 +1363,17 @@ func init() {
 		})
 	}
 	groupsettingMixinHooks0 := groupsettingMixin[0].Hooks()
-	groupsettingMixinHooks3 := groupsettingMixin[3].Hooks()
+	groupsettingMixinHooks2 := groupsettingMixin[2].Hooks()
 
 	groupsetting.Hooks[1] = groupsettingMixinHooks0[0]
 
-	groupsetting.Hooks[2] = groupsettingMixinHooks3[0]
-	groupsettingMixinInters3 := groupsettingMixin[3].Interceptors()
-	groupsetting.Interceptors[0] = groupsettingMixinInters3[0]
+	groupsetting.Hooks[2] = groupsettingMixinHooks2[0]
+	groupsettingMixinInters2 := groupsettingMixin[2].Interceptors()
+	groupsetting.Interceptors[0] = groupsettingMixinInters2[0]
 	groupsettingMixinFields0 := groupsettingMixin[0].Fields()
 	_ = groupsettingMixinFields0
 	groupsettingMixinFields1 := groupsettingMixin[1].Fields()
 	_ = groupsettingMixinFields1
-	groupsettingMixinFields2 := groupsettingMixin[2].Fields()
-	_ = groupsettingMixinFields2
 	groupsettingFields := schema.GroupSetting{}.Fields()
 	_ = groupsettingFields
 	// groupsettingDescCreatedAt is the schema descriptor for created_at field.
@@ -1381,10 +1386,6 @@ func init() {
 	groupsetting.DefaultUpdatedAt = groupsettingDescUpdatedAt.Default.(func() time.Time)
 	// groupsetting.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	groupsetting.UpdateDefaultUpdatedAt = groupsettingDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// groupsettingDescTags is the schema descriptor for tags field.
-	groupsettingDescTags := groupsettingMixinFields2[0].Descriptor()
-	// groupsetting.DefaultTags holds the default value on creation for the tags field.
-	groupsetting.DefaultTags = groupsettingDescTags.Default.([]string)
 	// groupsettingDescSyncToSlack is the schema descriptor for sync_to_slack field.
 	groupsettingDescSyncToSlack := groupsettingFields[2].Descriptor()
 	// groupsetting.DefaultSyncToSlack holds the default value on creation for the sync_to_slack field.
@@ -1415,16 +1416,12 @@ func init() {
 	groupsettinghistory.DefaultUpdatedAt = groupsettinghistoryDescUpdatedAt.Default.(func() time.Time)
 	// groupsettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	groupsettinghistory.UpdateDefaultUpdatedAt = groupsettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// groupsettinghistoryDescTags is the schema descriptor for tags field.
-	groupsettinghistoryDescTags := groupsettinghistoryFields[8].Descriptor()
-	// groupsettinghistory.DefaultTags holds the default value on creation for the tags field.
-	groupsettinghistory.DefaultTags = groupsettinghistoryDescTags.Default.([]string)
 	// groupsettinghistoryDescSyncToSlack is the schema descriptor for sync_to_slack field.
-	groupsettinghistoryDescSyncToSlack := groupsettinghistoryFields[13].Descriptor()
+	groupsettinghistoryDescSyncToSlack := groupsettinghistoryFields[12].Descriptor()
 	// groupsettinghistory.DefaultSyncToSlack holds the default value on creation for the sync_to_slack field.
 	groupsettinghistory.DefaultSyncToSlack = groupsettinghistoryDescSyncToSlack.Default.(bool)
 	// groupsettinghistoryDescSyncToGithub is the schema descriptor for sync_to_github field.
-	groupsettinghistoryDescSyncToGithub := groupsettinghistoryFields[14].Descriptor()
+	groupsettinghistoryDescSyncToGithub := groupsettinghistoryFields[13].Descriptor()
 	// groupsettinghistory.DefaultSyncToGithub holds the default value on creation for the sync_to_github field.
 	groupsettinghistory.DefaultSyncToGithub = groupsettinghistoryDescSyncToGithub.Default.(bool)
 	// groupsettinghistoryDescID is the schema descriptor for id field.
@@ -1887,7 +1884,7 @@ func init() {
 	noteMixinHooks0 := noteMixin[0].Hooks()
 	noteMixinHooks1 := noteMixin[1].Hooks()
 	noteMixinHooks2 := noteMixin[2].Hooks()
-	noteMixinHooks4 := noteMixin[4].Hooks()
+	noteMixinHooks3 := noteMixin[3].Hooks()
 
 	note.Hooks[1] = noteMixinHooks0[0]
 
@@ -1895,19 +1892,17 @@ func init() {
 
 	note.Hooks[3] = noteMixinHooks2[0]
 
-	note.Hooks[4] = noteMixinHooks4[0]
+	note.Hooks[4] = noteMixinHooks3[0]
 	noteMixinInters2 := noteMixin[2].Interceptors()
-	noteMixinInters4 := noteMixin[4].Interceptors()
+	noteMixinInters3 := noteMixin[3].Interceptors()
 	note.Interceptors[0] = noteMixinInters2[0]
-	note.Interceptors[1] = noteMixinInters4[0]
+	note.Interceptors[1] = noteMixinInters3[0]
 	noteMixinFields0 := noteMixin[0].Fields()
 	_ = noteMixinFields0
 	noteMixinFields1 := noteMixin[1].Fields()
 	_ = noteMixinFields1
 	noteMixinFields3 := noteMixin[3].Fields()
 	_ = noteMixinFields3
-	noteMixinFields4 := noteMixin[4].Fields()
-	_ = noteMixinFields4
 	noteFields := schema.Note{}.Fields()
 	_ = noteFields
 	// noteDescCreatedAt is the schema descriptor for created_at field.
@@ -1924,12 +1919,8 @@ func init() {
 	noteDescDisplayID := noteMixinFields1[1].Descriptor()
 	// note.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	note.DisplayIDValidator = noteDescDisplayID.Validators[0].(func(string) error)
-	// noteDescTags is the schema descriptor for tags field.
-	noteDescTags := noteMixinFields3[0].Descriptor()
-	// note.DefaultTags holds the default value on creation for the tags field.
-	note.DefaultTags = noteDescTags.Default.([]string)
 	// noteDescOwnerID is the schema descriptor for owner_id field.
-	noteDescOwnerID := noteMixinFields4[0].Descriptor()
+	noteDescOwnerID := noteMixinFields3[0].Descriptor()
 	// note.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	note.OwnerIDValidator = noteDescOwnerID.Validators[0].(func(string) error)
 	// noteDescText is the schema descriptor for text field.
@@ -1958,10 +1949,6 @@ func init() {
 	notehistory.DefaultUpdatedAt = notehistoryDescUpdatedAt.Default.(func() time.Time)
 	// notehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	notehistory.UpdateDefaultUpdatedAt = notehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// notehistoryDescTags is the schema descriptor for tags field.
-	notehistoryDescTags := notehistoryFields[11].Descriptor()
-	// notehistory.DefaultTags holds the default value on creation for the tags field.
-	notehistory.DefaultTags = notehistoryDescTags.Default.([]string)
 	// notehistoryDescID is the schema descriptor for id field.
 	notehistoryDescID := notehistoryFields[7].Descriptor()
 	// notehistory.DefaultID holds the default value on creation for the id field.

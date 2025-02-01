@@ -9,7 +9,6 @@ query GetAllNoteHistories {
         operation
         ownerID
         ref
-        tags
         text
         updatedAt
         updatedBy
@@ -29,7 +28,6 @@ query GetNoteHistories($where: NoteHistoryWhereInput) {
         operation
         ownerID
         ref
-        tags
         text
         updatedAt
         updatedBy

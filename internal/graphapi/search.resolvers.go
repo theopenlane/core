@@ -30,7 +30,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 		evidenceResults            []*generated.Evidence
 		fileResults                []*generated.File
 		groupResults               []*generated.Group
-		groupsettingResults        []*generated.GroupSetting
 		integrationResults         []*generated.Integration
 		internalpolicyResults      []*generated.InternalPolicy
 		narrativeResults           []*generated.Narrative
@@ -131,13 +130,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 		func() {
 			var err error
 			groupResults, err = searchGroups(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			groupsettingResults, err = searchGroupSettings(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -356,13 +348,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 		})
 
 		resultCount += len(groupResults)
-	}
-	if len(groupsettingResults) > 0 {
-		nodes = append(nodes, model.GroupSettingSearchResult{
-			GroupSettings: groupsettingResults,
-		})
-
-		resultCount += len(groupsettingResults)
 	}
 	if len(integrationResults) > 0 {
 		nodes = append(nodes, model.IntegrationSearchResult{
@@ -631,18 +616,6 @@ func (r *queryResolver) GroupSearch(ctx context.Context, query string) (*model.G
 	// return the results
 	return &model.GroupSearchResult{
 		Groups: groupResults,
-	}, nil
-}
-func (r *queryResolver) GroupSettingSearch(ctx context.Context, query string) (*model.GroupSettingSearchResult, error) {
-	groupsettingResults, err := searchGroupSettings(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &model.GroupSettingSearchResult{
-		GroupSettings: groupsettingResults,
 	}, nil
 }
 func (r *queryResolver) IntegrationSearch(ctx context.Context, query string) (*model.IntegrationSearchResult, error) {

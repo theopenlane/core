@@ -36,7 +36,6 @@ func (Note) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.NewIDMixinWithPrefixedID("NTE"),
 		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
 		NewOrgOwnMixinWithRef("notes"), // TODO: update to object owned mixin instead of org owned
 	}
 }

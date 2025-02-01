@@ -160,18 +160,11 @@ query AdminSearch($query: String!) {
         groups {
           deletedBy
           id
+          displayID
           tags
           ownerID
           name
           displayName
-        }
-      }
-      ... on GroupSettingSearchResult {
-        groupSettings {
-          id
-          tags
-          deletedBy
-          groupID
         }
       }
       ... on IntegrationSearchResult {

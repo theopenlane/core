@@ -82,15 +82,10 @@ query GlobalSearch($query: String!) {
       }
       ... on GroupSearchResult {
         groups {
+          displayID
           displayName
           id
           name
-          tags
-        }
-      }
-      ... on GroupSettingSearchResult {
-        groupSettings {
-          id
           tags
         }
       }
