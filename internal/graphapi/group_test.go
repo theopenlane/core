@@ -445,7 +445,25 @@ func (suite *GraphTestSuite) TestMutationCreateGroupWithMembers() {
 				expectedLen = 2
 			}
 
-			assert.Len(t, resp.CreateGroupWithMembers.Group.Members, expectedLen)
+			require.Len(t, resp.CreateGroupWithMembers.Group.Members, expectedLen)
+
+			// make sure we get the member data back
+			for _, member := range tc.members {
+				found := false
+				for _, m := range resp.CreateGroupWithMembers.Group.Members {
+					require.NotNil(t, m.User)
+
+					if m.User.ID == member.UserID {
+						found = true
+						assert.Equal(t, *member.Role, m.Role)
+
+						assert.NotEmpty(t, m.User.FirstName)
+						assert.NotEmpty(t, m.User.LastName)
+					}
+				}
+
+				assert.Truef(t, found, "member %s not found", member.UserID)
+			}
 		})
 	}
 }
