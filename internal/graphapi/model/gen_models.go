@@ -407,6 +407,13 @@ type GroupDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// GroupMembersInput is used to create members for a group
+// along with the group creation
+type GroupMembersInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
+}
+
 // Return response for createBulkGroupMembership mutation
 type GroupMembershipBulkCreatePayload struct {
 	// Created groupMemberships

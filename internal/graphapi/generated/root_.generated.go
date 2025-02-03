@@ -1653,6 +1653,7 @@ type ComplexityRoot struct {
 		CreateGroup                      func(childComplexity int, input generated.CreateGroupInput) int
 		CreateGroupMembership            func(childComplexity int, input generated.CreateGroupMembershipInput) int
 		CreateGroupSetting               func(childComplexity int, input generated.CreateGroupSettingInput) int
+		CreateGroupWithMembers           func(childComplexity int, group generated.CreateGroupInput, members []*model.GroupMembersInput) int
 		CreateHush                       func(childComplexity int, input generated.CreateHushInput) int
 		CreateIntegration                func(childComplexity int, input generated.CreateIntegrationInput) int
 		CreateInternalPolicy             func(childComplexity int, input generated.CreateInternalPolicyInput) int
@@ -11178,6 +11179,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateGroupSetting(childComplexity, args["input"].(generated.CreateGroupSettingInput)), true
+
+	case "Mutation.createGroupWithMembers":
+		if e.complexity.Mutation.CreateGroupWithMembers == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createGroupWithMembers_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateGroupWithMembers(childComplexity, args["group"].(generated.CreateGroupInput), args["members"].([]*model.GroupMembersInput)), true
 
 	case "Mutation.createHush":
 		if e.complexity.Mutation.CreateHush == nil {
@@ -21617,6 +21630,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputFileWhereInput,
 		ec.unmarshalInputGroupHistoryOrder,
 		ec.unmarshalInputGroupHistoryWhereInput,
+		ec.unmarshalInputGroupMembersInput,
 		ec.unmarshalInputGroupMembershipHistoryWhereInput,
 		ec.unmarshalInputGroupMembershipWhereInput,
 		ec.unmarshalInputGroupOrder,
@@ -53089,6 +53103,31 @@ extend input UpdateGroupInput {
 extend input GroupMembershipWhereInput {
   groupID: String
   userID: String
+}
+
+"""
+GroupMembersInput is used to create members for a group
+along with the group creation
+"""
+input GroupMembersInput {
+  role: GroupMembershipRole
+  userID: ID!
+}
+
+extend type Mutation{
+    """
+    Create a new group with members
+    """
+    createGroupWithMembers(
+        """
+        values of the group
+        """
+        group: CreateGroupInput!
+        """
+        group members to be added to the group
+        """
+        members: [GroupMembersInput!]
+    ): GroupCreatePayload!
 }`, BuiltIn: false},
 	{Name: "../schema/groupmembership.graphql", Input: `extend type Query {
     """

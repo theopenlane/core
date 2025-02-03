@@ -10,7 +10,43 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	entgroup "github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
+
+// CreateGroupWithMembers is the resolver for the createGroupWithMembers field.
+func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, group generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error) {
+	res, err := r.CreateGroup(ctx, group)
+	if err != nil {
+		return nil, err
+	}
+
+	memberInput := make([]*generated.CreateGroupMembershipInput, len(members))
+
+	for i, member := range members {
+		memberInput[i] = &generated.CreateGroupMembershipInput{
+			GroupID: res.Group.ID,
+			UserID:  member.UserID,
+			Role:    member.Role,
+		}
+	}
+
+	if _, err := r.CreateBulkGroupMembership(ctx, memberInput); err != nil {
+		return nil, err
+	}
+
+	finalResult, err := withTransactionalMutation(ctx).Group.
+		Query().
+		WithMembers().
+		Where(entgroup.IDEQ(res.Group.ID)).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+	}
+
+	return &model.GroupCreatePayload{
+		Group: finalResult,
+	}, nil
+}
 
 // CreateGroupSettings is the resolver for the createGroupSettings field.
 func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj *generated.CreateGroupInput, data *generated.CreateGroupSettingInput) error {

@@ -9993,6 +9993,14 @@ input GroupHistoryWhereInput {
 	displayNameEqualFold: String
 	displayNameContainsFold: String
 }
+"""
+GroupMembersInput is used to create members for a group
+along with the group creation
+"""
+input GroupMembersInput {
+	role: GroupMembershipRole
+	userID: ID!
+}
 type GroupMembership implements Node {
 	id: ID!
 	createdAt: Time
@@ -14372,6 +14380,20 @@ type Mutation {
 		"""
 		id: ID!
 	): GroupDeletePayload!
+	"""
+	Create a new group with members
+	"""
+	createGroupWithMembers(
+		"""
+		values of the group
+		"""
+		group: CreateGroupInput!
+
+		"""
+		group members to be added to the group
+		"""
+		members: [GroupMembersInput!]
+	): GroupCreatePayload!
 	"""
 	Create a new groupMembership
 	"""

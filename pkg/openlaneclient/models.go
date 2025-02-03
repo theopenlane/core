@@ -7745,6 +7745,13 @@ type GroupHistoryWhereInput struct {
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
 }
 
+// GroupMembersInput is used to create members for a group
+// along with the group creation
+type GroupMembersInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
+}
+
 type GroupMembership struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`

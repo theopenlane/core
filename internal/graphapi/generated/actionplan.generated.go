@@ -72,6 +72,7 @@ type MutationResolver interface {
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error)
 	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error)
 	DeleteGroup(ctx context.Context, id string) (*model.GroupDeletePayload, error)
+	CreateGroupWithMembers(ctx context.Context, group generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error)
 	CreateGroupMembership(ctx context.Context, input generated.CreateGroupMembershipInput) (*model.GroupMembershipCreatePayload, error)
 	CreateBulkGroupMembership(ctx context.Context, input []*generated.CreateGroupMembershipInput) (*model.GroupMembershipBulkCreatePayload, error)
 	CreateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*model.GroupMembershipBulkCreatePayload, error)
@@ -2338,6 +2339,57 @@ func (ec *executionContext) field_Mutation_createGroupSetting_argsInput(
 	}
 
 	var zeroVal generated.CreateGroupSettingInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createGroupWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_createGroupWithMembers_argsGroup(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["group"] = arg0
+	arg1, err := ec.field_Mutation_createGroupWithMembers_argsMembers(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["members"] = arg1
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_createGroupWithMembers_argsGroup(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (generated.CreateGroupInput, error) {
+	if _, ok := rawArgs["group"]; !ok {
+		var zeroVal generated.CreateGroupInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("group"))
+	if tmp, ok := rawArgs["group"]; ok {
+		return ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput(ctx, tmp)
+	}
+
+	var zeroVal generated.CreateGroupInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createGroupWithMembers_argsMembers(
+	ctx context.Context,
+	rawArgs map[string]any,
+) ([]*model.GroupMembersInput, error) {
+	if _, ok := rawArgs["members"]; !ok {
+		var zeroVal []*model.GroupMembersInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("members"))
+	if tmp, ok := rawArgs["members"]; ok {
+		return ec.unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInputᚄ(ctx, tmp)
+	}
+
+	var zeroVal []*model.GroupMembersInput
 	return zeroVal, nil
 }
 
@@ -9245,6 +9297,65 @@ func (ec *executionContext) fieldContext_Mutation_deleteGroup(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteGroup_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createGroupWithMembers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createGroupWithMembers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateGroupWithMembers(rctx, fc.Args["group"].(generated.CreateGroupInput), fc.Args["members"].([]*model.GroupMembersInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.GroupCreatePayload)
+	fc.Result = res
+	return ec.marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createGroupWithMembers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "group":
+				return ec.fieldContext_GroupCreatePayload_group(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createGroupWithMembers_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -16427,6 +16538,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteGroup":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteGroup(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createGroupWithMembers":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createGroupWithMembers(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

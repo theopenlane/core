@@ -114,6 +114,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVGroup, error)
 	CreateBulkGroup(ctx context.Context, input []*CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkGroup, error)
 	CreateGroup(ctx context.Context, input CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroup, error)
+	CreateGroupWithMembers(ctx context.Context, group CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error)
 	DeleteGroup(ctx context.Context, deleteGroupID string, interceptors ...clientv2.RequestInterceptor) (*DeleteGroup, error)
 	GetAllGroups(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllGroups, error)
 	GetGroupByID(ctx context.Context, groupID string, interceptors ...clientv2.RequestInterceptor) (*GetGroupByID, error)
@@ -17010,6 +17011,117 @@ type CreateGroup_CreateGroup struct {
 func (t *CreateGroup_CreateGroup) GetGroup() *CreateGroup_CreateGroup_Group {
 	if t == nil {
 		t = &CreateGroup_CreateGroup{}
+	}
+	return &t.Group
+}
+
+type CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting struct {
+	Visibility enums.Visibility "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting) GetVisibility() *enums.Visibility {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting{}
+	}
+	return &t.Visibility
+}
+
+type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User) GetID() string {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User{}
+	}
+	return t.ID
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User{}
+	}
+	return t.LastName
+}
+
+type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members struct {
+	ID   string                                                           "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                       "json:\"role\" graphql:\"role\""
+	User CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members) GetID() string {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members{}
+	}
+	return t.ID
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members{}
+	}
+	return &t.Role
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members) GetUser() *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members{}
+	}
+	return &t.User
+}
+
+type CreateGroupWithMembers_CreateGroupWithMembers_Group struct {
+	DisplayID string                                                         "json:\"displayID\" graphql:\"displayID\""
+	ID        string                                                         "json:\"id\" graphql:\"id\""
+	Members   []*CreateGroupWithMembers_CreateGroupWithMembers_Group_Members "json:\"members,omitempty\" graphql:\"members\""
+	Name      string                                                         "json:\"name\" graphql:\"name\""
+	Setting   *CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
+}
+
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetDisplayID() string {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group{}
+	}
+	return t.DisplayID
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetID() string {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group{}
+	}
+	return t.ID
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetMembers() []*CreateGroupWithMembers_CreateGroupWithMembers_Group_Members {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group{}
+	}
+	return t.Members
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetName() string {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group{}
+	}
+	return t.Name
+}
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetSetting() *CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group{}
+	}
+	return t.Setting
+}
+
+type CreateGroupWithMembers_CreateGroupWithMembers struct {
+	Group CreateGroupWithMembers_CreateGroupWithMembers_Group "json:\"group\" graphql:\"group\""
+}
+
+func (t *CreateGroupWithMembers_CreateGroupWithMembers) GetGroup() *CreateGroupWithMembers_CreateGroupWithMembers_Group {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers{}
 	}
 	return &t.Group
 }
@@ -48735,6 +48847,17 @@ func (t *CreateGroup) GetCreateGroup() *CreateGroup_CreateGroup {
 	return &t.CreateGroup
 }
 
+type CreateGroupWithMembers struct {
+	CreateGroupWithMembers CreateGroupWithMembers_CreateGroupWithMembers "json:\"createGroupWithMembers\" graphql:\"createGroupWithMembers\""
+}
+
+func (t *CreateGroupWithMembers) GetCreateGroupWithMembers() *CreateGroupWithMembers_CreateGroupWithMembers {
+	if t == nil {
+		t = &CreateGroupWithMembers{}
+	}
+	return &t.CreateGroupWithMembers
+}
+
 type DeleteGroup struct {
 	DeleteGroup DeleteGroup_DeleteGroup "json:\"deleteGroup\" graphql:\"deleteGroup\""
 }
@@ -55862,6 +55985,47 @@ func (c *Client) CreateGroup(ctx context.Context, input CreateGroupInput, interc
 
 	var res CreateGroup
 	if err := c.Client.Post(ctx, "CreateGroup", CreateGroupDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($group: CreateGroupInput!, $members: [GroupMembersInput!]) {
+	createGroupWithMembers(group: $group, members: $members) {
+		group {
+			id
+			displayID
+			name
+			setting {
+				visibility
+			}
+			members {
+				id
+				role
+				user {
+					id
+					firstName
+					lastName
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateGroupWithMembers(ctx context.Context, group CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error) {
+	vars := map[string]any{
+		"group":   group,
+		"members": members,
+	}
+
+	var res CreateGroupWithMembers
+	if err := c.Client.Post(ctx, "CreateGroupWithMembers", CreateGroupWithMembersDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -65476,6 +65640,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkCSVGroupDocument:                 "CreateBulkCSVGroup",
 	CreateBulkGroupDocument:                    "CreateBulkGroup",
 	CreateGroupDocument:                        "CreateGroup",
+	CreateGroupWithMembersDocument:             "CreateGroupWithMembers",
 	DeleteGroupDocument:                        "DeleteGroup",
 	GetAllGroupsDocument:                       "GetAllGroups",
 	GetGroupByIDDocument:                       "GetGroupByID",
