@@ -41,7 +41,7 @@ func HookProgramMembers() ent.Hook {
 				Where(orgmembership.OrganizationID(program.OwnerID)).
 				OnlyID(ctx)
 			if err != nil || orgMemberID == "" {
-				log.Error().Err(err).Msg("failed to get org membership, cannot add user to group")
+				log.Error().Err(err).Msg("failed to get org membership, cannot add user to program")
 
 				return nil, ErrUserNotInOrg
 			}

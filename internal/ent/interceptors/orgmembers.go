@@ -57,13 +57,13 @@ func InterceptorOrgMember() ent.Interceptor {
 				return nil, err
 			}
 
-			if orgMembersSkipInterceptor(ctx, v) {
+			if orgMembersSkipInterceptor(ctx) {
 				return v, nil
 			}
 
 			// deduplicate the org members if the query is for org members
 			members, ok := v.([]*generated.OrgMembership)
-			if !ok {
+			if !ok || len(members) == 0 {
 				return v, nil
 			}
 
@@ -106,7 +106,7 @@ func dedupeOrgMembers(ctx context.Context, members []*generated.OrgMembership) (
 }
 
 // orgMembersSkipInterceptor includes conditions to skip the org members interceptor
-func orgMembersSkipInterceptor(ctx context.Context, v ent.Value) bool {
+func orgMembersSkipInterceptor(ctx context.Context) bool {
 	// bypass filter if the request is internal and already set to allowed
 	// this only happens from internal requests
 	// and we don't need to dedupe the org members

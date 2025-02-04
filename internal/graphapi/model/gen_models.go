@@ -612,6 +612,13 @@ type NarrativeUpdatePayload struct {
 	Narrative *generated.Narrative `json:"narrative"`
 }
 
+// OrgMembersInput is used to create members for a organization
+// along with the org creation
+type OrgMembersInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
+}
+
 // Return response for createBulkOrgMembership mutation
 type OrgMembershipBulkCreatePayload struct {
 	// Created orgMemberships

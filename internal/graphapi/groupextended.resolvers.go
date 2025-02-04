@@ -11,6 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	entgroup "github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
@@ -81,6 +82,31 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 	}
 
 	_, err := c.GroupMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// RemoveGroupMembers is the resolver for the removeGroupMembers field.
+func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *generated.UpdateGroupInput, data []string) error {
+	opCtx := graphql.GetOperationContext(ctx)
+	groupID, ok := opCtx.Variables["updateGroupId"]
+	if !ok {
+		log.Error().Msg("unable to get group from context")
+
+		return ErrInternalServerError
+	}
+
+	c := withTransactionalMutation(ctx)
+
+	_, err := c.GroupMembership.Delete().
+		Where(
+			groupmembership.GroupID(groupID.(string)),
+			groupmembership.IDIn(data...),
+		).
+		Exec(ctx)
 	if err != nil {
 		return err
 	}

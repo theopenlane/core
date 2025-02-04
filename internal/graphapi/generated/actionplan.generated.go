@@ -118,6 +118,7 @@ type MutationResolver interface {
 	CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkCreatePayload, error)
 	UpdateOrganizationSetting(ctx context.Context, id string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingUpdatePayload, error)
 	DeleteOrganizationSetting(ctx context.Context, id string) (*model.OrganizationSettingDeletePayload, error)
+	CreateOrganizationWithMembers(ctx context.Context, organization generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error)
 	CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error)
 	CreateBulkOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*model.OrgMembershipBulkCreatePayload, error)
 	CreateBulkCSVOrgMembership(ctx context.Context, input graphql.Upload) (*model.OrgMembershipBulkCreatePayload, error)
@@ -2614,6 +2615,80 @@ func (ec *executionContext) field_Mutation_createOrganizationSetting_argsInput(
 	}
 
 	var zeroVal generated.CreateOrganizationSettingInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createOrganizationWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_createOrganizationWithMembers_argsOrganization(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["organization"] = arg0
+	arg1, err := ec.field_Mutation_createOrganizationWithMembers_argsAvatarFile(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFile"] = arg1
+	arg2, err := ec.field_Mutation_createOrganizationWithMembers_argsMembers(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["members"] = arg2
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_createOrganizationWithMembers_argsOrganization(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (generated.CreateOrganizationInput, error) {
+	if _, ok := rawArgs["organization"]; !ok {
+		var zeroVal generated.CreateOrganizationInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("organization"))
+	if tmp, ok := rawArgs["organization"]; ok {
+		return ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationInput(ctx, tmp)
+	}
+
+	var zeroVal generated.CreateOrganizationInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createOrganizationWithMembers_argsAvatarFile(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*graphql.Upload, error) {
+	if _, ok := rawArgs["avatarFile"]; !ok {
+		var zeroVal *graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
+	if tmp, ok := rawArgs["avatarFile"]; ok {
+		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
+	}
+
+	var zeroVal *graphql.Upload
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createOrganizationWithMembers_argsMembers(
+	ctx context.Context,
+	rawArgs map[string]any,
+) ([]*model.OrgMembersInput, error) {
+	if _, ok := rawArgs["members"]; !ok {
+		var zeroVal []*model.OrgMembersInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("members"))
+	if tmp, ok := rawArgs["members"]; ok {
+		return ec.unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInputᚄ(ctx, tmp)
+	}
+
+	var zeroVal []*model.OrgMembersInput
 	return zeroVal, nil
 }
 
@@ -12017,6 +12092,65 @@ func (ec *executionContext) fieldContext_Mutation_deleteOrganizationSetting(ctx 
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createOrganizationWithMembers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createOrganizationWithMembers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateOrganizationWithMembers(rctx, fc.Args["organization"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["members"].([]*model.OrgMembersInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.OrganizationCreatePayload)
+	fc.Result = res
+	return ec.marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createOrganizationWithMembers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "organization":
+				return ec.fieldContext_OrganizationCreatePayload_organization(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OrganizationCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createOrganizationWithMembers_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createOrgMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createOrgMembership(ctx, field)
 	if err != nil {
@@ -16860,6 +16994,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteOrganizationSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteOrganizationSetting(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createOrganizationWithMembers":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createOrganizationWithMembers(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

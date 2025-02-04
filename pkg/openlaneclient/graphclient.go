@@ -187,6 +187,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOrganization, error)
 	CreateBulkOrganization(ctx context.Context, input []*CreateOrganizationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOrganization, error)
 	CreateOrganization(ctx context.Context, input CreateOrganizationInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateOrganization, error)
+	CreateOrganizationWithMembers(ctx context.Context, org CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error)
 	DeleteOrganization(ctx context.Context, deleteOrganizationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteOrganization, error)
 	GetAllOrganizations(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllOrganizations, error)
 	GetOrganizationByID(ctx context.Context, organizationID string, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationByID, error)
@@ -25810,6 +25811,201 @@ func (t *CreateOrganization_CreateOrganization) GetOrganization() *CreateOrganiz
 	return &t.Organization
 }
 
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting struct {
+	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID             string          "json:\"id\" graphql:\"id\""
+	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetBillingAddress() *models.Address {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.BillingAddress
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetBillingContact() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.BillingContact
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetBillingEmail() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.BillingEmail
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetBillingPhone() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.BillingPhone
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetDomains() []string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.Domains
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetGeoLocation() *enums.Region {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.GeoLocation
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetID() string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.ID
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetTags() []string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.Tags
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetTaxIdentifier() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.TaxIdentifier
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User) GetID() string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User{}
+	}
+	return t.ID
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User{}
+	}
+	return t.LastName
+}
+
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members struct {
+	ID   string                                                                                "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                                            "json:\"role\" graphql:\"role\""
+	User CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetID() string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+	}
+	return t.ID
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+	}
+	return &t.Role
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetUser() *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+	}
+	return &t.User
+}
+
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization struct {
+	DisplayName string                                                                              "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                                                              "json:\"id\" graphql:\"id\""
+	Members     []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members "json:\"members,omitempty\" graphql:\"members\""
+	Name        string                                                                              "json:\"name\" graphql:\"name\""
+	Setting     *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
+}
+
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization{}
+	}
+	return t.DisplayName
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetID() string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization{}
+	}
+	return t.ID
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetMembers() []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization{}
+	}
+	return t.Members
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetName() string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization{}
+	}
+	return t.Name
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetSetting() *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization{}
+	}
+	return t.Setting
+}
+
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers struct {
+	Organization CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization "json:\"organization\" graphql:\"organization\""
+}
+
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers) GetOrganization() *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers{}
+	}
+	return &t.Organization
+}
+
 type DeleteOrganization_DeleteOrganization struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -32783,6 +32979,49 @@ func (t *GetAllPrograms_Programs_Edges_Node_BlockedGroups) GetName() string {
 	return t.Name
 }
 
+type GetAllPrograms_Programs_Edges_Node_Members_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetAllPrograms_Programs_Edges_Node_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Members_User) GetID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Members_User{}
+	}
+	return t.ID
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Members_User{}
+	}
+	return t.LastName
+}
+
+type GetAllPrograms_Programs_Edges_Node_Members struct {
+	ID   string                                          "json:\"id\" graphql:\"id\""
+	User GetAllPrograms_Programs_Edges_Node_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *GetAllPrograms_Programs_Edges_Node_Members) GetID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Members{}
+	}
+	return t.ID
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Members) GetUser() *GetAllPrograms_Programs_Edges_Node_Members_User {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Members{}
+	}
+	return &t.User
+}
+
 type GetAllPrograms_Programs_Edges_Node struct {
 	AuditorReadComments  bool                                                   "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                                   "json:\"auditorReady\" graphql:\"auditorReady\""
@@ -32796,6 +33035,7 @@ type GetAllPrograms_Programs_Edges_Node struct {
 	EndDate              *time.Time                                             "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                                 "json:\"id\" graphql:\"id\""
 	InternalPolicies     []*GetAllPrograms_Programs_Edges_Node_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Members              []*GetAllPrograms_Programs_Edges_Node_Members          "json:\"members,omitempty\" graphql:\"members\""
 	Name                 string                                                 "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Procedures           []*GetAllPrograms_Programs_Edges_Node_Procedures       "json:\"procedures,omitempty\" graphql:\"procedures\""
@@ -32878,6 +33118,12 @@ func (t *GetAllPrograms_Programs_Edges_Node) GetInternalPolicies() []*GetAllProg
 		t = &GetAllPrograms_Programs_Edges_Node{}
 	}
 	return t.InternalPolicies
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetMembers() []*GetAllPrograms_Programs_Edges_Node_Members {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.Members
 }
 func (t *GetAllPrograms_Programs_Edges_Node) GetName() string {
 	if t == nil {
@@ -33235,6 +33481,49 @@ func (t *GetProgramByID_Program_BlockedGroups) GetName() string {
 	return t.Name
 }
 
+type GetProgramByID_Program_Members_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetProgramByID_Program_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *GetProgramByID_Program_Members_User) GetID() string {
+	if t == nil {
+		t = &GetProgramByID_Program_Members_User{}
+	}
+	return t.ID
+}
+func (t *GetProgramByID_Program_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Members_User{}
+	}
+	return t.LastName
+}
+
+type GetProgramByID_Program_Members struct {
+	ID   string                              "json:\"id\" graphql:\"id\""
+	User GetProgramByID_Program_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *GetProgramByID_Program_Members) GetID() string {
+	if t == nil {
+		t = &GetProgramByID_Program_Members{}
+	}
+	return t.ID
+}
+func (t *GetProgramByID_Program_Members) GetUser() *GetProgramByID_Program_Members_User {
+	if t == nil {
+		t = &GetProgramByID_Program_Members{}
+	}
+	return &t.User
+}
+
 type GetProgramByID_Program struct {
 	AuditorReadComments  bool                                       "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                       "json:\"auditorReady\" graphql:\"auditorReady\""
@@ -33248,6 +33537,7 @@ type GetProgramByID_Program struct {
 	EndDate              *time.Time                                 "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                     "json:\"id\" graphql:\"id\""
 	InternalPolicies     []*GetProgramByID_Program_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Members              []*GetProgramByID_Program_Members          "json:\"members,omitempty\" graphql:\"members\""
 	Name                 string                                     "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Procedures           []*GetProgramByID_Program_Procedures       "json:\"procedures,omitempty\" graphql:\"procedures\""
@@ -33330,6 +33620,12 @@ func (t *GetProgramByID_Program) GetInternalPolicies() []*GetProgramByID_Program
 		t = &GetProgramByID_Program{}
 	}
 	return t.InternalPolicies
+}
+func (t *GetProgramByID_Program) GetMembers() []*GetProgramByID_Program_Members {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.Members
 }
 func (t *GetProgramByID_Program) GetName() string {
 	if t == nil {
@@ -33665,6 +33961,49 @@ func (t *GetPrograms_Programs_Edges_Node_BlockedGroups) GetName() string {
 	return t.Name
 }
 
+type GetPrograms_Programs_Edges_Node_Members_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetPrograms_Programs_Edges_Node_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *GetPrograms_Programs_Edges_Node_Members_User) GetID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Members_User{}
+	}
+	return t.ID
+}
+func (t *GetPrograms_Programs_Edges_Node_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Members_User{}
+	}
+	return t.LastName
+}
+
+type GetPrograms_Programs_Edges_Node_Members struct {
+	ID   string                                       "json:\"id\" graphql:\"id\""
+	User GetPrograms_Programs_Edges_Node_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *GetPrograms_Programs_Edges_Node_Members) GetID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Members{}
+	}
+	return t.ID
+}
+func (t *GetPrograms_Programs_Edges_Node_Members) GetUser() *GetPrograms_Programs_Edges_Node_Members_User {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Members{}
+	}
+	return &t.User
+}
+
 type GetPrograms_Programs_Edges_Node struct {
 	AuditorReadComments  bool                                                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                                "json:\"auditorReady\" graphql:\"auditorReady\""
@@ -33678,6 +34017,7 @@ type GetPrograms_Programs_Edges_Node struct {
 	EndDate              *time.Time                                          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                              "json:\"id\" graphql:\"id\""
 	InternalPolicies     []*GetPrograms_Programs_Edges_Node_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Members              []*GetPrograms_Programs_Edges_Node_Members          "json:\"members,omitempty\" graphql:\"members\""
 	Name                 string                                              "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Procedures           []*GetPrograms_Programs_Edges_Node_Procedures       "json:\"procedures,omitempty\" graphql:\"procedures\""
@@ -33760,6 +34100,12 @@ func (t *GetPrograms_Programs_Edges_Node) GetInternalPolicies() []*GetPrograms_P
 		t = &GetPrograms_Programs_Edges_Node{}
 	}
 	return t.InternalPolicies
+}
+func (t *GetPrograms_Programs_Edges_Node) GetMembers() []*GetPrograms_Programs_Edges_Node_Members {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.Members
 }
 func (t *GetPrograms_Programs_Edges_Node) GetName() string {
 	if t == nil {
@@ -34103,6 +34449,49 @@ func (t *UpdateProgram_UpdateProgram_Program_BlockedGroups) GetName() string {
 	return t.Name
 }
 
+type UpdateProgram_UpdateProgram_Program_Members_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *UpdateProgram_UpdateProgram_Program_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *UpdateProgram_UpdateProgram_Program_Members_User) GetID() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Members_User{}
+	}
+	return t.ID
+}
+func (t *UpdateProgram_UpdateProgram_Program_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Members_User{}
+	}
+	return t.LastName
+}
+
+type UpdateProgram_UpdateProgram_Program_Members struct {
+	ID   string                                           "json:\"id\" graphql:\"id\""
+	User UpdateProgram_UpdateProgram_Program_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *UpdateProgram_UpdateProgram_Program_Members) GetID() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Members{}
+	}
+	return t.ID
+}
+func (t *UpdateProgram_UpdateProgram_Program_Members) GetUser() *UpdateProgram_UpdateProgram_Program_Members_User {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Members{}
+	}
+	return &t.User
+}
+
 type UpdateProgram_UpdateProgram_Program struct {
 	AuditorReadComments  bool                                                    "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                                    "json:\"auditorReady\" graphql:\"auditorReady\""
@@ -34115,6 +34504,7 @@ type UpdateProgram_UpdateProgram_Program struct {
 	EndDate              *time.Time                                              "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string                                                  "json:\"id\" graphql:\"id\""
 	InternalPolicies     []*UpdateProgram_UpdateProgram_Program_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Members              []*UpdateProgram_UpdateProgram_Program_Members          "json:\"members,omitempty\" graphql:\"members\""
 	Name                 string                                                  "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Procedures           []*UpdateProgram_UpdateProgram_Program_Procedures       "json:\"procedures,omitempty\" graphql:\"procedures\""
@@ -34191,6 +34581,12 @@ func (t *UpdateProgram_UpdateProgram_Program) GetInternalPolicies() []*UpdatePro
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
 	return t.InternalPolicies
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetMembers() []*UpdateProgram_UpdateProgram_Program_Members {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.Members
 }
 func (t *UpdateProgram_UpdateProgram_Program) GetName() string {
 	if t == nil {
@@ -49650,6 +50046,17 @@ func (t *CreateOrganization) GetCreateOrganization() *CreateOrganization_CreateO
 	return &t.CreateOrganization
 }
 
+type CreateOrganizationWithMembers struct {
+	CreateOrganizationWithMembers CreateOrganizationWithMembers_CreateOrganizationWithMembers "json:\"createOrganizationWithMembers\" graphql:\"createOrganizationWithMembers\""
+}
+
+func (t *CreateOrganizationWithMembers) GetCreateOrganizationWithMembers() *CreateOrganizationWithMembers_CreateOrganizationWithMembers {
+	if t == nil {
+		t = &CreateOrganizationWithMembers{}
+	}
+	return &t.CreateOrganizationWithMembers
+}
+
 type DeleteOrganization struct {
 	DeleteOrganization DeleteOrganization_DeleteOrganization "json:\"deleteOrganization\" graphql:\"deleteOrganization\""
 }
@@ -58956,6 +59363,59 @@ func (c *Client) CreateOrganization(ctx context.Context, input CreateOrganizatio
 	return &res, nil
 }
 
+const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMembers ($org: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
+	createOrganizationWithMembers(organization: $org, members: $members) {
+		organization {
+			id
+			name
+			displayName
+			setting {
+				id
+				createdAt
+				updatedAt
+				createdBy
+				updatedBy
+				domains
+				billingContact
+				billingEmail
+				billingPhone
+				billingAddress
+				taxIdentifier
+				geoLocation
+				tags
+			}
+			members {
+				id
+				role
+				user {
+					id
+					firstName
+					lastName
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateOrganizationWithMembers(ctx context.Context, org CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error) {
+	vars := map[string]any{
+		"org":     org,
+		"members": members,
+	}
+
+	var res CreateOrganizationWithMembers
+	if err := c.Client.Post(ctx, "CreateOrganizationWithMembers", CreateOrganizationWithMembersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteOrganizationDocument = `mutation DeleteOrganization ($deleteOrganizationId: ID!) {
 	deleteOrganization(id: $deleteOrganizationId) {
 		deletedID
@@ -61139,6 +61599,14 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 					id
 					name
 				}
+				members {
+					id
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
 			}
 		}
 	}
@@ -61224,6 +61692,14 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		blockedGroups {
 			id
 			name
+		}
+		members {
+			id
+			user {
+				id
+				firstName
+				lastName
+			}
 		}
 	}
 }
@@ -61313,6 +61789,14 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 					id
 					name
 				}
+				members {
+					id
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
 			}
 		}
 	}
@@ -61398,6 +61882,14 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			blockedGroups {
 				id
 				name
+			}
+			members {
+				id
+				user {
+					id
+					firstName
+					lastName
+				}
 			}
 		}
 	}
@@ -65713,6 +66205,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkCSVOrganizationDocument:          "CreateBulkCSVOrganization",
 	CreateBulkOrganizationDocument:             "CreateBulkOrganization",
 	CreateOrganizationDocument:                 "CreateOrganization",
+	CreateOrganizationWithMembersDocument:      "CreateOrganizationWithMembers",
 	DeleteOrganizationDocument:                 "DeleteOrganization",
 	GetAllOrganizationsDocument:                "GetAllOrganizations",
 	GetOrganizationByIDDocument:                "GetOrganizationByID",

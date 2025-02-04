@@ -10,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
@@ -201,6 +202,31 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 	}
 
 	_, err := c.ProgramMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// RemoveProgramMembers is the resolver for the removeProgramMembers field.
+func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, obj *generated.UpdateProgramInput, data []string) error {
+	opCtx := graphql.GetOperationContext(ctx)
+	programID, ok := opCtx.Variables["updateProgramId"]
+	if !ok {
+		log.Error().Msg("unable to get program from context")
+
+		return ErrInternalServerError
+	}
+
+	c := withTransactionalMutation(ctx)
+
+	_, err := c.ProgramMembership.Delete().
+		Where(
+			programmembership.ProgramID(programID.(string)),
+			programmembership.IDIn(data...),
+		).
+		Exec(ctx)
 	if err != nil {
 		return err
 	}

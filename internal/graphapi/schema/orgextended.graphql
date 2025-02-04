@@ -4,10 +4,40 @@ extend input CreateOrganizationInput {
 
 extend input UpdateOrganizationInput {
   addOrgMembers: [CreateOrgMembershipInput!]
+  removeOrgMembers: [ID!]
   updateOrgSettings: UpdateOrganizationSettingInput
 }
 
 extend input OrgMembershipWhereInput {
   organizationID: String
   userID: String
+}
+
+"""
+OrgMembersInput is used to create members for a organization
+along with the org creation
+"""
+input OrgMembersInput {
+  role: OrgMembershipRole
+  userID: ID!
+}
+
+extend type Mutation{
+    """
+    Create a new organization with members
+    """
+    createOrganizationWithMembers(
+        """
+        values of the new organization
+        """
+        organization: CreateOrganizationInput!
+        """
+        avatar file to Upload
+        """
+        avatarFile: Upload
+        """
+        organization members to be added to the new org
+        """
+        members: [OrgMembersInput!]
+    ): OrganizationCreatePayload!
 }

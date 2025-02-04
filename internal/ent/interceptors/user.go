@@ -65,6 +65,7 @@ func filterType(ctx context.Context) string {
 			"createGroup",
 			"updateGroup",
 			"createGroupWithMembers",
+			"createOrganizationWithMembers",
 			"createGroupMembership",
 			"updateGroupMembership",
 			"createProgramMembership",
@@ -72,6 +73,8 @@ func filterType(ctx context.Context) string {
 			"createProgramWithMembers",
 			"createProgram",
 			"updateProgram",
+			"program",
+			"group",
 			"organization",
 		}
 

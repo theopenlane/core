@@ -4,6 +4,7 @@ extend input CreateGroupInput {
 
 extend input UpdateGroupInput {
   addGroupMembers: [CreateGroupMembershipInput!]
+  removeGroupMembers: [ID!]
   updateGroupSettings: UpdateGroupSettingInput
 }
 

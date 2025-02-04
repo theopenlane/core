@@ -135,6 +135,9 @@ func (Organization) Edges() []ent.Edge {
 		edge.To("api_tokens", APIToken.Type),
 		edge.From("users", User.Type).
 			Ref("organizations").
+			// Skip the mutation input for the users edge
+			// this should be done via the members edge
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Through("members", OrgMembership.Type),
 
 		edge.To("events", Event.Type),

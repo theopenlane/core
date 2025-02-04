@@ -83,6 +83,9 @@ func (Group) Edges() []ent.Edge {
 			),
 		edge.From("users", User.Type).
 			Ref("groups").
+			// Skip the mutation input for the users edge
+			// this should be done via the members edge
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Through("members", GroupMembership.Type),
 		edge.To("events", Event.Type),
 		edge.To("integrations", Integration.Type),
