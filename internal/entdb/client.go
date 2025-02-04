@@ -10,6 +10,7 @@ import (
 
 	"ariga.io/entcache"
 	entsql "entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/schema"
 	"github.com/pressly/goose/v3"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/entx"
@@ -24,6 +25,11 @@ import (
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )
+
+// postgresExtensions is a list of postgres extensions to enable
+var postgresExtensions = []string{
+	"citext",
+}
 
 const (
 	// defaultDBTestImage is the default docker image to use for testing
@@ -177,6 +183,13 @@ func (c *client) runGooseMigrations() error {
 
 	migrationsDir := "migrations-goose-postgres"
 
+	// enable extensions
+	if err := EnablePostgresExtensions(drv); err != nil {
+		log.Error().Err(err).Msg("failed enabling citext extension")
+
+		return err
+	}
+
 	if err := goose.Up(drv, migrationsDir); err != nil {
 		log.Error().Err(err).Msg("failed running goose migrations")
 
@@ -191,13 +204,40 @@ func (c *client) runGooseMigrations() error {
 func (c *client) runAtlasMigrations(ctx context.Context) error {
 	// Run the automatic migration tool to create all schema resources.
 	// entcache.Driver will skip the caching layer when running the schema migration
-	if err := c.pc.Schema.Create(entcache.Skip(ctx)); err != nil {
+	if err := c.pc.Schema.Create(entcache.Skip(ctx),
+		enablePostgresOption(c.pc.DB())); err != nil {
 		log.Error().Err(err).Msg("failed creating schema resources")
 
 		return err
 	}
 
 	return nil
+}
+
+// EnablePostgresExtensions enables the postgres extensions
+// needed when running migrations
+func EnablePostgresExtensions(db *sql.DB) error {
+	for _, ext := range postgresExtensions {
+		if _, err := db.Exec(fmt.Sprintf(`CREATE EXTENSION IF NOT EXISTS %s WITH SCHEMA public;`, ext)); err != nil {
+			return fmt.Errorf("could not enable %s extension: %w", ext, err)
+		}
+	}
+
+	return nil
+}
+
+// enablePostgresOption returns a schema.MigrateOption
+// that will enable the Postgres extension if needed for running atlas migrations
+func enablePostgresOption(db *sql.DB) schema.MigrateOption {
+	return schema.WithHooks(func(next schema.Creator) schema.Creator {
+		return schema.CreateFunc(func(ctx context.Context, tables ...*schema.Table) error {
+			if err := EnablePostgresExtensions(db); err != nil {
+				return err
+			}
+
+			return next.Create(ctx, tables...)
+		})
+	})
 }
 
 // seedData runs the data seed using goose
@@ -308,7 +348,12 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []ri
 		return nil, err
 	}
 
-	if err := db.Schema.Create(ctx); err != nil {
+	client := &client{
+		config: &dbconf,
+		pc:     db,
+	}
+
+	if err := client.runAtlasMigrations(ctx); err != nil {
 		return nil, err
 	}
 

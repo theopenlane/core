@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"entgo.io/ent"
 
@@ -35,6 +36,10 @@ func HookEntityCreate() ent.Hook {
 				uniqueName := fmt.Sprintf("%s-%s", displayName, ulids.New().String())
 				m.SetName(uniqueName)
 			}
+
+			// trim trailing whitespace from the name
+			name, _ = m.Name() // re-fetch incase it was updated above
+			m.SetName(strings.TrimSpace(name))
 
 			return next.Mutate(ctx, m)
 		})

@@ -228,12 +228,15 @@ func init() {
 	contactMixinHooks0 := contactMixin[0].Hooks()
 	contactMixinHooks2 := contactMixin[2].Hooks()
 	contactMixinHooks4 := contactMixin[4].Hooks()
+	contactHooks := schema.Contact{}.Hooks()
 
 	contact.Hooks[1] = contactMixinHooks0[0]
 
 	contact.Hooks[2] = contactMixinHooks2[0]
 
 	contact.Hooks[3] = contactMixinHooks4[0]
+
+	contact.Hooks[4] = contactHooks[0]
 	contactMixinInters2 := contactMixin[2].Interceptors()
 	contactMixinInters4 := contactMixin[4].Interceptors()
 	contact.Interceptors[0] = contactMixinInters2[0]
@@ -872,6 +875,7 @@ func init() {
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
+			validators[2].(func(string) error),
 		}
 		return func(name string) error {
 			for _, fn := range fns {
@@ -1240,7 +1244,21 @@ func init() {
 	// groupDescName is the schema descriptor for name field.
 	groupDescName := groupFields[0].Descriptor()
 	// group.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	group.NameValidator = groupDescName.Validators[0].(func(string) error)
+	group.NameValidator = func() func(string) error {
+		validators := groupDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// groupDescIsManaged is the schema descriptor for is_managed field.
 	groupDescIsManaged := groupFields[2].Descriptor()
 	// group.DefaultIsManaged holds the default value on creation for the is_managed field.
@@ -2174,6 +2192,7 @@ func init() {
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
+			validators[2].(func(string) error),
 		}
 		return func(name string) error {
 			for _, fn := range fns {

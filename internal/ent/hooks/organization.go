@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -49,6 +50,11 @@ func HookOrganization() ent.Hook {
 				// check if this is a child org, error if parent org is a personal org
 				if err := personalOrgNoChildren(ctx, m); err != nil {
 					return nil, err
+				}
+
+				// trim trailing whitespace from the name
+				if name, ok := m.Name(); ok {
+					m.SetName(strings.TrimSpace(name))
 				}
 			}
 

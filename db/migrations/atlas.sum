@@ -1,4 +1,4 @@
-h1:Vn6nZC+62tnCQzNx+sTcvB1YwvSVm8eNWWszv6auQdc=
+h1:R+rwupgcr4cPpwhHTxeQI1QPIcLQlOEg3VXssf1Qr5g=
 20241211231032_init.sql h1:TxjpHzKPB/5L2i7V2JfO1y+Cep/AyQN5wGjhY7saCeE=
 20241212223712_consistent_naming.sql h1:tbdYOtixhW66Jmvy3aCm+X6neI/SRVvItKM0Bdn26TA=
 20250109002849_billing_address.sql h1:mspCGbJ6HVmx3r4j+d/WvruzirJdJ8u5x18WF9R9ESE=
@@ -12,3 +12,4 @@ h1:Vn6nZC+62tnCQzNx+sTcvB1YwvSVm8eNWWszv6auQdc=
 20250122041747_tfa_setting.sql h1:puZkAVMKDpWtk3EY161vMEidn/WQfxiGPvvNr6jCK2g=
 20250127184836_evidence.sql h1:DEV/KXv9L9IW3uXwmQiKvutuAg9HyaoIP3eSyadtKec=
 20250131173614_group_settings.sql h1:NPt5pCa9zCVDHHmyyuWm5Edl0VRX+UToyEVnPsaPcek=
+20250204175354_unique_name_citext.sql h1:1+4ZoEzHkr8VNdg2H5XDbzGLNvptx2+3aU5DS73dhR4=

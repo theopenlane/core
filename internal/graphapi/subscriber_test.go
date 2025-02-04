@@ -164,6 +164,13 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 			wantErr: false,
 		},
 		{
+			name:    "happy path, duplicate subscriber, case insensitive",
+			email:   "c.STARK@example.com",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			wantErr: true,
+		},
+		{
 			name:    "happy path, new subscriber using api token",
 			email:   "e.stark@example.com",
 			client:  suite.client.apiWithToken,

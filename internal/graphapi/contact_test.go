@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -166,7 +167,7 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 			name: "happy path, all input",
 			request: openlaneclient.CreateContactInput{
 				FullName:    "Aemond Targaryen",
-				Email:       lo.ToPtr("atargarygen@dragon.com"),
+				Email:       lo.ToPtr("Atargarygen@dragon.com"),
 				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
 				Title:       lo.ToPtr("Prince of the Targaryen Dynasty"),
 				Company:     lo.ToPtr("Targaryen Dynasty"),
@@ -205,7 +206,7 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 			if tc.request.Email == nil {
 				assert.Empty(t, resp.CreateContact.Contact.Email)
 			} else {
-				assert.Equal(t, *tc.request.Email, *resp.CreateContact.Contact.Email)
+				assert.Equal(t, strings.ToLower(*tc.request.Email), *resp.CreateContact.Contact.Email)
 			}
 
 			if tc.request.PhoneNumber == nil {

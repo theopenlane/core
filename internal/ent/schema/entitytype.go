@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 const (
@@ -31,6 +33,10 @@ func (EntityType) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the entity").
+			SchemaType(map[string]string{
+				dialect.Postgres: "citext",
+			}).
+			Validate(validator.SpecialCharValidator).
 			MaxLen(maxEntityNameLen).
 			NotEmpty().
 			Annotations(

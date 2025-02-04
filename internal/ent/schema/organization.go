@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
@@ -24,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 const (
@@ -40,8 +42,12 @@ func (Organization) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the organization").
+			SchemaType(map[string]string{
+				dialect.Postgres: "citext",
+			}).
 			MaxLen(orgNameMaxLen).
-			NotEmpty().
+			MinLen(3).
+			Validate(validator.SpecialCharValidator).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
@@ -196,7 +202,9 @@ func (Organization) Indexes() []ent.Index {
 	return []ent.Index{
 		// names should be unique, but ignore deleted names
 		index.Fields("name").
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Unique().Annotations(
+			entsql.IndexWhere("deleted_at is NULL"),
+		),
 	}
 }
 

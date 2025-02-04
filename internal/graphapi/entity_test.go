@@ -192,9 +192,9 @@ func (suite *GraphTestSuite) TestMutationCreateEntity() {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "name already exists",
+			name: "name already exists, different casing",
 			request: openlaneclient.CreateEntityInput{
-				Name: lo.ToPtr("blue spruce"),
+				Name: lo.ToPtr("Blue spruce"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
