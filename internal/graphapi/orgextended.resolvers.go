@@ -16,8 +16,8 @@ import (
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
-func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organization generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
-	res, err := r.CreateOrganization(ctx, organization, nil)
+func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
+	res, err := r.CreateOrganization(ctx, organizationInput, nil)
 	if err != nil {
 		return nil, err
 	}

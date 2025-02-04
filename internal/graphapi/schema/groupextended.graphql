@@ -28,9 +28,9 @@ extend type Mutation{
     """
     createGroupWithMembers(
         """
-        values of the group
+        values of the group to be created
         """
-        group: CreateGroupInput!
+        groupInput: CreateGroupInput!
         """
         group members to be added to the group
         """

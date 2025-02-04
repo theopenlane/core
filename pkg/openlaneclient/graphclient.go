@@ -114,7 +114,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVGroup, error)
 	CreateBulkGroup(ctx context.Context, input []*CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkGroup, error)
 	CreateGroup(ctx context.Context, input CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroup, error)
-	CreateGroupWithMembers(ctx context.Context, group CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error)
+	CreateGroupWithMembers(ctx context.Context, groupInput CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error)
 	DeleteGroup(ctx context.Context, deleteGroupID string, interceptors ...clientv2.RequestInterceptor) (*DeleteGroup, error)
 	GetAllGroups(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllGroups, error)
 	GetGroupByID(ctx context.Context, groupID string, interceptors ...clientv2.RequestInterceptor) (*GetGroupByID, error)
@@ -187,7 +187,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOrganization, error)
 	CreateBulkOrganization(ctx context.Context, input []*CreateOrganizationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOrganization, error)
 	CreateOrganization(ctx context.Context, input CreateOrganizationInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateOrganization, error)
-	CreateOrganizationWithMembers(ctx context.Context, org CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error)
+	CreateOrganizationWithMembers(ctx context.Context, organizationInput CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error)
 	DeleteOrganization(ctx context.Context, deleteOrganizationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteOrganization, error)
 	GetAllOrganizations(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllOrganizations, error)
 	GetOrganizationByID(ctx context.Context, organizationID string, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationByID, error)
@@ -57650,8 +57650,8 @@ func (c *Client) CreateGroup(ctx context.Context, input CreateGroupInput, interc
 	return &res, nil
 }
 
-const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($group: CreateGroupInput!, $members: [GroupMembersInput!]) {
-	createGroupWithMembers(group: $group, members: $members) {
+const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
+	createGroupWithMembers(groupInput: $groupInput, members: $members) {
 		group {
 			id
 			displayID
@@ -57673,10 +57673,10 @@ const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($group:
 }
 `
 
-func (c *Client) CreateGroupWithMembers(ctx context.Context, group CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error) {
+func (c *Client) CreateGroupWithMembers(ctx context.Context, groupInput CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error) {
 	vars := map[string]any{
-		"group":   group,
-		"members": members,
+		"groupInput": groupInput,
+		"members":    members,
 	}
 
 	var res CreateGroupWithMembers
@@ -60611,8 +60611,8 @@ func (c *Client) CreateOrganization(ctx context.Context, input CreateOrganizatio
 	return &res, nil
 }
 
-const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMembers ($org: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
-	createOrganizationWithMembers(organization: $org, members: $members) {
+const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMembers ($organizationInput: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
+	createOrganizationWithMembers(organizationInput: $organizationInput, members: $members) {
 		organization {
 			id
 			name
@@ -60646,10 +60646,10 @@ const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMe
 }
 `
 
-func (c *Client) CreateOrganizationWithMembers(ctx context.Context, org CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error) {
+func (c *Client) CreateOrganizationWithMembers(ctx context.Context, organizationInput CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error) {
 	vars := map[string]any{
-		"org":     org,
-		"members": members,
+		"organizationInput": organizationInput,
+		"members":           members,
 	}
 
 	var res CreateOrganizationWithMembers

@@ -14335,9 +14335,9 @@ type Mutation {
 	"""
 	createGroupWithMembers(
 		"""
-		values of the group
+		values of the group to be created
 		"""
-		group: CreateGroupInput!
+		groupInput: CreateGroupInput!
 
 		"""
 		group members to be added to the group
@@ -14799,9 +14799,9 @@ type Mutation {
 	"""
 	createOrganizationWithMembers(
 		"""
-		values of the new organization
+		values of the new organization to be created
 		"""
-		organization: CreateOrganizationInput!
+		organizationInput: CreateOrganizationInput!
 
 		"""
 		avatar file to Upload

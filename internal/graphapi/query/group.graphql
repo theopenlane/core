@@ -97,8 +97,8 @@ mutation CreateGroup($input: CreateGroupInput!) {
   }
 }
 
-mutation CreateGroupWithMembers($group: CreateGroupInput!, $members: [GroupMembersInput!]) {
-  createGroupWithMembers(group: $group, members: $members) {
+mutation CreateGroupWithMembers($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
+  createGroupWithMembers(groupInput: $groupInput, members: $members) {
     group {
       id
       displayID
