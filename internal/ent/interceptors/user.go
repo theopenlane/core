@@ -64,6 +64,8 @@ func filterType(ctx context.Context) string {
 		allowedCtx := []string{
 			"createGroup",
 			"updateGroup",
+			"createGroupWithMembers",
+			"createOrganizationWithMembers",
 			"createGroupMembership",
 			"updateGroupMembership",
 			"createProgramMembership",
@@ -71,6 +73,8 @@ func filterType(ctx context.Context) string {
 			"createProgramWithMembers",
 			"createProgram",
 			"updateProgram",
+			"program",
+			"group",
 			"organization",
 		}
 

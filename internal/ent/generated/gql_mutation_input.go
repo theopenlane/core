@@ -2600,7 +2600,6 @@ type CreateGroupInput struct {
 	NarrativeBlockedGroupIDs        []string
 	NarrativeViewerIDs              []string
 	SettingID                       *string
-	UserIDs                         []string
 	EventIDs                        []string
 	IntegrationIDs                  []string
 	FileIDs                         []string
@@ -2714,9 +2713,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
-	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -2839,9 +2835,6 @@ type UpdateGroupInput struct {
 	RemoveNarrativeViewerIDs              []string
 	ClearSetting                          bool
 	SettingID                             *string
-	ClearUsers                            bool
-	AddUserIDs                            []string
-	RemoveUserIDs                         []string
 	ClearEvents                           bool
 	AddEventIDs                           []string
 	RemoveEventIDs                        []string
@@ -3154,15 +3147,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
-	}
-	if i.ClearUsers {
-		m.ClearUsers()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -4409,7 +4393,6 @@ type CreateOrganizationInput struct {
 	SettingID                  *string
 	PersonalAccessTokenIDs     []string
 	APITokenIDs                []string
-	UserIDs                    []string
 	EventIDs                   []string
 	SecretIDs                  []string
 	FileIDs                    []string
@@ -4499,9 +4482,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.APITokenIDs; len(v) > 0 {
 		m.AddAPITokenIDs(v...)
-	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -4634,9 +4614,6 @@ type UpdateOrganizationInput struct {
 	ClearAPITokens                   bool
 	AddAPITokenIDs                   []string
 	RemoveAPITokenIDs                []string
-	ClearUsers                       bool
-	AddUserIDs                       []string
-	RemoveUserIDs                    []string
 	ClearEvents                      bool
 	AddEventIDs                      []string
 	RemoveEventIDs                   []string
@@ -4852,15 +4829,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveAPITokenIDs; len(v) > 0 {
 		m.RemoveAPITokenIDs(v...)
-	}
-	if i.ClearUsers {
-		m.ClearUsers()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -5738,7 +5706,6 @@ type CreateProgramInput struct {
 	NarrativeIDs         []string
 	ActionPlanIDs        []string
 	StandardIDs          []string
-	UserIDs              []string
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -5819,9 +5786,6 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.StandardIDs; len(v) > 0 {
 		m.AddStandardIDs(v...)
 	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the CreateProgramInput on the ProgramCreate builder.
@@ -5896,9 +5860,6 @@ type UpdateProgramInput struct {
 	ClearStandards            bool
 	AddStandardIDs            []string
 	RemoveStandardIDs         []string
-	ClearUsers                bool
-	AddUserIDs                []string
-	RemoveUserIDs             []string
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -6094,15 +6055,6 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.RemoveStandardIDs; len(v) > 0 {
 		m.RemoveStandardIDs(v...)
-	}
-	if i.ClearUsers {
-		m.ClearUsers()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 }
 

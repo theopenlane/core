@@ -105,6 +105,9 @@ func (Program) Edges() []ent.Edge {
 			Comment("the framework(s) that the program is based on"),
 		edge.From("users", User.Type).
 			Ref("programs").
+			// Skip the mutation input for the users edge
+			// this should be done via the members edge
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Through("members", ProgramMembership.Type),
 	}
 }

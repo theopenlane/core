@@ -3527,7 +3527,6 @@ type CreateGroupInput struct {
 	NarrativeBlockedGroupIDs        []string                 `json:"narrativeBlockedGroupIDs,omitempty"`
 	NarrativeViewerIDs              []string                 `json:"narrativeViewerIDs,omitempty"`
 	SettingID                       *string                  `json:"settingID,omitempty"`
-	UserIDs                         []string                 `json:"userIDs,omitempty"`
 	EventIDs                        []string                 `json:"eventIDs,omitempty"`
 	IntegrationIDs                  []string                 `json:"integrationIDs,omitempty"`
 	FileIDs                         []string                 `json:"fileIDs,omitempty"`
@@ -3724,7 +3723,6 @@ type CreateOrganizationInput struct {
 	SettingID                  *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs     []string                        `json:"personalAccessTokenIDs,omitempty"`
 	APITokenIDs                []string                        `json:"apiTokenIDs,omitempty"`
-	UserIDs                    []string                        `json:"userIDs,omitempty"`
 	EventIDs                   []string                        `json:"eventIDs,omitempty"`
 	SecretIDs                  []string                        `json:"secretIDs,omitempty"`
 	FileIDs                    []string                        `json:"fileIDs,omitempty"`
@@ -3870,7 +3868,6 @@ type CreateProgramInput struct {
 	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
 	ActionPlanIDs       []string `json:"actionPlanIDs,omitempty"`
 	StandardIDs         []string `json:"standardIDs,omitempty"`
-	UserIDs             []string `json:"userIDs,omitempty"`
 }
 
 // CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -7743,6 +7740,13 @@ type GroupHistoryWhereInput struct {
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+}
+
+// GroupMembersInput is used to create members for a group
+// along with the group creation
+type GroupMembersInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
 }
 
 type GroupMembership struct {
@@ -11641,6 +11645,13 @@ type NoteWhereInput struct {
 	// program edge predicates
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
 	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+}
+
+// OrgMembersInput is used to create members for a organization
+// along with the org creation
+type OrgMembersInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
 }
 
 type OrgMembership struct {
@@ -20359,9 +20370,6 @@ type UpdateGroupInput struct {
 	ClearNarrativeViewers                 *bool                         `json:"clearNarrativeViewers,omitempty"`
 	SettingID                             *string                       `json:"settingID,omitempty"`
 	ClearSetting                          *bool                         `json:"clearSetting,omitempty"`
-	AddUserIDs                            []string                      `json:"addUserIDs,omitempty"`
-	RemoveUserIDs                         []string                      `json:"removeUserIDs,omitempty"`
-	ClearUsers                            *bool                         `json:"clearUsers,omitempty"`
 	AddEventIDs                           []string                      `json:"addEventIDs,omitempty"`
 	RemoveEventIDs                        []string                      `json:"removeEventIDs,omitempty"`
 	ClearEvents                           *bool                         `json:"clearEvents,omitempty"`
@@ -20375,6 +20383,7 @@ type UpdateGroupInput struct {
 	RemoveTaskIDs                         []string                      `json:"removeTaskIDs,omitempty"`
 	ClearTasks                            *bool                         `json:"clearTasks,omitempty"`
 	AddGroupMembers                       []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
+	RemoveGroupMembers                    []string                      `json:"removeGroupMembers,omitempty"`
 	UpdateGroupSettings                   *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 }
 
@@ -20655,9 +20664,6 @@ type UpdateOrganizationInput struct {
 	AddAPITokenIDs                   []string                        `json:"addAPITokenIDs,omitempty"`
 	RemoveAPITokenIDs                []string                        `json:"removeAPITokenIDs,omitempty"`
 	ClearAPITokens                   *bool                           `json:"clearAPITokens,omitempty"`
-	AddUserIDs                       []string                        `json:"addUserIDs,omitempty"`
-	RemoveUserIDs                    []string                        `json:"removeUserIDs,omitempty"`
-	ClearUsers                       *bool                           `json:"clearUsers,omitempty"`
 	AddEventIDs                      []string                        `json:"addEventIDs,omitempty"`
 	RemoveEventIDs                   []string                        `json:"removeEventIDs,omitempty"`
 	ClearEvents                      *bool                           `json:"clearEvents,omitempty"`
@@ -20733,6 +20739,7 @@ type UpdateOrganizationInput struct {
 	RemoveEvidenceIDs                []string                        `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence                    *bool                           `json:"clearEvidence,omitempty"`
 	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
+	RemoveOrgMembers                 []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 }
 
@@ -20939,10 +20946,8 @@ type UpdateProgramInput struct {
 	AddStandardIDs            []string                        `json:"addStandardIDs,omitempty"`
 	RemoveStandardIDs         []string                        `json:"removeStandardIDs,omitempty"`
 	ClearStandards            *bool                           `json:"clearStandards,omitempty"`
-	AddUserIDs                []string                        `json:"addUserIDs,omitempty"`
-	RemoveUserIDs             []string                        `json:"removeUserIDs,omitempty"`
-	ClearUsers                *bool                           `json:"clearUsers,omitempty"`
 	AddProgramMembers         []*CreateProgramMembershipInput `json:"addProgramMembers,omitempty"`
+	RemoveProgramMembers      []string                        `json:"removeProgramMembers,omitempty"`
 }
 
 // UpdateProgramMembershipInput is used for update ProgramMembership object.

@@ -395,6 +395,11 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// create program user to remove
+	programUser := suite.userBuilder(context.Background())
+	(&OrgMemberBuilder{client: suite.client, UserID: programUser.ID, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	pm := (&ProgramMemberBuilder{client: suite.client, UserID: programUser.ID, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
+
 	// Create some edge objects
 	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	policy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -464,6 +469,14 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 				AuditorReady:         lo.ToPtr(true),
 				AuditorWriteComments: lo.ToPtr(true),
 				AuditorReadComments:  lo.ToPtr(true),
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, remove program member",
+			request: openlaneclient.UpdateProgramInput{
+				RemoveBlockedGroupIDs: []string{pm.ID},
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -615,6 +628,11 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 				require.NoError(t, err)
 				require.NotEmpty(t, res)
 				assert.Equal(t, program.ID, res.Program.ID)
+			}
+
+			// member was removed, ensure there are no members now
+			if len(tc.request.RemoveProgramMembers) > 0 {
+				require.Len(t, resp.UpdateProgram.Program.Members, 0)
 			}
 		})
 	}

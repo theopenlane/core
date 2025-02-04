@@ -4242,7 +4242,6 @@ input CreateGroupInput {
   narrativeBlockedGroupIDs: [ID!]
   narrativeViewerIDs: [ID!]
   settingID: ID
-  userIDs: [ID!]
   eventIDs: [ID!]
   integrationIDs: [ID!]
   fileIDs: [ID!]
@@ -4525,7 +4524,6 @@ input CreateOrganizationInput {
   settingID: ID
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
-  userIDs: [ID!]
   eventIDs: [ID!]
   secretIDs: [ID!]
   fileIDs: [ID!]
@@ -4740,7 +4738,6 @@ input CreateProgramInput {
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
   standardIDs: [ID!]
-  userIDs: [ID!]
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -26864,9 +26861,6 @@ input UpdateGroupInput {
   clearNarrativeViewers: Boolean
   settingID: ID
   clearSetting: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -27238,9 +27232,6 @@ input UpdateOrganizationInput {
   addAPITokenIDs: [ID!]
   removeAPITokenIDs: [ID!]
   clearAPITokens: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -27588,9 +27579,6 @@ input UpdateProgramInput {
   addStandardIDs: [ID!]
   removeStandardIDs: [ID!]
   clearStandards: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.

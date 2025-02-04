@@ -339,6 +339,135 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 	}
 }
 
+func (suite *GraphTestSuite) TestMutationCreateGroupWithMembers() {
+	t := suite.T()
+
+	testCases := []struct {
+		name     string
+		group    openlaneclient.CreateGroupInput
+		members  []*openlaneclient.GroupMembersInput
+		client   *openlaneclient.OpenlaneClient
+		ctx      context.Context
+		errorMsg string
+	}{
+		{
+			name: "happy path group",
+			group: openlaneclient.CreateGroupInput{
+				Name: gofakeit.Name(),
+				CreateGroupSettings: &openlaneclient.CreateGroupSettingInput{
+					Visibility: &enums.VisibilityPrivate,
+				},
+			},
+			members: []*openlaneclient.GroupMembersInput{
+				{
+					UserID: adminUser.ID,
+					Role:   &enums.RoleAdmin,
+				},
+				{
+					UserID: viewOnlyUser.ID,
+					Role:   &enums.RoleMember,
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path group using api token with same members",
+			group: openlaneclient.CreateGroupInput{
+				Name: gofakeit.Name(),
+				CreateGroupSettings: &openlaneclient.CreateGroupSettingInput{
+					Visibility: &enums.VisibilityPrivate,
+				},
+			},
+			members: []*openlaneclient.GroupMembersInput{
+				{
+					UserID: adminUser.ID,
+					Role:   &enums.RoleAdmin,
+				},
+				{
+					UserID: viewOnlyUser.ID,
+					Role:   &enums.RoleMember,
+				},
+			},
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path group using personal access token with same members",
+			group: openlaneclient.CreateGroupInput{
+				Name:    gofakeit.Name(),
+				OwnerID: &testUser1.OrganizationID,
+				CreateGroupSettings: &openlaneclient.CreateGroupSettingInput{
+					Visibility: &enums.VisibilityPrivate,
+				},
+			},
+			members: []*openlaneclient.GroupMembersInput{
+				{
+					UserID: adminUser.ID,
+					Role:   &enums.RoleAdmin,
+				},
+				{
+					UserID: viewOnlyUser.ID,
+					Role:   &enums.RoleMember,
+				},
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateGroupWithMembers(tc.ctx, tc.group, tc.members)
+
+			if tc.errorMsg != "" {
+				require.Error(t, err)
+				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+			require.NotNil(t, resp.CreateGroupWithMembers.Group)
+
+			// Make sure provided values match
+			assert.Equal(t, tc.group.Name, resp.CreateGroupWithMembers.Group.Name)
+
+			// ensure we can still set the visibility on the group when creating it
+			assert.Equal(t, resp.CreateGroupWithMembers.Group.Setting.Visibility, enums.VisibilityPrivate)
+
+			// make sure there are three members, user who created the group, admin, and member
+			// except when using an api token
+			expectedLen := 3
+			if tc.client == suite.client.apiWithToken {
+				expectedLen = 2
+			}
+
+			require.Len(t, resp.CreateGroupWithMembers.Group.Members, expectedLen)
+
+			// make sure we get the member data back
+			for _, member := range tc.members {
+				found := false
+				for _, m := range resp.CreateGroupWithMembers.Group.Members {
+					require.NotNil(t, m.User)
+
+					if m.User.ID == member.UserID {
+						found = true
+						assert.Equal(t, *member.Role, m.Role)
+
+						assert.NotEmpty(t, m.User.FirstName)
+						assert.NotEmpty(t, m.User.LastName)
+					}
+				}
+
+				assert.Truef(t, found, "member %s not found", member.UserID)
+			}
+		})
+	}
+}
+
 func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 	t := suite.T()
 

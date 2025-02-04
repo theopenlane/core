@@ -4,10 +4,36 @@ extend input CreateGroupInput {
 
 extend input UpdateGroupInput {
   addGroupMembers: [CreateGroupMembershipInput!]
+  removeGroupMembers: [ID!]
   updateGroupSettings: UpdateGroupSettingInput
 }
 
 extend input GroupMembershipWhereInput {
   groupID: String
   userID: String
+}
+
+"""
+GroupMembersInput is used to create members for a group
+along with the group creation
+"""
+input GroupMembersInput {
+  role: GroupMembershipRole
+  userID: ID!
+}
+
+extend type Mutation{
+    """
+    Create a new group with members
+    """
+    createGroupWithMembers(
+        """
+        values of the group
+        """
+        group: CreateGroupInput!
+        """
+        group members to be added to the group
+        """
+        members: [GroupMembersInput!]
+    ): GroupCreatePayload!
 }

@@ -97,6 +97,28 @@ mutation CreateGroup($input: CreateGroupInput!) {
   }
 }
 
+mutation CreateGroupWithMembers($group: CreateGroupInput!, $members: [GroupMembersInput!]) {
+  createGroupWithMembers(group: $group, members: $members) {
+    group {
+      id
+      displayID
+      name
+      setting {
+        visibility
+      }
+      members {
+        id
+        role
+        user {
+          id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+}
+
 mutation DeleteGroup($deleteGroupId: ID!) {
   deleteGroup(id: $deleteGroupId) {
     deletedID

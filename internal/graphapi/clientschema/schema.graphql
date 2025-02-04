@@ -4498,7 +4498,6 @@ input CreateGroupInput {
 	narrativeBlockedGroupIDs: [ID!]
 	narrativeViewerIDs: [ID!]
 	settingID: ID
-	userIDs: [ID!]
 	eventIDs: [ID!]
 	integrationIDs: [ID!]
 	fileIDs: [ID!]
@@ -4786,7 +4785,6 @@ input CreateOrganizationInput {
 	settingID: ID
 	personalAccessTokenIDs: [ID!]
 	apiTokenIDs: [ID!]
-	userIDs: [ID!]
 	eventIDs: [ID!]
 	secretIDs: [ID!]
 	fileIDs: [ID!]
@@ -5002,7 +5000,6 @@ input CreateProgramInput {
 	narrativeIDs: [ID!]
 	actionPlanIDs: [ID!]
 	standardIDs: [ID!]
-	userIDs: [ID!]
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -9993,6 +9990,14 @@ input GroupHistoryWhereInput {
 	displayNameEqualFold: String
 	displayNameContainsFold: String
 }
+"""
+GroupMembersInput is used to create members for a group
+along with the group creation
+"""
+input GroupMembersInput {
+	role: GroupMembershipRole
+	userID: ID!
+}
 type GroupMembership implements Node {
 	id: ID!
 	createdAt: Time
@@ -14373,6 +14378,20 @@ type Mutation {
 		id: ID!
 	): GroupDeletePayload!
 	"""
+	Create a new group with members
+	"""
+	createGroupWithMembers(
+		"""
+		values of the group
+		"""
+		group: CreateGroupInput!
+
+		"""
+		group members to be added to the group
+		"""
+		members: [GroupMembersInput!]
+	): GroupCreatePayload!
+	"""
 	Create a new groupMembership
 	"""
 	createGroupMembership(
@@ -14822,6 +14841,25 @@ type Mutation {
 		"""
 		id: ID!
 	): OrganizationSettingDeletePayload!
+	"""
+	Create a new organization with members
+	"""
+	createOrganizationWithMembers(
+		"""
+		values of the new organization
+		"""
+		organization: CreateOrganizationInput!
+
+		"""
+		avatar file to Upload
+		"""
+		avatarFile: Upload
+
+		"""
+		organization members to be added to the new org
+		"""
+		members: [OrgMembersInput!]
+	): OrganizationCreatePayload!
 	"""
 	Create a new orgMembership
 	"""
@@ -16702,6 +16740,14 @@ enum OrderDirection {
 	Specifies a descending order for a given `orderBy` argument.
 	"""
 	DESC
+}
+"""
+OrgMembersInput is used to create members for a organization
+along with the org creation
+"""
+input OrgMembersInput {
+	role: OrgMembershipRole
+	userID: ID!
 }
 type OrgMembership implements Node {
 	id: ID!
@@ -30749,9 +30795,6 @@ input UpdateGroupInput {
 	clearNarrativeViewers: Boolean
 	settingID: ID
 	clearSetting: Boolean
-	addUserIDs: [ID!]
-	removeUserIDs: [ID!]
-	clearUsers: Boolean
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
@@ -30765,6 +30808,7 @@ input UpdateGroupInput {
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
 	addGroupMembers: [CreateGroupMembershipInput!]
+	removeGroupMembers: [ID!]
 	updateGroupSettings: UpdateGroupSettingInput
 }
 """
@@ -31125,9 +31169,6 @@ input UpdateOrganizationInput {
 	addAPITokenIDs: [ID!]
 	removeAPITokenIDs: [ID!]
 	clearAPITokens: Boolean
-	addUserIDs: [ID!]
-	removeUserIDs: [ID!]
-	clearUsers: Boolean
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
@@ -31203,6 +31244,7 @@ input UpdateOrganizationInput {
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
+	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
 }
 """
@@ -31477,10 +31519,8 @@ input UpdateProgramInput {
 	addStandardIDs: [ID!]
 	removeStandardIDs: [ID!]
 	clearStandards: Boolean
-	addUserIDs: [ID!]
-	removeUserIDs: [ID!]
-	clearUsers: Boolean
 	addProgramMembers: [CreateProgramMembershipInput!]
+	removeProgramMembers: [ID!]
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.

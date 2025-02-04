@@ -258,6 +258,14 @@ query GetAllPrograms {
           id
           name
         }
+        members {
+          id
+          user {
+            id
+            firstName
+            lastName
+          }
+        }
       }
     }
   }
@@ -327,6 +335,14 @@ query GetProgramByID($programId: ID!) {
     blockedGroups {
       id
       name
+    }
+    members {
+      id
+      user {
+        id
+        firstName
+        lastName
+      }
     }
   }
 }
@@ -398,6 +414,14 @@ query GetPrograms($where: ProgramWhereInput) {
           id
           name
         }
+        members {
+          id
+          user {
+            id
+            firstName
+            lastName
+          }
+        }
       }
     }
   }
@@ -465,6 +489,14 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       blockedGroups {
         id
         name
+      }
+      members {
+        id
+        user {
+          id
+          firstName
+          lastName
+        }
       }
     }
   }

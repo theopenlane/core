@@ -10,7 +10,44 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
+
+// CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
+func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organization generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
+	res, err := r.CreateOrganization(ctx, organization, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	memberInput := make([]*generated.CreateOrgMembershipInput, len(members))
+
+	for i, member := range members {
+		memberInput[i] = &generated.CreateOrgMembershipInput{
+			OrganizationID: res.Organization.ID,
+			UserID:         member.UserID,
+			Role:           member.Role,
+		}
+	}
+
+	if _, err := r.CreateBulkOrgMembership(ctx, memberInput); err != nil {
+		return nil, err
+	}
+
+	finalResult, err := withTransactionalMutation(ctx).Organization.
+		Query().
+		WithMembers().
+		Where(entorg.IDEQ(res.Organization.ID)).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
+	}
+
+	return &model.OrganizationCreatePayload{
+		Organization: finalResult,
+	}, nil
+}
 
 // CreateOrgSettings is the resolver for the createOrgSettings field.
 func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context, obj *generated.CreateOrganizationInput, data *generated.CreateOrganizationSettingInput) error {
@@ -45,6 +82,29 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 	}
 
 	_, err := c.OrgMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// RemoveOrgMembers is the resolver for the removeOrgMembers field.
+func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []string) error {
+	opCtx := graphql.GetOperationContext(ctx)
+	orgID, ok := opCtx.Variables["updateOrganizationId"]
+	if !ok {
+		log.Error().Msg("unable to get org from context")
+
+		return ErrInternalServerError
+	}
+
+	c := withTransactionalMutation(ctx)
+
+	_, err := c.OrgMembership.Delete().Where(
+		orgmembership.OrganizationID(orgID.(string)),
+		orgmembership.IDIn(data...),
+	).Exec(ctx)
 	if err != nil {
 		return err
 	}

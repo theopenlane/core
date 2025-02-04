@@ -73,6 +73,40 @@ mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Uploa
   }
 }
 
+mutation CreateOrganizationWithMembers($org: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
+  createOrganizationWithMembers(organization: $org, members: $members) {
+    organization {
+      id
+      name
+      displayName
+      setting {
+        id
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        domains
+        billingContact
+        billingEmail
+        billingPhone
+        billingAddress
+        taxIdentifier
+        geoLocation
+        tags
+      }
+      members {
+        id
+        role
+        user {
+          id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+}
+
 mutation DeleteOrganization($deleteOrganizationId: ID!) {
   deleteOrganization(id: $deleteOrganizationId) {
     deletedID
