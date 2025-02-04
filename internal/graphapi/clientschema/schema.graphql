@@ -9584,6 +9584,10 @@ type Group implements Node {
 	files: [File!]
 	tasks: [Task!]
 	members: [GroupMembership!]
+	"""
+	permissions the group provides
+	"""
+	permissions: [GroupPermissions!]
 }
 """
 Return response for createBulkGroup mutation
@@ -10461,6 +10465,18 @@ Properties by which Group connections can be ordered.
 enum GroupOrderField {
 	name
 	display_name
+}
+"""
+GroupPermissions contains details for the related object and the permissions
+the group provides (or removes in the case of blocked) to the object within the
+organization
+"""
+type GroupPermissions {
+	objectType: String!
+	permissions: Permission!
+	id: ID
+	displayID: String
+	name: String
 }
 type GroupSearchResult {
 	groups: [Group!]
@@ -19583,6 +19599,15 @@ type PageInfo {
 	When paginating forwards, the cursor to continue.
 	"""
 	endCursor: Cursor
+}
+"""
+Permission is enum for the permissions types
+"""
+enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permission") {
+	EDITOR
+	VIEWER
+	CREATOR
+	BLOCKED
 }
 type PersonalAccessToken implements Node {
 	id: ID!

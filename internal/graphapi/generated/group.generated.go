@@ -151,6 +151,8 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_tasks(ctx, field)
 			case "members":
 				return ec.fieldContext_Group_members(ctx, field)
+			case "permissions":
+				return ec.fieldContext_Group_permissions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Group", field.Name)
 		},
@@ -283,6 +285,8 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_tasks(ctx, field)
 			case "members":
 				return ec.fieldContext_Group_members(ctx, field)
+			case "permissions":
+				return ec.fieldContext_Group_permissions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Group", field.Name)
 		},
@@ -459,6 +463,8 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_tasks(ctx, field)
 			case "members":
 				return ec.fieldContext_Group_members(ctx, field)
+			case "permissions":
+				return ec.fieldContext_Group_permissions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Group", field.Name)
 		},

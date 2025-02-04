@@ -37,3 +37,33 @@ extend type Mutation{
         members: [GroupMembersInput!]
     ): GroupCreatePayload!
 }
+
+"""
+Permission is enum for the permissions types
+"""
+enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permission") {
+  EDITOR
+  VIEWER
+  CREATOR
+  BLOCKED
+}
+
+"""
+GroupPermissions contains details for the related object and the permissions
+the group provides (or removes in the case of blocked) to the object within the
+organization
+"""
+type GroupPermissions {
+  objectType: String!
+  permissions: Permission!
+  id: ID
+  displayID: String
+  name: String
+}
+
+extend type Group {
+  """
+  permissions the group provides
+  """
+  permissions: [GroupPermissions!]
+}

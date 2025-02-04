@@ -10,9 +10,11 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	entgroup "github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.
@@ -47,6 +49,98 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, group gen
 	return &model.GroupCreatePayload{
 		Group: finalResult,
 	}, nil
+}
+
+// Permissions is the resolver for the permissions field.
+func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group) ([]*model.GroupPermissions, error) {
+	perms := make([]*model.GroupPermissions, 0)
+
+	// TODO (sfunk): we should generate this code in the future
+	// based off the group permissions mixin
+	res, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(obj.ID)).
+		// Control permissions
+		WithControlEditors().
+		WithControlViewers().
+		WithControlBlockedGroups().
+		WithControlCreators().
+
+		// Control Objective permissions
+		WithControlObjectiveEditors().
+		WithControlObjectiveViewers().
+		WithControlObjectiveBlockedGroups().
+		WithControlObjectiveCreators().
+
+		// Program permissions
+		WithProgramViewers().
+		WithProgramEditors().
+		WithProgramBlockedGroups().
+		WithProgramCreators().
+
+		// Risk permissions
+		WithRiskViewers().
+		WithRiskEditors().
+		WithRiskBlockedGroups().
+		WithRiskCreators().
+
+		// Internal Policy permissions
+		WithInternalPolicyEditors().
+		WithInternalPolicyBlockedGroups().
+		WithInternalPolicyCreators().
+
+		// Procedure permissions
+		WithProcedureEditors().
+		WithProcedureBlockedGroups().
+		WithProcedureCreators().
+
+		// Narrative permissions
+		WithNarrativeViewers().
+		WithNarrativeEditors().
+		WithNarrativeBlockedGroups().
+		WithNarrativeCreators().
+
+		// Group permissions
+		WithGroupCreators().
+		Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+	}
+
+	perms = append(perms, getGroupPermissions(res.Edges.ControlViewers, generated.TypeControl, enums.Viewer)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ControlEditors, generated.TypeControl, enums.Editor)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ControlBlockedGroups, generated.TypeControl, enums.Blocked)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ControlCreators, generated.TypeControl, enums.Creator)...)
+
+	perms = append(perms, getGroupPermissions(res.Edges.ControlObjectiveViewers, generated.TypeControlObjective, enums.Viewer)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ControlObjectiveEditors, generated.TypeControlObjective, enums.Editor)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ControlObjectiveBlockedGroups, generated.TypeControlObjective, enums.Blocked)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ControlObjectiveCreators, generated.TypeControlObjective, enums.Creator)...)
+
+	perms = append(perms, getGroupPermissions(res.Edges.ProgramViewers, generated.TypeProgram, enums.Viewer)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ProgramEditors, generated.TypeProgram, enums.Editor)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ProgramBlockedGroups, generated.TypeProgram, enums.Blocked)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ProgramCreators, generated.TypeProgram, enums.Creator)...)
+
+	perms = append(perms, getGroupPermissions(res.Edges.RiskViewers, generated.TypeRisk, enums.Viewer)...)
+	perms = append(perms, getGroupPermissions(res.Edges.RiskEditors, generated.TypeRisk, enums.Editor)...)
+	perms = append(perms, getGroupPermissions(res.Edges.RiskBlockedGroups, generated.TypeRisk, enums.Blocked)...)
+	perms = append(perms, getGroupPermissions(res.Edges.RiskCreators, generated.TypeRisk, enums.Creator)...)
+
+	perms = append(perms, getGroupPermissions(res.Edges.InternalPolicyEditors, generated.TypeInternalPolicy, enums.Editor)...)
+	perms = append(perms, getGroupPermissions(res.Edges.InternalPolicyBlockedGroups, generated.TypeInternalPolicy, enums.Blocked)...)
+	perms = append(perms, getGroupPermissions(res.Edges.InternalPolicyCreators, generated.TypeInternalPolicy, enums.Creator)...)
+
+	perms = append(perms, getGroupPermissions(res.Edges.ProcedureEditors, generated.TypeProcedure, enums.Editor)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ProcedureBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
+	perms = append(perms, getGroupPermissions(res.Edges.ProcedureCreators, generated.TypeProcedure, enums.Creator)...)
+
+	perms = append(perms, getGroupPermissions(res.Edges.NarrativeViewers, generated.TypeNarrative, enums.Viewer)...)
+	perms = append(perms, getGroupPermissions(res.Edges.NarrativeEditors, generated.TypeProcedure, enums.Editor)...)
+	perms = append(perms, getGroupPermissions(res.Edges.NarrativeBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
+	perms = append(perms, getGroupPermissions(res.Edges.NarrativeCreators, generated.TypeProcedure, enums.Creator)...)
+
+	perms = append(perms, getGroupPermissions(res.Edges.GroupCreators, generated.TypeGroup, enums.Creator)...)
+
+	return perms, nil
 }
 
 // CreateGroupSettings is the resolver for the createGroupSettings field.
