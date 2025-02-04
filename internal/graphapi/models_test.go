@@ -305,6 +305,19 @@ type EvidenceBuilder struct {
 	ControlID string
 }
 
+// Faker structs with random injected data
+type Faker struct {
+	Name string
+}
+
+func randomName(t *testing.T) string {
+	var f Faker
+	err := gofakeit.Struct(&f)
+	require.NoError(t, err)
+
+	return f.Name
+}
+
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
@@ -316,7 +329,7 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	ctx = ent.NewContext(ctx, o.client.db)
 
 	if o.Name == "" {
-		o.Name = gofakeit.LetterN(40)
+		o.Name = randomName(t)
 	}
 
 	if o.DisplayName == "" {
@@ -445,7 +458,7 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	if g.Name == "" {
-		g.Name = gofakeit.AppName()
+		g.Name = randomName(t)
 	}
 
 	owner := g.Owner
@@ -621,7 +634,7 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	if e.Name == "" {
-		e.Name = gofakeit.AppName()
+		e.Name = randomName(t)
 	}
 
 	entityType := e.client.db.EntityType.Create().

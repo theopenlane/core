@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 
@@ -22,6 +23,9 @@ func HookSubscriber() ent.Hook {
 			if !ok || email == "" {
 				return nil, ErrEmailRequired
 			}
+
+			// lowercase the email for uniqueness
+			m.SetEmail(strings.ToLower(email))
 
 			if err := createVerificationToken(m, email); err != nil {
 				return nil, err

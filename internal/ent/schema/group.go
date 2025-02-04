@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 // Group holds the schema definition for the Group entity
@@ -31,7 +33,11 @@ func (Group) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the group - must be unique within the organization").
-			NotEmpty().
+			SchemaType(map[string]string{
+				dialect.Postgres: "citext",
+			}).
+			MinLen(3).
+			Validate(validator.SpecialCharValidator).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),

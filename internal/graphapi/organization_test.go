@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"context"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -252,10 +253,41 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			ctx:            testUser1.UserCtx,
 		},
 		{
+			name:           "duplicate organization name, case insensitive",
+			orgName:        strings.ToUpper(parentOrg.Organization.Name),
+			orgDescription: gofakeit.HipsterSentence(10),
+			errorMsg:       "already exists",
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+		},
+		{
 			name:           "duplicate organization name, but other was deleted, should pass",
 			orgName:        orgToDelete.Name,
 			orgDescription: gofakeit.HipsterSentence(10),
-			errorMsg:       "",
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+		},
+		{
+			name:           "organization name with trailing space should work with trailing space removed",
+			orgName:        "orgname ",
+			orgDescription: gofakeit.HipsterSentence(10),
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+		},
+		{
+			name:           "invalid organization name, too short",
+			orgName:        "ab",
+			orgDescription: gofakeit.HipsterSentence(10),
+			errorMsg:       "value is less than the required length",
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+		},
+		{
+
+			name:           "invalid organization name with special characters",
+			orgName:        "orgn!me$",
+			orgDescription: gofakeit.HipsterSentence(10),
+			errorMsg:       "invalid or unparsable field: name, field cannot contain special characters",
 			client:         suite.client.api,
 			ctx:            testUser1.UserCtx,
 		},
@@ -332,7 +364,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			require.NotNil(t, resp.CreateOrganization.Organization)
 
 			// Make sure provided values match
-			assert.Equal(t, tc.orgName, resp.CreateOrganization.Organization.Name)
+			assert.Equal(t, strings.TrimSpace(tc.orgName), resp.CreateOrganization.Organization.Name)
 			assert.Equal(t, tc.orgDescription, *resp.CreateOrganization.Organization.Description)
 
 			if tc.parentOrgID == "" {

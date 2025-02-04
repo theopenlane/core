@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -189,6 +190,8 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 func (suite *GraphTestSuite) TestMutationCreateGroup() {
 	t := suite.T()
 
+	name := gofakeit.Name()
+
 	testCases := []struct {
 		name          string
 		groupName     string
@@ -203,11 +206,20 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 	}{
 		{
 			name:        "happy path group",
-			groupName:   gofakeit.Name(),
+			groupName:   name,
 			displayName: gofakeit.LetterN(50),
 			description: gofakeit.HipsterSentence(10),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
+		},
+		{
+			name:        "duplicate group name, case insensitive",
+			groupName:   strings.ToUpper(name),
+			displayName: gofakeit.LetterN(50),
+			description: gofakeit.HipsterSentence(10),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			errorMsg:    "group already exists",
 		},
 		{
 			name:        "happy path group using api token",

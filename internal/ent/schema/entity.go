@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
@@ -30,9 +31,12 @@ func (Entity) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the entity").
-			MaxLen(orgNameMaxLen).
 			Optional().
-			NotEmpty().
+			SchemaType(map[string]string{
+				dialect.Postgres: "citext",
+			}).
+			MinLen(3).
+			Validate(validator.SpecialCharValidator).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),

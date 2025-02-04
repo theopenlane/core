@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -46,6 +47,9 @@ func HookGroup() ent.Hook {
 			}
 
 			if name, ok := m.Name(); ok {
+				// trim trailing whitespace from the name
+				m.SetName(strings.TrimSpace(name))
+
 				url := gravatar.New(name, nil)
 				m.SetGravatarLogoURL(url)
 			}

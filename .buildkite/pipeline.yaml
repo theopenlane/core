@@ -179,13 +179,15 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.1.0:
+          - theopenlane/atlas#v1.2.0:
               project: core
-              dev-url: "docker://postgres/17/dev?search_path=public"
+              atlas-env: dev
+              config: "file://db/atlas.hcl"
               dir: "file://db/migrations"
               step: lint
       - label: ":graphql: lint graphql schema"
         key: "apollo-lint-schema"
+        skip: "true" # skip until plugin is fixed
         soft_fail:
           - exit_status: 1
         cancel_on_build_failing: true
@@ -419,8 +421,9 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.1.0:
+          - theopenlane/atlas#v1.2.0:
               project: core
-              dev-url: "docker://postgres/17/dev?search_path=public"
               dir: "file://db/migrations"
               step: migrate
+              atlas-env: dev
+              config: "file://db/atlas.hcl"

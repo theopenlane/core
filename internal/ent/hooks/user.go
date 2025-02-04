@@ -68,6 +68,9 @@ func HookUser() ent.Hook {
 						url := gravatar.New(displayName, nil)
 						m.SetAvatarRemoteURL(url)
 					}
+
+					// lowercase the email for uniqueness
+					m.SetEmail(strings.ToLower(email))
 				}
 			}
 
