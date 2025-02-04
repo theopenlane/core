@@ -46,6 +46,7 @@ func getGroupPermissions[T any](obj []T, objectType string, permission enums.Per
 			})
 		}
 	}
+
 	return perms
 }
 
@@ -58,11 +59,11 @@ func convertToEntObject(obj any) (*EntObject, error) {
 	}
 
 	var entObject EntObject
+
 	err = json.Unmarshal(jsonBytes, &entObject)
 	if err != nil {
 		return nil, err
 	}
 
 	return &entObject, nil
-
 }
