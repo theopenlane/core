@@ -131,51 +131,69 @@ const (
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
-	// ControlCreatorsTable is the table that holds the control_creators relation/edge. The primary key declared below.
-	ControlCreatorsTable = "organization_control_creators"
+	// ControlCreatorsTable is the table that holds the control_creators relation/edge.
+	ControlCreatorsTable = "groups"
 	// ControlCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ControlCreatorsInverseTable = "groups"
-	// ControlObjectiveCreatorsTable is the table that holds the control_objective_creators relation/edge. The primary key declared below.
-	ControlObjectiveCreatorsTable = "organization_control_objective_creators"
+	// ControlCreatorsColumn is the table column denoting the control_creators relation/edge.
+	ControlCreatorsColumn = "organization_control_creators"
+	// ControlObjectiveCreatorsTable is the table that holds the control_objective_creators relation/edge.
+	ControlObjectiveCreatorsTable = "groups"
 	// ControlObjectiveCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ControlObjectiveCreatorsInverseTable = "groups"
-	// GroupCreatorsTable is the table that holds the group_creators relation/edge. The primary key declared below.
-	GroupCreatorsTable = "organization_group_creators"
+	// ControlObjectiveCreatorsColumn is the table column denoting the control_objective_creators relation/edge.
+	ControlObjectiveCreatorsColumn = "organization_control_objective_creators"
+	// GroupCreatorsTable is the table that holds the group_creators relation/edge.
+	GroupCreatorsTable = "groups"
 	// GroupCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	GroupCreatorsInverseTable = "groups"
-	// InternalPolicyCreatorsTable is the table that holds the internal_policy_creators relation/edge. The primary key declared below.
-	InternalPolicyCreatorsTable = "organization_internal_policy_creators"
+	// GroupCreatorsColumn is the table column denoting the group_creators relation/edge.
+	GroupCreatorsColumn = "organization_group_creators"
+	// InternalPolicyCreatorsTable is the table that holds the internal_policy_creators relation/edge.
+	InternalPolicyCreatorsTable = "groups"
 	// InternalPolicyCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	InternalPolicyCreatorsInverseTable = "groups"
-	// NarrativeCreatorsTable is the table that holds the narrative_creators relation/edge. The primary key declared below.
-	NarrativeCreatorsTable = "organization_narrative_creators"
+	// InternalPolicyCreatorsColumn is the table column denoting the internal_policy_creators relation/edge.
+	InternalPolicyCreatorsColumn = "organization_internal_policy_creators"
+	// NarrativeCreatorsTable is the table that holds the narrative_creators relation/edge.
+	NarrativeCreatorsTable = "groups"
 	// NarrativeCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	NarrativeCreatorsInverseTable = "groups"
-	// ProcedureCreatorsTable is the table that holds the procedure_creators relation/edge. The primary key declared below.
-	ProcedureCreatorsTable = "organization_procedure_creators"
+	// NarrativeCreatorsColumn is the table column denoting the narrative_creators relation/edge.
+	NarrativeCreatorsColumn = "organization_narrative_creators"
+	// ProcedureCreatorsTable is the table that holds the procedure_creators relation/edge.
+	ProcedureCreatorsTable = "groups"
 	// ProcedureCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ProcedureCreatorsInverseTable = "groups"
-	// ProgramCreatorsTable is the table that holds the program_creators relation/edge. The primary key declared below.
-	ProgramCreatorsTable = "organization_program_creators"
+	// ProcedureCreatorsColumn is the table column denoting the procedure_creators relation/edge.
+	ProcedureCreatorsColumn = "organization_procedure_creators"
+	// ProgramCreatorsTable is the table that holds the program_creators relation/edge.
+	ProgramCreatorsTable = "groups"
 	// ProgramCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ProgramCreatorsInverseTable = "groups"
-	// RiskCreatorsTable is the table that holds the risk_creators relation/edge. The primary key declared below.
-	RiskCreatorsTable = "organization_risk_creators"
+	// ProgramCreatorsColumn is the table column denoting the program_creators relation/edge.
+	ProgramCreatorsColumn = "organization_program_creators"
+	// RiskCreatorsTable is the table that holds the risk_creators relation/edge.
+	RiskCreatorsTable = "groups"
 	// RiskCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	RiskCreatorsInverseTable = "groups"
-	// TemplateCreatorsTable is the table that holds the template_creators relation/edge. The primary key declared below.
-	TemplateCreatorsTable = "organization_template_creators"
+	// RiskCreatorsColumn is the table column denoting the risk_creators relation/edge.
+	RiskCreatorsColumn = "organization_risk_creators"
+	// TemplateCreatorsTable is the table that holds the template_creators relation/edge.
+	TemplateCreatorsTable = "groups"
 	// TemplateCreatorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	TemplateCreatorsInverseTable = "groups"
+	// TemplateCreatorsColumn is the table column denoting the template_creators relation/edge.
+	TemplateCreatorsColumn = "organization_template_creators"
 	// ParentTable is the table that holds the parent relation/edge.
 	ParentTable = "organizations"
 	// ParentColumn is the table column denoting the parent relation/edge.
@@ -408,33 +426,6 @@ var Columns = []string{
 }
 
 var (
-	// ControlCreatorsPrimaryKey and ControlCreatorsColumn2 are the table columns denoting the
-	// primary key for the control_creators relation (M2M).
-	ControlCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// ControlObjectiveCreatorsPrimaryKey and ControlObjectiveCreatorsColumn2 are the table columns denoting the
-	// primary key for the control_objective_creators relation (M2M).
-	ControlObjectiveCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// GroupCreatorsPrimaryKey and GroupCreatorsColumn2 are the table columns denoting the
-	// primary key for the group_creators relation (M2M).
-	GroupCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// InternalPolicyCreatorsPrimaryKey and InternalPolicyCreatorsColumn2 are the table columns denoting the
-	// primary key for the internal_policy_creators relation (M2M).
-	InternalPolicyCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// NarrativeCreatorsPrimaryKey and NarrativeCreatorsColumn2 are the table columns denoting the
-	// primary key for the narrative_creators relation (M2M).
-	NarrativeCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// ProcedureCreatorsPrimaryKey and ProcedureCreatorsColumn2 are the table columns denoting the
-	// primary key for the procedure_creators relation (M2M).
-	ProcedureCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// ProgramCreatorsPrimaryKey and ProgramCreatorsColumn2 are the table columns denoting the
-	// primary key for the program_creators relation (M2M).
-	ProgramCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// RiskCreatorsPrimaryKey and RiskCreatorsColumn2 are the table columns denoting the
-	// primary key for the risk_creators relation (M2M).
-	RiskCreatorsPrimaryKey = []string{"organization_id", "group_id"}
-	// TemplateCreatorsPrimaryKey and TemplateCreatorsColumn2 are the table columns denoting the
-	// primary key for the template_creators relation (M2M).
-	TemplateCreatorsPrimaryKey = []string{"organization_id", "group_id"}
 	// PersonalAccessTokensPrimaryKey and PersonalAccessTokensColumn2 are the table columns denoting the
 	// primary key for the personal_access_tokens relation (M2M).
 	PersonalAccessTokensPrimaryKey = []string{"organization_id", "personal_access_token_id"}
@@ -1138,63 +1129,63 @@ func newControlCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlCreatorsTable, ControlCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlCreatorsTable, ControlCreatorsColumn),
 	)
 }
 func newControlObjectiveCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlObjectiveCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsColumn),
 	)
 }
 func newGroupCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(GroupCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, GroupCreatorsTable, GroupCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, GroupCreatorsTable, GroupCreatorsColumn),
 	)
 }
 func newInternalPolicyCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalPolicyCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, InternalPolicyCreatorsTable, InternalPolicyCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, InternalPolicyCreatorsTable, InternalPolicyCreatorsColumn),
 	)
 }
 func newNarrativeCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NarrativeCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, NarrativeCreatorsTable, NarrativeCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, NarrativeCreatorsTable, NarrativeCreatorsColumn),
 	)
 }
 func newProcedureCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProcedureCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ProcedureCreatorsTable, ProcedureCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProcedureCreatorsTable, ProcedureCreatorsColumn),
 	)
 }
 func newProgramCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ProgramCreatorsTable, ProgramCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProgramCreatorsTable, ProgramCreatorsColumn),
 	)
 }
 func newRiskCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RiskCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, RiskCreatorsTable, RiskCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, RiskCreatorsTable, RiskCreatorsColumn),
 	)
 }
 func newTemplateCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplateCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, TemplateCreatorsTable, TemplateCreatorsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, TemplateCreatorsTable, TemplateCreatorsColumn),
 	)
 }
 func newParentStep() *sqlgraph.Step {

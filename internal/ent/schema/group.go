@@ -108,8 +108,6 @@ func (Group) Mixin() []ent.Mixin {
 		emixin.NewIDMixinWithPrefixedID("GRP"),
 		emixin.TagMixin{},
 		NewOrgOwnMixinWithRef("groups"),
-		// add group based create permissions, back reference to the organization
-		NewGroupBasedCreateAccessMixin(false),
 		// Add the reverse edges for m:m relationships permissions based on the groups
 		GroupPermissionsEdgesMixin{
 			EdgeInfo: []EdgeInfo{
