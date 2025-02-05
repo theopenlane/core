@@ -438,6 +438,17 @@ type GroupMembershipUpdatePayload struct {
 	GroupMembership *generated.GroupMembership `json:"groupMembership"`
 }
 
+// GroupPermissions contains details for the related object and the permissions
+// the group provides (or removes in the case of blocked) to the object within the
+// organization
+type GroupPermissions struct {
+	ObjectType  string           `json:"objectType"`
+	Permissions enums.Permission `json:"permissions"`
+	ID          *string          `json:"id,omitempty"`
+	DisplayID   *string          `json:"displayID,omitempty"`
+	Name        *string          `json:"name,omitempty"`
+}
+
 type GroupSearchResult struct {
 	Groups []*generated.Group `json:"groups,omitempty"`
 }

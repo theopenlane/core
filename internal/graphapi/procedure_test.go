@@ -145,6 +145,9 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// group for the view only user
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		request       openlaneclient.CreateProcedureInput
@@ -250,7 +253,7 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
-						AddProcedureCreatorIDs: []string{viewOnlyUser.GroupID},
+						AddProcedureCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				require.NoError(t, err)
 			}

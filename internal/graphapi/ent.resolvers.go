@@ -1152,6 +1152,9 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 	return res, err
 }
 
+// Group returns gqlgenerated.GroupResolver implementation.
+func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
+
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
 
@@ -1195,6 +1198,7 @@ func (r *Resolver) UpdateTFASettingInput() gqlgenerated.UpdateTFASettingInputRes
 	return &updateTFASettingInputResolver{r}
 }
 
+type groupResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }

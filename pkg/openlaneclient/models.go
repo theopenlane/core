@@ -7432,6 +7432,8 @@ type Group struct {
 	Files                         []*File             `json:"files,omitempty"`
 	Tasks                         []*Task             `json:"tasks,omitempty"`
 	Members                       []*GroupMembership  `json:"members,omitempty"`
+	// permissions the group provides
+	Permissions []*GroupPermissions `json:"permissions,omitempty"`
 }
 
 func (Group) IsNode() {}
@@ -8103,6 +8105,17 @@ type GroupOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order Groups.
 	Field GroupOrderField `json:"field"`
+}
+
+// GroupPermissions contains details for the related object and the permissions
+// the group provides (or removes in the case of blocked) to the object within the
+// organization
+type GroupPermissions struct {
+	ObjectType  string           `json:"objectType"`
+	Permissions enums.Permission `json:"permissions"`
+	ID          *string          `json:"id,omitempty"`
+	DisplayID   *string          `json:"displayID,omitempty"`
+	Name        *string          `json:"name,omitempty"`
 }
 
 type GroupSearchResult struct {

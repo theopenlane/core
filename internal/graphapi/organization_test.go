@@ -616,7 +616,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 			client:   suite.client.api,
 			ctx:      memberUserCtx,
-			errorMsg: "you are not authorized to perform this action",
+			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name:  "update description and avatar file, happy path",

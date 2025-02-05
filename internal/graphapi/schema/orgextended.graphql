@@ -28,9 +28,9 @@ extend type Mutation{
     """
     createOrganizationWithMembers(
         """
-        values of the new organization
+        values of the new organization to be created
         """
-        organization: CreateOrganizationInput!
+        organizationInput: CreateOrganizationInput!
         """
         avatar file to Upload
         """

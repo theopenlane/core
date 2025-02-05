@@ -192,6 +192,9 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 
 	name := gofakeit.Name()
 
+	// group for the view only user
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		groupName     string
@@ -291,7 +294,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
-						AddGroupCreatorIDs: []string{viewOnlyUser.GroupID},
+						AddGroupCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				require.NoError(t, err)
 			}
@@ -488,9 +491,32 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 	descriptionUpdate := gofakeit.HipsterSentence(10)
 	gravatarURLUpdate := gofakeit.URL()
 
-	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	group := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	gm := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
 
 	om := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+
+	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	gmCtx, err := auth.NewTestContextWithOrgID(gm.UserID, testUser1.OrganizationID)
+	require.NoError(t, err)
+
+	// ensure user cannot get access to the program
+	programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)
+	require.Error(t, err)
+	require.Nil(t, programResp)
+
+	// ensure user cannot get access to the control
+	controlResp, err := suite.client.api.GetControlByID(gmCtx, control.ID)
+	require.Error(t, err)
+	require.Nil(t, controlResp)
+
+	// access to procedures is granted by default in the org
+	procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
+	require.NoError(t, err)
+	require.NotNil(t, procedureResp)
 
 	testCases := []struct {
 		name        string
@@ -500,6 +526,57 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 		ctx         context.Context
 		errorMsg    string
 	}{
+		{
+			name: "add permissions to object, happy path",
+			updateInput: openlaneclient.UpdateGroupInput{
+				AddProgramViewerIDs:         []string{program.ID},
+				AddProcedureBlockedGroupIDs: []string{procedure.ID},
+				AddControlEditorIDs:         []string{control.ID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
+				ID:          group.ID,
+				Name:        group.Name,
+				DisplayName: group.DisplayName,
+				Description: &group.Description,
+				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
+					JoinPolicy: enums.JoinPolicyOpen,
+				},
+				Permissions: []*openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions{
+					{
+						ObjectType:  "Program",
+						ID:          &program.ID,
+						Permissions: enums.Viewer,
+						DisplayID:   &program.DisplayID,
+						Name:        &program.Name,
+					},
+					{
+						ObjectType:  "Procedure",
+						ID:          &procedure.ID,
+						Permissions: enums.Blocked,
+						DisplayID:   &procedure.DisplayID,
+						Name:        &procedure.Name,
+					},
+					{
+						ObjectType:  "Control",
+						ID:          &control.ID,
+						Permissions: enums.Editor,
+						DisplayID:   &control.DisplayID,
+						Name:        &control.Name,
+					},
+				},
+			},
+		},
+		{
+			name: "add permissions to object, no access to program",
+			updateInput: openlaneclient.UpdateGroupInput{
+				AddProgramEditorIDs: []string{program.ID},
+			},
+			client:   suite.client.api,
+			ctx:      adminUser.UserCtx,
+			errorMsg: notAuthorizedErrorMsg,
+		},
 		{
 			name: "update name, happy path",
 			updateInput: openlaneclient.UpdateGroupInput{
@@ -618,14 +695,38 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 
 			if tc.updateInput.AddGroupMembers != nil {
 				// Adding a member to an group will make it 2 users, there is an admin
-				// assigned to the group automatically
-				assert.Len(t, updatedGroup.Members, 2)
-				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedGroup.Members[1].Role)
-				assert.Equal(t, tc.expectedRes.Members[0].User.ID, updatedGroup.Members[1].User.ID)
+				// assigned to the group automatically and a member added in the test case
+				assert.Len(t, updatedGroup.Members, 3)
+				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedGroup.Members[2].Role)
+				assert.Equal(t, tc.expectedRes.Members[0].User.ID, updatedGroup.Members[2].User.ID)
 			}
 
 			if tc.updateInput.UpdateGroupSettings != nil {
 				assert.Equal(t, updatedGroup.GetSetting().JoinPolicy, enums.JoinPolicyOpen)
+			}
+
+			if tc.updateInput.AddProgramViewerIDs != nil || tc.updateInput.AddProcedureEditorIDs != nil || tc.updateInput.AddControlBlockedGroupIDs != nil {
+				assert.Equal(t, len(tc.expectedRes.Permissions), len(updatedGroup.Permissions))
+
+				// ensure user can now get access to the program
+				programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)
+				require.NoError(t, err)
+				require.NotNil(t, programResp)
+
+				// ensure user can now access the control (they have editor access and should be able to make changes)
+				description := gofakeit.HipsterSentence(10)
+				controlResp, err := suite.client.api.UpdateControl(gmCtx, control.ID, openlaneclient.UpdateControlInput{
+					Description: &description,
+				})
+				require.NoError(t, err)
+				require.NotNil(t, controlResp)
+				assert.Equal(t, description, *controlResp.UpdateControl.Control.Description)
+
+				// access to procedures is granted by default in the org
+				procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
+				require.Error(t, err)
+				require.Nil(t, procedureResp)
+
 			}
 		})
 	}

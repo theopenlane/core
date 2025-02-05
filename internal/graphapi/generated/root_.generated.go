@@ -35,6 +35,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Group() GroupResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
 	CreateEntityInput() CreateEntityInputResolver
@@ -1050,6 +1051,7 @@ type ComplexityRoot struct {
 		NarrativeViewers              func(childComplexity int) int
 		Owner                         func(childComplexity int) int
 		OwnerID                       func(childComplexity int) int
+		Permissions                   func(childComplexity int) int
 		ProcedureBlockedGroups        func(childComplexity int) int
 		ProcedureEditors              func(childComplexity int) int
 		ProgramBlockedGroups          func(childComplexity int) int
@@ -1190,6 +1192,14 @@ type ComplexityRoot struct {
 
 	GroupMembershipUpdatePayload struct {
 		GroupMembership func(childComplexity int) int
+	}
+
+	GroupPermissions struct {
+		DisplayID   func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
+		ObjectType  func(childComplexity int) int
+		Permissions func(childComplexity int) int
 	}
 
 	GroupSearchResult struct {
@@ -1644,7 +1654,7 @@ type ComplexityRoot struct {
 		CreateGroup                      func(childComplexity int, input generated.CreateGroupInput) int
 		CreateGroupMembership            func(childComplexity int, input generated.CreateGroupMembershipInput) int
 		CreateGroupSetting               func(childComplexity int, input generated.CreateGroupSettingInput) int
-		CreateGroupWithMembers           func(childComplexity int, group generated.CreateGroupInput, members []*model.GroupMembersInput) int
+		CreateGroupWithMembers           func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
 		CreateHush                       func(childComplexity int, input generated.CreateHushInput) int
 		CreateIntegration                func(childComplexity int, input generated.CreateIntegrationInput) int
 		CreateInternalPolicy             func(childComplexity int, input generated.CreateInternalPolicyInput) int
@@ -1653,7 +1663,7 @@ type ComplexityRoot struct {
 		CreateOrgMembership              func(childComplexity int, input generated.CreateOrgMembershipInput) int
 		CreateOrganization               func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
 		CreateOrganizationSetting        func(childComplexity int, input generated.CreateOrganizationSettingInput) int
-		CreateOrganizationWithMembers    func(childComplexity int, organization generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
+		CreateOrganizationWithMembers    func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
 		CreatePersonalAccessToken        func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
 		CreateProcedure                  func(childComplexity int, input generated.CreateProcedureInput) int
 		CreateProgram                    func(childComplexity int, input generated.CreateProgramInput) int
@@ -8036,6 +8046,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.OwnerID(childComplexity), true
 
+	case "Group.permissions":
+		if e.complexity.Group.Permissions == nil {
+			break
+		}
+
+		return e.complexity.Group.Permissions(childComplexity), true
+
 	case "Group.procedureBlockedGroups":
 		if e.complexity.Group.ProcedureBlockedGroups == nil {
 			break
@@ -8637,6 +8654,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupMembershipUpdatePayload.GroupMembership(childComplexity), true
+
+	case "GroupPermissions.displayID":
+		if e.complexity.GroupPermissions.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissions.DisplayID(childComplexity), true
+
+	case "GroupPermissions.id":
+		if e.complexity.GroupPermissions.ID == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissions.ID(childComplexity), true
+
+	case "GroupPermissions.name":
+		if e.complexity.GroupPermissions.Name == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissions.Name(childComplexity), true
+
+	case "GroupPermissions.objectType":
+		if e.complexity.GroupPermissions.ObjectType == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissions.ObjectType(childComplexity), true
+
+	case "GroupPermissions.permissions":
+		if e.complexity.GroupPermissions.Permissions == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissions.Permissions(childComplexity), true
 
 	case "GroupSearchResult.groups":
 		if e.complexity.GroupSearchResult.Groups == nil {
@@ -11119,7 +11171,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateGroupWithMembers(childComplexity, args["group"].(generated.CreateGroupInput), args["members"].([]*model.GroupMembersInput)), true
+		return e.complexity.Mutation.CreateGroupWithMembers(childComplexity, args["groupInput"].(generated.CreateGroupInput), args["members"].([]*model.GroupMembersInput)), true
 
 	case "Mutation.createHush":
 		if e.complexity.Mutation.CreateHush == nil {
@@ -11227,7 +11279,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateOrganizationWithMembers(childComplexity, args["organization"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["members"].([]*model.OrgMembersInput)), true
+		return e.complexity.Mutation.CreateOrganizationWithMembers(childComplexity, args["organizationInput"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["members"].([]*model.OrgMembersInput)), true
 
 	case "Mutation.createPersonalAccessToken":
 		if e.complexity.Mutation.CreatePersonalAccessToken == nil {
@@ -52961,14 +53013,44 @@ extend type Mutation{
     """
     createGroupWithMembers(
         """
-        values of the group
+        values of the group to be created
         """
-        group: CreateGroupInput!
+        groupInput: CreateGroupInput!
         """
         group members to be added to the group
         """
         members: [GroupMembersInput!]
     ): GroupCreatePayload!
+}
+
+"""
+Permission is enum for the permissions types
+"""
+enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permission") {
+  EDITOR
+  VIEWER
+  CREATOR
+  BLOCKED
+}
+
+"""
+GroupPermissions contains details for the related object and the permissions
+the group provides (or removes in the case of blocked) to the object within the
+organization
+"""
+type GroupPermissions {
+  objectType: String!
+  permissions: Permission!
+  id: ID
+  displayID: String
+  name: String
+}
+
+extend type Group {
+  """
+  permissions the group provides
+  """
+  permissions: [GroupPermissions!]
 }`, BuiltIn: false},
 	{Name: "../schema/groupmembership.graphql", Input: `extend type Query {
     """
@@ -53929,9 +54011,9 @@ extend type Mutation{
     """
     createOrganizationWithMembers(
         """
-        values of the new organization
+        values of the new organization to be created
         """
-        organization: CreateOrganizationInput!
+        organizationInput: CreateOrganizationInput!
         """
         avatar file to Upload
         """

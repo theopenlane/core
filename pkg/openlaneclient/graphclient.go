@@ -114,7 +114,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVGroup, error)
 	CreateBulkGroup(ctx context.Context, input []*CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkGroup, error)
 	CreateGroup(ctx context.Context, input CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroup, error)
-	CreateGroupWithMembers(ctx context.Context, group CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error)
+	CreateGroupWithMembers(ctx context.Context, groupInput CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error)
 	DeleteGroup(ctx context.Context, deleteGroupID string, interceptors ...clientv2.RequestInterceptor) (*DeleteGroup, error)
 	GetAllGroups(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllGroups, error)
 	GetGroupByID(ctx context.Context, groupID string, interceptors ...clientv2.RequestInterceptor) (*GetGroupByID, error)
@@ -187,7 +187,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOrganization, error)
 	CreateBulkOrganization(ctx context.Context, input []*CreateOrganizationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOrganization, error)
 	CreateOrganization(ctx context.Context, input CreateOrganizationInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateOrganization, error)
-	CreateOrganizationWithMembers(ctx context.Context, org CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error)
+	CreateOrganizationWithMembers(ctx context.Context, organizationInput CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error)
 	DeleteOrganization(ctx context.Context, deleteOrganizationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteOrganization, error)
 	GetAllOrganizations(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllOrganizations, error)
 	GetOrganizationByID(ctx context.Context, organizationID string, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationByID, error)
@@ -16888,6 +16888,45 @@ func (t *CreateGroup_CreateGroup_Group_Setting) GetVisibility() *enums.Visibilit
 	return &t.Visibility
 }
 
+type CreateGroup_CreateGroup_Group_Permissions struct {
+	DisplayID   *string          "json:\"displayID,omitempty\" graphql:\"displayID\""
+	ID          *string          "json:\"id,omitempty\" graphql:\"id\""
+	Name        *string          "json:\"name,omitempty\" graphql:\"name\""
+	ObjectType  string           "json:\"objectType\" graphql:\"objectType\""
+	Permissions enums.Permission "json:\"permissions\" graphql:\"permissions\""
+}
+
+func (t *CreateGroup_CreateGroup_Group_Permissions) GetDisplayID() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group_Permissions{}
+	}
+	return t.DisplayID
+}
+func (t *CreateGroup_CreateGroup_Group_Permissions) GetID() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group_Permissions{}
+	}
+	return t.ID
+}
+func (t *CreateGroup_CreateGroup_Group_Permissions) GetName() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group_Permissions{}
+	}
+	return t.Name
+}
+func (t *CreateGroup_CreateGroup_Group_Permissions) GetObjectType() string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group_Permissions{}
+	}
+	return t.ObjectType
+}
+func (t *CreateGroup_CreateGroup_Group_Permissions) GetPermissions() *enums.Permission {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group_Permissions{}
+	}
+	return &t.Permissions
+}
+
 type CreateGroup_CreateGroup_Group_Members_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
@@ -16939,15 +16978,16 @@ func (t *CreateGroup_CreateGroup_Group_Members) GetUser() *CreateGroup_CreateGro
 }
 
 type CreateGroup_CreateGroup_Group struct {
-	Description *string                                  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string                                   "json:\"displayName\" graphql:\"displayName\""
-	ID          string                                   "json:\"id\" graphql:\"id\""
-	LogoURL     *string                                  "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*CreateGroup_CreateGroup_Group_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                   "json:\"name\" graphql:\"name\""
-	Owner       *CreateGroup_CreateGroup_Group_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     *CreateGroup_CreateGroup_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags        []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	Description *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                                       "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                       "json:\"id\" graphql:\"id\""
+	LogoURL     *string                                      "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Members     []*CreateGroup_CreateGroup_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Name        string                                       "json:\"name\" graphql:\"name\""
+	Owner       *CreateGroup_CreateGroup_Group_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
+	Permissions []*CreateGroup_CreateGroup_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
+	Setting     *CreateGroup_CreateGroup_Group_Setting       "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *CreateGroup_CreateGroup_Group) GetDescription() *string {
@@ -16991,6 +17031,12 @@ func (t *CreateGroup_CreateGroup_Group) GetOwner() *CreateGroup_CreateGroup_Grou
 		t = &CreateGroup_CreateGroup_Group{}
 	}
 	return t.Owner
+}
+func (t *CreateGroup_CreateGroup_Group) GetPermissions() []*CreateGroup_CreateGroup_Group_Permissions {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group{}
+	}
+	return t.Permissions
 }
 func (t *CreateGroup_CreateGroup_Group) GetSetting() *CreateGroup_CreateGroup_Group_Setting {
 	if t == nil {
@@ -17482,6 +17528,45 @@ func (t *GetGroupByID_Group_Setting) GetVisibility() *enums.Visibility {
 	return &t.Visibility
 }
 
+type GetGroupByID_Group_Permissions struct {
+	DisplayID   *string          "json:\"displayID,omitempty\" graphql:\"displayID\""
+	ID          *string          "json:\"id,omitempty\" graphql:\"id\""
+	Name        *string          "json:\"name,omitempty\" graphql:\"name\""
+	ObjectType  string           "json:\"objectType\" graphql:\"objectType\""
+	Permissions enums.Permission "json:\"permissions\" graphql:\"permissions\""
+}
+
+func (t *GetGroupByID_Group_Permissions) GetDisplayID() *string {
+	if t == nil {
+		t = &GetGroupByID_Group_Permissions{}
+	}
+	return t.DisplayID
+}
+func (t *GetGroupByID_Group_Permissions) GetID() *string {
+	if t == nil {
+		t = &GetGroupByID_Group_Permissions{}
+	}
+	return t.ID
+}
+func (t *GetGroupByID_Group_Permissions) GetName() *string {
+	if t == nil {
+		t = &GetGroupByID_Group_Permissions{}
+	}
+	return t.Name
+}
+func (t *GetGroupByID_Group_Permissions) GetObjectType() string {
+	if t == nil {
+		t = &GetGroupByID_Group_Permissions{}
+	}
+	return t.ObjectType
+}
+func (t *GetGroupByID_Group_Permissions) GetPermissions() *enums.Permission {
+	if t == nil {
+		t = &GetGroupByID_Group_Permissions{}
+	}
+	return &t.Permissions
+}
+
 type GetGroupByID_Group_Members_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
@@ -17533,20 +17618,21 @@ func (t *GetGroupByID_Group_Members) GetUser() *GetGroupByID_Group_Members_User 
 }
 
 type GetGroupByID_Group struct {
-	CreatedAt   *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string                        "json:\"displayName\" graphql:\"displayName\""
-	ID          string                        "json:\"id\" graphql:\"id\""
-	IsManaged   *bool                         "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL     *string                       "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*GetGroupByID_Group_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                        "json:\"name\" graphql:\"name\""
-	Owner       *GetGroupByID_Group_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     *GetGroupByID_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags        []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                           "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                            "json:\"displayName\" graphql:\"displayName\""
+	ID          string                            "json:\"id\" graphql:\"id\""
+	IsManaged   *bool                             "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL     *string                           "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Members     []*GetGroupByID_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Name        string                            "json:\"name\" graphql:\"name\""
+	Owner       *GetGroupByID_Group_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
+	Permissions []*GetGroupByID_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
+	Setting     *GetGroupByID_Group_Setting       "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetGroupByID_Group) GetCreatedAt() *time.Time {
@@ -17608,6 +17694,12 @@ func (t *GetGroupByID_Group) GetOwner() *GetGroupByID_Group_Owner {
 		t = &GetGroupByID_Group{}
 	}
 	return t.Owner
+}
+func (t *GetGroupByID_Group) GetPermissions() []*GetGroupByID_Group_Permissions {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.Permissions
 }
 func (t *GetGroupByID_Group) GetSetting() *GetGroupByID_Group_Setting {
 	if t == nil {
@@ -17719,6 +17811,45 @@ func (t *GetGroups_Groups_Edges_Node_Setting) GetVisibility() *enums.Visibility 
 	return &t.Visibility
 }
 
+type GetGroups_Groups_Edges_Node_Permissions struct {
+	DisplayID   *string          "json:\"displayID,omitempty\" graphql:\"displayID\""
+	ID          *string          "json:\"id,omitempty\" graphql:\"id\""
+	Name        *string          "json:\"name,omitempty\" graphql:\"name\""
+	ObjectType  string           "json:\"objectType\" graphql:\"objectType\""
+	Permissions enums.Permission "json:\"permissions\" graphql:\"permissions\""
+}
+
+func (t *GetGroups_Groups_Edges_Node_Permissions) GetDisplayID() *string {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Permissions{}
+	}
+	return t.DisplayID
+}
+func (t *GetGroups_Groups_Edges_Node_Permissions) GetID() *string {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Permissions{}
+	}
+	return t.ID
+}
+func (t *GetGroups_Groups_Edges_Node_Permissions) GetName() *string {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Permissions{}
+	}
+	return t.Name
+}
+func (t *GetGroups_Groups_Edges_Node_Permissions) GetObjectType() string {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Permissions{}
+	}
+	return t.ObjectType
+}
+func (t *GetGroups_Groups_Edges_Node_Permissions) GetPermissions() *enums.Permission {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Permissions{}
+	}
+	return &t.Permissions
+}
+
 type GetGroups_Groups_Edges_Node_Members_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
@@ -17770,20 +17901,21 @@ func (t *GetGroups_Groups_Edges_Node_Members) GetUser() *GetGroups_Groups_Edges_
 }
 
 type GetGroups_Groups_Edges_Node struct {
-	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string                                 "json:\"displayName\" graphql:\"displayName\""
-	ID          string                                 "json:\"id\" graphql:\"id\""
-	IsManaged   *bool                                  "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL     *string                                "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*GetGroups_Groups_Edges_Node_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                 "json:\"name\" graphql:\"name\""
-	Owner       *GetGroups_Groups_Edges_Node_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     *GetGroups_Groups_Edges_Node_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags        []string                               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                                    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                                     "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                     "json:\"id\" graphql:\"id\""
+	IsManaged   *bool                                      "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL     *string                                    "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Members     []*GetGroups_Groups_Edges_Node_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Name        string                                     "json:\"name\" graphql:\"name\""
+	Owner       *GetGroups_Groups_Edges_Node_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
+	Permissions []*GetGroups_Groups_Edges_Node_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
+	Setting     *GetGroups_Groups_Edges_Node_Setting       "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetGroups_Groups_Edges_Node) GetCreatedAt() *time.Time {
@@ -17845,6 +17977,12 @@ func (t *GetGroups_Groups_Edges_Node) GetOwner() *GetGroups_Groups_Edges_Node_Ow
 		t = &GetGroups_Groups_Edges_Node{}
 	}
 	return t.Owner
+}
+func (t *GetGroups_Groups_Edges_Node) GetPermissions() []*GetGroups_Groups_Edges_Node_Permissions {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node{}
+	}
+	return t.Permissions
 }
 func (t *GetGroups_Groups_Edges_Node) GetSetting() *GetGroups_Groups_Edges_Node_Setting {
 	if t == nil {
@@ -17978,6 +18116,45 @@ func (t *UpdateGroup_UpdateGroup_Group_Setting) GetVisibility() *enums.Visibilit
 	return &t.Visibility
 }
 
+type UpdateGroup_UpdateGroup_Group_Permissions struct {
+	DisplayID   *string          "json:\"displayID,omitempty\" graphql:\"displayID\""
+	ID          *string          "json:\"id,omitempty\" graphql:\"id\""
+	Name        *string          "json:\"name,omitempty\" graphql:\"name\""
+	ObjectType  string           "json:\"objectType\" graphql:\"objectType\""
+	Permissions enums.Permission "json:\"permissions\" graphql:\"permissions\""
+}
+
+func (t *UpdateGroup_UpdateGroup_Group_Permissions) GetDisplayID() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Permissions{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateGroup_UpdateGroup_Group_Permissions) GetID() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Permissions{}
+	}
+	return t.ID
+}
+func (t *UpdateGroup_UpdateGroup_Group_Permissions) GetName() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Permissions{}
+	}
+	return t.Name
+}
+func (t *UpdateGroup_UpdateGroup_Group_Permissions) GetObjectType() string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Permissions{}
+	}
+	return t.ObjectType
+}
+func (t *UpdateGroup_UpdateGroup_Group_Permissions) GetPermissions() *enums.Permission {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Permissions{}
+	}
+	return &t.Permissions
+}
+
 type UpdateGroup_UpdateGroup_Group_Members_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
@@ -18029,15 +18206,16 @@ func (t *UpdateGroup_UpdateGroup_Group_Members) GetUser() *UpdateGroup_UpdateGro
 }
 
 type UpdateGroup_UpdateGroup_Group struct {
-	Description *string                                  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string                                   "json:\"displayName\" graphql:\"displayName\""
-	ID          string                                   "json:\"id\" graphql:\"id\""
-	LogoURL     *string                                  "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*UpdateGroup_UpdateGroup_Group_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                   "json:\"name\" graphql:\"name\""
-	Owner       *UpdateGroup_UpdateGroup_Group_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     *UpdateGroup_UpdateGroup_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags        []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	Description *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                                       "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                       "json:\"id\" graphql:\"id\""
+	LogoURL     *string                                      "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Members     []*UpdateGroup_UpdateGroup_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Name        string                                       "json:\"name\" graphql:\"name\""
+	Owner       *UpdateGroup_UpdateGroup_Group_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
+	Permissions []*UpdateGroup_UpdateGroup_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
+	Setting     *UpdateGroup_UpdateGroup_Group_Setting       "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *UpdateGroup_UpdateGroup_Group) GetDescription() *string {
@@ -18081,6 +18259,12 @@ func (t *UpdateGroup_UpdateGroup_Group) GetOwner() *UpdateGroup_UpdateGroup_Grou
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
 	return t.Owner
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetPermissions() []*UpdateGroup_UpdateGroup_Group_Permissions {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.Permissions
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetSetting() *UpdateGroup_UpdateGroup_Group_Setting {
 	if t == nil {
@@ -57619,6 +57803,13 @@ const CreateGroupDocument = `mutation CreateGroup ($input: CreateGroupInput!) {
 				syncToSlack
 				visibility
 			}
+			permissions {
+				displayID
+				id
+				name
+				objectType
+				permissions
+			}
 			members {
 				id
 				role
@@ -57650,8 +57841,8 @@ func (c *Client) CreateGroup(ctx context.Context, input CreateGroupInput, interc
 	return &res, nil
 }
 
-const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($group: CreateGroupInput!, $members: [GroupMembersInput!]) {
-	createGroupWithMembers(group: $group, members: $members) {
+const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
+	createGroupWithMembers(groupInput: $groupInput, members: $members) {
 		group {
 			id
 			displayID
@@ -57673,10 +57864,10 @@ const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($group:
 }
 `
 
-func (c *Client) CreateGroupWithMembers(ctx context.Context, group CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error) {
+func (c *Client) CreateGroupWithMembers(ctx context.Context, groupInput CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error) {
 	vars := map[string]any{
-		"group":   group,
-		"members": members,
+		"groupInput": groupInput,
+		"members":    members,
 	}
 
 	var res CreateGroupWithMembers
@@ -57799,6 +57990,13 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 			updatedBy
 			visibility
 		}
+		permissions {
+			displayID
+			id
+			name
+			objectType
+			permissions
+		}
 		members {
 			id
 			role
@@ -57859,6 +58057,13 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 					updatedBy
 					visibility
 				}
+				permissions {
+					displayID
+					id
+					name
+					objectType
+					permissions
+				}
 				members {
 					id
 					role
@@ -57918,6 +58123,13 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 				updatedAt
 				updatedBy
 				visibility
+			}
+			permissions {
+				displayID
+				id
+				name
+				objectType
+				permissions
 			}
 			members {
 				id
@@ -60611,8 +60823,8 @@ func (c *Client) CreateOrganization(ctx context.Context, input CreateOrganizatio
 	return &res, nil
 }
 
-const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMembers ($org: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
-	createOrganizationWithMembers(organization: $org, members: $members) {
+const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMembers ($organizationInput: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
+	createOrganizationWithMembers(organizationInput: $organizationInput, members: $members) {
 		organization {
 			id
 			name
@@ -60646,10 +60858,10 @@ const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMe
 }
 `
 
-func (c *Client) CreateOrganizationWithMembers(ctx context.Context, org CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error) {
+func (c *Client) CreateOrganizationWithMembers(ctx context.Context, organizationInput CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error) {
 	vars := map[string]any{
-		"org":     org,
-		"members": members,
+		"organizationInput": organizationInput,
+		"members":           members,
 	}
 
 	var res CreateOrganizationWithMembers

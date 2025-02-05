@@ -217,7 +217,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "add groups",
 			request: openlaneclient.CreateControlInput{
-				Name:            "Test Procedure",
+				Name:            "Test Control CC1.2",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},

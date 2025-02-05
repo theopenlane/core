@@ -73,8 +73,8 @@ mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Uploa
   }
 }
 
-mutation CreateOrganizationWithMembers($org: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
-  createOrganizationWithMembers(organization: $org, members: $members) {
+mutation CreateOrganizationWithMembers($organizationInput: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
+  createOrganizationWithMembers(organizationInput: $organizationInput, members: $members) {
     organization {
       id
       name

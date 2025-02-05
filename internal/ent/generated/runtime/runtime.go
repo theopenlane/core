@@ -1188,6 +1188,7 @@ func init() {
 	groupMixinHooks1 := groupMixin[1].Hooks()
 	groupMixinHooks2 := groupMixin[2].Hooks()
 	groupMixinHooks4 := groupMixin[4].Hooks()
+	groupMixinHooks5 := groupMixin[5].Hooks()
 	groupHooks := schema.Group{}.Hooks()
 
 	group.Hooks[1] = groupMixinHooks0[0]
@@ -1198,11 +1199,13 @@ func init() {
 
 	group.Hooks[4] = groupMixinHooks4[0]
 
-	group.Hooks[5] = groupHooks[0]
+	group.Hooks[5] = groupMixinHooks5[0]
 
-	group.Hooks[6] = groupHooks[1]
+	group.Hooks[6] = groupHooks[0]
 
-	group.Hooks[7] = groupHooks[2]
+	group.Hooks[7] = groupHooks[1]
+
+	group.Hooks[8] = groupHooks[2]
 	groupMixinInters1 := groupMixin[1].Interceptors()
 	groupMixinInters4 := groupMixin[4].Interceptors()
 	groupInters := schema.Group{}.Interceptors()
