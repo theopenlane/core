@@ -3498,15 +3498,6 @@ type CreateGroupInput struct {
 	// The group's displayed 'friendly' name
 	DisplayName                     *string                  `json:"displayName,omitempty"`
 	OwnerID                         *string                  `json:"ownerID,omitempty"`
-	ControlCreatorIDs               []string                 `json:"controlCreatorIDs,omitempty"`
-	ControlObjectiveCreatorIDs      []string                 `json:"controlObjectiveCreatorIDs,omitempty"`
-	GroupCreatorIDs                 []string                 `json:"groupCreatorIDs,omitempty"`
-	InternalPolicyCreatorIDs        []string                 `json:"internalPolicyCreatorIDs,omitempty"`
-	NarrativeCreatorIDs             []string                 `json:"narrativeCreatorIDs,omitempty"`
-	ProcedureCreatorIDs             []string                 `json:"procedureCreatorIDs,omitempty"`
-	ProgramCreatorIDs               []string                 `json:"programCreatorIDs,omitempty"`
-	RiskCreatorIDs                  []string                 `json:"riskCreatorIDs,omitempty"`
-	TemplateCreatorIDs              []string                 `json:"templateCreatorIDs,omitempty"`
 	ProcedureEditorIDs              []string                 `json:"procedureEditorIDs,omitempty"`
 	ProcedureBlockedGroupIDs        []string                 `json:"procedureBlockedGroupIDs,omitempty"`
 	InternalPolicyEditorIDs         []string                 `json:"internalPolicyEditorIDs,omitempty"`
@@ -7415,15 +7406,6 @@ type Group struct {
 	// The group's displayed 'friendly' name
 	DisplayName                   string              `json:"displayName"`
 	Owner                         *Organization       `json:"owner,omitempty"`
-	ControlCreators               []*Organization     `json:"controlCreators,omitempty"`
-	ControlObjectiveCreators      []*Organization     `json:"controlObjectiveCreators,omitempty"`
-	GroupCreators                 []*Organization     `json:"groupCreators,omitempty"`
-	InternalPolicyCreators        []*Organization     `json:"internalPolicyCreators,omitempty"`
-	NarrativeCreators             []*Organization     `json:"narrativeCreators,omitempty"`
-	ProcedureCreators             []*Organization     `json:"procedureCreators,omitempty"`
-	ProgramCreators               []*Organization     `json:"programCreators,omitempty"`
-	RiskCreators                  []*Organization     `json:"riskCreators,omitempty"`
-	TemplateCreators              []*Organization     `json:"templateCreators,omitempty"`
 	ProcedureEditors              []*Procedure        `json:"procedureEditors,omitempty"`
 	ProcedureBlockedGroups        []*Procedure        `json:"procedureBlockedGroups,omitempty"`
 	InternalPolicyEditors         []*InternalPolicy   `json:"internalPolicyEditors,omitempty"`
@@ -8712,33 +8694,6 @@ type GroupWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// control_creators edge predicates
-	HasControlCreators     *bool                     `json:"hasControlCreators,omitempty"`
-	HasControlCreatorsWith []*OrganizationWhereInput `json:"hasControlCreatorsWith,omitempty"`
-	// control_objective_creators edge predicates
-	HasControlObjectiveCreators     *bool                     `json:"hasControlObjectiveCreators,omitempty"`
-	HasControlObjectiveCreatorsWith []*OrganizationWhereInput `json:"hasControlObjectiveCreatorsWith,omitempty"`
-	// group_creators edge predicates
-	HasGroupCreators     *bool                     `json:"hasGroupCreators,omitempty"`
-	HasGroupCreatorsWith []*OrganizationWhereInput `json:"hasGroupCreatorsWith,omitempty"`
-	// internal_policy_creators edge predicates
-	HasInternalPolicyCreators     *bool                     `json:"hasInternalPolicyCreators,omitempty"`
-	HasInternalPolicyCreatorsWith []*OrganizationWhereInput `json:"hasInternalPolicyCreatorsWith,omitempty"`
-	// narrative_creators edge predicates
-	HasNarrativeCreators     *bool                     `json:"hasNarrativeCreators,omitempty"`
-	HasNarrativeCreatorsWith []*OrganizationWhereInput `json:"hasNarrativeCreatorsWith,omitempty"`
-	// procedure_creators edge predicates
-	HasProcedureCreators     *bool                     `json:"hasProcedureCreators,omitempty"`
-	HasProcedureCreatorsWith []*OrganizationWhereInput `json:"hasProcedureCreatorsWith,omitempty"`
-	// program_creators edge predicates
-	HasProgramCreators     *bool                     `json:"hasProgramCreators,omitempty"`
-	HasProgramCreatorsWith []*OrganizationWhereInput `json:"hasProgramCreatorsWith,omitempty"`
-	// risk_creators edge predicates
-	HasRiskCreators     *bool                     `json:"hasRiskCreators,omitempty"`
-	HasRiskCreatorsWith []*OrganizationWhereInput `json:"hasRiskCreatorsWith,omitempty"`
-	// template_creators edge predicates
-	HasTemplateCreators     *bool                     `json:"hasTemplateCreators,omitempty"`
-	HasTemplateCreatorsWith []*OrganizationWhereInput `json:"hasTemplateCreatorsWith,omitempty"`
 	// procedure_editors edge predicates
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -20284,33 +20239,6 @@ type UpdateGroupInput struct {
 	DisplayName                           *string                       `json:"displayName,omitempty"`
 	OwnerID                               *string                       `json:"ownerID,omitempty"`
 	ClearOwner                            *bool                         `json:"clearOwner,omitempty"`
-	AddControlCreatorIDs                  []string                      `json:"addControlCreatorIDs,omitempty"`
-	RemoveControlCreatorIDs               []string                      `json:"removeControlCreatorIDs,omitempty"`
-	ClearControlCreators                  *bool                         `json:"clearControlCreators,omitempty"`
-	AddControlObjectiveCreatorIDs         []string                      `json:"addControlObjectiveCreatorIDs,omitempty"`
-	RemoveControlObjectiveCreatorIDs      []string                      `json:"removeControlObjectiveCreatorIDs,omitempty"`
-	ClearControlObjectiveCreators         *bool                         `json:"clearControlObjectiveCreators,omitempty"`
-	AddGroupCreatorIDs                    []string                      `json:"addGroupCreatorIDs,omitempty"`
-	RemoveGroupCreatorIDs                 []string                      `json:"removeGroupCreatorIDs,omitempty"`
-	ClearGroupCreators                    *bool                         `json:"clearGroupCreators,omitempty"`
-	AddInternalPolicyCreatorIDs           []string                      `json:"addInternalPolicyCreatorIDs,omitempty"`
-	RemoveInternalPolicyCreatorIDs        []string                      `json:"removeInternalPolicyCreatorIDs,omitempty"`
-	ClearInternalPolicyCreators           *bool                         `json:"clearInternalPolicyCreators,omitempty"`
-	AddNarrativeCreatorIDs                []string                      `json:"addNarrativeCreatorIDs,omitempty"`
-	RemoveNarrativeCreatorIDs             []string                      `json:"removeNarrativeCreatorIDs,omitempty"`
-	ClearNarrativeCreators                *bool                         `json:"clearNarrativeCreators,omitempty"`
-	AddProcedureCreatorIDs                []string                      `json:"addProcedureCreatorIDs,omitempty"`
-	RemoveProcedureCreatorIDs             []string                      `json:"removeProcedureCreatorIDs,omitempty"`
-	ClearProcedureCreators                *bool                         `json:"clearProcedureCreators,omitempty"`
-	AddProgramCreatorIDs                  []string                      `json:"addProgramCreatorIDs,omitempty"`
-	RemoveProgramCreatorIDs               []string                      `json:"removeProgramCreatorIDs,omitempty"`
-	ClearProgramCreators                  *bool                         `json:"clearProgramCreators,omitempty"`
-	AddRiskCreatorIDs                     []string                      `json:"addRiskCreatorIDs,omitempty"`
-	RemoveRiskCreatorIDs                  []string                      `json:"removeRiskCreatorIDs,omitempty"`
-	ClearRiskCreators                     *bool                         `json:"clearRiskCreators,omitempty"`
-	AddTemplateCreatorIDs                 []string                      `json:"addTemplateCreatorIDs,omitempty"`
-	RemoveTemplateCreatorIDs              []string                      `json:"removeTemplateCreatorIDs,omitempty"`
-	ClearTemplateCreators                 *bool                         `json:"clearTemplateCreators,omitempty"`
 	AddProcedureEditorIDs                 []string                      `json:"addProcedureEditorIDs,omitempty"`
 	RemoveProcedureEditorIDs              []string                      `json:"removeProcedureEditorIDs,omitempty"`
 	ClearProcedureEditors                 *bool                         `json:"clearProcedureEditors,omitempty"`

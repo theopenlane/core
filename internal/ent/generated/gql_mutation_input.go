@@ -2571,15 +2571,6 @@ type CreateGroupInput struct {
 	LogoURL                         *string
 	DisplayName                     *string
 	OwnerID                         *string
-	ControlCreatorIDs               []string
-	ControlObjectiveCreatorIDs      []string
-	GroupCreatorIDs                 []string
-	InternalPolicyCreatorIDs        []string
-	NarrativeCreatorIDs             []string
-	ProcedureCreatorIDs             []string
-	ProgramCreatorIDs               []string
-	RiskCreatorIDs                  []string
-	TemplateCreatorIDs              []string
 	ProcedureEditorIDs              []string
 	ProcedureBlockedGroupIDs        []string
 	InternalPolicyEditorIDs         []string
@@ -2626,33 +2617,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if v := i.ControlCreatorIDs; len(v) > 0 {
-		m.AddControlCreatorIDs(v...)
-	}
-	if v := i.ControlObjectiveCreatorIDs; len(v) > 0 {
-		m.AddControlObjectiveCreatorIDs(v...)
-	}
-	if v := i.GroupCreatorIDs; len(v) > 0 {
-		m.AddGroupCreatorIDs(v...)
-	}
-	if v := i.InternalPolicyCreatorIDs; len(v) > 0 {
-		m.AddInternalPolicyCreatorIDs(v...)
-	}
-	if v := i.NarrativeCreatorIDs; len(v) > 0 {
-		m.AddNarrativeCreatorIDs(v...)
-	}
-	if v := i.ProcedureCreatorIDs; len(v) > 0 {
-		m.AddProcedureCreatorIDs(v...)
-	}
-	if v := i.ProgramCreatorIDs; len(v) > 0 {
-		m.AddProgramCreatorIDs(v...)
-	}
-	if v := i.RiskCreatorIDs; len(v) > 0 {
-		m.AddRiskCreatorIDs(v...)
-	}
-	if v := i.TemplateCreatorIDs; len(v) > 0 {
-		m.AddTemplateCreatorIDs(v...)
 	}
 	if v := i.ProcedureEditorIDs; len(v) > 0 {
 		m.AddProcedureEditorIDs(v...)
@@ -2749,33 +2713,6 @@ type UpdateGroupInput struct {
 	DisplayName                           *string
 	ClearOwner                            bool
 	OwnerID                               *string
-	ClearControlCreators                  bool
-	AddControlCreatorIDs                  []string
-	RemoveControlCreatorIDs               []string
-	ClearControlObjectiveCreators         bool
-	AddControlObjectiveCreatorIDs         []string
-	RemoveControlObjectiveCreatorIDs      []string
-	ClearGroupCreators                    bool
-	AddGroupCreatorIDs                    []string
-	RemoveGroupCreatorIDs                 []string
-	ClearInternalPolicyCreators           bool
-	AddInternalPolicyCreatorIDs           []string
-	RemoveInternalPolicyCreatorIDs        []string
-	ClearNarrativeCreators                bool
-	AddNarrativeCreatorIDs                []string
-	RemoveNarrativeCreatorIDs             []string
-	ClearProcedureCreators                bool
-	AddProcedureCreatorIDs                []string
-	RemoveProcedureCreatorIDs             []string
-	ClearProgramCreators                  bool
-	AddProgramCreatorIDs                  []string
-	RemoveProgramCreatorIDs               []string
-	ClearRiskCreators                     bool
-	AddRiskCreatorIDs                     []string
-	RemoveRiskCreatorIDs                  []string
-	ClearTemplateCreators                 bool
-	AddTemplateCreatorIDs                 []string
-	RemoveTemplateCreatorIDs              []string
 	ClearProcedureEditors                 bool
 	AddProcedureEditorIDs                 []string
 	RemoveProcedureEditorIDs              []string
@@ -2889,87 +2826,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if i.ClearControlCreators {
-		m.ClearControlCreators()
-	}
-	if v := i.AddControlCreatorIDs; len(v) > 0 {
-		m.AddControlCreatorIDs(v...)
-	}
-	if v := i.RemoveControlCreatorIDs; len(v) > 0 {
-		m.RemoveControlCreatorIDs(v...)
-	}
-	if i.ClearControlObjectiveCreators {
-		m.ClearControlObjectiveCreators()
-	}
-	if v := i.AddControlObjectiveCreatorIDs; len(v) > 0 {
-		m.AddControlObjectiveCreatorIDs(v...)
-	}
-	if v := i.RemoveControlObjectiveCreatorIDs; len(v) > 0 {
-		m.RemoveControlObjectiveCreatorIDs(v...)
-	}
-	if i.ClearGroupCreators {
-		m.ClearGroupCreators()
-	}
-	if v := i.AddGroupCreatorIDs; len(v) > 0 {
-		m.AddGroupCreatorIDs(v...)
-	}
-	if v := i.RemoveGroupCreatorIDs; len(v) > 0 {
-		m.RemoveGroupCreatorIDs(v...)
-	}
-	if i.ClearInternalPolicyCreators {
-		m.ClearInternalPolicyCreators()
-	}
-	if v := i.AddInternalPolicyCreatorIDs; len(v) > 0 {
-		m.AddInternalPolicyCreatorIDs(v...)
-	}
-	if v := i.RemoveInternalPolicyCreatorIDs; len(v) > 0 {
-		m.RemoveInternalPolicyCreatorIDs(v...)
-	}
-	if i.ClearNarrativeCreators {
-		m.ClearNarrativeCreators()
-	}
-	if v := i.AddNarrativeCreatorIDs; len(v) > 0 {
-		m.AddNarrativeCreatorIDs(v...)
-	}
-	if v := i.RemoveNarrativeCreatorIDs; len(v) > 0 {
-		m.RemoveNarrativeCreatorIDs(v...)
-	}
-	if i.ClearProcedureCreators {
-		m.ClearProcedureCreators()
-	}
-	if v := i.AddProcedureCreatorIDs; len(v) > 0 {
-		m.AddProcedureCreatorIDs(v...)
-	}
-	if v := i.RemoveProcedureCreatorIDs; len(v) > 0 {
-		m.RemoveProcedureCreatorIDs(v...)
-	}
-	if i.ClearProgramCreators {
-		m.ClearProgramCreators()
-	}
-	if v := i.AddProgramCreatorIDs; len(v) > 0 {
-		m.AddProgramCreatorIDs(v...)
-	}
-	if v := i.RemoveProgramCreatorIDs; len(v) > 0 {
-		m.RemoveProgramCreatorIDs(v...)
-	}
-	if i.ClearRiskCreators {
-		m.ClearRiskCreators()
-	}
-	if v := i.AddRiskCreatorIDs; len(v) > 0 {
-		m.AddRiskCreatorIDs(v...)
-	}
-	if v := i.RemoveRiskCreatorIDs; len(v) > 0 {
-		m.RemoveRiskCreatorIDs(v...)
-	}
-	if i.ClearTemplateCreators {
-		m.ClearTemplateCreators()
-	}
-	if v := i.AddTemplateCreatorIDs; len(v) > 0 {
-		m.AddTemplateCreatorIDs(v...)
-	}
-	if v := i.RemoveTemplateCreatorIDs; len(v) > 0 {
-		m.RemoveTemplateCreatorIDs(v...)
 	}
 	if i.ClearProcedureEditors {
 		m.ClearProcedureEditors()

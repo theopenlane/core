@@ -5585,177 +5585,6 @@ func (c *GroupClient) QueryOwner(gr *Group) *OrganizationQuery {
 	return query
 }
 
-// QueryControlCreators queries the control_creators edge of a Group.
-func (c *GroupClient) QueryControlCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlCreatorsTable, group.ControlCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationControlCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryControlObjectiveCreators queries the control_objective_creators edge of a Group.
-func (c *GroupClient) QueryControlObjectiveCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlObjectiveCreatorsTable, group.ControlObjectiveCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationControlObjectiveCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryGroupCreators queries the group_creators edge of a Group.
-func (c *GroupClient) QueryGroupCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.GroupCreatorsTable, group.GroupCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationGroupCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryInternalPolicyCreators queries the internal_policy_creators edge of a Group.
-func (c *GroupClient) QueryInternalPolicyCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyCreatorsTable, group.InternalPolicyCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationInternalPolicyCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryNarrativeCreators queries the narrative_creators edge of a Group.
-func (c *GroupClient) QueryNarrativeCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeCreatorsTable, group.NarrativeCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationNarrativeCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryProcedureCreators queries the procedure_creators edge of a Group.
-func (c *GroupClient) QueryProcedureCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureCreatorsTable, group.ProcedureCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationProcedureCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryProgramCreators queries the program_creators edge of a Group.
-func (c *GroupClient) QueryProgramCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ProgramCreatorsTable, group.ProgramCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationProgramCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryRiskCreators queries the risk_creators edge of a Group.
-func (c *GroupClient) QueryRiskCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.RiskCreatorsTable, group.RiskCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationRiskCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryTemplateCreators queries the template_creators edge of a Group.
-func (c *GroupClient) QueryTemplateCreators(gr *Group) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.TemplateCreatorsTable, group.TemplateCreatorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationTemplateCreators
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryProcedureEditors queries the procedure_editors edge of a Group.
 func (c *GroupClient) QueryProcedureEditors(gr *Group) *ProcedureQuery {
 	query := (&ProcedureClient{config: c.config}).Query()
@@ -9822,11 +9651,11 @@ func (c *OrganizationClient) QueryControlCreators(o *Organization) *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.ControlCreatorsTable, organization.ControlCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlCreatorsTable, organization.ControlCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationControlCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9841,11 +9670,11 @@ func (c *OrganizationClient) QueryControlObjectiveCreators(o *Organization) *Gro
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.ControlObjectiveCreatorsTable, organization.ControlObjectiveCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlObjectiveCreatorsTable, organization.ControlObjectiveCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationControlObjectiveCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9860,11 +9689,11 @@ func (c *OrganizationClient) QueryGroupCreators(o *Organization) *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.GroupCreatorsTable, organization.GroupCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupCreatorsTable, organization.GroupCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationGroupCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9879,11 +9708,11 @@ func (c *OrganizationClient) QueryInternalPolicyCreators(o *Organization) *Group
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.InternalPolicyCreatorsTable, organization.InternalPolicyCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.InternalPolicyCreatorsTable, organization.InternalPolicyCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationInternalPolicyCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9898,11 +9727,11 @@ func (c *OrganizationClient) QueryNarrativeCreators(o *Organization) *GroupQuery
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.NarrativeCreatorsTable, organization.NarrativeCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NarrativeCreatorsTable, organization.NarrativeCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationNarrativeCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9917,11 +9746,11 @@ func (c *OrganizationClient) QueryProcedureCreators(o *Organization) *GroupQuery
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.ProcedureCreatorsTable, organization.ProcedureCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProcedureCreatorsTable, organization.ProcedureCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationProcedureCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9936,11 +9765,11 @@ func (c *OrganizationClient) QueryProgramCreators(o *Organization) *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.ProgramCreatorsTable, organization.ProgramCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProgramCreatorsTable, organization.ProgramCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationProgramCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9955,11 +9784,11 @@ func (c *OrganizationClient) QueryRiskCreators(o *Organization) *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.RiskCreatorsTable, organization.RiskCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskCreatorsTable, organization.RiskCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationRiskCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9974,11 +9803,11 @@ func (c *OrganizationClient) QueryTemplateCreators(o *Organization) *GroupQuery 
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.TemplateCreatorsTable, organization.TemplateCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplateCreatorsTable, organization.TemplateCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationTemplateCreators
+		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}

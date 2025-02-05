@@ -1086,24 +1086,6 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
-			case "controlCreators":
-				return ec.fieldContext_Group_controlCreators(ctx, field)
-			case "controlObjectiveCreators":
-				return ec.fieldContext_Group_controlObjectiveCreators(ctx, field)
-			case "groupCreators":
-				return ec.fieldContext_Group_groupCreators(ctx, field)
-			case "internalPolicyCreators":
-				return ec.fieldContext_Group_internalPolicyCreators(ctx, field)
-			case "narrativeCreators":
-				return ec.fieldContext_Group_narrativeCreators(ctx, field)
-			case "procedureCreators":
-				return ec.fieldContext_Group_procedureCreators(ctx, field)
-			case "programCreators":
-				return ec.fieldContext_Group_programCreators(ctx, field)
-			case "riskCreators":
-				return ec.fieldContext_Group_riskCreators(ctx, field)
-			case "templateCreators":
-				return ec.fieldContext_Group_templateCreators(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":

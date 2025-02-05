@@ -4469,15 +4469,6 @@ input CreateGroupInput {
 	"""
 	displayName: String
 	ownerID: ID
-	controlCreatorIDs: [ID!]
-	controlObjectiveCreatorIDs: [ID!]
-	groupCreatorIDs: [ID!]
-	internalPolicyCreatorIDs: [ID!]
-	narrativeCreatorIDs: [ID!]
-	procedureCreatorIDs: [ID!]
-	programCreatorIDs: [ID!]
-	riskCreatorIDs: [ID!]
-	templateCreatorIDs: [ID!]
 	procedureEditorIDs: [ID!]
 	procedureBlockedGroupIDs: [ID!]
 	internalPolicyEditorIDs: [ID!]
@@ -9567,15 +9558,6 @@ type Group implements Node {
 	"""
 	displayName: String!
 	owner: Organization
-	controlCreators: [Organization!]
-	controlObjectiveCreators: [Organization!]
-	groupCreators: [Organization!]
-	internalPolicyCreators: [Organization!]
-	narrativeCreators: [Organization!]
-	procedureCreators: [Organization!]
-	programCreators: [Organization!]
-	riskCreators: [Organization!]
-	templateCreators: [Organization!]
 	procedureEditors: [Procedure!]
 	procedureBlockedGroups: [Procedure!]
 	internalPolicyEditors: [InternalPolicy!]
@@ -11245,51 +11227,6 @@ input GroupWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
-	"""
-	control_creators edge predicates
-	"""
-	hasControlCreators: Boolean
-	hasControlCreatorsWith: [OrganizationWhereInput!]
-	"""
-	control_objective_creators edge predicates
-	"""
-	hasControlObjectiveCreators: Boolean
-	hasControlObjectiveCreatorsWith: [OrganizationWhereInput!]
-	"""
-	group_creators edge predicates
-	"""
-	hasGroupCreators: Boolean
-	hasGroupCreatorsWith: [OrganizationWhereInput!]
-	"""
-	internal_policy_creators edge predicates
-	"""
-	hasInternalPolicyCreators: Boolean
-	hasInternalPolicyCreatorsWith: [OrganizationWhereInput!]
-	"""
-	narrative_creators edge predicates
-	"""
-	hasNarrativeCreators: Boolean
-	hasNarrativeCreatorsWith: [OrganizationWhereInput!]
-	"""
-	procedure_creators edge predicates
-	"""
-	hasProcedureCreators: Boolean
-	hasProcedureCreatorsWith: [OrganizationWhereInput!]
-	"""
-	program_creators edge predicates
-	"""
-	hasProgramCreators: Boolean
-	hasProgramCreatorsWith: [OrganizationWhereInput!]
-	"""
-	risk_creators edge predicates
-	"""
-	hasRiskCreators: Boolean
-	hasRiskCreatorsWith: [OrganizationWhereInput!]
-	"""
-	template_creators edge predicates
-	"""
-	hasTemplateCreators: Boolean
-	hasTemplateCreatorsWith: [OrganizationWhereInput!]
 	"""
 	procedure_editors edge predicates
 	"""
@@ -30709,33 +30646,6 @@ input UpdateGroupInput {
 	displayName: String
 	ownerID: ID
 	clearOwner: Boolean
-	addControlCreatorIDs: [ID!]
-	removeControlCreatorIDs: [ID!]
-	clearControlCreators: Boolean
-	addControlObjectiveCreatorIDs: [ID!]
-	removeControlObjectiveCreatorIDs: [ID!]
-	clearControlObjectiveCreators: Boolean
-	addGroupCreatorIDs: [ID!]
-	removeGroupCreatorIDs: [ID!]
-	clearGroupCreators: Boolean
-	addInternalPolicyCreatorIDs: [ID!]
-	removeInternalPolicyCreatorIDs: [ID!]
-	clearInternalPolicyCreators: Boolean
-	addNarrativeCreatorIDs: [ID!]
-	removeNarrativeCreatorIDs: [ID!]
-	clearNarrativeCreators: Boolean
-	addProcedureCreatorIDs: [ID!]
-	removeProcedureCreatorIDs: [ID!]
-	clearProcedureCreators: Boolean
-	addProgramCreatorIDs: [ID!]
-	removeProgramCreatorIDs: [ID!]
-	clearProgramCreators: Boolean
-	addRiskCreatorIDs: [ID!]
-	removeRiskCreatorIDs: [ID!]
-	clearRiskCreators: Boolean
-	addTemplateCreatorIDs: [ID!]
-	removeTemplateCreatorIDs: [ID!]
-	clearTemplateCreators: Boolean
 	addProcedureEditorIDs: [ID!]
 	removeProcedureEditorIDs: [ID!]
 	clearProcedureEditors: Boolean

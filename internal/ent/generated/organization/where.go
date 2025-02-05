@@ -1042,11 +1042,11 @@ func HasControlCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ControlCreatorsTable, ControlCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, ControlCreatorsTable, ControlCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationControlCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1057,7 +1057,7 @@ func HasControlCreatorsWith(preds ...predicate.Group) predicate.Organization {
 		step := newControlCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationControlCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1071,11 +1071,11 @@ func HasControlObjectiveCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationControlObjectiveCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1086,7 +1086,7 @@ func HasControlObjectiveCreatorsWith(preds ...predicate.Group) predicate.Organiz
 		step := newControlObjectiveCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationControlObjectiveCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1100,11 +1100,11 @@ func HasGroupCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, GroupCreatorsTable, GroupCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, GroupCreatorsTable, GroupCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationGroupCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1115,7 +1115,7 @@ func HasGroupCreatorsWith(preds ...predicate.Group) predicate.Organization {
 		step := newGroupCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationGroupCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1129,11 +1129,11 @@ func HasInternalPolicyCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, InternalPolicyCreatorsTable, InternalPolicyCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, InternalPolicyCreatorsTable, InternalPolicyCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationInternalPolicyCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1144,7 +1144,7 @@ func HasInternalPolicyCreatorsWith(preds ...predicate.Group) predicate.Organizat
 		step := newInternalPolicyCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationInternalPolicyCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1158,11 +1158,11 @@ func HasNarrativeCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, NarrativeCreatorsTable, NarrativeCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, NarrativeCreatorsTable, NarrativeCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationNarrativeCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1173,7 +1173,7 @@ func HasNarrativeCreatorsWith(preds ...predicate.Group) predicate.Organization {
 		step := newNarrativeCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationNarrativeCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1187,11 +1187,11 @@ func HasProcedureCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ProcedureCreatorsTable, ProcedureCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProcedureCreatorsTable, ProcedureCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationProcedureCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1202,7 +1202,7 @@ func HasProcedureCreatorsWith(preds ...predicate.Group) predicate.Organization {
 		step := newProcedureCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationProcedureCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1216,11 +1216,11 @@ func HasProgramCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ProgramCreatorsTable, ProgramCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProgramCreatorsTable, ProgramCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationProgramCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1231,7 +1231,7 @@ func HasProgramCreatorsWith(preds ...predicate.Group) predicate.Organization {
 		step := newProgramCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationProgramCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1245,11 +1245,11 @@ func HasRiskCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, RiskCreatorsTable, RiskCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, RiskCreatorsTable, RiskCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationRiskCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1260,7 +1260,7 @@ func HasRiskCreatorsWith(preds ...predicate.Group) predicate.Organization {
 		step := newRiskCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationRiskCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1274,11 +1274,11 @@ func HasTemplateCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, TemplateCreatorsTable, TemplateCreatorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, TemplateCreatorsTable, TemplateCreatorsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationTemplateCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1289,7 +1289,7 @@ func HasTemplateCreatorsWith(preds ...predicate.Group) predicate.Organization {
 		step := newTemplateCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.OrganizationTemplateCreators
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

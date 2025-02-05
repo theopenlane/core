@@ -39,45 +39,24 @@ var createObjectTypes = []string{
 // the tuples upon association with the organization
 type GroupBasedCreateAccessMixin struct {
 	mixin.Schema
-
-	// ToEdges will add the To edges to the schema as well as the hooks
-	ToEdges bool
-	// FromEdges will add the From edges to the schema to create the m:m relationship
-	FromEdges bool
 }
 
 // NewGroupBasedCreateAccessMixin creates a new GroupBasedCreateAccessMixin with the specified edges
-func NewGroupBasedCreateAccessMixin(isToEdge bool) GroupBasedCreateAccessMixin {
-	return GroupBasedCreateAccessMixin{
-		ToEdges:   isToEdge,
-		FromEdges: !isToEdge,
-	}
+func NewGroupBasedCreateAccessMixin() GroupBasedCreateAccessMixin {
+	return GroupBasedCreateAccessMixin{}
 }
 
 // Edges of the GroupBasedCreateAccessMixin
 func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 	edges := []ent.Edge{}
 
-	if c.ToEdges {
-		for _, t := range createObjectTypes {
-			toName := strings.ToLower(fmt.Sprintf("%s_creators", t))
+	for _, t := range createObjectTypes {
+		toName := strings.ToLower(fmt.Sprintf("%s_creators", t))
 
-			edge := edge.To(toName, Group.Type).
-				Comment(fmt.Sprintf("groups that are allowed to create %ss", t))
+		edge := edge.To(toName, Group.Type).
+			Comment(fmt.Sprintf("groups that are allowed to create %ss", t))
 
-			edges = append(edges, edge)
-		}
-	}
-
-	if c.FromEdges {
-		for _, t := range createObjectTypes {
-			ref := strings.ToLower(fmt.Sprintf("%s_creators", t))
-
-			edge := edge.From(ref, Organization.Type).
-				Ref(ref)
-
-			edges = append(edges, edge)
-		}
+		edges = append(edges, edge)
 	}
 
 	return edges
@@ -86,11 +65,6 @@ func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 // Hooks of the GroupBasedCreateAccessMixin
 func (c GroupBasedCreateAccessMixin) Hooks() []ent.Hook {
 	var h []ent.Hook
-
-	// only add the hook on the owner of the edge (to direction)
-	if !c.ToEdges {
-		return h
-	}
 
 	for _, objectType := range createObjectTypes {
 		idField := fmt.Sprintf("%s_creator_id", objectType)

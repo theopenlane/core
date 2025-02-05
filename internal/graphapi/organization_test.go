@@ -469,7 +469,24 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// create groups for creator permissions tests and add a member
+	// group created by org owner
+	groupProgramCreators := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, GroupID: groupProgramCreators.ID}).MustNew(testUser1.UserCtx, t)
+
+	anotherGroupProgramCreators := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, GroupID: anotherGroupProgramCreators.ID}).MustNew(testUser1.UserCtx, t)
+
+	// group created by admin
+	groupProcedureCreators := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(adminUser.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, GroupID: groupProcedureCreators.ID}).MustNew(adminUser.UserCtx, t)
+
 	reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	require.NoError(t, err)
+
+	// add a member to the org, to test permissions
+	om := (&OrgMemberBuilder{client: suite.client, OrgID: org.ID, Role: string(enums.RoleMember)}).MustNew(testUser1.UserCtx, t)
+	memberUserCtx, err := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 	require.NoError(t, err)
 
 	// avatar file setup
@@ -529,6 +546,77 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 					},
 				},
 			},
+		},
+		{
+			name:  "add two program creators group",
+			orgID: org.ID,
+			updateInput: openlaneclient.UpdateOrganizationInput{
+				AddProgramCreatorIDs: []string{groupProgramCreators.ID, anotherGroupProgramCreators.ID},
+			},
+			client: suite.client.api,
+			ctx:    reqCtx,
+			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+				ID:          org.ID,
+				Name:        nameUpdate,
+				DisplayName: org.DisplayName,
+				Description: &org.Description,
+				ProgramCreators: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
+					{
+						ID:          groupProgramCreators.ID,
+						DisplayID:   groupProgramCreators.DisplayID,
+						Name:        groupProgramCreators.Name,
+						DisplayName: groupProgramCreators.DisplayName,
+					},
+					{
+						ID:          anotherGroupProgramCreators.ID,
+						DisplayID:   anotherGroupProgramCreators.DisplayID,
+						Name:        anotherGroupProgramCreators.Name,
+						DisplayName: anotherGroupProgramCreators.DisplayName,
+					},
+				},
+			},
+		},
+		{
+			name:  "remove one program creator group, add procedure creator group",
+			orgID: org.ID,
+			updateInput: openlaneclient.UpdateOrganizationInput{
+				RemoveProgramCreatorIDs: []string{groupProgramCreators.ID},
+				AddProcedureCreatorIDs:  []string{groupProcedureCreators.ID},
+			},
+			client: suite.client.api,
+			ctx:    reqCtx,
+			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+				ID:          org.ID,
+				Name:        nameUpdate,
+				DisplayName: org.DisplayName,
+				Description: &org.Description,
+				ProcedureCreators: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{
+					{
+						ID:          groupProcedureCreators.ID,
+						DisplayID:   groupProcedureCreators.DisplayID,
+						Name:        groupProcedureCreators.Name,
+						DisplayName: groupProcedureCreators.DisplayName,
+					},
+				},
+				ProgramCreators: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
+					{
+						ID:          anotherGroupProgramCreators.ID,
+						DisplayID:   anotherGroupProgramCreators.DisplayID,
+						Name:        anotherGroupProgramCreators.Name,
+						DisplayName: anotherGroupProgramCreators.DisplayName,
+					},
+				},
+			},
+		},
+		{
+			name:  "add program creator group, not allowed",
+			orgID: org.ID,
+			updateInput: openlaneclient.UpdateOrganizationInput{
+				AddProgramCreatorIDs: []string{groupProgramCreators.ID},
+			},
+			client:   suite.client.api,
+			ctx:      memberUserCtx,
+			errorMsg: "you are not authorized to perform this action",
 		},
 		{
 			name:  "update description and avatar file, happy path",
@@ -660,11 +748,11 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			assert.Equal(t, tc.expectedRes.Description, updatedOrg.Description)
 
 			if tc.updateInput.AddOrgMembers != nil {
-				// Adding a member to an org will make it 2 users, there is an owner
-				// assigned to the org automatically
-				assert.Len(t, updatedOrg.Members, 2)
-				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedOrg.Members[1].Role)
-				assert.Equal(t, tc.expectedRes.Members[0].UserID, updatedOrg.Members[1].UserID)
+				// Adding a member to an org will make it 3 users, there is an owner
+				// assigned to the org automatically and an another member added in the test
+				assert.Len(t, updatedOrg.Members, 3)
+				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedOrg.Members[2].Role)
+				assert.Equal(t, tc.expectedRes.Members[0].UserID, updatedOrg.Members[2].UserID)
 			}
 
 			if tc.updateInput.UpdateOrgSettings != nil {

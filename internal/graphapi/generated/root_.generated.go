@@ -1022,10 +1022,8 @@ type ComplexityRoot struct {
 
 	Group struct {
 		ControlBlockedGroups          func(childComplexity int) int
-		ControlCreators               func(childComplexity int) int
 		ControlEditors                func(childComplexity int) int
 		ControlObjectiveBlockedGroups func(childComplexity int) int
-		ControlObjectiveCreators      func(childComplexity int) int
 		ControlObjectiveEditors       func(childComplexity int) int
 		ControlObjectiveViewers       func(childComplexity int) int
 		ControlViewers                func(childComplexity int) int
@@ -1039,37 +1037,30 @@ type ComplexityRoot struct {
 		Events                        func(childComplexity int) int
 		Files                         func(childComplexity int) int
 		GravatarLogoURL               func(childComplexity int) int
-		GroupCreators                 func(childComplexity int) int
 		ID                            func(childComplexity int) int
 		Integrations                  func(childComplexity int) int
 		InternalPolicyBlockedGroups   func(childComplexity int) int
-		InternalPolicyCreators        func(childComplexity int) int
 		InternalPolicyEditors         func(childComplexity int) int
 		IsManaged                     func(childComplexity int) int
 		LogoURL                       func(childComplexity int) int
 		Members                       func(childComplexity int) int
 		Name                          func(childComplexity int) int
 		NarrativeBlockedGroups        func(childComplexity int) int
-		NarrativeCreators             func(childComplexity int) int
 		NarrativeEditors              func(childComplexity int) int
 		NarrativeViewers              func(childComplexity int) int
 		Owner                         func(childComplexity int) int
 		OwnerID                       func(childComplexity int) int
 		ProcedureBlockedGroups        func(childComplexity int) int
-		ProcedureCreators             func(childComplexity int) int
 		ProcedureEditors              func(childComplexity int) int
 		ProgramBlockedGroups          func(childComplexity int) int
-		ProgramCreators               func(childComplexity int) int
 		ProgramEditors                func(childComplexity int) int
 		ProgramViewers                func(childComplexity int) int
 		RiskBlockedGroups             func(childComplexity int) int
-		RiskCreators                  func(childComplexity int) int
 		RiskEditors                   func(childComplexity int) int
 		RiskViewers                   func(childComplexity int) int
 		Setting                       func(childComplexity int) int
 		Tags                          func(childComplexity int) int
 		Tasks                         func(childComplexity int) int
-		TemplateCreators              func(childComplexity int) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
 		Users                         func(childComplexity int) int
@@ -7849,13 +7840,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.ControlBlockedGroups(childComplexity), true
 
-	case "Group.controlCreators":
-		if e.complexity.Group.ControlCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.ControlCreators(childComplexity), true
-
 	case "Group.controlEditors":
 		if e.complexity.Group.ControlEditors == nil {
 			break
@@ -7869,13 +7853,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.ControlObjectiveBlockedGroups(childComplexity), true
-
-	case "Group.controlObjectiveCreators":
-		if e.complexity.Group.ControlObjectiveCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.ControlObjectiveCreators(childComplexity), true
 
 	case "Group.controlObjectiveEditors":
 		if e.complexity.Group.ControlObjectiveEditors == nil {
@@ -7968,13 +7945,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.GravatarLogoURL(childComplexity), true
 
-	case "Group.groupCreators":
-		if e.complexity.Group.GroupCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.GroupCreators(childComplexity), true
-
 	case "Group.id":
 		if e.complexity.Group.ID == nil {
 			break
@@ -7995,13 +7965,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.InternalPolicyBlockedGroups(childComplexity), true
-
-	case "Group.internalPolicyCreators":
-		if e.complexity.Group.InternalPolicyCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.InternalPolicyCreators(childComplexity), true
 
 	case "Group.internalPolicyEditors":
 		if e.complexity.Group.InternalPolicyEditors == nil {
@@ -8045,13 +8008,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.NarrativeBlockedGroups(childComplexity), true
 
-	case "Group.narrativeCreators":
-		if e.complexity.Group.NarrativeCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.NarrativeCreators(childComplexity), true
-
 	case "Group.narrativeEditors":
 		if e.complexity.Group.NarrativeEditors == nil {
 			break
@@ -8087,13 +8043,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.ProcedureBlockedGroups(childComplexity), true
 
-	case "Group.procedureCreators":
-		if e.complexity.Group.ProcedureCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.ProcedureCreators(childComplexity), true
-
 	case "Group.procedureEditors":
 		if e.complexity.Group.ProcedureEditors == nil {
 			break
@@ -8107,13 +8056,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.ProgramBlockedGroups(childComplexity), true
-
-	case "Group.programCreators":
-		if e.complexity.Group.ProgramCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.ProgramCreators(childComplexity), true
 
 	case "Group.programEditors":
 		if e.complexity.Group.ProgramEditors == nil {
@@ -8135,13 +8077,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.RiskBlockedGroups(childComplexity), true
-
-	case "Group.riskCreators":
-		if e.complexity.Group.RiskCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.RiskCreators(childComplexity), true
 
 	case "Group.riskEditors":
 		if e.complexity.Group.RiskEditors == nil {
@@ -8177,13 +8112,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.Tasks(childComplexity), true
-
-	case "Group.templateCreators":
-		if e.complexity.Group.TemplateCreators == nil {
-			break
-		}
-
-		return e.complexity.Group.TemplateCreators(childComplexity), true
 
 	case "Group.updatedAt":
 		if e.complexity.Group.UpdatedAt == nil {
@@ -27010,15 +26938,6 @@ input CreateGroupInput {
   """
   displayName: String
   ownerID: ID
-  controlCreatorIDs: [ID!]
-  controlObjectiveCreatorIDs: [ID!]
-  groupCreatorIDs: [ID!]
-  internalPolicyCreatorIDs: [ID!]
-  narrativeCreatorIDs: [ID!]
-  procedureCreatorIDs: [ID!]
-  programCreatorIDs: [ID!]
-  riskCreatorIDs: [ID!]
-  templateCreatorIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -31890,15 +31809,6 @@ type Group implements Node {
   """
   displayName: String!
   owner: Organization
-  controlCreators: [Organization!]
-  controlObjectiveCreators: [Organization!]
-  groupCreators: [Organization!]
-  internalPolicyCreators: [Organization!]
-  narrativeCreators: [Organization!]
-  procedureCreators: [Organization!]
-  programCreators: [Organization!]
-  riskCreators: [Organization!]
-  templateCreators: [Organization!]
   procedureEditors: [Procedure!]
   procedureBlockedGroups: [Procedure!]
   internalPolicyEditors: [InternalPolicy!]
@@ -33447,51 +33357,6 @@ input GroupWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
-  """
-  control_creators edge predicates
-  """
-  hasControlCreators: Boolean
-  hasControlCreatorsWith: [OrganizationWhereInput!]
-  """
-  control_objective_creators edge predicates
-  """
-  hasControlObjectiveCreators: Boolean
-  hasControlObjectiveCreatorsWith: [OrganizationWhereInput!]
-  """
-  group_creators edge predicates
-  """
-  hasGroupCreators: Boolean
-  hasGroupCreatorsWith: [OrganizationWhereInput!]
-  """
-  internal_policy_creators edge predicates
-  """
-  hasInternalPolicyCreators: Boolean
-  hasInternalPolicyCreatorsWith: [OrganizationWhereInput!]
-  """
-  narrative_creators edge predicates
-  """
-  hasNarrativeCreators: Boolean
-  hasNarrativeCreatorsWith: [OrganizationWhereInput!]
-  """
-  procedure_creators edge predicates
-  """
-  hasProcedureCreators: Boolean
-  hasProcedureCreatorsWith: [OrganizationWhereInput!]
-  """
-  program_creators edge predicates
-  """
-  hasProgramCreators: Boolean
-  hasProgramCreatorsWith: [OrganizationWhereInput!]
-  """
-  risk_creators edge predicates
-  """
-  hasRiskCreators: Boolean
-  hasRiskCreatorsWith: [OrganizationWhereInput!]
-  """
-  template_creators edge predicates
-  """
-  hasTemplateCreators: Boolean
-  hasTemplateCreatorsWith: [OrganizationWhereInput!]
   """
   procedure_editors edge predicates
   """
@@ -49572,33 +49437,6 @@ input UpdateGroupInput {
   displayName: String
   ownerID: ID
   clearOwner: Boolean
-  addControlCreatorIDs: [ID!]
-  removeControlCreatorIDs: [ID!]
-  clearControlCreators: Boolean
-  addControlObjectiveCreatorIDs: [ID!]
-  removeControlObjectiveCreatorIDs: [ID!]
-  clearControlObjectiveCreators: Boolean
-  addGroupCreatorIDs: [ID!]
-  removeGroupCreatorIDs: [ID!]
-  clearGroupCreators: Boolean
-  addInternalPolicyCreatorIDs: [ID!]
-  removeInternalPolicyCreatorIDs: [ID!]
-  clearInternalPolicyCreators: Boolean
-  addNarrativeCreatorIDs: [ID!]
-  removeNarrativeCreatorIDs: [ID!]
-  clearNarrativeCreators: Boolean
-  addProcedureCreatorIDs: [ID!]
-  removeProcedureCreatorIDs: [ID!]
-  clearProcedureCreators: Boolean
-  addProgramCreatorIDs: [ID!]
-  removeProgramCreatorIDs: [ID!]
-  clearProgramCreators: Boolean
-  addRiskCreatorIDs: [ID!]
-  removeRiskCreatorIDs: [ID!]
-  clearRiskCreators: Boolean
-  addTemplateCreatorIDs: [ID!]
-  removeTemplateCreatorIDs: [ID!]
-  clearTemplateCreators: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean

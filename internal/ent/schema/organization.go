@@ -235,7 +235,7 @@ func (Organization) Mixin() []ent.Mixin {
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
 		// add group based create permissions
-		NewGroupBasedCreateAccessMixin(true),
+		NewGroupBasedCreateAccessMixin(),
 	}
 }
 
