@@ -575,7 +575,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 			},
 			client:   suite.client.api,
 			ctx:      adminUser.UserCtx,
-			errorMsg: "you are not authorized to perform this action",
+			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update name, happy path",
@@ -713,14 +713,14 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 				require.NoError(t, err)
 				require.NotNil(t, programResp)
 
-				// // ensure user can now access the control (they have editor access)
-				// description := gofakeit.HipsterSentence(10)
-				// controlResp, err := suite.client.api.UpdateControl(gmCtx, control.ID, openlaneclient.UpdateControlInput{
-				// 	Description: &description,
-				// })
-				// require.NoError(t, err)
-				// require.NotNil(t, controlResp)
-				// assert.Equal(t, description, *controlResp.UpdateControl.Control.Description)
+				// ensure user can now access the control (they have editor access and should be able to make changes)
+				description := gofakeit.HipsterSentence(10)
+				controlResp, err := suite.client.api.UpdateControl(gmCtx, control.ID, openlaneclient.UpdateControlInput{
+					Description: &description,
+				})
+				require.NoError(t, err)
+				require.NotNil(t, controlResp)
+				assert.Equal(t, description, *controlResp.UpdateControl.Control.Description)
 
 				// access to procedures is granted by default in the org
 				procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)

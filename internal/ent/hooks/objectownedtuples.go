@@ -116,7 +116,7 @@ func HookGroupPermissionsTuples() ent.Hook {
 				}
 			}
 
-			addTuples, removeTuples, err := getTuplesForGroupEdges(m, subjectID)
+			addTuples, removeTuples, err := getTuplesForGroupEdgeChanges(m, subjectID)
 			if err != nil {
 				return nil, err
 			}
@@ -239,7 +239,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) e
 		for _, id := range ids {
 			idStr, ok := id.(string)
 			if !ok {
-				log.Warn().Interface("id", id).Msg("id is not a string")
+				log.Warn().Interface("id", id).Msg("id is not a string, unable to check access")
 
 				continue
 			}
@@ -253,7 +253,6 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) e
 			}
 
 			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {
-				log.Error().Err(err).Interface("ac", ac).Msg("not access")
 				return generated.ErrPermissionDenied
 			}
 		}
@@ -262,30 +261,27 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) e
 	return nil
 }
 
-// getTuplesForGroupEdges gets the tuples for a group edge based on the mutation
-func getTuplesForGroupEdges(m ent.Mutation, subjectID string) (addTuples []fgax.TupleKey, removeTuples []fgax.TupleKey, err error) {
+// getTuplesForGroupEdgeChanges gets the tuples for a group edge based on the mutation
+func getTuplesForGroupEdgeChanges(m ent.Mutation, subjectID string) (addTuples []fgax.TupleKey, removeTuples []fgax.TupleKey, err error) {
 	// check edges for added edges
 	if m.AddedEdges() != nil {
-		// looking for edges like `program_editors` or `program_viewers`
-		edges := m.AddedEdges()
-
-		addTuples = getTuplesForGroupEdge(m, edges, subjectID)
+		addTuples = getTuplesForGroupEdge(m, m.AddedEdges(), subjectID)
 	}
 
 	// check edges for added edges
 	if m.RemovedEdges() != nil {
-		// looking for edges like `program_editors` or `program_viewers`
-		edges := m.RemovedEdges()
-
-		removeTuples = getTuplesForGroupEdge(m, edges, subjectID)
+		removeTuples = getTuplesForGroupEdge(m, m.RemovedEdges(), subjectID)
 	}
 
 	return addTuples, removeTuples, nil
 }
 
-// getTuplesForGroupEdge gets the tuples for a group edge based on the mutation
+// getTuplesForGroupEdge gets the tuples for edges that were added or removed, it will take in the edges
+// that were changed and the subject id of the group and return the tuples
+// the subject id in this case should be the group id from the mutation
 func getTuplesForGroupEdge(m ent.Mutation, edges []string, subjectID string) (tuples []fgax.TupleKey) {
 	for _, edge := range edges {
+		// looking for edges like `program_editors` or `program_viewers`
 		objectType, relation, ok := isPermissionsEdge(edge)
 		if !ok {
 			continue
@@ -318,7 +314,7 @@ func getTuplesForGroupEdge(m ent.Mutation, edges []string, subjectID string) (tu
 }
 
 // isPermissionsEdge checks if the edge is a permissions edge
-// and returns the object type and true if it is
+// and returns the object type, relation for the edge, and true if it is a permissions edge
 func isPermissionsEdge(edge string) (string, fgax.Relation, bool) {
 	switch {
 	case strings.HasSuffix(edge, "editors"):
@@ -332,7 +328,7 @@ func isPermissionsEdge(edge string) (string, fgax.Relation, bool) {
 	return "", "", false
 }
 
-// checkAccessToObject checks if the user has access to the object they are trying to give permissions to
+// checkAccessToObjectsFromTuples checks if the user has access to the object they are trying to give permissions to
 // using the tuple structs that are about to be written
 func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples []fgax.TupleKey) error {
 	for _, tuple := range tuples {
@@ -345,11 +341,13 @@ func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples 
 			return nil
 		}
 
+		// get the user id or service id from the context
 		subjectID, err := auth.GetUserIDFromContext(ctx)
 		if err != nil {
 			return err
 		}
 
+		// does the user making the request have access to the edge object
 		ac := fgax.AccessCheck{
 			Relation:    fgax.CanEdit,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
@@ -363,6 +361,7 @@ func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples 
 			return err
 		}
 
+		// return an error if the user does not have access
 		if !access {
 			return generated.ErrPermissionDenied
 		}
