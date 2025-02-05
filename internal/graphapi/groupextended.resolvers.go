@@ -133,6 +133,9 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
+	// TODO (sfunk): we should generate this code in the future
+	// if we have a group to inherit permissions from, get the group with permissions
+	// and append the permissions to the group input
 	if inheritGroupPermissions != nil && *inheritGroupPermissions != "" {
 		groupWithPermissions, err := getGroupByIDWithPermissionsEdges(ctx, inheritGroupPermissions)
 		if err != nil {
@@ -221,6 +224,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
 
+	// if we have a group to clone members from, get the members and add them to the new group
 	if cloneGroupMembers != nil && *cloneGroupMembers != "" {
 		existingMembers, err := res.Members(ctx)
 		if err != nil {
@@ -232,6 +236,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		}
 	}
 
+	// retrieve the final result with all members
 	finalResult, err := withTransactionalMutation(ctx).Group.
 		Query().
 		WithMembers().
@@ -353,6 +358,7 @@ func (r *updateGroupInputResolver) InheritGroupPermissions(ctx context.Context, 
 		return nil
 	}
 
+	// TODO (sfunk): we should generate this code in the future based off the group permissions mixin
 	groupWithPermissions, err := getGroupByIDWithPermissionsEdges(ctx, data)
 	if err != nil {
 		return parseRequestError(err, action{action: ActionCreate, object: "group"})
