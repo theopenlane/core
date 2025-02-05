@@ -114,6 +114,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVGroup, error)
 	CreateBulkGroup(ctx context.Context, input []*CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkGroup, error)
 	CreateGroup(ctx context.Context, input CreateGroupInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroup, error)
+	CreateGroupByClone(ctx context.Context, groupInput CreateGroupInput, inheritGroupPermissions *string, cloneGroupMembers *string, interceptors ...clientv2.RequestInterceptor) (*CreateGroupByClone, error)
 	CreateGroupWithMembers(ctx context.Context, groupInput CreateGroupInput, members []*GroupMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateGroupWithMembers, error)
 	DeleteGroup(ctx context.Context, deleteGroupID string, interceptors ...clientv2.RequestInterceptor) (*DeleteGroup, error)
 	GetAllGroups(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllGroups, error)
@@ -17058,6 +17059,124 @@ type CreateGroup_CreateGroup struct {
 func (t *CreateGroup_CreateGroup) GetGroup() *CreateGroup_CreateGroup_Group {
 	if t == nil {
 		t = &CreateGroup_CreateGroup{}
+	}
+	return &t.Group
+}
+
+type CreateGroupByClone_CreateGroupByClone_Group_Members_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_User{}
+	}
+	return t.LastName
+}
+
+type CreateGroupByClone_CreateGroupByClone_Group_Members struct {
+	ID   string                                                   "json:\"id\" graphql:\"id\""
+	User CreateGroupByClone_CreateGroupByClone_Group_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members) GetID() string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members{}
+	}
+	return t.ID
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members) GetUser() *CreateGroupByClone_CreateGroupByClone_Group_Members_User {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members{}
+	}
+	return &t.User
+}
+
+type CreateGroupByClone_CreateGroupByClone_Group_Permissions struct {
+	DisplayID   *string          "json:\"displayID,omitempty\" graphql:\"displayID\""
+	ID          *string          "json:\"id,omitempty\" graphql:\"id\""
+	Name        *string          "json:\"name,omitempty\" graphql:\"name\""
+	ObjectType  string           "json:\"objectType\" graphql:\"objectType\""
+	Permissions enums.Permission "json:\"permissions\" graphql:\"permissions\""
+}
+
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Permissions) GetDisplayID() *string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Permissions{}
+	}
+	return t.DisplayID
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Permissions) GetID() *string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Permissions{}
+	}
+	return t.ID
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Permissions) GetName() *string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Permissions{}
+	}
+	return t.Name
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Permissions) GetObjectType() string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Permissions{}
+	}
+	return t.ObjectType
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Permissions) GetPermissions() *enums.Permission {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Permissions{}
+	}
+	return &t.Permissions
+}
+
+type CreateGroupByClone_CreateGroupByClone_Group struct {
+	DisplayID   string                                                     "json:\"displayID\" graphql:\"displayID\""
+	ID          string                                                     "json:\"id\" graphql:\"id\""
+	Members     []*CreateGroupByClone_CreateGroupByClone_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Permissions []*CreateGroupByClone_CreateGroupByClone_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
+}
+
+func (t *CreateGroupByClone_CreateGroupByClone_Group) GetDisplayID() string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group{}
+	}
+	return t.DisplayID
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group) GetID() string {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group{}
+	}
+	return t.ID
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group) GetMembers() []*CreateGroupByClone_CreateGroupByClone_Group_Members {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group{}
+	}
+	return t.Members
+}
+func (t *CreateGroupByClone_CreateGroupByClone_Group) GetPermissions() []*CreateGroupByClone_CreateGroupByClone_Group_Permissions {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group{}
+	}
+	return t.Permissions
+}
+
+type CreateGroupByClone_CreateGroupByClone struct {
+	Group CreateGroupByClone_CreateGroupByClone_Group "json:\"group\" graphql:\"group\""
+}
+
+func (t *CreateGroupByClone_CreateGroupByClone) GetGroup() *CreateGroupByClone_CreateGroupByClone_Group {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone{}
 	}
 	return &t.Group
 }
@@ -50675,6 +50794,17 @@ func (t *CreateGroup) GetCreateGroup() *CreateGroup_CreateGroup {
 	return &t.CreateGroup
 }
 
+type CreateGroupByClone struct {
+	CreateGroupByClone CreateGroupByClone_CreateGroupByClone "json:\"createGroupByClone\" graphql:\"createGroupByClone\""
+}
+
+func (t *CreateGroupByClone) GetCreateGroupByClone() *CreateGroupByClone_CreateGroupByClone {
+	if t == nil {
+		t = &CreateGroupByClone{}
+	}
+	return &t.CreateGroupByClone
+}
+
 type CreateGroupWithMembers struct {
 	CreateGroupWithMembers CreateGroupWithMembers_CreateGroupWithMembers "json:\"createGroupWithMembers\" graphql:\"createGroupWithMembers\""
 }
@@ -57831,6 +57961,49 @@ func (c *Client) CreateGroup(ctx context.Context, input CreateGroupInput, interc
 
 	var res CreateGroup
 	if err := c.Client.Post(ctx, "CreateGroup", CreateGroupDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateGroupByCloneDocument = `mutation CreateGroupByClone ($groupInput: CreateGroupInput!, $inheritGroupPermissions: ID, $cloneGroupMembers: ID) {
+	createGroupByClone(groupInput: $groupInput, inheritGroupPermissions: $inheritGroupPermissions, cloneGroupMembers: $cloneGroupMembers) {
+		group {
+			id
+			displayID
+			members {
+				id
+				user {
+					firstName
+					lastName
+				}
+			}
+			permissions {
+				id
+				displayID
+				name
+				objectType
+				permissions
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateGroupByClone(ctx context.Context, groupInput CreateGroupInput, inheritGroupPermissions *string, cloneGroupMembers *string, interceptors ...clientv2.RequestInterceptor) (*CreateGroupByClone, error) {
+	vars := map[string]any{
+		"groupInput":              groupInput,
+		"inheritGroupPermissions": inheritGroupPermissions,
+		"cloneGroupMembers":       cloneGroupMembers,
+	}
+
+	var res CreateGroupByClone
+	if err := c.Client.Post(ctx, "CreateGroupByClone", CreateGroupByCloneDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -67784,6 +67957,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkCSVGroupDocument:                 "CreateBulkCSVGroup",
 	CreateBulkGroupDocument:                    "CreateBulkGroup",
 	CreateGroupDocument:                        "CreateGroup",
+	CreateGroupByCloneDocument:                 "CreateGroupByClone",
 	CreateGroupWithMembersDocument:             "CreateGroupWithMembers",
 	DeleteGroupDocument:                        "DeleteGroup",
 	GetAllGroupsDocument:                       "GetAllGroups",

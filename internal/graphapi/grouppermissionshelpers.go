@@ -118,6 +118,7 @@ func (r *mutationResolver) createGroupMembersViaClone(ctx context.Context, clone
 
 	for _, member := range clonedGroupMembers {
 		memberExists := false
+
 		for _, existingMember := range existingMembers {
 			if member.UserID == existingMember.UserID {
 				memberExists = true

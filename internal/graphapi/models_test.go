@@ -38,8 +38,10 @@ type GroupBuilder struct {
 	client *client
 
 	// Fields
-	Name  string
-	Owner string
+	Name              string
+	Owner             string
+	ControlEditorsIDs []string
+	ProgramEditorsIDs []string
 }
 
 type GroupCleanup struct {
@@ -468,7 +470,17 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 		owner = testUser1.OrganizationID
 	}
 
-	group := g.client.db.Group.Create().SetName(g.Name).SetOwnerID(owner).SaveX(ctx)
+	mutation := g.client.db.Group.Create().SetName(g.Name).SetOwnerID(owner)
+
+	if len(g.ControlEditorsIDs) > 0 {
+		mutation.AddControlEditorIDs(g.ControlEditorsIDs...)
+	}
+
+	if len(g.ProgramEditorsIDs) > 0 {
+		mutation.AddProgramEditorIDs(g.ProgramEditorsIDs...)
+	}
+
+	group := mutation.SaveX(ctx)
 
 	return group
 }

@@ -483,6 +483,96 @@ func (suite *GraphTestSuite) TestMutationCreateGroupWithMembers() {
 	}
 }
 
+func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
+	t := suite.T()
+
+	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	group := (&GroupBuilder{client: suite.client, ProgramEditorsIDs: []string{program.ID}, ControlEditorsIDs: []string{control.ID}}).MustNew(testUser1.UserCtx, t)
+
+	// add a group member to the group
+	(&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name                  string
+		group                 openlaneclient.CreateGroupInput
+		groupPermissionsClone string
+		groupMembersClone     string
+		members               []*openlaneclient.GroupMembersInput
+		client                *openlaneclient.OpenlaneClient
+		ctx                   context.Context
+		errorMsg              string
+	}{
+		{
+			name: "happy path, clone group everything",
+			group: openlaneclient.CreateGroupInput{
+				Name: gofakeit.Name(),
+			},
+			groupPermissionsClone: group.ID,
+			groupMembersClone:     group.ID,
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+		},
+		{
+			name: "happy path, clone group members, use personal access token",
+			group: openlaneclient.CreateGroupInput{
+				Name:    gofakeit.Name(),
+				OwnerID: &testUser1.OrganizationID,
+			},
+			groupMembersClone: group.ID,
+			client:            suite.client.apiWithPAT,
+			ctx:               context.Background(),
+		},
+		// {
+		// 	name: "happy path, clone group permissions, use api token",
+		// 	group: openlaneclient.CreateGroupInput{
+		// 		Name: gofakeit.Name(),
+		// 	},
+		// 	groupPermissionsClone: group.ID,
+		// 	client:                suite.client.apiWithToken,
+		// 	ctx:                   context.Background(),
+		// },
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateGroupByClone(tc.ctx, tc.group, &tc.groupPermissionsClone, &tc.groupMembersClone)
+
+			if tc.errorMsg != "" {
+				require.Error(t, err)
+				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+			require.NotNil(t, resp.CreateGroupByClone.Group)
+
+			// the display id should be different
+			require.NotEqual(t, group.DisplayID, resp.CreateGroupByClone.Group.DisplayID)
+
+			// make sure there are two members, user who created the group and the cloned member
+			// even when an api token is used, there will still be the original user (testUser1)
+			expectedLen := 1
+			if tc.groupMembersClone != "" {
+				expectedLen += 1
+			}
+
+			assert.Len(t, resp.CreateGroupByClone.Group.Members, expectedLen)
+
+			// added a control and a program to the group we cloned, make sure they are there
+			expectedLenPerms := 0
+			if tc.groupPermissionsClone != "" {
+				expectedLenPerms = 2
+			}
+
+			assert.Len(t, resp.CreateGroupByClone.Group.Permissions, expectedLenPerms)
+		})
+	}
+}
+
 func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 	t := suite.T()
 
