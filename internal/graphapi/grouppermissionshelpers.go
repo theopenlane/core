@@ -1,8 +1,12 @@
 package graphapi
 
 import (
+	"context"
 	"encoding/json"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -50,4 +54,101 @@ func convertToEntObject(obj any) (*EntObject, error) {
 	}
 
 	return &entObject, nil
+}
+
+// getGroupByIDWithPermissionsEdges returns a group object with all the permissions edges
+// TODO (sfunk): This function is a good candidate for a generated function with the group permissions mixin
+func getGroupByIDWithPermissionsEdges(ctx context.Context, groupID *string) (*generated.Group, error) {
+	if groupID == nil || *groupID == "" {
+		return nil, nil
+	}
+
+	groupWithPermissions, err := withTransactionalMutation(ctx).Group.
+		Query().
+		Where(group.IDEQ(*groupID)).
+		// Control permissions
+		WithControlEditors().
+		WithControlViewers().
+		WithControlBlockedGroups().
+
+		// Control Objective permissions
+		WithControlObjectiveEditors().
+		WithControlObjectiveViewers().
+		WithControlObjectiveBlockedGroups().
+
+		// Program permissions
+		WithProgramViewers().
+		WithProgramEditors().
+		WithProgramBlockedGroups().
+
+		// Risk permissions
+		WithRiskViewers().
+		WithRiskEditors().
+		WithRiskBlockedGroups().
+
+		// Internal Policy permissions
+		WithInternalPolicyEditors().
+		WithInternalPolicyBlockedGroups().
+
+		// Procedure permissions
+		WithProcedureEditors().
+		WithProcedureBlockedGroups().
+
+		// Narrative permissions
+		WithNarrativeViewers().
+		WithNarrativeEditors().
+		WithNarrativeBlockedGroups().
+		Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return groupWithPermissions, nil
+}
+
+func (r *mutationResolver) createGroupMembersViaClone(ctx context.Context, cloneGroupID *string, groupID string, existingMembers []*generated.GroupMembership) error {
+	// if there is no clone group id, return
+	if cloneGroupID == nil || *cloneGroupID == "" {
+		return nil
+	}
+
+	// get all the members of the cloned group
+	clonedGroupMembers, err := withTransactionalMutation(ctx).GroupMembership.Query().Where(groupmembership.GroupID(*cloneGroupID)).All(ctx)
+	if err != nil {
+		return err
+	}
+
+	var memberInput []*generated.CreateGroupMembershipInput
+
+	// this happens after the original group mutation, so we need to ensure
+	// we don't add the same members to the group
+	for _, member := range clonedGroupMembers {
+		memberExists := false
+
+		for _, existingMember := range existingMembers {
+			if member.UserID == existingMember.UserID {
+				memberExists = true
+			}
+		}
+
+		if !memberExists {
+			memberInput = append(memberInput, &generated.CreateGroupMembershipInput{
+				GroupID: groupID,
+				UserID:  member.UserID,
+				Role:    &member.Role,
+			})
+		}
+	}
+
+	// no members to add
+	if len(memberInput) == 0 {
+		return nil
+	}
+
+	// create all the group memberships
+	if _, err := r.CreateBulkGroupMembership(ctx, memberInput); err != nil {
+		return err
+	}
+
+	return nil
 }
