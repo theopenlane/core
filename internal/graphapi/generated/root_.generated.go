@@ -1652,6 +1652,7 @@ type ComplexityRoot struct {
 		CreateEvidence                   func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
 		CreateFullProgram                func(childComplexity int, input model.CreateFullProgramInput) int
 		CreateGroup                      func(childComplexity int, input generated.CreateGroupInput) int
+		CreateGroupByClone               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
 		CreateGroupMembership            func(childComplexity int, input generated.CreateGroupMembershipInput) int
 		CreateGroupSetting               func(childComplexity int, input generated.CreateGroupSettingInput) int
 		CreateGroupWithMembers           func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
@@ -11136,6 +11137,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateGroup(childComplexity, args["input"].(generated.CreateGroupInput)), true
+
+	case "Mutation.createGroupByClone":
+		if e.complexity.Mutation.CreateGroupByClone == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createGroupByClone_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateGroupByClone(childComplexity, args["groupInput"].(generated.CreateGroupInput), args["members"].([]*model.GroupMembersInput), args["inheritGroupPermissions"].(*string), args["cloneGroupMembers"].(*string)), true
 
 	case "Mutation.createGroupMembership":
 		if e.complexity.Mutation.CreateGroupMembership == nil {
@@ -52991,6 +53004,11 @@ extend input UpdateGroupInput {
   addGroupMembers: [CreateGroupMembershipInput!]
   removeGroupMembers: [ID!]
   updateGroupSettings: UpdateGroupSettingInput
+  """
+  inheritGroupPermissions allows a group to be updated with the same permissions
+  as the specified group ID, existing permissions will be removed
+  """
+  inheritGroupPermissions: ID
 }
 
 extend input GroupMembershipWhereInput {
@@ -53051,6 +53069,31 @@ extend type Group {
   permissions the group provides
   """
   permissions: [GroupPermissions!]
+}
+extend type Mutation{
+  """
+  Create a new group with members
+  """
+  createGroupByClone(
+      """
+      values of the group
+      """
+      groupInput: CreateGroupInput!
+      """
+      group members to be added to the group
+      """
+      members: [GroupMembersInput!]
+      """
+      inheritGroupPermissions allows a group to be created with the same permissions
+      as the specified group ID
+      """
+      inheritGroupPermissions: ID
+      """
+      cloneGroupMembers allows a group to be created with the same group members
+      as the specified group ID
+      """
+      cloneGroupMembers: ID
+  ): GroupCreatePayload!
 }`, BuiltIn: false},
 	{Name: "../schema/groupmembership.graphql", Input: `extend type Query {
     """

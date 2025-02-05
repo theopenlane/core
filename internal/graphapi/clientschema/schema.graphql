@@ -14345,6 +14345,32 @@ type Mutation {
 		members: [GroupMembersInput!]
 	): GroupCreatePayload!
 	"""
+	Create a new group with members
+	"""
+	createGroupByClone(
+		"""
+		values of the group
+		"""
+		groupInput: CreateGroupInput!
+
+		"""
+		group members to be added to the group
+		"""
+		members: [GroupMembersInput!]
+
+		"""
+		inheritGroupPermissions allows a group to be created with the same permissions
+		as the specified group ID
+		"""
+		inheritGroupPermissions: ID
+
+		"""
+		cloneGroupMembers allows a group to be created with the same group members
+		as the specified group ID
+		"""
+		cloneGroupMembers: ID
+	): GroupCreatePayload!
+	"""
 	Create a new groupMembership
 	"""
 	createGroupMembership(
@@ -30745,6 +30771,11 @@ input UpdateGroupInput {
 	addGroupMembers: [CreateGroupMembershipInput!]
 	removeGroupMembers: [ID!]
 	updateGroupSettings: UpdateGroupSettingInput
+	"""
+	inheritGroupPermissions allows a group to be updated with the same permissions
+	as the specified group ID, existing permissions will be removed
+	"""
+	inheritGroupPermissions: ID
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.

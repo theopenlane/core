@@ -20326,6 +20326,9 @@ type UpdateGroupInput struct {
 	AddGroupMembers                       []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
 	RemoveGroupMembers                    []string                      `json:"removeGroupMembers,omitempty"`
 	UpdateGroupSettings                   *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
+	// inheritGroupPermissions allows a group to be updated with the same permissions
+	// as the specified group ID, existing permissions will be removed
+	InheritGroupPermissions *string `json:"inheritGroupPermissions,omitempty"`
 }
 
 // UpdateGroupMembershipInput is used for update GroupMembership object.
