@@ -192,6 +192,9 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 
 	name := gofakeit.Name()
 
+	// group for the view only user
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		groupName     string
@@ -291,7 +294,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
-						AddGroupCreatorIDs: []string{viewOnlyUser.GroupID},
+						AddGroupCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				require.NoError(t, err)
 			}

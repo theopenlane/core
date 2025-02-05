@@ -90,6 +90,9 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 	}
 }
 
+// HookGroupPermissionsTuples is a hook that adds group permissions tuples for the object being created
+// this is the reverse edge of the object owned tuples, meaning these run on group mutations
+// whereas the other hooks run on the object mutations
 func HookGroupPermissionsTuples() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -120,6 +123,64 @@ func HookGroupPermissionsTuples() ent.Hook {
 
 			// write the tuples to the authz service
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
+				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+					return nil, err
+				}
+
+				log.Debug().Interface("tuples", addTuples).Msg("added tuples")
+				log.Debug().Interface("tuples", removeTuples).Msg("removed tuples")
+			}
+
+			return retVal, err
+		},
+		)
+	}
+}
+
+// HookRelationTuples is a hook that adds tuples for the object being created
+// the objects input is a map of object id fields to the object type
+// these tuples based are based on the direct relation, e.g. a group#member to another object
+// this is the reverse of the HookGroupPermissionsTuples
+func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			objectID, err := GetObjectIDFromEntValue(retVal)
+			if err != nil {
+				return nil, err
+			}
+
+			var (
+				addTuples    []fgax.TupleKey
+				removeTuples []fgax.TupleKey
+			)
+
+			addTuples, err = createTuplesByRelation(ctx, m, objectID, relation, objects)
+			if err != nil {
+				return nil, err
+			}
+
+			removeTuples, err = removeTuplesByRelation(ctx, m, objectID, relation, objects)
+			if err != nil {
+				return nil, err
+			}
+
+			// write the tuples to the authz service
+			if len(addTuples) != 0 || len(removeTuples) != 0 {
+				// first check permissions, if the user doesn't have access
+				// these is the easiest place to check and roll back the transaction
+				if err := checkAccessToObjectsFromTuples(ctx, m, addTuples); err != nil {
+					return nil, err
+				}
+
+				if err := checkAccessToObjectsFromTuples(ctx, m, removeTuples); err != nil {
+					return nil, err
+				}
+
 				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
 					return nil, err
 				}
@@ -269,63 +330,6 @@ func isPermissionsEdge(edge string) (string, fgax.Relation, bool) {
 	}
 
 	return "", "", false
-}
-
-// HookRelationTuples is a hook that adds tuples for the object being created
-// the objects input is a map of object id fields to the object type
-// these tuples based are based on the direct relation, e.g. a group#member to another object
-func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			retVal, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			objectID, err := GetObjectIDFromEntValue(retVal)
-			if err != nil {
-				return nil, err
-			}
-
-			var (
-				addTuples    []fgax.TupleKey
-				removeTuples []fgax.TupleKey
-			)
-
-			addTuples, err = createTuplesByRelation(ctx, m, objectID, relation, objects)
-			if err != nil {
-				return nil, err
-			}
-
-			removeTuples, err = removeTuplesByRelation(ctx, m, objectID, relation, objects)
-			if err != nil {
-				return nil, err
-			}
-
-			// write the tuples to the authz service
-			if len(addTuples) != 0 || len(removeTuples) != 0 {
-				// first check permissions, if the user doesn't have access
-				// these is the easiest place to check and roll back the transaction
-				if err := checkAccessToObjectsFromTuples(ctx, m, addTuples); err != nil {
-					return nil, err
-				}
-
-				if err := checkAccessToObjectsFromTuples(ctx, m, removeTuples); err != nil {
-					return nil, err
-				}
-
-				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
-					return nil, err
-				}
-
-				log.Debug().Interface("tuples", addTuples).Msg("added tuples")
-				log.Debug().Interface("tuples", removeTuples).Msg("removed tuples")
-			}
-
-			return retVal, err
-		},
-		)
-	}
 }
 
 // checkAccessToObject checks if the user has access to the object they are trying to give permissions to

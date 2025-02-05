@@ -413,6 +413,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 	// create program user to remove
 	programUser := suite.userBuilder(context.Background())
 	(&OrgMemberBuilder{client: suite.client, UserID: programUser.ID, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+
 	pm := (&ProgramMemberBuilder{client: suite.client, UserID: programUser.ID, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
 
 	// Create some edge objects
@@ -491,7 +492,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 		{
 			name: "happy path, remove program member",
 			request: openlaneclient.UpdateProgramInput{
-				RemoveBlockedGroupIDs: []string{pm.ID},
+				RemoveProgramMembers: []string{pm.ID},
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -645,9 +646,12 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 				assert.Equal(t, program.ID, res.Program.ID)
 			}
 
-			// member was removed, ensure there are no members now
+			// member was removed, ensure there is only one member left
 			if len(tc.request.RemoveProgramMembers) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Members, 0)
+				require.Len(t, resp.UpdateProgram.Program.Members, 1)
+
+				// it should only be the owner left
+				require.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members[0].User.ID)
 			}
 		})
 	}

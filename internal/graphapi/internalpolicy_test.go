@@ -145,6 +145,9 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// group for the view only user
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		request       openlaneclient.CreateInternalPolicyInput
@@ -248,7 +251,7 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
-						AddInternalPolicyCreatorIDs: []string{viewOnlyUser.GroupID},
+						AddInternalPolicyCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				require.NoError(t, err)
 			}

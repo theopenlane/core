@@ -170,6 +170,9 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
+	// group for the view only user
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
 	// add adminUser to the program so that they can create a control objective associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
@@ -303,7 +306,7 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
-						AddControlObjectiveCreatorIDs: []string{viewOnlyUser.GroupID},
+						AddControlObjectiveCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				require.NoError(t, err)
 			}
