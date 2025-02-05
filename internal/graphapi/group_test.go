@@ -614,6 +614,12 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	programClone := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlClone := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// add additional permissions as well as the same we will be updating to the group (control ID)
+	groupClone := (&GroupBuilder{client: suite.client, ProgramEditorsIDs: []string{programClone.ID}, ControlEditorsIDs: []string{controlClone.ID, control.ID}}).MustNew(testUser1.UserCtx, t)
+
 	gmCtx, err := auth.NewTestContextWithOrgID(gm.UserID, testUser1.OrganizationID)
 	require.NoError(t, err)
 
@@ -692,11 +698,12 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update name, happy path",
+			name: "update name and clone permissions, happy path - this will add two permissions to the group",
 			updateInput: openlaneclient.UpdateGroupInput{
-				Name:        &nameUpdate,
-				DisplayName: &displayNameUpdate,
-				Description: &descriptionUpdate,
+				Name:                    &nameUpdate,
+				DisplayName:             &displayNameUpdate,
+				Description:             &descriptionUpdate,
+				InheritGroupPermissions: &groupClone.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -840,7 +847,11 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 				procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
 				require.Error(t, err)
 				require.Nil(t, procedureResp)
+			}
 
+			if tc.updateInput.InheritGroupPermissions != nil {
+				// ensure the group has the additional permissions as the group we cloned, there is one overlap with the group we cloned
+				assert.Len(t, updatedGroup.Permissions, 5)
 			}
 		})
 	}
