@@ -84,6 +84,13 @@ mutation CreateGroup($input: CreateGroupInput!) {
         syncToSlack
         visibility
       }
+      permissions {
+        displayID
+        id
+        name
+        objectType
+        permissions
+      }
       members {
         id
         role
@@ -193,6 +200,13 @@ query GetGroupByID($groupId: ID!) {
       updatedBy
       visibility
     }
+    permissions {
+      displayID
+      id
+      name
+      objectType
+      permissions
+    }
     members {
       id
       role
@@ -235,6 +249,13 @@ query GetGroups($where: GroupWhereInput) {
           updatedBy
           visibility
         }
+        permissions {
+          displayID
+          id
+          name
+          objectType
+          permissions
+        }
         members {
           id
           role
@@ -276,6 +297,13 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
         updatedAt
         updatedBy
         visibility
+      }
+      permissions {
+        displayID
+        id
+        name
+        objectType
+        permissions
       }
       members {
         id

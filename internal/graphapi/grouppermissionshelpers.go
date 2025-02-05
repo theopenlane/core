@@ -7,14 +7,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 )
 
-// Permissions for the different types of permissions
-const (
-	editor  = "Editor"
-	viewer  = "Viewer"
-	blocked = "Blocked"
-	creator = "Creator"
-)
-
 // EntObject is a struct that contains the id, displayID, and name of an object
 type EntObject struct {
 	ID        string `json:"id,omitempty"`
@@ -25,26 +17,18 @@ type EntObject struct {
 // getGroupPermissions returns a slice of GroupPermissions for the given object type and permission
 func getGroupPermissions[T any](obj []T, objectType string, permission enums.Permission) (perms []*model.GroupPermissions) {
 	for _, e := range obj {
-		if permission != enums.Creator {
-			eo, err := convertToEntObject(e)
-			if err != nil {
-				return nil
-			}
-
-			perms = append(perms, &model.GroupPermissions{
-				ObjectType:  objectType,
-				ID:          &eo.ID,
-				Permissions: permission,
-				DisplayID:   &eo.DisplayID,
-				Name:        &eo.Name,
-			})
-		} else {
-			// creator permissions are not specific to an object
-			perms = append(perms, &model.GroupPermissions{
-				ObjectType:  objectType,
-				Permissions: permission,
-			})
+		eo, err := convertToEntObject(e)
+		if err != nil {
+			return nil
 		}
+
+		perms = append(perms, &model.GroupPermissions{
+			ObjectType:  objectType,
+			ID:          &eo.ID,
+			Permissions: permission,
+			DisplayID:   &eo.DisplayID,
+			Name:        &eo.Name,
+		})
 	}
 
 	return perms

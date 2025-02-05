@@ -135,3 +135,13 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 
 	return edges
 }
+
+// Hooks of the GroupPermissionsEdgesMixin
+func (g GroupPermissionsEdgesMixin) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			hooks.HookGroupPermissionsTuples(),
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+	}
+}

@@ -160,11 +160,16 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 	startDate := time.Now().AddDate(0, 0, 1)
 	endDate := time.Now().AddDate(0, 0, 360)
 
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
 	// Create some edge objects
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// group that the user does not have access to (for testing permissions)
+	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -210,13 +215,23 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 		{
 			name: "add editor group",
 			request: openlaneclient.CreateProgramInput{
-				Name:            "Test Procedure",
+				Name:            "Test Program MITB",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "add editor group, no access to group",
+			request: openlaneclient.CreateProgramInput{
+				Name:      "Test Program Meow",
+				EditorIDs: []string{anotherGroup.ID},
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, using pat",
@@ -280,7 +295,7 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
-						AddProgramCreatorIDs: []string{viewOnlyUser.GroupID},
+						AddProgramCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				require.NoError(t, err)
 			}
