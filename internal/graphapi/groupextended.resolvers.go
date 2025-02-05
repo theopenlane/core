@@ -133,7 +133,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	if inheritGroupPermissions != nil {
+	if inheritGroupPermissions != nil && *inheritGroupPermissions != "" {
 		groupWithPermissions, err := getGroupByIDWithPermissionsEdges(ctx, inheritGroupPermissions)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
@@ -221,7 +221,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
 
-	if cloneGroupMembers != nil {
+	if cloneGroupMembers != nil && *cloneGroupMembers != "" {
 		existingMembers, err := res.Members(ctx)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
@@ -349,7 +349,7 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 // InheritGroupPermissions is the resolver for the inheritGroupPermissions field.
 func (r *updateGroupInputResolver) InheritGroupPermissions(ctx context.Context, obj *generated.UpdateGroupInput, data *string) error {
 	// if data is nil, we don't need to do anything
-	if data == nil {
+	if data == nil || *data == "" {
 		return nil
 	}
 

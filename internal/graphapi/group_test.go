@@ -490,14 +490,16 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group := (&GroupBuilder{client: suite.client, ProgramEditorsIDs: []string{program.ID}, ControlEditorsIDs: []string{control.ID}}).MustNew(testUser1.UserCtx, t)
 
+	groupAnotherUser := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
 	// add a group member to the group
 	(&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name                  string
 		group                 openlaneclient.CreateGroupInput
-		groupPermissionsClone string
-		groupMembersClone     string
+		groupPermissionsClone *string
+		groupMembersClone     *string
 		members               []*openlaneclient.GroupMembersInput
 		client                *openlaneclient.OpenlaneClient
 		ctx                   context.Context
@@ -508,8 +510,8 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 			group: openlaneclient.CreateGroupInput{
 				Name: gofakeit.Name(),
 			},
-			groupPermissionsClone: group.ID,
-			groupMembersClone:     group.ID,
+			groupPermissionsClone: &group.ID,
+			groupMembersClone:     &group.ID,
 			client:                suite.client.api,
 			ctx:                   testUser1.UserCtx,
 		},
@@ -519,24 +521,46 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 				Name:    gofakeit.Name(),
 				OwnerID: &testUser1.OrganizationID,
 			},
-			groupMembersClone: group.ID,
-			client:            suite.client.apiWithPAT,
+			groupPermissionsClone: &group.ID,
+			client:                suite.client.apiWithPAT,
+			ctx:                   context.Background(),
+		},
+		{
+			name: "happy path, clone group permissions, use api token",
+			group: openlaneclient.CreateGroupInput{
+				Name: gofakeit.Name(),
+			},
+			groupMembersClone: &group.ID,
+			client:            suite.client.apiWithToken,
 			ctx:               context.Background(),
 		},
-		// {
-		// 	name: "happy path, clone group permissions, use api token",
-		// 	group: openlaneclient.CreateGroupInput{
-		// 		Name: gofakeit.Name(),
-		// 	},
-		// 	groupPermissionsClone: group.ID,
-		// 	client:                suite.client.apiWithToken,
-		// 	ctx:                   context.Background(),
-		// },
+		{
+			name: "clone group everything, but view only user",
+			group: openlaneclient.CreateGroupInput{
+				Name: gofakeit.Name(),
+			},
+			groupPermissionsClone: &group.ID,
+			groupMembersClone:     &group.ID,
+			client:                suite.client.api,
+			ctx:                   viewOnlyUser.UserCtx,
+			errorMsg:              notAuthorizedErrorMsg,
+		},
+		{
+			name: "clone group everything, no access to clone group",
+			group: openlaneclient.CreateGroupInput{
+				Name: gofakeit.Name(),
+			},
+			groupPermissionsClone: &groupAnotherUser.ID,
+			groupMembersClone:     &groupAnotherUser.ID,
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			errorMsg:              notFoundErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateGroupByClone(tc.ctx, tc.group, &tc.groupPermissionsClone, &tc.groupMembersClone)
+			resp, err := tc.client.CreateGroupByClone(tc.ctx, tc.group, tc.groupPermissionsClone, tc.groupMembersClone)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -556,7 +580,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 			// make sure there are two members, user who created the group and the cloned member
 			// even when an api token is used, there will still be the original user (testUser1)
 			expectedLen := 1
-			if tc.groupMembersClone != "" {
+			if tc.groupMembersClone != nil {
 				expectedLen += 1
 			}
 
@@ -564,7 +588,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 
 			// added a control and a program to the group we cloned, make sure they are there
 			expectedLenPerms := 0
-			if tc.groupPermissionsClone != "" {
+			if tc.groupPermissionsClone != nil {
 				expectedLenPerms = 2
 			}
 
