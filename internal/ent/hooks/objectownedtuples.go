@@ -332,8 +332,10 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 // using the tuple structs that are about to be written
 func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples []fgax.TupleKey) error {
 	for _, tuple := range tuples {
-		objectID := tuple.Object.Identifier
-		objectType := string(tuple.Object.Kind)
+		// subject is the group that the permissions are being added to
+		// this is the reverse edge
+		objectID := tuple.Subject.Identifier
+		objectType := string(tuple.Subject.Kind)
 
 		if _, allow := privacy.DecisionFromContext(ctx); allow {
 			return nil
