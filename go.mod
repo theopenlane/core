@@ -16,7 +16,7 @@ require (
 	github.com/alitto/pond/v2 v2.1.6
 	github.com/aws/aws-sdk-go-v2/config v1.29.6
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.59
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.75.4
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.76.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/danielgtaylor/huma/v2 v2.28.0
@@ -45,7 +45,7 @@ require (
 	github.com/nyaruka/phonenumbers v1.5.0
 	github.com/oNaiPs/go-generate-fast v0.0.0-00010101000000-000000000000
 	github.com/oklog/ulid/v2 v2.1.0
-	github.com/openfga/go-sdk v0.6.4
+	github.com/openfga/go-sdk v0.6.5
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.1
 	github.com/prometheus/client_golang v1.20.5
@@ -325,7 +325,7 @@ require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.36.1
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.59
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.60
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
