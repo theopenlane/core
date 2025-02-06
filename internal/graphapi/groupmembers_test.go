@@ -246,46 +246,75 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 	t := suite.T()
 
-	gm := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	gm := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+
+	// get all group members so we know the id of the test user group member
+	groupMembers, err := suite.client.api.GetGroupMembersByGroupID(testUser1.UserCtx, &openlaneclient.GroupMembershipWhereInput{
+		GroupID: &testUser1.GroupID,
+	})
+
+	require.NoError(t, err)
+
+	testUser1GroupMember := ""
+	for _, gm := range groupMembers.GroupMemberships.Edges {
+		if gm.Node.UserID == testUser1.UserInfo.ID {
+			testUser1GroupMember = gm.Node.ID
+			break
+		}
+	}
 
 	testCases := []struct {
-		name   string
-		role   enums.Role
-		client *openlaneclient.OpenlaneClient
-		ctx    context.Context
-		errMsg string
+		name          string
+		groupMemberID string
+		role          enums.Role
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		errMsg        string
 	}{
 		{
-			name:   "happy path, update to admin from member",
-			role:   enums.RoleAdmin,
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			name:          "happy path, update to admin from member",
+			groupMemberID: gm.ID,
+			role:          enums.RoleAdmin,
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
 		},
 		{
-			name:   "happy path, update to member from admin using api token",
-			role:   enums.RoleMember,
-			client: suite.client.apiWithToken,
-			ctx:    context.Background(),
+			name:          "update self from admin to member, not allowed",
+			groupMemberID: testUser1GroupMember,
+			role:          enums.RoleMember,
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+			errMsg:        notAuthorizedErrorMsg,
 		},
 		{
-			name:   "happy path, update to admin from member using personal access token",
-			role:   enums.RoleAdmin,
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			name:          "happy path, update to member from admin using api token",
+			groupMemberID: gm.ID,
+			role:          enums.RoleMember,
+			client:        suite.client.apiWithToken,
+			ctx:           context.Background(),
 		},
 		{
-			name:   "invalid role",
-			role:   enums.RoleInvalid,
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			errMsg: "not a valid GroupMembershipRole",
+			name:          "happy path, update to admin from member using personal access token",
+			groupMemberID: gm.ID,
+			role:          enums.RoleAdmin,
+			client:        suite.client.apiWithPAT,
+			ctx:           context.Background(),
 		},
 		{
-			name:   "no access",
-			role:   enums.RoleMember,
-			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
-			errMsg: notAuthorizedErrorMsg,
+			name:          "invalid role",
+			groupMemberID: gm.ID,
+			role:          enums.RoleInvalid,
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+			errMsg:        "not a valid GroupMembershipRole",
+		},
+		{
+			name:          "no access",
+			groupMemberID: gm.ID,
+			role:          enums.RoleMember,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
+			errMsg:        notAuthorizedErrorMsg,
 		},
 	}
 
@@ -296,7 +325,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 				Role: &role,
 			}
 
-			resp, err := tc.client.UpdateUserRoleInGroup(tc.ctx, gm.ID, input)
+			resp, err := tc.client.UpdateUserRoleInGroup(tc.ctx, tc.groupMemberID, input)
 
 			if tc.errMsg != "" {
 				require.Error(t, err)
@@ -316,9 +345,24 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 	t := suite.T()
 
-	gm1 := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	gm2 := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	gm3 := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	gm1 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	gm2 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	gm3 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+
+	// get all group members so we know the id of the test user group member
+	groupMembers, err := suite.client.api.GetGroupMembersByGroupID(testUser1.UserCtx, &openlaneclient.GroupMembershipWhereInput{
+		GroupID: &testUser1.GroupID,
+	})
+
+	require.NoError(t, err)
+
+	testUser1GroupMember := ""
+	for _, gm := range groupMembers.GroupMemberships.Edges {
+		if gm.Node.UserID == testUser1.UserInfo.ID {
+			testUser1GroupMember = gm.Node.ID
+			break
+		}
+	}
 
 	testCases := []struct {
 		name        string
@@ -332,6 +376,13 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 			idToDelete:  gm1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:        "not allowed to delete self",
+			idToDelete:  testUser1GroupMember,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{

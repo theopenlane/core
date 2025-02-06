@@ -1329,6 +1329,8 @@ func init() {
 	groupmembership.Hooks[2] = groupmembershipMixinHooks2[0]
 
 	groupmembership.Hooks[3] = groupmembershipHooks[0]
+
+	groupmembership.Hooks[4] = groupmembershipHooks[1]
 	groupmembershipMixinInters2 := groupmembershipMixin[2].Interceptors()
 	groupmembership.Interceptors[0] = groupmembershipMixinInters2[0]
 	groupmembershipMixinFields0 := groupmembershipMixin[0].Fields()
