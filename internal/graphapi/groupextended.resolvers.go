@@ -287,6 +287,10 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 
 // RemoveGroupMembers is the resolver for the removeGroupMembers field.
 func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *generated.UpdateGroupInput, data []string) error {
+	if len(data) == 0 {
+		return nil
+	}
+
 	opCtx := graphql.GetOperationContext(ctx)
 	groupID, ok := opCtx.Variables["updateGroupId"]
 	if !ok {
@@ -297,14 +301,13 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 
 	c := withTransactionalMutation(ctx)
 
-	_, err := c.GroupMembership.Delete().
-		Where(
-			groupmembership.GroupID(groupID.(string)),
-			groupmembership.IDIn(data...),
-		).
-		Exec(ctx)
-	if err != nil {
-		return err
+	for _, id := range data {
+		if err := c.GroupMembership.DeleteOneID(id).
+			Where(groupmembership.GroupID(groupID.(string))).
+			Exec(ctx); err != nil {
+
+			return err
+		}
 	}
 
 	return nil

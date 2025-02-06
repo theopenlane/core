@@ -155,6 +155,15 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			ctx:     context.Background(),
 		},
 		{
+			name:    "cannot add self to group",
+			groupID: group1.ID,
+			userID:  adminUser.UserInfo.ID,
+			role:    enums.RoleAdmin,
+			client:  suite.client.api,
+			ctx:     adminUser.UserCtx,
+			errMsg:  notAuthorizedErrorMsg,
+		},
+		{
 			name:    "add member, no access",
 			groupID: group1.ID,
 			userID:  orgMember2.UserID,

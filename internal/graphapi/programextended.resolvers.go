@@ -211,6 +211,10 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 
 // RemoveProgramMembers is the resolver for the removeProgramMembers field.
 func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, obj *generated.UpdateProgramInput, data []string) error {
+	if len(data) == 0 {
+		return nil
+	}
+
 	opCtx := graphql.GetOperationContext(ctx)
 	programID, ok := opCtx.Variables["updateProgramId"]
 	if !ok {
@@ -221,14 +225,13 @@ func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, o
 
 	c := withTransactionalMutation(ctx)
 
-	_, err := c.ProgramMembership.Delete().
-		Where(
-			programmembership.ProgramID(programID.(string)),
-			programmembership.IDIn(data...),
-		).
-		Exec(ctx)
-	if err != nil {
-		return err
+	for _, id := range data {
+		if err := c.ProgramMembership.DeleteOneID(id).
+			Where(programmembership.ProgramID(programID.(string))).
+			Exec(ctx); err != nil {
+
+			return err
+		}
 	}
 
 	return nil
