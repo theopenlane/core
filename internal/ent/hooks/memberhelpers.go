@@ -82,7 +82,7 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 
 	for _, userID := range userIds {
 		if userID == actorID {
-			log.Debug().Msg("user cannot add themselves to a membership")
+			log.Error().Msg("user cannot add themselves to a membership")
 
 			return generated.ErrPermissionDenied
 		}

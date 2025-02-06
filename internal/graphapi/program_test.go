@@ -423,8 +423,6 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 		}
 	}
 
-	// programAdminUser := (&ProgramBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-
 	// create program user to remove
 	programUser := suite.userBuilder(context.Background())
 	(&OrgMemberBuilder{client: suite.client, UserID: programUser.ID, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)

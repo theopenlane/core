@@ -50,5 +50,5 @@ func HookProgramMembers() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate|ent.OpUpdateOne)
+	}, ent.OpCreate)
 }
