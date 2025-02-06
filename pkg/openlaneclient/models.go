@@ -20329,9 +20329,6 @@ type UpdateGroupInput struct {
 	// inheritGroupPermissions allows a group to be updated with the same permissions
 	// as the specified group ID, existing permissions will be removed
 	InheritGroupPermissions *string `json:"inheritGroupPermissions,omitempty"`
-	// cloneGroupMembers allows a group to be updated with the same group members
-	// as the specified group ID, group members will be appended to existing members
-	CloneGroupMembers *string `json:"cloneGroupMembers,omitempty"`
 }
 
 // UpdateGroupMembershipInput is used for update GroupMembership object.
