@@ -89,6 +89,7 @@ func (GroupMembership) Mixin() []ent.Mixin {
 func (GroupMembership) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookGroupMembers(),
+		hooks.HookMembershipSelf("group_memberships"),
 	}
 }
 

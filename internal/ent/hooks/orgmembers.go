@@ -115,6 +115,10 @@ func HookOrgMembersDelete() ent.Hook {
 				return nil, err
 			}
 
+			if orgMembership.Role == enums.RoleOwner {
+				return nil, ErrOrgOwnerCannotBeDeleted
+			}
+
 			// execute the delete operation
 			retValue, err := next.Mutate(ctx, m)
 			if err != nil {

@@ -410,6 +410,19 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{
+		ProgramID: &program.ID,
+	})
+
+	require.NoError(t, err)
+
+	testUserProgramMemberID := ""
+	for _, pm := range programMembers.ProgramMemberships.Edges {
+		if pm.Node.UserID == testUser1.ID {
+			testUserProgramMemberID = pm.Node.ID
+		}
+	}
+
 	// create program user to remove
 	programUser := suite.userBuilder(context.Background())
 	(&OrgMemberBuilder{client: suite.client, UserID: programUser.ID, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
@@ -478,7 +491,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, update multiple fields",
+			name: "happy path, update multiple fields using pat",
 			request: openlaneclient.UpdateProgramInput{
 				Status:               &enums.ProgramStatusReadyForAuditor,
 				EndDate:              lo.ToPtr(time.Now().AddDate(0, 0, 30)),
@@ -488,6 +501,40 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
+		},
+		{
+			name: "remove program member, cannot remove self",
+			request: openlaneclient.UpdateProgramInput{
+				RemoveProgramMembers: []string{testUserProgramMemberID},
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "add program member, cannot add self",
+			request: openlaneclient.UpdateProgramInput{
+				AddProgramMembers: []*openlaneclient.CreateProgramMembershipInput{
+					{
+						UserID: adminUser.ID,
+					},
+				},
+			},
+			client:      suite.client.api,
+			ctx:         adminUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "add program member, can add another user",
+			request: openlaneclient.UpdateProgramInput{
+				AddProgramMembers: []*openlaneclient.CreateProgramMembershipInput{
+					{
+						UserID: adminUser.ID,
+					},
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, remove program member",
@@ -646,11 +693,20 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 				assert.Equal(t, program.ID, res.Program.ID)
 			}
 
-			// member was removed, ensure there is only one member left
-			if len(tc.request.RemoveProgramMembers) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Members, 1)
+			if len(tc.request.AddProgramMembers) > 0 {
+				require.Len(t, resp.UpdateProgram.Program.Members, 3)
 
-				// it should only be the owner left
+				// it should have the owner and the admin user and the other user added in the test setup
+				require.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members[0].User.ID)
+				require.Equal(t, programUser.ID, resp.UpdateProgram.Program.Members[1].User.ID)
+				require.Equal(t, adminUser.ID, resp.UpdateProgram.Program.Members[2].User.ID)
+			}
+
+			// member was removed, ensure there are two members left
+			if len(tc.request.RemoveProgramMembers) > 0 {
+				require.Len(t, resp.UpdateProgram.Program.Members, 2)
+
+				// it should have the owner and the admin user
 				require.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members[0].User.ID)
 			}
 		})

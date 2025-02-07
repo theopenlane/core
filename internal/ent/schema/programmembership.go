@@ -88,6 +88,7 @@ func (ProgramMembership) Mixin() []ent.Mixin {
 func (ProgramMembership) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookProgramMembers(),
+		hooks.HookMembershipSelf("program_memberships"),
 	}
 }
 

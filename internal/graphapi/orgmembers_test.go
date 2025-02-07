@@ -157,6 +157,14 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			errMsg: "already exists",
 		},
 		{
+			name:   "cannot add self to organization",
+			orgID:  org1.ID,
+			userID: testUser2.ID,
+			role:   enums.RoleMember,
+			ctx:    testUser2.UserCtx,
+			errMsg: notAuthorizedErrorMsg,
+		},
+		{
 			name:   "add user to personal org not allowed",
 			orgID:  testUser1.PersonalOrgID,
 			userID: user1.ID,
@@ -230,27 +238,52 @@ func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
 
 	om := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
+		OrganizationID: &testUser1.OrganizationID,
+	})
+	require.NoError(t, err)
+
+	testUser1OrgMember := ""
+
+	for _, edge := range orgMembers.OrgMemberships.Edges {
+		if edge.Node.UserID == testUser1.ID {
+			testUser1OrgMember = edge.Node.ID
+			break
+		}
+	}
+
 	testCases := []struct {
-		name   string
-		role   enums.Role
-		errMsg string
+		name        string
+		orgMemberID string
+		role        enums.Role
+		errMsg      string
 	}{
 		{
-			name: "happy path, update to admin from member",
-			role: enums.RoleAdmin,
+			name:        "happy path, update to admin from member",
+			orgMemberID: om.ID,
+			role:        enums.RoleAdmin,
 		},
 		{
-			name: "happy path, update to member from admin",
-			role: enums.RoleMember,
+			name:        "happy path, update to member from admin",
+			orgMemberID: om.ID,
+			role:        enums.RoleMember,
 		},
 		{
-			name: "update to same role",
-			role: enums.RoleMember,
+			name:        "update to same role",
+			orgMemberID: om.ID,
+			role:        enums.RoleMember,
 		},
 		{
-			name:   "invalid role",
-			role:   enums.RoleInvalid,
-			errMsg: "not a valid OrgMembershipRole",
+			name:        "update self from admin to member, not allowed",
+			orgMemberID: testUser1OrgMember,
+			role:        enums.RoleMember,
+			errMsg:      notAuthorizedErrorMsg,
+		},
+		{
+			name:        "invalid role",
+			orgMemberID: om.ID,
+			role:        enums.RoleInvalid,
+			errMsg:      "not a valid OrgMembershipRole",
 		},
 	}
 
@@ -260,7 +293,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
 				Role: &tc.role,
 			}
 
-			resp, err := suite.client.api.UpdateUserRoleInOrg(testUser1.UserCtx, om.ID, input)
+			resp, err := suite.client.api.UpdateUserRoleInOrg(testUser1.UserCtx, tc.orgMemberID, input)
 
 			if tc.errMsg != "" {
 				require.Error(t, err)
@@ -303,6 +336,28 @@ func (suite *GraphTestSuite) TestMutationDeleteOrgMembers() {
 	})
 
 	require.NoError(t, err)
+
+	// cant remove self from org and owners cannot be removed
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
+		OrganizationID: &testUser1.OrganizationID,
+	})
+	require.NoError(t, err)
+
+	for _, edge := range orgMembers.OrgMemberships.Edges {
+		// cannot delete self
+		if edge.Node.UserID == adminUser.ID {
+			_, err := suite.client.api.RemoveUserFromOrg(adminUser.UserCtx, edge.Node.ID)
+			require.Error(t, err)
+
+		}
+
+		// organization owner cannot be deleted
+		if edge.Node.UserID == testUser1.ID {
+			_, err = suite.client.api.RemoveUserFromOrg(adminUser.UserCtx, edge.Node.ID)
+			require.Error(t, err)
+			break
+		}
+	}
 }
 
 func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, userID, orgID string, isEqual bool) {
