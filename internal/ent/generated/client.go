@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -190,6 +191,8 @@ type Client struct {
 	Note *NoteClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
 	NoteHistory *NoteHistoryClient
+	// Onboarding is the client for interacting with the Onboarding builders.
+	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
 	OrgMembership *OrgMembershipClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
@@ -315,6 +318,7 @@ func (c *Client) init() {
 	c.NarrativeHistory = NewNarrativeHistoryClient(c.config)
 	c.Note = NewNoteClient(c.config)
 	c.NoteHistory = NewNoteHistoryClient(c.config)
+	c.Onboarding = NewOnboardingClient(c.config)
 	c.OrgMembership = NewOrgMembershipClient(c.config)
 	c.OrgMembershipHistory = NewOrgMembershipHistoryClient(c.config)
 	c.OrgSubscription = NewOrgSubscriptionClient(c.config)
@@ -556,6 +560,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		NarrativeHistory:           NewNarrativeHistoryClient(cfg),
 		Note:                       NewNoteClient(cfg),
 		NoteHistory:                NewNoteHistoryClient(cfg),
+		Onboarding:                 NewOnboardingClient(cfg),
 		OrgMembership:              NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:       NewOrgMembershipHistoryClient(cfg),
 		OrgSubscription:            NewOrgSubscriptionClient(cfg),
@@ -647,6 +652,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		NarrativeHistory:           NewNarrativeHistoryClient(cfg),
 		Note:                       NewNoteClient(cfg),
 		NoteHistory:                NewNoteHistoryClient(cfg),
+		Onboarding:                 NewOnboardingClient(cfg),
 		OrgMembership:              NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:       NewOrgMembershipHistoryClient(cfg),
 		OrgSubscription:            NewOrgSubscriptionClient(cfg),
@@ -717,15 +723,16 @@ func (c *Client) Use(hooks ...Hook) {
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.OrgMembership,
-		c.OrgMembershipHistory, c.OrgSubscription, c.OrgSubscriptionHistory,
-		c.Organization, c.OrganizationHistory, c.OrganizationSetting,
-		c.OrganizationSettingHistory, c.PasswordResetToken, c.PersonalAccessToken,
-		c.Procedure, c.ProcedureHistory, c.Program, c.ProgramHistory,
-		c.ProgramMembership, c.ProgramMembershipHistory, c.Risk, c.RiskHistory,
-		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding,
+		c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
+		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
+		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
+		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
+		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
+		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -743,15 +750,16 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.OrgMembership,
-		c.OrgMembershipHistory, c.OrgSubscription, c.OrgSubscriptionHistory,
-		c.Organization, c.OrganizationHistory, c.OrganizationSetting,
-		c.OrganizationSettingHistory, c.PasswordResetToken, c.PersonalAccessToken,
-		c.Procedure, c.ProcedureHistory, c.Program, c.ProgramHistory,
-		c.ProgramMembership, c.ProgramMembershipHistory, c.Risk, c.RiskHistory,
-		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding,
+		c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
+		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
+		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
+		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
+		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
+		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -910,6 +918,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Note.mutate(ctx, m)
 	case *NoteHistoryMutation:
 		return c.NoteHistory.mutate(ctx, m)
+	case *OnboardingMutation:
+		return c.Onboarding.mutate(ctx, m)
 	case *OrgMembershipMutation:
 		return c.OrgMembership.mutate(ctx, m)
 	case *OrgMembershipHistoryMutation:
@@ -8922,6 +8932,160 @@ func (c *NoteHistoryClient) mutate(ctx context.Context, m *NoteHistoryMutation) 
 	}
 }
 
+// OnboardingClient is a client for the Onboarding schema.
+type OnboardingClient struct {
+	config
+}
+
+// NewOnboardingClient returns a client for the Onboarding from the given config.
+func NewOnboardingClient(c config) *OnboardingClient {
+	return &OnboardingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `onboarding.Hooks(f(g(h())))`.
+func (c *OnboardingClient) Use(hooks ...Hook) {
+	c.hooks.Onboarding = append(c.hooks.Onboarding, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `onboarding.Intercept(f(g(h())))`.
+func (c *OnboardingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Onboarding = append(c.inters.Onboarding, interceptors...)
+}
+
+// Create returns a builder for creating a Onboarding entity.
+func (c *OnboardingClient) Create() *OnboardingCreate {
+	mutation := newOnboardingMutation(c.config, OpCreate)
+	return &OnboardingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Onboarding entities.
+func (c *OnboardingClient) CreateBulk(builders ...*OnboardingCreate) *OnboardingCreateBulk {
+	return &OnboardingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OnboardingClient) MapCreateBulk(slice any, setFunc func(*OnboardingCreate, int)) *OnboardingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OnboardingCreateBulk{err: fmt.Errorf("calling to OnboardingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OnboardingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OnboardingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Onboarding.
+func (c *OnboardingClient) Update() *OnboardingUpdate {
+	mutation := newOnboardingMutation(c.config, OpUpdate)
+	return &OnboardingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OnboardingClient) UpdateOne(o *Onboarding) *OnboardingUpdateOne {
+	mutation := newOnboardingMutation(c.config, OpUpdateOne, withOnboarding(o))
+	return &OnboardingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OnboardingClient) UpdateOneID(id string) *OnboardingUpdateOne {
+	mutation := newOnboardingMutation(c.config, OpUpdateOne, withOnboardingID(id))
+	return &OnboardingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Onboarding.
+func (c *OnboardingClient) Delete() *OnboardingDelete {
+	mutation := newOnboardingMutation(c.config, OpDelete)
+	return &OnboardingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OnboardingClient) DeleteOne(o *Onboarding) *OnboardingDeleteOne {
+	return c.DeleteOneID(o.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OnboardingClient) DeleteOneID(id string) *OnboardingDeleteOne {
+	builder := c.Delete().Where(onboarding.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OnboardingDeleteOne{builder}
+}
+
+// Query returns a query builder for Onboarding.
+func (c *OnboardingClient) Query() *OnboardingQuery {
+	return &OnboardingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOnboarding},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Onboarding entity by its id.
+func (c *OnboardingClient) Get(ctx context.Context, id string) (*Onboarding, error) {
+	return c.Query().Where(onboarding.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OnboardingClient) GetX(ctx context.Context, id string) *Onboarding {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOrganization queries the organization edge of a Onboarding.
+func (c *OnboardingClient) QueryOrganization(o *Onboarding) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(onboarding.Table, onboarding.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, onboarding.OrganizationTable, onboarding.OrganizationColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Onboarding
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OnboardingClient) Hooks() []Hook {
+	hooks := c.hooks.Onboarding
+	return append(hooks[:len(hooks):len(hooks)], onboarding.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OnboardingClient) Interceptors() []Interceptor {
+	inters := c.inters.Onboarding
+	return append(inters[:len(inters):len(inters)], onboarding.Interceptors[:]...)
+}
+
+func (c *OnboardingClient) mutate(ctx context.Context, m *OnboardingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OnboardingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OnboardingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OnboardingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OnboardingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Onboarding mutation op: %q", m.Op())
+	}
+}
+
 // OrgMembershipClient is a client for the OrgMembership schema.
 type OrgMembershipClient struct {
 	config
@@ -16069,14 +16233,14 @@ type (
 		FileHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
 		GroupSetting, GroupSettingHistory, Hush, HushHistory, Integration,
 		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, Narrative,
-		NarrativeHistory, Note, NoteHistory, OrgMembership, OrgMembershipHistory,
-		OrgSubscription, OrgSubscriptionHistory, Organization, OrganizationHistory,
-		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
-		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
-		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn []ent.Hook
+		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
+		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
+		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
+		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subscriber,
+		TFASetting, Task, TaskHistory, Template, TemplateHistory, User, UserHistory,
+		UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -16086,14 +16250,14 @@ type (
 		FileHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
 		GroupSetting, GroupSettingHistory, Hush, HushHistory, Integration,
 		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, Narrative,
-		NarrativeHistory, Note, NoteHistory, OrgMembership, OrgMembershipHistory,
-		OrgSubscription, OrgSubscriptionHistory, Organization, OrganizationHistory,
-		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
-		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
-		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn []ent.Interceptor
+		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
+		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
+		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
+		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subscriber,
+		TFASetting, Task, TaskHistory, Template, TemplateHistory, User, UserHistory,
+		UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

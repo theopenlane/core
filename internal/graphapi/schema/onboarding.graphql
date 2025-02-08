@@ -1,0 +1,21 @@
+extend type Mutation{
+    """
+    Create a new onboarding
+    """
+    createOnboarding(
+        """
+        values of the onboarding
+        """
+        input: CreateOnboardingInput!
+    ): OnboardingCreatePayload!
+}
+
+"""
+Return response for createOnboarding mutation
+"""
+type OnboardingCreatePayload {
+    """
+    Created onboarding
+    """
+    onboarding: Onboarding!
+}

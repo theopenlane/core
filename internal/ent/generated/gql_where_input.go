@@ -45,6 +45,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -34920,6 +34921,380 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 		return predicates[0], nil
 	default:
 		return notehistory.And(predicates...), nil
+	}
+}
+
+// OnboardingWhereInput represents a where input for filtering Onboarding queries.
+type OnboardingWhereInput struct {
+	Predicates []predicate.Onboarding  `json:"-"`
+	Not        *OnboardingWhereInput   `json:"not,omitempty"`
+	Or         []*OnboardingWhereInput `json:"or,omitempty"`
+	And        []*OnboardingWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "deleted_at" field predicates.
+	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
+	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGT     *time.Time  `json:"deletedAtGT,omitempty"`
+	DeletedAtGTE    *time.Time  `json:"deletedAtGTE,omitempty"`
+	DeletedAtLT     *time.Time  `json:"deletedAtLT,omitempty"`
+	DeletedAtLTE    *time.Time  `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil bool        `json:"deletedAtNotNil,omitempty"`
+
+	// "deleted_by" field predicates.
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNEQ          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGT           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGTE          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLT           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLTE          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        bool     `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "organization_id" field predicates.
+	OrganizationID             *string  `json:"organizationID,omitempty"`
+	OrganizationIDNEQ          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
+	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
+	OrganizationIDGT           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIDGTE          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIDLT           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIDLTE          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
+	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
+	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
+	OrganizationIDIsNil        bool     `json:"organizationIDIsNil,omitempty"`
+	OrganizationIDNotNil       bool     `json:"organizationIDNotNil,omitempty"`
+	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
+	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+
+	// "company_name" field predicates.
+	CompanyName             *string  `json:"companyName,omitempty"`
+	CompanyNameNEQ          *string  `json:"companyNameNEQ,omitempty"`
+	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
+	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
+	CompanyNameGT           *string  `json:"companyNameGT,omitempty"`
+	CompanyNameGTE          *string  `json:"companyNameGTE,omitempty"`
+	CompanyNameLT           *string  `json:"companyNameLT,omitempty"`
+	CompanyNameLTE          *string  `json:"companyNameLTE,omitempty"`
+	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
+	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
+	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
+	CompanyNameEqualFold    *string  `json:"companyNameEqualFold,omitempty"`
+	CompanyNameContainsFold *string  `json:"companyNameContainsFold,omitempty"`
+
+	// "organization" edge predicates.
+	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
+	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *OnboardingWhereInput) AddPredicates(predicates ...predicate.Onboarding) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the OnboardingWhereInput filter on the OnboardingQuery builder.
+func (i *OnboardingWhereInput) Filter(q *OnboardingQuery) (*OnboardingQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyOnboardingWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyOnboardingWhereInput is returned in case the OnboardingWhereInput is empty.
+var ErrEmptyOnboardingWhereInput = errors.New("generated: empty predicate OnboardingWhereInput")
+
+// P returns a predicate for filtering onboardings.
+// An error is returned if the input is empty or invalid.
+func (i *OnboardingWhereInput) P() (predicate.Onboarding, error) {
+	var predicates []predicate.Onboarding
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, onboarding.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Onboarding, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, onboarding.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Onboarding, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, onboarding.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, onboarding.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, onboarding.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, onboarding.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, onboarding.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, onboarding.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, onboarding.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, onboarding.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, onboarding.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, onboarding.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, onboarding.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.DeletedAt != nil {
+		predicates = append(predicates, onboarding.DeletedAtEQ(*i.DeletedAt))
+	}
+	if i.DeletedAtNEQ != nil {
+		predicates = append(predicates, onboarding.DeletedAtNEQ(*i.DeletedAtNEQ))
+	}
+	if len(i.DeletedAtIn) > 0 {
+		predicates = append(predicates, onboarding.DeletedAtIn(i.DeletedAtIn...))
+	}
+	if len(i.DeletedAtNotIn) > 0 {
+		predicates = append(predicates, onboarding.DeletedAtNotIn(i.DeletedAtNotIn...))
+	}
+	if i.DeletedAtGT != nil {
+		predicates = append(predicates, onboarding.DeletedAtGT(*i.DeletedAtGT))
+	}
+	if i.DeletedAtGTE != nil {
+		predicates = append(predicates, onboarding.DeletedAtGTE(*i.DeletedAtGTE))
+	}
+	if i.DeletedAtLT != nil {
+		predicates = append(predicates, onboarding.DeletedAtLT(*i.DeletedAtLT))
+	}
+	if i.DeletedAtLTE != nil {
+		predicates = append(predicates, onboarding.DeletedAtLTE(*i.DeletedAtLTE))
+	}
+	if i.DeletedAtIsNil {
+		predicates = append(predicates, onboarding.DeletedAtIsNil())
+	}
+	if i.DeletedAtNotNil {
+		predicates = append(predicates, onboarding.DeletedAtNotNil())
+	}
+	if i.DeletedBy != nil {
+		predicates = append(predicates, onboarding.DeletedByEQ(*i.DeletedBy))
+	}
+	if i.DeletedByNEQ != nil {
+		predicates = append(predicates, onboarding.DeletedByNEQ(*i.DeletedByNEQ))
+	}
+	if len(i.DeletedByIn) > 0 {
+		predicates = append(predicates, onboarding.DeletedByIn(i.DeletedByIn...))
+	}
+	if len(i.DeletedByNotIn) > 0 {
+		predicates = append(predicates, onboarding.DeletedByNotIn(i.DeletedByNotIn...))
+	}
+	if i.DeletedByGT != nil {
+		predicates = append(predicates, onboarding.DeletedByGT(*i.DeletedByGT))
+	}
+	if i.DeletedByGTE != nil {
+		predicates = append(predicates, onboarding.DeletedByGTE(*i.DeletedByGTE))
+	}
+	if i.DeletedByLT != nil {
+		predicates = append(predicates, onboarding.DeletedByLT(*i.DeletedByLT))
+	}
+	if i.DeletedByLTE != nil {
+		predicates = append(predicates, onboarding.DeletedByLTE(*i.DeletedByLTE))
+	}
+	if i.DeletedByContains != nil {
+		predicates = append(predicates, onboarding.DeletedByContains(*i.DeletedByContains))
+	}
+	if i.DeletedByHasPrefix != nil {
+		predicates = append(predicates, onboarding.DeletedByHasPrefix(*i.DeletedByHasPrefix))
+	}
+	if i.DeletedByHasSuffix != nil {
+		predicates = append(predicates, onboarding.DeletedByHasSuffix(*i.DeletedByHasSuffix))
+	}
+	if i.DeletedByIsNil {
+		predicates = append(predicates, onboarding.DeletedByIsNil())
+	}
+	if i.DeletedByNotNil {
+		predicates = append(predicates, onboarding.DeletedByNotNil())
+	}
+	if i.DeletedByEqualFold != nil {
+		predicates = append(predicates, onboarding.DeletedByEqualFold(*i.DeletedByEqualFold))
+	}
+	if i.DeletedByContainsFold != nil {
+		predicates = append(predicates, onboarding.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OrganizationID != nil {
+		predicates = append(predicates, onboarding.OrganizationIDEQ(*i.OrganizationID))
+	}
+	if i.OrganizationIDNEQ != nil {
+		predicates = append(predicates, onboarding.OrganizationIDNEQ(*i.OrganizationIDNEQ))
+	}
+	if len(i.OrganizationIDIn) > 0 {
+		predicates = append(predicates, onboarding.OrganizationIDIn(i.OrganizationIDIn...))
+	}
+	if len(i.OrganizationIDNotIn) > 0 {
+		predicates = append(predicates, onboarding.OrganizationIDNotIn(i.OrganizationIDNotIn...))
+	}
+	if i.OrganizationIDGT != nil {
+		predicates = append(predicates, onboarding.OrganizationIDGT(*i.OrganizationIDGT))
+	}
+	if i.OrganizationIDGTE != nil {
+		predicates = append(predicates, onboarding.OrganizationIDGTE(*i.OrganizationIDGTE))
+	}
+	if i.OrganizationIDLT != nil {
+		predicates = append(predicates, onboarding.OrganizationIDLT(*i.OrganizationIDLT))
+	}
+	if i.OrganizationIDLTE != nil {
+		predicates = append(predicates, onboarding.OrganizationIDLTE(*i.OrganizationIDLTE))
+	}
+	if i.OrganizationIDContains != nil {
+		predicates = append(predicates, onboarding.OrganizationIDContains(*i.OrganizationIDContains))
+	}
+	if i.OrganizationIDHasPrefix != nil {
+		predicates = append(predicates, onboarding.OrganizationIDHasPrefix(*i.OrganizationIDHasPrefix))
+	}
+	if i.OrganizationIDHasSuffix != nil {
+		predicates = append(predicates, onboarding.OrganizationIDHasSuffix(*i.OrganizationIDHasSuffix))
+	}
+	if i.OrganizationIDIsNil {
+		predicates = append(predicates, onboarding.OrganizationIDIsNil())
+	}
+	if i.OrganizationIDNotNil {
+		predicates = append(predicates, onboarding.OrganizationIDNotNil())
+	}
+	if i.OrganizationIDEqualFold != nil {
+		predicates = append(predicates, onboarding.OrganizationIDEqualFold(*i.OrganizationIDEqualFold))
+	}
+	if i.OrganizationIDContainsFold != nil {
+		predicates = append(predicates, onboarding.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
+	}
+	if i.CompanyName != nil {
+		predicates = append(predicates, onboarding.CompanyNameEQ(*i.CompanyName))
+	}
+	if i.CompanyNameNEQ != nil {
+		predicates = append(predicates, onboarding.CompanyNameNEQ(*i.CompanyNameNEQ))
+	}
+	if len(i.CompanyNameIn) > 0 {
+		predicates = append(predicates, onboarding.CompanyNameIn(i.CompanyNameIn...))
+	}
+	if len(i.CompanyNameNotIn) > 0 {
+		predicates = append(predicates, onboarding.CompanyNameNotIn(i.CompanyNameNotIn...))
+	}
+	if i.CompanyNameGT != nil {
+		predicates = append(predicates, onboarding.CompanyNameGT(*i.CompanyNameGT))
+	}
+	if i.CompanyNameGTE != nil {
+		predicates = append(predicates, onboarding.CompanyNameGTE(*i.CompanyNameGTE))
+	}
+	if i.CompanyNameLT != nil {
+		predicates = append(predicates, onboarding.CompanyNameLT(*i.CompanyNameLT))
+	}
+	if i.CompanyNameLTE != nil {
+		predicates = append(predicates, onboarding.CompanyNameLTE(*i.CompanyNameLTE))
+	}
+	if i.CompanyNameContains != nil {
+		predicates = append(predicates, onboarding.CompanyNameContains(*i.CompanyNameContains))
+	}
+	if i.CompanyNameHasPrefix != nil {
+		predicates = append(predicates, onboarding.CompanyNameHasPrefix(*i.CompanyNameHasPrefix))
+	}
+	if i.CompanyNameHasSuffix != nil {
+		predicates = append(predicates, onboarding.CompanyNameHasSuffix(*i.CompanyNameHasSuffix))
+	}
+	if i.CompanyNameEqualFold != nil {
+		predicates = append(predicates, onboarding.CompanyNameEqualFold(*i.CompanyNameEqualFold))
+	}
+	if i.CompanyNameContainsFold != nil {
+		predicates = append(predicates, onboarding.CompanyNameContainsFold(*i.CompanyNameContainsFold))
+	}
+
+	if i.HasOrganization != nil {
+		p := onboarding.HasOrganization()
+		if !*i.HasOrganization {
+			p = onboarding.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrganizationWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		for _, w := range i.HasOrganizationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrganizationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, onboarding.HasOrganizationWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyOnboardingWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return onboarding.And(predicates...), nil
 	}
 }
 

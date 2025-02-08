@@ -100,7 +100,6 @@ func newForeignKeyError(action, objecttype string) *ForeignKeyError {
 }
 
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
-// TODO: cleanup return error messages
 func parseRequestError(err error, a action) error {
 	// log the error for debugging
 	log.Error().

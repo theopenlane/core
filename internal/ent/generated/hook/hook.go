@@ -477,6 +477,18 @@ func (f NoteHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.NoteHistoryMutation", m)
 }
 
+// The OnboardingFunc type is an adapter to allow the use of ordinary
+// function as Onboarding mutator.
+type OnboardingFunc func(context.Context, *generated.OnboardingMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OnboardingFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.OnboardingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OnboardingMutation", m)
+}
+
 // The OrgMembershipFunc type is an adapter to allow the use of ordinary
 // function as OrgMembership mutator.
 type OrgMembershipFunc func(context.Context, *generated.OrgMembershipMutation) (generated.Value, error)

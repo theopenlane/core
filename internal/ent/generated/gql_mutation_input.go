@@ -4164,6 +4164,42 @@ func (c *NoteUpdateOne) SetInput(i UpdateNoteInput) *NoteUpdateOne {
 	return c
 }
 
+// CreateOnboardingInput represents a mutation input for creating onboardings.
+type CreateOnboardingInput struct {
+	CompanyName    string
+	Domains        []string
+	CompanyDetails map[string]interface{}
+	UserDetails    map[string]interface{}
+	Compliance     map[string]interface{}
+	OrganizationID *string
+}
+
+// Mutate applies the CreateOnboardingInput on the OnboardingMutation builder.
+func (i *CreateOnboardingInput) Mutate(m *OnboardingMutation) {
+	m.SetCompanyName(i.CompanyName)
+	if v := i.Domains; v != nil {
+		m.SetDomains(v)
+	}
+	if v := i.CompanyDetails; v != nil {
+		m.SetCompanyDetails(v)
+	}
+	if v := i.UserDetails; v != nil {
+		m.SetUserDetails(v)
+	}
+	if v := i.Compliance; v != nil {
+		m.SetCompliance(v)
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateOnboardingInput on the OnboardingCreate builder.
+func (c *OnboardingCreate) SetInput(i CreateOnboardingInput) *OnboardingCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateOrgMembershipInput represents a mutation input for creating orgmemberships.
 type CreateOrgMembershipInput struct {
 	Role           *enums.Role

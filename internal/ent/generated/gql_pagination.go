@@ -52,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -10239,6 +10240,255 @@ func (nh *NoteHistory) ToEdge(order *NoteHistoryOrder) *NoteHistoryEdge {
 	return &NoteHistoryEdge{
 		Node:   nh,
 		Cursor: order.Field.toCursor(nh),
+	}
+}
+
+// OnboardingEdge is the edge representation of Onboarding.
+type OnboardingEdge struct {
+	Node   *Onboarding `json:"node"`
+	Cursor Cursor      `json:"cursor"`
+}
+
+// OnboardingConnection is the connection containing edges to Onboarding.
+type OnboardingConnection struct {
+	Edges      []*OnboardingEdge `json:"edges"`
+	PageInfo   PageInfo          `json:"pageInfo"`
+	TotalCount int               `json:"totalCount"`
+}
+
+func (c *OnboardingConnection) build(nodes []*Onboarding, pager *onboardingPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Onboarding
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Onboarding {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Onboarding {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*OnboardingEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &OnboardingEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// OnboardingPaginateOption enables pagination customization.
+type OnboardingPaginateOption func(*onboardingPager) error
+
+// WithOnboardingOrder configures pagination ordering.
+func WithOnboardingOrder(order *OnboardingOrder) OnboardingPaginateOption {
+	if order == nil {
+		order = DefaultOnboardingOrder
+	}
+	o := *order
+	return func(pager *onboardingPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultOnboardingOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithOnboardingFilter configures pagination filter.
+func WithOnboardingFilter(filter func(*OnboardingQuery) (*OnboardingQuery, error)) OnboardingPaginateOption {
+	return func(pager *onboardingPager) error {
+		if filter == nil {
+			return errors.New("OnboardingQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type onboardingPager struct {
+	reverse bool
+	order   *OnboardingOrder
+	filter  func(*OnboardingQuery) (*OnboardingQuery, error)
+}
+
+func newOnboardingPager(opts []OnboardingPaginateOption, reverse bool) (*onboardingPager, error) {
+	pager := &onboardingPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultOnboardingOrder
+	}
+	return pager, nil
+}
+
+func (p *onboardingPager) applyFilter(query *OnboardingQuery) (*OnboardingQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *onboardingPager) toCursor(o *Onboarding) Cursor {
+	return p.order.Field.toCursor(o)
+}
+
+func (p *onboardingPager) applyCursors(query *OnboardingQuery, after, before *Cursor) (*OnboardingQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultOnboardingOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *onboardingPager) applyOrder(query *OnboardingQuery) *OnboardingQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultOnboardingOrder.Field {
+		query = query.Order(DefaultOnboardingOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *onboardingPager) orderExpr(query *OnboardingQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultOnboardingOrder.Field {
+			b.Comma().Ident(DefaultOnboardingOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Onboarding.
+func (o *OnboardingQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...OnboardingPaginateOption,
+) (*OnboardingConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newOnboardingPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if o, err = pager.applyFilter(o); err != nil {
+		return nil, err
+	}
+	conn := &OnboardingConnection{Edges: []*OnboardingEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := o.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if o, err = pager.applyCursors(o, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		o.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := o.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	o = pager.applyOrder(o)
+	nodes, err := o.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// OnboardingOrderField defines the ordering field of Onboarding.
+type OnboardingOrderField struct {
+	// Value extracts the ordering value from the given Onboarding.
+	Value    func(*Onboarding) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) onboarding.OrderOption
+	toCursor func(*Onboarding) Cursor
+}
+
+// OnboardingOrder defines the ordering of Onboarding.
+type OnboardingOrder struct {
+	Direction OrderDirection        `json:"direction"`
+	Field     *OnboardingOrderField `json:"field"`
+}
+
+// DefaultOnboardingOrder is the default ordering of Onboarding.
+var DefaultOnboardingOrder = &OnboardingOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &OnboardingOrderField{
+		Value: func(o *Onboarding) (ent.Value, error) {
+			return o.ID, nil
+		},
+		column: onboarding.FieldID,
+		toTerm: onboarding.ByID,
+		toCursor: func(o *Onboarding) Cursor {
+			return Cursor{ID: o.ID}
+		},
+	},
+}
+
+// ToEdge converts Onboarding into OnboardingEdge.
+func (o *Onboarding) ToEdge(order *OnboardingOrder) *OnboardingEdge {
+	if order == nil {
+		order = DefaultOnboardingOrder
+	}
+	return &OnboardingEdge{
+		Node:   o,
+		Cursor: order.Field.toCursor(o),
 	}
 }
 
