@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -274,6 +275,11 @@ var notehistoryImplementors = []string{"NoteHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*NoteHistory) IsNode() {}
+
+var onboardingImplementors = []string{"Onboarding", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Onboarding) IsNode() {}
 
 var orgmembershipImplementors = []string{"OrgMembership", "Node"}
 
@@ -826,6 +832,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(notehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case onboarding.Table:
+		query := c.Onboarding.Query().
+			Where(onboarding.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, onboardingImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1778,6 +1793,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.NoteHistory.Query().
 			Where(notehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, notehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case onboarding.Table:
+		query := c.Onboarding.Query().
+			Where(onboarding.IDIn(ids...))
+		query, err := query.CollectFields(ctx, onboardingImplementors...)
 		if err != nil {
 			return nil, err
 		}

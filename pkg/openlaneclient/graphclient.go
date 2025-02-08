@@ -185,6 +185,7 @@ type OpenlaneGraphClient interface {
 	GetNarrativeHistories(ctx context.Context, where *NarrativeHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetNarrativeHistories, error)
 	GetAllNoteHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllNoteHistories, error)
 	GetNoteHistories(ctx context.Context, where *NoteHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetNoteHistories, error)
+	CreateOnboarding(ctx context.Context, input CreateOnboardingInput, interceptors ...clientv2.RequestInterceptor) (*CreateOnboarding, error)
 	CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOrganization, error)
 	CreateBulkOrganization(ctx context.Context, input []*CreateOrganizationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOrganization, error)
 	CreateOrganization(ctx context.Context, input CreateOrganizationInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateOrganization, error)
@@ -25707,6 +25708,70 @@ func (t *GetNoteHistories_NoteHistories) GetEdges() []*GetNoteHistories_NoteHist
 		t = &GetNoteHistories_NoteHistories{}
 	}
 	return t.Edges
+}
+
+type CreateOnboarding_CreateOnboarding_Onboarding struct {
+	CompanyDetails map[string]any "json:\"companyDetails,omitempty\" graphql:\"companyDetails\""
+	CompanyName    string         "json:\"companyName\" graphql:\"companyName\""
+	Compliance     map[string]any "json:\"compliance,omitempty\" graphql:\"compliance\""
+	Domains        []string       "json:\"domains,omitempty\" graphql:\"domains\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	OrganizationID *string        "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	UserDetails    map[string]any "json:\"userDetails,omitempty\" graphql:\"userDetails\""
+}
+
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetCompanyDetails() map[string]any {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.CompanyDetails
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetCompanyName() string {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.CompanyName
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetCompliance() map[string]any {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.Compliance
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetDomains() []string {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.Domains
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetID() string {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.ID
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetOrganizationID() *string {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.OrganizationID
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetUserDetails() map[string]any {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.UserDetails
+}
+
+type CreateOnboarding_CreateOnboarding struct {
+	Onboarding CreateOnboarding_CreateOnboarding_Onboarding "json:\"onboarding\" graphql:\"onboarding\""
+}
+
+func (t *CreateOnboarding_CreateOnboarding) GetOnboarding() *CreateOnboarding_CreateOnboarding_Onboarding {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding{}
+	}
+	return &t.Onboarding
 }
 
 type CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations struct {
@@ -51575,6 +51640,17 @@ func (t *GetNoteHistories) GetNoteHistories() *GetNoteHistories_NoteHistories {
 	return &t.NoteHistories
 }
 
+type CreateOnboarding struct {
+	CreateOnboarding CreateOnboarding_CreateOnboarding "json:\"createOnboarding\" graphql:\"createOnboarding\""
+}
+
+func (t *CreateOnboarding) GetCreateOnboarding() *CreateOnboarding_CreateOnboarding {
+	if t == nil {
+		t = &CreateOnboarding{}
+	}
+	return &t.CreateOnboarding
+}
+
 type CreateBulkCSVOrganization struct {
 	CreateBulkCSVOrganization CreateBulkCSVOrganization_CreateBulkCSVOrganization "json:\"createBulkCSVOrganization\" graphql:\"createBulkCSVOrganization\""
 }
@@ -60866,6 +60942,38 @@ func (c *Client) GetNoteHistories(ctx context.Context, where *NoteHistoryWhereIn
 	return &res, nil
 }
 
+const CreateOnboardingDocument = `mutation CreateOnboarding ($input: CreateOnboardingInput!) {
+	createOnboarding(input: $input) {
+		onboarding {
+			companyDetails
+			companyName
+			domains
+			compliance
+			id
+			organizationID
+			userDetails
+		}
+	}
+}
+`
+
+func (c *Client) CreateOnboarding(ctx context.Context, input CreateOnboardingInput, interceptors ...clientv2.RequestInterceptor) (*CreateOnboarding, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateOnboarding
+	if err := c.Client.Post(ctx, "CreateOnboarding", CreateOnboardingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVOrganizationDocument = `mutation CreateBulkCSVOrganization ($input: Upload!) {
 	createBulkCSVOrganization(input: $input) {
 		organizations {
@@ -68028,6 +68136,7 @@ var DocumentOperationNames = map[string]string{
 	GetNarrativeHistoriesDocument:              "GetNarrativeHistories",
 	GetAllNoteHistoriesDocument:                "GetAllNoteHistories",
 	GetNoteHistoriesDocument:                   "GetNoteHistories",
+	CreateOnboardingDocument:                   "CreateOnboarding",
 	CreateBulkCSVOrganizationDocument:          "CreateBulkCSVOrganization",
 	CreateBulkOrganizationDocument:             "CreateBulkOrganization",
 	CreateOrganizationDocument:                 "CreateOrganization",

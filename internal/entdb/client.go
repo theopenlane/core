@@ -205,7 +205,7 @@ func (c *client) runAtlasMigrations(ctx context.Context) error {
 	// Run the automatic migration tool to create all schema resources.
 	// entcache.Driver will skip the caching layer when running the schema migration
 	if err := c.pc.Schema.Create(entcache.Skip(ctx),
-		enablePostgresOption(c.pc.DB())); err != nil {
+		EnablePostgresOption(c.pc.DB())); err != nil {
 		log.Error().Err(err).Msg("failed creating schema resources")
 
 		return err
@@ -226,9 +226,9 @@ func EnablePostgresExtensions(db *sql.DB) error {
 	return nil
 }
 
-// enablePostgresOption returns a schema.MigrateOption
+// EnablePostgresOption returns a schema.MigrateOption
 // that will enable the Postgres extension if needed for running atlas migrations
-func enablePostgresOption(db *sql.DB) schema.MigrateOption {
+func EnablePostgresOption(db *sql.DB) schema.MigrateOption {
 	return schema.WithHooks(func(next schema.Creator) schema.Creator {
 		return schema.CreateFunc(func(ctx context.Context, tables ...*schema.Table) error {
 			if err := EnablePostgresExtensions(db); err != nil {

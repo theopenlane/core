@@ -1047,6 +1047,30 @@ func (f NoteHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.NoteHistoryMutation", m)
 }
 
+// The OnboardingQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OnboardingQueryRuleFunc func(context.Context, *generated.OnboardingQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OnboardingQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OnboardingQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OnboardingQuery", q)
+}
+
+// The OnboardingMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OnboardingMutationRuleFunc func(context.Context, *generated.OnboardingMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OnboardingMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OnboardingMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OnboardingMutation", m)
+}
+
 // The OrgMembershipQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OrgMembershipQueryRuleFunc func(context.Context, *generated.OrgMembershipQuery) error
@@ -1952,6 +1976,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.NoteHistoryQuery:
 		return q.Filter(), nil
+	case *generated.OnboardingQuery:
+		return q.Filter(), nil
 	case *generated.OrgMembershipQuery:
 		return q.Filter(), nil
 	case *generated.OrgMembershipHistoryQuery:
@@ -2102,6 +2128,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.NoteMutation:
 		return m.Filter(), nil
 	case *generated.NoteHistoryMutation:
+		return m.Filter(), nil
+	case *generated.OnboardingMutation:
 		return m.Filter(), nil
 	case *generated.OrgMembershipMutation:
 		return m.Filter(), nil

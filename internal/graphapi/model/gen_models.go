@@ -623,6 +623,12 @@ type NarrativeUpdatePayload struct {
 	Narrative *generated.Narrative `json:"narrative"`
 }
 
+// Return response for createOnboarding mutation
+type OnboardingCreatePayload struct {
+	// Created onboarding
+	Onboarding *generated.Onboarding `json:"onboarding"`
+}
+
 // OrgMembersInput is used to create members for a organization
 // along with the org creation
 type OrgMembersInput struct {

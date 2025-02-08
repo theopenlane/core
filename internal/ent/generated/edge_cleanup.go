@@ -293,6 +293,12 @@ func NoteHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func OnboardingEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup onboarding edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembership edge")), entfga.DeleteTuplesFirstKey{})
 

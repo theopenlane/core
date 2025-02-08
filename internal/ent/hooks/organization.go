@@ -209,7 +209,7 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 
 // createEntityTypes creates the default entity types for a new org
 func createEntityTypes(ctx context.Context, orgID string, m *generated.OrganizationMutation) error {
-	if len(m.EntConfig.EntityTypes) == 0 {
+	if m.EntConfig == nil || len(m.EntConfig.EntityTypes) == 0 {
 		return nil
 	}
 

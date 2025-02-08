@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -7382,6 +7383,123 @@ func newNoteHistoryPaginateArgs(rv map[string]any) *notehistoryPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*NoteHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithNoteHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (o *OnboardingQuery) CollectFields(ctx context.Context, satisfies ...string) (*OnboardingQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return o, nil
+	}
+	if err := o.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return o, nil
+}
+
+func (o *OnboardingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(onboarding.Columns))
+		selectedFields = []string{onboarding.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "organization":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			o.withOrganization = query
+			if _, ok := fieldSeen[onboarding.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldOrganizationID)
+				fieldSeen[onboarding.FieldOrganizationID] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[onboarding.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldDeletedAt)
+				fieldSeen[onboarding.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[onboarding.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldDeletedBy)
+				fieldSeen[onboarding.FieldDeletedBy] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[onboarding.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldOrganizationID)
+				fieldSeen[onboarding.FieldOrganizationID] = struct{}{}
+			}
+		case "companyName":
+			if _, ok := fieldSeen[onboarding.FieldCompanyName]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldCompanyName)
+				fieldSeen[onboarding.FieldCompanyName] = struct{}{}
+			}
+		case "domains":
+			if _, ok := fieldSeen[onboarding.FieldDomains]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldDomains)
+				fieldSeen[onboarding.FieldDomains] = struct{}{}
+			}
+		case "companyDetails":
+			if _, ok := fieldSeen[onboarding.FieldCompanyDetails]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldCompanyDetails)
+				fieldSeen[onboarding.FieldCompanyDetails] = struct{}{}
+			}
+		case "userDetails":
+			if _, ok := fieldSeen[onboarding.FieldUserDetails]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldUserDetails)
+				fieldSeen[onboarding.FieldUserDetails] = struct{}{}
+			}
+		case "compliance":
+			if _, ok := fieldSeen[onboarding.FieldCompliance]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldCompliance)
+				fieldSeen[onboarding.FieldCompliance] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		o.Select(selectedFields...)
+	}
+	return nil
+}
+
+type onboardingPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []OnboardingPaginateOption
+}
+
+func newOnboardingPaginateArgs(rv map[string]any) *onboardingPaginateArgs {
+	args := &onboardingPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*OnboardingWhereInput); ok {
+		args.opts = append(args.opts, WithOnboardingFilter(v.Filter))
 	}
 	return args
 }

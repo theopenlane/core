@@ -90,6 +90,8 @@ type Tx struct {
 	Note *NoteClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
 	NoteHistory *NoteHistoryClient
+	// Onboarding is the client for interacting with the Onboarding builders.
+	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
 	OrgMembership *OrgMembershipClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
@@ -326,6 +328,7 @@ func (tx *Tx) init() {
 	tx.NarrativeHistory = NewNarrativeHistoryClient(tx.config)
 	tx.Note = NewNoteClient(tx.config)
 	tx.NoteHistory = NewNoteHistoryClient(tx.config)
+	tx.Onboarding = NewOnboardingClient(tx.config)
 	tx.OrgMembership = NewOrgMembershipClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
 	tx.OrgSubscription = NewOrgSubscriptionClient(tx.config)

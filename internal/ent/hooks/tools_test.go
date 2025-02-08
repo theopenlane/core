@@ -1,0 +1,114 @@
+package hooks_test
+
+import (
+	"context"
+	"database/sql"
+	"testing"
+	"time"
+
+	"entgo.io/ent/dialect"
+	"github.com/brianvoe/gofakeit/v7"
+	"github.com/rs/zerolog"
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/enttest"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/entdb"
+	coreutils "github.com/theopenlane/core/pkg/testutils"
+	fgatest "github.com/theopenlane/iam/fgax/testutils"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/utils/testutils"
+)
+
+const (
+	fgaModelFile = "../../../fga/model/model.fga"
+)
+
+// TestHookSuite runs all the tests in the TestHookSuite
+func TestHookTestSuite(t *testing.T) {
+	suite.Run(t, new(HookTestSuite))
+}
+
+// HookTestSuite handles the setup and teardown between tests
+type HookTestSuite struct {
+	suite.Suite
+	client *generated.Client
+	tf     *testutils.TestFixture
+	ofgaTF *fgatest.OpenFGATestFixture
+}
+
+// SetupSuite runs before the test suite
+func (suite *HookTestSuite) SetupSuite() {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+
+	if testing.Verbose() {
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	}
+
+	suite.client = suite.setupClient()
+}
+
+// TearDownSuite runs after the test suite
+func (suite *HookTestSuite) TearDownSuite() {
+	t := suite.T()
+
+	// close the database connection
+	err := suite.client.Close()
+	require.NoError(t, err)
+
+	// close the database container
+	testutils.TeardownFixture(suite.tf)
+}
+
+// setupClient sets up the client for the test suite
+// using enttest
+func (suite *HookTestSuite) setupClient() *generated.Client {
+	t := suite.T()
+
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
+	ctx := context.Background()
+
+	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
+	require.NoError(t, err)
+
+	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	sm := coreutils.CreateSessionManager()
+	rc := coreutils.NewRedisClient()
+
+	sessionConfig := sessions.NewSessionConfig(
+		sm,
+		sessions.WithPersistence(rc),
+	)
+
+	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
+
+	opts := []generated.Option{
+		generated.Authz(*fgaClient),
+		generated.TokenManager(tm),
+		generated.SessionConfig(&sessionConfig),
+	}
+
+	suite.tf = entdb.NewTestFixture()
+
+	db, err := sql.Open("postgres", suite.tf.URI)
+	require.NoError(t, err)
+
+	defer db.Close()
+
+	client := enttest.Open(t, dialect.Postgres, suite.tf.URI,
+		enttest.WithMigrateOptions(entdb.EnablePostgresOption(db)),
+		enttest.WithOptions(opts...))
+
+	return client
+}
+
+func (suite *HookTestSuite) seedUser() *generated.User {
+	t := suite.T()
+
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	user, err := suite.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
+	require.NoError(t, err)
+
+	return user
+}

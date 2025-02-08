@@ -1604,6 +1604,14 @@ func (n *Note) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
+func (o *Onboarding) Organization(ctx context.Context) (*Organization, error) {
+	result, err := o.Edges.OrganizationOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryOrganization().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (om *OrgMembership) Organization(ctx context.Context) (*Organization, error) {
 	result, err := om.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {

@@ -51,6 +51,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -183,6 +184,7 @@ func checkColumn(table, column string) error {
 			narrativehistory.Table:           narrativehistory.ValidColumn,
 			note.Table:                       note.ValidColumn,
 			notehistory.Table:                notehistory.ValidColumn,
+			onboarding.Table:                 onboarding.ValidColumn,
 			orgmembership.Table:              orgmembership.ValidColumn,
 			orgmembershiphistory.Table:       orgmembershiphistory.ValidColumn,
 			orgsubscription.Table:            orgsubscription.ValidColumn,

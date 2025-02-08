@@ -49,6 +49,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	Hidden func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
 }
 
 type ComplexityRoot struct {
@@ -1661,6 +1662,7 @@ type ComplexityRoot struct {
 		CreateInternalPolicy             func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                     func(childComplexity int, input generated.CreateInviteInput) int
 		CreateNarrative                  func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateOnboarding                 func(childComplexity int, input generated.CreateOnboardingInput) int
 		CreateOrgMembership              func(childComplexity int, input generated.CreateOrgMembershipInput) int
 		CreateOrganization               func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
 		CreateOrganizationSetting        func(childComplexity int, input generated.CreateOrganizationSettingInput) int
@@ -1889,6 +1891,23 @@ type ComplexityRoot struct {
 	NoteHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	Onboarding struct {
+		CompanyDetails func(childComplexity int) int
+		CompanyName    func(childComplexity int) int
+		Compliance     func(childComplexity int) int
+		DeletedAt      func(childComplexity int) int
+		DeletedBy      func(childComplexity int) int
+		Domains        func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Organization   func(childComplexity int) int
+		OrganizationID func(childComplexity int) int
+		UserDetails    func(childComplexity int) int
+	}
+
+	OnboardingCreatePayload struct {
+		Onboarding func(childComplexity int) int
 	}
 
 	OrgMembership struct {
@@ -11246,6 +11265,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateNarrative(childComplexity, args["input"].(generated.CreateNarrativeInput)), true
 
+	case "Mutation.createOnboarding":
+		if e.complexity.Mutation.CreateOnboarding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createOnboarding_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateOnboarding(childComplexity, args["input"].(generated.CreateOnboardingInput)), true
+
 	case "Mutation.createOrgMembership":
 		if e.complexity.Mutation.CreateOrgMembership == nil {
 			break
@@ -12909,6 +12940,83 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NoteHistoryEdge.Node(childComplexity), true
+
+	case "Onboarding.companyDetails":
+		if e.complexity.Onboarding.CompanyDetails == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.CompanyDetails(childComplexity), true
+
+	case "Onboarding.companyName":
+		if e.complexity.Onboarding.CompanyName == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.CompanyName(childComplexity), true
+
+	case "Onboarding.compliance":
+		if e.complexity.Onboarding.Compliance == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.Compliance(childComplexity), true
+
+	case "Onboarding.deletedAt":
+		if e.complexity.Onboarding.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.DeletedAt(childComplexity), true
+
+	case "Onboarding.deletedBy":
+		if e.complexity.Onboarding.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.DeletedBy(childComplexity), true
+
+	case "Onboarding.domains":
+		if e.complexity.Onboarding.Domains == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.Domains(childComplexity), true
+
+	case "Onboarding.id":
+		if e.complexity.Onboarding.ID == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.ID(childComplexity), true
+
+	case "Onboarding.organization":
+		if e.complexity.Onboarding.Organization == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.Organization(childComplexity), true
+
+	case "Onboarding.organizationID":
+		if e.complexity.Onboarding.OrganizationID == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.OrganizationID(childComplexity), true
+
+	case "Onboarding.userDetails":
+		if e.complexity.Onboarding.UserDetails == nil {
+			break
+		}
+
+		return e.complexity.Onboarding.UserDetails(childComplexity), true
+
+	case "OnboardingCreatePayload.onboarding":
+		if e.complexity.OnboardingCreatePayload.Onboarding == nil {
+			break
+		}
+
+		return e.complexity.OnboardingCreatePayload.Onboarding(childComplexity), true
 
 	case "OrgMembership.createdAt":
 		if e.complexity.OrgMembership.CreatedAt == nil {
@@ -21601,6 +21709,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateMemberWithProgramInput,
 		ec.unmarshalInputCreateNarrativeInput,
 		ec.unmarshalInputCreateNoteInput,
+		ec.unmarshalInputCreateOnboardingInput,
 		ec.unmarshalInputCreateOrgMembershipInput,
 		ec.unmarshalInputCreateOrganizationInput,
 		ec.unmarshalInputCreateOrganizationSettingInput,
@@ -21658,6 +21767,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputNarrativeWhereInput,
 		ec.unmarshalInputNoteHistoryWhereInput,
 		ec.unmarshalInputNoteWhereInput,
+		ec.unmarshalInputOnboardingWhereInput,
 		ec.unmarshalInputOrgMembersInput,
 		ec.unmarshalInputOrgMembershipHistoryWhereInput,
 		ec.unmarshalInputOrgMembershipWhereInput,
@@ -22685,6 +22795,8 @@ type ControlObjectiveBulkCreatePayload {
     """
     controlObjectives: [ControlObjective!]
 }`, BuiltIn: false},
+	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+`, BuiltIn: false},
 	{Name: "../schema/documentdata.graphql", Input: `extend type Query {
     """
     Look up documentData by ID
@@ -27244,6 +27356,33 @@ input CreateNoteInput {
   entityID: ID
   subcontrolIDs: [ID!]
   programIDs: [ID!]
+}
+"""
+CreateOnboardingInput is used for create Onboarding object.
+Input was generated by ent.
+"""
+input CreateOnboardingInput {
+  """
+  name of the company
+  """
+  companyName: String!
+  """
+  domains associated with the company
+  """
+  domains: [String!]
+  """
+  details given about the company during the onboarding process, including things such as company size, sector, etc
+  """
+  companyDetails: Map
+  """
+  details given about the user during the onboarding process, including things such as name, job title, department, etc
+  """
+  userDetails: Map
+  """
+  details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
+  """
+  compliance: Map
+  organizationID: ID
 }
 """
 CreateOrgMembershipInput is used for create OrgMembership object.
@@ -36971,6 +37110,125 @@ input NoteWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+}
+type Onboarding implements Node {
+  id: ID!
+  deletedAt: Time
+  deletedBy: String
+  organizationID: ID
+  """
+  name of the company
+  """
+  companyName: String!
+  """
+  domains associated with the company
+  """
+  domains: [String!]
+  """
+  details given about the company during the onboarding process, including things such as company size, sector, etc
+  """
+  companyDetails: Map
+  """
+  details given about the user during the onboarding process, including things such as name, job title, department, etc
+  """
+  userDetails: Map
+  """
+  details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
+  """
+  compliance: Map
+  organization: Organization
+}
+"""
+OnboardingWhereInput is used for filtering Onboarding objects.
+Input was generated by ent.
+"""
+input OnboardingWhereInput {
+  not: OnboardingWhereInput
+  and: [OnboardingWhereInput!]
+  or: [OnboardingWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: ID
+  organizationIDNEQ: ID
+  organizationIDIn: [ID!]
+  organizationIDNotIn: [ID!]
+  organizationIDGT: ID
+  organizationIDGTE: ID
+  organizationIDLT: ID
+  organizationIDLTE: ID
+  organizationIDContains: ID
+  organizationIDHasPrefix: ID
+  organizationIDHasSuffix: ID
+  organizationIDIsNil: Boolean
+  organizationIDNotNil: Boolean
+  organizationIDEqualFold: ID
+  organizationIDContainsFold: ID
+  """
+  company_name field predicates
+  """
+  companyName: String
+  companyNameNEQ: String
+  companyNameIn: [String!]
+  companyNameNotIn: [String!]
+  companyNameGT: String
+  companyNameGTE: String
+  companyNameLT: String
+  companyNameLTE: String
+  companyNameContains: String
+  companyNameHasPrefix: String
+  companyNameHasSuffix: String
+  companyNameEqualFold: String
+  companyNameContainsFold: String
+  """
+  organization edge predicates
+  """
+  hasOrganization: Boolean
+  hasOrganizationWith: [OrganizationWhereInput!]
 }
 """
 Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.
@@ -53815,6 +54073,27 @@ type NarrativeBulkCreatePayload {
     Created narratives
     """
     narratives: [Narrative!]
+}`, BuiltIn: false},
+	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
+    """
+    Create a new onboarding
+    """
+    createOnboarding(
+        """
+        values of the onboarding
+        """
+        input: CreateOnboardingInput!
+    ): OnboardingCreatePayload!
+}
+
+"""
+Return response for createOnboarding mutation
+"""
+type OnboardingCreatePayload {
+    """
+    Created onboarding
+    """
+    onboarding: Onboarding!
 }`, BuiltIn: false},
 	{Name: "../schema/organization.graphql", Input: `extend type Query {
     """

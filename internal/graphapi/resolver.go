@@ -51,6 +51,7 @@ type Resolver struct {
 	pool              *soiree.PondPool
 	extensionsEnabled bool
 	uploader          *objects.Objects
+	isDevelopment     bool
 }
 
 // NewResolver returns a resolver configured with the given ent client
@@ -67,6 +68,14 @@ func (r Resolver) WithExtensions(enabled bool) *Resolver {
 	return &r
 }
 
+// WithDevelopment sets the resolver to development mode
+// when isDevelopment is false, introspection will be disabled
+func (r Resolver) WithDevelopment(dev bool) *Resolver {
+	r.isDevelopment = dev
+
+	return &r
+}
+
 // Handler is an http handler wrapping a Resolver
 type Handler struct {
 	r              *Resolver
@@ -78,9 +87,7 @@ type Handler struct {
 // Handler returns an http handler for a graph resolver
 func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv := handler.New(gqlgenerated.NewExecutableSchema(
-		gqlgenerated.Config{
-			Resolvers: r,
-		},
+		gqlgenerated.Config{Resolvers: r},
 	))
 
 	srv.AddTransport(transport.Websocket{
@@ -101,7 +108,11 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
 
-	srv.Use(extension.Introspection{})
+	// only enable introspection in development mode
+	if r.isDevelopment {
+		srv.Use(extension.Introspection{})
+	}
+
 	srv.Use(extension.AutomaticPersistedQuery{
 		Cache: lru.New[string](100), //nolint:mnd
 	})

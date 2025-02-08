@@ -1,0 +1,1 @@
+directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION

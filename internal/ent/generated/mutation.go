@@ -51,6 +51,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -138,6 +139,7 @@ const (
 	TypeNarrativeHistory           = "NarrativeHistory"
 	TypeNote                       = "Note"
 	TypeNoteHistory                = "NoteHistory"
+	TypeOnboarding                 = "Onboarding"
 	TypeOrgMembership              = "OrgMembership"
 	TypeOrgMembershipHistory       = "OrgMembershipHistory"
 	TypeOrgSubscription            = "OrgSubscription"
@@ -63909,6 +63911,923 @@ func (m *NoteHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *NoteHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown NoteHistory edge %s", name)
+}
+
+// OnboardingMutation represents an operation that mutates the Onboarding nodes in the graph.
+type OnboardingMutation struct {
+	config
+	op                  Op
+	typ                 string
+	id                  *string
+	deleted_at          *time.Time
+	deleted_by          *string
+	company_name        *string
+	domains             *[]string
+	appenddomains       []string
+	company_details     *map[string]interface{}
+	user_details        *map[string]interface{}
+	compliance          *map[string]interface{}
+	clearedFields       map[string]struct{}
+	organization        *string
+	clearedorganization bool
+	done                bool
+	oldValue            func(context.Context) (*Onboarding, error)
+	predicates          []predicate.Onboarding
+}
+
+var _ ent.Mutation = (*OnboardingMutation)(nil)
+
+// onboardingOption allows management of the mutation configuration using functional options.
+type onboardingOption func(*OnboardingMutation)
+
+// newOnboardingMutation creates new mutation for the Onboarding entity.
+func newOnboardingMutation(c config, op Op, opts ...onboardingOption) *OnboardingMutation {
+	m := &OnboardingMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeOnboarding,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withOnboardingID sets the ID field of the mutation.
+func withOnboardingID(id string) onboardingOption {
+	return func(m *OnboardingMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Onboarding
+		)
+		m.oldValue = func(ctx context.Context) (*Onboarding, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Onboarding.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withOnboarding sets the old Onboarding of the mutation.
+func withOnboarding(node *Onboarding) onboardingOption {
+	return func(m *OnboardingMutation) {
+		m.oldValue = func(context.Context) (*Onboarding, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m OnboardingMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m OnboardingMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Onboarding entities.
+func (m *OnboardingMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *OnboardingMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *OnboardingMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Onboarding.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *OnboardingMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *OnboardingMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *OnboardingMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[onboarding.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *OnboardingMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *OnboardingMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, onboarding.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *OnboardingMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *OnboardingMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *OnboardingMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[onboarding.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *OnboardingMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *OnboardingMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, onboarding.FieldDeletedBy)
+}
+
+// SetOrganizationID sets the "organization_id" field.
+func (m *OnboardingMutation) SetOrganizationID(s string) {
+	m.organization = &s
+}
+
+// OrganizationID returns the value of the "organization_id" field in the mutation.
+func (m *OnboardingMutation) OrganizationID() (r string, exists bool) {
+	v := m.organization
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrganizationID returns the old "organization_id" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldOrganizationID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrganizationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrganizationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrganizationID: %w", err)
+	}
+	return oldValue.OrganizationID, nil
+}
+
+// ClearOrganizationID clears the value of the "organization_id" field.
+func (m *OnboardingMutation) ClearOrganizationID() {
+	m.organization = nil
+	m.clearedFields[onboarding.FieldOrganizationID] = struct{}{}
+}
+
+// OrganizationIDCleared returns if the "organization_id" field was cleared in this mutation.
+func (m *OnboardingMutation) OrganizationIDCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldOrganizationID]
+	return ok
+}
+
+// ResetOrganizationID resets all changes to the "organization_id" field.
+func (m *OnboardingMutation) ResetOrganizationID() {
+	m.organization = nil
+	delete(m.clearedFields, onboarding.FieldOrganizationID)
+}
+
+// SetCompanyName sets the "company_name" field.
+func (m *OnboardingMutation) SetCompanyName(s string) {
+	m.company_name = &s
+}
+
+// CompanyName returns the value of the "company_name" field in the mutation.
+func (m *OnboardingMutation) CompanyName() (r string, exists bool) {
+	v := m.company_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompanyName returns the old "company_name" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldCompanyName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompanyName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompanyName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompanyName: %w", err)
+	}
+	return oldValue.CompanyName, nil
+}
+
+// ResetCompanyName resets all changes to the "company_name" field.
+func (m *OnboardingMutation) ResetCompanyName() {
+	m.company_name = nil
+}
+
+// SetDomains sets the "domains" field.
+func (m *OnboardingMutation) SetDomains(s []string) {
+	m.domains = &s
+	m.appenddomains = nil
+}
+
+// Domains returns the value of the "domains" field in the mutation.
+func (m *OnboardingMutation) Domains() (r []string, exists bool) {
+	v := m.domains
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDomains returns the old "domains" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldDomains(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDomains is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDomains requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDomains: %w", err)
+	}
+	return oldValue.Domains, nil
+}
+
+// AppendDomains adds s to the "domains" field.
+func (m *OnboardingMutation) AppendDomains(s []string) {
+	m.appenddomains = append(m.appenddomains, s...)
+}
+
+// AppendedDomains returns the list of values that were appended to the "domains" field in this mutation.
+func (m *OnboardingMutation) AppendedDomains() ([]string, bool) {
+	if len(m.appenddomains) == 0 {
+		return nil, false
+	}
+	return m.appenddomains, true
+}
+
+// ClearDomains clears the value of the "domains" field.
+func (m *OnboardingMutation) ClearDomains() {
+	m.domains = nil
+	m.appenddomains = nil
+	m.clearedFields[onboarding.FieldDomains] = struct{}{}
+}
+
+// DomainsCleared returns if the "domains" field was cleared in this mutation.
+func (m *OnboardingMutation) DomainsCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldDomains]
+	return ok
+}
+
+// ResetDomains resets all changes to the "domains" field.
+func (m *OnboardingMutation) ResetDomains() {
+	m.domains = nil
+	m.appenddomains = nil
+	delete(m.clearedFields, onboarding.FieldDomains)
+}
+
+// SetCompanyDetails sets the "company_details" field.
+func (m *OnboardingMutation) SetCompanyDetails(value map[string]interface{}) {
+	m.company_details = &value
+}
+
+// CompanyDetails returns the value of the "company_details" field in the mutation.
+func (m *OnboardingMutation) CompanyDetails() (r map[string]interface{}, exists bool) {
+	v := m.company_details
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompanyDetails returns the old "company_details" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldCompanyDetails(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompanyDetails is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompanyDetails requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompanyDetails: %w", err)
+	}
+	return oldValue.CompanyDetails, nil
+}
+
+// ClearCompanyDetails clears the value of the "company_details" field.
+func (m *OnboardingMutation) ClearCompanyDetails() {
+	m.company_details = nil
+	m.clearedFields[onboarding.FieldCompanyDetails] = struct{}{}
+}
+
+// CompanyDetailsCleared returns if the "company_details" field was cleared in this mutation.
+func (m *OnboardingMutation) CompanyDetailsCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldCompanyDetails]
+	return ok
+}
+
+// ResetCompanyDetails resets all changes to the "company_details" field.
+func (m *OnboardingMutation) ResetCompanyDetails() {
+	m.company_details = nil
+	delete(m.clearedFields, onboarding.FieldCompanyDetails)
+}
+
+// SetUserDetails sets the "user_details" field.
+func (m *OnboardingMutation) SetUserDetails(value map[string]interface{}) {
+	m.user_details = &value
+}
+
+// UserDetails returns the value of the "user_details" field in the mutation.
+func (m *OnboardingMutation) UserDetails() (r map[string]interface{}, exists bool) {
+	v := m.user_details
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserDetails returns the old "user_details" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldUserDetails(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserDetails is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserDetails requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserDetails: %w", err)
+	}
+	return oldValue.UserDetails, nil
+}
+
+// ClearUserDetails clears the value of the "user_details" field.
+func (m *OnboardingMutation) ClearUserDetails() {
+	m.user_details = nil
+	m.clearedFields[onboarding.FieldUserDetails] = struct{}{}
+}
+
+// UserDetailsCleared returns if the "user_details" field was cleared in this mutation.
+func (m *OnboardingMutation) UserDetailsCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldUserDetails]
+	return ok
+}
+
+// ResetUserDetails resets all changes to the "user_details" field.
+func (m *OnboardingMutation) ResetUserDetails() {
+	m.user_details = nil
+	delete(m.clearedFields, onboarding.FieldUserDetails)
+}
+
+// SetCompliance sets the "compliance" field.
+func (m *OnboardingMutation) SetCompliance(value map[string]interface{}) {
+	m.compliance = &value
+}
+
+// Compliance returns the value of the "compliance" field in the mutation.
+func (m *OnboardingMutation) Compliance() (r map[string]interface{}, exists bool) {
+	v := m.compliance
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompliance returns the old "compliance" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldCompliance(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompliance is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompliance requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompliance: %w", err)
+	}
+	return oldValue.Compliance, nil
+}
+
+// ClearCompliance clears the value of the "compliance" field.
+func (m *OnboardingMutation) ClearCompliance() {
+	m.compliance = nil
+	m.clearedFields[onboarding.FieldCompliance] = struct{}{}
+}
+
+// ComplianceCleared returns if the "compliance" field was cleared in this mutation.
+func (m *OnboardingMutation) ComplianceCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldCompliance]
+	return ok
+}
+
+// ResetCompliance resets all changes to the "compliance" field.
+func (m *OnboardingMutation) ResetCompliance() {
+	m.compliance = nil
+	delete(m.clearedFields, onboarding.FieldCompliance)
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (m *OnboardingMutation) ClearOrganization() {
+	m.clearedorganization = true
+	m.clearedFields[onboarding.FieldOrganizationID] = struct{}{}
+}
+
+// OrganizationCleared reports if the "organization" edge to the Organization entity was cleared.
+func (m *OnboardingMutation) OrganizationCleared() bool {
+	return m.OrganizationIDCleared() || m.clearedorganization
+}
+
+// OrganizationIDs returns the "organization" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OrganizationID instead. It exists only for internal usage by the builders.
+func (m *OnboardingMutation) OrganizationIDs() (ids []string) {
+	if id := m.organization; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOrganization resets all changes to the "organization" edge.
+func (m *OnboardingMutation) ResetOrganization() {
+	m.organization = nil
+	m.clearedorganization = false
+}
+
+// Where appends a list predicates to the OnboardingMutation builder.
+func (m *OnboardingMutation) Where(ps ...predicate.Onboarding) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the OnboardingMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *OnboardingMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Onboarding, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *OnboardingMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *OnboardingMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Onboarding).
+func (m *OnboardingMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *OnboardingMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.deleted_at != nil {
+		fields = append(fields, onboarding.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, onboarding.FieldDeletedBy)
+	}
+	if m.organization != nil {
+		fields = append(fields, onboarding.FieldOrganizationID)
+	}
+	if m.company_name != nil {
+		fields = append(fields, onboarding.FieldCompanyName)
+	}
+	if m.domains != nil {
+		fields = append(fields, onboarding.FieldDomains)
+	}
+	if m.company_details != nil {
+		fields = append(fields, onboarding.FieldCompanyDetails)
+	}
+	if m.user_details != nil {
+		fields = append(fields, onboarding.FieldUserDetails)
+	}
+	if m.compliance != nil {
+		fields = append(fields, onboarding.FieldCompliance)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *OnboardingMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case onboarding.FieldDeletedAt:
+		return m.DeletedAt()
+	case onboarding.FieldDeletedBy:
+		return m.DeletedBy()
+	case onboarding.FieldOrganizationID:
+		return m.OrganizationID()
+	case onboarding.FieldCompanyName:
+		return m.CompanyName()
+	case onboarding.FieldDomains:
+		return m.Domains()
+	case onboarding.FieldCompanyDetails:
+		return m.CompanyDetails()
+	case onboarding.FieldUserDetails:
+		return m.UserDetails()
+	case onboarding.FieldCompliance:
+		return m.Compliance()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *OnboardingMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case onboarding.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case onboarding.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case onboarding.FieldOrganizationID:
+		return m.OldOrganizationID(ctx)
+	case onboarding.FieldCompanyName:
+		return m.OldCompanyName(ctx)
+	case onboarding.FieldDomains:
+		return m.OldDomains(ctx)
+	case onboarding.FieldCompanyDetails:
+		return m.OldCompanyDetails(ctx)
+	case onboarding.FieldUserDetails:
+		return m.OldUserDetails(ctx)
+	case onboarding.FieldCompliance:
+		return m.OldCompliance(ctx)
+	}
+	return nil, fmt.Errorf("unknown Onboarding field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *OnboardingMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case onboarding.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case onboarding.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case onboarding.FieldOrganizationID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrganizationID(v)
+		return nil
+	case onboarding.FieldCompanyName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompanyName(v)
+		return nil
+	case onboarding.FieldDomains:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDomains(v)
+		return nil
+	case onboarding.FieldCompanyDetails:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompanyDetails(v)
+		return nil
+	case onboarding.FieldUserDetails:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserDetails(v)
+		return nil
+	case onboarding.FieldCompliance:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompliance(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Onboarding field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *OnboardingMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *OnboardingMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *OnboardingMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Onboarding numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *OnboardingMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(onboarding.FieldDeletedAt) {
+		fields = append(fields, onboarding.FieldDeletedAt)
+	}
+	if m.FieldCleared(onboarding.FieldDeletedBy) {
+		fields = append(fields, onboarding.FieldDeletedBy)
+	}
+	if m.FieldCleared(onboarding.FieldOrganizationID) {
+		fields = append(fields, onboarding.FieldOrganizationID)
+	}
+	if m.FieldCleared(onboarding.FieldDomains) {
+		fields = append(fields, onboarding.FieldDomains)
+	}
+	if m.FieldCleared(onboarding.FieldCompanyDetails) {
+		fields = append(fields, onboarding.FieldCompanyDetails)
+	}
+	if m.FieldCleared(onboarding.FieldUserDetails) {
+		fields = append(fields, onboarding.FieldUserDetails)
+	}
+	if m.FieldCleared(onboarding.FieldCompliance) {
+		fields = append(fields, onboarding.FieldCompliance)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *OnboardingMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *OnboardingMutation) ClearField(name string) error {
+	switch name {
+	case onboarding.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case onboarding.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case onboarding.FieldOrganizationID:
+		m.ClearOrganizationID()
+		return nil
+	case onboarding.FieldDomains:
+		m.ClearDomains()
+		return nil
+	case onboarding.FieldCompanyDetails:
+		m.ClearCompanyDetails()
+		return nil
+	case onboarding.FieldUserDetails:
+		m.ClearUserDetails()
+		return nil
+	case onboarding.FieldCompliance:
+		m.ClearCompliance()
+		return nil
+	}
+	return fmt.Errorf("unknown Onboarding nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *OnboardingMutation) ResetField(name string) error {
+	switch name {
+	case onboarding.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case onboarding.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case onboarding.FieldOrganizationID:
+		m.ResetOrganizationID()
+		return nil
+	case onboarding.FieldCompanyName:
+		m.ResetCompanyName()
+		return nil
+	case onboarding.FieldDomains:
+		m.ResetDomains()
+		return nil
+	case onboarding.FieldCompanyDetails:
+		m.ResetCompanyDetails()
+		return nil
+	case onboarding.FieldUserDetails:
+		m.ResetUserDetails()
+		return nil
+	case onboarding.FieldCompliance:
+		m.ResetCompliance()
+		return nil
+	}
+	return fmt.Errorf("unknown Onboarding field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *OnboardingMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.organization != nil {
+		edges = append(edges, onboarding.EdgeOrganization)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *OnboardingMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case onboarding.EdgeOrganization:
+		if id := m.organization; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *OnboardingMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *OnboardingMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *OnboardingMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedorganization {
+		edges = append(edges, onboarding.EdgeOrganization)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *OnboardingMutation) EdgeCleared(name string) bool {
+	switch name {
+	case onboarding.EdgeOrganization:
+		return m.clearedorganization
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *OnboardingMutation) ClearEdge(name string) error {
+	switch name {
+	case onboarding.EdgeOrganization:
+		m.ClearOrganization()
+		return nil
+	}
+	return fmt.Errorf("unknown Onboarding unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *OnboardingMutation) ResetEdge(name string) error {
+	switch name {
+	case onboarding.EdgeOrganization:
+		m.ResetOrganization()
+		return nil
+	}
+	return fmt.Errorf("unknown Onboarding edge %s", name)
 }
 
 // OrgMembershipMutation represents an operation that mutates the OrgMembership nodes in the graph.

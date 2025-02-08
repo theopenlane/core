@@ -45,6 +45,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -1976,6 +1977,36 @@ func init() {
 	notehistoryDescID := notehistoryFields[7].Descriptor()
 	// notehistory.DefaultID holds the default value on creation for the id field.
 	notehistory.DefaultID = notehistoryDescID.Default.(func() string)
+	onboardingMixin := schema.Onboarding{}.Mixin()
+	onboarding.Policy = privacy.NewPolicies(schema.Onboarding{})
+	onboarding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := onboarding.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	onboardingMixinHooks1 := onboardingMixin[1].Hooks()
+	onboardingHooks := schema.Onboarding{}.Hooks()
+
+	onboarding.Hooks[1] = onboardingMixinHooks1[0]
+
+	onboarding.Hooks[2] = onboardingHooks[0]
+	onboardingMixinInters1 := onboardingMixin[1].Interceptors()
+	onboarding.Interceptors[0] = onboardingMixinInters1[0]
+	onboardingMixinFields0 := onboardingMixin[0].Fields()
+	_ = onboardingMixinFields0
+	onboardingFields := schema.Onboarding{}.Fields()
+	_ = onboardingFields
+	// onboardingDescOrganizationID is the schema descriptor for organization_id field.
+	onboardingDescOrganizationID := onboardingFields[0].Descriptor()
+	// onboarding.OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
+	onboarding.OrganizationIDValidator = onboardingDescOrganizationID.Validators[0].(func(string) error)
+	// onboardingDescID is the schema descriptor for id field.
+	onboardingDescID := onboardingMixinFields0[0].Descriptor()
+	// onboarding.DefaultID holds the default value on creation for the id field.
+	onboarding.DefaultID = onboardingDescID.Default.(func() string)
 	orgmembershipMixin := schema.OrgMembership{}.Mixin()
 	orgmembership.Policy = privacy.NewPolicies(schema.OrgMembership{})
 	orgmembership.Hooks[0] = func(next ent.Mutator) ent.Mutator {

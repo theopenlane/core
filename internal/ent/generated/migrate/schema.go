@@ -1497,6 +1497,32 @@ var (
 			},
 		},
 	}
+	// OnboardingsColumns holds the columns for the "onboardings" table.
+	OnboardingsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "company_name", Type: field.TypeString},
+		{Name: "domains", Type: field.TypeJSON, Nullable: true},
+		{Name: "company_details", Type: field.TypeJSON, Nullable: true},
+		{Name: "user_details", Type: field.TypeJSON, Nullable: true},
+		{Name: "compliance", Type: field.TypeJSON, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+	}
+	// OnboardingsTable holds the schema information for the "onboardings" table.
+	OnboardingsTable = &schema.Table{
+		Name:       "onboardings",
+		Columns:    OnboardingsColumns,
+		PrimaryKey: []*schema.Column{OnboardingsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "onboardings_organizations_organization",
+				Columns:    []*schema.Column{OnboardingsColumns[8]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// OrgMembershipsColumns holds the columns for the "org_memberships" table.
 	OrgMembershipsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -5019,6 +5045,7 @@ var (
 		NarrativeHistoryTable,
 		NotesTable,
 		NoteHistoryTable,
+		OnboardingsTable,
 		OrgMembershipsTable,
 		OrgMembershipHistoryTable,
 		OrgSubscriptionsTable,
@@ -5231,6 +5258,7 @@ func init() {
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
+	OnboardingsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
