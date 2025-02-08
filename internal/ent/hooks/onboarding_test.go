@@ -49,7 +49,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 			},
 		},
 		{
-			name: "valid onboarding, Same Name, no details",
+			name: "valid onboarding, same name, no details",
 			input: generated.CreateOnboardingInput{
 				CompanyName: name,
 			},
