@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/utils/keygen"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/utils/keygen"
 )
 
 // HookOnboarding runs on onboarding mutations to create the organization and settings
@@ -73,6 +74,7 @@ func createOrgUniqueName(ctx context.Context, m *generated.OnboardingMutation, i
 	if exists {
 		input.Name = uniqueOrganizationName(input.Name)
 		attempt += 1
+
 		return createOrgUniqueName(ctx, m, input, attempt)
 	}
 
@@ -96,5 +98,5 @@ func uniqueOrganizationName(name string) string {
 	// replace spaces with dashes
 	name = strings.ReplaceAll(name, " ", "-")
 
-	return strings.ToLower(alphaNumericDashRegex.ReplaceAllString(name, "")) + "-" + keygen.AlphaNumeric(6)
+	return strings.ToLower(alphaNumericDashRegex.ReplaceAllString(name, "")) + "-" + keygen.AlphaNumeric(6) //nolint:mnd
 }
