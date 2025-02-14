@@ -76,7 +76,14 @@ func jsonOutput(out any) error {
 func tableOutput(out []openlaneclient.GroupSetting) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "GroupName", "Visibility", "SyncToGithub", "SyncToSlack")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.Group.Name, i.Visibility,
+		groupName := ""
+		if i.Group != nil {
+			groupName = i.Group.Name
+		}
+
+		writer.AddRow(i.ID,
+			groupName,
+			i.Visibility,
 			*i.SyncToGithub,
 			*i.SyncToSlack)
 	}
