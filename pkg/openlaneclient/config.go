@@ -29,15 +29,29 @@ func graphRequestPath(config Config) string {
 
 // NewDefaultConfig returns a new default configuration for the API client
 func NewDefaultConfig() Config {
-	return defaultClientConfig
+	return defaultDevClientConfig
 }
 
-var defaultClientConfig = Config{
+var defaultDevClientConfig = Config{
 	BaseURL: &url.URL{
 		Scheme: "http",
 		Host:   "localhost:17608",
 	},
 	GraphQLPath:     "/query",
 	Interceptors:    []clientv2.RequestInterceptor{},
+	Clientv2Options: clientv2.Options{ParseDataAlongWithErrors: false},
+}
+
+// NewDefaultConfig returns a new default configuration for the API client
+func NewProdDefaultConfig() Config {
+	return defaultProductionClientConfig
+}
+
+var defaultProductionClientConfig = Config{
+	BaseURL: &url.URL{
+		Scheme: "https",
+		Host:   "api.theopenlane.io",
+	},
+	GraphQLPath:     "/query",
 	Clientv2Options: clientv2.Options{ParseDataAlongWithErrors: false},
 }

@@ -1388,12 +1388,17 @@ func init() {
 	}
 	groupsettingMixinHooks0 := groupsettingMixin[0].Hooks()
 	groupsettingMixinHooks2 := groupsettingMixin[2].Hooks()
+	groupsettingHooks := schema.GroupSetting{}.Hooks()
 
 	groupsetting.Hooks[1] = groupsettingMixinHooks0[0]
 
 	groupsetting.Hooks[2] = groupsettingMixinHooks2[0]
+
+	groupsetting.Hooks[3] = groupsettingHooks[0]
 	groupsettingMixinInters2 := groupsettingMixin[2].Interceptors()
+	groupsettingInters := schema.GroupSetting{}.Interceptors()
 	groupsetting.Interceptors[0] = groupsettingMixinInters2[0]
+	groupsetting.Interceptors[1] = groupsettingInters[0]
 	groupsettingMixinFields0 := groupsettingMixin[0].Fields()
 	_ = groupsettingMixinFields0
 	groupsettingMixinFields1 := groupsettingMixin[1].Fields()

@@ -20,6 +20,15 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 	t := suite.T()
 
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	privateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	privateGroupWithSetting, err := suite.client.api.GetGroupByID(testUser1.UserCtx, privateGroup.ID)
+	require.NoError(t, err)
+
+	_, err = suite.client.api.UpdateGroupSetting(testUser1.UserCtx, privateGroupWithSetting.Group.Setting.ID, openlaneclient.UpdateGroupSettingInput{
+		Visibility: &enums.VisibilityPrivate,
+	})
+	require.NoError(t, err)
 
 	testCases := []struct {
 		name     string
@@ -28,6 +37,7 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 		ctx      context.Context
 		errorMsg string
 	}{
+
 		{
 			name:    "happy path group",
 			client:  suite.client.api,
@@ -39,6 +49,19 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 			client:  suite.client.apiWithPAT,
 			ctx:     context.Background(),
 			queryID: group1.ID,
+		},
+		{
+			name:    "happy path private group",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			queryID: privateGroup.ID,
+		},
+		{
+			name:     "private group, no access",
+			client:   suite.client.api,
+			ctx:      viewOnlyUser.UserCtx,
+			queryID:  privateGroup.ID,
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "no access",
@@ -145,6 +168,16 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 	group2 := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	group3 := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
+	privateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	privateGroupWithSetting, err := suite.client.api.GetGroupByID(testUser1.UserCtx, privateGroup.ID)
+	require.NoError(t, err)
+
+	_, err = suite.client.api.UpdateGroupSetting(testUser1.UserCtx, privateGroupWithSetting.Group.Setting.ID, openlaneclient.UpdateGroupSettingInput{
+		Visibility: &enums.VisibilityPrivate,
+	})
+	require.NoError(t, err)
+
 	t.Run("Get Groups", func(t *testing.T) {
 		resp, err := suite.client.api.GetAllGroups(testUser2.UserCtx)
 
@@ -177,12 +210,22 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 		// if group 1 (which belongs to an unauthorized org) is found, fail the test
 		require.False(t, group1Found)
 
+		// check groups available to testuser1
 		resp, err = suite.client.api.GetAllGroups(testUser1.UserCtx)
 
 		require.NoError(t, err)
 		require.NotNil(t, resp)
 
-		// make sure only two groups are returned, group 1 and the seeded group, and the 3 managed groups
+		// make sure only 6 groups are returned, group 1, private group and the seeded group, and the 3 managed groups
+		assert.Equal(t, 6, len(resp.Groups.Edges))
+
+		// check groups available to admin user (private group created by testUser1 should not be returned)
+		resp, err = suite.client.api.GetAllGroups(adminUser.UserCtx)
+
+		require.NoError(t, err)
+		require.NotNil(t, resp)
+
+		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
 		assert.Equal(t, 5, len(resp.Groups.Edges))
 	})
 }
@@ -757,6 +800,66 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 			},
 		},
 		{
+			name: "update visibility",
+			updateInput: openlaneclient.UpdateGroupInput{
+				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
+					Visibility: &enums.VisibilityPrivate,
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
+				ID:          group.ID,
+				Name:        nameUpdate,
+				DisplayName: displayNameUpdate,
+				Description: &descriptionUpdate,
+				LogoURL:     &gravatarURLUpdate,
+				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
+					Visibility: enums.VisibilityPrivate,
+				},
+			},
+		},
+		{
+			name: "update visibility, same setting",
+			updateInput: openlaneclient.UpdateGroupInput{
+				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
+					Visibility: &enums.VisibilityPrivate,
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
+				ID:          group.ID,
+				Name:        nameUpdate,
+				DisplayName: displayNameUpdate,
+				Description: &descriptionUpdate,
+				LogoURL:     &gravatarURLUpdate,
+				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
+					Visibility: enums.VisibilityPrivate,
+				},
+			},
+		},
+		{
+			name: "update visibility, back to public",
+			updateInput: openlaneclient.UpdateGroupInput{
+				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
+					Visibility: &enums.VisibilityPrivate,
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
+				ID:          group.ID,
+				Name:        nameUpdate,
+				DisplayName: displayNameUpdate,
+				Description: &descriptionUpdate,
+				LogoURL:     &gravatarURLUpdate,
+				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
+					Visibility: enums.VisibilityPublic,
+				},
+			},
+		},
+		{
 			name: "update settings, happy path",
 			updateInput: openlaneclient.UpdateGroupInput{
 				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
@@ -823,7 +926,13 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 			}
 
 			if tc.updateInput.UpdateGroupSettings != nil {
-				assert.Equal(t, updatedGroup.GetSetting().JoinPolicy, enums.JoinPolicyOpen)
+				if tc.updateInput.UpdateGroupSettings.JoinPolicy != nil {
+					assert.Equal(t, updatedGroup.GetSetting().JoinPolicy, enums.JoinPolicyOpen)
+				}
+
+				if tc.updateInput.UpdateGroupSettings.Visibility != nil {
+					assert.Equal(t, updatedGroup.GetSetting().Visibility, *tc.updateInput.UpdateGroupSettings.Visibility)
+				}
 			}
 
 			if tc.updateInput.AddProgramViewerIDs != nil || tc.updateInput.AddProcedureEditorIDs != nil || tc.updateInput.AddControlBlockedGroupIDs != nil {
@@ -863,6 +972,15 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group2 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group3 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	privateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	privateGroupWithSetting, err := suite.client.api.GetGroupByID(testUser1.UserCtx, privateGroup.ID)
+	require.NoError(t, err)
+
+	_, err = suite.client.api.UpdateGroupSetting(testUser1.UserCtx, privateGroupWithSetting.Group.Setting.ID, openlaneclient.UpdateGroupSettingInput{
+		Visibility: &enums.VisibilityPrivate,
+	})
+	require.NoError(t, err)
 
 	testCases := []struct {
 		name     string
@@ -876,6 +994,12 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
 			groupID: group1.ID,
+		},
+		{
+			name:    "delete private group, happy path",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			groupID: privateGroup.ID,
 		},
 		{
 			name:    "delete group, happy path using api token",

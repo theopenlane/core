@@ -48,9 +48,19 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 	builders := make([]*generated.GroupCreate, 0, len(defaultGroups))
 
 	for name, desc := range defaultGroups {
+		tags := []string{"managed"}
+
+		switch name {
+		case AdminsGroup:
+			tags = append(tags, "admins")
+		case ViewersGroup:
+			tags = append(tags, "viewers")
+		}
+
 		groupInput := generated.CreateGroupInput{
 			Name:        name,
 			Description: &desc,
+			Tags:        tags,
 		}
 
 		builders = append(builders, m.Client().Group.Create().

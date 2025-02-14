@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -63,6 +65,20 @@ func (GroupSetting) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SettingsChecks("group"),
+	}
+}
+
+// Hooks of the GroupSetting
+func (GroupSetting) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookGroupSettingVisibility(),
+	}
+}
+
+// Interceptors of the GroupSetting
+func (GroupSetting) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorGroupSetting(),
 	}
 }
 

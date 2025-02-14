@@ -37,7 +37,10 @@ type organization
     # main permission sets based on roles
     define can_delete: [service] or owner or can_delete from parent
     define can_edit: [service] or admin or owner or can_edit from parent
-    define can_view: [service] or member or admin or owner or can_edit or can_view from parent
+    # view access of the organization
+    # includes all members, admins, and owners
+    # also allows users to be given time based access to the organization (e.g. support access)
+    define can_view: [service, user with time_based_grant] or member or admin or owner or can_edit or can_view from parent
     # additional fine-grained permissions
     # allow owner and assigned users to view audit logs
     define audit_log_viewer: ([user, service] or owner or audit_log_viewer from parent) and can_view
@@ -85,6 +88,7 @@ type organization
 
     # additional relations
     define user_in_context: [user]
+
 # groups are a subset of an organization that can be used to define more fine-grained access to objects
 # users must be members of the organization to be members of a group
 # groups are all visible to all members of the organization, unless they are blocked
@@ -93,22 +97,36 @@ type organization
 type group
   relations
     # main roles
-    define admin: [user] and member from parent
-    define member: ([user] and member from parent) or admin
-    define parent: [organization]
+    define admin: [user]
+    define member: [user]
+    # parent inheritance
+    define parent: [organization with public_group]
+    # permissions inherited from the organization
+    define parent_viewer: can_view from parent
+    define parent_editor: can_edit from parent
+    define parent_deleter: can_edit from parent
     # main permission sets based on roles
-    define can_delete: [service] or admin or can_edit or can_delete from parent
-    define can_edit: [service] or admin or owner from parent or can_edit from parent
-    define can_view: [service] or member or admin or can_edit or can_view from parent
+    define can_delete: [service] or admin or parent_deleter
+    define can_edit: [service] or admin or parent_editor
+    define can_view: [service] or member or can_edit or parent_editor or parent_viewer
     # additional fine-grained permissions
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+
+
 # files have their permissions defined by the parent object (like a control or a procedure), users with access to the parent object will have access to the file
 type file
   relations
-    define can_view: [user, service] or can_delete or can_edit or can_view from parent
-    define can_edit: [user, service] or can_delete or can_edit from parent
-    define can_delete: [user, service] or can_delete from parent
+    define can_view: [user, service] or parent_viewer
+    define can_edit: [user, service] or parent_editor
+    define can_delete: [user, service] or parent_deleter
+
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+
+    # permissions inherited from the parent
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+
     define parent: [user, program, organization, control, procedure, group, template, document_data, contact, internal_policy, narrative, evidence]
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
@@ -118,16 +136,20 @@ type program
   relations
     # main roles
     define admin: ([user] or owner from parent) and member from parent
-    define member: ([user] or admin or owner from parent) and member from parent
+    define member: [user] and member from parent
     # auditor role will not have access to everything in the program by default
     # but can be assigned access to specific objects
     define auditor: [user]
     # main permission sets based on roles
-    define can_delete: [service] or admin or owner from parent
-    define can_edit: [service] or admin or owner from parent or (editor but not blocked)
-    define can_view: [service] or member or admin or can_edit or owner from parent or ((editor or viewer) but not blocked)
+    define can_delete: [service] or admin or parent_deleter
+    define can_edit: [service] or admin or parent_editor or (editor but not blocked)
+    define can_view: [service] or member or can_edit or parent_viewer or ((editor or viewer) but not blocked)
     # parent relation, only the organization owner will have access to the program by default
     define parent: [organization]
+    # permissions inherited from the parent organization
+    define parent_viewer: owner from parent
+    define parent_editor: owner from parent
+    define parent_deleter: owner from parent
     # additional fine-grained permissions
     # allow a group to be assigned to add edit permissions for a set of users
     define editor: [group#member]
@@ -306,3 +328,19 @@ type evidence
     define viewer: [group#member] or editor
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
+
+## Conditions
+# Public groups access; affects the view access of users in the organization
+condition public_group(public: bool) {
+  public == true
+}
+
+# User IP address is within the CIDR range of the company network
+condition in_company_network(user_ip: ipaddress, cidr: string) {
+  user_ip.in_cidr(cidr)
+}
+
+# Time based access to resources
+  condition time_based_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+     current_time < grant_time + grant_duration
+  }

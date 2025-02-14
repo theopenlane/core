@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -25,6 +26,7 @@ func init() {
 	createCmd.Flags().StringP("display-name", "s", "", "display name of the group")
 	createCmd.Flags().StringP("description", "d", "", "description of the group")
 	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the group")
+	createCmd.Flags().BoolP("private", "p", false, "set group to private")
 }
 
 // createValidation validates the required fields for the command
@@ -47,6 +49,12 @@ func createValidation() (input openlaneclient.CreateGroupInput, err error) {
 	tags := cmd.Config.Strings("tags")
 	if len(tags) > 0 {
 		input.Tags = tags
+	}
+
+	if cmd.Config.Bool("private") {
+		input.CreateGroupSettings = &openlaneclient.CreateGroupSettingInput{
+			Visibility: &enums.VisibilityPrivate,
+		}
 	}
 
 	return input, nil

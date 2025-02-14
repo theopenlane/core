@@ -17,6 +17,10 @@ tuples:
   - user: user:ulid-of-member
     relation: member
     object: organization:openlane
+  # setup another org member
+  - user: user:ulid-of-member-2
+    relation: member
+    object: organization:openlane
   # setup audit log viewer
   - user: user:ulid-of-audit-log-viewer
     relation: member
@@ -54,7 +58,14 @@ tests:
   - name: organization
     description: test organization relationships
     tuples:
-    # add test local tuples here
+      - user: user:support-user
+        relation: can_view
+        object: organization:openlane
+        condition:
+          name: time_based_grant
+          context:
+            grant_time: "2025-02-14T00:00:00Z"
+            grant_duration: 1h
     check:
       - user: user:ulid-of-owner
         object: organization:openlane # parent org
@@ -164,6 +175,34 @@ tests:
           audit_log_viewer: false
           can_invite_members: true
           can_invite_admins: true
+      - user: user:support-user
+        object: organization:openlane
+        context:
+          current_time: "2025-02-14T00:24:00Z" # valid grant
+        assertions:
+          member: false
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: false
+          can_invite_admins: false
+      - user: user:support-user
+        object: organization:openlane
+        context:
+          current_time: "2025-02-14T02:24:02Z" # expired grant
+        assertions:
+          member: false
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: false
+          audit_log_viewer: false
+          can_invite_members: false
+          can_invite_admins: false
     list_objects:
       - user: user:ulid-of-owner
         type: organization
@@ -216,10 +255,26 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:cat-lovers
+        condition:
+          name: public_group
+          context:
+            public: true
+            # setup private group with owner
+      - user: organization:openlane
+        relation: parent
+        object: group:cat-haters
+        condition:
+          name: public_group
+          context:
+            public: false
       # add group admin
       - user: user:ulid-of-owner
         relation: admin
         object: group:cat-lovers
+        # add group admin of private group
+      - user: user:ulid-of-owner
+        relation: admin
+        object: group:cat-haters
       # add group member but not a member of the org
       - user: user:ulid-of-cat-lover-member
         relation: member
@@ -231,33 +286,26 @@ tests:
       - user: user:ulid-of-audit-log-viewer
         relation: audit_log_viewer
         object: group:cat-lovers
-      # add group admin
+      # add group member
       - user: user:ulid-of-member
         relation: member
         object: group:cat-lovers
     check:
       - user: organization:openlane
         object: group:cat-lovers
+        context:
+          relation: can_view
         assertions:
           parent: true
       - user: user:ulid-of-owner
         object: group:cat-lovers
         assertions:
           admin: true
-          member: true
+          member: false
           can_delete: true
           can_edit: true
           can_view: true
           audit_log_viewer: true
-      - user: user:ulid-of-cat-lover-member
-        object: group:cat-lovers
-        assertions:
-          admin: false
-          member: false # not an org member so should be false
-          can_delete: false
-          can_edit: false
-          can_view: false
-          audit_log_viewer: false
       - user: user:ulid-of-member
         object: group:cat-lovers
         assertions:
@@ -276,14 +324,32 @@ tests:
           can_edit: true
           can_view: true
           audit_log_viewer: false
+      # private group check
+      - user: user:ulid-of-member-2
+        object: group:cat-haters
+        assertions:
+          admin: false
+          member: false
+          can_delete: false
+          can_edit: false
+          can_view: false
+          audit_log_viewer: false
+      - user: user:ulid-of-owner
+        object: group:cat-haters
+        assertions:
+          admin: true
+          member: false
+          can_delete: true
+          can_edit: true
+          can_view: true
+          audit_log_viewer: false
     list_objects:
       - user: user:ulid-of-owner
         type: group
         assertions:
           admin:
             - group:cat-lovers
-          member:
-            - group:cat-lovers
+            - group:cat-haters
       - user: user:ulid-of-member
         type: group
         assertions:
@@ -468,6 +534,10 @@ tests:
       - user: organization:group-org
         relation: parent
         object: group:group-1
+        condition:
+          name: public_group
+          context:
+            public: true
     check:
       - user: user:ulid-admin # admin of the task should have all permissions
         object: task:task-1
@@ -515,6 +585,10 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:group-editor
+        condition:
+          name: public_group
+          context:
+            public: true
       - user: user:ulid-group-editor
         relation: member
         object: group:group-editor
@@ -525,6 +599,10 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:group-blocked
+        condition:
+          name: public_group
+          context:
+            public: true
       - user: user:ulid-group-blocked
         relation: member
         object: group:group-blocked
@@ -584,6 +662,10 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:group-editor
+        condition:
+          name: public_group
+          context:
+            public: true
       - user: user:ulid-group-editor
         relation: member
         object: group:group-editor
@@ -594,6 +676,10 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:group-blocked
+        condition:
+          name: public_group
+          context:
+            public: true
       - user: user:ulid-group-blocked
         relation: member
         object: group:group-blocked
@@ -653,6 +739,10 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:group-editor
+        condition:
+          name: public_group
+          context:
+            public: true
       - user: user:ulid-group-editor
         relation: member
         object: group:group-editor
@@ -663,6 +753,10 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:group-blocked
+        condition:
+          name: public_group
+          context:
+            public: true
       - user: user:ulid-group-blocked
         relation: member
         object: group:group-blocked
@@ -733,6 +827,10 @@ tests:
       - user: organization:openlane
         relation: parent
         object: group:editor-1
+        condition:
+          name: public_group
+          context:
+            public: true
       - user: user:group-editor
         relation: member
         object: organization:openlane
