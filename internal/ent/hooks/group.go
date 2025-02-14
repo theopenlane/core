@@ -133,14 +133,17 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 		}
 	}
 
+	// create the relationship tuple for the parent org
 	org, orgExists := m.OwnerID()
 	if !orgExists {
+		// skip if the owner is not set
 		return nil
 	}
 
+	// determine if the group is public
 	publicGroup := true
-	setting, ok := m.SettingID()
 
+	setting, ok := m.SettingID()
 	if ok {
 		// allow before tuples may be created
 		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -200,6 +203,7 @@ func createGroupParentTuple(orgID, groupID string, isPublic bool) (*fgax.TupleKe
 	return &groupTuple, err
 }
 
+// createGroupMember creates a group membership for the authorized user who triggered the group creation
 func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutation) error {
 	managed, _ := m.IsManaged()
 	groupName, _ := m.Name()
@@ -240,6 +244,8 @@ func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutati
 	return nil
 }
 
+// groupDeleteHook deletes all relationship tuples for a group on delete
+// with the exception of the user, those are handled by the cascade delete of the group membership
 func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
 	// Add relationship tuples if authz is enabled
 	objID, ok := m.ID()

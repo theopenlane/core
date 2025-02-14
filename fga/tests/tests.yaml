@@ -259,7 +259,7 @@ tests:
           name: public_group
           context:
             public: true
-            # setup private group with owner
+      # setup private group with owner
       - user: organization:openlane
         relation: parent
         object: group:cat-haters

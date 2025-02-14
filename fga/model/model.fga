@@ -341,6 +341,6 @@ condition in_company_network(user_ip: ipaddress, cidr: string) {
 }
 
 # Time based access to resources
-  condition time_based_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
-     current_time < grant_time + grant_duration
-  }
+condition time_based_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+    current_time < grant_time + grant_duration
+}
