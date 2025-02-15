@@ -58,6 +58,7 @@ func HookOrgMembers() ent.Hook {
 
 			// allow the request, which is for a user other than the authenticated user
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 			user, err := m.Client().User.Get(allowCtx, userID)
 			if err != nil {
 				log.Error().Err(err).Msg("failed to get user")

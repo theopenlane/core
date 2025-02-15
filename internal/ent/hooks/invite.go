@@ -391,6 +391,7 @@ func CheckAllowedEmailDomain(email string, orgSetting *generated.OrganizationSet
 	emailDomain := strings.SplitAfter(email, "@")[1]
 
 	allowed := false
+
 	for _, domain := range orgSetting.AllowedEmailDomains {
 		if domain == emailDomain {
 			allowed = true
