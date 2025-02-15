@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -401,14 +402,28 @@ func (h *Handler) addDefaultOrgToUserQuery(ctx context.Context, user *ent.User) 
 		return err
 	}
 
-	if err := hooks.CheckAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
-		log.Error().Err(err).Msg("user email not allowed in default organization")
+	// add default org to user object
+	user.Edges.Setting.Edges.DefaultOrg = org
+
+	return nil
+}
+
+func (h *Handler) validateAllowedDomains(ctx context.Context, user *ent.User) error {
+	//  allow the request before the user is authenticated
+	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	orgSetting, err := h.getOrgSettingByOrgID(orgCtx, user.Edges.Setting.Edges.DefaultOrg.ID)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining org settings")
 
 		return err
 	}
 
-	// add default org to user object
-	user.Edges.Setting.Edges.DefaultOrg = org
+	if err := hooks.CheckAllowedEmailDomain(user.Email, orgSetting); err != nil {
+		log.Error().Err(err).Msg("user email not allowed in default organization")
+
+		return err
+	}
 
 	return nil
 }
@@ -526,6 +541,19 @@ func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.
 // getOrgByID returns the organization based on the id in the request
 func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization, error) {
 	org, err := transaction.FromContext(ctx).Organization.Get(ctx, id)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining organization from id")
+
+		return nil, err
+	}
+
+	return org, nil
+}
+
+// getOrgSettingByOrgID returns the organization settings based on the org id in the request
+func (h *Handler) getOrgSettingByOrgID(ctx context.Context, id string) (*ent.OrganizationSetting, error) {
+	org, err := transaction.FromContext(ctx).OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(id)).Only(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining organization from id")
 

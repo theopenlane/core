@@ -33,14 +33,12 @@ func HookInvite() ent.Hook {
 				return nil, err
 			}
 
-			// check that the invite isn't to a personal organization
+			// validate the invite
 			if err := validateCanCreateInvite(ctx, m); err != nil {
 				log.Info().Err(err).Msg("unable to add user to specified organization")
 
 				return nil, err
 			}
-
-			// check for domain restrictions on the organization
 
 			// generate token based on recipient + target org ID
 			m, err = setRecipientAndToken(m)
@@ -163,6 +161,8 @@ func HookInviteAccepted() ent.Hook {
 
 			// delete the invite that has been accepted
 			if err := deleteInvite(ctx, m); err != nil {
+				log.Error().Err(err).Msg("unable to delete invite")
+
 				return retValue, err
 			}
 
@@ -234,8 +234,6 @@ func setRecipientAndToken(m *generated.InviteMutation) (*generated.InviteMutatio
 func setRequestor(ctx context.Context, m *generated.InviteMutation) (*generated.InviteMutation, error) {
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get requestor")
-
 		return m, err
 	}
 
@@ -279,10 +277,9 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	}
 
 	// send the email
-	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
-	}, nil)
-	if err != nil {
+	}, nil); err != nil {
 		log.Error().Err(err).Msg("error queueing email verification")
 
 		return err
@@ -303,10 +300,9 @@ func createOrgInviteAcceptedToSend(ctx context.Context, m *generated.InviteMutat
 	}
 
 	// send the email
-	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
-	}, nil)
-	if err != nil {
+	}, nil); err != nil {
 		log.Error().Err(err).Msg("error queueing email verification")
 
 		return err
@@ -359,13 +355,7 @@ func updateInvite(ctx context.Context, m *generated.InviteMutation) (*generated.
 func deleteInvite(ctx context.Context, m *generated.InviteMutation) error {
 	id, _ := m.ID()
 
-	if err := m.Client().Invite.DeleteOneID(id).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("unable to delete invite")
-
-		return err
-	}
-
-	return nil
+	return m.Client().Invite.DeleteOneID(id).Exec(ctx)
 }
 
 func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Invite, error) {

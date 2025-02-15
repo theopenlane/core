@@ -60,6 +60,10 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	if err := h.validateAllowedDomains(ctxWithToken, entUser); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
 	user := &provider.User{
 		ID:    entUser.ID,
 		Email: entUser.Email,

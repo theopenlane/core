@@ -3779,7 +3779,7 @@ type CreateOrganizationSettingInput struct {
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
-	// domains allowed to access the organization, if empty al domains are allowed
+	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	OrganizationID      *string  `json:"organizationID,omitempty"`
 	FileIDs             []string `json:"fileIDs,omitempty"`
@@ -13108,7 +13108,7 @@ type OrganizationSetting struct {
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
-	// domains allowed to access the organization, if empty al domains are allowed
+	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string      `json:"allowedEmailDomains,omitempty"`
 	Organization        *Organization `json:"organization,omitempty"`
 	Files               []*File       `json:"files,omitempty"`
@@ -13183,7 +13183,7 @@ type OrganizationSettingHistory struct {
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
-	// domains allowed to access the organization, if empty al domains are allowed
+	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 }
 
@@ -20845,7 +20845,7 @@ type UpdateOrganizationSettingInput struct {
 	ClearGeoLocation *bool         `json:"clearGeoLocation,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
-	// domains allowed to access the organization, if empty al domains are allowed
+	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains       []string `json:"allowedEmailDomains,omitempty"`
 	AppendAllowedEmailDomains []string `json:"appendAllowedEmailDomains,omitempty"`
 	ClearAllowedEmailDomains  *bool    `json:"clearAllowedEmailDomains,omitempty"`

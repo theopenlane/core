@@ -70,7 +70,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("should we send email notifications related to billing").
 			Default(true),
 		field.Strings("allowed_email_domains").
-			Comment("domains allowed to access the organization, if empty al domains are allowed").
+			Comment("domains allowed to access the organization, if empty all domains are allowed").
 			Optional(),
 	}
 }

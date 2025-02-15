@@ -59,7 +59,7 @@ type OrganizationSettingHistory struct {
 	OrganizationID string `json:"organization_id,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
-	// domains allowed to access the organization, if empty al domains are allowed
+	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowed_email_domains,omitempty"`
 	selectValues        sql.SelectValues
 }

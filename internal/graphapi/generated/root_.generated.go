@@ -27528,7 +27528,7 @@ input CreateOrganizationSettingInput {
   """
   billingNotificationsEnabled: Boolean
   """
-  domains allowed to access the organization, if empty al domains are allowed
+  domains allowed to access the organization, if empty all domains are allowed
   """
   allowedEmailDomains: [String!]
   organizationID: ID
@@ -38987,7 +38987,7 @@ type OrganizationSetting implements Node {
   """
   billingNotificationsEnabled: Boolean!
   """
-  domains allowed to access the organization, if empty al domains are allowed
+  domains allowed to access the organization, if empty all domains are allowed
   """
   allowedEmailDomains: [String!]
   organization: Organization
@@ -39075,7 +39075,7 @@ type OrganizationSettingHistory implements Node {
   """
   billingNotificationsEnabled: Boolean!
   """
-  domains allowed to access the organization, if empty al domains are allowed
+  domains allowed to access the organization, if empty all domains are allowed
   """
   allowedEmailDomains: [String!]
 }
@@ -50345,7 +50345,7 @@ input UpdateOrganizationSettingInput {
   """
   billingNotificationsEnabled: Boolean
   """
-  domains allowed to access the organization, if empty al domains are allowed
+  domains allowed to access the organization, if empty all domains are allowed
   """
   allowedEmailDomains: [String!]
   appendAllowedEmailDomains: [String!]

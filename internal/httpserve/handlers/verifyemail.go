@@ -109,6 +109,10 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	if err := h.validateAllowedDomains(ctxWithToken, entUser); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, entUser)
 	if err != nil {
