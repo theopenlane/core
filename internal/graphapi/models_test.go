@@ -19,12 +19,13 @@ type OrganizationBuilder struct {
 	client *client
 
 	// Fields
-	Name        string
-	DisplayName string
-	Description *string
-	OrgID       string
-	ParentOrgID string
-	PersonalOrg bool
+	Name           string
+	DisplayName    string
+	Description    *string
+	OrgID          string
+	ParentOrgID    string
+	PersonalOrg    bool
+	AllowedDomains []string
 }
 
 type OrganizationCleanup struct {
@@ -350,8 +351,14 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	}
 
 	org, err := m.Save(ctx)
-	if err != nil {
-		t.Fatalf("failed to create organization: %s", err)
+	require.NoError(t, err)
+
+	if o.AllowedDomains != nil {
+		orgSetting, err := org.Setting(ctx)
+		require.NoError(t, err)
+
+		err = orgSetting.Update().SetAllowedEmailDomains(o.AllowedDomains).Exec(ctx)
+		require.NoError(t, err)
 	}
 
 	return org

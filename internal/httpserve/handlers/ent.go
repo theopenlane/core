@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
@@ -396,6 +397,12 @@ func (h *Handler) addDefaultOrgToUserQuery(ctx context.Context, user *ent.User) 
 	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining default org")
+
+		return err
+	}
+
+	if err := hooks.CheckAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
+		log.Error().Err(err).Msg("user email not allowed in default organization")
 
 		return err
 	}

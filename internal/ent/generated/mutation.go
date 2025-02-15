@@ -76810,6 +76810,8 @@ type OrganizationSettingMutation struct {
 	tax_identifier                *string
 	geo_location                  *enums.Region
 	billing_notifications_enabled *bool
+	allowed_email_domains         *[]string
+	appendallowed_email_domains   []string
 	clearedFields                 map[string]struct{}
 	organization                  *string
 	clearedorganization           bool
@@ -77728,6 +77730,71 @@ func (m *OrganizationSettingMutation) ResetBillingNotificationsEnabled() {
 	m.billing_notifications_enabled = nil
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) SetAllowedEmailDomains(s []string) {
+	m.allowed_email_domains = &s
+	m.appendallowed_email_domains = nil
+}
+
+// AllowedEmailDomains returns the value of the "allowed_email_domains" field in the mutation.
+func (m *OrganizationSettingMutation) AllowedEmailDomains() (r []string, exists bool) {
+	v := m.allowed_email_domains
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAllowedEmailDomains returns the old "allowed_email_domains" field's value of the OrganizationSetting entity.
+// If the OrganizationSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingMutation) OldAllowedEmailDomains(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAllowedEmailDomains is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAllowedEmailDomains requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAllowedEmailDomains: %w", err)
+	}
+	return oldValue.AllowedEmailDomains, nil
+}
+
+// AppendAllowedEmailDomains adds s to the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) AppendAllowedEmailDomains(s []string) {
+	m.appendallowed_email_domains = append(m.appendallowed_email_domains, s...)
+}
+
+// AppendedAllowedEmailDomains returns the list of values that were appended to the "allowed_email_domains" field in this mutation.
+func (m *OrganizationSettingMutation) AppendedAllowedEmailDomains() ([]string, bool) {
+	if len(m.appendallowed_email_domains) == 0 {
+		return nil, false
+	}
+	return m.appendallowed_email_domains, true
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) ClearAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	m.clearedFields[organizationsetting.FieldAllowedEmailDomains] = struct{}{}
+}
+
+// AllowedEmailDomainsCleared returns if the "allowed_email_domains" field was cleared in this mutation.
+func (m *OrganizationSettingMutation) AllowedEmailDomainsCleared() bool {
+	_, ok := m.clearedFields[organizationsetting.FieldAllowedEmailDomains]
+	return ok
+}
+
+// ResetAllowedEmailDomains resets all changes to the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) ResetAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	delete(m.clearedFields, organizationsetting.FieldAllowedEmailDomains)
+}
+
 // ClearOrganization clears the "organization" edge to the Organization entity.
 func (m *OrganizationSettingMutation) ClearOrganization() {
 	m.clearedorganization = true
@@ -77843,7 +77910,7 @@ func (m *OrganizationSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, organizationsetting.FieldCreatedAt)
 	}
@@ -77892,6 +77959,9 @@ func (m *OrganizationSettingMutation) Fields() []string {
 	if m.billing_notifications_enabled != nil {
 		fields = append(fields, organizationsetting.FieldBillingNotificationsEnabled)
 	}
+	if m.allowed_email_domains != nil {
+		fields = append(fields, organizationsetting.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -77932,6 +78002,8 @@ func (m *OrganizationSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.OrganizationID()
 	case organizationsetting.FieldBillingNotificationsEnabled:
 		return m.BillingNotificationsEnabled()
+	case organizationsetting.FieldAllowedEmailDomains:
+		return m.AllowedEmailDomains()
 	}
 	return nil, false
 }
@@ -77973,6 +78045,8 @@ func (m *OrganizationSettingMutation) OldField(ctx context.Context, name string)
 		return m.OldOrganizationID(ctx)
 	case organizationsetting.FieldBillingNotificationsEnabled:
 		return m.OldBillingNotificationsEnabled(ctx)
+	case organizationsetting.FieldAllowedEmailDomains:
+		return m.OldAllowedEmailDomains(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSetting field %s", name)
 }
@@ -78094,6 +78168,13 @@ func (m *OrganizationSettingMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetBillingNotificationsEnabled(v)
 		return nil
+	case organizationsetting.FieldAllowedEmailDomains:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAllowedEmailDomains(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
 }
@@ -78169,6 +78250,9 @@ func (m *OrganizationSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationsetting.FieldOrganizationID) {
 		fields = append(fields, organizationsetting.FieldOrganizationID)
 	}
+	if m.FieldCleared(organizationsetting.FieldAllowedEmailDomains) {
+		fields = append(fields, organizationsetting.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -78228,6 +78312,9 @@ func (m *OrganizationSettingMutation) ClearField(name string) error {
 	case organizationsetting.FieldOrganizationID:
 		m.ClearOrganizationID()
 		return nil
+	case organizationsetting.FieldAllowedEmailDomains:
+		m.ClearAllowedEmailDomains()
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting nullable field %s", name)
 }
@@ -78283,6 +78370,9 @@ func (m *OrganizationSettingMutation) ResetField(name string) error {
 		return nil
 	case organizationsetting.FieldBillingNotificationsEnabled:
 		m.ResetBillingNotificationsEnabled()
+		return nil
+	case organizationsetting.FieldAllowedEmailDomains:
+		m.ResetAllowedEmailDomains()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
@@ -78417,6 +78507,8 @@ type OrganizationSettingHistoryMutation struct {
 	geo_location                  *enums.Region
 	organization_id               *string
 	billing_notifications_enabled *bool
+	allowed_email_domains         *[]string
+	appendallowed_email_domains   []string
 	clearedFields                 map[string]struct{}
 	done                          bool
 	oldValue                      func(context.Context) (*OrganizationSettingHistory, error)
@@ -79451,6 +79543,71 @@ func (m *OrganizationSettingHistoryMutation) ResetBillingNotificationsEnabled() 
 	m.billing_notifications_enabled = nil
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) SetAllowedEmailDomains(s []string) {
+	m.allowed_email_domains = &s
+	m.appendallowed_email_domains = nil
+}
+
+// AllowedEmailDomains returns the value of the "allowed_email_domains" field in the mutation.
+func (m *OrganizationSettingHistoryMutation) AllowedEmailDomains() (r []string, exists bool) {
+	v := m.allowed_email_domains
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAllowedEmailDomains returns the old "allowed_email_domains" field's value of the OrganizationSettingHistory entity.
+// If the OrganizationSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingHistoryMutation) OldAllowedEmailDomains(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAllowedEmailDomains is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAllowedEmailDomains requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAllowedEmailDomains: %w", err)
+	}
+	return oldValue.AllowedEmailDomains, nil
+}
+
+// AppendAllowedEmailDomains adds s to the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) AppendAllowedEmailDomains(s []string) {
+	m.appendallowed_email_domains = append(m.appendallowed_email_domains, s...)
+}
+
+// AppendedAllowedEmailDomains returns the list of values that were appended to the "allowed_email_domains" field in this mutation.
+func (m *OrganizationSettingHistoryMutation) AppendedAllowedEmailDomains() ([]string, bool) {
+	if len(m.appendallowed_email_domains) == 0 {
+		return nil, false
+	}
+	return m.appendallowed_email_domains, true
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) ClearAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	m.clearedFields[organizationsettinghistory.FieldAllowedEmailDomains] = struct{}{}
+}
+
+// AllowedEmailDomainsCleared returns if the "allowed_email_domains" field was cleared in this mutation.
+func (m *OrganizationSettingHistoryMutation) AllowedEmailDomainsCleared() bool {
+	_, ok := m.clearedFields[organizationsettinghistory.FieldAllowedEmailDomains]
+	return ok
+}
+
+// ResetAllowedEmailDomains resets all changes to the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) ResetAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	delete(m.clearedFields, organizationsettinghistory.FieldAllowedEmailDomains)
+}
+
 // Where appends a list predicates to the OrganizationSettingHistoryMutation builder.
 func (m *OrganizationSettingHistoryMutation) Where(ps ...predicate.OrganizationSettingHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -79485,7 +79642,7 @@ func (m *OrganizationSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.history_time != nil {
 		fields = append(fields, organizationsettinghistory.FieldHistoryTime)
 	}
@@ -79543,6 +79700,9 @@ func (m *OrganizationSettingHistoryMutation) Fields() []string {
 	if m.billing_notifications_enabled != nil {
 		fields = append(fields, organizationsettinghistory.FieldBillingNotificationsEnabled)
 	}
+	if m.allowed_email_domains != nil {
+		fields = append(fields, organizationsettinghistory.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -79589,6 +79749,8 @@ func (m *OrganizationSettingHistoryMutation) Field(name string) (ent.Value, bool
 		return m.OrganizationID()
 	case organizationsettinghistory.FieldBillingNotificationsEnabled:
 		return m.BillingNotificationsEnabled()
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		return m.AllowedEmailDomains()
 	}
 	return nil, false
 }
@@ -79636,6 +79798,8 @@ func (m *OrganizationSettingHistoryMutation) OldField(ctx context.Context, name 
 		return m.OldOrganizationID(ctx)
 	case organizationsettinghistory.FieldBillingNotificationsEnabled:
 		return m.OldBillingNotificationsEnabled(ctx)
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		return m.OldAllowedEmailDomains(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
 }
@@ -79778,6 +79942,13 @@ func (m *OrganizationSettingHistoryMutation) SetField(name string, value ent.Val
 		}
 		m.SetBillingNotificationsEnabled(v)
 		return nil
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAllowedEmailDomains(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
 }
@@ -79856,6 +80027,9 @@ func (m *OrganizationSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationsettinghistory.FieldOrganizationID) {
 		fields = append(fields, organizationsettinghistory.FieldOrganizationID)
 	}
+	if m.FieldCleared(organizationsettinghistory.FieldAllowedEmailDomains) {
+		fields = append(fields, organizationsettinghistory.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -79917,6 +80091,9 @@ func (m *OrganizationSettingHistoryMutation) ClearField(name string) error {
 		return nil
 	case organizationsettinghistory.FieldOrganizationID:
 		m.ClearOrganizationID()
+		return nil
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		m.ClearAllowedEmailDomains()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory nullable field %s", name)
@@ -79982,6 +80159,9 @@ func (m *OrganizationSettingHistoryMutation) ResetField(name string) error {
 		return nil
 	case organizationsettinghistory.FieldBillingNotificationsEnabled:
 		m.ResetBillingNotificationsEnabled()
+		return nil
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		m.ResetAllowedEmailDomains()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)

@@ -99,6 +99,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "billingNotificationsEnabled":
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
+			case "allowedEmailDomains":
+				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -183,6 +185,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "billingNotificationsEnabled":
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
+			case "allowedEmailDomains":
+				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -311,6 +315,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "billingNotificationsEnabled":
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
+			case "allowedEmailDomains":
+				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

@@ -9183,6 +9183,11 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldBillingNotificationsEnabled)
 				fieldSeen[organizationsetting.FieldBillingNotificationsEnabled] = struct{}{}
 			}
+		case "allowedEmailDomains":
+			if _, ok := fieldSeen[organizationsetting.FieldAllowedEmailDomains]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldAllowedEmailDomains)
+				fieldSeen[organizationsetting.FieldAllowedEmailDomains] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -9339,6 +9344,11 @@ func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[organizationsettinghistory.FieldBillingNotificationsEnabled]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldBillingNotificationsEnabled)
 				fieldSeen[organizationsettinghistory.FieldBillingNotificationsEnabled] = struct{}{}
+			}
+		case "allowedEmailDomains":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldAllowedEmailDomains]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowedEmailDomains)
+				fieldSeen[organizationsettinghistory.FieldAllowedEmailDomains] = struct{}{}
 			}
 		case "id":
 		case "__typename":

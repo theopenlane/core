@@ -3778,9 +3778,11 @@ type CreateOrganizationSettingInput struct {
 	// geographical location of the organization
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// should we send email notifications related to billing
-	BillingNotificationsEnabled *bool    `json:"billingNotificationsEnabled,omitempty"`
-	OrganizationID              *string  `json:"organizationID,omitempty"`
-	FileIDs                     []string `json:"fileIDs,omitempty"`
+	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
+	// domains allowed to access the organization, if empty al domains are allowed
+	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
+	OrganizationID      *string  `json:"organizationID,omitempty"`
+	FileIDs             []string `json:"fileIDs,omitempty"`
 }
 
 // CreatePersonalAccessTokenInput is used for create PersonalAccessToken object.
@@ -13105,9 +13107,11 @@ type OrganizationSetting struct {
 	// the ID of the organization the settings belong to
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
-	BillingNotificationsEnabled bool          `json:"billingNotificationsEnabled"`
-	Organization                *Organization `json:"organization,omitempty"`
-	Files                       []*File       `json:"files,omitempty"`
+	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
+	// domains allowed to access the organization, if empty al domains are allowed
+	AllowedEmailDomains []string      `json:"allowedEmailDomains,omitempty"`
+	Organization        *Organization `json:"organization,omitempty"`
+	Files               []*File       `json:"files,omitempty"`
 }
 
 func (OrganizationSetting) IsNode() {}
@@ -13179,6 +13183,8 @@ type OrganizationSettingHistory struct {
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
+	// domains allowed to access the organization, if empty al domains are allowed
+	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 }
 
 func (OrganizationSettingHistory) IsNode() {}
@@ -20838,12 +20844,16 @@ type UpdateOrganizationSettingInput struct {
 	GeoLocation      *enums.Region `json:"geoLocation,omitempty"`
 	ClearGeoLocation *bool         `json:"clearGeoLocation,omitempty"`
 	// should we send email notifications related to billing
-	BillingNotificationsEnabled *bool    `json:"billingNotificationsEnabled,omitempty"`
-	OrganizationID              *string  `json:"organizationID,omitempty"`
-	ClearOrganization           *bool    `json:"clearOrganization,omitempty"`
-	AddFileIDs                  []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs               []string `json:"removeFileIDs,omitempty"`
-	ClearFiles                  *bool    `json:"clearFiles,omitempty"`
+	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
+	// domains allowed to access the organization, if empty al domains are allowed
+	AllowedEmailDomains       []string `json:"allowedEmailDomains,omitempty"`
+	AppendAllowedEmailDomains []string `json:"appendAllowedEmailDomains,omitempty"`
+	ClearAllowedEmailDomains  *bool    `json:"clearAllowedEmailDomains,omitempty"`
+	OrganizationID            *string  `json:"organizationID,omitempty"`
+	ClearOrganization         *bool    `json:"clearOrganization,omitempty"`
+	AddFileIDs                []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs             []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                *bool    `json:"clearFiles,omitempty"`
 }
 
 // UpdatePersonalAccessTokenInput is used for update PersonalAccessToken object.

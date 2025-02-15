@@ -1407,6 +1407,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldGeoLocation:                 {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
 			organizationsetting.FieldOrganizationID:              {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
 			organizationsetting.FieldBillingNotificationsEnabled: {Type: field.TypeBool, Column: organizationsetting.FieldBillingNotificationsEnabled},
+			organizationsetting.FieldAllowedEmailDomains:         {Type: field.TypeJSON, Column: organizationsetting.FieldAllowedEmailDomains},
 		},
 	}
 	graph.Nodes[47] = &sqlgraph.Node{
@@ -1439,6 +1440,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldGeoLocation:                 {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
 			organizationsettinghistory.FieldOrganizationID:              {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
 			organizationsettinghistory.FieldBillingNotificationsEnabled: {Type: field.TypeBool, Column: organizationsettinghistory.FieldBillingNotificationsEnabled},
+			organizationsettinghistory.FieldAllowedEmailDomains:         {Type: field.TypeJSON, Column: organizationsettinghistory.FieldAllowedEmailDomains},
 		},
 	}
 	graph.Nodes[48] = &sqlgraph.Node{
@@ -13710,6 +13712,11 @@ func (f *OrganizationSettingFilter) WhereBillingNotificationsEnabled(p entql.Boo
 	f.Where(p.Field(organizationsetting.FieldBillingNotificationsEnabled))
 }
 
+// WhereAllowedEmailDomains applies the entql json.RawMessage predicate on the allowed_email_domains field.
+func (f *OrganizationSettingFilter) WhereAllowedEmailDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsetting.FieldAllowedEmailDomains))
+}
+
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *OrganizationSettingFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -13871,6 +13878,11 @@ func (f *OrganizationSettingHistoryFilter) WhereOrganizationID(p entql.StringP) 
 // WhereBillingNotificationsEnabled applies the entql bool predicate on the billing_notifications_enabled field.
 func (f *OrganizationSettingHistoryFilter) WhereBillingNotificationsEnabled(p entql.BoolP) {
 	f.Where(p.Field(organizationsettinghistory.FieldBillingNotificationsEnabled))
+}
+
+// WhereAllowedEmailDomains applies the entql json.RawMessage predicate on the allowed_email_domains field.
+func (f *OrganizationSettingHistoryFilter) WhereAllowedEmailDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsettinghistory.FieldAllowedEmailDomains))
 }
 
 // addPredicate implements the predicateAdder interface.

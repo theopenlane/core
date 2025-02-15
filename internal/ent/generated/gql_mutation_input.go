@@ -4969,6 +4969,7 @@ type CreateOrganizationSettingInput struct {
 	TaxIdentifier               *string
 	GeoLocation                 *enums.Region
 	BillingNotificationsEnabled *bool
+	AllowedEmailDomains         []string
 	OrganizationID              *string
 	FileIDs                     []string
 }
@@ -5001,6 +5002,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.BillingNotificationsEnabled; v != nil {
 		m.SetBillingNotificationsEnabled(*v)
+	}
+	if v := i.AllowedEmailDomains; v != nil {
+		m.SetAllowedEmailDomains(v)
 	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
@@ -5037,6 +5041,9 @@ type UpdateOrganizationSettingInput struct {
 	ClearGeoLocation            bool
 	GeoLocation                 *enums.Region
 	BillingNotificationsEnabled *bool
+	ClearAllowedEmailDomains    bool
+	AllowedEmailDomains         []string
+	AppendAllowedEmailDomains   []string
 	ClearOrganization           bool
 	OrganizationID              *string
 	ClearFiles                  bool
@@ -5102,6 +5109,15 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.BillingNotificationsEnabled; v != nil {
 		m.SetBillingNotificationsEnabled(*v)
+	}
+	if i.ClearAllowedEmailDomains {
+		m.ClearAllowedEmailDomains()
+	}
+	if v := i.AllowedEmailDomains; v != nil {
+		m.SetAllowedEmailDomains(v)
+	}
+	if i.AppendAllowedEmailDomains != nil {
+		m.AppendAllowedEmailDomains(i.AllowedEmailDomains)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()

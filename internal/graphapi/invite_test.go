@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/pkg/enums"
@@ -82,6 +83,10 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 	existingUser2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	_ = (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
 
+	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"meow.net"}}).MustNew(testUser1.UserCtx, t)
+	orgWithRestrictionsCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
+	require.NoError(t, err)
+
 	testCases := []struct {
 		name             string
 		recipient        string
@@ -105,6 +110,28 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
 			wantErr:          false,
+		},
+		{
+			name:             "happy path, new user as member in restricted domain org",
+			recipient:        "meow@meow.net",
+			orgID:            orgWithRestrictions.ID,
+			role:             enums.RoleMember,
+			client:           suite.client.api,
+			ctx:              orgWithRestrictionsCtx,
+			requestorID:      testUser1.ID,
+			expectedStatus:   enums.InvitationSent,
+			expectedAttempts: 0,
+			wantErr:          false,
+		},
+		{
+			name:        "new user as member in restricted domain org with invalid domain",
+			recipient:   "meow@meow.io",
+			orgID:       orgWithRestrictions.ID,
+			role:        enums.RoleMember,
+			client:      suite.client.api,
+			ctx:         orgWithRestrictionsCtx,
+			requestorID: testUser1.ID,
+			wantErr:     true,
 		},
 		{
 			name:             "re-invite new user as member using api token",
@@ -155,6 +182,15 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:      "new user as owner should fail",
 			recipient: "woof@theopenlane.io",
+			orgID:     testUser1.OrganizationID,
+			role:      enums.RoleOwner,
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
+			wantErr:   true,
+		},
+		{
+			name:      "new user with invalid email",
+			recipient: "woof",
 			orgID:     testUser1.OrganizationID,
 			role:      enums.RoleOwner,
 			client:    suite.client.api,

@@ -296,6 +296,24 @@ func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingNotificationsEna
 	return oshu
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetAllowedEmailDomains(s)
+	return oshu
+}
+
+// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
+func (oshu *OrganizationSettingHistoryUpdate) AppendAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.AppendAllowedEmailDomains(s)
+	return oshu
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearAllowedEmailDomains()
+	return oshu
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshu *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
 	return oshu.mutation
@@ -464,6 +482,17 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if value, ok := oshu.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
+	}
+	if value, ok := oshu.mutation.AllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := oshu.mutation.AppendedAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldAllowedEmailDomains, value)
+		})
+	}
+	if oshu.mutation.AllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -751,6 +780,24 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingNotification
 	return oshuo
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetAllowedEmailDomains(s)
+	return oshuo
+}
+
+// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) AppendAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.AppendAllowedEmailDomains(s)
+	return oshuo
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearAllowedEmailDomains()
+	return oshuo
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshuo *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
 	return oshuo.mutation
@@ -949,6 +996,17 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if value, ok := oshuo.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
+	}
+	if value, ok := oshuo.mutation.AllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := oshuo.mutation.AppendedAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldAllowedEmailDomains, value)
+		})
+	}
+	if oshuo.mutation.AllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)

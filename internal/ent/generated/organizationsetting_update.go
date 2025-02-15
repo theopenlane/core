@@ -298,6 +298,24 @@ func (osu *OrganizationSettingUpdate) SetNillableBillingNotificationsEnabled(b *
 	return osu
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (osu *OrganizationSettingUpdate) SetAllowedEmailDomains(s []string) *OrganizationSettingUpdate {
+	osu.mutation.SetAllowedEmailDomains(s)
+	return osu
+}
+
+// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
+func (osu *OrganizationSettingUpdate) AppendAllowedEmailDomains(s []string) *OrganizationSettingUpdate {
+	osu.mutation.AppendAllowedEmailDomains(s)
+	return osu
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (osu *OrganizationSettingUpdate) ClearAllowedEmailDomains() *OrganizationSettingUpdate {
+	osu.mutation.ClearAllowedEmailDomains()
+	return osu
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osu *OrganizationSettingUpdate) SetOrganization(o *Organization) *OrganizationSettingUpdate {
 	return osu.SetOrganizationID(o.ID)
@@ -525,6 +543,17 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if value, ok := osu.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsetting.FieldBillingNotificationsEnabled, field.TypeBool, value)
+	}
+	if value, ok := osu.mutation.AllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := osu.mutation.AppendedAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldAllowedEmailDomains, value)
+		})
+	}
+	if osu.mutation.AllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON)
 	}
 	if osu.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -891,6 +920,24 @@ func (osuo *OrganizationSettingUpdateOne) SetNillableBillingNotificationsEnabled
 	return osuo
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (osuo *OrganizationSettingUpdateOne) SetAllowedEmailDomains(s []string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetAllowedEmailDomains(s)
+	return osuo
+}
+
+// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
+func (osuo *OrganizationSettingUpdateOne) AppendAllowedEmailDomains(s []string) *OrganizationSettingUpdateOne {
+	osuo.mutation.AppendAllowedEmailDomains(s)
+	return osuo
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (osuo *OrganizationSettingUpdateOne) ClearAllowedEmailDomains() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearAllowedEmailDomains()
+	return osuo
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osuo *OrganizationSettingUpdateOne) SetOrganization(o *Organization) *OrganizationSettingUpdateOne {
 	return osuo.SetOrganizationID(o.ID)
@@ -1148,6 +1195,17 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if value, ok := osuo.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsetting.FieldBillingNotificationsEnabled, field.TypeBool, value)
+	}
+	if value, ok := osuo.mutation.AllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := osuo.mutation.AppendedAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldAllowedEmailDomains, value)
+		})
+	}
+	if osuo.mutation.AllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON)
 	}
 	if osuo.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -1,4 +1,4 @@
-h1:h5kiowbp61tMXBIImP8Gc/ZuA+SkuADOO4svPtAGjXc=
+h1:3Wf0Sh0SiM3FKjRI2UnEIy46SZ390O2hDoobKlerk6c=
 20241211231032_init.sql h1:TxjpHzKPB/5L2i7V2JfO1y+Cep/AyQN5wGjhY7saCeE=
 20241212223712_consistent_naming.sql h1:tbdYOtixhW66Jmvy3aCm+X6neI/SRVvItKM0Bdn26TA=
 20250109002849_billing_address.sql h1:mspCGbJ6HVmx3r4j+d/WvruzirJdJ8u5x18WF9R9ESE=
@@ -15,3 +15,4 @@ h1:h5kiowbp61tMXBIImP8Gc/ZuA+SkuADOO4svPtAGjXc=
 20250204175354_unique_name_citext.sql h1:1+4ZoEzHkr8VNdg2H5XDbzGLNvptx2+3aU5DS73dhR4=
 20250204210420_creator_edge.sql h1:IpzaUbCWcMqaDEkXkpacuzYciHmMXCJx3HYUDzOP82c=
 20250208014426_onboarding.sql h1:NEbY2QMiTR/kF2sL8rSpYKrPsBQpZDU+rezOBjTNF+U=
+20250215010311_org_setting_allowed_email_domains.sql h1:4fxEF/06QAr92q2XXjSUxylBQsDXMjigJme/lL8xSAc=

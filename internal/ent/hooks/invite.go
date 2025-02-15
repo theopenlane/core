@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -33,11 +34,13 @@ func HookInvite() ent.Hook {
 			}
 
 			// check that the invite isn't to a personal organization
-			if err := personalOrgNoInvite(ctx, m); err != nil {
+			if err := validateCanCreateInvite(ctx, m); err != nil {
 				log.Info().Err(err).Msg("unable to add user to specified organization")
 
 				return nil, err
 			}
+
+			// check for domain restrictions on the organization
 
 			// generate token based on recipient + target org ID
 			m, err = setRecipientAndToken(m)
@@ -168,22 +171,30 @@ func HookInviteAccepted() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }
 
-// personalOrgNoInvite checks if the mutation is for a personal org and denies if true or
+// validateCanCreateInvite checks if the mutation is for a personal org and denies if true or
 // if the user does not have access to that organization
-func personalOrgNoInvite(ctx context.Context, m *generated.InviteMutation) error {
+func validateCanCreateInvite(ctx context.Context, m *generated.InviteMutation) error {
 	orgID, ok := m.OwnerID()
-	if ok {
-		org, err := m.Client().Organization.Get(ctx, orgID)
-		if err != nil {
-			return err
-		}
-
-		if org.PersonalOrg {
-			return ErrPersonalOrgsNoChildren
-		}
+	if !ok {
+		return nil
 	}
 
-	return nil
+	org, err := m.Client().Organization.Query().
+		WithSetting().
+		Where(organization.ID(orgID)).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	if org.PersonalOrg {
+		return ErrPersonalOrgsNoChildren
+	}
+
+	// check if the the email can be invited to the organization
+	email, _ := m.Recipient()
+
+	return CheckAllowedEmailDomain(email, org.Edges.Setting)
 }
 
 // setRecipientAndToken function is responsible for generating a invite token based on the
@@ -362,4 +373,34 @@ func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Inv
 	ownerID, _ := m.OwnerID()
 
 	return m.Client().Invite.Query().Where(invite.Recipient(rec)).Where(invite.OwnerID(ownerID)).Only(ctx)
+}
+
+// CheckAllowedEmailDomain checks if the email domain is allowed for the organization
+func CheckAllowedEmailDomain(email string, orgSetting *generated.OrganizationSetting) error {
+	if orgSetting == nil || email == "" {
+		log.Info().Msg("no organization setting or email provided, cannot check settings")
+
+		return nil
+	}
+
+	// allow all domains if none are set
+	if orgSetting.AllowedEmailDomains == nil {
+		return nil
+	}
+
+	emailDomain := strings.SplitAfter(email, "@")[1]
+
+	allowed := false
+	for _, domain := range orgSetting.AllowedEmailDomains {
+		if domain == emailDomain {
+			allowed = true
+			break
+		}
+	}
+
+	if !allowed {
+		return ErrEmailDomainNotAllowed
+	}
+
+	return nil
 }

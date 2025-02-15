@@ -122,9 +122,17 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 	require.Len(t, orgMember, 1)
 
 	userCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
+	require.NoError(t, err)
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(testUser1.UserCtx, t)
+	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(testUser1.UserCtx, t)
+
+	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(testUser1.UserCtx, t)
+	otherOrgCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
+	require.NoError(t, err)
 
 	testCases := []struct {
 		name   string
@@ -143,10 +151,25 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 		},
 		{
 			name:   "happy path, add member",
+			orgID:  orgWithRestrictions.ID,
+			userID: userWithValidDomain.ID,
+			ctx:    otherOrgCtx,
+			role:   enums.RoleMember,
+		},
+		{
+			name:   "happy path, add member in org with allowed domains",
 			orgID:  org1.ID,
 			userID: user2.ID,
 			ctx:    userCtx,
 			role:   enums.RoleMember,
+		},
+		{
+			name:   "add member with invalid domain",
+			orgID:  orgWithRestrictions.ID,
+			userID: userWithInvalidDomain.ID,
+			ctx:    otherOrgCtx,
+			role:   enums.RoleMember,
+			errMsg: "email domain not allowed in organization",
 		},
 		{
 			name:   "duplicate user, different role",
@@ -178,7 +201,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			userID: ulids.New().String(),
 			role:   enums.RoleMember,
 			ctx:    userCtx,
-			errMsg: "constraint failed, unable to complete the create",
+			errMsg: "user not found",
 		},
 		{
 			name:   "no access",

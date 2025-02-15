@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -63,12 +64,6 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		ObjectID:    in.TargetOrganizationID,
 	}
 
-	if allow, err := h.DBClient.Authz.CheckOrgReadAccess(reqCtx, req); err != nil || !allow {
-		log.Error().Err(err).Msg("user not authorized to access organization")
-
-		return h.Unauthorized(ctx, err)
-	}
-
 	// get the target organization
 	orgGetCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
@@ -77,6 +72,25 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		log.Error().Err(err).Msg("unable to get target organization by id")
 
 		return h.BadRequest(ctx, err)
+	}
+
+	orgSettings, err := org.Setting(orgGetCtx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get target organization settings")
+
+		return h.BadRequest(ctx, err)
+	}
+
+	if err := hooks.CheckAllowedEmailDomain(user.Email, orgSettings); err != nil {
+		log.Error().Err(err).Msg("user email not allowed in target organization")
+
+		return h.BadRequest(ctx, err)
+	}
+
+	if allow, err := h.DBClient.Authz.CheckOrgReadAccess(reqCtx, req); err != nil || !allow {
+		log.Error().Err(err).Msg("user not authorized to access organization")
+
+		return h.Unauthorized(ctx, err)
 	}
 
 	// create new claims for the user

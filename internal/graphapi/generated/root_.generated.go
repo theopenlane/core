@@ -2176,6 +2176,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSetting struct {
+		AllowedEmailDomains         func(childComplexity int) int
 		BillingAddress              func(childComplexity int) int
 		BillingContact              func(childComplexity int) int
 		BillingEmail                func(childComplexity int) int
@@ -2221,6 +2222,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingHistory struct {
+		AllowedEmailDomains         func(childComplexity int) int
 		BillingAddress              func(childComplexity int) int
 		BillingContact              func(childComplexity int) int
 		BillingEmail                func(childComplexity int) int
@@ -14311,6 +14313,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSearchResult.Organizations(childComplexity), true
 
+	case "OrganizationSetting.allowedEmailDomains":
+		if e.complexity.OrganizationSetting.AllowedEmailDomains == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.AllowedEmailDomains(childComplexity), true
+
 	case "OrganizationSetting.billingAddress":
 		if e.complexity.OrganizationSetting.BillingAddress == nil {
 			break
@@ -14499,6 +14508,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrganizationSettingEdge.Node(childComplexity), true
+
+	case "OrganizationSettingHistory.allowedEmailDomains":
+		if e.complexity.OrganizationSettingHistory.AllowedEmailDomains == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.AllowedEmailDomains(childComplexity), true
 
 	case "OrganizationSettingHistory.billingAddress":
 		if e.complexity.OrganizationSettingHistory.BillingAddress == nil {
@@ -27511,6 +27527,10 @@ input CreateOrganizationSettingInput {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean
+  """
+  domains allowed to access the organization, if empty al domains are allowed
+  """
+  allowedEmailDomains: [String!]
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -38966,6 +38986,10 @@ type OrganizationSetting implements Node {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean!
+  """
+  domains allowed to access the organization, if empty al domains are allowed
+  """
+  allowedEmailDomains: [String!]
   organization: Organization
   files: [File!]
 }
@@ -39050,6 +39074,10 @@ type OrganizationSettingHistory implements Node {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean!
+  """
+  domains allowed to access the organization, if empty al domains are allowed
+  """
+  allowedEmailDomains: [String!]
 }
 """
 A connection to a list of items.
@@ -50316,6 +50344,12 @@ input UpdateOrganizationSettingInput {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean
+  """
+  domains allowed to access the organization, if empty al domains are allowed
+  """
+  allowedEmailDomains: [String!]
+  appendAllowedEmailDomains: [String!]
+  clearAllowedEmailDomains: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]

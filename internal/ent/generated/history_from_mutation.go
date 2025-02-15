@@ -5127,6 +5127,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetBillingNotificationsEnabled(billingNotificationsEnabled)
 	}
 
+	if allowedEmailDomains, exists := m.AllowedEmailDomains(); exists {
+		create = create.SetAllowedEmailDomains(allowedEmailDomains)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5253,6 +5257,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled)
 		}
 
+		if allowedEmailDomains, exists := m.AllowedEmailDomains(); exists {
+			create = create.SetAllowedEmailDomains(allowedEmailDomains)
+		} else {
+			create = create.SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5301,6 +5311,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetGeoLocation(organizationsetting.GeoLocation).
 			SetOrganizationID(organizationsetting.OrganizationID).
 			SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled).
+			SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains).
 			Save(ctx)
 		if err != nil {
 			return err

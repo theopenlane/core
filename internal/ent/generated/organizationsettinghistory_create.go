@@ -265,6 +265,12 @@ func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingNotificationsEna
 	return oshc
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (oshc *OrganizationSettingHistoryCreate) SetAllowedEmailDomains(s []string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetAllowedEmailDomains(s)
+	return oshc
+}
+
 // SetID sets the "id" field.
 func (oshc *OrganizationSettingHistoryCreate) SetID(s string) *OrganizationSettingHistoryCreate {
 	oshc.mutation.SetID(s)
@@ -476,6 +482,10 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 	if value, ok := oshc.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 		_node.BillingNotificationsEnabled = value
+	}
+	if value, ok := oshc.mutation.AllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
+		_node.AllowedEmailDomains = value
 	}
 	return _node, _spec
 }

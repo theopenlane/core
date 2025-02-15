@@ -232,6 +232,12 @@ func (osc *OrganizationSettingCreate) SetNillableBillingNotificationsEnabled(b *
 	return osc
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (osc *OrganizationSettingCreate) SetAllowedEmailDomains(s []string) *OrganizationSettingCreate {
+	osc.mutation.SetAllowedEmailDomains(s)
+	return osc
+}
+
 // SetID sets the "id" field.
 func (osc *OrganizationSettingCreate) SetID(s string) *OrganizationSettingCreate {
 	osc.mutation.SetID(s)
@@ -459,6 +465,10 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	if value, ok := osc.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsetting.FieldBillingNotificationsEnabled, field.TypeBool, value)
 		_node.BillingNotificationsEnabled = value
+	}
+	if value, ok := osc.mutation.AllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
+		_node.AllowedEmailDomains = value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

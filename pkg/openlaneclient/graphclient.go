@@ -2799,18 +2799,25 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult) GetOrganization
 }
 
 type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	DeletedBy      *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	OrganizationID *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	DeletedBy           *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	OrganizationID      *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
@@ -53946,6 +53953,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					billingAddress
 					taxIdentifier
 					organizationID
+					allowedEmailDomains
 				}
 			}
 			... on PersonalAccessTokenSearchResult {

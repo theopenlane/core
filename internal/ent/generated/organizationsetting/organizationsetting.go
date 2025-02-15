@@ -50,6 +50,8 @@ const (
 	FieldOrganizationID = "organization_id"
 	// FieldBillingNotificationsEnabled holds the string denoting the billing_notifications_enabled field in the database.
 	FieldBillingNotificationsEnabled = "billing_notifications_enabled"
+	// FieldAllowedEmailDomains holds the string denoting the allowed_email_domains field in the database.
+	FieldAllowedEmailDomains = "allowed_email_domains"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -89,6 +91,7 @@ var Columns = []string{
 	FieldGeoLocation,
 	FieldOrganizationID,
 	FieldBillingNotificationsEnabled,
+	FieldAllowedEmailDomains,
 }
 
 var (

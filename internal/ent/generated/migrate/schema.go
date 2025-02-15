@@ -1773,6 +1773,7 @@ var (
 		{Name: "tax_identifier", Type: field.TypeString, Nullable: true},
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
+		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
@@ -1783,7 +1784,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[16]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1811,6 +1812,7 @@ var (
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
+		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

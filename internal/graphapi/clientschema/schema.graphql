@@ -4872,6 +4872,10 @@ input CreateOrganizationSettingInput {
 	should we send email notifications related to billing
 	"""
 	billingNotificationsEnabled: Boolean
+	"""
+	domains allowed to access the organization, if empty al domains are allowed
+	"""
+	allowedEmailDomains: [String!]
 	organizationID: ID
 	fileIDs: [ID!]
 }
@@ -18688,6 +18692,10 @@ type OrganizationSetting implements Node {
 	should we send email notifications related to billing
 	"""
 	billingNotificationsEnabled: Boolean!
+	"""
+	domains allowed to access the organization, if empty al domains are allowed
+	"""
+	allowedEmailDomains: [String!]
 	organization: Organization
 	files: [File!]
 }
@@ -18799,6 +18807,10 @@ type OrganizationSettingHistory implements Node {
 	should we send email notifications related to billing
 	"""
 	billingNotificationsEnabled: Boolean!
+	"""
+	domains allowed to access the organization, if empty al domains are allowed
+	"""
+	allowedEmailDomains: [String!]
 }
 """
 A connection to a list of items.
@@ -31429,6 +31441,12 @@ input UpdateOrganizationSettingInput {
 	should we send email notifications related to billing
 	"""
 	billingNotificationsEnabled: Boolean
+	"""
+	domains allowed to access the organization, if empty al domains are allowed
+	"""
+	allowedEmailDomains: [String!]
+	appendAllowedEmailDomains: [String!]
+	clearAllowedEmailDomains: Boolean
 	organizationID: ID
 	clearOrganization: Boolean
 	addFileIDs: [ID!]
