@@ -19,12 +19,11 @@ import (
 
 // HookEnableTFA is a hook that generates the tfa secrets if the totp setting is set to allowed
 func HookEnableTFA() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.TFASettingFunc(func(ctx context.Context, m *generated.TFASettingMutation) (generated.Value, error) {
 			// if the user has TOTP enabled, generate a secret
-			totpAllowed, ok := m.TotpAllowed()
-
-			if !ok || !totpAllowed {
+			totpAllowed, _ := m.TotpAllowed()
+			if !totpAllowed {
 				return next.Mutate(ctx, m)
 			}
 
@@ -60,7 +59,12 @@ func HookEnableTFA() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
+	},
+		hook.And(
+			hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne),
+			hook.HasFields("totp_allowed"),
+		),
+	)
 }
 
 // HookVerifyTFA is a hook that will generate recovery codes and enable TFA for a user

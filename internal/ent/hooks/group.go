@@ -61,12 +61,8 @@ func HookGroup() ent.Hook {
 
 // HookManagedGroups runs on group mutations to prevent updates to managed groups
 func HookManagedGroups() ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.GroupFunc(func(ctx context.Context, m *generated.GroupMutation) (ent.Value, error) {
-			if m.Op().Is(ent.OpCreate) {
-				return next.Mutate(ctx, m)
-			}
-
 			groupID, ok := m.ID()
 			if !ok || groupID == "" {
 				return next.Mutate(ctx, m)
@@ -89,7 +85,7 @@ func HookManagedGroups() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}
+	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne)
 }
 
 // HookGroupAuthz runs on group mutations to setup or remove relationship tuples

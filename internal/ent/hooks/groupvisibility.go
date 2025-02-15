@@ -18,7 +18,7 @@ import (
 // based on the visibility setting changing
 // the initial tuple is set up on group creation
 func HookGroupSettingVisibility() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.GroupSettingFunc(func(ctx context.Context, m *generated.GroupSettingMutation) (generated.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -44,7 +44,12 @@ func HookGroupSettingVisibility() ent.Hook {
 
 			return retVal, err
 		})
-	}, ent.OpUpdateOne|ent.OpUpdate)
+	},
+		hook.And(
+			hook.HasFields("visibility"),
+			hook.HasOp(ent.OpUpdate|ent.OpUpdateOne),
+		),
+	)
 }
 
 // getVisibilityTuples returns the visibility tuples based on the group setting visibility setting
