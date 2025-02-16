@@ -94,6 +94,7 @@ func tableOutput(out []openlaneclient.OrganizationSetting) {
 		"TaxIdentifier",
 		"Tags",
 		"Domains",
+		"AllowedEmailDomains",
 	)
 	for _, i := range out {
 		writer.AddRow(i.ID,
@@ -105,7 +106,8 @@ func tableOutput(out []openlaneclient.OrganizationSetting) {
 			*i.GeoLocation,
 			*i.TaxIdentifier,
 			strings.Join(i.Tags, ", "),
-			strings.Join(i.Domains, ", "))
+			strings.Join(i.Domains, ", "),
+			strings.Join(i.AllowedEmailDomains, ", "))
 	}
 
 	writer.Render()

@@ -28,6 +28,7 @@ func init() {
 	updateCmd.Flags().StringP("billing-phone", "p", "", "billing phone for the org")
 	updateCmd.Flags().StringP("tax-identifier", "x", "", "tax identifier for the org")
 	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the org")
+	updateCmd.Flags().StringSliceP("allowed-domains", "a", []string{}, "emails domains allowed to access the org")
 }
 
 // updateValidation validates the input flags provided by the user
@@ -65,6 +66,11 @@ func updateValidation() (id string, input openlaneclient.UpdateOrganizationSetti
 	domains := cmd.Config.Strings("domains")
 	if len(domains) > 0 {
 		input.Domains = domains
+	}
+
+	allowedDomains := cmd.Config.Strings("allowed-domains")
+	if len(allowedDomains) > 0 {
+		input.AllowedEmailDomains = allowedDomains
 	}
 
 	return id, input, nil

@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"io"
+	"strings"
 
 	"github.com/rs/zerolog/log"
 )
@@ -25,7 +26,18 @@ type Address struct {
 
 // String returns a string representation of the address
 func (a Address) String() string {
-	return a.Line1 + " " + a.Line2 + " " + a.City + ", " + a.State + " " + a.PostalCode + " " + a.Country
+	if a == (Address{}) {
+		return ""
+	}
+
+	line1 := a.Line1 + " " + a.Line2 + " " + a.City
+	line2 := a.State + " " + a.PostalCode + " " + a.Country
+
+	if strings.TrimSpace(line1) == "" {
+		return strings.TrimSpace(line2)
+	}
+
+	return strings.TrimSpace(line1 + ", " + line2)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen

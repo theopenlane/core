@@ -64,6 +64,8 @@ func HookOrgMembers() ent.Hook {
 				log.Error().Err(err).Msg("failed to get user")
 
 				if generated.IsNotFound(err) {
+					// use a different error message for user not found
+					// so our error parsing can differentiate between the two
 					return nil, ErrUserNotFound
 				}
 

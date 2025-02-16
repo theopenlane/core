@@ -7,10 +7,12 @@ import (
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -408,6 +410,8 @@ func (h *Handler) addDefaultOrgToUserQuery(ctx context.Context, user *ent.User) 
 	return nil
 }
 
+// validateAllowedDomains checks if the user email is allowed in the default organization
+// if not, the user is switched to the personal organization
 func (h *Handler) validateAllowedDomains(ctx context.Context, user *ent.User) error {
 	//  allow the request before the user is authenticated
 	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -420,12 +424,39 @@ func (h *Handler) validateAllowedDomains(ctx context.Context, user *ent.User) er
 	}
 
 	if err := hooks.CheckAllowedEmailDomain(user.Email, orgSetting); err != nil {
-		log.Error().Err(err).Msg("user email not allowed in default organization")
+		log.Error().Err(err).Msg("user email not allowed in default organization, switching to personal org")
+
+		return h.updateDefaultOrgToPersonal(ctx, user)
+	}
+
+	return nil
+}
+
+// updateDefaultOrgToPersonal updates the default org for the user to the personal org
+func (h *Handler) updateDefaultOrgToPersonal(ctx context.Context, user *ent.User) error {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	personalOrg, err := h.getPersonalOrgID(allowCtx, user)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining personal org")
 
 		return err
 	}
 
+	if err := h.DBClient.UserSetting.UpdateOneID(user.Edges.Setting.ID).SetDefaultOrgID(personalOrg.ID).Exec(allowCtx); err != nil {
+		log.Error().Err(err).Msg("error updating default org")
+
+		return err
+	}
+
+	user.Edges.Setting.Edges.DefaultOrg = personalOrg
+
 	return nil
+}
+
+// getPersonalOrgID returns the personal org ID for the user
+func (h *Handler) getPersonalOrgID(ctx context.Context, user *ent.User) (*generated.Organization, error) {
+	return h.DBClient.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(ctx)
 }
 
 // CheckAndCreateUser takes a user with an OauthTooToken set in the context and checks if the user is already created

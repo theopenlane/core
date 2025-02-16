@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -21,7 +22,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -90,6 +90,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		name           string
 		username       string
 		password       string
+		expectedOrgID  string
 		expectedErr    error
 		expectedStatus int
 	}{
@@ -98,19 +99,21 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			username:       validConfirmedUser.UserInfo.Email,
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
+			expectedOrgID:  validConfirmedUser.OrganizationID,
 		},
 		{
 			name:           "happy path, domain restricted org",
 			username:       validConfirmedUserRestrictedOrg.UserInfo.Email,
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
+			expectedOrgID:  org.ID,
 		},
 		{
-			name:           "domain restricted org, email not allowed",
+			name:           "domain restricted org, email not allowed, switch to personal org",
 			username:       invalidConfirmedUserRestrictedOrg.UserInfo.Email,
 			password:       validPassword,
-			expectedStatus: http.StatusBadRequest,
-			expectedErr:    hooks.ErrEmailDomainNotAllowed,
+			expectedStatus: http.StatusOK,
+			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
 		},
 		{
 			name:           "email unverified",
@@ -185,6 +188,16 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
 				assert.True(t, out.TFAEnabled) // we set the user to have TFA enabled in the tests
+				require.NotNil(t, out.AccessToken)
+
+				// check the claims to ensure the user is in the correct org
+				token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
+				require.NoError(t, err)
+
+				claims, ok := token.Claims.(jwt.MapClaims)
+				require.True(t, ok)
+
+				assert.Equal(t, tc.expectedOrgID, claims["org"])
 			} else {
 				assert.Contains(t, out.Error, tc.expectedErr.Error())
 			}
