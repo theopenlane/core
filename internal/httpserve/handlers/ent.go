@@ -7,7 +7,6 @@ import (
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -455,7 +454,7 @@ func (h *Handler) updateDefaultOrgToPersonal(ctx context.Context, user *ent.User
 }
 
 // getPersonalOrgID returns the personal org ID for the user
-func (h *Handler) getPersonalOrgID(ctx context.Context, user *ent.User) (*generated.Organization, error) {
+func (h *Handler) getPersonalOrgID(ctx context.Context, user *ent.User) (*ent.Organization, error) {
 	return h.DBClient.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(ctx)
 }
 
