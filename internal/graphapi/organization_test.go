@@ -940,20 +940,19 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 	require.Equal(t, o.Organization.ID, org.ID)
 
 	// allow after tuples have been deleted
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = entx.SkipSoftDelete(ctx)
+
+	co, err = suite.client.api.GetOrganizationByID(ctx, childOrg.ID)
+	require.NoError(t, err)
+
+	require.Equal(t, co.Organization.ID, childOrg.ID)
+
+	// allow after tuples have been deleted
 	ctx = privacy.DecisionContext(reqCtx, privacy.Allow)
 	ctx = entx.SkipSoftDelete(ctx)
 
-	// TODO: fix
-	// g, err = suite.client.api.GetGroupByID(ctx, group1.ID)
-	// require.NoError(t, err)
-	// require.Equal(t, g.Group.ID, group1.ID)
-
-	// // allow after tuples have been deleted
-	// ctx = privacy.DecisionContext(ctx, privacy.Allow)
-	// ctx = entx.SkipSoftDelete(ctx)
-
-	// co, err = suite.client.api.GetOrganizationByID(ctx, childOrg.ID)
-	// require.NoError(t, err)
-
-	// require.Equal(t, co.Organization.ID, childOrg.ID)
+	g, err = suite.client.api.GetGroupByID(ctx, group1.ID)
+	require.NoError(t, err)
+	require.Equal(t, g.Group.ID, group1.ID)
 }
