@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -135,11 +136,16 @@ func (Subcontrol) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the Subcontrol
+func (Subcontrol) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{}
+}
+
 // Policy of the Subcontrol
 func (Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.SubcontrolQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.ControlParent), // if mutation contains control_id, check access

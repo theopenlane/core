@@ -204,12 +204,30 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			ctx:            testUser1.UserCtx,
 		},
 		{
+			name:           "organization with parent org, no access",
+			orgName:        gofakeit.Name(),
+			orgDescription: gofakeit.HipsterSentence(10),
+			parentOrgID:    testUser2.OrganizationID,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			errorMsg:       notAuthorizedErrorMsg,
+		},
+		{
 			name:           "happy path organization with parent org using personal access token",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    testUser1.OrganizationID,
 			client:         suite.client.apiWithPAT,
 			ctx:            context.Background(),
+		},
+		{
+			name:           "organization with parent org using personal access token, no access to parent",
+			orgName:        gofakeit.Name(),
+			orgDescription: gofakeit.HipsterSentence(10),
+			parentOrgID:    testUser2.OrganizationID,
+			client:         suite.client.apiWithPAT,
+			ctx:            context.Background(),
+			errorMsg:       notFoundErrorMsg,
 		},
 		{
 			name:           "organization with parent personal org",
@@ -841,6 +859,10 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 
 			// make sure the deletedID matches the ID we wanted to delete
 			assert.Equal(t, tc.orgID, resp.DeleteOrganization.DeletedID)
+
+			// update the context to have the correct org after the org is deleted
+			reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
+			require.NoError(t, err)
 
 			// make sure the default org is reset
 			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, testUser1.UserInfo.Edges.Setting.ID)

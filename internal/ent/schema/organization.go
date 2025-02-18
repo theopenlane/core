@@ -17,7 +17,6 @@ import (
 
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -245,8 +244,7 @@ func (Organization) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),    // Allow sign-up tokens to query the org ID they are subscribing to
-			entfga.CheckReadAccess[*generated.OrganizationQuery](),            // access based on query context
-			policy.CheckOrgReadAccess(),                                       // access based on auth context
+			policy.CheckOrgReadAccess(),                                       // access based on query and auth context
 		),
 		policy.WithMutationRules(
 			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
@@ -267,5 +265,6 @@ func (Organization) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookOrganization(),
 		hooks.HookOrganizationDelete(),
+		hooks.HookOrganizationCreatePolicy(),
 	}
 }

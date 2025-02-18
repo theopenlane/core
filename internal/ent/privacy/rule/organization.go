@@ -14,11 +14,49 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
-// CheckOrgAccess checks if the authenticated user has access to the organization
+// CheckCurrentOrgAccess checks if the authenticated user has access to the organization
 // based on the relation provided
 // This rule assumes that the organization id and user id are set in the context
 // and only checks for access to the single organization
-func CheckOrgAccess(ctx context.Context, relation string) error {
+func CheckCurrentOrgAccess(ctx context.Context, relation string) error {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	return checkOrgAccess(ctx, relation, orgID)
+}
+
+func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *generated.OrganizationQuery) error {
+	// run the query with allow context to get the list of organizations
+	// the user is trying to access
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	requestedOrgs, err := query.Clone().All(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	if len(requestedOrgs) == 0 {
+		// return nil if no organizations were found
+		// to allow the next check to run
+		return nil
+	}
+
+	for _, org := range requestedOrgs {
+		if err := checkOrgAccess(ctx, relation, org.ID); err != nil && err == privacy.Deny {
+			return err
+		}
+	}
+
+	return privacy.Allow
+}
+
+func checkOrgAccess(ctx context.Context, relation, organizationID string) error {
+	// skip if permission is already set to allow
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return nil
+	}
+
 	log.Debug().Str("relation", relation).Msg("checking access to organization")
 
 	au, err := auth.GetAuthenticatedUserContext(ctx)
@@ -30,8 +68,9 @@ func CheckOrgAccess(ctx context.Context, relation string) error {
 		SubjectID:   au.SubjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		Relation:    relation,
-		ObjectType:  "organization",
-		ObjectID:    au.OrganizationID,
+		ObjectType:  generated.TypeOrganization,
+		ObjectID:    organizationID,
+		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 	}
 
 	access, err := utils.AuthzClientFromContext(ctx).CheckOrgAccess(ctx, ac)
@@ -59,15 +98,16 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			relation = fgax.CanDelete
 		}
 
-		userID, err := auth.GetUserIDFromContext(ctx)
+		user, err := auth.GetAuthenticatedUserContext(ctx)
 		if err != nil {
 			return err
 		}
 
 		ac := fgax.AccessCheck{
-			SubjectID:   userID,
+			SubjectID:   user.SubjectID,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
 			Relation:    relation,
+			Context:     utils.NewOrganizationContextKey(user.SubjectEmail),
 		}
 
 		// No permissions checks on creation of org except if this is not a root org
@@ -84,8 +124,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 
 				if !access {
-					log.Debug().Str("relation", relation).
-						Str("organization_id", parentOrgID).
+					log.Debug().Str("relation", relation).Str("organization_id", parentOrgID).
 						Msg("access denied to parent org")
 
 					return generated.ErrPermissionDenied

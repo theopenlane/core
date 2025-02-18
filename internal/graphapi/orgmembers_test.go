@@ -62,7 +62,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedLen: 0,
-			expectErr:   true,
+			expectErr:   false, // no org members returned
 		},
 		{
 			name:        "invalid-id",
@@ -70,7 +70,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedLen: 0,
-			expectErr:   true,
+			expectErr:   false, // no org members returned
 		},
 	}
 

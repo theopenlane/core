@@ -176,6 +176,7 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 	return &auth.AuthenticatedUser{
 		SubjectID:          user.ID,
 		SubjectName:        getSubjectName(user),
+		SubjectEmail:       user.Email,
 		OrganizationID:     org.ID,
 		OrganizationName:   org.Name,
 		OrganizationIDs:    []string{org.ID},
@@ -207,6 +208,8 @@ func checkToken(ctx context.Context, conf *AuthOptions, token string) (*auth.Aut
 
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
 func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
+	// query for the token before the user is authorized
+	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	pat, err := dbClient.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
 		WithOwner().
 		WithOrganizations().
@@ -237,12 +240,15 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	return &auth.AuthenticatedUser{
 		SubjectID:          pat.OwnerID,
 		SubjectName:        getSubjectName(pat.Edges.Owner),
+		SubjectEmail:       pat.Edges.Owner.Email,
 		OrganizationIDs:    orgIDs,
 		AuthenticationType: auth.PATAuthentication,
 	}, pat.ID, nil
 }
 
 func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
+	// query for the token before the user is authorized
+	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	t, err := dbClient.APIToken.Query().Where(apitoken.Token(token)).
 		Only(ctx)
 	if err != nil {
@@ -257,6 +263,7 @@ func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*a
 	return &auth.AuthenticatedUser{
 		SubjectID:          t.ID,
 		SubjectName:        fmt.Sprintf("service: %s", t.Name),
+		SubjectEmail:       "", // no email for service accounts
 		OrganizationID:     t.OwnerID,
 		OrganizationIDs:    []string{t.OwnerID},
 		AuthenticationType: auth.APITokenAuthentication,

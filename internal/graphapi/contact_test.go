@@ -37,6 +37,12 @@ func (suite *GraphTestSuite) TestQueryContact() {
 			ctx:     testUser1.UserCtx,
 		},
 		{
+			name:    "happy path contact, view only user",
+			queryID: contact.ID,
+			client:  suite.client.api,
+			ctx:     viewOnlyUser.UserCtx,
+		},
+		{
 			name:     "contact not returned, no access",
 			queryID:  contact.ID,
 			client:   suite.client.api,
@@ -98,6 +104,12 @@ func (suite *GraphTestSuite) TestQueryContacts() {
 			expectedResults: 2,
 		},
 		{
+			name:            "happy path, view only user",
+			client:          suite.client.api,
+			ctx:             viewOnlyUser.UserCtx,
+			expectedResults: 2,
+		},
+		{
 			name:            "happy path, using api token",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
@@ -145,6 +157,15 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "view only user cannot create",
+			request: openlaneclient.CreateContactInput{
+				FullName: "Aemond Targaryen",
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, using api token",
@@ -262,6 +283,24 @@ func (suite *GraphTestSuite) TestMutationUpdateContact() {
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "view only user cannot update",
+			request: openlaneclient.UpdateContactInput{
+				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "no access, cannot update",
+			request: openlaneclient.UpdateContactInput{
+				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "update phone number, using api token",

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -86,9 +87,6 @@ func (APIToken) Mixin() []ent.Mixin {
 		NewOrgOwnedMixin(
 			ObjectOwnedMixin{
 				Ref: "api_tokens",
-				// skip the interceptor for Only queries when the token is being checked
-				// and we do not yet know the organization
-				SkipInterceptor: interceptors.SkipOnlyQuery,
 			}),
 	}
 }
@@ -125,7 +123,7 @@ func (APIToken) Interceptors() []ent.Interceptor {
 func (APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.APITokenQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.APITokenMutation](),

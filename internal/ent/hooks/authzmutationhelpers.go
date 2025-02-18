@@ -84,7 +84,7 @@ func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID str
 	// create the tuple for the parent org owner relationship without the subject id
 	// this will be filled in by getTuplesToAdd based on the owner id field
 	tr := fgax.TupleRequest{
-		SubjectType: "organization",
+		SubjectType: generated.TypeOrganization,
 		ObjectID:    objectID,                        // this is the object id being created
 		ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 		Relation:    fgax.ParentRelation,

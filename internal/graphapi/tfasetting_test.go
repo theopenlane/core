@@ -278,17 +278,16 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 			}
 
 			// make sure user setting is updated correctly
-			userSettings, err := tc.client.GetAllUserSettings(tc.ctx)
+			userSettings, err := suite.client.api.GetUserSettingByID(testUser1.UserCtx, testUser1.UserInfo.Edges.Setting.ID)
 			require.NoError(t, err)
-			require.Len(t, userSettings.UserSettings.Edges, 1)
 
 			if resp.UpdateTFASetting.TfaSetting.Verified {
-				assert.True(t, *userSettings.UserSettings.Edges[0].Node.IsTfaEnabled)
+				assert.True(t, *userSettings.UserSetting.IsTfaEnabled)
 			}
 
 			// ensure TFA is disabled if totp is not allowed
 			if !*resp.UpdateTFASetting.TfaSetting.TotpAllowed {
-				assert.False(t, *userSettings.UserSettings.Edges[0].Node.IsTfaEnabled)
+				assert.False(t, *userSettings.UserSetting.IsTfaEnabled)
 			}
 
 			// set at the end so we can compare later

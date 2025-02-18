@@ -15,6 +15,15 @@ import (
 
 // CreateOrganization is the resolver for the createOrganization field.
 func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error) {
+	// set the parent organization in the auth context, used when creating a sub-organization with a personal access token
+	if input.ParentID != nil {
+		if err := setOrganizationInAuthContext(ctx, input.ParentID); err != nil {
+			log.Error().Err(err).Msg("failed to set organization in auth context")
+
+			return nil, newNotFoundError("parent_id")
+		}
+	}
+
 	res, err := withTransactionalMutation(ctx).Organization.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
@@ -79,6 +88,12 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 
 // Organization is the resolver for the organization field.
 func (r *queryResolver) Organization(ctx context.Context, id string) (*generated.Organization, error) {
+	if err := setOrganizationInAuthContext(ctx, &id); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, newNotFoundError("id")
+	}
+
 	res, err := withTransactionalMutation(ctx).Organization.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})

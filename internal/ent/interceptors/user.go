@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // TraverseUser returns an ent interceptor for user that filters users based on the context of the query
@@ -110,8 +111,9 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 
 	for _, orgID := range orgIDs {
 		req := fgax.ListRequest{
-			ObjectID:   orgID,
-			ObjectType: "organization",
+			ObjectID:         orgID,
+			ObjectType:       generated.TypeOrganization,
+			ConditionContext: utils.NewOrganizationContextKey(""), // use an empty domain context on list
 		}
 
 		listUserResp, err := q.Authz.ListUserRequest(ctx, req)

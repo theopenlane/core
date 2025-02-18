@@ -4,6 +4,8 @@ go 1.23.6
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
+replace github.com/theopenlane/iam => ../iam
+
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.1

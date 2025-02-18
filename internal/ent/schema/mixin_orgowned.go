@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -160,7 +161,7 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 	}
 
 	tr := fgax.TupleRequest{
-		SubjectType:     "organization",
+		SubjectType:     generated.TypeOrganization,
 		SubjectID:       orgID,
 		SubjectRelation: fgax.OwnerRelation,
 		ObjectID:        id,                                    // this is the object id being created
@@ -188,6 +189,16 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			}
 		}
 
+		// Allow the interceptor to skip the query if the context has an allow
+		// bypass and its for a token
+		// these are queried during the auth flow and should not be filtered
+		if q.Type() == generated.TypeAPIToken || q.Type() == generated.TypeOrganization {
+			if _, allow := privacy.DecisionFromContext(ctx); allow {
+				return nil
+			}
+
+		}
+
 		// skip interceptor if the context has the managed group key
 		if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
 			return nil
@@ -201,7 +212,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		case interceptors.SkipOnlyQuery:
 			{
-				if ctxQuery.Op == "Only" {
+				if ctxQuery.Op == interceptors.OnlyOperation {
 					return nil
 				}
 			}

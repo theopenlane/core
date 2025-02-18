@@ -48,6 +48,11 @@ func updateUserAuthSession(ctx context.Context, as authmanager.Config, newOrgID 
 		return err
 	}
 
+	// // add the organization ID to the authenticated user context
+	// if err := auth.SetOrganizationIDInAuthContext(ctx, newOrgID); err != nil {
+	// 	return err
+	// }
+
 	// set the auth cookies
 	auth.SetAuthCookies(ec.Response().Writer, out.AccessToken, out.RefreshToken, *as.GetSessionConfig().CookieConfig)
 

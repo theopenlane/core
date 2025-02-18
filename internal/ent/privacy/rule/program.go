@@ -35,7 +35,7 @@ func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privac
 
 		relation := fgax.CanEdit
 
-		userID, err := auth.GetUserIDFromContext(ctx)
+		user, err := auth.GetAuthenticatedUserContext(ctx)
 		if err != nil {
 			return err
 		}
@@ -46,11 +46,12 @@ func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privac
 
 		for _, pID := range pIDs {
 			ac := fgax.AccessCheck{
-				SubjectID:   userID,
+				SubjectID:   user.SubjectID,
 				SubjectType: auth.GetAuthzSubjectType(ctx),
 				ObjectID:    pID,
 				ObjectType:  fgax.Kind(parentType),
 				Relation:    relation,
+				Context:     utils.NewOrganizationContextKey(user.SubjectEmail),
 			}
 
 			access, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac)

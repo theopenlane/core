@@ -18,6 +18,8 @@ import (
 )
 
 // FilterListQuery filters any list query to only include the objects that the user has access to
+// This is automatically added to all schemas using the ObjectOwnedMixin, so should not be added
+// directly if that mixin is used
 func FilterListQuery() ent.Interceptor {
 	return intercept.TraverseFunc(AddIDPredicate)
 }
@@ -30,26 +32,41 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 		return nil
 	}
 
+	// Membership tables should use the object_id field,
+	// e.g. GroupMembership should use group_id
+	isMembership := strings.Contains(q.Type(), "Membership")
+
+	// types that are filtered by another field than id
+	// History uses `ref`
 	isHistory := strings.Contains(q.Type(), "History")
 
-	objectIDs, err := GetAuthorizedObjectIDs(ctx, q.Type())
+	objectType := q.Type()
+	if isMembership {
+		objectType = strings.ReplaceAll(q.Type(), "Membership", "")
+	}
+
+	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType)
 	if err != nil {
 		return err
 	}
 
-	// if the query is a history query, we need to filter by the ref field
-	if isHistory {
+	switch {
+	case isHistory:
 		q.WhereP(
 			sql.FieldIn("ref", objectIDs...),
 		)
 
-		return nil
-	}
+	case isMembership:
+		column := strings.ToLower(objectType) + "_id"
+		q.WhereP(
+			sql.FieldIn(column, objectIDs...),
+		)
+	default:
+		q.WhereP(
+			sql.FieldIn("id", objectIDs...),
+		)
 
-	// filter the query to only include the objects that the user has access to
-	q.WhereP(
-		sql.FieldIn("id", objectIDs...),
-	)
+	}
 
 	return nil
 }
@@ -57,7 +74,7 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 // GetAuthorizedObjectIDs does a list objects request to pull all ids the current user
 // has access to within the FGA system
 func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	user, err := auth.GetAuthenticatedUserContext(ctx)
 	if err != nil {
 		return []string{}, nil
 	}
@@ -66,9 +83,11 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, er
 	objectType := strings.Replace(queryType, "History", "", 1)
 
 	req := fgax.ListRequest{
-		SubjectID:   userID,
+		SubjectID:   user.SubjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		ObjectType:  strcase.SnakeCase(objectType),
+		// add email domain to satisfy any list requests with organization conditions
+		ConditionContext: utils.NewOrganizationContextKey(user.SubjectEmail),
 	}
 
 	if strings.Contains(queryType, "History") {
@@ -81,7 +100,7 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, er
 
 	resp, err := utils.AuthzClientFromContext(ctx).ListObjectsRequest(ctx, req)
 	if err != nil {
-		return []string{}, nil
+		return []string{}, err
 	}
 
 	objectIDs := make([]string, 0, len(resp.Objects))

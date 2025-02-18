@@ -221,7 +221,7 @@ func checkAccessForEdges(ctx context.Context, m ent.Mutation) error {
 
 // checkEdgesEditAccess takes a list of edges and looks for the permissions edges to confirm the user has edit access
 func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) error {
-	actorID, err := auth.GetUserIDFromContext(ctx)
+	actor, err := auth.GetAuthenticatedUserContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -248,8 +248,9 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) e
 				Relation:    fgax.CanEdit,
 				ObjectID:    idStr,
 				ObjectType:  fgax.Kind(objectType),
-				SubjectID:   actorID,
+				SubjectID:   actor.SubjectID,
 				SubjectType: auth.GetAuthzSubjectType(ctx),
+				Context:     utils.NewOrganizationContextKey(actor.SubjectEmail),
 			}
 
 			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {
@@ -342,7 +343,7 @@ func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples 
 		}
 
 		// get the user id or service id from the context
-		subjectID, err := auth.GetUserIDFromContext(ctx)
+		subject, err := auth.GetAuthenticatedUserContext(ctx)
 		if err != nil {
 			return err
 		}
@@ -351,9 +352,10 @@ func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples 
 		ac := fgax.AccessCheck{
 			Relation:    fgax.CanEdit,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
-			SubjectID:   subjectID,
+			SubjectID:   subject.SubjectID,
 			ObjectID:    objectID,
 			ObjectType:  fgax.Kind(objectType),
+			Context:     utils.NewOrganizationContextKey(subject.SubjectEmail),
 		}
 
 		access, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac)

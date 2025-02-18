@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -26,21 +27,21 @@ func (h *Handler) AccountAccessHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	req := fgax.AccessCheck{
-		SubjectType: in.SubjectType,
-		Relation:    in.Relation,
-		ObjectID:    in.ObjectID,
-		ObjectType:  fgax.Kind(in.ObjectType),
-	}
-
-	subjectID, err := auth.GetUserIDFromContext(ctx.Request().Context())
+	subject, err := auth.GetAuthenticatedUserContext(ctx.Request().Context())
 	if err != nil {
 		log.Error().Err(err).Msg("error getting user id from context")
 
 		return h.InternalServerError(ctx, err)
 	}
 
-	req.SubjectID = subjectID
+	req := fgax.AccessCheck{
+		SubjectType: in.SubjectType,
+		Relation:    in.Relation,
+		ObjectID:    in.ObjectID,
+		ObjectType:  fgax.Kind(in.ObjectType),
+		SubjectID:   subject.SubjectID,
+		Context:     utils.NewOrganizationContextKey(subject.SubjectEmail),
+	}
 
 	allow, err := h.DBClient.Authz.CheckAccess(ctx.Request().Context(), req)
 	if err != nil {

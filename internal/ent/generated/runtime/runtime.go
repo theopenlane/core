@@ -1333,7 +1333,9 @@ func init() {
 
 	groupmembership.Hooks[4] = groupmembershipHooks[1]
 	groupmembershipMixinInters2 := groupmembershipMixin[2].Interceptors()
+	groupmembershipInters := schema.GroupMembership{}.Interceptors()
 	groupmembership.Interceptors[0] = groupmembershipMixinInters2[0]
+	groupmembership.Interceptors[1] = groupmembershipInters[0]
 	groupmembershipMixinFields0 := groupmembershipMixin[0].Fields()
 	_ = groupmembershipMixinFields0
 	groupmembershipMixinFields1 := groupmembershipMixin[1].Fields()
@@ -1629,8 +1631,10 @@ func init() {
 	internalpolicy.Hooks[7] = internalpolicyHooks[0]
 	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
 	internalpolicyMixinInters4 := internalpolicyMixin[4].Interceptors()
+	internalpolicyInters := schema.InternalPolicy{}.Interceptors()
 	internalpolicy.Interceptors[0] = internalpolicyMixinInters1[0]
 	internalpolicy.Interceptors[1] = internalpolicyMixinInters4[0]
+	internalpolicy.Interceptors[2] = internalpolicyInters[0]
 	internalpolicyMixinFields0 := internalpolicyMixin[0].Fields()
 	_ = internalpolicyMixinFields0
 	internalpolicyMixinFields2 := internalpolicyMixin[2].Fields()
@@ -2201,6 +2205,8 @@ func init() {
 	organization.Hooks[12] = organizationHooks[0]
 
 	organization.Hooks[13] = organizationHooks[1]
+
+	organization.Hooks[14] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
@@ -2344,10 +2350,15 @@ func init() {
 	}
 	organizationsettingMixinHooks0 := organizationsettingMixin[0].Hooks()
 	organizationsettingMixinHooks3 := organizationsettingMixin[3].Hooks()
+	organizationsettingHooks := schema.OrganizationSetting{}.Hooks()
 
 	organizationsetting.Hooks[1] = organizationsettingMixinHooks0[0]
 
 	organizationsetting.Hooks[2] = organizationsettingMixinHooks3[0]
+
+	organizationsetting.Hooks[3] = organizationsettingHooks[0]
+
+	organizationsetting.Hooks[4] = organizationsettingHooks[1]
 	organizationsettingMixinInters3 := organizationsettingMixin[3].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
 	organizationsetting.Interceptors[0] = organizationsettingMixinInters3[0]
@@ -2592,8 +2603,10 @@ func init() {
 	procedure.Hooks[7] = procedureHooks[0]
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
 	procedureMixinInters4 := procedureMixin[4].Interceptors()
+	procedureInters := schema.Procedure{}.Interceptors()
 	procedure.Interceptors[0] = procedureMixinInters1[0]
 	procedure.Interceptors[1] = procedureMixinInters4[0]
+	procedure.Interceptors[2] = procedureInters[0]
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
 	procedureMixinFields2 := procedureMixin[2].Fields()
@@ -2818,7 +2831,9 @@ func init() {
 
 	programmembership.Hooks[4] = programmembershipHooks[1]
 	programmembershipMixinInters2 := programmembershipMixin[2].Interceptors()
+	programmembershipInters := schema.ProgramMembership{}.Interceptors()
 	programmembership.Interceptors[0] = programmembershipMixinInters2[0]
+	programmembership.Interceptors[1] = programmembershipInters[0]
 	programmembershipMixinFields0 := programmembershipMixin[0].Fields()
 	_ = programmembershipMixinFields0
 	programmembershipMixinFields1 := programmembershipMixin[1].Fields()

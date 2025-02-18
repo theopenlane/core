@@ -59,16 +59,16 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 			queryID:     group.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expected:    nil,
-			errExpected: true,
+			expected:    nil, // no results are returned because the group provided is not found for that user
+			errExpected: false,
 		},
 		{
 			name:        "invalid-id",
 			queryID:     "tacos-for-dinner",
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expected:    nil,
-			errExpected: true,
+			expected:    nil, // no results are returned because the group provided is not found for that user
+			errExpected: false,
 		},
 	}
 

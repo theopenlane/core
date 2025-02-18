@@ -15,6 +15,7 @@ var prePolicy = privacy.Policy{
 // postPolicy is executed after privacy policy
 var postPolicy = privacy.Policy{
 	Query: privacy.QueryPolicy{
+		// TODO: update to always allow after policies implemented on all schemas
 		privacy.AlwaysDenyRule(),
 	},
 	Mutation: privacy.MutationPolicy{

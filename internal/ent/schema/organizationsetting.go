@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -93,6 +94,13 @@ func (OrganizationSetting) Annotations() []schema.Annotation {
 	}
 }
 
+func (OrganizationSetting) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookOrganizationCreatePolicy(),
+		hooks.HookOrganizationUpdatePolicy(),
+	}
+}
+
 // Interceptors of the OrganizationSetting
 func (OrganizationSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
@@ -114,8 +122,7 @@ func (OrganizationSetting) Mixin() []ent.Mixin {
 func (OrganizationSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.OrganizationSettingQuery](), // access based on query context
-			policy.CheckOrgReadAccess(),                                   // access based on auth context
+			policy.CheckOrgReadAccess(), // access based on auth context
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.OrganizationSettingMutation](),

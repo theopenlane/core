@@ -58,7 +58,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 	if exists && orgExists {
 		req := fgax.TupleRequest{
 			SubjectID:   org,
-			SubjectType: "organization",
+			SubjectType: generated.TypeOrganization,
 			ObjectID:    objID,
 			ObjectType:  GetObjectTypeFromEntMutation(m),
 		}

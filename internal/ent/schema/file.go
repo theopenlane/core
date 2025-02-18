@@ -133,7 +133,7 @@ func (File) Interceptors() []ent.Interceptor {
 func (File) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.FileQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithOnMutationRules(
 			// check permissions on delete and update operations, creation is handled by the parent object

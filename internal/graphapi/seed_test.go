@@ -98,7 +98,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	pat := (&PersonalAccessTokenBuilder{
 		client:          suite.client,
 		OwnerID:         testUser1.ID,
-		OrganizationIDs: []string{testUser1.OrganizationID, testUser1.OrganizationID}}).
+		OrganizationIDs: []string{testUser1.OrganizationID, testUser1.PersonalOrgID}}).
 		MustNew(testUser1.UserCtx, t)
 
 	authHeaderPAT := openlaneclient.Authorization{
