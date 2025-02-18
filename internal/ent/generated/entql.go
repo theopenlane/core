@@ -4161,6 +4161,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organization.FilesTable,
+			Columns: organization.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"Organization",
+		"File",
+	)
+	graph.MustAddE(
 		"events",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4183,18 +4195,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Organization",
 		"Hush",
-	)
-	graph.MustAddE(
-		"files",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
-			Bidi:    false,
-		},
-		"Organization",
-		"File",
 	)
 	graph.MustAddE(
 		"avatar_file",
@@ -13093,6 +13093,20 @@ func (f *OrganizationFilter) WhereHasUsersWith(preds ...predicate.User) {
 	})))
 }
 
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *OrganizationFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasEvents applies a predicate to check if query has an edge events.
 func (f *OrganizationFilter) WhereHasEvents() {
 	f.Where(entql.HasEdge("events"))
@@ -13115,20 +13129,6 @@ func (f *OrganizationFilter) WhereHasSecrets() {
 // WhereHasSecretsWith applies a predicate to check if query has an edge secrets with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasSecretsWith(preds ...predicate.Hush) {
 	f.Where(entql.HasEdgeWith("secrets", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *OrganizationFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
-}
-
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

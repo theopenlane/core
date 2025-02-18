@@ -10092,6 +10092,25 @@ func (c *OrganizationClient) QueryUsers(o *Organization) *UserQuery {
 	return query
 }
 
+// QueryFiles queries the files edge of a Organization.
+func (c *OrganizationClient) QueryFiles(o *Organization) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, organization.FilesTable, organization.FilesPrimaryKey...),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.OrganizationFiles
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvents queries the events edge of a Organization.
 func (c *OrganizationClient) QueryEvents(o *Organization) *EventQuery {
 	query := (&EventClient{config: c.config}).Query()
@@ -10124,25 +10143,6 @@ func (c *OrganizationClient) QuerySecrets(o *Organization) *HushQuery {
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Hush
 		step.Edge.Schema = schemaConfig.OrganizationSecrets
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryFiles queries the files edge of a Organization.
-func (c *OrganizationClient) QueryFiles(o *Organization) *FileQuery {
-	query := (&FileClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.FilesTable, organization.FilesPrimaryKey...),
-		)
-		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.OrganizationFiles
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}

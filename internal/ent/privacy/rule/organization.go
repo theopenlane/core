@@ -2,6 +2,7 @@ package rule
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -27,11 +28,14 @@ func CheckCurrentOrgAccess(ctx context.Context, relation string) error {
 	return checkOrgAccess(ctx, relation, orgID)
 }
 
+// CheckOrgAccessBasedOnRequest checks if the authenticated user has access to the organizations that are requested
+// in the organization query based on the relation provided
 func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *generated.OrganizationQuery) error {
 	// run the query with allow context to get the list of organizations
 	// the user is trying to access
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	requestedOrgs, err := query.Clone().All(allowCtx)
+
+	requestedOrgs, err := query.Clone().Select("id").All(allowCtx)
 	if err != nil {
 		return err
 	}
@@ -43,7 +47,7 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 	}
 
 	for _, org := range requestedOrgs {
-		if err := checkOrgAccess(ctx, relation, org.ID); err != nil && err == privacy.Deny {
+		if err := checkOrgAccess(ctx, relation, org.ID); err != nil && errors.Is(err, privacy.Deny) {
 			return err
 		}
 	}
@@ -51,6 +55,7 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 	return privacy.Allow
 }
 
+// checkOrgAccess checks if the authenticated user has access to the organization
 func checkOrgAccess(ctx context.Context, relation, organizationID string) error {
 	// skip if permission is already set to allow
 	if _, allow := privacy.DecisionFromContext(ctx); allow {

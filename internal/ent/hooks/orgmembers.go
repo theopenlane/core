@@ -72,7 +72,7 @@ func HookOrgMembers() ent.Hook {
 				return nil, err
 			}
 
-			if err := CheckAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
+			if err := checkAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
 				return nil, err
 			}
 

@@ -42,8 +42,11 @@ func (DocumentData) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		NewOrgOwnMixinWithRef("document_data"),
-	}
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			FieldNames:            []string{"template_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "document_data",
+		})}
 }
 
 // Edges of the DocumentData
@@ -66,7 +69,7 @@ func (DocumentData) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.OrganizationInheritedChecks(), // TODO(sfunk): update to template checks instead of org checks
+		entfga.SelfAccessChecks(),
 	}
 }
 

@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -12,14 +13,15 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 )
 
-// newAuthSession creates a new auth session struct
-func newAuthSession(db *generated.Client) authmanager.Config {
-	return *authmanager.New(db)
-}
-
 // updateUserAuthSession updates the user session with the new org ID
 // and sets updated auth cookies
-func updateUserAuthSession(ctx context.Context, as authmanager.Config, newOrgID string) error {
+func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID string) error {
+	if am == nil {
+		log.Error().Msg("auth manager is nil, unable to update user auth session")
+
+		return ErrInternalServerError
+	}
+
 	au, err := auth.GetAuthenticatedUserContext(ctx)
 	if err != nil {
 		return err
@@ -43,7 +45,7 @@ func updateUserAuthSession(ctx context.Context, as authmanager.Config, newOrgID 
 
 	// generate a new auth session with the new org ID
 	// this will also set the session cookie
-	out, err := as.GenerateUserAuthSessionWithOrg(ec, user, newOrgID)
+	out, err := am.GenerateUserAuthSessionWithOrg(ec, user, newOrgID)
 	if err != nil {
 		return err
 	}
@@ -54,7 +56,7 @@ func updateUserAuthSession(ctx context.Context, as authmanager.Config, newOrgID 
 	}
 
 	// set the auth cookies
-	auth.SetAuthCookies(ec.Response().Writer, out.AccessToken, out.RefreshToken, *as.GetSessionConfig().CookieConfig)
+	auth.SetAuthCookies(ec.Response().Writer, out.AccessToken, out.RefreshToken, *am.GetSessionConfig().CookieConfig)
 
 	// update the context with the new tokens and session
 	auth.SetAccessTokenContext(ec, out.AccessToken)

@@ -145,9 +145,12 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Through("members", OrgMembership.Type),
 
+		// files can be owned by an organization, but don't have to be
+		// only those with the organization id set should be cascade deleted
+		edge.To("files", File.Type).
+			Annotations(entx.CascadeAnnotationField("Organization")),
 		edge.To("events", Event.Type),
 		edge.To("secrets", Hush.Type),
-		edge.To("files", File.Type),
 		edge.To("avatar_file", File.Type).
 			Field("avatar_local_file_id").Unique(),
 

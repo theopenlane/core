@@ -26901,7 +26901,7 @@ input CreateDocumentDataInput {
   the json data of the document
   """
   data: JSON!
-  ownerID: ID
+  ownerID: ID!
   templateID: ID!
   entityIDs: [ID!]
   fileIDs: [ID!]
@@ -27460,9 +27460,9 @@ input CreateOrganizationInput {
   settingID: ID
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
+  fileIDs: [ID!]
   eventIDs: [ID!]
   secretIDs: [ID!]
-  fileIDs: [ID!]
   avatarFileID: ID
   groupIDs: [ID!]
   templateIDs: [ID!]
@@ -28119,9 +28119,9 @@ type DocumentData implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
-  ownerID: ID
+  ownerID: ID!
   """
   the template id of the document
   """
@@ -28130,7 +28130,7 @@ type DocumentData implements Node {
   the json data of the document
   """
   data: JSON!
-  owner: Organization
+  owner: Organization!
   template: Template!
   entity: [Entity!]
   files: [File!]
@@ -28181,9 +28181,9 @@ type DocumentDataHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
-  ownerID: String
+  ownerID: String!
   """
   the template id of the document
   """
@@ -28395,8 +28395,6 @@ input DocumentDataHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -28544,8 +28542,6 @@ input DocumentDataWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -38514,9 +38510,9 @@ type Organization implements Node {
   personalAccessTokens: [PersonalAccessToken!]
   apiTokens: [APIToken!]
   users: [User!]
+  files: [File!]
   events: [Event!]
   secrets: [Hush!]
-  files: [File!]
   avatarFile: File
   groups: [Group!]
   templates: [Template!]
@@ -39897,6 +39893,11 @@ input OrganizationWhereInput {
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
   """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
   events edge predicates
   """
   hasEvents: Boolean
@@ -39906,11 +39907,6 @@ input OrganizationWhereInput {
   """
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
-  """
-  files edge predicates
-  """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
   """
   avatar_file edge predicates
   """
@@ -49446,7 +49442,6 @@ input UpdateDocumentDataInput {
   """
   data: JSON
   ownerID: ID
-  clearOwner: Boolean
   templateID: ID
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
@@ -50218,15 +50213,15 @@ input UpdateOrganizationInput {
   addAPITokenIDs: [ID!]
   removeAPITokenIDs: [ID!]
   clearAPITokens: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
   addSecretIDs: [ID!]
   removeSecretIDs: [ID!]
   clearSecrets: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
   avatarFileID: ID
   clearAvatarFile: Boolean
   addGroupIDs: [ID!]

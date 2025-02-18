@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -350,6 +351,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).OrganizationSetting.Query().Where((organizationsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", organizationsettingCount).Msg("deleting organizationsetting")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).File.Query().Where((file.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", fileCount).Msg("deleting file")
 			return err
 		}
 	}

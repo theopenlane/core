@@ -194,7 +194,7 @@ func validateCanCreateInvite(ctx context.Context, m *generated.InviteMutation) e
 	// check if the the email can be invited to the organization
 	email, _ := m.Recipient()
 
-	return CheckAllowedEmailDomain(email, org.Edges.Setting)
+	return checkAllowedEmailDomain(email, org.Edges.Setting)
 }
 
 // setRecipientAndToken function is responsible for generating a invite token based on the
@@ -365,8 +365,8 @@ func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Inv
 	return m.Client().Invite.Query().Where(invite.Recipient(rec)).Where(invite.OwnerID(ownerID)).Only(ctx)
 }
 
-// CheckAllowedEmailDomain checks if the email domain is allowed for the organization
-func CheckAllowedEmailDomain(email string, orgSetting *generated.OrganizationSetting) error {
+// checkAllowedEmailDomain checks if the email domain is allowed for the organization
+func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSetting) error {
 	if orgSetting == nil || email == "" {
 		log.Info().Msg("no organization setting or email provided, cannot check settings")
 

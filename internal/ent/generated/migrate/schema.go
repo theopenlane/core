@@ -382,7 +382,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "template_id", Type: field.TypeString},
 	}
 	// DocumentDataTable holds the schema information for the "document_data" table.
@@ -395,7 +395,7 @@ var (
 				Symbol:     "document_data_organizations_document_data",
 				Columns:    []*schema.Column{DocumentDataColumns[9]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "document_data_templates_documents",
@@ -418,7 +418,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "template_id", Type: field.TypeString},
 		{Name: "data", Type: field.TypeJSON},
 	}
@@ -3956,6 +3956,31 @@ var (
 			},
 		},
 	}
+	// OrganizationFilesColumns holds the columns for the "organization_files" table.
+	OrganizationFilesColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// OrganizationFilesTable holds the schema information for the "organization_files" table.
+	OrganizationFilesTable = &schema.Table{
+		Name:       "organization_files",
+		Columns:    OrganizationFilesColumns,
+		PrimaryKey: []*schema.Column{OrganizationFilesColumns[0], OrganizationFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_files_organization_id",
+				Columns:    []*schema.Column{OrganizationFilesColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_files_file_id",
+				Columns:    []*schema.Column{OrganizationFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// OrganizationEventsColumns holds the columns for the "organization_events" table.
 	OrganizationEventsColumns = []*schema.Column{
 		{Name: "organization_id", Type: field.TypeString},
@@ -4002,31 +4027,6 @@ var (
 				Symbol:     "organization_secrets_hush_id",
 				Columns:    []*schema.Column{OrganizationSecretsColumns[1]},
 				RefColumns: []*schema.Column{HushesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// OrganizationFilesColumns holds the columns for the "organization_files" table.
-	OrganizationFilesColumns = []*schema.Column{
-		{Name: "organization_id", Type: field.TypeString},
-		{Name: "file_id", Type: field.TypeString},
-	}
-	// OrganizationFilesTable holds the schema information for the "organization_files" table.
-	OrganizationFilesTable = &schema.Table{
-		Name:       "organization_files",
-		Columns:    OrganizationFilesColumns,
-		PrimaryKey: []*schema.Column{OrganizationFilesColumns[0], OrganizationFilesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "organization_files_organization_id",
-				Columns:    []*schema.Column{OrganizationFilesColumns[0]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "organization_files_file_id",
-				Columns:    []*schema.Column{OrganizationFilesColumns[1]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -5124,9 +5124,9 @@ var (
 		NarrativeViewersTable,
 		OrgMembershipEventsTable,
 		OrganizationPersonalAccessTokensTable,
+		OrganizationFilesTable,
 		OrganizationEventsTable,
 		OrganizationSecretsTable,
-		OrganizationFilesTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
 		ProcedureBlockedGroupsTable,
@@ -5419,12 +5419,12 @@ func init() {
 	OrgMembershipEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[1].RefTable = PersonalAccessTokensTable
+	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
 	OrganizationEventsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrganizationSecretsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationSecretsTable.ForeignKeys[1].RefTable = HushesTable
-	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
 	OrganizationSettingFilesTable.ForeignKeys[0].RefTable = OrganizationSettingsTable
 	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable

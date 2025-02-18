@@ -905,30 +905,14 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 	whereArg := gCtx.Args["where"]
 	if whereArg != nil {
 		where, ok := whereArg.(*DocumentDataWhereInput)
-		if ok && where != nil && where.OwnerID != nil {
-			objectID = *where.OwnerID
+		if ok && where != nil && where.ID != nil {
+			objectID = *where.ID
 		}
 	}
 
 	// if that doesn't work, check for the id in the request args
 	if objectID == "" {
-		objectID, _ = gCtx.Args["ownerid"].(string)
-	}
-
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens on join tables where we have the join ID (for updates and deletes)
-	// and not the actual object id
-	if objectID == "" {
-		// allow this query to run
-		reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		ob, err := q.Clone().Only(reqCtx)
-		if err != nil {
-			return privacy.Allowf("nil request, bypassing auth check")
-		}
-
-		objectID = ob.OwnerID
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
@@ -939,7 +923,7 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanView,
-		ObjectType:  "organization",
+		ObjectType:  "document_data",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
 		ObjectID:    objectID,
@@ -957,29 +941,17 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if orgID == "" || err != nil {
-		// if we still don't have an object id, run the query and grab the object ID
-		// from the result
-		// this happens when using a personal access token since it is authorized for multiple orgs
-		id, _ := m.ID()
-
-		if id != "" {
-			// allow this query to run
-			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-			ob, err := m.Client().DocumentData.Get(reqCtx, id)
-			if err != nil {
-				log.Debug().Err(err).Msg("error getting object")
-
-				return err
-			}
-
-			orgID = ob.OwnerID
-		}
+	gCtx := graphql.GetFieldContext(ctx)
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	objectID = orgID
+	// check the id from the args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
+	}
 
 	// request is for a list objects, will get filtered in interceptors
 	if objectID == "" {
@@ -993,7 +965,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanEdit,
-		ObjectType:  "organization",
+		ObjectType:  "document_data",
 		ObjectID:    objectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -1036,7 +1008,7 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
-		ObjectType:  "organization",
+		ObjectType:  "document_data",
 		ObjectID:    objectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -1079,14 +1051,14 @@ func (q *DocumentDataHistoryQuery) CheckAccess(ctx context.Context) error {
 	whereArg := gCtx.Args["where"]
 	if whereArg != nil {
 		where, ok := whereArg.(*DocumentDataHistoryWhereInput)
-		if ok && where != nil && where.OwnerID != nil {
-			objectID = *where.OwnerID
+		if ok && where != nil && where.Ref != nil {
+			objectID = *where.Ref
 		}
 	}
 
 	// if that doesn't work, check for the id in the request args
 	if objectID == "" {
-		objectID, _ = gCtx.Args["ownerid"].(string)
+		objectID, _ = gCtx.Args["ref"].(string)
 	}
 
 	// if we still don't have an object id, run the query and grab the object ID
@@ -1102,7 +1074,7 @@ func (q *DocumentDataHistoryQuery) CheckAccess(ctx context.Context) error {
 			return privacy.Allowf("nil request, bypassing auth check")
 		}
 
-		objectID = ob.OwnerID
+		objectID = ob.Ref
 	}
 
 	// request is for a list objects, will get filtered in interceptors
@@ -1113,7 +1085,7 @@ func (q *DocumentDataHistoryQuery) CheckAccess(ctx context.Context) error {
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanViewAuditLog,
-		ObjectType:  "organization",
+		ObjectType:  "document_data",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
 		ObjectID:    objectID,

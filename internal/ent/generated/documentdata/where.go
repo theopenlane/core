@@ -547,16 +547,6 @@ func OwnerIDHasSuffix(v string) predicate.DocumentData {
 	return predicate.DocumentData(sql.FieldHasSuffix(FieldOwnerID, v))
 }
 
-// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
-func OwnerIDIsNil() predicate.DocumentData {
-	return predicate.DocumentData(sql.FieldIsNull(FieldOwnerID))
-}
-
-// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
-func OwnerIDNotNil() predicate.DocumentData {
-	return predicate.DocumentData(sql.FieldNotNull(FieldOwnerID))
-}
-
 // OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
 func OwnerIDEqualFold(v string) predicate.DocumentData {
 	return predicate.DocumentData(sql.FieldEqualFold(FieldOwnerID, v))

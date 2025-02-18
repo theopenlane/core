@@ -138,16 +138,6 @@ func (h *Handler) issueGoogleSession() http.Handler {
 			return
 		}
 
-		if err := h.addDefaultOrgToUserQuery(ctx, user); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		if err := h.validateAllowedDomains(ctx, user); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
 		// remove cookie
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
 

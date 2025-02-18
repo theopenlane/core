@@ -6,15 +6,19 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/iam/fgax"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/iam/fgax"
 )
 
+// HookOrganizationCreatePolicy is used on organization and organization setting creation mutations
+// if the allowed email domains are set, it will create a conditional tuple that restricts access
+// to the organization based on the email domain
 func HookOrganizationCreatePolicy() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -29,9 +33,11 @@ func HookOrganizationCreatePolicy() ent.Hook {
 			switch m := m.(type) {
 			case *generated.OrganizationSettingMutation:
 				allowedDomains, _ = m.AllowedEmailDomains()
+
 				orgID, err = getOrgIDFromSettingMutation(ctx, m, retVal)
 				if err != nil {
-					//  skip if its a not found error
+					// skip if its a not found error
+					// a setting can be created without an organization
 					if generated.IsNotFound(err) {
 						return retVal, nil
 					}
@@ -45,10 +51,6 @@ func HookOrganizationCreatePolicy() ent.Hook {
 				}
 
 				settingID, ok := m.SettingID()
-				if err != nil {
-					return nil, err
-				}
-
 				if !ok || settingID == "" {
 					return retVal, nil
 				}
@@ -78,6 +80,8 @@ func HookOrganizationCreatePolicy() ent.Hook {
 	)
 }
 
+// HookOrganizationUpdatePolicy is used on organization setting mutations where the allowed email domains are set in the request
+// it will update the conditional tuple that restricts access to the organization based on the email domain
 func HookOrganizationUpdatePolicy() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationSettingFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) (ent.Value, error) {
@@ -91,10 +95,11 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 				return nil, err
 			}
 
-			domainUpdates := []string{}
 			allowedEmailDomains, okSet := m.AllowedEmailDomains()
 			okClear := m.AllowedEmailDomainsCleared()
 			appendedDomains, okAppend := m.AppendedAllowedEmailDomains()
+
+			var domainUpdates []string
 
 			switch {
 			case okSet:
@@ -109,10 +114,12 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 
 				domainUpdates = slices.Concat(originalDomains, appendedDomains)
 			default:
+				// we shouldn't get here because the hook is only called when the allowed email domains are set
+				// but if we do, just return
 				return retVal, nil
 			}
 
-			// we should always have an orgID on update
+			// update the conditional tuples with the new set of domains
 			if err := updateOrgConditionalTuples(ctx, m, orgID, domainUpdates); err != nil {
 				return nil, err
 			}
@@ -145,18 +152,15 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 //	context:
 //	  allowed_domains: []
 func updateOrgConditionalTuples(ctx context.Context, m ent.Mutation, orgID string, allowedEmailDomains []string) error {
-
 	tk := fgax.TupleRequest{
-		ObjectID:        orgID,
-		ObjectType:      generated.TypeOrganization,
-		SubjectType:     generated.TypeOrganization,
-		SubjectID:       orgID,
-		SubjectRelation: fgax.MemberRelation,
-		Relation:        "access",
-		ConditionName:   "email_domains_allowed",
-		ConditionContext: &map[string]any{
-			"allowed_domains": allowedEmailDomains,
-		},
+		ObjectID:         orgID,
+		ObjectType:       generated.TypeOrganization,
+		SubjectType:      generated.TypeOrganization,
+		SubjectID:        orgID,
+		SubjectRelation:  fgax.MemberRelation,
+		Relation:         utils.OrgAccessCheckRelation,
+		ConditionName:    utils.OrgEmailConditionName,
+		ConditionContext: utils.NewOrganizationConditionContext(allowedEmailDomains),
 	}
 
 	if _, err := utils.AuthzClient(ctx, m).UpdateConditionalTupleKey(ctx, fgax.GetTupleKey(tk)); err != nil {
@@ -192,8 +196,9 @@ func getOrgIDFromSettingMutation(ctx context.Context, m *generated.OrganizationS
 		settingID, _ = m.ID()
 	}
 
-	// allow the retrieval, which  may happen before the tuples are created
+	// allow the retrieval, which may happen before the tuples are created
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	return m.Client().Organization.Query().
 		Where(organization.HasSettingWith(organizationsetting.ID(settingID))).
 		OnlyID(allowCtx)

@@ -31,7 +31,7 @@ type Handler struct {
 	// RedisClient to interact with redis
 	RedisClient *redis.Client
 	// AuthManager contains the required configuration for the auth session creation
-	AuthManager *authmanager.Config
+	AuthManager *authmanager.Client
 	// TokenManager contains the token manager in order to validate auth requests
 	TokenManager *tokens.TokenManager
 	// ReadyChecks is a set of checkFuncs to determine if the application is "ready" upon startup

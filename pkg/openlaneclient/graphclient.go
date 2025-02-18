@@ -1887,7 +1887,7 @@ type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData struct 
 	Data       json.RawMessage "json:\"data\" graphql:\"data\""
 	DeletedBy  *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID         string          "json:\"id\" graphql:\"id\""
-	OwnerID    *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	OwnerID    string          "json:\"ownerID\" graphql:\"ownerID\""
 	Tags       []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID string          "json:\"templateID\" graphql:\"templateID\""
 }
@@ -1910,7 +1910,7 @@ func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) Ge
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetOwnerID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
 	}
@@ -9673,7 +9673,7 @@ type GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string          "json:\"id\" graphql:\"id\""
 	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	OwnerID     string          "json:\"ownerID\" graphql:\"ownerID\""
 	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
@@ -9717,7 +9717,7 @@ func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperat
 	}
 	return &t.Operation
 }
-func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() *string {
+func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() string {
 	if t == nil {
 		t = &GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
@@ -9783,7 +9783,7 @@ type GetDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string          "json:\"id\" graphql:\"id\""
 	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	OwnerID     string          "json:\"ownerID\" graphql:\"ownerID\""
 	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
@@ -9827,7 +9827,7 @@ func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperation
 	}
 	return &t.Operation
 }
-func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() *string {
+func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() string {
 	if t == nil {
 		t = &GetDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}

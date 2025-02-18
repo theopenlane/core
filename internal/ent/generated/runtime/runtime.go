@@ -551,6 +551,10 @@ func init() {
 	documentdata.Hooks[2] = documentdataMixinHooks3[0]
 
 	documentdata.Hooks[3] = documentdataMixinHooks4[0]
+
+	documentdata.Hooks[4] = documentdataMixinHooks4[1]
+
+	documentdata.Hooks[5] = documentdataMixinHooks4[2]
 	documentdataMixinInters3 := documentdataMixin[3].Interceptors()
 	documentdataMixinInters4 := documentdataMixin[4].Interceptors()
 	documentdata.Interceptors[0] = documentdataMixinInters3[0]

@@ -10494,8 +10494,6 @@ type DocumentDataWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -10890,12 +10888,6 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, documentdata.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, documentdata.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, documentdata.OwnerIDNotNil())
-	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, documentdata.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -11175,8 +11167,6 @@ type DocumentDataHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -11635,12 +11625,6 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, documentdatahistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, documentdatahistory.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, documentdatahistory.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, documentdatahistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -38740,6 +38724,10 @@ type OrganizationWhereInput struct {
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
@@ -38747,10 +38735,6 @@ type OrganizationWhereInput struct {
 	// "secrets" edge predicates.
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
-
-	// "files" edge predicates.
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 
 	// "avatar_file" edge predicates.
 	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
@@ -39658,6 +39642,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasUsersWith(with...))
 	}
+	if i.HasFiles != nil {
+		p := organization.HasFiles()
+		if !*i.HasFiles {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasFilesWith(with...))
+	}
 	if i.HasEvents != nil {
 		p := organization.HasEvents()
 		if !*i.HasEvents {
@@ -39693,24 +39695,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasSecretsWith(with...))
-	}
-	if i.HasFiles != nil {
-		p := organization.HasFiles()
-		if !*i.HasFiles {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasFilesWith) > 0 {
-		with := make([]predicate.File, 0, len(i.HasFilesWith))
-		for _, w := range i.HasFilesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasFilesWith(with...))
 	}
 	if i.HasAvatarFile != nil {
 		p := organization.HasAvatarFile()

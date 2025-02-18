@@ -24,10 +24,6 @@ type search
   relations
     define admin: [user]
 
-type policy
-  relations
-    define email_domain_policy: [organization with email_domains_allowed]
-
 # organization is the highest object access
 # objects can inherit access from the organization
 # or define their own specific access

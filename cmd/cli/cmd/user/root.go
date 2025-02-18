@@ -41,6 +41,8 @@ func consoleOutput(e any) error {
 		e = nodes
 	case *openlaneclient.GetUserByID:
 		e = v.User
+	case *openlaneclient.GetSelf:
+		e = v.Self
 	case *openlaneclient.CreateUser:
 		e = v.CreateUser.User
 	case *openlaneclient.UpdateUser:

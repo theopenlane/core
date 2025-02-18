@@ -8403,6 +8403,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
+
 		case "events":
 			var (
 				alias = field.Alias
@@ -8426,19 +8439,6 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			o.WithNamedSecrets(alias, func(wq *HushQuery) {
-				*wq = *query
-			})
-
-		case "files":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&FileClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
-				return err
-			}
-			o.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 

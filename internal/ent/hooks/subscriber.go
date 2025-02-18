@@ -3,11 +3,9 @@ package hooks
 import (
 	"context"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 
-	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
@@ -71,12 +69,9 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 	}
 
 	// send the email via the job queue
-	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
-	}, &river.InsertOpts{
-		ScheduledAt: time.Now().Add(3 * time.Hour),
-	})
-	if err != nil {
+	}, nil); err != nil {
 		log.Error().Err(err).Msg("error queueing email verification")
 
 		return err

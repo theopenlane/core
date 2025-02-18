@@ -65,7 +65,6 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 		q.WhereP(
 			sql.FieldIn("id", objectIDs...),
 		)
-
 	}
 
 	return nil

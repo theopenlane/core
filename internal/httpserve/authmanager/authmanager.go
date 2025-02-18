@@ -17,37 +17,48 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 )
 
 const (
-	bearerAuthType = "Bearer"
+	bearerScheme = "Bearer"
 )
 
-type Config struct {
+// Client holds the necessary clients and configuration for the auth manager
+type Client struct {
 	db *generated.Client
 }
 
-func New(db *generated.Client) *Config {
-	return &Config{
+// New creates a new auth manager client with the provided database client
+func New(db *generated.Client) *Client {
+	return &Client{
 		db: db,
 	}
 }
 
-func (a *Config) GetSessionConfig() *sessions.SessionConfig {
+// SetDBClient sets the database client in the config
+func (a *Client) SetDBClient(db *generated.Client) {
+	a.db = db
+}
+
+// GetDBClient returns the database client
+func (a *Client) GetDBClient() *generated.Client {
+	return a.db
+}
+
+// GetSessionConfig returns the session config
+func (a *Client) GetSessionConfig() *sessions.SessionConfig {
 	return a.db.SessionConfig
 }
 
-// generateNewAuthSession creates a new auth session for the user and their default organization id
-func (a *Config) GenerateUserAuthSession(ctx echo.Context, user *generated.User) (*models.AuthData, error) {
-	return a.GenerateUserAuthSessionWithOrg(ctx, user, "")
-}
-
-// generateUserAuthSessionWithOrg creates a new auth session for the user and the new target organization id
-func (a *Config) GenerateUserAuthSessionWithOrg(ctx echo.Context, user *generated.User, targetOrgID string) (*models.AuthData, error) {
+// GenerateUserAuthSessionWithOrg creates a new auth session for the user and the new target organization id
+// this is used when the user is switching organizations, or when the user deletes their authorized organization
+// and is automatically switched into another organization
+// Before the sessions is issues, we check that the user still has access to the target organization
+// if not, the user's default org (or personal org) is used
+func (a *Client) GenerateUserAuthSessionWithOrg(ctx echo.Context, user *generated.User, targetOrgID string) (*models.AuthData, error) {
 	auth, err := a.createTokenPair(ctx.Request().Context(), user, targetOrgID)
 	if err != nil {
 		return nil, err
@@ -58,13 +69,19 @@ func (a *Config) GenerateUserAuthSessionWithOrg(ctx echo.Context, user *generate
 		return nil, err
 	}
 
-	auth.TokenType = bearerAuthType
+	auth.TokenType = bearerScheme
 
 	return auth, nil
 }
 
+// generateNewAuthSession creates a new auth session for the user and their default organization id
+// this is used during the login process
+func (a *Client) GenerateUserAuthSession(ctx echo.Context, user *generated.User) (*models.AuthData, error) {
+	return a.GenerateUserAuthSessionWithOrg(ctx, user, "")
+}
+
 // GenerateOauthAuthSession creates a new auth session for the oauth user and their default organization id
-func (a *Config) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User, oauthRequest models.OauthTokenRequest) (*models.AuthData, error) {
+func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User, oauthRequest models.OauthTokenRequest) (*models.AuthData, error) {
 	auth, err := a.createTokenPair(ctx, user, "")
 	if err != nil {
 		return nil, err
@@ -75,12 +92,13 @@ func (a *Config) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 		return nil, err
 	}
 
-	auth.TokenType = bearerAuthType
+	auth.TokenType = bearerScheme
 
 	return auth, nil
 }
 
 // createClaims creates the claims for the JWT token using the id for the user and organization
+// if not target org is provided, the user's default org is used
 func createClaimsWithOrg(u *generated.User, targetOrgID string) *tokens.Claims {
 	if targetOrgID == "" {
 		if u.Edges.Setting.Edges.DefaultOrg != nil {
@@ -98,25 +116,8 @@ func createClaimsWithOrg(u *generated.User, targetOrgID string) *tokens.Claims {
 }
 
 // createTokenPair creates a new token pair for the user and the target organization id (or default org if none provided)
-func (a *Config) createTokenPair(ctx context.Context, user *generated.User, targetOrgID string) (*models.AuthData, error) {
-	orgCheck := targetOrgID
-	if orgCheck == "" {
-		// get the default org for the user, to use as the target org when one is not provided
-		orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		org, err := user.Edges.Setting.DefaultOrg(orgCtx)
-		if err != nil {
-			log.Error().Err(err).Msg("error obtaining default org")
-
-			return nil, err
-		}
-
-		// add default org to user object
-		orgCheck = org.ID
-		user.Edges.Setting.Edges.DefaultOrg = org
-	}
-
-	newTarget, err := a.authCheck(ctx, user, orgCheck)
+func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targetOrgID string) (*models.AuthData, error) {
+	newTarget, err := a.authCheck(ctx, user, targetOrgID)
 	if err != nil {
 		if targetOrgID != "" {
 			log.Error().Err(err).Msg("user attempting to switch into an org they cannot access, returning error")
@@ -125,6 +126,7 @@ func (a *Config) createTokenPair(ctx context.Context, user *generated.User, targ
 		}
 
 		log.Warn().Err(err).Msg("user attempting to authenticate into an org they cannot access; switching to personal org")
+
 		targetOrgID = newTarget
 	}
 
@@ -144,7 +146,7 @@ func (a *Config) createTokenPair(ctx context.Context, user *generated.User, targ
 }
 
 // GenerateUserSession creates a new session for the user and stores it in the response
-func (a *Config) generateUserSession(ctx echo.Context, userID string) (string, error) {
+func (a *Client) generateUserSession(ctx echo.Context, userID string) (string, error) {
 	// set sessions in response
 	if err := a.db.SessionConfig.CreateAndStoreSession(ctx, userID); err != nil {
 		return "", err
@@ -160,7 +162,7 @@ func (a *Config) generateUserSession(ctx echo.Context, userID string) (string, e
 }
 
 // generateOauthUserSession creates a new session for the oauth user and stores it in the response
-func (a *Config) generateOauthUserSession(ctx context.Context, w http.ResponseWriter, userID string, oauthRequest models.OauthTokenRequest) (string, error) {
+func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWriter, userID string, oauthRequest models.OauthTokenRequest) (string, error) {
 	setSessionMap := map[string]any{}
 	setSessionMap[sessions.ExternalUserIDKey] = fmt.Sprintf("%v", oauthRequest.ExternalUserID)
 	setSessionMap[sessions.UsernameKey] = oauthRequest.ExternalUserName
@@ -181,14 +183,25 @@ func (a *Config) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 	return session, nil
 }
 
-func (a *Config) authCheck(ctx context.Context, user *generated.User, orgID string) (string, error) {
+// authCheck checks if the user has access to the target organization before issuing a new session and claims
+// if the user does not have access to the target organization, the user's default org is used (or falls back)
+// to their personal org
+func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (newOrgID string, err error) {
 	if _, allow := privacy.DecisionFromContext(ctx); allow {
-		return "", nil
+		return
+	}
+
+	if orgID == "" {
+		// get the default org for the user to check access
+		orgID, err = getUserDefaultOrg(ctx, user)
+		if err != nil {
+			return
+		}
 	}
 
 	au, err := auth.GetAuthenticatedUserContext(ctx)
 	if err != nil {
-		return "", nil
+		return
 	}
 
 	// if no org is provided, check with the authenticated org
@@ -208,14 +221,16 @@ func (a *Config) authCheck(ctx context.Context, user *generated.User, orgID stri
 	if err != nil {
 		log.Error().Err(err).Msg("unable to check access")
 
-		return "", err
+		return
 	}
 
 	if allow {
-		return "", nil
+		return
 	}
 
-	newOrgID, err := a.updateDefaultOrg(ctx, user, au)
+	// if the user was not allowed, we need to update the default org if we used their default org
+	// to authenticate
+	newOrgID, err = a.updateDefaultOrg(ctx, user, orgID)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to update default org")
 
@@ -225,22 +240,41 @@ func (a *Config) authCheck(ctx context.Context, user *generated.User, orgID stri
 	return newOrgID, generated.ErrPermissionDenied
 }
 
-func (a *Config) updateDefaultOrg(ctx context.Context, user *generated.User, au *auth.AuthenticatedUser) (string, error) {
-	// see if we should update the default org to the personal org
-	// if the user is not a member of the target org
-	// if user.Edges.Setting != nil {
-	// 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	// 	defaultOrg, err := user.Edges.Setting.DefaultOrg(allowCtx)
-	// 	if err != nil {
-	// 		log.Error().Err(err).Msg("unable to get default org")
+// getUserDefaultOrg returns the default org for the user
+func getUserDefaultOrg(ctx context.Context, user *generated.User) (string, error) {
+	// check if we already have the default org
+	if user.Edges.Setting.Edges.DefaultOrg != nil {
+		return user.Edges.Setting.Edges.DefaultOrg.ID, nil
+	}
 
-	// 		return "", err
-	// 	}
+	// otherwise, query the default org from the user setting and allow the request
+	// incase the user is in the login process
+	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	// 	if defaultOrg.ID != au.OrganizationID {
-	// 		return defaultOrg.ID, err
-	// 	}
-	// }
+	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining default org")
+
+		return "", err
+	}
+
+	// add default org to user object to use later
+	user.Edges.Setting.Edges.DefaultOrg = org
+
+	return org.ID, nil
+}
+
+func (a *Client) updateDefaultOrg(ctx context.Context, user *generated.User, orgID string) (string, error) {
+	defaultOrgID, err := getUserDefaultOrg(ctx, user)
+	if err != nil {
+		return "", err
+	}
+
+	// if the org we were checking was not the default org, we can return that org instead
+	// of updating the default org
+	if orgID != defaultOrgID {
+		return defaultOrgID, nil
+	}
 
 	// update default org to personal org
 	newOrgID, err := a.updateDefaultOrgToPersonal(ctx, user)
@@ -254,7 +288,9 @@ func (a *Config) updateDefaultOrg(ctx context.Context, user *generated.User, au 
 }
 
 // updateDefaultOrgToPersonal updates the default org for the user to the personal org
-func (a *Config) updateDefaultOrgToPersonal(ctx context.Context, user *generated.User) (string, error) {
+func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated.User) (string, error) {
+	log.Debug().Str("user", user.ID).Msg("user no longer has access to their default org, switching the default to their personal org")
+
 	personalOrg, err := a.getPersonalOrgID(ctx, user)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining personal org")
@@ -263,6 +299,7 @@ func (a *Config) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 	}
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	err = a.db.UserSetting.Update().
 		SetDefaultOrgID(personalOrg.ID).
 		Where(usersetting.UserID(user.ID)).
@@ -289,11 +326,7 @@ func (a *Config) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 	return personalOrg.ID, nil
 }
 
-func (a *Config) getUserDetailsByID(ctx context.Context, userID string) (*generated.User, error) {
-	return a.db.User.Query().WithSetting().Where(user.ID(userID)).Only(ctx)
-}
-
 // getPersonalOrgID returns the personal org ID for the user
-func (a *Config) getPersonalOrgID(ctx context.Context, user *generated.User) (*generated.Organization, error) {
+func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*generated.Organization, error) {
 	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(ctx)
 }

@@ -11,18 +11,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/iam/auth"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user
@@ -392,74 +387,6 @@ func (h *Handler) updateUserPassword(ctx context.Context, id string, password st
 	return nil
 }
 
-// addDefaultOrgToUserQuery adds the default org to the user object, user must be authenticated before calling this
-func (h *Handler) addDefaultOrgToUserQuery(ctx context.Context, user *ent.User) error {
-	// get the default org for the user, allow access, accessible orgs will be filtered by the interceptor
-	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
-	if err != nil {
-		log.Error().Err(err).Msg("error obtaining default org")
-
-		return err
-	}
-
-	// add default org to user object
-	user.Edges.Setting.Edges.DefaultOrg = org
-
-	// set in context
-	return auth.SetOrganizationIDInAuthContext(ctx, org.ID)
-}
-
-// validateAllowedDomains checks if the user email is allowed in the default organization
-// if not, the user is switched to the personal organization
-func (h *Handler) validateAllowedDomains(ctx context.Context, user *ent.User) error {
-	//  allow the request before the user is authenticated
-	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	orgSetting, err := h.getOrgSettingByOrgID(orgCtx, user.Edges.Setting.Edges.DefaultOrg.ID)
-	if err != nil {
-		log.Error().Err(err).Msg("error obtaining org settings")
-
-		return err
-	}
-
-	if err := hooks.CheckAllowedEmailDomain(user.Email, orgSetting); err != nil {
-		log.Error().Err(err).Msg("user email not allowed in default organization, switching to personal org")
-
-		return h.updateDefaultOrgToPersonal(ctx, user)
-	}
-
-	return nil
-}
-
-// updateDefaultOrgToPersonal updates the default org for the user to the personal org
-func (h *Handler) updateDefaultOrgToPersonal(ctx context.Context, user *ent.User) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	personalOrg, err := h.getPersonalOrgID(allowCtx, user)
-	if err != nil {
-		log.Error().Err(err).Msg("error obtaining personal org")
-
-		return err
-	}
-
-	if err := h.DBClient.UserSetting.UpdateOneID(user.Edges.Setting.ID).SetDefaultOrgID(personalOrg.ID).Exec(allowCtx); err != nil {
-		log.Error().Err(err).Msg("error updating default org")
-
-		return err
-	}
-
-	user.Edges.Setting.Edges.DefaultOrg = personalOrg
-
-	return nil
-}
-
-// getPersonalOrgID returns the personal org ID for the user
-func (h *Handler) getPersonalOrgID(ctx context.Context, user *ent.User) (*ent.Organization, error) {
-	return h.DBClient.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(ctx)
-}
-
 // CheckAndCreateUser takes a user with an OauthTooToken set in the context and checks if the user is already created
 // if the user already exists, update last seen
 func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, provider enums.AuthProvider, image string) (*ent.User, error) {
@@ -573,19 +500,6 @@ func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.
 // getOrgByID returns the organization based on the id in the request
 func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization, error) {
 	org, err := transaction.FromContext(ctx).Organization.Get(ctx, id)
-	if err != nil {
-		log.Error().Err(err).Msg("error obtaining organization from id")
-
-		return nil, err
-	}
-
-	return org, nil
-}
-
-// getOrgSettingByOrgID returns the organization settings based on the org id in the request
-func (h *Handler) getOrgSettingByOrgID(ctx context.Context, id string) (*ent.OrganizationSetting, error) {
-	org, err := transaction.FromContext(ctx).OrganizationSetting.Query().
-		Where(organizationsetting.OrganizationID(id)).Only(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining organization from id")
 
