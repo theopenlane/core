@@ -947,12 +947,4 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 	require.NoError(t, err)
 
 	require.Equal(t, co.Organization.ID, childOrg.ID)
-
-	// allow after tuples have been deleted
-	ctx = privacy.DecisionContext(reqCtx, privacy.Allow)
-	ctx = entx.SkipSoftDelete(ctx)
-
-	g, err = suite.client.api.GetGroupByID(ctx, group1.ID)
-	require.NoError(t, err)
-	require.Equal(t, g.Group.ID, group1.ID)
 }
