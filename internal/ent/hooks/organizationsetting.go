@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"slices"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -90,10 +91,29 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 				return nil, err
 			}
 
-			allowedEmailDomains, _ := m.AllowedEmailDomains()
+			domainUpdates := []string{}
+			allowedEmailDomains, okSet := m.AllowedEmailDomains()
+			okClear := m.AllowedEmailDomainsCleared()
+			appendedDomains, okAppend := m.AppendedAllowedEmailDomains()
+
+			switch {
+			case okSet:
+				domainUpdates = allowedEmailDomains
+			case okClear:
+				domainUpdates = []string{}
+			case okAppend:
+				originalDomains, err := m.OldAllowedEmailDomains(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				domainUpdates = slices.Concat(originalDomains, appendedDomains)
+			default:
+				return retVal, nil
+			}
 
 			// we should always have an orgID on update
-			if err := updateOrgConditionalTuples(ctx, m, orgID, allowedEmailDomains); err != nil {
+			if err := updateOrgConditionalTuples(ctx, m, orgID, domainUpdates); err != nil {
 				return nil, err
 			}
 
@@ -101,7 +121,11 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 		})
 	},
 		hook.And(
-			hook.HasFields("allowed_email_domains"),
+			hook.Or(
+				hook.HasFields("allowed_email_domains"),
+				hook.HasAddedFields("allowed_email_domains"),
+				hook.HasClearedFields("allowed_email_domains"),
+			),
 			hook.HasOp(ent.OpUpdateOne|ent.OpUpdate),
 		),
 	)

@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/iam/auth"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user
@@ -406,7 +407,8 @@ func (h *Handler) addDefaultOrgToUserQuery(ctx context.Context, user *ent.User) 
 	// add default org to user object
 	user.Edges.Setting.Edges.DefaultOrg = org
 
-	return nil
+	// set in context
+	return auth.SetOrganizationIDInAuthContext(ctx, org.ID)
 }
 
 // validateAllowedDomains checks if the user email is allowed in the default organization

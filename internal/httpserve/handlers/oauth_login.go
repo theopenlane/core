@@ -199,16 +199,6 @@ func (h *Handler) issueGitHubSession() http.Handler {
 			return
 		}
 
-		if err := h.addDefaultOrgToUserQuery(ctx, user); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		if err := h.validateAllowedDomains(ctx, user); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
 		oauthReq := models.OauthTokenRequest{
 			Email:            *githubUser.Email,
 			ExternalUserName: *githubUser.Login,

@@ -45,7 +45,7 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
-	o, err := client.GetOrganizationSettingByID(ctx, id)
+	o, err := client.GetAllOrganizationSettings(ctx)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

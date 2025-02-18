@@ -95,6 +95,13 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		expectedStatus int
 	}{
 		{
+			name:           "domain restricted org, email not allowed, switch to personal org",
+			username:       invalidConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:       validPassword,
+			expectedStatus: http.StatusOK,
+			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
+		},
+		{
 			name:           "happy path, valid credentials",
 			username:       validConfirmedUser.UserInfo.Email,
 			password:       validPassword,
@@ -107,13 +114,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
 			expectedOrgID:  org.ID,
-		},
-		{
-			name:           "domain restricted org, email not allowed, switch to personal org",
-			username:       invalidConfirmedUserRestrictedOrg.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
 		},
 		{
 			name:           "email unverified",

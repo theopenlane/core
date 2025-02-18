@@ -116,8 +116,7 @@ func HookOrganization() ent.Hook {
 				// if the org is not a personal org, as personal orgs are created during registration
 				// and sessions are already set
 				if !orgCreated.PersonalOrg {
-					as := newAuthSession(m.SessionConfig, m.TokenManager)
-
+					as := newAuthSession(m.Client())
 					if err := updateUserAuthSession(ctx, as, orgCreated.ID); err != nil {
 						return v, err
 					}
@@ -167,7 +166,7 @@ func HookOrganizationDelete() ent.Hook {
 			}
 
 			// if the deleted org was the current org, update the session cookie
-			as := newAuthSession(m.SessionConfig, m.TokenManager)
+			as := newAuthSession(m.Client())
 
 			if err := updateUserAuthSession(ctx, as, newOrgID); err != nil {
 				return v, err

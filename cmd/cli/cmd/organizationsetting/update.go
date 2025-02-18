@@ -29,14 +29,12 @@ func init() {
 	updateCmd.Flags().StringP("tax-identifier", "x", "", "tax identifier for the org")
 	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the org")
 	updateCmd.Flags().StringSliceP("allowed-domains", "a", []string{}, "emails domains allowed to access the org")
+	updateCmd.Flags().BoolP("clear-allowed-domains", "l", false, "clear emails domains allowed to access the org")
 }
 
 // updateValidation validates the input flags provided by the user
 func updateValidation() (id string, input openlaneclient.UpdateOrganizationSettingInput, err error) {
 	id = cmd.Config.String("id")
-	if id == "" {
-		return id, input, cmd.NewRequiredFieldMissingError("setting id")
-	}
 
 	billingContact := cmd.Config.String("billing-contact")
 	if billingContact != "" {
@@ -69,8 +67,12 @@ func updateValidation() (id string, input openlaneclient.UpdateOrganizationSetti
 	}
 
 	allowedDomains := cmd.Config.Strings("allowed-domains")
+	clearDomains := cmd.Config.Bool("clear-allowed-domains")
+
 	if len(allowedDomains) > 0 {
 		input.AllowedEmailDomains = allowedDomains
+	} else if clearDomains {
+		input.ClearAllowedEmailDomains = &clearDomains
 	}
 
 	return id, input, nil
@@ -89,6 +91,17 @@ func update(ctx context.Context) error {
 
 	id, input, err := updateValidation()
 	cobra.CheckErr(err)
+
+	if id == "" {
+		settings, err := client.GetAllOrganizationSettings(ctx)
+		cobra.CheckErr(err)
+
+		if len(settings.OrganizationSettings.Edges) == 1 {
+			id = settings.OrganizationSettings.Edges[0].Node.ID
+		} else {
+			return cmd.NewRequiredFieldMissingError("id")
+		}
+	}
 
 	o, err := client.UpdateOrganizationSetting(ctx, id, input)
 	cobra.CheckErr(err)

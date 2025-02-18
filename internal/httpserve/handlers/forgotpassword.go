@@ -10,8 +10,6 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/iam/auth"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -56,9 +54,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 		ID:        entUser.ID,
 	}
 
-	authCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: entUser.ID,
-	})
+	authCtx := setAuthenticatedContext(ctx, entUser)
 
 	if _, err = h.storeAndSendPasswordResetToken(authCtx, user); err != nil {
 		return h.InternalServerError(ctx, err)

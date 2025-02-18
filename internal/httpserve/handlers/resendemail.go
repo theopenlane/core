@@ -10,8 +10,6 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/iam/auth"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
@@ -59,9 +57,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 	}
 
 	// setup user context
-	userCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: entUser.ID,
-	})
+	userCtx := setAuthenticatedContext(ctx, entUser)
 
 	// create email verification token
 	user := &User{

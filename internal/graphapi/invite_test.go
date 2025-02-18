@@ -87,6 +87,8 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 	orgWithRestrictionsCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
 	require.NoError(t, err)
 
+	user1Context, err := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
+
 	testCases := []struct {
 		name             string
 		recipient        string
@@ -105,7 +107,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              user1Context,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
@@ -185,7 +187,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			orgID:     testUser1.OrganizationID,
 			role:      enums.RoleOwner,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       user1Context,
 			wantErr:   true,
 		},
 		{
@@ -194,7 +196,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			orgID:     testUser1.OrganizationID,
 			role:      enums.RoleOwner,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       user1Context,
 			wantErr:   true,
 		},
 		{
@@ -203,7 +205,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              user1Context,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
@@ -215,7 +217,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              user1Context,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,

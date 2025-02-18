@@ -6,14 +6,11 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -49,30 +46,6 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrAlreadySwitchedIntoOrg)
 	}
 
-	// ensure user is already a member of the destination organization
-	req := fgax.AccessCheck{
-		SubjectID:   ac.SubjectID,
-		SubjectType: auth.UserSubjectType,
-		ObjectID:    in.TargetOrganizationID,
-		Context:     utils.NewOrganizationContextKey(ac.SubjectEmail),
-	}
-
-	// get the target organization
-	orgGetCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-
-	org, err := h.getOrgByID(orgGetCtx, in.TargetOrganizationID)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get target organization by id")
-
-		return h.BadRequest(ctx, err)
-	}
-
-	if allow, err := h.DBClient.Authz.CheckOrgReadAccess(reqCtx, req); err != nil || !allow {
-		log.Error().Err(err).Msg("user not authorized to access organization")
-
-		return h.Unauthorized(ctx, err)
-	}
-
 	// get user from database by subject
 	user, err := h.getUserDetailsByID(reqCtx, ac.SubjectID)
 	if err != nil {
@@ -82,17 +55,17 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctx, user, org.ID)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctx, user, in.TargetOrganizationID)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err)
+		return h.Unauthorized(ctx, err)
 	}
 
 	// set the out attributes we send back to the client only on success
 	out := &models.SwitchOrganizationReply{
 		Reply:    rout.Reply{Success: true},
-		AuthData: *auth,
+		AuthData: *authData,
 	}
 
 	return h.Success(ctx, out)

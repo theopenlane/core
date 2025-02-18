@@ -8,7 +8,6 @@ import (
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -60,9 +59,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	}
 
 	// setup user context
-	userCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: meowuser.ID,
-	})
+	userCtx := setAuthenticatedContext(ctx, meowuser)
 
 	// create email verification token
 	user := &User{

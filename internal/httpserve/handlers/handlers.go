@@ -1,12 +1,15 @@
 package handlers
 
 import (
+	"context"
+
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/emailtemplates"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
 
 	"github.com/theopenlane/iam/sessions"
@@ -49,4 +52,13 @@ type Handler struct {
 	Emailer emailtemplates.Config
 	// Entitlements contains the entitlements client
 	Entitlements *entitlements.StripeClient
+}
+
+// setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
+// during a login or verification process
+func setAuthenticatedContext(ctx echo.Context, user *ent.User) context.Context {
+	return auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
+		SubjectID:    user.ID,
+		SubjectEmail: user.Email,
+	})
 }

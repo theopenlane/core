@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -51,9 +50,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		Email: entUser.Email,
 	}
 
-	userCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: entUser.ID,
-	})
+	userCtx := setAuthenticatedContext(ctx, entUser)
 
 	// check to see if user is already confirmed
 	if !entUser.Edges.Setting.EmailConfirmed {
@@ -103,14 +100,6 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		if err := h.setEmailConfirmed(userCtx, entUser); err != nil {
 			return h.BadRequest(ctx, err)
 		}
-	}
-
-	if err := h.addDefaultOrgToUserQuery(userCtx, entUser); err != nil {
-		return h.InternalServerError(ctx, err)
-	}
-
-	if err := h.validateAllowedDomains(ctxWithToken, entUser); err != nil {
-		return h.BadRequest(ctx, err)
 	}
 
 	// create new claims for the user

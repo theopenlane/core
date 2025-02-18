@@ -14,7 +14,6 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/utils/passwd"
@@ -102,9 +101,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	}
 
 	// set context for remaining request based on logged in user
-	userCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: entUser.ID,
-	})
+	userCtx := setAuthenticatedContext(ctx, entUser)
 
 	if err := h.updateUserPassword(userCtx, entUser.ID, in.Password); err != nil {
 		log.Error().Err(err).Msg("error updating user password")

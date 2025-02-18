@@ -66,9 +66,6 @@ func serve(ctx context.Context) error {
 		so.AddServerOptions(serveropts.WithGeneratedKeys())
 	}
 
-	// add auth session manager
-	so.Config.Handler.AuthManager = authmanager.New()
-
 	// setup token manager
 	so.AddServerOptions(
 		serveropts.WithTokenManager(),
@@ -127,6 +124,9 @@ func serve(ctx context.Context) error {
 	}
 
 	defer dbClient.CloseAll() // nolint: errcheck
+
+	// add auth session manager
+	so.Config.Handler.AuthManager = authmanager.New(dbClient)
 
 	// Add Driver to the Handlers Config
 	so.Config.Handler.DBClient = dbClient
