@@ -103,6 +103,8 @@ jobQueue:
         RescueStuckJobsAfter: 0
         RetryPolicy: null
         SkipUnknownJobCheck: false
+        Test:
+            Time: null
         TestOnly: false
         WorkerMiddleware: null
         Workers: null
