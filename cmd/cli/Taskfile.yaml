@@ -2,7 +2,7 @@ version: "3"
 
 env:
   DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
-  SECOND_USER_EMAIL: "funk@theopenlane.io"
+  SECOND_USER_EMAIL: "funk@theopenlane.com"
   DEFAULT_ORG_NAME: "meowmeow"
 
 tasks:

@@ -66,7 +66,7 @@ func HookOrganizationCreatePolicy() ent.Hook {
 				allowedDomains = []string{}
 			}
 
-			if err := createAccessTuples(ctx, m, orgID, allowedDomains); err != nil {
+			if err := updateOrgConditionalTuples(ctx, m, orgID, allowedDomains); err != nil {
 				return nil, err
 			}
 
@@ -93,7 +93,7 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 			allowedEmailDomains, _ := m.AllowedEmailDomains()
 
 			// we should always have an orgID on update
-			if err := createAccessTuples(ctx, m, orgID, allowedEmailDomains); err != nil {
+			if err := updateOrgConditionalTuples(ctx, m, orgID, allowedEmailDomains); err != nil {
 				return nil, err
 			}
 
@@ -107,15 +107,20 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 	)
 }
 
-func createAccessTuples(ctx context.Context, m ent.Mutation, orgID string, allowedEmailDomains []string) error {
-	// create tuple for the organization in this format
-	// user: organization:openlane#member
-	// relation: access
-	// object: organization:openlane
-	// condition:
-	//   name: email_domain_allowed
-	//   context:
-	//     allowed_domains: []
+// updateOrgConditionalTuples will update (or create) a conditional tuple for the organization
+// that restricts access based on the email domain
+// the tuple will look like the following, where the allowed_domains are the email domains that are allowed
+// if the list is empty, then all domains are allowed
+//
+// user: organization:openlane#member
+// relation: access
+// object: organization:openlane
+// condition:
+//
+//	name: email_domain_allowed
+//	context:
+//	  allowed_domains: []
+func updateOrgConditionalTuples(ctx context.Context, m ent.Mutation, orgID string, allowedEmailDomains []string) error {
 
 	tk := fgax.TupleRequest{
 		ObjectID:        orgID,
@@ -130,7 +135,7 @@ func createAccessTuples(ctx context.Context, m ent.Mutation, orgID string, allow
 		},
 	}
 
-	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(tk)}, nil); err != nil {
+	if _, err := utils.AuthzClient(ctx, m).UpdateConditionalTupleKey(ctx, fgax.GetTupleKey(tk)); err != nil {
 		log.Error().Err(err).Msg("failed to create org access restriction tuple")
 
 		return err

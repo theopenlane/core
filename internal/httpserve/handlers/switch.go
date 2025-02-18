@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -30,17 +30,9 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	userID, err := auth.GetUserIDFromContext(reqCtx)
+	ac, err := auth.GetAuthenticatedUserContext(reqCtx)
 	if err != nil {
 		log.Err(err).Msg("unable to get user id from context")
-
-		return h.BadRequest(ctx, err)
-	}
-
-	// get user from database by subject
-	user, err := h.getUserDetailsByID(reqCtx, userID)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get user by subject")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -59,9 +51,10 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	// ensure user is already a member of the destination organization
 	req := fgax.AccessCheck{
-		SubjectID:   userID,
+		SubjectID:   ac.SubjectID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    in.TargetOrganizationID,
+		Context:     utils.NewOrganizationContextKey(ac.SubjectEmail),
 	}
 
 	// get the target organization
@@ -74,23 +67,18 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	orgSettings, err := org.Setting(orgGetCtx)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get target organization settings")
-
-		return h.BadRequest(ctx, err)
-	}
-
-	if err := hooks.CheckAllowedEmailDomain(user.Email, orgSettings); err != nil {
-		log.Error().Err(err).Msg("user email not allowed in target organization")
-
-		return h.BadRequest(ctx, err)
-	}
-
 	if allow, err := h.DBClient.Authz.CheckOrgReadAccess(reqCtx, req); err != nil || !allow {
 		log.Error().Err(err).Msg("user not authorized to access organization")
 
 		return h.Unauthorized(ctx, err)
+	}
+
+	// get user from database by subject
+	user, err := h.getUserDetailsByID(reqCtx, ac.SubjectID)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get user by subject")
+
+		return h.BadRequest(ctx, err)
 	}
 
 	// create new claims for the user

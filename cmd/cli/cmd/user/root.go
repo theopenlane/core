@@ -78,7 +78,20 @@ func jsonOutput(out any) error {
 func tableOutput(out []openlaneclient.User) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Email", "FirstName", "LastName", "DisplayName", "AuthProvider")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.Email, *i.FirstName, *i.LastName, i.DisplayName, i.AuthProvider)
+		firstName := ""
+		lastName := ""
+
+		if i.FirstName != nil {
+			firstName = *i.FirstName
+		}
+
+		if i.LastName != nil {
+			lastName = *i.LastName
+		}
+
+		writer.AddRow(i.ID, i.Email,
+			firstName, lastName,
+			i.DisplayName, i.AuthProvider)
 	}
 
 	writer.Render()

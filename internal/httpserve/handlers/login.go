@@ -58,10 +58,6 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
-	if err := h.validateAllowedDomains(userCtx, user); err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, user)
 	if err != nil {
