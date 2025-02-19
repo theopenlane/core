@@ -14,7 +14,7 @@ import (
 
 // DNSX is a wrapper around the dnsx library for client initialization and functional options settings
 type DNSX struct {
-	// Resolver is the dnsx resolver
+	// Client is the dnsx client
 	Client *pddnsx.DNSX
 	// Options are the dnsx options
 	Options *Options
@@ -100,6 +100,8 @@ func (d *DNSX) GetDomainDNSRecords(ctx context.Context, domain string) (DNSRecor
 
 		if err != nil {
 			errors = append(errors, err.Error())
+		} else {
+			dkimRecords.Txt = append(dkimRecords.Txt, dkimRecordForSelector.Txt...)
 		}
 
 		dkimRecords.Txt = append(dkimRecords.Txt, dkimRecordForSelector.Txt...)
@@ -130,24 +132,24 @@ func (d *DNSX) LookupCDN(domain string) (value, cdnType string, err error) {
 	if net.ParseIP(domain) == nil {
 		ips, err := d.Lookup(domain)
 		if err != nil {
-			return "", "", err
+			return value, cdnType, nil
 		}
 
 		if len(ips) == 0 {
-			return "", "", err
+			return value, cdnType, nil
 		}
 
 		// this isn't ideal but it's functional and fine for now
 		for _, ip := range ips {
 			if ip.IsPrivate() {
-				return "", "", err
+				return value, cdnType, nil
 			}
 		}
 
 		for _, ip := range ips {
 			ok, value, cdnType, err := d.CDNCheck.Check(ip)
 			if err != nil {
-				return "", "", err
+				return value, cdnType, nil
 			}
 
 			if ok && cdnType != "" {
@@ -157,7 +159,7 @@ func (d *DNSX) LookupCDN(domain string) (value, cdnType string, err error) {
 	} else {
 		ok, value, cdnType, err := d.CDNCheck.Check(net.ParseIP(domain))
 		if err != nil {
-			return "", "", err
+			return value, cdnType, nil
 		}
 
 		if ok && cdnType != "" {
@@ -211,9 +213,9 @@ func (d *DNSX) getDNSRecords(domain string, questionTypes []uint16) (DNSRecords,
 					continue
 				}
 
-				cdn := fmt.Sprintf("%s (%s)", val, cdnType)
-
-				if cdn != "" {
+				// we still want the cloud provider (val) if it's avil even if cdn type could be empty, and vice versa
+				if val != "" || cdnType != "" {
+					cdn := fmt.Sprintf("%s (%s)", val, cdnType)
 					dnsRecordsSlice[i].CDN = cdn
 				}
 			}

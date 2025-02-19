@@ -57,7 +57,7 @@ func WithQuestionTypes(types []uint16) Option {
 	}
 }
 
-// WithTrace sets the trace option for
+// WithTrace sets the trace option for the DNSX client
 func WithTrace(trace bool) Option {
 	return func(o *Options) {
 		o.Trace = trace

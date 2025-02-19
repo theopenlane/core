@@ -3,6 +3,7 @@ run:
   allow-parallel-runners: true
   concurrency: 0
   tests: false
+  modules-download-mode: readonly
 linters-settings:
   goimports:
     local-prefixes: github.com/theopenlane/core
