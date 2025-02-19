@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"ariga.io/entcache"
+	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/pressly/goose/v3"
@@ -62,15 +63,14 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 		return nil, err
 	}
 
-	// Decorates the sql.Driver with entcache.Driver on the primaryDB
-	drvPrimary := entcache.NewDriver(
-		entConfig.GetPrimaryDB(),
-		entcache.TTL(c.CacheTTL), // set the TTL on the cache
-		entcache.ContextLevel(),
-	)
+	// setup driver(s)
+	var drvPrimary dialect.Driver
+	var drvSecondary dialect.Driver
 
+	drvPrimary = entConfig.GetPrimaryDB()
 	client.pc = client.createEntDBClient(entConfig.GetPrimaryDB())
 
+	// run migrations on primary driver
 	if c.RunMigrations {
 		if err := client.runMigrations(ctx); err != nil {
 			log.Error().Err(err).Msg("failed running migrations")
@@ -81,16 +81,12 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 
 	var cOpts []ent.Option
 
+	// if multi-write is enabled, create a secondary client
 	if c.MultiWrite {
-		// Decorates the sql.Driver with entcache.Driver on the primaryDB
-		drvSecondary := entcache.NewDriver(
-			entConfig.GetSecondaryDB(),
-			entcache.TTL(c.CacheTTL), // set the TTL on the cache
-			entcache.ContextLevel(),
-		)
-
+		drvSecondary = entConfig.GetSecondaryDB()
 		client.sc = client.createEntDBClient(entConfig.GetSecondaryDB())
 
+		// run  migrations on secondary driver
 		if c.RunMigrations {
 			if err := client.runMigrations(ctx); err != nil {
 				log.Error().Err(err).Msg("failed running migrations")
@@ -98,8 +94,22 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 				return nil, err
 			}
 		}
+	}
 
-		// Create Multiwrite driver
+	// if cache TTL is set, wrap the driver with the cache driver
+	// as of (2025-02-18) entcache needs to be enabled after migrations are run
+	// if using atlas migrations due to an incompatibility in versions
+	// even with entcache.Skip(ctx) set on atlas migrations
+	if c.CacheTTL > 0 {
+		drvPrimary = entcacheDriver(drvPrimary, c.CacheTTL)
+
+		if drvSecondary != nil {
+			drvSecondary = entcacheDriver(drvSecondary, c.CacheTTL)
+		}
+	}
+
+	// add the option to the client for the drivers
+	if drvSecondary != nil {
 		cOpts = []ent.Option{ent.Driver(&entx.MultiWriteDriver{Wp: drvPrimary, Ws: drvSecondary})}
 	} else {
 		cOpts = []ent.Option{ent.Driver(drvPrimary)}
@@ -114,7 +124,6 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 		cOpts = append(cOpts,
 			ent.Log(log.Print),
 			ent.Debug(),
-			ent.Driver(drvPrimary),
 		)
 	}
 
@@ -144,6 +153,14 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	}
 
 	return db, nil
+}
+
+func entcacheDriver(driver dialect.Driver, cacheTTL time.Duration) *entcache.Driver {
+	return entcache.NewDriver(
+		driver,
+		entcache.TTL(cacheTTL), // set the TTL on the cache
+		entcache.ContextLevel(),
+	)
 }
 
 // runMigrations runs the migrations based on the configured migration provider on startup
@@ -203,8 +220,7 @@ func (c *client) runGooseMigrations() error {
 // this do not use the generated versioned migrations files from ent
 func (c *client) runAtlasMigrations(ctx context.Context) error {
 	// Run the automatic migration tool to create all schema resources.
-	// entcache.Driver will skip the caching layer when running the schema migration
-	if err := c.pc.Schema.Create(entcache.Skip(ctx),
+	if err := c.pc.Schema.Create(ctx,
 		EnablePostgresOption(c.pc.DB())); err != nil {
 		log.Error().Err(err).Msg("failed creating schema resources")
 
