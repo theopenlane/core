@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-
 	"github.com/theopenlane/core/pkg/sleuth/spider"
 	"github.com/theopenlane/core/pkg/sleuth/tech"
 )
