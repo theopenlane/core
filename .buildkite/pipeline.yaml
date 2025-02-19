@@ -53,8 +53,8 @@ steps:
         key: "lint"
         plugins:
           - docker#v5.12.0:
-              image: "registry.hub.docker.com/golangci/golangci-lint:v1.64.5"
-              command: ["golangci-lint", "run", "--config", ".golangci.yaml"]
+              image: "registry.hub.docker.com/golangci/golangci-lint:v1.64.5-alpine"
+              command: ["golangci-lint", "run", "--config", ".golangci.yaml", "--verbose"]
               environment:
                 - "GOTOOLCHAIN=auto"
         artifact_paths: ["coverage.out"]
