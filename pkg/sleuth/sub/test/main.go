@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/pkg/sleuth/sub"
 )
 
 func meow() {
-
 	client, err := sub.NewSubfinder(sub.NewOptions())
 	if err != nil {
 		log.Debug().Msgf("Error creating Subfinder client: %s", err)
