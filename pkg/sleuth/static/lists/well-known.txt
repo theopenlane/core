@@ -1,0 +1,6 @@
+.well-known/apple-app-site-association
+.well-known/security.txt
+.well-known/jwks.json
+.well-known/oauth-authorization-server
+.well-known/openid-configuration
+.well-known/openid-federation

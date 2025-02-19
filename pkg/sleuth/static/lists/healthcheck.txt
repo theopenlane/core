@@ -1,0 +1,12 @@
+alive
+health
+health/live
+health/ready
+health/started
+healthz
+healthz/live
+healthz/ready
+ready
+status
+status/live
+status/ready
