@@ -53,9 +53,8 @@ steps:
         key: "lint"
         plugins:
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              command: ["task", "go:lint:ci"]
-              always_pull: true
+              image: "registry.hub.docker.com/golangci/golangci-lint:v1.64.5"
+              command: ["golangci-lint", "run", "--config", ".golangci.yaml"]
               environment:
                 - "GOTOOLCHAIN=auto"
         artifact_paths: ["coverage.out"]
