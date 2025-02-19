@@ -1,6 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.23.5
+go 1.23.6
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
@@ -213,9 +213,6 @@ require (
 	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed // indirect
 	github.com/google/go-github/v30 v30.1.0 // indirect
 	github.com/google/go-github/v69 v69.2.0 // indirect
-	github.com/google/certificate-transparency-go v1.1.4 // indirect
-	github.com/google/go-github/v30 v30.1.0 // indirect
-	github.com/google/go-github/v68 v68.0.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/gordonklaus/ineffassign v0.1.0 // indirect
@@ -368,7 +365,6 @@ require (
 	github.com/zalando/go-keyring v0.2.6 // indirect
 	github.com/zcalusic/sysinfo v1.0.2 // indirect
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
-	github.com/zcalusic/sysinfo v1.0.2 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	github.com/zmap/rc2 v0.0.0-20190804163417-abaa70531248 // indirect
 	github.com/zmap/zcrypto v0.0.0-20240512203510-0fef58d9a9db // indirect
