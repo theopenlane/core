@@ -12,7 +12,7 @@ import (
 
 // HookContact runs on contact create mutations
 func HookContact() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.ContactFunc(func(ctx context.Context, m *generated.ContactMutation) (generated.Value, error) {
 			email, ok := m.Email()
 			if ok {
@@ -22,5 +22,10 @@ func HookContact() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+	},
+		hook.And(
+			hook.HasFields("email"),
+			hook.HasOp(ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate),
+		),
+	)
 }

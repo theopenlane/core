@@ -437,6 +437,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**RescueStuckJobsAfter**|`integer`|||
 |**RetryPolicy**||||
 |**SkipUnknownJobCheck**|`boolean`|||
+|[**Test**](#jobqueueriverconftest)|`object`|||
 |**TestOnly**|`boolean`|||
 |[**Workers**](#jobqueueriverconfworkers)|`object`|||
 |[**WorkerMiddleware**](#jobqueueriverconfworkermiddleware)|`array`|||
@@ -466,6 +467,16 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 
+<a name="jobqueueriverconftest"></a>
+#### jobQueue\.riverConf\.Test: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Time**||||
+
+**Additional Properties:** not allowed  
 <a name="jobqueueriverconfworkers"></a>
 #### jobQueue\.riverConf\.Workers: object
 

@@ -1388,12 +1388,17 @@ func init() {
 	}
 	groupsettingMixinHooks0 := groupsettingMixin[0].Hooks()
 	groupsettingMixinHooks2 := groupsettingMixin[2].Hooks()
+	groupsettingHooks := schema.GroupSetting{}.Hooks()
 
 	groupsetting.Hooks[1] = groupsettingMixinHooks0[0]
 
 	groupsetting.Hooks[2] = groupsettingMixinHooks2[0]
+
+	groupsetting.Hooks[3] = groupsettingHooks[0]
 	groupsettingMixinInters2 := groupsettingMixin[2].Interceptors()
+	groupsettingInters := schema.GroupSetting{}.Interceptors()
 	groupsetting.Interceptors[0] = groupsettingMixinInters2[0]
+	groupsetting.Interceptors[1] = groupsettingInters[0]
 	groupsettingMixinFields0 := groupsettingMixin[0].Fields()
 	_ = groupsettingMixinFields0
 	groupsettingMixinFields1 := groupsettingMixin[1].Fields()
@@ -3767,6 +3772,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.1"                                         // Version of ent codegen.
-	Sum     = "h1:fUERL506Pqr92EPHJqr8EYxbPioflJo6PudkrEA8a/s=" // Sum of ent codegen.
+	Version = "v0.14.2"                                         // Version of ent codegen.
+	Sum     = "h1:ywld/j2Rx4EmnIKs8eZ29cbFA1zpB+DA9TLL5l3rlq0=" // Sum of ent codegen.
 )

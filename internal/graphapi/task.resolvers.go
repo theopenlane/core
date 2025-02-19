@@ -34,6 +34,16 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input generated.Creat
 
 // CreateBulkTask is the resolver for the createBulkTask field.
 func (r *mutationResolver) CreateBulkTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &input[0].OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateTask(ctx, input)
 }
 

@@ -37,15 +37,10 @@ func HookOrgOwnedTuples(skipUser bool) ent.Hook {
 					return nil, err
 				}
 
-				subject := "user"
-				if a.AuthenticationType == auth.APITokenAuthentication {
-					subject = "service"
-				}
-
 				// add user permissions to the object as the parent on creation
 				userTuple := fgax.GetTupleKey(fgax.TupleRequest{
 					SubjectID:   a.SubjectID,
-					SubjectType: subject,
+					SubjectType: auth.GetAuthzSubjectType(ctx),
 					ObjectID:    objectID,                        // this is the object id being created
 					ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 					Relation:    fgax.AdminRelation,

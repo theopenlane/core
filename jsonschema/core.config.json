@@ -756,6 +756,9 @@
         "SkipUnknownJobCheck": {
           "type": "boolean"
         },
+        "Test": {
+          "$ref": "#/$defs/river.TestConfig"
+        },
         "TestOnly": {
           "type": "boolean"
         },
@@ -779,6 +782,13 @@
         "MaxWorkers": {
           "type": "integer"
         }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "river.TestConfig": {
+      "properties": {
+        "Time": true
       },
       "additionalProperties": false,
       "type": "object"
