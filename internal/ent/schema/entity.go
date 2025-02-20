@@ -122,11 +122,6 @@ func (Entity) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the Entity
-func (Entity) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the Entity
 func (Entity) Policy() ent.Policy {
 	return policy.NewPolicy(

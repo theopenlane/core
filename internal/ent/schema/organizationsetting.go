@@ -72,6 +72,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Default(true),
 		field.Strings("allowed_email_domains").
 			Comment("domains allowed to access the organization, if empty all domains are allowed").
+			Validate(validator.ValidateDomains()).
 			Optional(),
 	}
 }

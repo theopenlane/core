@@ -53,11 +53,6 @@ func (Note) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Note
-func (Note) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Note
 func (Note) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -69,16 +64,6 @@ func (Note) Annotations() []schema.Annotation {
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
 	}
-}
-
-// Hooks of the Note
-func (Note) Hooks() []ent.Hook {
-	return []ent.Hook{}
-}
-
-// Interceptors of the Note
-func (Note) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
 }
 
 // Policy of the Note

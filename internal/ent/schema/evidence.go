@@ -85,11 +85,6 @@ func (Evidence) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Evidence
-func (Evidence) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Evidence
 func (Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -105,11 +100,6 @@ func (Evidence) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEvidenceFiles(),
 	}
-}
-
-// Interceptors of the Evidence
-func (Evidence) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
 }
 
 // Policy of the Evidence

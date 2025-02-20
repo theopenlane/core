@@ -108,11 +108,6 @@ func (Task) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Task
-func (Task) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Task
 func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -129,11 +124,6 @@ func (Task) Hooks() []ent.Hook {
 		hooks.HookTaskCreate(),
 		hooks.HookTaskAssignee(),
 	}
-}
-
-// Interceptors of the Task
-func (Task) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
 }
 
 // Policy of the Task

@@ -113,11 +113,6 @@ func (Program) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Program
-func (Program) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Program
 func (Program) Annotations() []schema.Annotation {
 	return []schema.Annotation{

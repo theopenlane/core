@@ -136,11 +136,6 @@ func (Subscriber) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Subscriber
-func (Subscriber) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the Subscriber
 func (Subscriber) Policy() ent.Policy {
 	return policy.NewPolicy(

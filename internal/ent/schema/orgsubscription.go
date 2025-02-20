@@ -67,16 +67,6 @@ func (OrgSubscription) Mixin() []ent.Mixin {
 	}
 }
 
-// Edges of the OrgSubscription
-func (OrgSubscription) Edges() []ent.Edge {
-	return []ent.Edge{}
-}
-
-// Indexes of the OrgSubscription
-func (OrgSubscription) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the OrgSubscription
 func (OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -85,11 +75,6 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 		// since we only have queries, we can just use the interceptors for queries and can skip the fga generated checks
 		// entfga.MembershipChecks("organization"),
 	}
-}
-
-// Hooks of the OrgSubscription
-func (OrgSubscription) Hooks() []ent.Hook {
-	return []ent.Hook{}
 }
 
 // Interceptors of the OrgSubscription

@@ -136,11 +136,6 @@ func (Subcontrol) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the Subcontrol
-func (Subcontrol) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the Subcontrol
 func (Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(

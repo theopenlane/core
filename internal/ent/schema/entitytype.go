@@ -83,16 +83,6 @@ func (EntityType) Annotations() []schema.Annotation {
 	}
 }
 
-// Hooks of the EntityType
-func (EntityType) Hooks() []ent.Hook {
-	return []ent.Hook{}
-}
-
-// Interceptors of the EntityType
-func (EntityType) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the EntityType
 func (EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(

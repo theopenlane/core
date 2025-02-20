@@ -2405,6 +2405,10 @@ func init() {
 	organizationsettingDescBillingNotificationsEnabled := organizationsettingFields[8].Descriptor()
 	// organizationsetting.DefaultBillingNotificationsEnabled holds the default value on creation for the billing_notifications_enabled field.
 	organizationsetting.DefaultBillingNotificationsEnabled = organizationsettingDescBillingNotificationsEnabled.Default.(bool)
+	// organizationsettingDescAllowedEmailDomains is the schema descriptor for allowed_email_domains field.
+	organizationsettingDescAllowedEmailDomains := organizationsettingFields[9].Descriptor()
+	// organizationsetting.AllowedEmailDomainsValidator is a validator for the "allowed_email_domains" field. It is called by the builders before save.
+	organizationsetting.AllowedEmailDomainsValidator = organizationsettingDescAllowedEmailDomains.Validators[0].(func([]string) error)
 	// organizationsettingDescID is the schema descriptor for id field.
 	organizationsettingDescID := organizationsettingMixinFields1[0].Descriptor()
 	// organizationsetting.DefaultID holds the default value on creation for the id field.

@@ -27,15 +27,6 @@ func InterceptorOrganizationSetting() ent.Interceptor {
 			return err
 		}
 
-		if len(orgIDs) == 0 {
-			orgID, err := auth.GetOrganizationIDFromContext(ctx)
-			if err != nil {
-				return err
-			}
-
-			orgIDs = append(orgIDs, orgID)
-		}
-
 		// sets the organization id on the query for the current organization
 		q.WhereP(organizationsetting.OrganizationIDIn(orgIDs...))
 

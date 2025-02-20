@@ -4,8 +4,10 @@ import "strings"
 
 // Context keys for authorization checks
 const (
+	// emailDomainContextKey is the context key for email domain checks defined in the fga model
 	emailDomainContextKey = "email_domain"
-	conditionContextKey   = "allowed_domains"
+	// conditionContextKey is the context key for condition checks defined in the fga model
+	conditionContextKey = "allowed_domains"
 
 	// OrgEmailConditionName is the name of the condition for organization email domain checks
 	OrgEmailConditionName = "email_domains_allowed"

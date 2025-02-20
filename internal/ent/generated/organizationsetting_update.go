@@ -432,6 +432,11 @@ func (osu *OrganizationSettingUpdate) check() error {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.geo_location": %w`, err)}
 		}
 	}
+	if v, ok := osu.mutation.AllowedEmailDomains(); ok {
+		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1065,6 +1070,11 @@ func (osuo *OrganizationSettingUpdateOne) check() error {
 	if v, ok := osuo.mutation.GeoLocation(); ok {
 		if err := organizationsetting.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.geo_location": %w`, err)}
+		}
+	}
+	if v, ok := osuo.mutation.AllowedEmailDomains(); ok {
+		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
 		}
 	}
 	return nil

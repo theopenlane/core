@@ -27,9 +27,11 @@ func HookOrganizationCreatePolicy() ent.Hook {
 				return nil, err
 			}
 
+			// setup vars before switch
 			orgID := ""
 
 			allowedDomains := []string{}
+
 			switch m := m.(type) {
 			case *generated.OrganizationSettingMutation:
 				allowedDomains, _ = m.AllowedEmailDomains()
@@ -65,6 +67,7 @@ func HookOrganizationCreatePolicy() ent.Hook {
 				allowedDomains = setting.AllowedEmailDomains
 			}
 
+			// ensure we didn't get a nil slice from the database, fga doesn't like that
 			if allowedDomains == nil {
 				allowedDomains = []string{}
 			}
@@ -152,11 +155,12 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 //	context:
 //	  allowed_domains: []
 func updateOrgConditionalTuples(ctx context.Context, m ent.Mutation, orgID string, allowedEmailDomains []string) error {
+	// create the tuple request, this is a self-referential tuple so the object and subject are the same
 	tk := fgax.TupleRequest{
 		ObjectID:         orgID,
 		ObjectType:       generated.TypeOrganization,
-		SubjectType:      generated.TypeOrganization,
 		SubjectID:        orgID,
+		SubjectType:      generated.TypeOrganization,
 		SubjectRelation:  fgax.MemberRelation,
 		Relation:         utils.OrgAccessCheckRelation,
 		ConditionName:    utils.OrgEmailConditionName,

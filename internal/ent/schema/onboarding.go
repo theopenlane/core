@@ -64,11 +64,6 @@ func (Onboarding) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Onboarding
-func (Onboarding) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Onboarding
 func (Onboarding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -85,11 +80,6 @@ func (Onboarding) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookOnboarding(),
 	}
-}
-
-// Interceptors of the Onboarding
-func (Onboarding) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
 }
 
 // Policy of the Onboarding

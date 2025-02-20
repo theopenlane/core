@@ -74,11 +74,6 @@ func (Integration) Mixin() []ent.Mixin {
 	}
 }
 
-// Interceptors of the Integration
-func (Integration) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the Integration
 func (Integration) Policy() ent.Policy {
 	return policy.NewPolicy(

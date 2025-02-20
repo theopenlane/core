@@ -124,11 +124,6 @@ func (Control) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Controls
-func (Control) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the Control
 func (Control) Policy() ent.Policy {
 	return policy.NewPolicy(

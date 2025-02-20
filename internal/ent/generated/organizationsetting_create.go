@@ -370,6 +370,11 @@ func (osc *OrganizationSettingCreate) check() error {
 	if _, ok := osc.mutation.BillingNotificationsEnabled(); !ok {
 		return &ValidationError{Name: "billing_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSetting.billing_notifications_enabled"`)}
 	}
+	if v, ok := osc.mutation.AllowedEmailDomains(); ok {
+		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
+		}
+	}
 	return nil
 }
 

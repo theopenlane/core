@@ -73,11 +73,6 @@ func (DocumentData) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the DocumentData
-func (DocumentData) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the DocumentData
 func (DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(

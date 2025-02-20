@@ -99,6 +99,23 @@ func newForeignKeyError(action, objecttype string) *ForeignKeyError {
 	}
 }
 
+// ValidationError is returned when a field fails validation
+type ValidationError struct {
+	ErrMsg string
+}
+
+// Error returns the ValidationError in string format, by removing the "generated: " prefix
+func (e *ValidationError) Error() string {
+	return strings.ReplaceAll(e.ErrMsg, "generated: ", "")
+}
+
+// newValidationError returns a ValidationError
+func newValidationError(errMsg string) *ValidationError {
+	return &ValidationError{
+		ErrMsg: errMsg,
+	}
+}
+
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
 func parseRequestError(err error, a action) error {
 	// log the error for debugging
@@ -117,7 +134,7 @@ func parseRequestError(err error, a action) error {
 			Str("field", validationError.Name).
 			Msg("validation error")
 
-		return validationError
+		return newValidationError(validationError.Error())
 	case generated.IsConstraintError(err):
 		constraintError := err.(*generated.ConstraintError)
 

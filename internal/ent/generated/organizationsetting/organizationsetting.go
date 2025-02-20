@@ -135,6 +135,8 @@ var (
 	BillingPhoneValidator func(string) error
 	// DefaultBillingNotificationsEnabled holds the default value on creation for the "billing_notifications_enabled" field.
 	DefaultBillingNotificationsEnabled bool
+	// AllowedEmailDomainsValidator is a validator for the "allowed_email_domains" field. It is called by the builders before save.
+	AllowedEmailDomainsValidator func([]string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

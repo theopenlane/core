@@ -182,7 +182,8 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 				ContentType: avatarFile.ContentType,
 			},
 			settings: &openlaneclient.CreateOrganizationSettingInput{
-				Domains: []string{"meow.theopenlane.io"},
+				Domains:             []string{"meow.theopenlane.io"},
+				AllowedEmailDomains: []string{"theopenlane.io"},
 				BillingAddress: &models.Address{
 					Line1:      gofakeit.StreetNumber() + " " + gofakeit.Street(),
 					City:       gofakeit.City(),
@@ -337,6 +338,26 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			errorMsg: "unsupported mime type uploaded: text/plain",
+		},
+		{
+			name:    "invalid allowed email domains ",
+			orgName: gofakeit.Name(),
+			settings: &openlaneclient.CreateOrganizationSettingInput{
+				AllowedEmailDomains: []string{"theopenlane"},
+			},
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "invalid or unparsable field: domains",
+		},
+		{
+			name:    "invalid domains",
+			orgName: gofakeit.Name(),
+			settings: &openlaneclient.CreateOrganizationSettingInput{
+				Domains: []string{"theopenlane"},
+			},
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "invalid or unparsable field: domains",
 		},
 	}
 

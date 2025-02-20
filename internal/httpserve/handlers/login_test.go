@@ -64,7 +64,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
 		generated.CreateOrganizationSettingInput{
-			AllowedEmailDomains: []string{"example.com"},
+			AllowedEmailDomains: []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
 		},
 	).SaveX(ctx)
 
@@ -95,13 +95,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		expectedStatus int
 	}{
 		{
-			name:           "domain restricted org, email not allowed, switch to personal org",
-			username:       invalidConfirmedUserRestrictedOrg.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
-		},
-		{
 			name:           "happy path, valid credentials",
 			username:       validConfirmedUser.UserInfo.Email,
 			password:       validPassword,
@@ -109,11 +102,18 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			expectedOrgID:  validConfirmedUser.OrganizationID,
 		},
 		{
-			name:           "happy path, domain restricted org",
+			name:           "happy path, domain restricted org, but owner so domains can be mismatched",
 			username:       validConfirmedUserRestrictedOrg.UserInfo.Email,
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
 			expectedOrgID:  org.ID,
+		},
+		{
+			name:           "domain restricted org, email not allowed, switch to personal org",
+			username:       invalidConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:       validPassword,
+			expectedStatus: http.StatusOK,
+			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
 		},
 		{
 			name:           "email unverified",

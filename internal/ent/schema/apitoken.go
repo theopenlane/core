@@ -64,11 +64,6 @@ func (APIToken) Fields() []ent.Field {
 	}
 }
 
-// Edges of the APIToken
-func (APIToken) Edges() []ent.Edge {
-	return []ent.Edge{}
-}
-
 // Indexes of the APIToken
 func (APIToken) Indexes() []ent.Index {
 	return []ent.Index{

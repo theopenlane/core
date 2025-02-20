@@ -19,7 +19,7 @@ import (
 func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
 	res, err := r.CreateOrganization(ctx, organizationInput, nil)
 	if err != nil {
-		return nil, err
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
 	}
 
 	memberInput := make([]*generated.CreateOrgMembershipInput, len(members))
@@ -55,7 +55,7 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 
 	orgSettings, err := c.OrganizationSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionCreate, object: "organization"})
 	}
 
 	obj.SettingID = &orgSettings.ID
@@ -83,7 +83,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 
 	_, err := c.OrgMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	return nil
@@ -106,7 +106,7 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 		orgmembership.IDIn(data...),
 	).Exec(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	return nil
@@ -129,12 +129,12 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	if settingID == nil {
 		org, err := c.Organization.Get(ctx, orgID.(string))
 		if err != nil {
-			return err
+			return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 		}
 
 		setting, err := org.Setting(ctx)
 		if err != nil {
-			return err
+			return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 		}
 
 		settingID = &setting.ID
@@ -142,7 +142,7 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 
 	_, err := c.OrganizationSetting.UpdateOneID(*settingID).SetInput(*data).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	return nil

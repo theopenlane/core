@@ -52,11 +52,6 @@ func (PasswordResetToken) Fields() []ent.Field {
 	}
 }
 
-// Edges of the PasswordResetToken
-func (PasswordResetToken) Edges() []ent.Edge {
-	return []ent.Edge{}
-}
-
 // Mixin of the PasswordResetToken
 func (PasswordResetToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{

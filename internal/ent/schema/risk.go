@@ -112,11 +112,6 @@ func (Risk) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Risk
-func (Risk) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the Risk
 func (Risk) Policy() ent.Policy {
 	return policy.NewPolicy(

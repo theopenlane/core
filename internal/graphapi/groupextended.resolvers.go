@@ -251,7 +251,7 @@ func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj 
 
 	groupSettings, err := c.GroupSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
 
 	obj.SettingID = &groupSettings.ID
@@ -279,7 +279,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 
 	_, err := c.GroupMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionUpdate, object: "group"})
 	}
 
 	return nil
@@ -306,7 +306,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 			Where(groupmembership.GroupID(groupID.(string))).
 			Exec(ctx); err != nil {
 
-			return err
+			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
 		}
 	}
 
@@ -330,12 +330,12 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 	if settingID == nil {
 		group, err := c.Group.Get(ctx, groupID.(string))
 		if err != nil {
-			return err
+			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
 		}
 
 		setting, err := group.Setting(ctx)
 		if err != nil {
-			return err
+			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
 		}
 
 		settingID = &setting.ID
@@ -343,7 +343,7 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 
 	_, err := c.GroupSetting.UpdateOneID(*settingID).SetInput(*data).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionUpdate, object: "group"})
 	}
 
 	return nil

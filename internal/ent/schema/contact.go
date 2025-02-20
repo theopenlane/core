@@ -92,11 +92,6 @@ func (Contact) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Contact
-func (Contact) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Contact
 func (Contact) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -112,11 +107,6 @@ func (Contact) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookContact(),
 	}
-}
-
-// Interceptors of the Contact
-func (Contact) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
 }
 
 // Policy of the Contact
