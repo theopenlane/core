@@ -474,6 +474,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**DisableUniqueEnforcement**|`boolean`|||
 |**Time**||||
 
 **Additional Properties:** not allowed  

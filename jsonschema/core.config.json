@@ -788,6 +788,9 @@
     },
     "river.TestConfig": {
       "properties": {
+        "DisableUniqueEnforcement": {
+          "type": "boolean"
+        },
         "Time": true
       },
       "additionalProperties": false,

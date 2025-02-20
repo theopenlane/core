@@ -104,6 +104,7 @@ jobQueue:
         RetryPolicy: null
         SkipUnknownJobCheck: false
         Test:
+            DisableUniqueEnforcement: false
             Time: null
         TestOnly: false
         WorkerMiddleware: null

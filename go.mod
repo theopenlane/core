@@ -19,7 +19,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.77.1
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.2.1
-	github.com/danielgtaylor/huma/v2 v2.28.0
+	github.com/danielgtaylor/huma/v2 v2.29.0
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.129.0
@@ -41,7 +41,7 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.1.3
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
-	github.com/miekg/dns v1.1.59
+	github.com/miekg/dns v1.1.63
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.5.0
 	github.com/oNaiPs/go-generate-fast v0.0.0-00010101000000-000000000000
@@ -49,15 +49,15 @@ require (
 	github.com/openfga/go-sdk v0.6.5
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.1
-	github.com/projectdiscovery/cdncheck v1.1.0
-	github.com/projectdiscovery/dnsx v1.2.1
-	github.com/projectdiscovery/goflags v0.1.67
-	github.com/projectdiscovery/utils v0.4.8
-	github.com/prometheus/client_golang v1.20.5
+	github.com/projectdiscovery/cdncheck v1.1.6
+	github.com/projectdiscovery/dnsx v1.2.2
+	github.com/projectdiscovery/goflags v0.1.72
+	github.com/projectdiscovery/utils v0.4.11
+	github.com/prometheus/client_golang v1.21.0
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.0
-	github.com/riverqueue/river v0.17.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.17.0
+	github.com/riverqueue/river v0.18.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.18.0
 	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.49.1
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
@@ -69,10 +69,10 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.1
 	github.com/theopenlane/emailtemplates v0.1.2
-	github.com/theopenlane/entx v0.4.3
+	github.com/theopenlane/entx v0.4.4
 	github.com/theopenlane/gqlgen-plugins v0.4.4
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.8.1
+	github.com/theopenlane/iam v0.8.2
 	github.com/theopenlane/newman v0.1.2
 	github.com/theopenlane/riverboat v0.0.8
 	github.com/theopenlane/utils v0.4.3
@@ -95,7 +95,7 @@ require (
 	atomicgo.dev/cursor v0.2.0 // indirect
 	atomicgo.dev/keyboard v0.2.9 // indirect
 	atomicgo.dev/schedule v0.1.0 // indirect
-	cel.dev/expr v0.19.0 // indirect
+	cel.dev/expr v0.19.1 // indirect
 	github.com/4meepo/tagalign v1.3.4 // indirect
 	github.com/Abirdcfly/dupword v0.1.3 // indirect
 	github.com/Antonboom/errname v1.0.0 // indirect
@@ -176,7 +176,7 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
-	github.com/docker/docker v27.4.1+incompatible // indirect
+	github.com/docker/docker v27.5.1+incompatible // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
 	github.com/ettle/strcase v0.2.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
@@ -285,15 +285,15 @@ require (
 	github.com/projectdiscovery/chaos-client v0.5.2 // indirect
 	github.com/projectdiscovery/dsl v0.3.13 // indirect
 	github.com/projectdiscovery/fastdialer v0.3.0 // indirect
-	github.com/projectdiscovery/gologger v1.1.41 // indirect
+	github.com/projectdiscovery/gologger v1.1.44 // indirect
 	github.com/projectdiscovery/gostruct v0.0.2 // indirect
-	github.com/projectdiscovery/hmap v0.0.76 // indirect
+	github.com/projectdiscovery/hmap v0.0.79 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
 	github.com/projectdiscovery/networkpolicy v0.1.1 // indirect
-	github.com/projectdiscovery/ratelimit v0.0.68 // indirect
+	github.com/projectdiscovery/ratelimit v0.0.69 // indirect
 	github.com/projectdiscovery/retryabledns v1.0.94 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.96 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.99 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.3-0.20240823090925-0fe6f58b47b1 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -408,7 +408,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.36.0 // indirect
+	github.com/XSAM/otelsql v0.37.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.0 // indirect
 	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
@@ -453,7 +453,7 @@ require (
 	github.com/go-webauthn/x v0.1.14 // indirect
 	github.com/goccy/go-json v0.10.5
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/google/cel-go v0.22.1 // indirect
+	github.com/google/cel-go v0.23.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/go-tpm v0.9.1 // indirect
@@ -463,7 +463,7 @@ require (
 	github.com/gookit/color v1.5.4
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.25.1 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -473,7 +473,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/klauspost/compress v1.17.10 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/knadh/koanf/maps v0.1.1 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.2 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
@@ -501,9 +501,9 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/opencontainers/runc v1.1.14 // indirect
-	github.com/openfga/api/proto v0.0.0-20250107154247-c22e6db5c4f5 // indirect
-	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20241115164311-10e575c8e47c // indirect
-	github.com/openfga/openfga v1.8.4 // indirect
+	github.com/openfga/api/proto v0.0.0-20250127102726-f9709139a369 // indirect
+	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20250121233318-0eae96a39570 // indirect
+	github.com/openfga/openfga v1.8.5 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
@@ -513,13 +513,13 @@ require (
 	github.com/projectdiscovery/subfinder/v2 v2.6.8
 	github.com/projectdiscovery/wappalyzergo v0.2.16
 	github.com/prometheus/client_model v0.6.1 // indirect
-	github.com/prometheus/common v0.61.0 // indirect
+	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/pterm/pterm v0.12.80
 	github.com/resend/resend-go/v2 v2.13.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.17.0 // indirect
-	github.com/riverqueue/river/rivershared v0.17.0 // indirect
-	github.com/riverqueue/river/rivertype v0.17.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.18.0 // indirect
+	github.com/riverqueue/river/rivershared v0.18.0 // indirect
+	github.com/riverqueue/river/rivertype v0.18.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.6.0 // indirect
@@ -552,10 +552,10 @@ require (
 	github.com/zclconf/go-cty v1.15.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib v1.29.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.58.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.59.0 // indirect
 	go.opentelemetry.io/otel v1.34.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.33.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.33.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.34.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.34.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.33.0 // indirect
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.33.0 // indirect
 	go.opentelemetry.io/otel/metric v1.34.0 // indirect
@@ -572,9 +572,9 @@ require (
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/time v0.10.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240716161551-93cc26a95ae9 // indirect
-	google.golang.org/api v0.221.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20250102185135-69823020774d // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250207221924-e9438ea467c6 // indirect
+	google.golang.org/api v0.222.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20250115164207-1a7da9e5054f // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250212204824-5a70512c5d8b // indirect
 	google.golang.org/grpc v1.70.0 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
