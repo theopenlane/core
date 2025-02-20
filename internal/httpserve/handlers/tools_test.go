@@ -140,7 +140,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	require.NoError(t, err)
 
 	// setup handler
-	suite.h = handlerSetup(t, suite.db)
+	suite.h = handlerSetup(suite.db)
 
 	// setup totp manager
 	suite.h.OTPManager = &totp.Manager{
@@ -187,10 +187,8 @@ func setupEcho(dbClient *ent.Client) *echo.Echo {
 }
 
 // handlerSetup to be used for required references in the handler tests
-func handlerSetup(t *testing.T, db *ent.Client) *handlers.Handler {
-	as := authmanager.New()
-	as.SetTokenManager(db.TokenManager)
-	as.SetSessionConfig(db.SessionConfig)
+func handlerSetup(db *ent.Client) *handlers.Handler {
+	as := authmanager.New(db)
 
 	h := &handlers.Handler{
 		IsTest:        true,

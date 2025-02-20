@@ -17,7 +17,6 @@ import (
 
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -146,9 +145,12 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Through("members", OrgMembership.Type),
 
+		// files can be owned by an organization, but don't have to be
+		// only those with the organization id set should be cascade deleted
+		edge.To("files", File.Type).
+			Annotations(entx.CascadeAnnotationField("Organization")),
 		edge.To("events", Event.Type),
 		edge.To("secrets", Hush.Type),
-		edge.To("files", File.Type),
 		edge.To("avatar_file", File.Type).
 			Field("avatar_local_file_id").Unique(),
 
@@ -245,8 +247,7 @@ func (Organization) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),    // Allow sign-up tokens to query the org ID they are subscribing to
-			entfga.CheckReadAccess[*generated.OrganizationQuery](),            // access based on query context
-			policy.CheckOrgReadAccess(),                                       // access based on auth context
+			policy.CheckOrgReadAccess(),                                       // access based on query and auth context
 		),
 		policy.WithMutationRules(
 			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
@@ -267,5 +268,6 @@ func (Organization) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookOrganization(),
 		hooks.HookOrganizationDelete(),
+		hooks.HookOrganizationCreatePolicy(),
 	}
 }

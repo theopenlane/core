@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/brianvoe/gofakeit/v7"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -18,6 +18,8 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/pkg/models"
@@ -35,60 +37,94 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	// authentication in the tests
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
 
-	// create user in the database
-	validConfirmedUser := "rsanchez@theopenlane.io"
+	// create users in the database
 	validPassword := "sup3rs3cu7e!"
 
-	userSetting := suite.db.UserSetting.Create().
-		SetEmailConfirmed(true).
-		SetIsTfaEnabled(true).
-		SaveX(ctx)
+	validConfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      validPassword,
+		confirmedUser: true,
+	})
 
-	_ = suite.db.User.Create().
-		SetFirstName(gofakeit.FirstName()).
-		SetLastName(gofakeit.LastName()).
-		SetEmail(validConfirmedUser).
-		SetPassword(validPassword).
-		SetSetting(userSetting).
-		SaveX(ctx)
+	validConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
+		email:         "meow@example.com",
+		password:      validPassword,
+		confirmedUser: true,
+	})
 
-	validUnconfirmedUser := "msmith@theopenlane.io"
+	invalidConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
+		email:         "meow@foobar.com",
+		password:      validPassword,
+		confirmedUser: true,
+	})
 
-	userSetting = suite.db.UserSetting.Create().
-		SetEmailConfirmed(false).
-		SaveX(ctx)
+	validUnconfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      validPassword,
+		confirmedUser: false,
+	})
 
-	_ = suite.db.User.Create().
-		SetFirstName(gofakeit.FirstName()).
-		SetLastName(gofakeit.LastName()).
-		SetEmail(validUnconfirmedUser).
-		SetPassword(validPassword).
-		SetSetting(userSetting).
-		SaveX(ctx)
+	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
+		generated.CreateOrganizationSettingInput{
+			AllowedEmailDomains: []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
+		},
+	).SaveX(ctx)
+
+	input := generated.CreateOrganizationInput{
+		Name:      "restricted",
+		SettingID: &orgSetting.ID,
+	}
+
+	// setup allow context with the client in the context which is required for hooks that run
+	allowCtx := privacy.DecisionContext(validConfirmedUserRestrictedOrg.UserCtx, privacy.Allow)
+	allowCtx = ent.NewContext(allowCtx, suite.db)
+
+	org := suite.db.Organization.Create().SetInput(input).SaveX(allowCtx)
+
+	// update the user settings to have the default org set that is the domain restricted org
+	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
+		SetDefaultOrgID(org.ID).SaveX(allowCtx)
+
+	suite.db.UserSetting.UpdateOneID(invalidConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
+		SetDefaultOrgID(org.ID).SaveX(allowCtx)
 
 	testCases := []struct {
 		name           string
 		username       string
 		password       string
+		expectedOrgID  string
 		expectedErr    error
 		expectedStatus int
 	}{
 		{
 			name:           "happy path, valid credentials",
-			username:       validConfirmedUser,
+			username:       validConfirmedUser.UserInfo.Email,
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
+			expectedOrgID:  validConfirmedUser.OrganizationID,
+		},
+		{
+			name:           "happy path, domain restricted org, but owner so domains can be mismatched",
+			username:       validConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:       validPassword,
+			expectedStatus: http.StatusOK,
+			expectedOrgID:  org.ID,
+		},
+		{
+			name:           "domain restricted org, email not allowed, switch to personal org",
+			username:       invalidConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:       validPassword,
+			expectedStatus: http.StatusOK,
+			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
 		},
 		{
 			name:           "email unverified",
-			username:       validUnconfirmedUser,
+			username:       validUnconfirmedUser.UserInfo.Email,
 			password:       validPassword,
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    auth.ErrUnverifiedUser,
 		},
 		{
 			name:           "invalid password",
-			username:       validConfirmedUser,
+			username:       validConfirmedUser.UserInfo.Email,
 			password:       "thisisnottherightone",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    rout.ErrInvalidCredentials,
@@ -109,7 +145,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		},
 		{
 			name:           "empty password",
-			username:       validConfirmedUser,
+			username:       validConfirmedUser.UserInfo.Email,
 			password:       "",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    rout.NewMissingRequiredFieldError("password"),
@@ -152,6 +188,16 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
 				assert.True(t, out.TFAEnabled) // we set the user to have TFA enabled in the tests
+				require.NotNil(t, out.AccessToken)
+
+				// check the claims to ensure the user is in the correct org
+				token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
+				require.NoError(t, err)
+
+				claims, ok := token.Claims.(jwt.MapClaims)
+				require.True(t, ok)
+
+				assert.Equal(t, tc.expectedOrgID, claims["org"])
 			} else {
 				assert.Contains(t, out.Error, tc.expectedErr.Error())
 			}

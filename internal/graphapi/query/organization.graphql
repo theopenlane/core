@@ -42,6 +42,7 @@ mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Uploa
       updatedAt
       setting {
         id
+        allowedEmailDomains
         createdAt
         updatedAt
         createdBy
@@ -74,13 +75,17 @@ mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Uploa
 }
 
 mutation CreateOrganizationWithMembers($organizationInput: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
-  createOrganizationWithMembers(organizationInput: $organizationInput, members: $members) {
+  createOrganizationWithMembers(
+    organizationInput: $organizationInput
+    members: $members
+  ) {
     organization {
       id
       name
       displayName
       setting {
         id
+        allowedEmailDomains
         createdAt
         updatedAt
         createdBy
@@ -148,6 +153,7 @@ query GetAllOrganizations {
         }
         setting {
           id
+          allowedEmailDomains
           createdAt
           updatedAt
           createdBy
@@ -251,6 +257,7 @@ query GetOrganizationByID($organizationId: ID!) {
     }
     setting {
       id
+      allowedEmailDomains
       createdAt
       updatedAt
       createdBy
@@ -354,6 +361,7 @@ query GetOrganizations($where: OrganizationWhereInput) {
         }
         setting {
           id
+          allowedEmailDomains
           createdAt
           updatedAt
           createdBy
@@ -447,6 +455,7 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
       }
       setting {
         id
+        allowedEmailDomains
         createdAt
         updatedAt
         createdBy

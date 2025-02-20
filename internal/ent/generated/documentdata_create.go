@@ -121,14 +121,6 @@ func (ddc *DocumentDataCreate) SetOwnerID(s string) *DocumentDataCreate {
 	return ddc
 }
 
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ddc *DocumentDataCreate) SetNillableOwnerID(s *string) *DocumentDataCreate {
-	if s != nil {
-		ddc.SetOwnerID(*s)
-	}
-	return ddc
-}
-
 // SetTemplateID sets the "template_id" field.
 func (ddc *DocumentDataCreate) SetTemplateID(s string) *DocumentDataCreate {
 	ddc.mutation.SetTemplateID(s)
@@ -262,6 +254,9 @@ func (ddc *DocumentDataCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ddc *DocumentDataCreate) check() error {
+	if _, ok := ddc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "DocumentData.owner_id"`)}
+	}
 	if v, ok := ddc.mutation.OwnerID(); ok {
 		if err := documentdata.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DocumentData.owner_id": %w`, err)}
@@ -272,6 +267,9 @@ func (ddc *DocumentDataCreate) check() error {
 	}
 	if _, ok := ddc.mutation.Data(); !ok {
 		return &ValidationError{Name: "data", err: errors.New(`generated: missing required field "DocumentData.data"`)}
+	}
+	if len(ddc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "DocumentData.owner"`)}
 	}
 	if len(ddc.mutation.TemplateIDs()) == 0 {
 		return &ValidationError{Name: "template", err: errors.New(`generated: missing required edge "DocumentData.template"`)}

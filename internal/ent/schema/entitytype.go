@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -82,21 +83,11 @@ func (EntityType) Annotations() []schema.Annotation {
 	}
 }
 
-// Hooks of the EntityType
-func (EntityType) Hooks() []ent.Hook {
-	return []ent.Hook{}
-}
-
-// Interceptors of the EntityType
-func (EntityType) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the EntityType
 func (EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.EntityTypeQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.EntityTypeMutation](),

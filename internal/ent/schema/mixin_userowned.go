@@ -169,7 +169,7 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 
 					// Skip the interceptor if the query is for a single entity
 					// and the BypassInterceptor flag is set for Only queries
-					if userOwned.SkipInterceptor == interceptors.SkipOnlyQuery && ctxQuery.Op == "Only" {
+					if userOwned.SkipInterceptor == interceptors.SkipOnlyQuery && ctxQuery.Op == interceptors.OnlyOperation {
 						return nil
 					}
 

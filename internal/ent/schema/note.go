@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -52,11 +53,6 @@ func (Note) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Note
-func (Note) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Note
 func (Note) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -70,21 +66,11 @@ func (Note) Annotations() []schema.Annotation {
 	}
 }
 
-// Hooks of the Note
-func (Note) Hooks() []ent.Hook {
-	return []ent.Hook{}
-}
-
-// Interceptors of the Note
-func (Note) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the Note
 func (Note) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.NoteQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.NoteMutation](),

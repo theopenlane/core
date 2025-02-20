@@ -958,6 +958,16 @@ func BillingNotificationsEnabledNEQ(v bool) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldNEQ(FieldBillingNotificationsEnabled, v))
 }
 
+// AllowedEmailDomainsIsNil applies the IsNil predicate on the "allowed_email_domains" field.
+func AllowedEmailDomainsIsNil() predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldIsNull(FieldAllowedEmailDomains))
+}
+
+// AllowedEmailDomainsNotNil applies the NotNil predicate on the "allowed_email_domains" field.
+func AllowedEmailDomainsNotNil() predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNotNull(FieldAllowedEmailDomains))
+}
+
 // HasOrganization applies the HasEdge predicate on the "organization" edge.
 func HasOrganization() predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(func(s *sql.Selector) {

@@ -1101,6 +1101,16 @@ func BillingNotificationsEnabledNEQ(v bool) predicate.OrganizationSettingHistory
 	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldBillingNotificationsEnabled, v))
 }
 
+// AllowedEmailDomainsIsNil applies the IsNil predicate on the "allowed_email_domains" field.
+func AllowedEmailDomainsIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldAllowedEmailDomains))
+}
+
+// AllowedEmailDomainsNotNil applies the NotNil predicate on the "allowed_email_domains" field.
+func AllowedEmailDomainsNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldAllowedEmailDomains))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.OrganizationSettingHistory) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.AndPredicates(predicates...))

@@ -118,7 +118,7 @@ func createScopeTuples(scopes []string, orgID, tokenID string) (tuples []fgax.Tu
 			SubjectID:   tokenID,
 			SubjectType: "service",
 			ObjectID:    orgID,
-			ObjectType:  "organization",
+			ObjectType:  generated.TypeOrganization,
 			Relation:    relation,
 		}
 

@@ -2,6 +2,7 @@ query GetAllOrganizationSettings {
   organizationSettings {
     edges {
       node {
+        allowedEmailDomains
         billingAddress
         billingContact
         billingEmail
@@ -26,6 +27,7 @@ query GetAllOrganizationSettings {
 
 query GetOrganizationSettingByID($organizationSettingId: ID!) {
   organizationSetting(id: $organizationSettingId) {
+    allowedEmailDomains
     billingAddress
     billingContact
     billingEmail
@@ -50,6 +52,7 @@ query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
   organizationSettings(where: $where) {
     edges {
       node {
+        allowedEmailDomains
         billingAddress
         billingContact
         billingEmail
@@ -75,6 +78,7 @@ query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
 mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
   updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
     organizationSetting {
+      allowedEmailDomains
       billingAddress
       billingContact
       billingEmail

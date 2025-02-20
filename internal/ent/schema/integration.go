@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -77,7 +78,7 @@ func (Integration) Mixin() []ent.Mixin {
 func (Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.IntegrationQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.IntegrationMutation](),

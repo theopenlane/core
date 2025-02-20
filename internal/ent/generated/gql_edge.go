@@ -441,7 +441,7 @@ func (dd *DocumentData) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = dd.QueryOwner().Only(ctx)
 	}
-	return result, MaskNotFound(err)
+	return result, err
 }
 
 func (dd *DocumentData) Template(ctx context.Context) (*Template, error) {
@@ -1829,6 +1829,18 @@ func (o *Organization) Users(ctx context.Context) (result []*User, err error) {
 	return result, err
 }
 
+func (o *Organization) Files(ctx context.Context) (result []*File, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.FilesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryFiles().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Events(ctx context.Context) (result []*Event, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1849,18 +1861,6 @@ func (o *Organization) Secrets(ctx context.Context) (result []*Hush, err error) 
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QuerySecrets().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Files(ctx context.Context) (result []*File, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.FilesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryFiles().All(ctx)
 	}
 	return result, err
 }

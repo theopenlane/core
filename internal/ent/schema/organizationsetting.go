@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -69,6 +70,10 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.Bool("billing_notifications_enabled").
 			Comment("should we send email notifications related to billing").
 			Default(true),
+		field.Strings("allowed_email_domains").
+			Comment("domains allowed to access the organization, if empty all domains are allowed").
+			Validate(validator.ValidateDomains()).
+			Optional(),
 	}
 }
 
@@ -87,6 +92,13 @@ func (OrganizationSetting) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SettingsChecks("organization"),
+	}
+}
+
+func (OrganizationSetting) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookOrganizationCreatePolicy(),
+		hooks.HookOrganizationUpdatePolicy(),
 	}
 }
 
@@ -111,8 +123,7 @@ func (OrganizationSetting) Mixin() []ent.Mixin {
 func (OrganizationSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.OrganizationSettingQuery](), // access based on query context
-			policy.CheckOrgReadAccess(),                                   // access based on auth context
+			policy.CheckOrgReadAccess(), // access based on auth context
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.OrganizationSettingMutation](),

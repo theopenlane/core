@@ -504,6 +504,21 @@ func (oc *OrganizationCreate) AddUsers(u ...*User) *OrganizationCreate {
 	return oc.AddUserIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (oc *OrganizationCreate) AddFileIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddFileIDs(ids...)
+	return oc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (oc *OrganizationCreate) AddFiles(f ...*File) *OrganizationCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return oc.AddFileIDs(ids...)
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (oc *OrganizationCreate) AddEventIDs(ids ...string) *OrganizationCreate {
 	oc.mutation.AddEventIDs(ids...)
@@ -532,21 +547,6 @@ func (oc *OrganizationCreate) AddSecrets(h ...*Hush) *OrganizationCreate {
 		ids[i] = h[i].ID
 	}
 	return oc.AddSecretIDs(ids...)
-}
-
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (oc *OrganizationCreate) AddFileIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddFileIDs(ids...)
-	return oc
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (oc *OrganizationCreate) AddFiles(f ...*File) *OrganizationCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
-	}
-	return oc.AddFileIDs(ids...)
 }
 
 // SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
@@ -1363,6 +1363,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := oc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organization.FilesTable,
+			Columns: organization.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.OrganizationFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := oc.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1392,23 +1409,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.OrganizationSecrets
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := oc.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

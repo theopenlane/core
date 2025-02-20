@@ -1318,7 +1318,7 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 type CreateDocumentDataInput struct {
 	Tags       []string
 	Data       customtypes.JSONObject
-	OwnerID    *string
+	OwnerID    string
 	TemplateID string
 	EntityIDs  []string
 	FileIDs    []string
@@ -1332,9 +1332,7 @@ func (i *CreateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	if v := i.Data; v != nil {
 		m.SetData(v)
 	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
+	m.SetOwnerID(i.OwnerID)
 	m.SetTemplateID(i.TemplateID)
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
@@ -1356,7 +1354,6 @@ type UpdateDocumentDataInput struct {
 	Tags            []string
 	AppendTags      []string
 	Data            customtypes.JSONObject
-	ClearOwner      bool
 	OwnerID         *string
 	TemplateID      *string
 	ClearEntity     bool
@@ -1380,9 +1377,6 @@ func (i *UpdateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	}
 	if v := i.Data; v != nil {
 		m.SetData(v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4285,9 +4279,9 @@ type CreateOrganizationInput struct {
 	SettingID                  *string
 	PersonalAccessTokenIDs     []string
 	APITokenIDs                []string
+	FileIDs                    []string
 	EventIDs                   []string
 	SecretIDs                  []string
-	FileIDs                    []string
 	AvatarFileID               *string
 	GroupIDs                   []string
 	TemplateIDs                []string
@@ -4375,14 +4369,14 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.APITokenIDs; len(v) > 0 {
 		m.AddAPITokenIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
 	if v := i.SecretIDs; len(v) > 0 {
 		m.AddSecretIDs(v...)
-	}
-	if v := i.FileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
 	}
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
@@ -4506,15 +4500,15 @@ type UpdateOrganizationInput struct {
 	ClearAPITokens                   bool
 	AddAPITokenIDs                   []string
 	RemoveAPITokenIDs                []string
+	ClearFiles                       bool
+	AddFileIDs                       []string
+	RemoveFileIDs                    []string
 	ClearEvents                      bool
 	AddEventIDs                      []string
 	RemoveEventIDs                   []string
 	ClearSecrets                     bool
 	AddSecretIDs                     []string
 	RemoveSecretIDs                  []string
-	ClearFiles                       bool
-	AddFileIDs                       []string
-	RemoveFileIDs                    []string
 	ClearAvatarFile                  bool
 	AvatarFileID                     *string
 	ClearGroups                      bool
@@ -4722,6 +4716,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveAPITokenIDs; len(v) > 0 {
 		m.RemoveAPITokenIDs(v...)
 	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
 	if i.ClearEvents {
 		m.ClearEvents()
 	}
@@ -4739,15 +4742,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveSecretIDs; len(v) > 0 {
 		m.RemoveSecretIDs(v...)
-	}
-	if i.ClearFiles {
-		m.ClearFiles()
-	}
-	if v := i.AddFileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
-	if v := i.RemoveFileIDs; len(v) > 0 {
-		m.RemoveFileIDs(v...)
 	}
 	if i.ClearAvatarFile {
 		m.ClearAvatarFile()
@@ -4969,6 +4963,7 @@ type CreateOrganizationSettingInput struct {
 	TaxIdentifier               *string
 	GeoLocation                 *enums.Region
 	BillingNotificationsEnabled *bool
+	AllowedEmailDomains         []string
 	OrganizationID              *string
 	FileIDs                     []string
 }
@@ -5001,6 +4996,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.BillingNotificationsEnabled; v != nil {
 		m.SetBillingNotificationsEnabled(*v)
+	}
+	if v := i.AllowedEmailDomains; v != nil {
+		m.SetAllowedEmailDomains(v)
 	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
@@ -5037,6 +5035,9 @@ type UpdateOrganizationSettingInput struct {
 	ClearGeoLocation            bool
 	GeoLocation                 *enums.Region
 	BillingNotificationsEnabled *bool
+	ClearAllowedEmailDomains    bool
+	AllowedEmailDomains         []string
+	AppendAllowedEmailDomains   []string
 	ClearOrganization           bool
 	OrganizationID              *string
 	ClearFiles                  bool
@@ -5102,6 +5103,15 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.BillingNotificationsEnabled; v != nil {
 		m.SetBillingNotificationsEnabled(*v)
+	}
+	if i.ClearAllowedEmailDomains {
+		m.ClearAllowedEmailDomains()
+	}
+	if v := i.AllowedEmailDomains; v != nil {
+		m.SetAllowedEmailDomains(v)
+	}
+	if i.AppendAllowedEmailDomains != nil {
+		m.AppendAllowedEmailDomains(i.AllowedEmailDomains)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()

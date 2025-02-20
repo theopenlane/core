@@ -20,7 +20,7 @@ func (r *createEntityInputResolver) Note(ctx context.Context, obj *generated.Cre
 
 	note, err := c.Note.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionCreate, object: "entity"})
 	}
 
 	obj.NoteIDs = []string{note.ID}
@@ -58,7 +58,7 @@ func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.Upd
 
 	note, err := c.Note.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionUpdate, object: "entity"})
 	}
 
 	obj.AddNoteIDs = []string{note.ID}

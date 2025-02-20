@@ -719,6 +719,10 @@ func adminSearchOrganizationSettings(ctx context.Context, query string) ([]*gene
 			},
 			organizationsetting.TaxIdentifierContainsFold(query),  // search by TaxIdentifier
 			organizationsetting.OrganizationIDContainsFold(query), // search by OrganizationID
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(allowedemaildomains)::text LIKE $11", likeQuery)) // search by AllowedEmailDomains
+			},
 		),
 	).All(ctx)
 }

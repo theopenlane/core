@@ -50,6 +50,8 @@ const (
 	FieldOrganizationID = "organization_id"
 	// FieldBillingNotificationsEnabled holds the string denoting the billing_notifications_enabled field in the database.
 	FieldBillingNotificationsEnabled = "billing_notifications_enabled"
+	// FieldAllowedEmailDomains holds the string denoting the allowed_email_domains field in the database.
+	FieldAllowedEmailDomains = "allowed_email_domains"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -89,6 +91,7 @@ var Columns = []string{
 	FieldGeoLocation,
 	FieldOrganizationID,
 	FieldBillingNotificationsEnabled,
+	FieldAllowedEmailDomains,
 }
 
 var (
@@ -113,7 +116,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [3]ent.Hook
+	Hooks        [5]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -132,6 +135,8 @@ var (
 	BillingPhoneValidator func(string) error
 	// DefaultBillingNotificationsEnabled holds the default value on creation for the "billing_notifications_enabled" field.
 	DefaultBillingNotificationsEnabled bool
+	// AllowedEmailDomainsValidator is a validator for the "allowed_email_domains" field. It is called by the builders before save.
+	AllowedEmailDomainsValidator func([]string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

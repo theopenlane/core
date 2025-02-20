@@ -33,21 +33,24 @@ type organization
     define admin: [user] or admin from parent
     define member: [user] or owner or admin or member from parent
     define owner: [user] or owner from parent
+    # parent inheritance
     define parent: [organization]
+    # organization policies to restrict access
+    define access: [organization#member with email_domains_allowed]
     # main permission sets based on roles
     define can_delete: [service] or owner or can_delete from parent
-    define can_edit: [service] or admin or owner or can_edit from parent
+    define can_edit: [service] or (admin and access)  or owner or can_edit from parent
     # view access of the organization
     # includes all members, admins, and owners
     # also allows users to be given time based access to the organization (e.g. support access)
-    define can_view: [service, user with time_based_grant] or member or admin or owner or can_edit or can_view from parent
+    define can_view: [service, user with time_based_grant] or (member and access) or owner or can_edit or can_view from parent
     # additional fine-grained permissions
     # allow owner and assigned users to view audit logs
     define audit_log_viewer: ([user, service] or owner or audit_log_viewer from parent) and can_view
     # allow members to invite other members
-    define can_invite_members: [user] or member or can_edit or can_invite_members from parent
+    define can_invite_members: can_view or can_edit or can_invite_members from parent
     # only allow users with edit access to the org to invite other admins
-    define can_invite_admins: [user] or can_edit or can_invite_admins from parent
+    define can_invite_admins: can_edit or can_invite_admins from parent
     # object creation permissions
     # these permissions should all be defined as:
     #     define [object]_creator: [group#member]
@@ -159,9 +162,9 @@ type program
     # allow owner and assigned users to view audit logs
     define audit_log_viewer: ([user, service] or admin or audit_log_viewer from parent) and can_view
     # allow members to invite other members
-    define can_invite_members: [user] or member or can_edit
+    define can_invite_members: member or can_edit
     # only allow users with edit access to the org to invite other admins
-    define can_invite_admins: [user] or can_edit
+    define can_invite_admins: can_edit
     # additional relations
     define user_in_context: [user]
 # controls are associated with an organization but do not inherit access from the organization
@@ -343,4 +346,11 @@ condition in_company_network(user_ip: ipaddress, cidr: string) {
 # Time based access to resources
 condition time_based_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
     current_time < grant_time + grant_duration
+}
+
+# user email domain within the allowed list
+# if there are no restrictions, or a check is done without a domain, it will pass
+# if the email domain is in the allowed list, it will pass
+condition email_domains_allowed(email_domain: string, allowed_domains: list<string>) {
+  allowed_domains == [] || email_domain == "" || email_domain in allowed_domains
 }

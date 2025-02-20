@@ -59,7 +59,9 @@ type OrganizationSettingHistory struct {
 	OrganizationID string `json:"organization_id,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
-	selectValues                sql.SelectValues
+	// domains allowed to access the organization, if empty all domains are allowed
+	AllowedEmailDomains []string `json:"allowed_email_domains,omitempty"`
+	selectValues        sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -67,7 +69,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case organizationsettinghistory.FieldTags, organizationsettinghistory.FieldDomains, organizationsettinghistory.FieldBillingAddress:
+		case organizationsettinghistory.FieldTags, organizationsettinghistory.FieldDomains, organizationsettinghistory.FieldBillingAddress, organizationsettinghistory.FieldAllowedEmailDomains:
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -218,6 +220,14 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			} else if value.Valid {
 				osh.BillingNotificationsEnabled = value.Bool
 			}
+		case organizationsettinghistory.FieldAllowedEmailDomains:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field allowed_email_domains", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &osh.AllowedEmailDomains); err != nil {
+					return fmt.Errorf("unmarshal field allowed_email_domains: %w", err)
+				}
+			}
 		default:
 			osh.selectValues.Set(columns[i], values[i])
 		}
@@ -310,6 +320,9 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("billing_notifications_enabled=")
 	builder.WriteString(fmt.Sprintf("%v", osh.BillingNotificationsEnabled))
+	builder.WriteString(", ")
+	builder.WriteString("allowed_email_domains=")
+	builder.WriteString(fmt.Sprintf("%v", osh.AllowedEmailDomains))
 	builder.WriteByte(')')
 	return builder.String()
 }

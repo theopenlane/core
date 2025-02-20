@@ -53,6 +53,8 @@ type OrganizationSetting struct {
 	OrganizationID string `json:"organization_id,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
+	// domains allowed to access the organization, if empty all domains are allowed
+	AllowedEmailDomains []string `json:"allowed_email_domains,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationSettingQuery when eager-loading is set.
 	Edges        OrganizationSettingEdges `json:"edges"`
@@ -99,7 +101,7 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress:
+		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress, organizationsetting.FieldAllowedEmailDomains:
 			values[i] = new([]byte)
 		case organizationsetting.FieldBillingNotificationsEnabled:
 			values[i] = new(sql.NullBool)
@@ -230,6 +232,14 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				os.BillingNotificationsEnabled = value.Bool
 			}
+		case organizationsetting.FieldAllowedEmailDomains:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field allowed_email_domains", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &os.AllowedEmailDomains); err != nil {
+					return fmt.Errorf("unmarshal field allowed_email_domains: %w", err)
+				}
+			}
 		default:
 			os.selectValues.Set(columns[i], values[i])
 		}
@@ -323,6 +333,9 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("billing_notifications_enabled=")
 	builder.WriteString(fmt.Sprintf("%v", os.BillingNotificationsEnabled))
+	builder.WriteString(", ")
+	builder.WriteString("allowed_email_domains=")
+	builder.WriteString(fmt.Sprintf("%v", os.AllowedEmailDomains))
 	builder.WriteByte(')')
 	return builder.String()
 }

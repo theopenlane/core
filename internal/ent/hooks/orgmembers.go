@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -40,7 +41,7 @@ func HookOrgMembers() ent.Hook {
 			}
 
 			// get the organization
-			org, err := m.Client().Organization.Get(ctx, orgID)
+			org, err := m.Client().Organization.Query().WithSetting().Where(organization.ID(orgID)).Only(ctx)
 			if err != nil {
 				log.Error().Err(err).Msg("failed to get organization")
 
@@ -50,6 +51,29 @@ func HookOrgMembers() ent.Hook {
 			// do not allow members to be added to personal orgs
 			if org.PersonalOrg {
 				return nil, ErrPersonalOrgsNoMembers
+			}
+
+			// ensure user email can be added to the org
+			userID, _ := m.UserID()
+
+			// allow the request, which is for a user other than the authenticated user
+			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+			user, err := m.Client().User.Get(allowCtx, userID)
+			if err != nil {
+				log.Error().Err(err).Msg("failed to get user")
+
+				if generated.IsNotFound(err) {
+					// use a different error message for user not found
+					// so our error parsing can differentiate between the two
+					return nil, ErrUserNotFound
+				}
+
+				return nil, err
+			}
+
+			if err := checkAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
+				return nil, err
 			}
 
 			retValue, err := next.Mutate(ctx, m)

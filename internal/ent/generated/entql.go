@@ -1407,6 +1407,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldGeoLocation:                 {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
 			organizationsetting.FieldOrganizationID:              {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
 			organizationsetting.FieldBillingNotificationsEnabled: {Type: field.TypeBool, Column: organizationsetting.FieldBillingNotificationsEnabled},
+			organizationsetting.FieldAllowedEmailDomains:         {Type: field.TypeJSON, Column: organizationsetting.FieldAllowedEmailDomains},
 		},
 	}
 	graph.Nodes[47] = &sqlgraph.Node{
@@ -1439,6 +1440,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldGeoLocation:                 {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
 			organizationsettinghistory.FieldOrganizationID:              {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
 			organizationsettinghistory.FieldBillingNotificationsEnabled: {Type: field.TypeBool, Column: organizationsettinghistory.FieldBillingNotificationsEnabled},
+			organizationsettinghistory.FieldAllowedEmailDomains:         {Type: field.TypeJSON, Column: organizationsettinghistory.FieldAllowedEmailDomains},
 		},
 	}
 	graph.Nodes[48] = &sqlgraph.Node{
@@ -4159,6 +4161,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organization.FilesTable,
+			Columns: organization.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"Organization",
+		"File",
+	)
+	graph.MustAddE(
 		"events",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4181,18 +4195,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Organization",
 		"Hush",
-	)
-	graph.MustAddE(
-		"files",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
-			Bidi:    false,
-		},
-		"Organization",
-		"File",
 	)
 	graph.MustAddE(
 		"avatar_file",
@@ -13091,6 +13093,20 @@ func (f *OrganizationFilter) WhereHasUsersWith(preds ...predicate.User) {
 	})))
 }
 
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *OrganizationFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasEvents applies a predicate to check if query has an edge events.
 func (f *OrganizationFilter) WhereHasEvents() {
 	f.Where(entql.HasEdge("events"))
@@ -13113,20 +13129,6 @@ func (f *OrganizationFilter) WhereHasSecrets() {
 // WhereHasSecretsWith applies a predicate to check if query has an edge secrets with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasSecretsWith(preds ...predicate.Hush) {
 	f.Where(entql.HasEdgeWith("secrets", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *OrganizationFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
-}
-
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -13710,6 +13712,11 @@ func (f *OrganizationSettingFilter) WhereBillingNotificationsEnabled(p entql.Boo
 	f.Where(p.Field(organizationsetting.FieldBillingNotificationsEnabled))
 }
 
+// WhereAllowedEmailDomains applies the entql json.RawMessage predicate on the allowed_email_domains field.
+func (f *OrganizationSettingFilter) WhereAllowedEmailDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsetting.FieldAllowedEmailDomains))
+}
+
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *OrganizationSettingFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -13871,6 +13878,11 @@ func (f *OrganizationSettingHistoryFilter) WhereOrganizationID(p entql.StringP) 
 // WhereBillingNotificationsEnabled applies the entql bool predicate on the billing_notifications_enabled field.
 func (f *OrganizationSettingHistoryFilter) WhereBillingNotificationsEnabled(p entql.BoolP) {
 	f.Where(p.Field(organizationsettinghistory.FieldBillingNotificationsEnabled))
+}
+
+// WhereAllowedEmailDomains applies the entql json.RawMessage predicate on the allowed_email_domains field.
+func (f *OrganizationSettingHistoryFilter) WhereAllowedEmailDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsettinghistory.FieldAllowedEmailDomains))
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -1591,12 +1591,12 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
 			case "users":
 				return ec.fieldContext_Organization_users(ctx, field)
+			case "files":
+				return ec.fieldContext_Organization_files(ctx, field)
 			case "events":
 				return ec.fieldContext_Organization_events(ctx, field)
 			case "secrets":
 				return ec.fieldContext_Organization_secrets(ctx, field)
-			case "files":
-				return ec.fieldContext_Organization_files(ctx, field)
 			case "avatarFile":
 				return ec.fieldContext_Organization_avatarFile(ctx, field)
 			case "groups":
@@ -1720,6 +1720,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "billingNotificationsEnabled":
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
+			case "allowedEmailDomains":
+				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

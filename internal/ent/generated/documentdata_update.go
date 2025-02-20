@@ -141,12 +141,6 @@ func (ddu *DocumentDataUpdate) SetNillableOwnerID(s *string) *DocumentDataUpdate
 	return ddu
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (ddu *DocumentDataUpdate) ClearOwnerID() *DocumentDataUpdate {
-	ddu.mutation.ClearOwnerID()
-	return ddu
-}
-
 // SetTemplateID sets the "template_id" field.
 func (ddu *DocumentDataUpdate) SetTemplateID(s string) *DocumentDataUpdate {
 	ddu.mutation.SetTemplateID(s)
@@ -314,6 +308,9 @@ func (ddu *DocumentDataUpdate) check() error {
 		if err := documentdata.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DocumentData.owner_id": %w`, err)}
 		}
+	}
+	if ddu.mutation.OwnerCleared() && len(ddu.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "DocumentData.owner"`)
 	}
 	if ddu.mutation.TemplateCleared() && len(ddu.mutation.TemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)
@@ -669,12 +666,6 @@ func (dduo *DocumentDataUpdateOne) SetNillableOwnerID(s *string) *DocumentDataUp
 	return dduo
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (dduo *DocumentDataUpdateOne) ClearOwnerID() *DocumentDataUpdateOne {
-	dduo.mutation.ClearOwnerID()
-	return dduo
-}
-
 // SetTemplateID sets the "template_id" field.
 func (dduo *DocumentDataUpdateOne) SetTemplateID(s string) *DocumentDataUpdateOne {
 	dduo.mutation.SetTemplateID(s)
@@ -855,6 +846,9 @@ func (dduo *DocumentDataUpdateOne) check() error {
 		if err := documentdata.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DocumentData.owner_id": %w`, err)}
 		}
+	}
+	if dduo.mutation.OwnerCleared() && len(dduo.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "DocumentData.owner"`)
 	}
 	if dduo.mutation.TemplateCleared() && len(dduo.mutation.TemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)

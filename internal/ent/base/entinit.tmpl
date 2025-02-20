@@ -79,7 +79,7 @@ func ({{ . }}) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			// add query rules here, the below is the recommended default
-			entfga.CheckReadAccess[*generated.{{ . }}Query](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			// add mutation rules here, the below is the recommended default

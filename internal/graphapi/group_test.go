@@ -952,7 +952,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 				require.NotNil(t, controlResp)
 				assert.Equal(t, description, *controlResp.UpdateControl.Control.Description)
 
-				// access to procedures is granted by default in the org
+				// access to procedures is granted by default in the org, it should be blocked now
 				procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
 				require.Error(t, err)
 				require.Nil(t, procedureResp)

@@ -232,6 +232,12 @@ func (osc *OrganizationSettingCreate) SetNillableBillingNotificationsEnabled(b *
 	return osc
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (osc *OrganizationSettingCreate) SetAllowedEmailDomains(s []string) *OrganizationSettingCreate {
+	osc.mutation.SetAllowedEmailDomains(s)
+	return osc
+}
+
 // SetID sets the "id" field.
 func (osc *OrganizationSettingCreate) SetID(s string) *OrganizationSettingCreate {
 	osc.mutation.SetID(s)
@@ -364,6 +370,11 @@ func (osc *OrganizationSettingCreate) check() error {
 	if _, ok := osc.mutation.BillingNotificationsEnabled(); !ok {
 		return &ValidationError{Name: "billing_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSetting.billing_notifications_enabled"`)}
 	}
+	if v, ok := osc.mutation.AllowedEmailDomains(); ok {
+		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -459,6 +470,10 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	if value, ok := osc.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsetting.FieldBillingNotificationsEnabled, field.TypeBool, value)
 		_node.BillingNotificationsEnabled = value
+	}
+	if value, ok := osc.mutation.AllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
+		_node.AllowedEmailDomains = value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -18,8 +18,10 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -93,7 +95,11 @@ func HookOrganization() ent.Hook {
 
 				// create the database, if the org has a dedicated db and dbx is available
 				if orgCreated.DedicatedDb {
-					settings, err := orgCreated.Setting(ctx)
+					// on create the org will not yet have access to the settings
+					// allow the request to proceed to get the org settings
+					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+					settings, err := orgCreated.Setting(allowCtx)
 					if err != nil {
 						log.Error().Err(err).Msg("unable to get organization settings")
 
@@ -112,9 +118,8 @@ func HookOrganization() ent.Hook {
 				// if the org is not a personal org, as personal orgs are created during registration
 				// and sessions are already set
 				if !orgCreated.PersonalOrg {
-					as := newAuthSession(m.SessionConfig, m.TokenManager)
-
-					if err := updateUserAuthSession(ctx, as, orgCreated.ID); err != nil {
+					am := authmanager.New(m.Client())
+					if err := updateUserAuthSession(ctx, am, orgCreated.ID); err != nil {
 						return v, err
 					}
 
@@ -163,9 +168,9 @@ func HookOrganizationDelete() ent.Hook {
 			}
 
 			// if the deleted org was the current org, update the session cookie
-			as := newAuthSession(m.SessionConfig, m.TokenManager)
+			am := authmanager.New(m.Client())
 
-			if err := updateUserAuthSession(ctx, as, newOrgID); err != nil {
+			if err := updateUserAuthSession(ctx, am, newOrgID); err != nil {
 				return v, err
 			}
 
@@ -380,7 +385,10 @@ func personalOrgNoChildren(ctx context.Context, m *generated.OrganizationMutatio
 	parentOrgID, ok := m.ParentID()
 	if ok {
 		// check if parent org is a personal org
-		parentOrg, err := m.Client().Organization.Get(ctx, parentOrgID)
+		parentOrg, err := m.Client().Organization.Query().
+			Select("personal_org").
+			Where(organization.ID(parentOrgID)).
+			Only(ctx)
 		if err != nil {
 			return err
 		}
@@ -397,9 +405,9 @@ func personalOrgNoChildren(ctx context.Context, m *generated.OrganizationMutatio
 func createParentOrgTuple(ctx context.Context, m *generated.OrganizationMutation, parentOrgID, childOrgID string) error {
 	req := fgax.TupleRequest{
 		SubjectID:   parentOrgID,
-		SubjectType: "organization",
+		SubjectType: generated.TypeOrganization,
 		ObjectID:    childOrgID,
-		ObjectType:  "organization",
+		ObjectType:  generated.TypeOrganization,
 		Relation:    fgax.ParentRelation,
 	}
 

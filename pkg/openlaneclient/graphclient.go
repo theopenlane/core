@@ -1887,7 +1887,7 @@ type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData struct 
 	Data       json.RawMessage "json:\"data\" graphql:\"data\""
 	DeletedBy  *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID         string          "json:\"id\" graphql:\"id\""
-	OwnerID    *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	OwnerID    string          "json:\"ownerID\" graphql:\"ownerID\""
 	Tags       []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID string          "json:\"templateID\" graphql:\"templateID\""
 }
@@ -1910,7 +1910,7 @@ func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) Ge
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetOwnerID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
 	}
@@ -2799,18 +2799,25 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult) GetOrganization
 }
 
 type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	DeletedBy      *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	OrganizationID *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	DeletedBy           *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	OrganizationID      *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
@@ -9666,7 +9673,7 @@ type GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string          "json:\"id\" graphql:\"id\""
 	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	OwnerID     string          "json:\"ownerID\" graphql:\"ownerID\""
 	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
@@ -9710,7 +9717,7 @@ func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperat
 	}
 	return &t.Operation
 }
-func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() *string {
+func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() string {
 	if t == nil {
 		t = &GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
@@ -9776,7 +9783,7 @@ type GetDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
 	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string          "json:\"id\" graphql:\"id\""
 	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	OwnerID     string          "json:\"ownerID\" graphql:\"ownerID\""
 	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
@@ -9820,7 +9827,7 @@ func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperation
 	}
 	return &t.Operation
 }
-func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() *string {
+func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOwnerID() string {
 	if t == nil {
 		t = &GetDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
@@ -25900,21 +25907,28 @@ func (t *CreateOrganization_CreateOrganization_Organization_AvatarFile) GetPresi
 }
 
 type CreateOrganization_CreateOrganization_Organization_Setting struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
@@ -26180,21 +26194,28 @@ func (t *CreateOrganization_CreateOrganization) GetOrganization() *CreateOrganiz
 }
 
 type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting{}
@@ -26508,21 +26529,28 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetUser() *GetAll
 }
 
 type GetAllOrganizations_Organizations_Edges_Node_Setting struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_Setting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &GetAllOrganizations_Organizations_Edges_Node_Setting{}
@@ -27147,21 +27175,28 @@ func (t *GetOrganizationByID_Organization_Members) GetUser() *GetOrganizationByI
 }
 
 type GetOrganizationByID_Organization_Setting struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetOrganizationByID_Organization_Setting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_Setting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *GetOrganizationByID_Organization_Setting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &GetOrganizationByID_Organization_Setting{}
@@ -27792,21 +27827,28 @@ func (t *GetOrganizations_Organizations_Edges_Node_Members) GetUser() *GetOrgani
 }
 
 type GetOrganizations_Organizations_Edges_Node_Setting struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
@@ -28345,21 +28387,28 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetUserID()
 }
 
 type UpdateOrganization_UpdateOrganization_Organization_Setting struct {
-	BillingAddress *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string          "json:\"id\" graphql:\"id\""
-	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string          "json:\"id\" graphql:\"id\""
+	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_Setting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization_Setting{}
@@ -29124,22 +29173,29 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
-	BillingAddress *models.Address                                                          "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string                                                                  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string                                                                   "json:\"id\" graphql:\"id\""
-	Organization   *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags           []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string                                                                 "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address                                                          "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string                                                                  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string                                                                   "json:\"id\" graphql:\"id\""
+	Organization        *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -29266,22 +29322,29 @@ func (t *GetOrganizationSettingByID_OrganizationSetting_Organization) GetName() 
 }
 
 type GetOrganizationSettingByID_OrganizationSetting struct {
-	BillingAddress *models.Address                                              "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string                                                      "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string                                                       "json:\"id\" graphql:\"id\""
-	Organization   *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags           []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string                                                     "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address                                              "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string                                                      "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string                                                       "json:\"id\" graphql:\"id\""
+	Organization        *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
@@ -29386,22 +29449,29 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization) G
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
-	BillingAddress *models.Address                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string                                                                "json:\"id\" graphql:\"id\""
-	Organization   *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags           []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string                                                                "json:\"id\" graphql:\"id\""
+	Organization        *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -29528,22 +29598,29 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting struct {
-	BillingAddress *models.Address                                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string                                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID             string                                                                                "json:\"id\" graphql:\"id\""
-	Organization   *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags           []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains []string                                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress      *models.Address                                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact      *string                                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail        *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone        *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt           *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy           *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains             []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation         *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                  string                                                                                "json:\"id\" graphql:\"id\""
+	Organization        *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier       *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt           *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy           *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetAllowedEmailDomains() []string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.AllowedEmailDomains
+}
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetBillingAddress() *models.Address {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
@@ -53946,6 +54023,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					billingAddress
 					taxIdentifier
 					organizationID
+					allowedEmailDomains
 				}
 			}
 			... on PersonalAccessTokenSearchResult {
@@ -61054,6 +61132,7 @@ const CreateOrganizationDocument = `mutation CreateOrganization ($input: CreateO
 			updatedAt
 			setting {
 				id
+				allowedEmailDomains
 				createdAt
 				updatedAt
 				createdBy
@@ -61112,6 +61191,7 @@ const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMe
 			displayName
 			setting {
 				id
+				allowedEmailDomains
 				createdAt
 				updatedAt
 				createdBy
@@ -61216,6 +61296,7 @@ const GetAllOrganizationsDocument = `query GetAllOrganizations {
 				}
 				setting {
 					id
+					allowedEmailDomains
 					createdAt
 					updatedAt
 					createdBy
@@ -61335,6 +61416,7 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 		}
 		setting {
 			id
+			allowedEmailDomains
 			createdAt
 			updatedAt
 			createdBy
@@ -61456,6 +61538,7 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 				}
 				setting {
 					id
+					allowedEmailDomains
 					createdAt
 					updatedAt
 					createdBy
@@ -61563,6 +61646,7 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 			}
 			setting {
 				id
+				allowedEmailDomains
 				createdAt
 				updatedAt
 				createdBy
@@ -61734,6 +61818,7 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 	organizationSettings {
 		edges {
 			node {
+				allowedEmailDomains
 				billingAddress
 				billingContact
 				billingEmail
@@ -61774,6 +61859,7 @@ func (c *Client) GetAllOrganizationSettings(ctx context.Context, interceptors ..
 
 const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 	organizationSetting(id: $organizationSettingId) {
+		allowedEmailDomains
 		billingAddress
 		billingContact
 		billingEmail
@@ -61816,6 +61902,7 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 	organizationSettings(where: $where) {
 		edges {
 			node {
+				allowedEmailDomains
 				billingAddress
 				billingContact
 				billingEmail
@@ -61859,6 +61946,7 @@ func (c *Client) GetOrganizationSettings(ctx context.Context, where Organization
 const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
 	updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
 		organizationSetting {
+			allowedEmailDomains
 			billingAddress
 			billingContact
 			billingEmail

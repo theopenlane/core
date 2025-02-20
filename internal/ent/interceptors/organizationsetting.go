@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 )
@@ -17,17 +18,17 @@ func InterceptorOrganizationSetting() ent.Interceptor {
 		// Organization list queries should not be filtered by organization id
 		// Same with OrganizationSetting queries with the Only operation
 		ctxQuery := ent.QueryFromContext(ctx)
-		if ctxQuery.Type == "Organization" || ctxQuery.Op == "Only" {
+		if ctxQuery.Type == generated.TypeOrganization || ctxQuery.Op == OnlyOperation {
 			return nil
 		}
 
-		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 		if err != nil {
 			return err
 		}
 
 		// sets the organization id on the query for the current organization
-		q.WhereP(organizationsetting.OrganizationID(orgID))
+		q.WhereP(organizationsetting.OrganizationIDIn(orgIDs...))
 
 		return nil
 	})

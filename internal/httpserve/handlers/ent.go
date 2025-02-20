@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -384,24 +383,6 @@ func (h *Handler) updateUserPassword(ctx context.Context, id string, password st
 
 		return err
 	}
-
-	return nil
-}
-
-// addDefaultOrgToUserQuery adds the default org to the user object, user must be authenticated before calling this
-func (h *Handler) addDefaultOrgToUserQuery(ctx context.Context, user *ent.User) error {
-	// get the default org for the user, allow access, accessible orgs will be filtered by the interceptor
-	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
-	if err != nil {
-		log.Error().Err(err).Msg("error obtaining default org")
-
-		return err
-	}
-
-	// add default org to user object
-	user.Edges.Setting.Edges.DefaultOrg = org
 
 	return nil
 }

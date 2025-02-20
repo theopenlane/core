@@ -77,12 +77,12 @@ const (
 	EdgeAPITokens = "api_tokens"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
 	EdgeSecrets = "secrets"
-	// EdgeFiles holds the string denoting the files edge name in mutations.
-	EdgeFiles = "files"
 	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
 	EdgeAvatarFile = "avatar_file"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
@@ -226,6 +226,11 @@ const (
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "users"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "organization_files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "organization_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -236,11 +241,6 @@ const (
 	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
 	SecretsInverseTable = "hushes"
-	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
-	FilesTable = "organization_files"
-	// FilesInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FilesInverseTable = "files"
 	// AvatarFileTable is the table that holds the avatar_file relation/edge.
 	AvatarFileTable = "organizations"
 	// AvatarFileInverseTable is the table name for the File entity.
@@ -432,15 +432,15 @@ var (
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"user_id", "organization_id"}
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"organization_id", "file_id"}
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"organization_id", "event_id"}
 	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
 	// primary key for the secrets relation (M2M).
 	SecretsPrimaryKey = []string{"organization_id", "hush_id"}
-	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
-	// primary key for the files relation (M2M).
-	FilesPrimaryKey = []string{"organization_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -459,7 +459,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [14]ent.Hook
+	Hooks        [15]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -769,6 +769,20 @@ func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEventsCount orders the results by events count.
 func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -794,20 +808,6 @@ func BySecretsCount(opts ...sql.OrderTermOption) OrderOption {
 func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSecretsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByFilesCount orders the results by files count.
-func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
-	}
-}
-
-// ByFiles orders the results by files terms.
-func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1230,6 +1230,13 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 	)
 }
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
 func newEventsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1242,13 +1249,6 @@ func newSecretsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SecretsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
-	)
-}
-func newFilesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 	)
 }
 func newAvatarFileStep() *sqlgraph.Step {

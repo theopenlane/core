@@ -18248,22 +18248,9 @@ func (m *DocumentDataMutation) OldOwnerID(ctx context.Context) (v string, err er
 	return oldValue.OwnerID, nil
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (m *DocumentDataMutation) ClearOwnerID() {
-	m.owner = nil
-	m.clearedFields[documentdata.FieldOwnerID] = struct{}{}
-}
-
-// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
-func (m *DocumentDataMutation) OwnerIDCleared() bool {
-	_, ok := m.clearedFields[documentdata.FieldOwnerID]
-	return ok
-}
-
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *DocumentDataMutation) ResetOwnerID() {
 	m.owner = nil
-	delete(m.clearedFields, documentdata.FieldOwnerID)
 }
 
 // SetTemplateID sets the "template_id" field.
@@ -18346,7 +18333,7 @@ func (m *DocumentDataMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *DocumentDataMutation) OwnerCleared() bool {
-	return m.OwnerIDCleared() || m.clearedowner
+	return m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -18752,9 +18739,6 @@ func (m *DocumentDataMutation) ClearedFields() []string {
 	if m.FieldCleared(documentdata.FieldDeletedBy) {
 		fields = append(fields, documentdata.FieldDeletedBy)
 	}
-	if m.FieldCleared(documentdata.FieldOwnerID) {
-		fields = append(fields, documentdata.FieldOwnerID)
-	}
 	return fields
 }
 
@@ -18789,9 +18773,6 @@ func (m *DocumentDataMutation) ClearField(name string) error {
 		return nil
 	case documentdata.FieldDeletedBy:
 		m.ClearDeletedBy()
-		return nil
-	case documentdata.FieldOwnerID:
-		m.ClearOwnerID()
 		return nil
 	}
 	return fmt.Errorf("unknown DocumentData nullable field %s", name)
@@ -19622,22 +19603,9 @@ func (m *DocumentDataHistoryMutation) OldOwnerID(ctx context.Context) (v string,
 	return oldValue.OwnerID, nil
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (m *DocumentDataHistoryMutation) ClearOwnerID() {
-	m.owner_id = nil
-	m.clearedFields[documentdatahistory.FieldOwnerID] = struct{}{}
-}
-
-// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
-func (m *DocumentDataHistoryMutation) OwnerIDCleared() bool {
-	_, ok := m.clearedFields[documentdatahistory.FieldOwnerID]
-	return ok
-}
-
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *DocumentDataHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
-	delete(m.clearedFields, documentdatahistory.FieldOwnerID)
 }
 
 // SetTemplateID sets the "template_id" field.
@@ -20009,9 +19977,6 @@ func (m *DocumentDataHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(documentdatahistory.FieldDeletedBy) {
 		fields = append(fields, documentdatahistory.FieldDeletedBy)
 	}
-	if m.FieldCleared(documentdatahistory.FieldOwnerID) {
-		fields = append(fields, documentdatahistory.FieldOwnerID)
-	}
 	return fields
 }
 
@@ -20049,9 +20014,6 @@ func (m *DocumentDataHistoryMutation) ClearField(name string) error {
 		return nil
 	case documentdatahistory.FieldDeletedBy:
 		m.ClearDeletedBy()
-		return nil
-	case documentdatahistory.FieldOwnerID:
-		m.ClearOwnerID()
 		return nil
 	}
 	return fmt.Errorf("unknown DocumentDataHistory nullable field %s", name)
@@ -70512,15 +70474,15 @@ type OrganizationMutation struct {
 	users                             map[string]struct{}
 	removedusers                      map[string]struct{}
 	clearedusers                      bool
+	files                             map[string]struct{}
+	removedfiles                      map[string]struct{}
+	clearedfiles                      bool
 	events                            map[string]struct{}
 	removedevents                     map[string]struct{}
 	clearedevents                     bool
 	secrets                           map[string]struct{}
 	removedsecrets                    map[string]struct{}
 	clearedsecrets                    bool
-	files                             map[string]struct{}
-	removedfiles                      map[string]struct{}
-	clearedfiles                      bool
 	avatar_file                       *string
 	clearedavatar_file                bool
 	groups                            map[string]struct{}
@@ -72240,6 +72202,60 @@ func (m *OrganizationMutation) ResetUsers() {
 	m.removedusers = nil
 }
 
+// AddFileIDs adds the "files" edge to the File entity by ids.
+func (m *OrganizationMutation) AddFileIDs(ids ...string) {
+	if m.files == nil {
+		m.files = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.files[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFiles clears the "files" edge to the File entity.
+func (m *OrganizationMutation) ClearFiles() {
+	m.clearedfiles = true
+}
+
+// FilesCleared reports if the "files" edge to the File entity was cleared.
+func (m *OrganizationMutation) FilesCleared() bool {
+	return m.clearedfiles
+}
+
+// RemoveFileIDs removes the "files" edge to the File entity by IDs.
+func (m *OrganizationMutation) RemoveFileIDs(ids ...string) {
+	if m.removedfiles == nil {
+		m.removedfiles = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.files, ids[i])
+		m.removedfiles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFiles returns the removed IDs of the "files" edge to the File entity.
+func (m *OrganizationMutation) RemovedFilesIDs() (ids []string) {
+	for id := range m.removedfiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FilesIDs returns the "files" edge IDs in the mutation.
+func (m *OrganizationMutation) FilesIDs() (ids []string) {
+	for id := range m.files {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFiles resets all changes to the "files" edge.
+func (m *OrganizationMutation) ResetFiles() {
+	m.files = nil
+	m.clearedfiles = false
+	m.removedfiles = nil
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by ids.
 func (m *OrganizationMutation) AddEventIDs(ids ...string) {
 	if m.events == nil {
@@ -72346,60 +72362,6 @@ func (m *OrganizationMutation) ResetSecrets() {
 	m.secrets = nil
 	m.clearedsecrets = false
 	m.removedsecrets = nil
-}
-
-// AddFileIDs adds the "files" edge to the File entity by ids.
-func (m *OrganizationMutation) AddFileIDs(ids ...string) {
-	if m.files == nil {
-		m.files = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.files[ids[i]] = struct{}{}
-	}
-}
-
-// ClearFiles clears the "files" edge to the File entity.
-func (m *OrganizationMutation) ClearFiles() {
-	m.clearedfiles = true
-}
-
-// FilesCleared reports if the "files" edge to the File entity was cleared.
-func (m *OrganizationMutation) FilesCleared() bool {
-	return m.clearedfiles
-}
-
-// RemoveFileIDs removes the "files" edge to the File entity by IDs.
-func (m *OrganizationMutation) RemoveFileIDs(ids ...string) {
-	if m.removedfiles == nil {
-		m.removedfiles = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.files, ids[i])
-		m.removedfiles[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedFiles returns the removed IDs of the "files" edge to the File entity.
-func (m *OrganizationMutation) RemovedFilesIDs() (ids []string) {
-	for id := range m.removedfiles {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// FilesIDs returns the "files" edge IDs in the mutation.
-func (m *OrganizationMutation) FilesIDs() (ids []string) {
-	for id := range m.files {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetFiles resets all changes to the "files" edge.
-func (m *OrganizationMutation) ResetFiles() {
-	m.files = nil
-	m.clearedfiles = false
-	m.removedfiles = nil
 }
 
 // SetAvatarFileID sets the "avatar_file" edge to the File entity by id.
@@ -74145,14 +74107,14 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.users != nil {
 		edges = append(edges, organization.EdgeUsers)
 	}
+	if m.files != nil {
+		edges = append(edges, organization.EdgeFiles)
+	}
 	if m.events != nil {
 		edges = append(edges, organization.EdgeEvents)
 	}
 	if m.secrets != nil {
 		edges = append(edges, organization.EdgeSecrets)
-	}
-	if m.files != nil {
-		edges = append(edges, organization.EdgeFiles)
 	}
 	if m.avatar_file != nil {
 		edges = append(edges, organization.EdgeAvatarFile)
@@ -74316,6 +74278,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.files))
+		for id := range m.files {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeEvents:
 		ids := make([]ent.Value, 0, len(m.events))
 		for id := range m.events {
@@ -74325,12 +74293,6 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 	case organization.EdgeSecrets:
 		ids := make([]ent.Value, 0, len(m.secrets))
 		for id := range m.secrets {
-			ids = append(ids, id)
-		}
-		return ids
-	case organization.EdgeFiles:
-		ids := make([]ent.Value, 0, len(m.files))
-		for id := range m.files {
 			ids = append(ids, id)
 		}
 		return ids
@@ -74516,14 +74478,14 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedusers != nil {
 		edges = append(edges, organization.EdgeUsers)
 	}
+	if m.removedfiles != nil {
+		edges = append(edges, organization.EdgeFiles)
+	}
 	if m.removedevents != nil {
 		edges = append(edges, organization.EdgeEvents)
 	}
 	if m.removedsecrets != nil {
 		edges = append(edges, organization.EdgeSecrets)
-	}
-	if m.removedfiles != nil {
-		edges = append(edges, organization.EdgeFiles)
 	}
 	if m.removedgroups != nil {
 		edges = append(edges, organization.EdgeGroups)
@@ -74676,6 +74638,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.removedfiles))
+		for id := range m.removedfiles {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeEvents:
 		ids := make([]ent.Value, 0, len(m.removedevents))
 		for id := range m.removedevents {
@@ -74685,12 +74653,6 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 	case organization.EdgeSecrets:
 		ids := make([]ent.Value, 0, len(m.removedsecrets))
 		for id := range m.removedsecrets {
-			ids = append(ids, id)
-		}
-		return ids
-	case organization.EdgeFiles:
-		ids := make([]ent.Value, 0, len(m.removedfiles))
-		for id := range m.removedfiles {
 			ids = append(ids, id)
 		}
 		return ids
@@ -74878,14 +74840,14 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedusers {
 		edges = append(edges, organization.EdgeUsers)
 	}
+	if m.clearedfiles {
+		edges = append(edges, organization.EdgeFiles)
+	}
 	if m.clearedevents {
 		edges = append(edges, organization.EdgeEvents)
 	}
 	if m.clearedsecrets {
 		edges = append(edges, organization.EdgeSecrets)
-	}
-	if m.clearedfiles {
-		edges = append(edges, organization.EdgeFiles)
 	}
 	if m.clearedavatar_file {
 		edges = append(edges, organization.EdgeAvatarFile)
@@ -74993,12 +74955,12 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedapi_tokens
 	case organization.EdgeUsers:
 		return m.clearedusers
+	case organization.EdgeFiles:
+		return m.clearedfiles
 	case organization.EdgeEvents:
 		return m.clearedevents
 	case organization.EdgeSecrets:
 		return m.clearedsecrets
-	case organization.EdgeFiles:
-		return m.clearedfiles
 	case organization.EdgeAvatarFile:
 		return m.clearedavatar_file
 	case organization.EdgeGroups:
@@ -75115,14 +75077,14 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeUsers:
 		m.ResetUsers()
 		return nil
+	case organization.EdgeFiles:
+		m.ResetFiles()
+		return nil
 	case organization.EdgeEvents:
 		m.ResetEvents()
 		return nil
 	case organization.EdgeSecrets:
 		m.ResetSecrets()
-		return nil
-	case organization.EdgeFiles:
-		m.ResetFiles()
 		return nil
 	case organization.EdgeAvatarFile:
 		m.ResetAvatarFile()
@@ -76810,6 +76772,8 @@ type OrganizationSettingMutation struct {
 	tax_identifier                *string
 	geo_location                  *enums.Region
 	billing_notifications_enabled *bool
+	allowed_email_domains         *[]string
+	appendallowed_email_domains   []string
 	clearedFields                 map[string]struct{}
 	organization                  *string
 	clearedorganization           bool
@@ -77728,6 +77692,71 @@ func (m *OrganizationSettingMutation) ResetBillingNotificationsEnabled() {
 	m.billing_notifications_enabled = nil
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) SetAllowedEmailDomains(s []string) {
+	m.allowed_email_domains = &s
+	m.appendallowed_email_domains = nil
+}
+
+// AllowedEmailDomains returns the value of the "allowed_email_domains" field in the mutation.
+func (m *OrganizationSettingMutation) AllowedEmailDomains() (r []string, exists bool) {
+	v := m.allowed_email_domains
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAllowedEmailDomains returns the old "allowed_email_domains" field's value of the OrganizationSetting entity.
+// If the OrganizationSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingMutation) OldAllowedEmailDomains(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAllowedEmailDomains is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAllowedEmailDomains requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAllowedEmailDomains: %w", err)
+	}
+	return oldValue.AllowedEmailDomains, nil
+}
+
+// AppendAllowedEmailDomains adds s to the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) AppendAllowedEmailDomains(s []string) {
+	m.appendallowed_email_domains = append(m.appendallowed_email_domains, s...)
+}
+
+// AppendedAllowedEmailDomains returns the list of values that were appended to the "allowed_email_domains" field in this mutation.
+func (m *OrganizationSettingMutation) AppendedAllowedEmailDomains() ([]string, bool) {
+	if len(m.appendallowed_email_domains) == 0 {
+		return nil, false
+	}
+	return m.appendallowed_email_domains, true
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) ClearAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	m.clearedFields[organizationsetting.FieldAllowedEmailDomains] = struct{}{}
+}
+
+// AllowedEmailDomainsCleared returns if the "allowed_email_domains" field was cleared in this mutation.
+func (m *OrganizationSettingMutation) AllowedEmailDomainsCleared() bool {
+	_, ok := m.clearedFields[organizationsetting.FieldAllowedEmailDomains]
+	return ok
+}
+
+// ResetAllowedEmailDomains resets all changes to the "allowed_email_domains" field.
+func (m *OrganizationSettingMutation) ResetAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	delete(m.clearedFields, organizationsetting.FieldAllowedEmailDomains)
+}
+
 // ClearOrganization clears the "organization" edge to the Organization entity.
 func (m *OrganizationSettingMutation) ClearOrganization() {
 	m.clearedorganization = true
@@ -77843,7 +77872,7 @@ func (m *OrganizationSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, organizationsetting.FieldCreatedAt)
 	}
@@ -77892,6 +77921,9 @@ func (m *OrganizationSettingMutation) Fields() []string {
 	if m.billing_notifications_enabled != nil {
 		fields = append(fields, organizationsetting.FieldBillingNotificationsEnabled)
 	}
+	if m.allowed_email_domains != nil {
+		fields = append(fields, organizationsetting.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -77932,6 +77964,8 @@ func (m *OrganizationSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.OrganizationID()
 	case organizationsetting.FieldBillingNotificationsEnabled:
 		return m.BillingNotificationsEnabled()
+	case organizationsetting.FieldAllowedEmailDomains:
+		return m.AllowedEmailDomains()
 	}
 	return nil, false
 }
@@ -77973,6 +78007,8 @@ func (m *OrganizationSettingMutation) OldField(ctx context.Context, name string)
 		return m.OldOrganizationID(ctx)
 	case organizationsetting.FieldBillingNotificationsEnabled:
 		return m.OldBillingNotificationsEnabled(ctx)
+	case organizationsetting.FieldAllowedEmailDomains:
+		return m.OldAllowedEmailDomains(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSetting field %s", name)
 }
@@ -78094,6 +78130,13 @@ func (m *OrganizationSettingMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetBillingNotificationsEnabled(v)
 		return nil
+	case organizationsetting.FieldAllowedEmailDomains:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAllowedEmailDomains(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
 }
@@ -78169,6 +78212,9 @@ func (m *OrganizationSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationsetting.FieldOrganizationID) {
 		fields = append(fields, organizationsetting.FieldOrganizationID)
 	}
+	if m.FieldCleared(organizationsetting.FieldAllowedEmailDomains) {
+		fields = append(fields, organizationsetting.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -78228,6 +78274,9 @@ func (m *OrganizationSettingMutation) ClearField(name string) error {
 	case organizationsetting.FieldOrganizationID:
 		m.ClearOrganizationID()
 		return nil
+	case organizationsetting.FieldAllowedEmailDomains:
+		m.ClearAllowedEmailDomains()
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting nullable field %s", name)
 }
@@ -78283,6 +78332,9 @@ func (m *OrganizationSettingMutation) ResetField(name string) error {
 		return nil
 	case organizationsetting.FieldBillingNotificationsEnabled:
 		m.ResetBillingNotificationsEnabled()
+		return nil
+	case organizationsetting.FieldAllowedEmailDomains:
+		m.ResetAllowedEmailDomains()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
@@ -78417,6 +78469,8 @@ type OrganizationSettingHistoryMutation struct {
 	geo_location                  *enums.Region
 	organization_id               *string
 	billing_notifications_enabled *bool
+	allowed_email_domains         *[]string
+	appendallowed_email_domains   []string
 	clearedFields                 map[string]struct{}
 	done                          bool
 	oldValue                      func(context.Context) (*OrganizationSettingHistory, error)
@@ -79451,6 +79505,71 @@ func (m *OrganizationSettingHistoryMutation) ResetBillingNotificationsEnabled() 
 	m.billing_notifications_enabled = nil
 }
 
+// SetAllowedEmailDomains sets the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) SetAllowedEmailDomains(s []string) {
+	m.allowed_email_domains = &s
+	m.appendallowed_email_domains = nil
+}
+
+// AllowedEmailDomains returns the value of the "allowed_email_domains" field in the mutation.
+func (m *OrganizationSettingHistoryMutation) AllowedEmailDomains() (r []string, exists bool) {
+	v := m.allowed_email_domains
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAllowedEmailDomains returns the old "allowed_email_domains" field's value of the OrganizationSettingHistory entity.
+// If the OrganizationSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingHistoryMutation) OldAllowedEmailDomains(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAllowedEmailDomains is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAllowedEmailDomains requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAllowedEmailDomains: %w", err)
+	}
+	return oldValue.AllowedEmailDomains, nil
+}
+
+// AppendAllowedEmailDomains adds s to the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) AppendAllowedEmailDomains(s []string) {
+	m.appendallowed_email_domains = append(m.appendallowed_email_domains, s...)
+}
+
+// AppendedAllowedEmailDomains returns the list of values that were appended to the "allowed_email_domains" field in this mutation.
+func (m *OrganizationSettingHistoryMutation) AppendedAllowedEmailDomains() ([]string, bool) {
+	if len(m.appendallowed_email_domains) == 0 {
+		return nil, false
+	}
+	return m.appendallowed_email_domains, true
+}
+
+// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) ClearAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	m.clearedFields[organizationsettinghistory.FieldAllowedEmailDomains] = struct{}{}
+}
+
+// AllowedEmailDomainsCleared returns if the "allowed_email_domains" field was cleared in this mutation.
+func (m *OrganizationSettingHistoryMutation) AllowedEmailDomainsCleared() bool {
+	_, ok := m.clearedFields[organizationsettinghistory.FieldAllowedEmailDomains]
+	return ok
+}
+
+// ResetAllowedEmailDomains resets all changes to the "allowed_email_domains" field.
+func (m *OrganizationSettingHistoryMutation) ResetAllowedEmailDomains() {
+	m.allowed_email_domains = nil
+	m.appendallowed_email_domains = nil
+	delete(m.clearedFields, organizationsettinghistory.FieldAllowedEmailDomains)
+}
+
 // Where appends a list predicates to the OrganizationSettingHistoryMutation builder.
 func (m *OrganizationSettingHistoryMutation) Where(ps ...predicate.OrganizationSettingHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -79485,7 +79604,7 @@ func (m *OrganizationSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.history_time != nil {
 		fields = append(fields, organizationsettinghistory.FieldHistoryTime)
 	}
@@ -79543,6 +79662,9 @@ func (m *OrganizationSettingHistoryMutation) Fields() []string {
 	if m.billing_notifications_enabled != nil {
 		fields = append(fields, organizationsettinghistory.FieldBillingNotificationsEnabled)
 	}
+	if m.allowed_email_domains != nil {
+		fields = append(fields, organizationsettinghistory.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -79589,6 +79711,8 @@ func (m *OrganizationSettingHistoryMutation) Field(name string) (ent.Value, bool
 		return m.OrganizationID()
 	case organizationsettinghistory.FieldBillingNotificationsEnabled:
 		return m.BillingNotificationsEnabled()
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		return m.AllowedEmailDomains()
 	}
 	return nil, false
 }
@@ -79636,6 +79760,8 @@ func (m *OrganizationSettingHistoryMutation) OldField(ctx context.Context, name 
 		return m.OldOrganizationID(ctx)
 	case organizationsettinghistory.FieldBillingNotificationsEnabled:
 		return m.OldBillingNotificationsEnabled(ctx)
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		return m.OldAllowedEmailDomains(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
 }
@@ -79778,6 +79904,13 @@ func (m *OrganizationSettingHistoryMutation) SetField(name string, value ent.Val
 		}
 		m.SetBillingNotificationsEnabled(v)
 		return nil
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAllowedEmailDomains(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
 }
@@ -79856,6 +79989,9 @@ func (m *OrganizationSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationsettinghistory.FieldOrganizationID) {
 		fields = append(fields, organizationsettinghistory.FieldOrganizationID)
 	}
+	if m.FieldCleared(organizationsettinghistory.FieldAllowedEmailDomains) {
+		fields = append(fields, organizationsettinghistory.FieldAllowedEmailDomains)
+	}
 	return fields
 }
 
@@ -79917,6 +80053,9 @@ func (m *OrganizationSettingHistoryMutation) ClearField(name string) error {
 		return nil
 	case organizationsettinghistory.FieldOrganizationID:
 		m.ClearOrganizationID()
+		return nil
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		m.ClearAllowedEmailDomains()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory nullable field %s", name)
@@ -79982,6 +80121,9 @@ func (m *OrganizationSettingHistoryMutation) ResetField(name string) error {
 		return nil
 	case organizationsettinghistory.FieldBillingNotificationsEnabled:
 		m.ResetBillingNotificationsEnabled()
+		return nil
+	case organizationsettinghistory.FieldAllowedEmailDomains:
+		m.ResetAllowedEmailDomains()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)

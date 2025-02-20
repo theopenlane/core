@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -41,8 +42,11 @@ func (DocumentData) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		NewOrgOwnMixinWithRef("document_data"),
-	}
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			FieldNames:            []string{"template_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "document_data",
+		})}
 }
 
 // Edges of the DocumentData
@@ -65,7 +69,7 @@ func (DocumentData) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.OrganizationInheritedChecks(), // TODO(sfunk): update to template checks instead of org checks
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -73,7 +77,7 @@ func (DocumentData) Annotations() []schema.Annotation {
 func (DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.DocumentDataQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.DocumentDataMutation](),

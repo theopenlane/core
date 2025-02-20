@@ -203,7 +203,7 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 
 	_, err := c.ProgramMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return err
+		return parseRequestError(err, action{action: ActionUpdate, object: "program"})
 	}
 
 	return nil
@@ -230,7 +230,7 @@ func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, o
 			Where(programmembership.ProgramID(programID.(string))).
 			Exec(ctx); err != nil {
 
-			return err
+			return parseRequestError(err, action{action: ActionUpdate, object: "program"})
 		}
 	}
 

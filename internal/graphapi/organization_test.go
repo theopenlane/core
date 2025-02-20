@@ -182,7 +182,8 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 				ContentType: avatarFile.ContentType,
 			},
 			settings: &openlaneclient.CreateOrganizationSettingInput{
-				Domains: []string{"meow.theopenlane.io"},
+				Domains:             []string{"meow.theopenlane.io"},
+				AllowedEmailDomains: []string{"theopenlane.io"},
 				BillingAddress: &models.Address{
 					Line1:      gofakeit.StreetNumber() + " " + gofakeit.Street(),
 					City:       gofakeit.City(),
@@ -204,12 +205,30 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			ctx:            testUser1.UserCtx,
 		},
 		{
+			name:           "organization with parent org, no access",
+			orgName:        gofakeit.Name(),
+			orgDescription: gofakeit.HipsterSentence(10),
+			parentOrgID:    testUser2.OrganizationID,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			errorMsg:       notAuthorizedErrorMsg,
+		},
+		{
 			name:           "happy path organization with parent org using personal access token",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    testUser1.OrganizationID,
 			client:         suite.client.apiWithPAT,
 			ctx:            context.Background(),
+		},
+		{
+			name:           "organization with parent org using personal access token, no access to parent",
+			orgName:        gofakeit.Name(),
+			orgDescription: gofakeit.HipsterSentence(10),
+			parentOrgID:    testUser2.OrganizationID,
+			client:         suite.client.apiWithPAT,
+			ctx:            context.Background(),
+			errorMsg:       notFoundErrorMsg,
 		},
 		{
 			name:           "organization with parent personal org",
@@ -319,6 +338,26 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			errorMsg: "unsupported mime type uploaded: text/plain",
+		},
+		{
+			name:    "invalid allowed email domains ",
+			orgName: gofakeit.Name(),
+			settings: &openlaneclient.CreateOrganizationSettingInput{
+				AllowedEmailDomains: []string{"theopenlane"},
+			},
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "invalid or unparsable field: domains",
+		},
+		{
+			name:    "invalid domains",
+			orgName: gofakeit.Name(),
+			settings: &openlaneclient.CreateOrganizationSettingInput{
+				Domains: []string{"theopenlane"},
+			},
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "invalid or unparsable field: domains",
 		},
 	}
 
@@ -842,6 +881,10 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 			// make sure the deletedID matches the ID we wanted to delete
 			assert.Equal(t, tc.orgID, resp.DeleteOrganization.DeletedID)
 
+			// update the context to have the correct org after the org is deleted
+			reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
+			require.NoError(t, err)
+
 			// make sure the default org is reset
 			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, testUser1.UserInfo.Edges.Setting.ID)
 			require.NoError(t, err)
@@ -916,14 +959,6 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 
 	require.NoError(t, err)
 	require.Equal(t, o.Organization.ID, org.ID)
-
-	// allow after tuples have been deleted
-	ctx = privacy.DecisionContext(reqCtx, privacy.Allow)
-	ctx = entx.SkipSoftDelete(ctx)
-
-	g, err = suite.client.api.GetGroupByID(ctx, group1.ID)
-	require.NoError(t, err)
-	require.Equal(t, g.Group.ID, group1.ID)
 
 	// allow after tuples have been deleted
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)

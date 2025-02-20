@@ -31,6 +31,16 @@ type testUserDetails struct {
 // userBuilder creates a new test user and returns the details
 // this includes a test user and an organization the user is the owner of
 func (suite *HandlerTestSuite) userBuilder(ctx context.Context) testUserDetails {
+	return suite.userBuilderWithInput(ctx, nil)
+}
+
+type userInput struct {
+	email         string
+	password      string
+	confirmedUser bool
+}
+
+func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *userInput) testUserDetails {
 	t := suite.T()
 
 	testUser := testUserDetails{}
@@ -39,11 +49,34 @@ func (suite *HandlerTestSuite) userBuilder(ctx context.Context) testUserDetails 
 
 	// create a test user
 	var err error
-	testUser.UserInfo, err = suite.db.User.Create().
-		SetEmail(gofakeit.Email()).
+	var userSetting *ent.UserSetting
+
+	if input != nil && input.confirmedUser {
+		userSetting = suite.db.UserSetting.Create().
+			SetEmailConfirmed(true).
+			SetIsTfaEnabled(true).
+			SaveX(ctx)
+	}
+
+	email := gofakeit.Email()
+	if input != nil && input.email != "" {
+		email = input.email
+	}
+
+	builder := suite.db.User.Create().
+		SetEmail(email).
 		SetFirstName(gofakeit.FirstName()).
-		SetLastName(gofakeit.LastName()).
-		Save(ctx)
+		SetLastName(gofakeit.LastName())
+
+	if input != nil && input.password != "" {
+		builder.SetPassword(input.password)
+	}
+
+	if userSetting != nil {
+		builder.SetSetting(userSetting)
+	}
+
+	testUser.UserInfo, err = builder.Save(ctx)
 	require.NoError(t, err)
 
 	testUser.ID = testUser.UserInfo.ID

@@ -14,6 +14,8 @@ import (
 func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 	t := suite.T()
 
+	companyName := "Test Acme Corp, Inc."
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateOnboardingInput
@@ -24,7 +26,7 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 		{
 			name: "happy path, minimal input",
 			request: openlaneclient.CreateOnboardingInput{
-				CompanyName: gofakeit.Company(),
+				CompanyName: companyName,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -32,7 +34,7 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 		{
 			name: "happy path, all input",
 			request: openlaneclient.CreateOnboardingInput{
-				CompanyName: gofakeit.Company(),
+				CompanyName: companyName,
 				Domains:     []string{gofakeit.DomainName(), gofakeit.DomainName()},
 				CompanyDetails: map[string]interface{}{
 					"sector":       "Technology",

@@ -40,8 +40,9 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 			SubjectID:   au.SubjectID,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
 			ObjectID:    au.OrganizationID,
-			ObjectType:  "organization",
+			ObjectType:  generated.TypeOrganization,
 			Relation:    relation,
+			Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 		}
 
 		access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)

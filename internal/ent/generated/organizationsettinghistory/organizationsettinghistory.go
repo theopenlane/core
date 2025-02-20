@@ -56,6 +56,8 @@ const (
 	FieldOrganizationID = "organization_id"
 	// FieldBillingNotificationsEnabled holds the string denoting the billing_notifications_enabled field in the database.
 	FieldBillingNotificationsEnabled = "billing_notifications_enabled"
+	// FieldAllowedEmailDomains holds the string denoting the allowed_email_domains field in the database.
+	FieldAllowedEmailDomains = "allowed_email_domains"
 	// Table holds the table name of the organizationsettinghistory in the database.
 	Table = "organization_setting_history"
 )
@@ -82,6 +84,7 @@ var Columns = []string{
 	FieldGeoLocation,
 	FieldOrganizationID,
 	FieldBillingNotificationsEnabled,
+	FieldAllowedEmailDomains,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

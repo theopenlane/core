@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -32,8 +33,8 @@ func HookInvite() ent.Hook {
 				return nil, err
 			}
 
-			// check that the invite isn't to a personal organization
-			if err := personalOrgNoInvite(ctx, m); err != nil {
+			// validate the invite
+			if err := validateCanCreateInvite(ctx, m); err != nil {
 				log.Info().Err(err).Msg("unable to add user to specified organization")
 
 				return nil, err
@@ -160,6 +161,8 @@ func HookInviteAccepted() ent.Hook {
 
 			// delete the invite that has been accepted
 			if err := deleteInvite(ctx, m); err != nil {
+				log.Error().Err(err).Msg("unable to delete invite")
+
 				return retValue, err
 			}
 
@@ -168,22 +171,30 @@ func HookInviteAccepted() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }
 
-// personalOrgNoInvite checks if the mutation is for a personal org and denies if true or
+// validateCanCreateInvite checks if the mutation is for a personal org and denies if true or
 // if the user does not have access to that organization
-func personalOrgNoInvite(ctx context.Context, m *generated.InviteMutation) error {
+func validateCanCreateInvite(ctx context.Context, m *generated.InviteMutation) error {
 	orgID, ok := m.OwnerID()
-	if ok {
-		org, err := m.Client().Organization.Get(ctx, orgID)
-		if err != nil {
-			return err
-		}
-
-		if org.PersonalOrg {
-			return ErrPersonalOrgsNoChildren
-		}
+	if !ok {
+		return nil
 	}
 
-	return nil
+	org, err := m.Client().Organization.Query().
+		WithSetting().
+		Where(organization.ID(orgID)).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	if org.PersonalOrg {
+		return ErrPersonalOrgsNoChildren
+	}
+
+	// check if the the email can be invited to the organization
+	email, _ := m.Recipient()
+
+	return checkAllowedEmailDomain(email, org.Edges.Setting)
 }
 
 // setRecipientAndToken function is responsible for generating a invite token based on the
@@ -223,8 +234,6 @@ func setRecipientAndToken(m *generated.InviteMutation) (*generated.InviteMutatio
 func setRequestor(ctx context.Context, m *generated.InviteMutation) (*generated.InviteMutation, error) {
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get requestor")
-
 		return m, err
 	}
 
@@ -268,10 +277,9 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	}
 
 	// send the email
-	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
-	}, nil)
-	if err != nil {
+	}, nil); err != nil {
 		log.Error().Err(err).Msg("error queueing email verification")
 
 		return err
@@ -292,10 +300,9 @@ func createOrgInviteAcceptedToSend(ctx context.Context, m *generated.InviteMutat
 	}
 
 	// send the email
-	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
-	}, nil)
-	if err != nil {
+	}, nil); err != nil {
 		log.Error().Err(err).Msg("error queueing email verification")
 
 		return err
@@ -348,13 +355,7 @@ func updateInvite(ctx context.Context, m *generated.InviteMutation) (*generated.
 func deleteInvite(ctx context.Context, m *generated.InviteMutation) error {
 	id, _ := m.ID()
 
-	if err := m.Client().Invite.DeleteOneID(id).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("unable to delete invite")
-
-		return err
-	}
-
-	return nil
+	return m.Client().Invite.DeleteOneID(id).Exec(ctx)
 }
 
 func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Invite, error) {
@@ -362,4 +363,35 @@ func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Inv
 	ownerID, _ := m.OwnerID()
 
 	return m.Client().Invite.Query().Where(invite.Recipient(rec)).Where(invite.OwnerID(ownerID)).Only(ctx)
+}
+
+// checkAllowedEmailDomain checks if the email domain is allowed for the organization
+func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSetting) error {
+	if orgSetting == nil || email == "" {
+		log.Info().Msg("no organization setting or email provided, cannot check settings")
+
+		return nil
+	}
+
+	// allow all domains if none are set
+	if orgSetting.AllowedEmailDomains == nil {
+		return nil
+	}
+
+	emailDomain := strings.SplitAfter(email, "@")[1]
+
+	allowed := false
+
+	for _, domain := range orgSetting.AllowedEmailDomains {
+		if domain == emailDomain {
+			allowed = true
+			break
+		}
+	}
+
+	if !allowed {
+		return ErrEmailDomainNotAllowed
+	}
+
+	return nil
 }

@@ -138,11 +138,6 @@ func (h *Handler) issueGoogleSession() http.Handler {
 			return
 		}
 
-		if err := h.addDefaultOrgToUserQuery(ctx, user); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 		// remove cookie
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
 
@@ -191,11 +186,6 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		user, err := h.CheckAndCreateUser(ctxWithToken, *githubUser.Name, *githubUser.Email, enums.AuthProviderGitHub, *githubUser.AvatarURL)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		if err := h.addDefaultOrgToUserQuery(ctx, user); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 

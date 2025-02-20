@@ -69,10 +69,9 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 	}
 
 	// send the email via the job queue
-	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
-	}, nil)
-	if err != nil {
+	}, nil); err != nil {
 		log.Error().Err(err).Msg("error queueing email verification")
 
 		return err

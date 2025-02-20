@@ -8,12 +8,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -160,7 +162,7 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 	}
 
 	tr := fgax.TupleRequest{
-		SubjectType:     "organization",
+		SubjectType:     generated.TypeOrganization,
 		SubjectID:       orgID,
 		SubjectRelation: fgax.OwnerRelation,
 		ObjectID:        id,                                    // this is the object id being created
@@ -177,19 +179,12 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 	return nil
 }
 
+// defaultOrgInterceptorFunc is the default interceptor function for the organization owned mixin
+// this applies a filter on organization ID for any request to a schema that applies the org
+// owned mixin
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		// skip the interceptor if the context has the token type
-		// this is useful for tokens, where the user is not yet authenticated to
-		// a particular organization yet
-		for _, tokenType := range o.SkipTokenType {
-			if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
-				return nil
-			}
-		}
-
-		// skip interceptor if the context has the managed group key
-		if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
+		if skip := o.orgInterceptorSkipper(ctx, q); skip {
 			return nil
 		}
 
@@ -201,7 +196,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		case interceptors.SkipOnlyQuery:
 			{
-				if ctxQuery.Op == "Only" {
+				if ctxQuery.Op == interceptors.OnlyOperation {
 					return nil
 				}
 			}
@@ -218,4 +213,43 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 
 		return nil
 	})
+}
+
+// orgInterceptorSkipper skips the organization interceptor based on the context
+// and query type
+// if soft deletes are bypassed; so is the interceptor - the user will no longer have access to the organization and
+// filters will skip the organization
+// if the context has a privacy token type, the interceptor is skipped
+// if the context has the managed group key, the interceptor is skipped
+// if the query is for a token and explicitly allowed, the interceptor is skipped
+func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
+	if entx.CheckSkipSoftDelete(ctx) {
+		return true
+	}
+
+	// skip the interceptor if the context has the token type
+	// this is useful for tokens, where the user is not yet authenticated to
+	// a particular organization yet
+	for _, tokenType := range o.SkipTokenType {
+		if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
+			return true
+		}
+	}
+
+	// Allow the interceptor to skip the query if the context has an allow
+	// bypass and its for a token
+	// these are queried during the auth flow and should not be filtered
+	if q.Type() == generated.TypeAPIToken || q.Type() == generated.TypePersonalAccessToken {
+		if _, allow := privacy.DecisionFromContext(ctx); allow {
+			return true
+		}
+
+	}
+
+	// skip interceptor if the context has the managed group key
+	if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
+		return true
+	}
+
+	return false
 }

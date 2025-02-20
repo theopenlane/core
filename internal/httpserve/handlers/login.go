@@ -29,8 +29,10 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// check user in the database, username == email and ensure only one record is returned
-	user, err := h.getUserByEmail(ctx.Request().Context(), in.Username, enums.AuthProviderCredentials)
+	user, err := h.getUserByEmail(reqCtx, in.Username, enums.AuthProviderCredentials)
 	if err != nil {
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
@@ -50,13 +52,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	}
 
 	// set context for remaining request based on logged in user
-	userCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: user.ID,
-	})
-
-	if err := h.addDefaultOrgToUserQuery(userCtx, user); err != nil {
-		return h.InternalServerError(ctx, err)
-	}
+	userCtx := setAuthenticatedContext(ctx, user)
 
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, user)

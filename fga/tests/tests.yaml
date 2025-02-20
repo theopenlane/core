@@ -1,6 +1,23 @@
 name: Openlane
 model_file: ../model/model.fga
 tuples:
+  -
+  # setup organization with empty domain condition
+  - user: organization:openlane#member
+    relation: access
+    object: organization:openlane
+    condition:
+      name: email_domains_allowed
+      context:
+        allowed_domains: []
+  # setup child organization with empty domain condition
+  - user: organization:foo#member
+    relation: access
+    object: organization:foo
+    condition:
+      name: email_domains_allowed
+      context:
+        allowed_domains: []
   # setup parent child org relationship
   - user: organization:openlane
     relation: parent
@@ -66,9 +83,24 @@ tests:
           context:
             grant_time: "2025-02-14T00:00:00Z"
             grant_duration: 1h
+      -
+      # setup organization with empty domain condition
+      - user: organization:restricted#member
+        relation: access
+        object: organization:restricted
+        condition:
+          name: email_domains_allowed
+          context:
+            allowed_domains: ["meow.com"]
+      # setup org member
+      - user: user:ulid-of-member
+        relation: member
+        object: organization:restricted
     check:
       - user: user:ulid-of-owner
-        object: organization:openlane # parent org
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -80,7 +112,9 @@ tests:
           can_invite_members: true
           can_invite_admins: true
       - user: user:ulid-of-member
-        object: organization:openlane # parent org
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -113,10 +147,12 @@ tests:
           can_edit: false
           can_view: true
           audit_log_viewer: false
-          can_invite_members: false
+          can_invite_members: true
           can_invite_admins: false
       - user: user:ulid-of-admin
         object: organization:openlane # parent org
+        context:
+          email_domain: "example.com"
         assertions:
           member: true
           admin: true
@@ -129,6 +165,8 @@ tests:
           can_invite_admins: true
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
+        context:
+          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -141,6 +179,8 @@ tests:
           can_invite_admins: false
       - user: user:ulid-of-owner
         object: organization:foo #child org
+        context:
+          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -153,6 +193,8 @@ tests:
           can_invite_admins: true
       - user: user:ulid-of-member
         object: organization:foo # child org
+        context:
+          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -165,6 +207,8 @@ tests:
           can_invite_admins: false
       - user: user:ulid-of-admin
         object: organization:foo # child org
+        context:
+          email_domain: "example.com"
         assertions:
           member: true
           admin: true
@@ -187,7 +231,7 @@ tests:
           can_edit: false
           can_view: true
           audit_log_viewer: false
-          can_invite_members: false
+          can_invite_members: true
           can_invite_admins: false
       - user: user:support-user
         object: organization:openlane
@@ -195,6 +239,20 @@ tests:
           current_time: "2025-02-14T02:24:02Z" # expired grant
         assertions:
           member: false
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: false
+          audit_log_viewer: false
+          can_invite_members: false
+          can_invite_admins: false
+      - user: user:ulid-of-member
+        object: organization:restricted
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: true # they are a member of the org, but have no other permissions
           admin: false
           owner: false
           can_delete: false
@@ -222,6 +280,7 @@ tests:
           member:
             - organization:foo
             - organization:openlane
+            - organization:restricted
       - user: service:ulid-of-service-editor
         type: organization
         assertions:
@@ -388,6 +447,15 @@ tests:
       - user: contact:contact-1
         relation: parent
         object: file:file-3 # contact has access to file
+      -
+      #setup organization with empty domain condition
+      - user: organization:contact-org#member
+        relation: access
+        object: organization:contact-org
+        condition:
+          name: email_domains_allowed
+          context:
+            allowed_domains: []
       - user: user:ulid-contact-1
         relation: owner
         object: organization:contact-org
@@ -528,6 +596,15 @@ tests:
       - user: group:group-1
         relation: parent
         object: task:task-3 # group has access to task
+      -
+      #setup organization with empty domain condition
+      - user: organization:group-org#member
+        relation: access
+        object: organization:group-org
+        condition:
+          name: email_domains_allowed
+          context:
+            allowed_domains: []
       - user: user:ulid-group-1
         relation: owner
         object: organization:group-org

@@ -2176,6 +2176,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSetting struct {
+		AllowedEmailDomains         func(childComplexity int) int
 		BillingAddress              func(childComplexity int) int
 		BillingContact              func(childComplexity int) int
 		BillingEmail                func(childComplexity int) int
@@ -2221,6 +2222,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingHistory struct {
+		AllowedEmailDomains         func(childComplexity int) int
 		BillingAddress              func(childComplexity int) int
 		BillingContact              func(childComplexity int) int
 		BillingEmail                func(childComplexity int) int
@@ -14311,6 +14313,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSearchResult.Organizations(childComplexity), true
 
+	case "OrganizationSetting.allowedEmailDomains":
+		if e.complexity.OrganizationSetting.AllowedEmailDomains == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.AllowedEmailDomains(childComplexity), true
+
 	case "OrganizationSetting.billingAddress":
 		if e.complexity.OrganizationSetting.BillingAddress == nil {
 			break
@@ -14499,6 +14508,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrganizationSettingEdge.Node(childComplexity), true
+
+	case "OrganizationSettingHistory.allowedEmailDomains":
+		if e.complexity.OrganizationSettingHistory.AllowedEmailDomains == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.AllowedEmailDomains(childComplexity), true
 
 	case "OrganizationSettingHistory.billingAddress":
 		if e.complexity.OrganizationSettingHistory.BillingAddress == nil {
@@ -26885,7 +26901,7 @@ input CreateDocumentDataInput {
   the json data of the document
   """
   data: JSON!
-  ownerID: ID
+  ownerID: ID!
   templateID: ID!
   entityIDs: [ID!]
   fileIDs: [ID!]
@@ -27444,9 +27460,9 @@ input CreateOrganizationInput {
   settingID: ID
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
+  fileIDs: [ID!]
   eventIDs: [ID!]
   secretIDs: [ID!]
-  fileIDs: [ID!]
   avatarFileID: ID
   groupIDs: [ID!]
   templateIDs: [ID!]
@@ -27511,6 +27527,10 @@ input CreateOrganizationSettingInput {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean
+  """
+  domains allowed to access the organization, if empty all domains are allowed
+  """
+  allowedEmailDomains: [String!]
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -28099,9 +28119,9 @@ type DocumentData implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
-  ownerID: ID
+  ownerID: ID!
   """
   the template id of the document
   """
@@ -28110,7 +28130,7 @@ type DocumentData implements Node {
   the json data of the document
   """
   data: JSON!
-  owner: Organization
+  owner: Organization!
   template: Template!
   entity: [Entity!]
   files: [File!]
@@ -28161,9 +28181,9 @@ type DocumentDataHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
-  ownerID: String
+  ownerID: String!
   """
   the template id of the document
   """
@@ -28375,8 +28395,6 @@ input DocumentDataHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -28524,8 +28542,6 @@ input DocumentDataWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -38494,9 +38510,9 @@ type Organization implements Node {
   personalAccessTokens: [PersonalAccessToken!]
   apiTokens: [APIToken!]
   users: [User!]
+  files: [File!]
   events: [Event!]
   secrets: [Hush!]
-  files: [File!]
   avatarFile: File
   groups: [Group!]
   templates: [Template!]
@@ -38966,6 +38982,10 @@ type OrganizationSetting implements Node {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean!
+  """
+  domains allowed to access the organization, if empty all domains are allowed
+  """
+  allowedEmailDomains: [String!]
   organization: Organization
   files: [File!]
 }
@@ -39050,6 +39070,10 @@ type OrganizationSettingHistory implements Node {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean!
+  """
+  domains allowed to access the organization, if empty all domains are allowed
+  """
+  allowedEmailDomains: [String!]
 }
 """
 A connection to a list of items.
@@ -39869,6 +39893,11 @@ input OrganizationWhereInput {
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
   """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
   events edge predicates
   """
   hasEvents: Boolean
@@ -39878,11 +39907,6 @@ input OrganizationWhereInput {
   """
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
-  """
-  files edge predicates
-  """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
   """
   avatar_file edge predicates
   """
@@ -49418,7 +49442,6 @@ input UpdateDocumentDataInput {
   """
   data: JSON
   ownerID: ID
-  clearOwner: Boolean
   templateID: ID
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
@@ -50190,15 +50213,15 @@ input UpdateOrganizationInput {
   addAPITokenIDs: [ID!]
   removeAPITokenIDs: [ID!]
   clearAPITokens: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
   addSecretIDs: [ID!]
   removeSecretIDs: [ID!]
   clearSecrets: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
   avatarFileID: ID
   clearAvatarFile: Boolean
   addGroupIDs: [ID!]
@@ -50316,6 +50339,12 @@ input UpdateOrganizationSettingInput {
   should we send email notifications related to billing
   """
   billingNotificationsEnabled: Boolean
+  """
+  domains allowed to access the organization, if empty all domains are allowed
+  """
+  allowedEmailDomains: [String!]
+  appendAllowedEmailDomains: [String!]
+  clearAllowedEmailDomains: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]

@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 const (
@@ -26,7 +27,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			return privacy.Skipf("no owner set on request, cannot check access")
 		}
 
-		userID, err := auth.GetUserIDFromContext(ctx)
+		user, err := auth.GetAuthenticatedUserContext(ctx)
 		if err != nil {
 			return err
 		}
@@ -39,10 +40,11 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 		}
 
 		ac := fgax.AccessCheck{
-			SubjectID:   userID,
+			SubjectID:   user.SubjectID,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
 			ObjectID:    oID,
 			Relation:    relation,
+			Context:     utils.NewOrganizationContextKey(user.SubjectEmail),
 		}
 
 		log.Debug().Interface("tuple", ac).Msg("checking relationship tuples")

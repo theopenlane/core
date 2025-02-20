@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/iam/auth"
 	provider "github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
 
@@ -47,16 +46,10 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	}
 
 	// set context for remaining request based on logged in user
-	userCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: entUser.ID,
-	})
+	userCtx := setAuthenticatedContext(ctx, entUser)
 
 	// set webauthn allowed
 	if err := h.setWebauthnAllowed(userCtx, entUser); err != nil {
-		return h.InternalServerError(ctx, err)
-	}
-
-	if err := h.addDefaultOrgToUserQuery(userCtx, entUser); err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
@@ -153,9 +146,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	}
 
 	// set user in the viewer context for the rest of the request
-	userCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
-		SubjectID: entUser.ID,
-	})
+	userCtx := setAuthenticatedContext(ctx, entUser)
 
 	// follows https://www.w3.org/TR/webauthn/#sctn-registering-a-new-credential
 	response, err := protocol.ParseCredentialCreationResponseBody(ctx.Request().Body)

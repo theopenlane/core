@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -84,11 +85,6 @@ func (Evidence) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Evidence
-func (Evidence) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Evidence
 func (Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -110,7 +106,7 @@ func (Evidence) Hooks() []ent.Hook {
 func (Evidence) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.EvidenceQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),

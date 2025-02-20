@@ -1562,6 +1562,9 @@ func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) 
 	if !reflect.DeepEqual(osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingNotificationsEnabled, osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled))
 	}
+	if !reflect.DeepEqual(osh.AllowedEmailDomains, new.AllowedEmailDomains) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldAllowedEmailDomains, osh.AllowedEmailDomains, new.AllowedEmailDomains))
+	}
 	return changes
 }
 

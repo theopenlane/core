@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -112,11 +113,6 @@ func (Program) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the Program
-func (Program) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the Program
 func (Program) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -154,7 +150,7 @@ func (Program) Interceptors() []ent.Interceptor {
 func (Program) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.ProgramQuery](),
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),

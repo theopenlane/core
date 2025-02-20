@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
@@ -29,7 +30,8 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 			Relation:    relation,
 			SubjectID:   au.SubjectID,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
-			ObjectType:  "organization",
+			ObjectType:  generated.TypeOrganization,
+			Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 		}
 
 		var allowedOrgs []string

@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -111,10 +110,6 @@ func orgMembersSkipInterceptor(ctx context.Context) bool {
 	// this only happens from internal requests
 	// and we don't need to dedupe the org members
 	if _, allow := privacy.DecisionFromContext(ctx); allow {
-		return true
-	}
-
-	if entx.CheckIsSoftDelete(ctx) {
 		return true
 	}
 

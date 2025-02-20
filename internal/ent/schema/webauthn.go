@@ -53,11 +53,6 @@ func (Webauthn) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Webauthn
-func (Webauthn) Edges() []ent.Edge {
-	return []ent.Edge{}
-}
-
 // Mixin of the Webauthn
 func (Webauthn) Mixin() []ent.Mixin {
 	return []ent.Mixin{

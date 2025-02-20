@@ -3337,7 +3337,7 @@ type CreateDocumentDataInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the json data of the document
 	Data       json.RawMessage `json:"data"`
-	OwnerID    *string         `json:"ownerID,omitempty"`
+	OwnerID    string          `json:"ownerID"`
 	TemplateID string          `json:"templateID"`
 	EntityIDs  []string        `json:"entityIDs,omitempty"`
 	FileIDs    []string        `json:"fileIDs,omitempty"`
@@ -3730,9 +3730,9 @@ type CreateOrganizationInput struct {
 	SettingID                  *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs     []string                        `json:"personalAccessTokenIDs,omitempty"`
 	APITokenIDs                []string                        `json:"apiTokenIDs,omitempty"`
+	FileIDs                    []string                        `json:"fileIDs,omitempty"`
 	EventIDs                   []string                        `json:"eventIDs,omitempty"`
 	SecretIDs                  []string                        `json:"secretIDs,omitempty"`
-	FileIDs                    []string                        `json:"fileIDs,omitempty"`
 	AvatarFileID               *string                         `json:"avatarFileID,omitempty"`
 	GroupIDs                   []string                        `json:"groupIDs,omitempty"`
 	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
@@ -3778,9 +3778,11 @@ type CreateOrganizationSettingInput struct {
 	// geographical location of the organization
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// should we send email notifications related to billing
-	BillingNotificationsEnabled *bool    `json:"billingNotificationsEnabled,omitempty"`
-	OrganizationID              *string  `json:"organizationID,omitempty"`
-	FileIDs                     []string `json:"fileIDs,omitempty"`
+	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
+	// domains allowed to access the organization, if empty all domains are allowed
+	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
+	OrganizationID      *string  `json:"organizationID,omitempty"`
+	FileIDs             []string `json:"fileIDs,omitempty"`
 }
 
 // CreatePersonalAccessTokenInput is used for create PersonalAccessToken object.
@@ -4154,13 +4156,13 @@ type DocumentData struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
 	Data     json.RawMessage `json:"data"`
-	Owner    *Organization   `json:"owner,omitempty"`
+	Owner    *Organization   `json:"owner"`
 	Template *Template       `json:"template"`
 	Entity   []*Entity       `json:"entity,omitempty"`
 	Files    []*File         `json:"files,omitempty"`
@@ -4217,8 +4219,8 @@ type DocumentDataHistory struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
@@ -4385,8 +4387,6 @@ type DocumentDataHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// template_id field predicates
@@ -4527,8 +4527,6 @@ type DocumentDataWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// template_id field predicates
@@ -12731,9 +12729,9 @@ type Organization struct {
 	PersonalAccessTokens []*PersonalAccessToken  `json:"personalAccessTokens,omitempty"`
 	APITokens            []*APIToken             `json:"apiTokens,omitempty"`
 	Users                []*User                 `json:"users,omitempty"`
+	Files                []*File                 `json:"files,omitempty"`
 	Events               []*Event                `json:"events,omitempty"`
 	Secrets              []*Hush                 `json:"secrets,omitempty"`
-	Files                []*File                 `json:"files,omitempty"`
 	AvatarFile           *File                   `json:"avatarFile,omitempty"`
 	Groups               []*Group                `json:"groups,omitempty"`
 	Templates            []*Template             `json:"templates,omitempty"`
@@ -13105,9 +13103,11 @@ type OrganizationSetting struct {
 	// the ID of the organization the settings belong to
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
-	BillingNotificationsEnabled bool          `json:"billingNotificationsEnabled"`
-	Organization                *Organization `json:"organization,omitempty"`
-	Files                       []*File       `json:"files,omitempty"`
+	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
+	// domains allowed to access the organization, if empty all domains are allowed
+	AllowedEmailDomains []string      `json:"allowedEmailDomains,omitempty"`
+	Organization        *Organization `json:"organization,omitempty"`
+	Files               []*File       `json:"files,omitempty"`
 }
 
 func (OrganizationSetting) IsNode() {}
@@ -13179,6 +13179,8 @@ type OrganizationSettingHistory struct {
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
+	// domains allowed to access the organization, if empty all domains are allowed
+	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 }
 
 func (OrganizationSettingHistory) IsNode() {}
@@ -13856,15 +13858,15 @@ type OrganizationWhereInput struct {
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 	// secrets edge predicates
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
-	// files edge predicates
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// avatar_file edge predicates
 	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
 	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
@@ -20110,7 +20112,6 @@ type UpdateDocumentDataInput struct {
 	// the json data of the document
 	Data            json.RawMessage `json:"data,omitempty"`
 	OwnerID         *string         `json:"ownerID,omitempty"`
-	ClearOwner      *bool           `json:"clearOwner,omitempty"`
 	TemplateID      *string         `json:"templateID,omitempty"`
 	AddEntityIDs    []string        `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs []string        `json:"removeEntityIDs,omitempty"`
@@ -20729,15 +20730,15 @@ type UpdateOrganizationInput struct {
 	AddAPITokenIDs                   []string                        `json:"addAPITokenIDs,omitempty"`
 	RemoveAPITokenIDs                []string                        `json:"removeAPITokenIDs,omitempty"`
 	ClearAPITokens                   *bool                           `json:"clearAPITokens,omitempty"`
+	AddFileIDs                       []string                        `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                    []string                        `json:"removeFileIDs,omitempty"`
+	ClearFiles                       *bool                           `json:"clearFiles,omitempty"`
 	AddEventIDs                      []string                        `json:"addEventIDs,omitempty"`
 	RemoveEventIDs                   []string                        `json:"removeEventIDs,omitempty"`
 	ClearEvents                      *bool                           `json:"clearEvents,omitempty"`
 	AddSecretIDs                     []string                        `json:"addSecretIDs,omitempty"`
 	RemoveSecretIDs                  []string                        `json:"removeSecretIDs,omitempty"`
 	ClearSecrets                     *bool                           `json:"clearSecrets,omitempty"`
-	AddFileIDs                       []string                        `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                    []string                        `json:"removeFileIDs,omitempty"`
-	ClearFiles                       *bool                           `json:"clearFiles,omitempty"`
 	AvatarFileID                     *string                         `json:"avatarFileID,omitempty"`
 	ClearAvatarFile                  *bool                           `json:"clearAvatarFile,omitempty"`
 	AddGroupIDs                      []string                        `json:"addGroupIDs,omitempty"`
@@ -20838,12 +20839,16 @@ type UpdateOrganizationSettingInput struct {
 	GeoLocation      *enums.Region `json:"geoLocation,omitempty"`
 	ClearGeoLocation *bool         `json:"clearGeoLocation,omitempty"`
 	// should we send email notifications related to billing
-	BillingNotificationsEnabled *bool    `json:"billingNotificationsEnabled,omitempty"`
-	OrganizationID              *string  `json:"organizationID,omitempty"`
-	ClearOrganization           *bool    `json:"clearOrganization,omitempty"`
-	AddFileIDs                  []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs               []string `json:"removeFileIDs,omitempty"`
-	ClearFiles                  *bool    `json:"clearFiles,omitempty"`
+	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
+	// domains allowed to access the organization, if empty all domains are allowed
+	AllowedEmailDomains       []string `json:"allowedEmailDomains,omitempty"`
+	AppendAllowedEmailDomains []string `json:"appendAllowedEmailDomains,omitempty"`
+	ClearAllowedEmailDomains  *bool    `json:"clearAllowedEmailDomains,omitempty"`
+	OrganizationID            *string  `json:"organizationID,omitempty"`
+	ClearOrganization         *bool    `json:"clearOrganization,omitempty"`
+	AddFileIDs                []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs             []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                *bool    `json:"clearFiles,omitempty"`
 }
 
 // UpdatePersonalAccessTokenInput is used for update PersonalAccessToken object.

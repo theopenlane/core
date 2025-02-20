@@ -36,8 +36,8 @@ func (DocumentDataHistory) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entfga.Annotations{
-			ObjectType:   "organization",
-			IDField:      "OwnerID",
+			ObjectType:   "document_data",
+			IDField:      "Ref",
 			IncludeHooks: false,
 		},
 	}
@@ -99,6 +99,6 @@ func (DocumentDataHistory) Indexes() []ent.Index {
 // Interceptors of the DocumentDataHistory
 func (DocumentDataHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

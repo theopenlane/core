@@ -201,7 +201,6 @@ func (Group) Hooks() []ent.Hook {
 func (Group) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			entfga.CheckReadAccess[*generated.GroupQuery](),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
