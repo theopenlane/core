@@ -4,14 +4,15 @@ import (
 	"context"
 	"math"
 
-	"github.com/projectdiscovery/katana/pkg/engine/standard"
+	"github.com/projectdiscovery/katana/pkg/engine/hybrid"
 	"github.com/projectdiscovery/katana/pkg/types"
 )
 
 // Spider is a wrapper struct for the katana crawler
 type Spider struct {
-	Client  *standard.Crawler
+	//	Client  *standard.Crawler
 	Options *Options
+	Client  *hybrid.Crawler
 }
 
 // NewOptions creates a new Options struct with default values and allows overrides
@@ -73,7 +74,7 @@ func performWebSpider(targets []string, opts ...Option) ([]LinkDetails, []string
 		return links, errors, err
 	}
 
-	crawler, err := standard.New(crawlerOptions)
+	crawler, err := hybrid.New(crawlerOptions)
 	if err != nil {
 		return links, errors, err
 	}
