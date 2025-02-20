@@ -65,6 +65,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 
 	// setup driver(s)
 	var drvPrimary dialect.Driver
+
 	var drvSecondary dialect.Driver
 
 	drvPrimary = entConfig.GetPrimaryDB()
