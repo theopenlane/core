@@ -31,7 +31,7 @@ type organization
   relations
     # main roles
     define admin: [user] or admin from parent
-    define member:  [user] or owner or admin or member from parent
+    define member: [user] or owner or admin or member from parent
     define owner: [user] or owner from parent
     # parent inheritance
     define parent: [organization]
