@@ -31,6 +31,9 @@ var (
 
 	// ErrUnableToDetermineObjectType is returned when the object type up the parent upload object cannot be determined
 	ErrUnableToDetermineObjectType = errors.New("unable to determine parent object type")
+
+	// ErrResourceNotAccessibleWithToken is returned when a resource is not accessible with a personal access token or api token
+	ErrResourceNotAccessibleWithToken = errors.New("resource is not accessible with token authentication")
 )
 
 // NotFoundError is returned when the requested object is not found

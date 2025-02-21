@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
@@ -214,21 +215,30 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			errorMsg:       notAuthorizedErrorMsg,
 		},
 		{
-			name:           "happy path organization with parent org using personal access token",
+			name:           "organization with parent org using personal access token, not allowed",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    testUser1.OrganizationID,
 			client:         suite.client.apiWithPAT,
 			ctx:            context.Background(),
+			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
 		{
-			name:           "organization with parent org using personal access token, no access to parent",
+			name:           "organization with parent org using personal access token, no access to parent, not allowed",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    testUser2.OrganizationID,
 			client:         suite.client.apiWithPAT,
 			ctx:            context.Background(),
-			errorMsg:       notFoundErrorMsg,
+			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
+		},
+		{
+			name:           "organization create with api token not allowed",
+			orgName:        gofakeit.Name(),
+			orgDescription: gofakeit.HipsterSentence(10),
+			client:         suite.client.apiWithToken,
+			ctx:            context.Background(),
+			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
 		{
 			name:           "organization with parent personal org",

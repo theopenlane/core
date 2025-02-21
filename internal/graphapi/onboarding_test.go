@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -60,6 +61,24 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
+		},
+		{
+			name: "not allowed with PAT",
+			request: openlaneclient.CreateOnboardingInput{
+				CompanyName: companyName,
+			},
+			client:      suite.client.apiWithPAT,
+			ctx:         testUser1.UserCtx,
+			expectedErr: graphapi.ErrResourceNotAccessibleWithToken.Error(),
+		},
+		{
+			name: "not allowed with token",
+			request: openlaneclient.CreateOnboardingInput{
+				CompanyName: companyName,
+			},
+			client:      suite.client.apiWithToken,
+			ctx:         testUser1.UserCtx,
+			expectedErr: graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
 	}
 
