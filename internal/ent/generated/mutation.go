@@ -8454,9 +8454,22 @@ func (m *ControlMutation) OldOwnerID(ctx context.Context) (v string, err error) 
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ControlMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[control.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ControlMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[control.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *ControlMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, control.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -9091,7 +9104,7 @@ func (m *ControlMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *ControlMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -10232,6 +10245,9 @@ func (m *ControlMutation) ClearedFields() []string {
 	if m.FieldCleared(control.FieldTags) {
 		fields = append(fields, control.FieldTags)
 	}
+	if m.FieldCleared(control.FieldOwnerID) {
+		fields = append(fields, control.FieldOwnerID)
+	}
 	if m.FieldCleared(control.FieldDescription) {
 		fields = append(fields, control.FieldDescription)
 	}
@@ -10302,6 +10318,9 @@ func (m *ControlMutation) ClearField(name string) error {
 		return nil
 	case control.FieldTags:
 		m.ClearTags()
+		return nil
+	case control.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case control.FieldDescription:
 		m.ClearDescription()
@@ -11520,9 +11539,22 @@ func (m *ControlHistoryMutation) OldOwnerID(ctx context.Context) (v string, err 
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ControlHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[controlhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ControlHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *ControlHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, controlhistory.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -12614,6 +12646,9 @@ func (m *ControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlhistory.FieldTags) {
 		fields = append(fields, controlhistory.FieldTags)
 	}
+	if m.FieldCleared(controlhistory.FieldOwnerID) {
+		fields = append(fields, controlhistory.FieldOwnerID)
+	}
 	if m.FieldCleared(controlhistory.FieldDescription) {
 		fields = append(fields, controlhistory.FieldDescription)
 	}
@@ -12687,6 +12722,9 @@ func (m *ControlHistoryMutation) ClearField(name string) error {
 		return nil
 	case controlhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case controlhistory.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case controlhistory.FieldDescription:
 		m.ClearDescription()
@@ -13463,9 +13501,22 @@ func (m *ControlObjectiveMutation) OldOwnerID(ctx context.Context) (v string, er
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ControlObjectiveMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[controlobjective.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ControlObjectiveMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[controlobjective.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *ControlObjectiveMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, controlobjective.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -14051,7 +14102,7 @@ func (m *ControlObjectiveMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *ControlObjectiveMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -15178,6 +15229,9 @@ func (m *ControlObjectiveMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjective.FieldTags) {
 		fields = append(fields, controlobjective.FieldTags)
 	}
+	if m.FieldCleared(controlobjective.FieldOwnerID) {
+		fields = append(fields, controlobjective.FieldOwnerID)
+	}
 	if m.FieldCleared(controlobjective.FieldDescription) {
 		fields = append(fields, controlobjective.FieldDescription)
 	}
@@ -15245,6 +15299,9 @@ func (m *ControlObjectiveMutation) ClearField(name string) error {
 		return nil
 	case controlobjective.FieldTags:
 		m.ClearTags()
+		return nil
+	case controlobjective.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case controlobjective.FieldDescription:
 		m.ClearDescription()
@@ -16456,9 +16513,22 @@ func (m *ControlObjectiveHistoryMutation) OldOwnerID(ctx context.Context) (v str
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ControlObjectiveHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[controlobjectivehistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *ControlObjectiveHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -17487,6 +17557,9 @@ func (m *ControlObjectiveHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjectivehistory.FieldTags) {
 		fields = append(fields, controlobjectivehistory.FieldTags)
 	}
+	if m.FieldCleared(controlobjectivehistory.FieldOwnerID) {
+		fields = append(fields, controlobjectivehistory.FieldOwnerID)
+	}
 	if m.FieldCleared(controlobjectivehistory.FieldDescription) {
 		fields = append(fields, controlobjectivehistory.FieldDescription)
 	}
@@ -17557,6 +17630,9 @@ func (m *ControlObjectiveHistoryMutation) ClearField(name string) error {
 		return nil
 	case controlobjectivehistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case controlobjectivehistory.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case controlobjectivehistory.FieldDescription:
 		m.ClearDescription()
@@ -18248,9 +18324,22 @@ func (m *DocumentDataMutation) OldOwnerID(ctx context.Context) (v string, err er
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *DocumentDataMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[documentdata.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *DocumentDataMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[documentdata.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *DocumentDataMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, documentdata.FieldOwnerID)
 }
 
 // SetTemplateID sets the "template_id" field.
@@ -18333,7 +18422,7 @@ func (m *DocumentDataMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *DocumentDataMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -18739,6 +18828,9 @@ func (m *DocumentDataMutation) ClearedFields() []string {
 	if m.FieldCleared(documentdata.FieldDeletedBy) {
 		fields = append(fields, documentdata.FieldDeletedBy)
 	}
+	if m.FieldCleared(documentdata.FieldOwnerID) {
+		fields = append(fields, documentdata.FieldOwnerID)
+	}
 	return fields
 }
 
@@ -18773,6 +18865,9 @@ func (m *DocumentDataMutation) ClearField(name string) error {
 		return nil
 	case documentdata.FieldDeletedBy:
 		m.ClearDeletedBy()
+		return nil
+	case documentdata.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	}
 	return fmt.Errorf("unknown DocumentData nullable field %s", name)
@@ -19603,9 +19698,22 @@ func (m *DocumentDataHistoryMutation) OldOwnerID(ctx context.Context) (v string,
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *DocumentDataHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[documentdatahistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *DocumentDataHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[documentdatahistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *DocumentDataHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, documentdatahistory.FieldOwnerID)
 }
 
 // SetTemplateID sets the "template_id" field.
@@ -19977,6 +20085,9 @@ func (m *DocumentDataHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(documentdatahistory.FieldDeletedBy) {
 		fields = append(fields, documentdatahistory.FieldDeletedBy)
 	}
+	if m.FieldCleared(documentdatahistory.FieldOwnerID) {
+		fields = append(fields, documentdatahistory.FieldOwnerID)
+	}
 	return fields
 }
 
@@ -20014,6 +20125,9 @@ func (m *DocumentDataHistoryMutation) ClearField(name string) error {
 		return nil
 	case documentdatahistory.FieldDeletedBy:
 		m.ClearDeletedBy()
+		return nil
+	case documentdatahistory.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	}
 	return fmt.Errorf("unknown DocumentDataHistory nullable field %s", name)
@@ -30193,9 +30307,22 @@ func (m *EvidenceMutation) OldOwnerID(ctx context.Context) (v string, err error)
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *EvidenceMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[evidence.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *EvidenceMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *EvidenceMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, evidence.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -30572,7 +30699,7 @@ func (m *EvidenceMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *EvidenceMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -31265,6 +31392,9 @@ func (m *EvidenceMutation) ClearedFields() []string {
 	if m.FieldCleared(evidence.FieldTags) {
 		fields = append(fields, evidence.FieldTags)
 	}
+	if m.FieldCleared(evidence.FieldOwnerID) {
+		fields = append(fields, evidence.FieldOwnerID)
+	}
 	if m.FieldCleared(evidence.FieldDescription) {
 		fields = append(fields, evidence.FieldDescription)
 	}
@@ -31317,6 +31447,9 @@ func (m *EvidenceMutation) ClearField(name string) error {
 		return nil
 	case evidence.FieldTags:
 		m.ClearTags()
+		return nil
+	case evidence.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case evidence.FieldDescription:
 		m.ClearDescription()
@@ -32315,9 +32448,22 @@ func (m *EvidenceHistoryMutation) OldOwnerID(ctx context.Context) (v string, err
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *EvidenceHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[evidencehistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *EvidenceHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, evidencehistory.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -33081,6 +33227,9 @@ func (m *EvidenceHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(evidencehistory.FieldTags) {
 		fields = append(fields, evidencehistory.FieldTags)
 	}
+	if m.FieldCleared(evidencehistory.FieldOwnerID) {
+		fields = append(fields, evidencehistory.FieldOwnerID)
+	}
 	if m.FieldCleared(evidencehistory.FieldDescription) {
 		fields = append(fields, evidencehistory.FieldDescription)
 	}
@@ -33136,6 +33285,9 @@ func (m *EvidenceHistoryMutation) ClearField(name string) error {
 		return nil
 	case evidencehistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case evidencehistory.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case evidencehistory.FieldDescription:
 		m.ClearDescription()
@@ -58913,9 +59065,22 @@ func (m *NarrativeMutation) OldOwnerID(ctx context.Context) (v string, err error
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *NarrativeMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[narrative.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *NarrativeMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[narrative.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *NarrativeMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, narrative.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -59109,7 +59274,7 @@ func (m *NarrativeMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *NarrativeMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -59854,6 +60019,9 @@ func (m *NarrativeMutation) ClearedFields() []string {
 	if m.FieldCleared(narrative.FieldTags) {
 		fields = append(fields, narrative.FieldTags)
 	}
+	if m.FieldCleared(narrative.FieldOwnerID) {
+		fields = append(fields, narrative.FieldOwnerID)
+	}
 	if m.FieldCleared(narrative.FieldDescription) {
 		fields = append(fields, narrative.FieldDescription)
 	}
@@ -59897,6 +60065,9 @@ func (m *NarrativeMutation) ClearField(name string) error {
 		return nil
 	case narrative.FieldTags:
 		m.ClearTags()
+		return nil
+	case narrative.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case narrative.FieldDescription:
 		m.ClearDescription()
@@ -60922,9 +61093,22 @@ func (m *NarrativeHistoryMutation) OldOwnerID(ctx context.Context) (v string, er
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *NarrativeHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[narrativehistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *NarrativeHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, narrativehistory.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -61449,6 +61633,9 @@ func (m *NarrativeHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(narrativehistory.FieldTags) {
 		fields = append(fields, narrativehistory.FieldTags)
 	}
+	if m.FieldCleared(narrativehistory.FieldOwnerID) {
+		fields = append(fields, narrativehistory.FieldOwnerID)
+	}
 	if m.FieldCleared(narrativehistory.FieldDescription) {
 		fields = append(fields, narrativehistory.FieldDescription)
 	}
@@ -61495,6 +61682,9 @@ func (m *NarrativeHistoryMutation) ClearField(name string) error {
 		return nil
 	case narrativehistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case narrativehistory.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case narrativehistory.FieldDescription:
 		m.ClearDescription()
@@ -61616,31 +61806,25 @@ func (m *NarrativeHistoryMutation) ResetEdge(name string) error {
 // NoteMutation represents an operation that mutates the Note nodes in the graph.
 type NoteMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *string
-	created_at         *time.Time
-	updated_at         *time.Time
-	created_by         *string
-	updated_by         *string
-	display_id         *string
-	deleted_at         *time.Time
-	deleted_by         *string
-	text               *string
-	clearedFields      map[string]struct{}
-	owner              *string
-	clearedowner       bool
-	entity             *string
-	clearedentity      bool
-	subcontrols        map[string]struct{}
-	removedsubcontrols map[string]struct{}
-	clearedsubcontrols bool
-	program            map[string]struct{}
-	removedprogram     map[string]struct{}
-	clearedprogram     bool
-	done               bool
-	oldValue           func(context.Context) (*Note, error)
-	predicates         []predicate.Note
+	op            Op
+	typ           string
+	id            *string
+	created_at    *time.Time
+	updated_at    *time.Time
+	created_by    *string
+	updated_by    *string
+	display_id    *string
+	deleted_at    *time.Time
+	deleted_by    *string
+	text          *string
+	clearedFields map[string]struct{}
+	owner         *string
+	clearedowner  bool
+	task          *string
+	clearedtask   bool
+	done          bool
+	oldValue      func(context.Context) (*Note, error)
+	predicates    []predicate.Note
 }
 
 var _ ent.Mutation = (*NoteMutation)(nil)
@@ -62189,151 +62373,43 @@ func (m *NoteMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
-// SetEntityID sets the "entity" edge to the Entity entity by id.
-func (m *NoteMutation) SetEntityID(id string) {
-	m.entity = &id
+// SetTaskID sets the "task" edge to the Task entity by id.
+func (m *NoteMutation) SetTaskID(id string) {
+	m.task = &id
 }
 
-// ClearEntity clears the "entity" edge to the Entity entity.
-func (m *NoteMutation) ClearEntity() {
-	m.clearedentity = true
+// ClearTask clears the "task" edge to the Task entity.
+func (m *NoteMutation) ClearTask() {
+	m.clearedtask = true
 }
 
-// EntityCleared reports if the "entity" edge to the Entity entity was cleared.
-func (m *NoteMutation) EntityCleared() bool {
-	return m.clearedentity
+// TaskCleared reports if the "task" edge to the Task entity was cleared.
+func (m *NoteMutation) TaskCleared() bool {
+	return m.clearedtask
 }
 
-// EntityID returns the "entity" edge ID in the mutation.
-func (m *NoteMutation) EntityID() (id string, exists bool) {
-	if m.entity != nil {
-		return *m.entity, true
+// TaskID returns the "task" edge ID in the mutation.
+func (m *NoteMutation) TaskID() (id string, exists bool) {
+	if m.task != nil {
+		return *m.task, true
 	}
 	return
 }
 
-// EntityIDs returns the "entity" edge IDs in the mutation.
+// TaskIDs returns the "task" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// EntityID instead. It exists only for internal usage by the builders.
-func (m *NoteMutation) EntityIDs() (ids []string) {
-	if id := m.entity; id != nil {
+// TaskID instead. It exists only for internal usage by the builders.
+func (m *NoteMutation) TaskIDs() (ids []string) {
+	if id := m.task; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetEntity resets all changes to the "entity" edge.
-func (m *NoteMutation) ResetEntity() {
-	m.entity = nil
-	m.clearedentity = false
-}
-
-// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
-func (m *NoteMutation) AddSubcontrolIDs(ids ...string) {
-	if m.subcontrols == nil {
-		m.subcontrols = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.subcontrols[ids[i]] = struct{}{}
-	}
-}
-
-// ClearSubcontrols clears the "subcontrols" edge to the Subcontrol entity.
-func (m *NoteMutation) ClearSubcontrols() {
-	m.clearedsubcontrols = true
-}
-
-// SubcontrolsCleared reports if the "subcontrols" edge to the Subcontrol entity was cleared.
-func (m *NoteMutation) SubcontrolsCleared() bool {
-	return m.clearedsubcontrols
-}
-
-// RemoveSubcontrolIDs removes the "subcontrols" edge to the Subcontrol entity by IDs.
-func (m *NoteMutation) RemoveSubcontrolIDs(ids ...string) {
-	if m.removedsubcontrols == nil {
-		m.removedsubcontrols = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.subcontrols, ids[i])
-		m.removedsubcontrols[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedSubcontrols returns the removed IDs of the "subcontrols" edge to the Subcontrol entity.
-func (m *NoteMutation) RemovedSubcontrolsIDs() (ids []string) {
-	for id := range m.removedsubcontrols {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// SubcontrolsIDs returns the "subcontrols" edge IDs in the mutation.
-func (m *NoteMutation) SubcontrolsIDs() (ids []string) {
-	for id := range m.subcontrols {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetSubcontrols resets all changes to the "subcontrols" edge.
-func (m *NoteMutation) ResetSubcontrols() {
-	m.subcontrols = nil
-	m.clearedsubcontrols = false
-	m.removedsubcontrols = nil
-}
-
-// AddProgramIDs adds the "program" edge to the Program entity by ids.
-func (m *NoteMutation) AddProgramIDs(ids ...string) {
-	if m.program == nil {
-		m.program = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.program[ids[i]] = struct{}{}
-	}
-}
-
-// ClearProgram clears the "program" edge to the Program entity.
-func (m *NoteMutation) ClearProgram() {
-	m.clearedprogram = true
-}
-
-// ProgramCleared reports if the "program" edge to the Program entity was cleared.
-func (m *NoteMutation) ProgramCleared() bool {
-	return m.clearedprogram
-}
-
-// RemoveProgramIDs removes the "program" edge to the Program entity by IDs.
-func (m *NoteMutation) RemoveProgramIDs(ids ...string) {
-	if m.removedprogram == nil {
-		m.removedprogram = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.program, ids[i])
-		m.removedprogram[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedProgram returns the removed IDs of the "program" edge to the Program entity.
-func (m *NoteMutation) RemovedProgramIDs() (ids []string) {
-	for id := range m.removedprogram {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ProgramIDs returns the "program" edge IDs in the mutation.
-func (m *NoteMutation) ProgramIDs() (ids []string) {
-	for id := range m.program {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetProgram resets all changes to the "program" edge.
-func (m *NoteMutation) ResetProgram() {
-	m.program = nil
-	m.clearedprogram = false
-	m.removedprogram = nil
+// ResetTask resets all changes to the "task" edge.
+func (m *NoteMutation) ResetTask() {
+	m.task = nil
+	m.clearedtask = false
 }
 
 // Where appends a list predicates to the NoteMutation builder.
@@ -62650,18 +62726,12 @@ func (m *NoteMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NoteMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 2)
 	if m.owner != nil {
 		edges = append(edges, note.EdgeOwner)
 	}
-	if m.entity != nil {
-		edges = append(edges, note.EdgeEntity)
-	}
-	if m.subcontrols != nil {
-		edges = append(edges, note.EdgeSubcontrols)
-	}
-	if m.program != nil {
-		edges = append(edges, note.EdgeProgram)
+	if m.task != nil {
+		edges = append(edges, note.EdgeTask)
 	}
 	return edges
 }
@@ -62674,72 +62744,34 @@ func (m *NoteMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
-	case note.EdgeEntity:
-		if id := m.entity; id != nil {
+	case note.EdgeTask:
+		if id := m.task; id != nil {
 			return []ent.Value{*id}
 		}
-	case note.EdgeSubcontrols:
-		ids := make([]ent.Value, 0, len(m.subcontrols))
-		for id := range m.subcontrols {
-			ids = append(ids, id)
-		}
-		return ids
-	case note.EdgeProgram:
-		ids := make([]ent.Value, 0, len(m.program))
-		for id := range m.program {
-			ids = append(ids, id)
-		}
-		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NoteMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
-	if m.removedsubcontrols != nil {
-		edges = append(edges, note.EdgeSubcontrols)
-	}
-	if m.removedprogram != nil {
-		edges = append(edges, note.EdgeProgram)
-	}
+	edges := make([]string, 0, 2)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *NoteMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case note.EdgeSubcontrols:
-		ids := make([]ent.Value, 0, len(m.removedsubcontrols))
-		for id := range m.removedsubcontrols {
-			ids = append(ids, id)
-		}
-		return ids
-	case note.EdgeProgram:
-		ids := make([]ent.Value, 0, len(m.removedprogram))
-		for id := range m.removedprogram {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NoteMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 2)
 	if m.clearedowner {
 		edges = append(edges, note.EdgeOwner)
 	}
-	if m.clearedentity {
-		edges = append(edges, note.EdgeEntity)
-	}
-	if m.clearedsubcontrols {
-		edges = append(edges, note.EdgeSubcontrols)
-	}
-	if m.clearedprogram {
-		edges = append(edges, note.EdgeProgram)
+	if m.clearedtask {
+		edges = append(edges, note.EdgeTask)
 	}
 	return edges
 }
@@ -62750,12 +62782,8 @@ func (m *NoteMutation) EdgeCleared(name string) bool {
 	switch name {
 	case note.EdgeOwner:
 		return m.clearedowner
-	case note.EdgeEntity:
-		return m.clearedentity
-	case note.EdgeSubcontrols:
-		return m.clearedsubcontrols
-	case note.EdgeProgram:
-		return m.clearedprogram
+	case note.EdgeTask:
+		return m.clearedtask
 	}
 	return false
 }
@@ -62767,8 +62795,8 @@ func (m *NoteMutation) ClearEdge(name string) error {
 	case note.EdgeOwner:
 		m.ClearOwner()
 		return nil
-	case note.EdgeEntity:
-		m.ClearEntity()
+	case note.EdgeTask:
+		m.ClearTask()
 		return nil
 	}
 	return fmt.Errorf("unknown Note unique edge %s", name)
@@ -62781,14 +62809,8 @@ func (m *NoteMutation) ResetEdge(name string) error {
 	case note.EdgeOwner:
 		m.ResetOwner()
 		return nil
-	case note.EdgeEntity:
-		m.ResetEntity()
-		return nil
-	case note.EdgeSubcontrols:
-		m.ResetSubcontrols()
-		return nil
-	case note.EdgeProgram:
-		m.ResetProgram()
+	case note.EdgeTask:
+		m.ResetTask()
 		return nil
 	}
 	return fmt.Errorf("unknown Note edge %s", name)
@@ -94184,9 +94206,22 @@ func (m *RiskMutation) OldOwnerID(ctx context.Context) (v string, err error) {
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *RiskMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[risk.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *RiskMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[risk.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *RiskMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, risk.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -94674,7 +94709,7 @@ func (m *RiskMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *RiskMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -95449,6 +95484,9 @@ func (m *RiskMutation) ClearedFields() []string {
 	if m.FieldCleared(risk.FieldTags) {
 		fields = append(fields, risk.FieldTags)
 	}
+	if m.FieldCleared(risk.FieldOwnerID) {
+		fields = append(fields, risk.FieldOwnerID)
+	}
 	if m.FieldCleared(risk.FieldDescription) {
 		fields = append(fields, risk.FieldDescription)
 	}
@@ -95510,6 +95548,9 @@ func (m *RiskMutation) ClearField(name string) error {
 		return nil
 	case risk.FieldTags:
 		m.ClearTags()
+		return nil
+	case risk.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case risk.FieldDescription:
 		m.ClearDescription()
@@ -96551,9 +96592,22 @@ func (m *RiskHistoryMutation) OldOwnerID(ctx context.Context) (v string, err err
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *RiskHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[riskhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *RiskHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[riskhistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *RiskHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, riskhistory.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -97456,6 +97510,9 @@ func (m *RiskHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(riskhistory.FieldTags) {
 		fields = append(fields, riskhistory.FieldTags)
 	}
+	if m.FieldCleared(riskhistory.FieldOwnerID) {
+		fields = append(fields, riskhistory.FieldOwnerID)
+	}
 	if m.FieldCleared(riskhistory.FieldDescription) {
 		fields = append(fields, riskhistory.FieldDescription)
 	}
@@ -97520,6 +97577,9 @@ func (m *RiskHistoryMutation) ClearField(name string) error {
 		return nil
 	case riskhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case riskhistory.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case riskhistory.FieldDescription:
 		m.ClearDescription()
@@ -101358,14 +101418,9 @@ type SubcontrolMutation struct {
 	controls                         map[string]struct{}
 	removedcontrols                  map[string]struct{}
 	clearedcontrols                  bool
-	user                             map[string]struct{}
-	removeduser                      map[string]struct{}
-	cleareduser                      bool
 	tasks                            map[string]struct{}
 	removedtasks                     map[string]struct{}
 	clearedtasks                     bool
-	notes                            *string
-	clearednotes                     bool
 	programs                         map[string]struct{}
 	removedprograms                  map[string]struct{}
 	clearedprograms                  bool
@@ -101907,9 +101962,22 @@ func (m *SubcontrolMutation) OldOwnerID(ctx context.Context) (v string, err erro
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *SubcontrolMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[subcontrol.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *SubcontrolMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *SubcontrolMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, subcontrol.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -102740,7 +102808,7 @@ func (m *SubcontrolMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *SubcontrolMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -102813,60 +102881,6 @@ func (m *SubcontrolMutation) ResetControls() {
 	m.removedcontrols = nil
 }
 
-// AddUserIDs adds the "user" edge to the User entity by ids.
-func (m *SubcontrolMutation) AddUserIDs(ids ...string) {
-	if m.user == nil {
-		m.user = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.user[ids[i]] = struct{}{}
-	}
-}
-
-// ClearUser clears the "user" edge to the User entity.
-func (m *SubcontrolMutation) ClearUser() {
-	m.cleareduser = true
-}
-
-// UserCleared reports if the "user" edge to the User entity was cleared.
-func (m *SubcontrolMutation) UserCleared() bool {
-	return m.cleareduser
-}
-
-// RemoveUserIDs removes the "user" edge to the User entity by IDs.
-func (m *SubcontrolMutation) RemoveUserIDs(ids ...string) {
-	if m.removeduser == nil {
-		m.removeduser = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.user, ids[i])
-		m.removeduser[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedUser returns the removed IDs of the "user" edge to the User entity.
-func (m *SubcontrolMutation) RemovedUserIDs() (ids []string) {
-	for id := range m.removeduser {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// UserIDs returns the "user" edge IDs in the mutation.
-func (m *SubcontrolMutation) UserIDs() (ids []string) {
-	for id := range m.user {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetUser resets all changes to the "user" edge.
-func (m *SubcontrolMutation) ResetUser() {
-	m.user = nil
-	m.cleareduser = false
-	m.removeduser = nil
-}
-
 // AddTaskIDs adds the "tasks" edge to the Task entity by ids.
 func (m *SubcontrolMutation) AddTaskIDs(ids ...string) {
 	if m.tasks == nil {
@@ -102919,45 +102933,6 @@ func (m *SubcontrolMutation) ResetTasks() {
 	m.tasks = nil
 	m.clearedtasks = false
 	m.removedtasks = nil
-}
-
-// SetNotesID sets the "notes" edge to the Note entity by id.
-func (m *SubcontrolMutation) SetNotesID(id string) {
-	m.notes = &id
-}
-
-// ClearNotes clears the "notes" edge to the Note entity.
-func (m *SubcontrolMutation) ClearNotes() {
-	m.clearednotes = true
-}
-
-// NotesCleared reports if the "notes" edge to the Note entity was cleared.
-func (m *SubcontrolMutation) NotesCleared() bool {
-	return m.clearednotes
-}
-
-// NotesID returns the "notes" edge ID in the mutation.
-func (m *SubcontrolMutation) NotesID() (id string, exists bool) {
-	if m.notes != nil {
-		return *m.notes, true
-	}
-	return
-}
-
-// NotesIDs returns the "notes" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// NotesID instead. It exists only for internal usage by the builders.
-func (m *SubcontrolMutation) NotesIDs() (ids []string) {
-	if id := m.notes; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetNotes resets all changes to the "notes" edge.
-func (m *SubcontrolMutation) ResetNotes() {
-	m.notes = nil
-	m.clearednotes = false
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by ids.
@@ -103544,6 +103519,9 @@ func (m *SubcontrolMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrol.FieldTags) {
 		fields = append(fields, subcontrol.FieldTags)
 	}
+	if m.FieldCleared(subcontrol.FieldOwnerID) {
+		fields = append(fields, subcontrol.FieldOwnerID)
+	}
 	if m.FieldCleared(subcontrol.FieldDescription) {
 		fields = append(fields, subcontrol.FieldDescription)
 	}
@@ -103626,6 +103604,9 @@ func (m *SubcontrolMutation) ClearField(name string) error {
 		return nil
 	case subcontrol.FieldTags:
 		m.ClearTags()
+		return nil
+	case subcontrol.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case subcontrol.FieldDescription:
 		m.ClearDescription()
@@ -103767,21 +103748,15 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubcontrolMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 5)
 	if m.owner != nil {
 		edges = append(edges, subcontrol.EdgeOwner)
 	}
 	if m.controls != nil {
 		edges = append(edges, subcontrol.EdgeControls)
 	}
-	if m.user != nil {
-		edges = append(edges, subcontrol.EdgeUser)
-	}
 	if m.tasks != nil {
 		edges = append(edges, subcontrol.EdgeTasks)
-	}
-	if m.notes != nil {
-		edges = append(edges, subcontrol.EdgeNotes)
 	}
 	if m.programs != nil {
 		edges = append(edges, subcontrol.EdgePrograms)
@@ -103806,22 +103781,12 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case subcontrol.EdgeUser:
-		ids := make([]ent.Value, 0, len(m.user))
-		for id := range m.user {
-			ids = append(ids, id)
-		}
-		return ids
 	case subcontrol.EdgeTasks:
 		ids := make([]ent.Value, 0, len(m.tasks))
 		for id := range m.tasks {
 			ids = append(ids, id)
 		}
 		return ids
-	case subcontrol.EdgeNotes:
-		if id := m.notes; id != nil {
-			return []ent.Value{*id}
-		}
 	case subcontrol.EdgePrograms:
 		ids := make([]ent.Value, 0, len(m.programs))
 		for id := range m.programs {
@@ -103840,12 +103805,9 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubcontrolMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 5)
 	if m.removedcontrols != nil {
 		edges = append(edges, subcontrol.EdgeControls)
-	}
-	if m.removeduser != nil {
-		edges = append(edges, subcontrol.EdgeUser)
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, subcontrol.EdgeTasks)
@@ -103866,12 +103828,6 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 	case subcontrol.EdgeControls:
 		ids := make([]ent.Value, 0, len(m.removedcontrols))
 		for id := range m.removedcontrols {
-			ids = append(ids, id)
-		}
-		return ids
-	case subcontrol.EdgeUser:
-		ids := make([]ent.Value, 0, len(m.removeduser))
-		for id := range m.removeduser {
 			ids = append(ids, id)
 		}
 		return ids
@@ -103899,21 +103855,15 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubcontrolMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 5)
 	if m.clearedowner {
 		edges = append(edges, subcontrol.EdgeOwner)
 	}
 	if m.clearedcontrols {
 		edges = append(edges, subcontrol.EdgeControls)
 	}
-	if m.cleareduser {
-		edges = append(edges, subcontrol.EdgeUser)
-	}
 	if m.clearedtasks {
 		edges = append(edges, subcontrol.EdgeTasks)
-	}
-	if m.clearednotes {
-		edges = append(edges, subcontrol.EdgeNotes)
 	}
 	if m.clearedprograms {
 		edges = append(edges, subcontrol.EdgePrograms)
@@ -103932,12 +103882,8 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 		return m.clearedowner
 	case subcontrol.EdgeControls:
 		return m.clearedcontrols
-	case subcontrol.EdgeUser:
-		return m.cleareduser
 	case subcontrol.EdgeTasks:
 		return m.clearedtasks
-	case subcontrol.EdgeNotes:
-		return m.clearednotes
 	case subcontrol.EdgePrograms:
 		return m.clearedprograms
 	case subcontrol.EdgeEvidence:
@@ -103953,9 +103899,6 @@ func (m *SubcontrolMutation) ClearEdge(name string) error {
 	case subcontrol.EdgeOwner:
 		m.ClearOwner()
 		return nil
-	case subcontrol.EdgeNotes:
-		m.ClearNotes()
-		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol unique edge %s", name)
 }
@@ -103970,14 +103913,8 @@ func (m *SubcontrolMutation) ResetEdge(name string) error {
 	case subcontrol.EdgeControls:
 		m.ResetControls()
 		return nil
-	case subcontrol.EdgeUser:
-		m.ResetUser()
-		return nil
 	case subcontrol.EdgeTasks:
 		m.ResetTasks()
-		return nil
-	case subcontrol.EdgeNotes:
-		m.ResetNotes()
 		return nil
 	case subcontrol.EdgePrograms:
 		m.ResetPrograms()
@@ -104682,9 +104619,22 @@ func (m *SubcontrolHistoryMutation) OldOwnerID(ctx context.Context) (v string, e
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *SubcontrolHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[subcontrolhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *SubcontrolHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, subcontrolhistory.FieldOwnerID)
 }
 
 // SetName sets the "name" field.
@@ -106028,6 +105978,9 @@ func (m *SubcontrolHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrolhistory.FieldTags) {
 		fields = append(fields, subcontrolhistory.FieldTags)
 	}
+	if m.FieldCleared(subcontrolhistory.FieldOwnerID) {
+		fields = append(fields, subcontrolhistory.FieldOwnerID)
+	}
 	if m.FieldCleared(subcontrolhistory.FieldDescription) {
 		fields = append(fields, subcontrolhistory.FieldDescription)
 	}
@@ -106113,6 +106066,9 @@ func (m *SubcontrolHistoryMutation) ClearField(name string) error {
 		return nil
 	case subcontrolhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case subcontrolhistory.FieldOwnerID:
+		m.ClearOwnerID()
 		return nil
 	case subcontrolhistory.FieldDescription:
 		m.ClearDescription()
@@ -109080,10 +109036,10 @@ type TaskMutation struct {
 	appendtags               []string
 	title                    *string
 	description              *string
-	details                  *map[string]interface{}
+	details                  *string
 	status                   *enums.TaskStatus
+	category                 *string
 	due                      *time.Time
-	priority                 *enums.Priority
 	completed                *time.Time
 	clearedFields            map[string]struct{}
 	owner                    *string
@@ -109092,6 +109048,9 @@ type TaskMutation struct {
 	clearedassigner          bool
 	assignee                 *string
 	clearedassignee          bool
+	comments                 map[string]struct{}
+	removedcomments          map[string]struct{}
+	clearedcomments          bool
 	group                    map[string]struct{}
 	removedgroup             map[string]struct{}
 	clearedgroup             bool
@@ -109651,9 +109610,22 @@ func (m *TaskMutation) OldOwnerID(ctx context.Context) (v string, err error) {
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *TaskMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[task.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *TaskMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[task.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *TaskMutation) ResetOwnerID() {
 	m.owner = nil
+	delete(m.clearedFields, task.FieldOwnerID)
 }
 
 // SetTitle sets the "title" field.
@@ -109742,12 +109714,12 @@ func (m *TaskMutation) ResetDescription() {
 }
 
 // SetDetails sets the "details" field.
-func (m *TaskMutation) SetDetails(value map[string]interface{}) {
-	m.details = &value
+func (m *TaskMutation) SetDetails(s string) {
+	m.details = &s
 }
 
 // Details returns the value of the "details" field in the mutation.
-func (m *TaskMutation) Details() (r map[string]interface{}, exists bool) {
+func (m *TaskMutation) Details() (r string, exists bool) {
 	v := m.details
 	if v == nil {
 		return
@@ -109758,7 +109730,7 @@ func (m *TaskMutation) Details() (r map[string]interface{}, exists bool) {
 // OldDetails returns the old "details" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *TaskMutation) OldDetails(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
@@ -109826,6 +109798,55 @@ func (m *TaskMutation) ResetStatus() {
 	m.status = nil
 }
 
+// SetCategory sets the "category" field.
+func (m *TaskMutation) SetCategory(s string) {
+	m.category = &s
+}
+
+// Category returns the value of the "category" field in the mutation.
+func (m *TaskMutation) Category() (r string, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategory returns the old "category" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldCategory(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+	}
+	return oldValue.Category, nil
+}
+
+// ClearCategory clears the value of the "category" field.
+func (m *TaskMutation) ClearCategory() {
+	m.category = nil
+	m.clearedFields[task.FieldCategory] = struct{}{}
+}
+
+// CategoryCleared returns if the "category" field was cleared in this mutation.
+func (m *TaskMutation) CategoryCleared() bool {
+	_, ok := m.clearedFields[task.FieldCategory]
+	return ok
+}
+
+// ResetCategory resets all changes to the "category" field.
+func (m *TaskMutation) ResetCategory() {
+	m.category = nil
+	delete(m.clearedFields, task.FieldCategory)
+}
+
 // SetDue sets the "due" field.
 func (m *TaskMutation) SetDue(t time.Time) {
 	m.due = &t
@@ -109873,42 +109894,6 @@ func (m *TaskMutation) DueCleared() bool {
 func (m *TaskMutation) ResetDue() {
 	m.due = nil
 	delete(m.clearedFields, task.FieldDue)
-}
-
-// SetPriority sets the "priority" field.
-func (m *TaskMutation) SetPriority(e enums.Priority) {
-	m.priority = &e
-}
-
-// Priority returns the value of the "priority" field in the mutation.
-func (m *TaskMutation) Priority() (r enums.Priority, exists bool) {
-	v := m.priority
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldPriority returns the old "priority" field's value of the Task entity.
-// If the Task object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldPriority(ctx context.Context) (v enums.Priority, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPriority requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
-	}
-	return oldValue.Priority, nil
-}
-
-// ResetPriority resets all changes to the "priority" field.
-func (m *TaskMutation) ResetPriority() {
-	m.priority = nil
 }
 
 // SetCompleted sets the "completed" field.
@@ -110053,7 +110038,7 @@ func (m *TaskMutation) ClearOwner() {
 
 // OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
 func (m *TaskMutation) OwnerCleared() bool {
-	return m.clearedowner
+	return m.OwnerIDCleared() || m.clearedowner
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
@@ -110124,6 +110109,60 @@ func (m *TaskMutation) AssigneeIDs() (ids []string) {
 func (m *TaskMutation) ResetAssignee() {
 	m.assignee = nil
 	m.clearedassignee = false
+}
+
+// AddCommentIDs adds the "comments" edge to the Note entity by ids.
+func (m *TaskMutation) AddCommentIDs(ids ...string) {
+	if m.comments == nil {
+		m.comments = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.comments[ids[i]] = struct{}{}
+	}
+}
+
+// ClearComments clears the "comments" edge to the Note entity.
+func (m *TaskMutation) ClearComments() {
+	m.clearedcomments = true
+}
+
+// CommentsCleared reports if the "comments" edge to the Note entity was cleared.
+func (m *TaskMutation) CommentsCleared() bool {
+	return m.clearedcomments
+}
+
+// RemoveCommentIDs removes the "comments" edge to the Note entity by IDs.
+func (m *TaskMutation) RemoveCommentIDs(ids ...string) {
+	if m.removedcomments == nil {
+		m.removedcomments = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.comments, ids[i])
+		m.removedcomments[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedComments returns the removed IDs of the "comments" edge to the Note entity.
+func (m *TaskMutation) RemovedCommentsIDs() (ids []string) {
+	for id := range m.removedcomments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// CommentsIDs returns the "comments" edge IDs in the mutation.
+func (m *TaskMutation) CommentsIDs() (ids []string) {
+	for id := range m.comments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetComments resets all changes to the "comments" edge.
+func (m *TaskMutation) ResetComments() {
+	m.comments = nil
+	m.clearedcomments = false
+	m.removedcomments = nil
 }
 
 // AddGroupIDs adds the "group" edge to the Group entity by ids.
@@ -110632,11 +110671,11 @@ func (m *TaskMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, task.FieldStatus)
 	}
+	if m.category != nil {
+		fields = append(fields, task.FieldCategory)
+	}
 	if m.due != nil {
 		fields = append(fields, task.FieldDue)
-	}
-	if m.priority != nil {
-		fields = append(fields, task.FieldPriority)
 	}
 	if m.completed != nil {
 		fields = append(fields, task.FieldCompleted)
@@ -110681,10 +110720,10 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.Details()
 	case task.FieldStatus:
 		return m.Status()
+	case task.FieldCategory:
+		return m.Category()
 	case task.FieldDue:
 		return m.Due()
-	case task.FieldPriority:
-		return m.Priority()
 	case task.FieldCompleted:
 		return m.Completed()
 	case task.FieldAssigneeID:
@@ -110726,10 +110765,10 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDetails(ctx)
 	case task.FieldStatus:
 		return m.OldStatus(ctx)
+	case task.FieldCategory:
+		return m.OldCategory(ctx)
 	case task.FieldDue:
 		return m.OldDue(ctx)
-	case task.FieldPriority:
-		return m.OldPriority(ctx)
 	case task.FieldCompleted:
 		return m.OldCompleted(ctx)
 	case task.FieldAssigneeID:
@@ -110823,7 +110862,7 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetDescription(v)
 		return nil
 	case task.FieldDetails:
-		v, ok := value.(map[string]interface{})
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -110836,19 +110875,19 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case task.FieldCategory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategory(v)
+		return nil
 	case task.FieldDue:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDue(v)
-		return nil
-	case task.FieldPriority:
-		v, ok := value.(enums.Priority)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPriority(v)
 		return nil
 	case task.FieldCompleted:
 		v, ok := value.(time.Time)
@@ -110922,11 +110961,17 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldTags) {
 		fields = append(fields, task.FieldTags)
 	}
+	if m.FieldCleared(task.FieldOwnerID) {
+		fields = append(fields, task.FieldOwnerID)
+	}
 	if m.FieldCleared(task.FieldDescription) {
 		fields = append(fields, task.FieldDescription)
 	}
 	if m.FieldCleared(task.FieldDetails) {
 		fields = append(fields, task.FieldDetails)
+	}
+	if m.FieldCleared(task.FieldCategory) {
+		fields = append(fields, task.FieldCategory)
 	}
 	if m.FieldCleared(task.FieldDue) {
 		fields = append(fields, task.FieldDue)
@@ -110972,11 +111017,17 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldTags:
 		m.ClearTags()
 		return nil
+	case task.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
 	case task.FieldDescription:
 		m.ClearDescription()
 		return nil
 	case task.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case task.FieldCategory:
+		m.ClearCategory()
 		return nil
 	case task.FieldDue:
 		m.ClearDue()
@@ -111034,11 +111085,11 @@ func (m *TaskMutation) ResetField(name string) error {
 	case task.FieldStatus:
 		m.ResetStatus()
 		return nil
+	case task.FieldCategory:
+		m.ResetCategory()
+		return nil
 	case task.FieldDue:
 		m.ResetDue()
-		return nil
-	case task.FieldPriority:
-		m.ResetPriority()
 		return nil
 	case task.FieldCompleted:
 		m.ResetCompleted()
@@ -111055,7 +111106,7 @@ func (m *TaskMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TaskMutation) AddedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.owner != nil {
 		edges = append(edges, task.EdgeOwner)
 	}
@@ -111064,6 +111115,9 @@ func (m *TaskMutation) AddedEdges() []string {
 	}
 	if m.assignee != nil {
 		edges = append(edges, task.EdgeAssignee)
+	}
+	if m.comments != nil {
+		edges = append(edges, task.EdgeComments)
 	}
 	if m.group != nil {
 		edges = append(edges, task.EdgeGroup)
@@ -111108,6 +111162,12 @@ func (m *TaskMutation) AddedIDs(name string) []ent.Value {
 		if id := m.assignee; id != nil {
 			return []ent.Value{*id}
 		}
+	case task.EdgeComments:
+		ids := make([]ent.Value, 0, len(m.comments))
+		for id := range m.comments {
+			ids = append(ids, id)
+		}
+		return ids
 	case task.EdgeGroup:
 		ids := make([]ent.Value, 0, len(m.group))
 		for id := range m.group {
@@ -111162,7 +111222,10 @@ func (m *TaskMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TaskMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
+	if m.removedcomments != nil {
+		edges = append(edges, task.EdgeComments)
+	}
 	if m.removedgroup != nil {
 		edges = append(edges, task.EdgeGroup)
 	}
@@ -111194,6 +111257,12 @@ func (m *TaskMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *TaskMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case task.EdgeComments:
+		ids := make([]ent.Value, 0, len(m.removedcomments))
+		for id := range m.removedcomments {
+			ids = append(ids, id)
+		}
+		return ids
 	case task.EdgeGroup:
 		ids := make([]ent.Value, 0, len(m.removedgroup))
 		for id := range m.removedgroup {
@@ -111248,7 +111317,7 @@ func (m *TaskMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TaskMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.clearedowner {
 		edges = append(edges, task.EdgeOwner)
 	}
@@ -111257,6 +111326,9 @@ func (m *TaskMutation) ClearedEdges() []string {
 	}
 	if m.clearedassignee {
 		edges = append(edges, task.EdgeAssignee)
+	}
+	if m.clearedcomments {
+		edges = append(edges, task.EdgeComments)
 	}
 	if m.clearedgroup {
 		edges = append(edges, task.EdgeGroup)
@@ -111295,6 +111367,8 @@ func (m *TaskMutation) EdgeCleared(name string) bool {
 		return m.clearedassigner
 	case task.EdgeAssignee:
 		return m.clearedassignee
+	case task.EdgeComments:
+		return m.clearedcomments
 	case task.EdgeGroup:
 		return m.clearedgroup
 	case task.EdgeInternalPolicy:
@@ -111345,6 +111419,9 @@ func (m *TaskMutation) ResetEdge(name string) error {
 	case task.EdgeAssignee:
 		m.ResetAssignee()
 		return nil
+	case task.EdgeComments:
+		m.ResetComments()
+		return nil
 	case task.EdgeGroup:
 		m.ResetGroup()
 		return nil
@@ -111394,10 +111471,10 @@ type TaskHistoryMutation struct {
 	owner_id      *string
 	title         *string
 	description   *string
-	details       *map[string]interface{}
+	details       *string
 	status        *enums.TaskStatus
+	category      *string
 	due           *time.Time
-	priority      *enums.Priority
 	completed     *time.Time
 	assignee_id   *string
 	assigner_id   *string
@@ -112058,9 +112135,22 @@ func (m *TaskHistoryMutation) OldOwnerID(ctx context.Context) (v string, err err
 	return oldValue.OwnerID, nil
 }
 
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *TaskHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[taskhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *TaskHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldOwnerID]
+	return ok
+}
+
 // ResetOwnerID resets all changes to the "owner_id" field.
 func (m *TaskHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
+	delete(m.clearedFields, taskhistory.FieldOwnerID)
 }
 
 // SetTitle sets the "title" field.
@@ -112149,12 +112239,12 @@ func (m *TaskHistoryMutation) ResetDescription() {
 }
 
 // SetDetails sets the "details" field.
-func (m *TaskHistoryMutation) SetDetails(value map[string]interface{}) {
-	m.details = &value
+func (m *TaskHistoryMutation) SetDetails(s string) {
+	m.details = &s
 }
 
 // Details returns the value of the "details" field in the mutation.
-func (m *TaskHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+func (m *TaskHistoryMutation) Details() (r string, exists bool) {
 	v := m.details
 	if v == nil {
 		return
@@ -112165,7 +112255,7 @@ func (m *TaskHistoryMutation) Details() (r map[string]interface{}, exists bool) 
 // OldDetails returns the old "details" field's value of the TaskHistory entity.
 // If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *TaskHistoryMutation) OldDetails(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
@@ -112233,6 +112323,55 @@ func (m *TaskHistoryMutation) ResetStatus() {
 	m.status = nil
 }
 
+// SetCategory sets the "category" field.
+func (m *TaskHistoryMutation) SetCategory(s string) {
+	m.category = &s
+}
+
+// Category returns the value of the "category" field in the mutation.
+func (m *TaskHistoryMutation) Category() (r string, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategory returns the old "category" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldCategory(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+	}
+	return oldValue.Category, nil
+}
+
+// ClearCategory clears the value of the "category" field.
+func (m *TaskHistoryMutation) ClearCategory() {
+	m.category = nil
+	m.clearedFields[taskhistory.FieldCategory] = struct{}{}
+}
+
+// CategoryCleared returns if the "category" field was cleared in this mutation.
+func (m *TaskHistoryMutation) CategoryCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldCategory]
+	return ok
+}
+
+// ResetCategory resets all changes to the "category" field.
+func (m *TaskHistoryMutation) ResetCategory() {
+	m.category = nil
+	delete(m.clearedFields, taskhistory.FieldCategory)
+}
+
 // SetDue sets the "due" field.
 func (m *TaskHistoryMutation) SetDue(t time.Time) {
 	m.due = &t
@@ -112280,42 +112419,6 @@ func (m *TaskHistoryMutation) DueCleared() bool {
 func (m *TaskHistoryMutation) ResetDue() {
 	m.due = nil
 	delete(m.clearedFields, taskhistory.FieldDue)
-}
-
-// SetPriority sets the "priority" field.
-func (m *TaskHistoryMutation) SetPriority(e enums.Priority) {
-	m.priority = &e
-}
-
-// Priority returns the value of the "priority" field in the mutation.
-func (m *TaskHistoryMutation) Priority() (r enums.Priority, exists bool) {
-	v := m.priority
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldPriority returns the old "priority" field's value of the TaskHistory entity.
-// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskHistoryMutation) OldPriority(ctx context.Context) (v enums.Priority, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPriority requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
-	}
-	return oldValue.Priority, nil
-}
-
-// ResetPriority resets all changes to the "priority" field.
-func (m *TaskHistoryMutation) ResetPriority() {
-	m.priority = nil
 }
 
 // SetCompleted sets the "completed" field.
@@ -112535,11 +112638,11 @@ func (m *TaskHistoryMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, taskhistory.FieldStatus)
 	}
+	if m.category != nil {
+		fields = append(fields, taskhistory.FieldCategory)
+	}
 	if m.due != nil {
 		fields = append(fields, taskhistory.FieldDue)
-	}
-	if m.priority != nil {
-		fields = append(fields, taskhistory.FieldPriority)
 	}
 	if m.completed != nil {
 		fields = append(fields, taskhistory.FieldCompleted)
@@ -112590,10 +112693,10 @@ func (m *TaskHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Details()
 	case taskhistory.FieldStatus:
 		return m.Status()
+	case taskhistory.FieldCategory:
+		return m.Category()
 	case taskhistory.FieldDue:
 		return m.Due()
-	case taskhistory.FieldPriority:
-		return m.Priority()
 	case taskhistory.FieldCompleted:
 		return m.Completed()
 	case taskhistory.FieldAssigneeID:
@@ -112641,10 +112744,10 @@ func (m *TaskHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDetails(ctx)
 	case taskhistory.FieldStatus:
 		return m.OldStatus(ctx)
+	case taskhistory.FieldCategory:
+		return m.OldCategory(ctx)
 	case taskhistory.FieldDue:
 		return m.OldDue(ctx)
-	case taskhistory.FieldPriority:
-		return m.OldPriority(ctx)
 	case taskhistory.FieldCompleted:
 		return m.OldCompleted(ctx)
 	case taskhistory.FieldAssigneeID:
@@ -112759,7 +112862,7 @@ func (m *TaskHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetDescription(v)
 		return nil
 	case taskhistory.FieldDetails:
-		v, ok := value.(map[string]interface{})
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -112772,19 +112875,19 @@ func (m *TaskHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case taskhistory.FieldCategory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategory(v)
+		return nil
 	case taskhistory.FieldDue:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDue(v)
-		return nil
-	case taskhistory.FieldPriority:
-		v, ok := value.(enums.Priority)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPriority(v)
 		return nil
 	case taskhistory.FieldCompleted:
 		v, ok := value.(time.Time)
@@ -112861,11 +112964,17 @@ func (m *TaskHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(taskhistory.FieldTags) {
 		fields = append(fields, taskhistory.FieldTags)
 	}
+	if m.FieldCleared(taskhistory.FieldOwnerID) {
+		fields = append(fields, taskhistory.FieldOwnerID)
+	}
 	if m.FieldCleared(taskhistory.FieldDescription) {
 		fields = append(fields, taskhistory.FieldDescription)
 	}
 	if m.FieldCleared(taskhistory.FieldDetails) {
 		fields = append(fields, taskhistory.FieldDetails)
+	}
+	if m.FieldCleared(taskhistory.FieldCategory) {
+		fields = append(fields, taskhistory.FieldCategory)
 	}
 	if m.FieldCleared(taskhistory.FieldDue) {
 		fields = append(fields, taskhistory.FieldDue)
@@ -112914,11 +113023,17 @@ func (m *TaskHistoryMutation) ClearField(name string) error {
 	case taskhistory.FieldTags:
 		m.ClearTags()
 		return nil
+	case taskhistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
 	case taskhistory.FieldDescription:
 		m.ClearDescription()
 		return nil
 	case taskhistory.FieldDetails:
 		m.ClearDetails()
+		return nil
+	case taskhistory.FieldCategory:
+		m.ClearCategory()
 		return nil
 	case taskhistory.FieldDue:
 		m.ClearDue()
@@ -112985,11 +113100,11 @@ func (m *TaskHistoryMutation) ResetField(name string) error {
 	case taskhistory.FieldStatus:
 		m.ResetStatus()
 		return nil
+	case taskhistory.FieldCategory:
+		m.ResetCategory()
+		return nil
 	case taskhistory.FieldDue:
 		m.ResetDue()
-		return nil
-	case taskhistory.FieldPriority:
-		m.ResetPriority()
 		return nil
 	case taskhistory.FieldCompleted:
 		m.ResetCompleted()

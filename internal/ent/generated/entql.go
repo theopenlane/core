@@ -1959,10 +1959,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldOwnerID:     {Type: field.TypeString, Column: task.FieldOwnerID},
 			task.FieldTitle:       {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDescription: {Type: field.TypeString, Column: task.FieldDescription},
-			task.FieldDetails:     {Type: field.TypeJSON, Column: task.FieldDetails},
+			task.FieldDetails:     {Type: field.TypeString, Column: task.FieldDetails},
 			task.FieldStatus:      {Type: field.TypeEnum, Column: task.FieldStatus},
+			task.FieldCategory:    {Type: field.TypeString, Column: task.FieldCategory},
 			task.FieldDue:         {Type: field.TypeTime, Column: task.FieldDue},
-			task.FieldPriority:    {Type: field.TypeEnum, Column: task.FieldPriority},
 			task.FieldCompleted:   {Type: field.TypeTime, Column: task.FieldCompleted},
 			task.FieldAssigneeID:  {Type: field.TypeString, Column: task.FieldAssigneeID},
 			task.FieldAssignerID:  {Type: field.TypeString, Column: task.FieldAssignerID},
@@ -1993,10 +1993,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldOwnerID:     {Type: field.TypeString, Column: taskhistory.FieldOwnerID},
 			taskhistory.FieldTitle:       {Type: field.TypeString, Column: taskhistory.FieldTitle},
 			taskhistory.FieldDescription: {Type: field.TypeString, Column: taskhistory.FieldDescription},
-			taskhistory.FieldDetails:     {Type: field.TypeJSON, Column: taskhistory.FieldDetails},
+			taskhistory.FieldDetails:     {Type: field.TypeString, Column: taskhistory.FieldDetails},
 			taskhistory.FieldStatus:      {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
+			taskhistory.FieldCategory:    {Type: field.TypeString, Column: taskhistory.FieldCategory},
 			taskhistory.FieldDue:         {Type: field.TypeTime, Column: taskhistory.FieldDue},
-			taskhistory.FieldPriority:    {Type: field.TypeEnum, Column: taskhistory.FieldPriority},
 			taskhistory.FieldCompleted:   {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
 			taskhistory.FieldAssigneeID:  {Type: field.TypeString, Column: taskhistory.FieldAssigneeID},
 			taskhistory.FieldAssignerID:  {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
@@ -3885,40 +3885,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"entity",
+		"task",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   note.EntityTable,
-			Columns: []string{note.EntityColumn},
+			Table:   note.TaskTable,
+			Columns: []string{note.TaskColumn},
 			Bidi:    false,
 		},
 		"Note",
-		"Entity",
-	)
-	graph.MustAddE(
-		"subcontrols",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-		},
-		"Note",
-		"Subcontrol",
-	)
-	graph.MustAddE(
-		"program",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-		},
-		"Note",
-		"Program",
+		"Task",
 	)
 	graph.MustAddE(
 		"organization",
@@ -4787,10 +4763,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"notes",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.NotesTable,
-			Columns: program.NotesPrimaryKey,
+			Columns: []string{program.NotesColumn},
 			Bidi:    false,
 		},
 		"Program",
@@ -5097,18 +5073,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
-		"user",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.UserTable,
-			Columns: subcontrol.UserPrimaryKey,
-			Bidi:    false,
-		},
-		"Subcontrol",
-		"User",
-	)
-	graph.MustAddE(
 		"tasks",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5119,18 +5083,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"Task",
-	)
-	graph.MustAddE(
-		"notes",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   subcontrol.NotesTable,
-			Columns: []string{subcontrol.NotesColumn},
-			Bidi:    false,
-		},
-		"Subcontrol",
-		"Note",
 	)
 	graph.MustAddE(
 		"programs",
@@ -5227,6 +5179,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Task",
 		"User",
+	)
+	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+		},
+		"Task",
+		"Note",
 	)
 	graph.MustAddE(
 		"group",
@@ -5507,10 +5471,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"subcontrols",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   user.SubcontrolsTable,
-			Columns: user.SubcontrolsPrimaryKey,
+			Columns: []string{user.SubcontrolsColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -12011,42 +11975,14 @@ func (f *NoteFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	})))
 }
 
-// WhereHasEntity applies a predicate to check if query has an edge entity.
-func (f *NoteFilter) WhereHasEntity() {
-	f.Where(entql.HasEdge("entity"))
+// WhereHasTask applies a predicate to check if query has an edge task.
+func (f *NoteFilter) WhereHasTask() {
+	f.Where(entql.HasEdge("task"))
 }
 
-// WhereHasEntityWith applies a predicate to check if query has an edge entity with a given conditions (other predicates).
-func (f *NoteFilter) WhereHasEntityWith(preds ...predicate.Entity) {
-	f.Where(entql.HasEdgeWith("entity", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
-func (f *NoteFilter) WhereHasSubcontrols() {
-	f.Where(entql.HasEdge("subcontrols"))
-}
-
-// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
-func (f *NoteFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
-	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasProgram applies a predicate to check if query has an edge program.
-func (f *NoteFilter) WhereHasProgram() {
-	f.Where(entql.HasEdge("program"))
-}
-
-// WhereHasProgramWith applies a predicate to check if query has an edge program with a given conditions (other predicates).
-func (f *NoteFilter) WhereHasProgramWith(preds ...predicate.Program) {
-	f.Where(entql.HasEdgeWith("program", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasTaskWith applies a predicate to check if query has an edge task with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasTaskWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("task", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16245,20 +16181,6 @@ func (f *SubcontrolFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	})))
 }
 
-// WhereHasUser applies a predicate to check if query has an edge user.
-func (f *SubcontrolFilter) WhereHasUser() {
-	f.Where(entql.HasEdge("user"))
-}
-
-// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasUserWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasTasks applies a predicate to check if query has an edge tasks.
 func (f *SubcontrolFilter) WhereHasTasks() {
 	f.Where(entql.HasEdge("tasks"))
@@ -16267,20 +16189,6 @@ func (f *SubcontrolFilter) WhereHasTasks() {
 // WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasNotes applies a predicate to check if query has an edge notes.
-func (f *SubcontrolFilter) WhereHasNotes() {
-	f.Where(entql.HasEdge("notes"))
-}
-
-// WhereHasNotesWith applies a predicate to check if query has an edge notes with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasNotesWith(preds ...predicate.Note) {
-	f.Where(entql.HasEdgeWith("notes", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16862,8 +16770,8 @@ func (f *TaskFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(task.FieldDescription))
 }
 
-// WhereDetails applies the entql json.RawMessage predicate on the details field.
-func (f *TaskFilter) WhereDetails(p entql.BytesP) {
+// WhereDetails applies the entql string predicate on the details field.
+func (f *TaskFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(task.FieldDetails))
 }
 
@@ -16872,14 +16780,14 @@ func (f *TaskFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(task.FieldStatus))
 }
 
+// WhereCategory applies the entql string predicate on the category field.
+func (f *TaskFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(task.FieldCategory))
+}
+
 // WhereDue applies the entql time.Time predicate on the due field.
 func (f *TaskFilter) WhereDue(p entql.TimeP) {
 	f.Where(p.Field(task.FieldDue))
-}
-
-// WherePriority applies the entql string predicate on the priority field.
-func (f *TaskFilter) WherePriority(p entql.StringP) {
-	f.Where(p.Field(task.FieldPriority))
 }
 
 // WhereCompleted applies the entql time.Time predicate on the completed field.
@@ -16933,6 +16841,20 @@ func (f *TaskFilter) WhereHasAssignee() {
 // WhereHasAssigneeWith applies a predicate to check if query has an edge assignee with a given conditions (other predicates).
 func (f *TaskFilter) WhereHasAssigneeWith(preds ...predicate.User) {
 	f.Where(entql.HasEdgeWith("assignee", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *TaskFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -17161,8 +17083,8 @@ func (f *TaskHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldDescription))
 }
 
-// WhereDetails applies the entql json.RawMessage predicate on the details field.
-func (f *TaskHistoryFilter) WhereDetails(p entql.BytesP) {
+// WhereDetails applies the entql string predicate on the details field.
+func (f *TaskHistoryFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldDetails))
 }
 
@@ -17171,14 +17093,14 @@ func (f *TaskHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldStatus))
 }
 
+// WhereCategory applies the entql string predicate on the category field.
+func (f *TaskHistoryFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldCategory))
+}
+
 // WhereDue applies the entql time.Time predicate on the due field.
 func (f *TaskHistoryFilter) WhereDue(p entql.TimeP) {
 	f.Where(p.Field(taskhistory.FieldDue))
-}
-
-// WherePriority applies the entql string predicate on the priority field.
-func (f *TaskHistoryFilter) WherePriority(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldPriority))
 }
 
 // WhereCompleted applies the entql time.Time predicate on the completed field.

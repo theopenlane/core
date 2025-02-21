@@ -71,12 +71,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
-	// EdgeNotes holds the string denoting the notes edge name in mutations.
-	EdgeNotes = "notes"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
@@ -95,23 +91,11 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// UserTable is the table that holds the user relation/edge. The primary key declared below.
-	UserTable = "user_subcontrols"
-	// UserInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
 	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
 	TasksTable = "subcontrol_tasks"
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
-	// NotesTable is the table that holds the notes relation/edge.
-	NotesTable = "subcontrols"
-	// NotesInverseTable is the table name for the Note entity.
-	// It exists in this package in order to avoid circular dependency with the "note" package.
-	NotesInverseTable = "notes"
-	// NotesColumn is the table column denoting the notes relation/edge.
-	NotesColumn = "note_subcontrols"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_subcontrols"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -159,16 +143,13 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_subcontrols",
-	"note_subcontrols",
+	"user_subcontrols",
 }
 
 var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"control_id", "subcontrol_id"}
-	// UserPrimaryKey and UserColumn2 are the table columns denoting the
-	// primary key for the user relation (M2M).
-	UserPrimaryKey = []string{"user_id", "subcontrol_id"}
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"subcontrol_id", "task_id"}
@@ -371,20 +352,6 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByUserCount orders the results by user count.
-func ByUserCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUserStep(), opts...)
-	}
-}
-
-// ByUser orders the results by user terms.
-func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByTasksCount orders the results by tasks count.
 func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -396,13 +363,6 @@ func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByNotesField orders the results by notes field.
-func ByNotesField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newNotesStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -447,25 +407,11 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
-func newUserStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
-	)
-}
 func newTasksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
-	)
-}
-func newNotesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(NotesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, NotesTable, NotesColumn),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

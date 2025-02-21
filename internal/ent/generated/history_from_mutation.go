@@ -7081,12 +7081,12 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
-	if due, exists := m.Due(); exists {
-		create = create.SetDue(due)
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
 	}
 
-	if priority, exists := m.Priority(); exists {
-		create = create.SetPriority(priority)
+	if due, exists := m.Due(); exists {
+		create = create.SetDue(due)
 	}
 
 	if completed, exists := m.Completed(); exists {
@@ -7209,16 +7209,16 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(task.Status)
 		}
 
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
+		} else {
+			create = create.SetCategory(task.Category)
+		}
+
 		if due, exists := m.Due(); exists {
 			create = create.SetDue(due)
 		} else {
 			create = create.SetDue(task.Due)
-		}
-
-		if priority, exists := m.Priority(); exists {
-			create = create.SetPriority(priority)
-		} else {
-			create = create.SetPriority(task.Priority)
 		}
 
 		if completed, exists := m.Completed(); exists {
@@ -7284,8 +7284,8 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDescription(task.Description).
 			SetDetails(task.Details).
 			SetStatus(task.Status).
+			SetCategory(task.Category).
 			SetDue(task.Due).
-			SetPriority(task.Priority).
 			SetCompleted(task.Completed).
 			SetAssigneeID(task.AssigneeID).
 			SetAssignerID(task.AssignerID).

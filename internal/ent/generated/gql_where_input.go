@@ -4637,6 +4637,8 @@ type ControlWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -5296,6 +5298,12 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, control.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, control.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, control.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, control.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -6266,6 +6274,8 @@ type ControlHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -6951,6 +6961,12 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, controlhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, controlhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, controlhistory.OwnerIDNotNil())
+	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, controlhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -7635,6 +7651,8 @@ type ControlObjectiveWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -8277,6 +8295,12 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, controlobjective.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, controlobjective.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, controlobjective.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, controlobjective.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -9202,6 +9226,8 @@ type ControlObjectiveHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -9870,6 +9896,12 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, controlobjectivehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDNotNil())
+	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, controlobjectivehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -10494,6 +10526,8 @@ type DocumentDataWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -10888,6 +10922,12 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, documentdata.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, documentdata.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, documentdata.OwnerIDNotNil())
+	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, documentdata.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -11167,6 +11207,8 @@ type DocumentDataHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -11625,6 +11667,12 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, documentdatahistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, documentdatahistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, documentdatahistory.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, documentdatahistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -16239,6 +16287,8 @@ type EvidenceWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -16779,6 +16829,12 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, evidence.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, evidence.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, evidence.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, evidence.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -17374,6 +17430,8 @@ type EvidenceHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -17967,6 +18025,12 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, evidencehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, evidencehistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, evidencehistory.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, evidencehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -31839,6 +31903,8 @@ type NarrativeWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -32326,6 +32392,12 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, narrative.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, narrative.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, narrative.OwnerIDNotNil())
+	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, narrative.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -32800,6 +32872,8 @@ type NarrativeHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -33332,6 +33406,12 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, narrativehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, narrativehistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, narrativehistory.OwnerIDNotNil())
+	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, narrativehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -33635,17 +33715,9 @@ type NoteWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
-	// "entity" edge predicates.
-	HasEntity     *bool               `json:"hasEntity,omitempty"`
-	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
-
-	// "subcontrols" edge predicates.
-	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
-
-	// "program" edge predicates.
-	HasProgram     *bool                `json:"hasProgram,omitempty"`
-	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+	// "task" edge predicates.
+	HasTask     *bool             `json:"hasTask,omitempty"`
+	HasTaskWith []*TaskWhereInput `json:"hasTaskWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -34116,59 +34188,23 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 		}
 		predicates = append(predicates, note.HasOwnerWith(with...))
 	}
-	if i.HasEntity != nil {
-		p := note.HasEntity()
-		if !*i.HasEntity {
+	if i.HasTask != nil {
+		p := note.HasTask()
+		if !*i.HasTask {
 			p = note.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasEntityWith) > 0 {
-		with := make([]predicate.Entity, 0, len(i.HasEntityWith))
-		for _, w := range i.HasEntityWith {
+	if len(i.HasTaskWith) > 0 {
+		with := make([]predicate.Task, 0, len(i.HasTaskWith))
+		for _, w := range i.HasTaskWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEntityWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasTaskWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, note.HasEntityWith(with...))
-	}
-	if i.HasSubcontrols != nil {
-		p := note.HasSubcontrols()
-		if !*i.HasSubcontrols {
-			p = note.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSubcontrolsWith) > 0 {
-		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
-		for _, w := range i.HasSubcontrolsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, note.HasSubcontrolsWith(with...))
-	}
-	if i.HasProgram != nil {
-		p := note.HasProgram()
-		if !*i.HasProgram {
-			p = note.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasProgramWith) > 0 {
-		with := make([]predicate.Program, 0, len(i.HasProgramWith))
-		for _, w := range i.HasProgramWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasProgramWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, note.HasProgramWith(with...))
+		predicates = append(predicates, note.HasTaskWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -49435,6 +49471,8 @@ type RiskWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -50001,6 +50039,12 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, risk.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, risk.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, risk.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, risk.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -50674,6 +50718,8 @@ type RiskHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -51289,6 +51335,12 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, riskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, riskhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, riskhistory.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, riskhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -53997,6 +54049,8 @@ type SubcontrolWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -54268,17 +54322,9 @@ type SubcontrolWhereInput struct {
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
-	// "user" edge predicates.
-	HasUser     *bool             `json:"hasUser,omitempty"`
-	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
-
 	// "tasks" edge predicates.
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
-
-	// "notes" edge predicates.
-	HasNotes     *bool             `json:"hasNotes,omitempty"`
-	HasNotesWith []*NoteWhereInput `json:"hasNotesWith,omitempty"`
 
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
@@ -54686,6 +54732,12 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, subcontrol.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, subcontrol.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, subcontrol.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, subcontrol.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -55414,24 +55466,6 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 		}
 		predicates = append(predicates, subcontrol.HasControlsWith(with...))
 	}
-	if i.HasUser != nil {
-		p := subcontrol.HasUser()
-		if !*i.HasUser {
-			p = subcontrol.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasUserWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUserWith))
-		for _, w := range i.HasUserWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasUserWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, subcontrol.HasUserWith(with...))
-	}
 	if i.HasTasks != nil {
 		p := subcontrol.HasTasks()
 		if !*i.HasTasks {
@@ -55449,24 +55483,6 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, subcontrol.HasTasksWith(with...))
-	}
-	if i.HasNotes != nil {
-		p := subcontrol.HasNotes()
-		if !*i.HasNotes {
-			p = subcontrol.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasNotesWith) > 0 {
-		with := make([]predicate.Note, 0, len(i.HasNotesWith))
-		for _, w := range i.HasNotesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasNotesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, subcontrol.HasNotesWith(with...))
 	}
 	if i.HasPrograms != nil {
 		p := subcontrol.HasPrograms()
@@ -55680,6 +55696,8 @@ type SubcontrolHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -56422,6 +56440,12 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, subcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDNotNil())
 	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, subcontrolhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
@@ -58447,6 +58471,8 @@ type TaskWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -58482,11 +58508,45 @@ type TaskWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "details" field predicates.
+	Details             *string  `json:"details,omitempty"`
+	DetailsNEQ          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGT           *string  `json:"detailsGT,omitempty"`
+	DetailsGTE          *string  `json:"detailsGTE,omitempty"`
+	DetailsLT           *string  `json:"detailsLT,omitempty"`
+	DetailsLTE          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        bool     `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       bool     `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status      *enums.TaskStatus  `json:"status,omitempty"`
 	StatusNEQ   *enums.TaskStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.TaskStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.TaskStatus `json:"statusNotIn,omitempty"`
+
+	// "category" field predicates.
+	Category             *string  `json:"category,omitempty"`
+	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGT           *string  `json:"categoryGT,omitempty"`
+	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
+	CategoryLT           *string  `json:"categoryLT,omitempty"`
+	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        bool     `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       bool     `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 
 	// "due" field predicates.
 	Due       *time.Time  `json:"due,omitempty"`
@@ -58499,12 +58559,6 @@ type TaskWhereInput struct {
 	DueLTE    *time.Time  `json:"dueLTE,omitempty"`
 	DueIsNil  bool        `json:"dueIsNil,omitempty"`
 	DueNotNil bool        `json:"dueNotNil,omitempty"`
-
-	// "priority" field predicates.
-	Priority      *enums.Priority  `json:"priority,omitempty"`
-	PriorityNEQ   *enums.Priority  `json:"priorityNEQ,omitempty"`
-	PriorityIn    []enums.Priority `json:"priorityIn,omitempty"`
-	PriorityNotIn []enums.Priority `json:"priorityNotIn,omitempty"`
 
 	// "completed" field predicates.
 	Completed       *time.Time  `json:"completed,omitempty"`
@@ -58561,6 +58615,10 @@ type TaskWhereInput struct {
 	// "assignee" edge predicates.
 	HasAssignee     *bool             `json:"hasAssignee,omitempty"`
 	HasAssigneeWith []*UserWhereInput `json:"hasAssigneeWith,omitempty"`
+
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 
 	// "group" edge predicates.
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
@@ -58993,6 +59051,12 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, task.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, task.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, task.OwnerIDNotNil())
+	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, task.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -59083,6 +59147,51 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, task.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.Details != nil {
+		predicates = append(predicates, task.DetailsEQ(*i.Details))
+	}
+	if i.DetailsNEQ != nil {
+		predicates = append(predicates, task.DetailsNEQ(*i.DetailsNEQ))
+	}
+	if len(i.DetailsIn) > 0 {
+		predicates = append(predicates, task.DetailsIn(i.DetailsIn...))
+	}
+	if len(i.DetailsNotIn) > 0 {
+		predicates = append(predicates, task.DetailsNotIn(i.DetailsNotIn...))
+	}
+	if i.DetailsGT != nil {
+		predicates = append(predicates, task.DetailsGT(*i.DetailsGT))
+	}
+	if i.DetailsGTE != nil {
+		predicates = append(predicates, task.DetailsGTE(*i.DetailsGTE))
+	}
+	if i.DetailsLT != nil {
+		predicates = append(predicates, task.DetailsLT(*i.DetailsLT))
+	}
+	if i.DetailsLTE != nil {
+		predicates = append(predicates, task.DetailsLTE(*i.DetailsLTE))
+	}
+	if i.DetailsContains != nil {
+		predicates = append(predicates, task.DetailsContains(*i.DetailsContains))
+	}
+	if i.DetailsHasPrefix != nil {
+		predicates = append(predicates, task.DetailsHasPrefix(*i.DetailsHasPrefix))
+	}
+	if i.DetailsHasSuffix != nil {
+		predicates = append(predicates, task.DetailsHasSuffix(*i.DetailsHasSuffix))
+	}
+	if i.DetailsIsNil {
+		predicates = append(predicates, task.DetailsIsNil())
+	}
+	if i.DetailsNotNil {
+		predicates = append(predicates, task.DetailsNotNil())
+	}
+	if i.DetailsEqualFold != nil {
+		predicates = append(predicates, task.DetailsEqualFold(*i.DetailsEqualFold))
+	}
+	if i.DetailsContainsFold != nil {
+		predicates = append(predicates, task.DetailsContainsFold(*i.DetailsContainsFold))
+	}
 	if i.Status != nil {
 		predicates = append(predicates, task.StatusEQ(*i.Status))
 	}
@@ -59094,6 +59203,51 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, task.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.Category != nil {
+		predicates = append(predicates, task.CategoryEQ(*i.Category))
+	}
+	if i.CategoryNEQ != nil {
+		predicates = append(predicates, task.CategoryNEQ(*i.CategoryNEQ))
+	}
+	if len(i.CategoryIn) > 0 {
+		predicates = append(predicates, task.CategoryIn(i.CategoryIn...))
+	}
+	if len(i.CategoryNotIn) > 0 {
+		predicates = append(predicates, task.CategoryNotIn(i.CategoryNotIn...))
+	}
+	if i.CategoryGT != nil {
+		predicates = append(predicates, task.CategoryGT(*i.CategoryGT))
+	}
+	if i.CategoryGTE != nil {
+		predicates = append(predicates, task.CategoryGTE(*i.CategoryGTE))
+	}
+	if i.CategoryLT != nil {
+		predicates = append(predicates, task.CategoryLT(*i.CategoryLT))
+	}
+	if i.CategoryLTE != nil {
+		predicates = append(predicates, task.CategoryLTE(*i.CategoryLTE))
+	}
+	if i.CategoryContains != nil {
+		predicates = append(predicates, task.CategoryContains(*i.CategoryContains))
+	}
+	if i.CategoryHasPrefix != nil {
+		predicates = append(predicates, task.CategoryHasPrefix(*i.CategoryHasPrefix))
+	}
+	if i.CategoryHasSuffix != nil {
+		predicates = append(predicates, task.CategoryHasSuffix(*i.CategoryHasSuffix))
+	}
+	if i.CategoryIsNil {
+		predicates = append(predicates, task.CategoryIsNil())
+	}
+	if i.CategoryNotNil {
+		predicates = append(predicates, task.CategoryNotNil())
+	}
+	if i.CategoryEqualFold != nil {
+		predicates = append(predicates, task.CategoryEqualFold(*i.CategoryEqualFold))
+	}
+	if i.CategoryContainsFold != nil {
+		predicates = append(predicates, task.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 	if i.Due != nil {
 		predicates = append(predicates, task.DueEQ(*i.Due))
@@ -59124,18 +59278,6 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if i.DueNotNil {
 		predicates = append(predicates, task.DueNotNil())
-	}
-	if i.Priority != nil {
-		predicates = append(predicates, task.PriorityEQ(*i.Priority))
-	}
-	if i.PriorityNEQ != nil {
-		predicates = append(predicates, task.PriorityNEQ(*i.PriorityNEQ))
-	}
-	if len(i.PriorityIn) > 0 {
-		predicates = append(predicates, task.PriorityIn(i.PriorityIn...))
-	}
-	if len(i.PriorityNotIn) > 0 {
-		predicates = append(predicates, task.PriorityNotIn(i.PriorityNotIn...))
 	}
 	if i.Completed != nil {
 		predicates = append(predicates, task.CompletedEQ(*i.Completed))
@@ -59305,6 +59447,24 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, task.HasAssigneeWith(with...))
+	}
+	if i.HasComments != nil {
+		p := task.HasComments()
+		if !*i.HasComments {
+			p = task.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, task.HasCommentsWith(with...))
 	}
 	if i.HasGroup != nil {
 		p := task.HasGroup()
@@ -59626,6 +59786,8 @@ type TaskHistoryWhereInput struct {
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
@@ -59661,11 +59823,45 @@ type TaskHistoryWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "details" field predicates.
+	Details             *string  `json:"details,omitempty"`
+	DetailsNEQ          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGT           *string  `json:"detailsGT,omitempty"`
+	DetailsGTE          *string  `json:"detailsGTE,omitempty"`
+	DetailsLT           *string  `json:"detailsLT,omitempty"`
+	DetailsLTE          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        bool     `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       bool     `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status      *enums.TaskStatus  `json:"status,omitempty"`
 	StatusNEQ   *enums.TaskStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.TaskStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.TaskStatus `json:"statusNotIn,omitempty"`
+
+	// "category" field predicates.
+	Category             *string  `json:"category,omitempty"`
+	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGT           *string  `json:"categoryGT,omitempty"`
+	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
+	CategoryLT           *string  `json:"categoryLT,omitempty"`
+	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        bool     `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       bool     `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 
 	// "due" field predicates.
 	Due       *time.Time  `json:"due,omitempty"`
@@ -59678,12 +59874,6 @@ type TaskHistoryWhereInput struct {
 	DueLTE    *time.Time  `json:"dueLTE,omitempty"`
 	DueIsNil  bool        `json:"dueIsNil,omitempty"`
 	DueNotNil bool        `json:"dueNotNil,omitempty"`
-
-	// "priority" field predicates.
-	Priority      *enums.Priority  `json:"priority,omitempty"`
-	PriorityNEQ   *enums.Priority  `json:"priorityNEQ,omitempty"`
-	PriorityIn    []enums.Priority `json:"priorityIn,omitempty"`
-	PriorityNotIn []enums.Priority `json:"priorityNotIn,omitempty"`
 
 	// "completed" field predicates.
 	Completed       *time.Time  `json:"completed,omitempty"`
@@ -60209,6 +60399,12 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, taskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
 	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, taskhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, taskhistory.OwnerIDNotNil())
+	}
 	if i.OwnerIDEqualFold != nil {
 		predicates = append(predicates, taskhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
 	}
@@ -60299,6 +60495,51 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, taskhistory.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.Details != nil {
+		predicates = append(predicates, taskhistory.DetailsEQ(*i.Details))
+	}
+	if i.DetailsNEQ != nil {
+		predicates = append(predicates, taskhistory.DetailsNEQ(*i.DetailsNEQ))
+	}
+	if len(i.DetailsIn) > 0 {
+		predicates = append(predicates, taskhistory.DetailsIn(i.DetailsIn...))
+	}
+	if len(i.DetailsNotIn) > 0 {
+		predicates = append(predicates, taskhistory.DetailsNotIn(i.DetailsNotIn...))
+	}
+	if i.DetailsGT != nil {
+		predicates = append(predicates, taskhistory.DetailsGT(*i.DetailsGT))
+	}
+	if i.DetailsGTE != nil {
+		predicates = append(predicates, taskhistory.DetailsGTE(*i.DetailsGTE))
+	}
+	if i.DetailsLT != nil {
+		predicates = append(predicates, taskhistory.DetailsLT(*i.DetailsLT))
+	}
+	if i.DetailsLTE != nil {
+		predicates = append(predicates, taskhistory.DetailsLTE(*i.DetailsLTE))
+	}
+	if i.DetailsContains != nil {
+		predicates = append(predicates, taskhistory.DetailsContains(*i.DetailsContains))
+	}
+	if i.DetailsHasPrefix != nil {
+		predicates = append(predicates, taskhistory.DetailsHasPrefix(*i.DetailsHasPrefix))
+	}
+	if i.DetailsHasSuffix != nil {
+		predicates = append(predicates, taskhistory.DetailsHasSuffix(*i.DetailsHasSuffix))
+	}
+	if i.DetailsIsNil {
+		predicates = append(predicates, taskhistory.DetailsIsNil())
+	}
+	if i.DetailsNotNil {
+		predicates = append(predicates, taskhistory.DetailsNotNil())
+	}
+	if i.DetailsEqualFold != nil {
+		predicates = append(predicates, taskhistory.DetailsEqualFold(*i.DetailsEqualFold))
+	}
+	if i.DetailsContainsFold != nil {
+		predicates = append(predicates, taskhistory.DetailsContainsFold(*i.DetailsContainsFold))
+	}
 	if i.Status != nil {
 		predicates = append(predicates, taskhistory.StatusEQ(*i.Status))
 	}
@@ -60310,6 +60551,51 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, taskhistory.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.Category != nil {
+		predicates = append(predicates, taskhistory.CategoryEQ(*i.Category))
+	}
+	if i.CategoryNEQ != nil {
+		predicates = append(predicates, taskhistory.CategoryNEQ(*i.CategoryNEQ))
+	}
+	if len(i.CategoryIn) > 0 {
+		predicates = append(predicates, taskhistory.CategoryIn(i.CategoryIn...))
+	}
+	if len(i.CategoryNotIn) > 0 {
+		predicates = append(predicates, taskhistory.CategoryNotIn(i.CategoryNotIn...))
+	}
+	if i.CategoryGT != nil {
+		predicates = append(predicates, taskhistory.CategoryGT(*i.CategoryGT))
+	}
+	if i.CategoryGTE != nil {
+		predicates = append(predicates, taskhistory.CategoryGTE(*i.CategoryGTE))
+	}
+	if i.CategoryLT != nil {
+		predicates = append(predicates, taskhistory.CategoryLT(*i.CategoryLT))
+	}
+	if i.CategoryLTE != nil {
+		predicates = append(predicates, taskhistory.CategoryLTE(*i.CategoryLTE))
+	}
+	if i.CategoryContains != nil {
+		predicates = append(predicates, taskhistory.CategoryContains(*i.CategoryContains))
+	}
+	if i.CategoryHasPrefix != nil {
+		predicates = append(predicates, taskhistory.CategoryHasPrefix(*i.CategoryHasPrefix))
+	}
+	if i.CategoryHasSuffix != nil {
+		predicates = append(predicates, taskhistory.CategoryHasSuffix(*i.CategoryHasSuffix))
+	}
+	if i.CategoryIsNil {
+		predicates = append(predicates, taskhistory.CategoryIsNil())
+	}
+	if i.CategoryNotNil {
+		predicates = append(predicates, taskhistory.CategoryNotNil())
+	}
+	if i.CategoryEqualFold != nil {
+		predicates = append(predicates, taskhistory.CategoryEqualFold(*i.CategoryEqualFold))
+	}
+	if i.CategoryContainsFold != nil {
+		predicates = append(predicates, taskhistory.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 	if i.Due != nil {
 		predicates = append(predicates, taskhistory.DueEQ(*i.Due))
@@ -60340,18 +60626,6 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.DueNotNil {
 		predicates = append(predicates, taskhistory.DueNotNil())
-	}
-	if i.Priority != nil {
-		predicates = append(predicates, taskhistory.PriorityEQ(*i.Priority))
-	}
-	if i.PriorityNEQ != nil {
-		predicates = append(predicates, taskhistory.PriorityNEQ(*i.PriorityNEQ))
-	}
-	if len(i.PriorityIn) > 0 {
-		predicates = append(predicates, taskhistory.PriorityIn(i.PriorityIn...))
-	}
-	if len(i.PriorityNotIn) > 0 {
-		predicates = append(predicates, taskhistory.PriorityNotIn(i.PriorityNotIn...))
 	}
 	if i.Completed != nil {
 		predicates = append(predicates, taskhistory.CompletedEQ(*i.Completed))

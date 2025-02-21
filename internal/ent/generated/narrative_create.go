@@ -129,6 +129,14 @@ func (nc *NarrativeCreate) SetOwnerID(s string) *NarrativeCreate {
 	return nc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableOwnerID(s *string) *NarrativeCreate {
+	if s != nil {
+		nc.SetOwnerID(*s)
+	}
+	return nc
+}
+
 // SetName sets the "name" field.
 func (nc *NarrativeCreate) SetName(s string) *NarrativeCreate {
 	nc.mutation.SetName(s)
@@ -383,9 +391,6 @@ func (nc *NarrativeCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.display_id": %w`, err)}
 		}
 	}
-	if _, ok := nc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Narrative.owner_id"`)}
-	}
 	if v, ok := nc.mutation.OwnerID(); ok {
 		if err := narrative.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.owner_id": %w`, err)}
@@ -398,9 +403,6 @@ func (nc *NarrativeCreate) check() error {
 		if err := narrative.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
 		}
-	}
-	if len(nc.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Narrative.owner"`)}
 	}
 	return nil
 }

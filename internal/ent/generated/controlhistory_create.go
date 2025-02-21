@@ -157,6 +157,14 @@ func (chc *ControlHistoryCreate) SetOwnerID(s string) *ControlHistoryCreate {
 	return chc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableOwnerID(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetOwnerID(*s)
+	}
+	return chc
+}
+
 // SetName sets the "name" field.
 func (chc *ControlHistoryCreate) SetName(s string) *ControlHistoryCreate {
 	chc.mutation.SetName(s)
@@ -409,9 +417,6 @@ func (chc *ControlHistoryCreate) check() error {
 	}
 	if _, ok := chc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlHistory.display_id"`)}
-	}
-	if _, ok := chc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlHistory.owner_id"`)}
 	}
 	if _, ok := chc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlHistory.name"`)}

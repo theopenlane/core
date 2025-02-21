@@ -274,7 +274,7 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 			request: openlaneclient.CreateEvidenceInput{
 				Name:    "Test Evidence - TSK-123",
 				TaskIDs: []string{task.ID},
-				OwnerID: testUser1.OrganizationID,
+				OwnerID: &testUser1.OrganizationID,
 			},
 			files: []*graphql.Upload{
 				{

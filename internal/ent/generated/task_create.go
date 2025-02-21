@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -133,6 +134,14 @@ func (tc *TaskCreate) SetOwnerID(s string) *TaskCreate {
 	return tc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableOwnerID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetOwnerID(*s)
+	}
+	return tc
+}
+
 // SetTitle sets the "title" field.
 func (tc *TaskCreate) SetTitle(s string) *TaskCreate {
 	tc.mutation.SetTitle(s)
@@ -154,8 +163,16 @@ func (tc *TaskCreate) SetNillableDescription(s *string) *TaskCreate {
 }
 
 // SetDetails sets the "details" field.
-func (tc *TaskCreate) SetDetails(m map[string]interface{}) *TaskCreate {
-	tc.mutation.SetDetails(m)
+func (tc *TaskCreate) SetDetails(s string) *TaskCreate {
+	tc.mutation.SetDetails(s)
+	return tc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableDetails(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetDetails(*s)
+	}
 	return tc
 }
 
@@ -173,6 +190,20 @@ func (tc *TaskCreate) SetNillableStatus(es *enums.TaskStatus) *TaskCreate {
 	return tc
 }
 
+// SetCategory sets the "category" field.
+func (tc *TaskCreate) SetCategory(s string) *TaskCreate {
+	tc.mutation.SetCategory(s)
+	return tc
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableCategory(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetCategory(*s)
+	}
+	return tc
+}
+
 // SetDue sets the "due" field.
 func (tc *TaskCreate) SetDue(t time.Time) *TaskCreate {
 	tc.mutation.SetDue(t)
@@ -183,20 +214,6 @@ func (tc *TaskCreate) SetDue(t time.Time) *TaskCreate {
 func (tc *TaskCreate) SetNillableDue(t *time.Time) *TaskCreate {
 	if t != nil {
 		tc.SetDue(*t)
-	}
-	return tc
-}
-
-// SetPriority sets the "priority" field.
-func (tc *TaskCreate) SetPriority(e enums.Priority) *TaskCreate {
-	tc.mutation.SetPriority(e)
-	return tc
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (tc *TaskCreate) SetNillablePriority(e *enums.Priority) *TaskCreate {
-	if e != nil {
-		tc.SetPriority(*e)
 	}
 	return tc
 }
@@ -262,6 +279,21 @@ func (tc *TaskCreate) SetAssigner(u *User) *TaskCreate {
 // SetAssignee sets the "assignee" edge to the User entity.
 func (tc *TaskCreate) SetAssignee(u *User) *TaskCreate {
 	return tc.SetAssigneeID(u.ID)
+}
+
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (tc *TaskCreate) AddCommentIDs(ids ...string) *TaskCreate {
+	tc.mutation.AddCommentIDs(ids...)
+	return tc
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (tc *TaskCreate) AddComments(n ...*Note) *TaskCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return tc.AddCommentIDs(ids...)
 }
 
 // AddGroupIDs adds the "group" edge to the Group entity by IDs.
@@ -443,10 +475,6 @@ func (tc *TaskCreate) defaults() error {
 		v := task.DefaultStatus
 		tc.mutation.SetStatus(v)
 	}
-	if _, ok := tc.mutation.Priority(); !ok {
-		v := task.DefaultPriority
-		tc.mutation.SetPriority(v)
-	}
 	if _, ok := tc.mutation.ID(); !ok {
 		if task.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized task.DefaultID (forgotten import generated/runtime?)")
@@ -466,9 +494,6 @@ func (tc *TaskCreate) check() error {
 		if err := task.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Task.display_id": %w`, err)}
 		}
-	}
-	if _, ok := tc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Task.owner_id"`)}
 	}
 	if v, ok := tc.mutation.OwnerID(); ok {
 		if err := task.OwnerIDValidator(v); err != nil {
@@ -491,19 +516,8 @@ func (tc *TaskCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
 	}
-	if _, ok := tc.mutation.Priority(); !ok {
-		return &ValidationError{Name: "priority", err: errors.New(`generated: missing required field "Task.priority"`)}
-	}
-	if v, ok := tc.mutation.Priority(); ok {
-		if err := task.PriorityValidator(v); err != nil {
-			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "Task.priority": %w`, err)}
-		}
-	}
 	if _, ok := tc.mutation.AssignerID(); !ok {
 		return &ValidationError{Name: "assigner_id", err: errors.New(`generated: missing required field "Task.assigner_id"`)}
-	}
-	if len(tc.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Task.owner"`)}
 	}
 	if len(tc.mutation.AssignerIDs()) == 0 {
 		return &ValidationError{Name: "assigner", err: errors.New(`generated: missing required edge "Task.assigner"`)}
@@ -585,20 +599,20 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_node.Description = value
 	}
 	if value, ok := tc.mutation.Details(); ok {
-		_spec.SetField(task.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(task.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
 	if value, ok := tc.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
+	if value, ok := tc.mutation.Category(); ok {
+		_spec.SetField(task.FieldCategory, field.TypeString, value)
+		_node.Category = value
+	}
 	if value, ok := tc.mutation.Due(); ok {
 		_spec.SetField(task.FieldDue, field.TypeTime, value)
 		_node.Due = value
-	}
-	if value, ok := tc.mutation.Priority(); ok {
-		_spec.SetField(task.FieldPriority, field.TypeEnum, value)
-		_node.Priority = value
 	}
 	if value, ok := tc.mutation.Completed(); ok {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
@@ -656,6 +670,23 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AssigneeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tc.mutation.GroupIDs(); len(nodes) > 0 {

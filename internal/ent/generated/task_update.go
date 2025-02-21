@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -133,20 +133,6 @@ func (tu *TaskUpdate) ClearTags() *TaskUpdate {
 	return tu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (tu *TaskUpdate) SetOwnerID(s string) *TaskUpdate {
-	tu.mutation.SetOwnerID(s)
-	return tu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableOwnerID(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetOwnerID(*s)
-	}
-	return tu
-}
-
 // SetTitle sets the "title" field.
 func (tu *TaskUpdate) SetTitle(s string) *TaskUpdate {
 	tu.mutation.SetTitle(s)
@@ -182,8 +168,16 @@ func (tu *TaskUpdate) ClearDescription() *TaskUpdate {
 }
 
 // SetDetails sets the "details" field.
-func (tu *TaskUpdate) SetDetails(m map[string]interface{}) *TaskUpdate {
-	tu.mutation.SetDetails(m)
+func (tu *TaskUpdate) SetDetails(s string) *TaskUpdate {
+	tu.mutation.SetDetails(s)
+	return tu
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableDetails(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetDetails(*s)
+	}
 	return tu
 }
 
@@ -207,6 +201,26 @@ func (tu *TaskUpdate) SetNillableStatus(es *enums.TaskStatus) *TaskUpdate {
 	return tu
 }
 
+// SetCategory sets the "category" field.
+func (tu *TaskUpdate) SetCategory(s string) *TaskUpdate {
+	tu.mutation.SetCategory(s)
+	return tu
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableCategory(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetCategory(*s)
+	}
+	return tu
+}
+
+// ClearCategory clears the value of the "category" field.
+func (tu *TaskUpdate) ClearCategory() *TaskUpdate {
+	tu.mutation.ClearCategory()
+	return tu
+}
+
 // SetDue sets the "due" field.
 func (tu *TaskUpdate) SetDue(t time.Time) *TaskUpdate {
 	tu.mutation.SetDue(t)
@@ -224,20 +238,6 @@ func (tu *TaskUpdate) SetNillableDue(t *time.Time) *TaskUpdate {
 // ClearDue clears the value of the "due" field.
 func (tu *TaskUpdate) ClearDue() *TaskUpdate {
 	tu.mutation.ClearDue()
-	return tu
-}
-
-// SetPriority sets the "priority" field.
-func (tu *TaskUpdate) SetPriority(e enums.Priority) *TaskUpdate {
-	tu.mutation.SetPriority(e)
-	return tu
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillablePriority(e *enums.Priority) *TaskUpdate {
-	if e != nil {
-		tu.SetPriority(*e)
-	}
 	return tu
 }
 
@@ -281,33 +281,24 @@ func (tu *TaskUpdate) ClearAssigneeID() *TaskUpdate {
 	return tu
 }
 
-// SetAssignerID sets the "assigner_id" field.
-func (tu *TaskUpdate) SetAssignerID(s string) *TaskUpdate {
-	tu.mutation.SetAssignerID(s)
-	return tu
-}
-
-// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableAssignerID(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetAssignerID(*s)
-	}
-	return tu
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (tu *TaskUpdate) SetOwner(o *Organization) *TaskUpdate {
-	return tu.SetOwnerID(o.ID)
-}
-
-// SetAssigner sets the "assigner" edge to the User entity.
-func (tu *TaskUpdate) SetAssigner(u *User) *TaskUpdate {
-	return tu.SetAssignerID(u.ID)
-}
-
 // SetAssignee sets the "assignee" edge to the User entity.
 func (tu *TaskUpdate) SetAssignee(u *User) *TaskUpdate {
 	return tu.SetAssigneeID(u.ID)
+}
+
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (tu *TaskUpdate) AddCommentIDs(ids ...string) *TaskUpdate {
+	tu.mutation.AddCommentIDs(ids...)
+	return tu
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (tu *TaskUpdate) AddComments(n ...*Note) *TaskUpdate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return tu.AddCommentIDs(ids...)
 }
 
 // AddGroupIDs adds the "group" edge to the Group entity by IDs.
@@ -435,22 +426,31 @@ func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (tu *TaskUpdate) ClearOwner() *TaskUpdate {
-	tu.mutation.ClearOwner()
-	return tu
-}
-
-// ClearAssigner clears the "assigner" edge to the User entity.
-func (tu *TaskUpdate) ClearAssigner() *TaskUpdate {
-	tu.mutation.ClearAssigner()
-	return tu
-}
-
 // ClearAssignee clears the "assignee" edge to the User entity.
 func (tu *TaskUpdate) ClearAssignee() *TaskUpdate {
 	tu.mutation.ClearAssignee()
 	return tu
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (tu *TaskUpdate) ClearComments() *TaskUpdate {
+	tu.mutation.ClearComments()
+	return tu
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (tu *TaskUpdate) RemoveCommentIDs(ids ...string) *TaskUpdate {
+	tu.mutation.RemoveCommentIDs(ids...)
+	return tu
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (tu *TaskUpdate) RemoveComments(n ...*Note) *TaskUpdate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return tu.RemoveCommentIDs(ids...)
 }
 
 // ClearGroup clears all "group" edges to the Group entity.
@@ -665,11 +665,6 @@ func (tu *TaskUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (tu *TaskUpdate) check() error {
-	if v, ok := tu.mutation.OwnerID(); ok {
-		if err := task.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Task.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := tu.mutation.Title(); ok {
 		if err := task.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Task.title": %w`, err)}
@@ -679,14 +674,6 @@ func (tu *TaskUpdate) check() error {
 		if err := task.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
-	}
-	if v, ok := tu.mutation.Priority(); ok {
-		if err := task.PriorityValidator(v); err != nil {
-			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "Task.priority": %w`, err)}
-		}
-	}
-	if tu.mutation.OwnerCleared() && len(tu.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Task.owner"`)
 	}
 	if tu.mutation.AssignerCleared() && len(tu.mutation.AssignerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "Task.assigner"`)
@@ -763,13 +750,19 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(task.FieldDescription, field.TypeString)
 	}
 	if value, ok := tu.mutation.Details(); ok {
-		_spec.SetField(task.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(task.FieldDetails, field.TypeString, value)
 	}
 	if tu.mutation.DetailsCleared() {
-		_spec.ClearField(task.FieldDetails, field.TypeJSON)
+		_spec.ClearField(task.FieldDetails, field.TypeString)
 	}
 	if value, ok := tu.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := tu.mutation.Category(); ok {
+		_spec.SetField(task.FieldCategory, field.TypeString, value)
+	}
+	if tu.mutation.CategoryCleared() {
+		_spec.ClearField(task.FieldCategory, field.TypeString)
 	}
 	if value, ok := tu.mutation.Due(); ok {
 		_spec.SetField(task.FieldDue, field.TypeTime, value)
@@ -777,76 +770,11 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.DueCleared() {
 		_spec.ClearField(task.FieldDue, field.TypeTime)
 	}
-	if value, ok := tu.mutation.Priority(); ok {
-		_spec.SetField(task.FieldPriority, field.TypeEnum, value)
-	}
 	if value, ok := tu.mutation.Completed(); ok {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
 	}
 	if tu.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
-	}
-	if tu.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.OwnerTable,
-			Columns: []string{task.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.Task
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tu.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.OwnerTable,
-			Columns: []string{task.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.Task
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if tu.mutation.AssignerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.AssignerTable,
-			Columns: []string{task.AssignerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.Task
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tu.mutation.AssignerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.AssignerTable,
-			Columns: []string{task.AssignerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.Task
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tu.mutation.AssigneeCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -874,6 +802,54 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = tu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !tu.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1377,20 +1353,6 @@ func (tuo *TaskUpdateOne) ClearTags() *TaskUpdateOne {
 	return tuo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (tuo *TaskUpdateOne) SetOwnerID(s string) *TaskUpdateOne {
-	tuo.mutation.SetOwnerID(s)
-	return tuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableOwnerID(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetOwnerID(*s)
-	}
-	return tuo
-}
-
 // SetTitle sets the "title" field.
 func (tuo *TaskUpdateOne) SetTitle(s string) *TaskUpdateOne {
 	tuo.mutation.SetTitle(s)
@@ -1426,8 +1388,16 @@ func (tuo *TaskUpdateOne) ClearDescription() *TaskUpdateOne {
 }
 
 // SetDetails sets the "details" field.
-func (tuo *TaskUpdateOne) SetDetails(m map[string]interface{}) *TaskUpdateOne {
-	tuo.mutation.SetDetails(m)
+func (tuo *TaskUpdateOne) SetDetails(s string) *TaskUpdateOne {
+	tuo.mutation.SetDetails(s)
+	return tuo
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableDetails(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetDetails(*s)
+	}
 	return tuo
 }
 
@@ -1451,6 +1421,26 @@ func (tuo *TaskUpdateOne) SetNillableStatus(es *enums.TaskStatus) *TaskUpdateOne
 	return tuo
 }
 
+// SetCategory sets the "category" field.
+func (tuo *TaskUpdateOne) SetCategory(s string) *TaskUpdateOne {
+	tuo.mutation.SetCategory(s)
+	return tuo
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableCategory(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetCategory(*s)
+	}
+	return tuo
+}
+
+// ClearCategory clears the value of the "category" field.
+func (tuo *TaskUpdateOne) ClearCategory() *TaskUpdateOne {
+	tuo.mutation.ClearCategory()
+	return tuo
+}
+
 // SetDue sets the "due" field.
 func (tuo *TaskUpdateOne) SetDue(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetDue(t)
@@ -1468,20 +1458,6 @@ func (tuo *TaskUpdateOne) SetNillableDue(t *time.Time) *TaskUpdateOne {
 // ClearDue clears the value of the "due" field.
 func (tuo *TaskUpdateOne) ClearDue() *TaskUpdateOne {
 	tuo.mutation.ClearDue()
-	return tuo
-}
-
-// SetPriority sets the "priority" field.
-func (tuo *TaskUpdateOne) SetPriority(e enums.Priority) *TaskUpdateOne {
-	tuo.mutation.SetPriority(e)
-	return tuo
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillablePriority(e *enums.Priority) *TaskUpdateOne {
-	if e != nil {
-		tuo.SetPriority(*e)
-	}
 	return tuo
 }
 
@@ -1525,33 +1501,24 @@ func (tuo *TaskUpdateOne) ClearAssigneeID() *TaskUpdateOne {
 	return tuo
 }
 
-// SetAssignerID sets the "assigner_id" field.
-func (tuo *TaskUpdateOne) SetAssignerID(s string) *TaskUpdateOne {
-	tuo.mutation.SetAssignerID(s)
-	return tuo
-}
-
-// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableAssignerID(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetAssignerID(*s)
-	}
-	return tuo
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (tuo *TaskUpdateOne) SetOwner(o *Organization) *TaskUpdateOne {
-	return tuo.SetOwnerID(o.ID)
-}
-
-// SetAssigner sets the "assigner" edge to the User entity.
-func (tuo *TaskUpdateOne) SetAssigner(u *User) *TaskUpdateOne {
-	return tuo.SetAssignerID(u.ID)
-}
-
 // SetAssignee sets the "assignee" edge to the User entity.
 func (tuo *TaskUpdateOne) SetAssignee(u *User) *TaskUpdateOne {
 	return tuo.SetAssigneeID(u.ID)
+}
+
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (tuo *TaskUpdateOne) AddCommentIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.AddCommentIDs(ids...)
+	return tuo
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (tuo *TaskUpdateOne) AddComments(n ...*Note) *TaskUpdateOne {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return tuo.AddCommentIDs(ids...)
 }
 
 // AddGroupIDs adds the "group" edge to the Group entity by IDs.
@@ -1679,22 +1646,31 @@ func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (tuo *TaskUpdateOne) ClearOwner() *TaskUpdateOne {
-	tuo.mutation.ClearOwner()
-	return tuo
-}
-
-// ClearAssigner clears the "assigner" edge to the User entity.
-func (tuo *TaskUpdateOne) ClearAssigner() *TaskUpdateOne {
-	tuo.mutation.ClearAssigner()
-	return tuo
-}
-
 // ClearAssignee clears the "assignee" edge to the User entity.
 func (tuo *TaskUpdateOne) ClearAssignee() *TaskUpdateOne {
 	tuo.mutation.ClearAssignee()
 	return tuo
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (tuo *TaskUpdateOne) ClearComments() *TaskUpdateOne {
+	tuo.mutation.ClearComments()
+	return tuo
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (tuo *TaskUpdateOne) RemoveCommentIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.RemoveCommentIDs(ids...)
+	return tuo
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (tuo *TaskUpdateOne) RemoveComments(n ...*Note) *TaskUpdateOne {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return tuo.RemoveCommentIDs(ids...)
 }
 
 // ClearGroup clears all "group" edges to the Group entity.
@@ -1922,11 +1898,6 @@ func (tuo *TaskUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (tuo *TaskUpdateOne) check() error {
-	if v, ok := tuo.mutation.OwnerID(); ok {
-		if err := task.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Task.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := tuo.mutation.Title(); ok {
 		if err := task.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Task.title": %w`, err)}
@@ -1936,14 +1907,6 @@ func (tuo *TaskUpdateOne) check() error {
 		if err := task.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
-	}
-	if v, ok := tuo.mutation.Priority(); ok {
-		if err := task.PriorityValidator(v); err != nil {
-			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "Task.priority": %w`, err)}
-		}
-	}
-	if tuo.mutation.OwnerCleared() && len(tuo.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Task.owner"`)
 	}
 	if tuo.mutation.AssignerCleared() && len(tuo.mutation.AssignerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "Task.assigner"`)
@@ -2037,13 +2000,19 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		_spec.ClearField(task.FieldDescription, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Details(); ok {
-		_spec.SetField(task.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(task.FieldDetails, field.TypeString, value)
 	}
 	if tuo.mutation.DetailsCleared() {
-		_spec.ClearField(task.FieldDetails, field.TypeJSON)
+		_spec.ClearField(task.FieldDetails, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := tuo.mutation.Category(); ok {
+		_spec.SetField(task.FieldCategory, field.TypeString, value)
+	}
+	if tuo.mutation.CategoryCleared() {
+		_spec.ClearField(task.FieldCategory, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Due(); ok {
 		_spec.SetField(task.FieldDue, field.TypeTime, value)
@@ -2051,76 +2020,11 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.DueCleared() {
 		_spec.ClearField(task.FieldDue, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.Priority(); ok {
-		_spec.SetField(task.FieldPriority, field.TypeEnum, value)
-	}
 	if value, ok := tuo.mutation.Completed(); ok {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
 	}
 	if tuo.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
-	}
-	if tuo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.OwnerTable,
-			Columns: []string{task.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.Task
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tuo.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.OwnerTable,
-			Columns: []string{task.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.Task
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if tuo.mutation.AssignerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.AssignerTable,
-			Columns: []string{task.AssignerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.Task
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tuo.mutation.AssignerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   task.AssignerTable,
-			Columns: []string{task.AssignerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.Task
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tuo.mutation.AssigneeCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2148,6 +2052,54 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			},
 		}
 		edge.Schema = tuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !tuo.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.CommentsTable,
+			Columns: []string{task.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

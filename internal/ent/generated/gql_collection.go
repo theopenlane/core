@@ -7143,42 +7143,16 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				fieldSeen[note.FieldOwnerID] = struct{}{}
 			}
 
-		case "entity":
+		case "task":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: n.config}).Query()
+				query = (&TaskClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, entityImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
 				return err
 			}
-			n.withEntity = query
-
-		case "subcontrols":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&SubcontrolClient{config: n.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
-				return err
-			}
-			n.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
-				*wq = *query
-			})
-
-		case "program":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProgramClient{config: n.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
-				return err
-			}
-			n.WithNamedProgram(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
+			n.withTask = query
 		case "createdAt":
 			if _, ok := fieldSeen[note.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, note.FieldCreatedAt)
@@ -11683,19 +11657,6 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				*wq = *query
 			})
 
-		case "user":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
-				return err
-			}
-			s.WithNamedUser(alias, func(wq *UserQuery) {
-				*wq = *query
-			})
-
 		case "tasks":
 			var (
 				alias = field.Alias
@@ -11708,17 +11669,6 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			s.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
-
-		case "notes":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&NoteClient{config: s.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, noteImplementors)...); err != nil {
-				return err
-			}
-			s.withNotes = query
 
 		case "programs":
 			var (
@@ -12462,6 +12412,19 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				fieldSeen[task.FieldAssigneeID] = struct{}{}
 			}
 
+		case "comments":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NoteClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, noteImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedComments(alias, func(wq *NoteQuery) {
+				*wq = *query
+			})
+
 		case "group":
 			var (
 				alias = field.Alias
@@ -12630,15 +12593,15 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, task.FieldStatus)
 				fieldSeen[task.FieldStatus] = struct{}{}
 			}
+		case "category":
+			if _, ok := fieldSeen[task.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, task.FieldCategory)
+				fieldSeen[task.FieldCategory] = struct{}{}
+			}
 		case "due":
 			if _, ok := fieldSeen[task.FieldDue]; !ok {
 				selectedFields = append(selectedFields, task.FieldDue)
 				fieldSeen[task.FieldDue] = struct{}{}
-			}
-		case "priority":
-			if _, ok := fieldSeen[task.FieldPriority]; !ok {
-				selectedFields = append(selectedFields, task.FieldPriority)
-				fieldSeen[task.FieldPriority] = struct{}{}
 			}
 		case "completed":
 			if _, ok := fieldSeen[task.FieldCompleted]; !ok {
@@ -12797,15 +12760,15 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldStatus)
 				fieldSeen[taskhistory.FieldStatus] = struct{}{}
 			}
+		case "category":
+			if _, ok := fieldSeen[taskhistory.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldCategory)
+				fieldSeen[taskhistory.FieldCategory] = struct{}{}
+			}
 		case "due":
 			if _, ok := fieldSeen[taskhistory.FieldDue]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldDue)
 				fieldSeen[taskhistory.FieldDue] = struct{}{}
-			}
-		case "priority":
-			if _, ok := fieldSeen[taskhistory.FieldPriority]; !ok {
-				selectedFields = append(selectedFields, taskhistory.FieldPriority)
-				fieldSeen[taskhistory.FieldPriority] = struct{}{}
 			}
 		case "completed":
 			if _, ok := fieldSeen[taskhistory.FieldCompleted]; !ok {

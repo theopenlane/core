@@ -200,7 +200,7 @@ var (
 		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ControlsTable holds the schema information for the "controls" table.
 	ControlsTable = &schema.Table{
@@ -224,7 +224,7 @@ var (
 				Symbol:     "controls_organizations_controls",
 				Columns:    []*schema.Column{ControlsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -249,7 +249,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -301,7 +301,7 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_control_objectives", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
 	ControlObjectivesTable = &schema.Table{
@@ -319,7 +319,7 @@ var (
 				Symbol:     "control_objectives_organizations_control_objectives",
 				Columns:    []*schema.Column{ControlObjectivesColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -344,7 +344,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -382,7 +382,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString},
 	}
 	// DocumentDataTable holds the schema information for the "document_data" table.
@@ -395,7 +395,7 @@ var (
 				Symbol:     "document_data_organizations_document_data",
 				Columns:    []*schema.Column{DocumentDataColumns[9]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "document_data_templates_documents",
@@ -418,7 +418,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString},
 		{Name: "data", Type: field.TypeJSON},
 	}
@@ -696,7 +696,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EvidencesTable holds the schema information for the "evidences" table.
 	EvidencesTable = &schema.Table{
@@ -708,7 +708,7 @@ var (
 				Symbol:     "evidences_organizations_evidence",
 				Columns:    []*schema.Column{EvidencesColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -733,7 +733,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "collection_procedure", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1371,7 +1371,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// NarrativesTable holds the schema information for the "narratives" table.
 	NarrativesTable = &schema.Table{
@@ -1383,7 +1383,7 @@ var (
 				Symbol:     "narratives_organizations_narratives",
 				Columns:    []*schema.Column{NarrativesColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -1408,7 +1408,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1437,9 +1437,11 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "text", Type: field.TypeString},
+		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "program_notes", Type: field.TypeString, Nullable: true},
+		{Name: "task_comments", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
 	NotesTable = &schema.Table{
@@ -1457,6 +1459,18 @@ var (
 				Symbol:     "notes_organizations_notes",
 				Columns:    []*schema.Column{NotesColumns[10]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_programs_notes",
+				Columns:    []*schema.Column{NotesColumns[11]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_tasks_comments",
+				Columns:    []*schema.Column{NotesColumns[12]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1482,7 +1496,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "text", Type: field.TypeString},
+		{Name: "text", Type: field.TypeString, Size: 2147483647},
 	}
 	// NoteHistoryTable holds the schema information for the "note_history" table.
 	NoteHistoryTable = &schema.Table{
@@ -2182,7 +2196,7 @@ var (
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -2200,7 +2214,7 @@ var (
 				Symbol:     "risks_organizations_risks",
 				Columns:    []*schema.Column{RisksColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -2225,7 +2239,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -2343,8 +2357,8 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "example_evidence", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
-		{Name: "note_subcontrols", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "user_subcontrols", Type: field.TypeString, Nullable: true},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
 	SubcontrolsTable = &schema.Table{
@@ -2359,23 +2373,23 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_notes_subcontrols",
+				Symbol:     "subcontrols_organizations_subcontrols",
 				Columns:    []*schema.Column{SubcontrolsColumns[27]},
-				RefColumns: []*schema.Column{NotesColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_organizations_subcontrols",
+				Symbol:     "subcontrols_users_subcontrols",
 				Columns:    []*schema.Column{SubcontrolsColumns[28]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[28]},
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[27]},
 			},
 		},
 	}
@@ -2393,7 +2407,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -2523,12 +2537,12 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
+		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
-		{Name: "priority", Type: field.TypeEnum, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "MEDIUM"},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
 	}
@@ -2542,7 +2556,7 @@ var (
 				Symbol:     "tasks_organizations_tasks",
 				Columns:    []*schema.Column{TasksColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
@@ -2579,13 +2593,13 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
+		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
-		{Name: "priority", Type: field.TypeEnum, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "MEDIUM"},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString},
@@ -4456,31 +4470,6 @@ var (
 			},
 		},
 	}
-	// ProgramNotesColumns holds the columns for the "program_notes" table.
-	ProgramNotesColumns = []*schema.Column{
-		{Name: "program_id", Type: field.TypeString},
-		{Name: "note_id", Type: field.TypeString},
-	}
-	// ProgramNotesTable holds the schema information for the "program_notes" table.
-	ProgramNotesTable = &schema.Table{
-		Name:       "program_notes",
-		Columns:    ProgramNotesColumns,
-		PrimaryKey: []*schema.Column{ProgramNotesColumns[0], ProgramNotesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "program_notes_program_id",
-				Columns:    []*schema.Column{ProgramNotesColumns[0]},
-				RefColumns: []*schema.Column{ProgramsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "program_notes_note_id",
-				Columns:    []*schema.Column{ProgramNotesColumns[1]},
-				RefColumns: []*schema.Column{NotesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// ProgramFilesColumns holds the columns for the "program_files" table.
 	ProgramFilesColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
@@ -4956,31 +4945,6 @@ var (
 			},
 		},
 	}
-	// UserSubcontrolsColumns holds the columns for the "user_subcontrols" table.
-	UserSubcontrolsColumns = []*schema.Column{
-		{Name: "user_id", Type: field.TypeString},
-		{Name: "subcontrol_id", Type: field.TypeString},
-	}
-	// UserSubcontrolsTable holds the schema information for the "user_subcontrols" table.
-	UserSubcontrolsTable = &schema.Table{
-		Name:       "user_subcontrols",
-		Columns:    UserSubcontrolsColumns,
-		PrimaryKey: []*schema.Column{UserSubcontrolsColumns[0], UserSubcontrolsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "user_subcontrols_user_id",
-				Columns:    []*schema.Column{UserSubcontrolsColumns[0]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "user_subcontrols_subcontrol_id",
-				Columns:    []*schema.Column{UserSubcontrolsColumns[1]},
-				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
 	UserSettingFilesColumns = []*schema.Column{
 		{Name: "user_setting_id", Type: field.TypeString},
@@ -5144,7 +5108,6 @@ var (
 		ProgramProceduresTable,
 		ProgramRisksTable,
 		ProgramTasksTable,
-		ProgramNotesTable,
 		ProgramFilesTable,
 		ProgramEvidenceTable,
 		ProgramNarrativesTable,
@@ -5164,7 +5127,6 @@ var (
 		UserFilesTable,
 		UserEventsTable,
 		UserActionPlansTable,
-		UserSubcontrolsTable,
 		UserSettingFilesTable,
 	}
 )
@@ -5257,6 +5219,8 @@ func init() {
 	}
 	NotesTable.ForeignKeys[0].RefTable = EntitiesTable
 	NotesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[2].RefTable = ProgramsTable
+	NotesTable.ForeignKeys[3].RefTable = TasksTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
@@ -5306,8 +5270,8 @@ func init() {
 		Table: "standard_history",
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
-	SubcontrolsTable.ForeignKeys[1].RefTable = NotesTable
-	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	SubcontrolsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	SubcontrolsTable.ForeignKeys[2].RefTable = UsersTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
@@ -5459,8 +5423,6 @@ func init() {
 	ProgramRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ProgramTasksTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramTasksTable.ForeignKeys[1].RefTable = TasksTable
-	ProgramNotesTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramNotesTable.ForeignKeys[1].RefTable = NotesTable
 	ProgramFilesTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ProgramEvidenceTable.ForeignKeys[0].RefTable = ProgramsTable
@@ -5499,8 +5461,6 @@ func init() {
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
 	UserActionPlansTable.ForeignKeys[0].RefTable = UsersTable
 	UserActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
-	UserSubcontrolsTable.ForeignKeys[0].RefTable = UsersTable
-	UserSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 }

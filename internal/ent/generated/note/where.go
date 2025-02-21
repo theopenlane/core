@@ -721,85 +721,27 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.Note {
 	})
 }
 
-// HasEntity applies the HasEdge predicate on the "entity" edge.
-func HasEntity() predicate.Note {
+// HasTask applies the HasEdge predicate on the "task" edge.
+func HasTask() predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, EntityTable, EntityColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, TaskTable, TaskColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
+		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Note
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasEntityWith applies the HasEdge predicate on the "entity" edge with a given conditions (other predicates).
-func HasEntityWith(preds ...predicate.Entity) predicate.Note {
+// HasTaskWith applies the HasEdge predicate on the "task" edge with a given conditions (other predicates).
+func HasTaskWith(preds ...predicate.Task) predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {
-		step := newEntityStep()
+		step := newTaskStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
+		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Note
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
-func HasSubcontrols() predicate.Note {
-	return predicate.Note(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
-func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Note {
-	return predicate.Note(func(s *sql.Selector) {
-		step := newSubcontrolsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasProgram applies the HasEdge predicate on the "program" edge.
-func HasProgram() predicate.Note {
-	return predicate.Note(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramNotes
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasProgramWith applies the HasEdge predicate on the "program" edge with a given conditions (other predicates).
-func HasProgramWith(preds ...predicate.Program) predicate.Note {
-	return predicate.Note(func(s *sql.Selector) {
-		step := newProgramStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramNotes
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

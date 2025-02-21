@@ -7,11 +7,11 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -185,9 +185,8 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 
 // AddProgramMembers is the resolver for the addProgramMembers field.
 func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj *generated.UpdateProgramInput, data []*generated.CreateProgramMembershipInput) error {
-	opCtx := graphql.GetOperationContext(ctx)
-	programID, ok := opCtx.Variables["updateProgramId"]
-	if !ok {
+	programID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if programID == nil {
 		log.Error().Msg("unable to get program from context")
 
 		return ErrInternalServerError
@@ -197,7 +196,7 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 	builders := make([]*generated.ProgramMembershipCreate, len(data))
 	for i := range data {
 		input := *data[i]
-		input.ProgramID = programID.(string)
+		input.ProgramID = *programID
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 
@@ -215,9 +214,8 @@ func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, o
 		return nil
 	}
 
-	opCtx := graphql.GetOperationContext(ctx)
-	programID, ok := opCtx.Variables["updateProgramId"]
-	if !ok {
+	programID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if programID == nil {
 		log.Error().Msg("unable to get program from context")
 
 		return ErrInternalServerError
@@ -227,7 +225,7 @@ func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, o
 
 	for _, id := range data {
 		if err := c.ProgramMembership.DeleteOneID(id).
-			Where(programmembership.ProgramID(programID.(string))).
+			Where(programmembership.ProgramID(*programID)).
 			Exec(ctx); err != nil {
 
 			return parseRequestError(err, action{action: ActionUpdate, object: "program"})

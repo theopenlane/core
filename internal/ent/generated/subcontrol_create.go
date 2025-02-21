@@ -12,12 +12,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // SubcontrolCreate is the builder for creating a Subcontrol entity.
@@ -126,6 +124,14 @@ func (sc *SubcontrolCreate) SetTags(s []string) *SubcontrolCreate {
 // SetOwnerID sets the "owner_id" field.
 func (sc *SubcontrolCreate) SetOwnerID(s string) *SubcontrolCreate {
 	sc.mutation.SetOwnerID(s)
+	return sc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableOwnerID(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetOwnerID(*s)
+	}
 	return sc
 }
 
@@ -385,21 +391,6 @@ func (sc *SubcontrolCreate) AddControls(c ...*Control) *SubcontrolCreate {
 	return sc.AddControlIDs(ids...)
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
-func (sc *SubcontrolCreate) AddUserIDs(ids ...string) *SubcontrolCreate {
-	sc.mutation.AddUserIDs(ids...)
-	return sc
-}
-
-// AddUser adds the "user" edges to the User entity.
-func (sc *SubcontrolCreate) AddUser(u ...*User) *SubcontrolCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
-	}
-	return sc.AddUserIDs(ids...)
-}
-
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
 func (sc *SubcontrolCreate) AddTaskIDs(ids ...string) *SubcontrolCreate {
 	sc.mutation.AddTaskIDs(ids...)
@@ -413,25 +404,6 @@ func (sc *SubcontrolCreate) AddTasks(t ...*Task) *SubcontrolCreate {
 		ids[i] = t[i].ID
 	}
 	return sc.AddTaskIDs(ids...)
-}
-
-// SetNotesID sets the "notes" edge to the Note entity by ID.
-func (sc *SubcontrolCreate) SetNotesID(id string) *SubcontrolCreate {
-	sc.mutation.SetNotesID(id)
-	return sc
-}
-
-// SetNillableNotesID sets the "notes" edge to the Note entity by ID if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableNotesID(id *string) *SubcontrolCreate {
-	if id != nil {
-		sc = sc.SetNotesID(*id)
-	}
-	return sc
-}
-
-// SetNotes sets the "notes" edge to the Note entity.
-func (sc *SubcontrolCreate) SetNotes(n *Note) *SubcontrolCreate {
-	return sc.SetNotesID(n.ID)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -539,9 +511,6 @@ func (sc *SubcontrolCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.display_id": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Subcontrol.owner_id"`)}
-	}
 	if v, ok := sc.mutation.OwnerID(); ok {
 		if err := subcontrol.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.owner_id": %w`, err)}
@@ -554,9 +523,6 @@ func (sc *SubcontrolCreate) check() error {
 		if err := subcontrol.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.name": %w`, err)}
 		}
-	}
-	if len(sc.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Subcontrol.owner"`)}
 	}
 	if len(sc.mutation.ControlsIDs()) == 0 {
 		return &ValidationError{Name: "controls", err: errors.New(`generated: missing required edge "Subcontrol.controls"`)}
@@ -732,23 +698,6 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.UserTable,
-			Columns: subcontrol.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = sc.schemaConfig.UserSubcontrols
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := sc.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -764,24 +713,6 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.NotesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   subcontrol.NotesTable,
-			Columns: []string{subcontrol.NotesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = sc.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.note_subcontrols = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := sc.mutation.ProgramsIDs(); len(nodes) > 0 {

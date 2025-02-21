@@ -157,6 +157,14 @@ func (cohc *ControlObjectiveHistoryCreate) SetOwnerID(s string) *ControlObjectiv
 	return cohc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableOwnerID(s *string) *ControlObjectiveHistoryCreate {
+	if s != nil {
+		cohc.SetOwnerID(*s)
+	}
+	return cohc
+}
+
 // SetName sets the "name" field.
 func (cohc *ControlObjectiveHistoryCreate) SetName(s string) *ControlObjectiveHistoryCreate {
 	cohc.mutation.SetName(s)
@@ -395,9 +403,6 @@ func (cohc *ControlObjectiveHistoryCreate) check() error {
 	}
 	if _, ok := cohc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlObjectiveHistory.display_id"`)}
-	}
-	if _, ok := cohc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlObjectiveHistory.owner_id"`)}
 	}
 	if _, ok := cohc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlObjectiveHistory.name"`)}

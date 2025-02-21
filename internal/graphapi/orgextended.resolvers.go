@@ -13,6 +13,7 @@ import (
 	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/graphutils"
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
@@ -65,9 +66,8 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 
 // AddOrgMembers is the resolver for the addOrgMembers field.
 func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []*generated.CreateOrgMembershipInput) error {
-	opCtx := graphql.GetOperationContext(ctx)
-	orgID, ok := opCtx.Variables["updateOrganizationId"]
-	if !ok {
+	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if orgID == nil {
 		log.Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
@@ -77,7 +77,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 	builders := make([]*generated.OrgMembershipCreate, len(data))
 	for i := range data {
 		input := *data[i]
-		input.OrganizationID = orgID.(string)
+		input.OrganizationID = *orgID
 		builders[i] = c.OrgMembership.Create().SetInput(input)
 	}
 
@@ -91,9 +91,8 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 
 // RemoveOrgMembers is the resolver for the removeOrgMembers field.
 func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []string) error {
-	opCtx := graphql.GetOperationContext(ctx)
-	orgID, ok := opCtx.Variables["updateOrganizationId"]
-	if !ok {
+	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if orgID == nil {
 		log.Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
@@ -102,7 +101,7 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 	c := withTransactionalMutation(ctx)
 
 	_, err := c.OrgMembership.Delete().Where(
-		orgmembership.OrganizationID(orgID.(string)),
+		orgmembership.OrganizationID(*orgID),
 		orgmembership.IDIn(data...),
 	).Exec(ctx)
 	if err != nil {
@@ -114,9 +113,8 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 
 // UpdateOrgSettings is the resolver for the updateOrgSettings field.
 func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context, obj *generated.UpdateOrganizationInput, data *generated.UpdateOrganizationSettingInput) error {
-	opCtx := graphql.GetOperationContext(ctx)
-	orgID, ok := opCtx.Variables["updateOrganizationId"]
-	if !ok {
+	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if orgID == nil {
 		log.Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
@@ -127,7 +125,7 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	// get setting ID to Update
 	settingID := obj.SettingID
 	if settingID == nil {
-		org, err := c.Organization.Get(ctx, orgID.(string))
+		org, err := c.Organization.Get(ctx, *orgID)
 		if err != nil {
 			return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 		}

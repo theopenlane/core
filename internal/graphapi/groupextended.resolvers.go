@@ -7,12 +7,12 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/graphutils"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/rout"
 )
@@ -261,9 +261,8 @@ func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj 
 
 // AddGroupMembers is the resolver for the addGroupMembers field.
 func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *generated.UpdateGroupInput, data []*generated.CreateGroupMembershipInput) error {
-	opCtx := graphql.GetOperationContext(ctx)
-	groupID, ok := opCtx.Variables["updateGroupId"]
-	if !ok {
+	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if groupID == nil {
 		log.Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
@@ -273,7 +272,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 	builders := make([]*generated.GroupMembershipCreate, len(data))
 	for i := range data {
 		input := *data[i]
-		input.GroupID = groupID.(string)
+		input.GroupID = *groupID
 		builders[i] = c.GroupMembership.Create().SetInput(input)
 	}
 
@@ -291,9 +290,8 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 		return nil
 	}
 
-	opCtx := graphql.GetOperationContext(ctx)
-	groupID, ok := opCtx.Variables["updateGroupId"]
-	if !ok {
+	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if groupID == nil {
 		log.Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
@@ -303,7 +301,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 
 	for _, id := range data {
 		if err := c.GroupMembership.DeleteOneID(id).
-			Where(groupmembership.GroupID(groupID.(string))).
+			Where(groupmembership.GroupID(*groupID)).
 			Exec(ctx); err != nil {
 
 			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
@@ -315,9 +313,8 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 
 // UpdateGroupSettings is the resolver for the updateGroupSettings field.
 func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj *generated.UpdateGroupInput, data *generated.UpdateGroupSettingInput) error {
-	opCtx := graphql.GetOperationContext(ctx)
-	groupID, ok := opCtx.Variables["updateGroupId"]
-	if !ok {
+	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
+	if groupID == nil {
 		log.Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
@@ -328,7 +325,7 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 	// get setting ID to update
 	settingID := obj.SettingID
 	if settingID == nil {
-		group, err := c.Group.Get(ctx, groupID.(string))
+		group, err := c.Group.Get(ctx, *groupID)
 		if err != nil {
 			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
 		}

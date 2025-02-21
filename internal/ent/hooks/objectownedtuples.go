@@ -18,7 +18,10 @@ import (
 // given a set of parent id fields, it will add the user and parent permissions to the object
 // on creation
 // by default, it will always add a user permission to the object
-func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
+// ownerRelation should normally be set to fgax.ParentRelation, but in some cases
+// this is set to owner to account for different inherited permissions from parent objects
+// vs. the user/service owner of the object (see notes as an example)
+func HookObjectOwnedTuples(parents []string, ownerRelation string, skipUser bool) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
@@ -51,7 +54,7 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 					SubjectType: subject,
 					ObjectID:    objectID,                        // this is the object id being created
 					ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
-					Relation:    fgax.ParentRelation,
+					Relation:    ownerRelation,
 				})
 
 				addTuples = append(addTuples, userTuple)

@@ -1621,30 +1621,30 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.NotesTable,
-			Columns: program.NotesPrimaryKey,
+			Columns: []string{program.NotesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramNotes
+		edge.Schema = pu.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedNotesIDs(); len(nodes) > 0 && !pu.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.NotesTable,
-			Columns: program.NotesPrimaryKey,
+			Columns: []string{program.NotesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramNotes
+		edge.Schema = pu.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1652,16 +1652,16 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := pu.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.NotesTable,
-			Columns: program.NotesPrimaryKey,
+			Columns: []string{program.NotesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramNotes
+		edge.Schema = pu.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3649,30 +3649,30 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if puo.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.NotesTable,
-			Columns: program.NotesPrimaryKey,
+			Columns: []string{program.NotesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramNotes
+		edge.Schema = puo.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedNotesIDs(); len(nodes) > 0 && !puo.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.NotesTable,
-			Columns: program.NotesPrimaryKey,
+			Columns: []string{program.NotesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramNotes
+		edge.Schema = puo.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3680,16 +3680,16 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if nodes := puo.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.NotesTable,
-			Columns: program.NotesPrimaryKey,
+			Columns: []string{program.NotesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramNotes
+		edge.Schema = puo.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -35,7 +35,7 @@ func HookTaskCreate() ent.Hook {
 
 // HookTaskAssignee runs on task create and update mutations to add and remove the assignee tuple
 func HookTaskAssignee() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.TaskFunc(func(ctx context.Context, m *generated.TaskMutation) (generated.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -46,6 +46,16 @@ func HookTaskAssignee() ent.Hook {
 			// this will allow the assignee to see and edit the task
 			if slices.Contains(m.AddedEdges(), "assignee") {
 				if assignee, _ := m.AssigneeID(); assignee != "" {
+					oldAssignee, err := m.OldAssigneeID(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					// if the assignee is the same as the old assignee, return early
+					if oldAssignee == assignee {
+						return retVal, nil
+					}
+
 					taskID, ok := m.ID()
 
 					if ok {
@@ -58,46 +68,35 @@ func HookTaskAssignee() ent.Hook {
 							Relation:    "assignee",
 						})
 
-						// get the current assignee and remove them
-						resp, err := utils.AuthzClient(ctx, m).ListUserRequest(ctx, fgax.ListRequest{
-							ObjectID:   taskID,
-							ObjectType: GetObjectTypeFromEntMutation(m),
-							Relation:   "assignee",
+						deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
+							SubjectID:   oldAssignee,
+							SubjectType: "user",
+							ObjectID:    taskID,
+							ObjectType:  GetObjectTypeFromEntMutation(m),
+							Relation:    "assignee",
 						})
-						if err != nil {
-							return nil, err
-						}
-
-						currentAssignee := resp.GetUsers()
-
-						// remove the current assignee from the task, this should only be one user but we will loop through it
-						// to ensure we remove all assignees
-						var deleteTuples []fgax.TupleKey
-
-						for _, user := range currentAssignee {
-							deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
-								SubjectID:   user.Object.Id,
-								SubjectType: user.Object.Type,
-								ObjectID:    taskID,
-								ObjectType:  GetObjectTypeFromEntMutation(m),
-								Relation:    "assignee",
-							})
-
-							deleteTuples = append(deleteTuples, deleteTuple)
-						}
 
 						// add the new assignee and remove the old assignee
-						if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{addTuple}, deleteTuples); err != nil {
+						if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{addTuple}, []fgax.TupleKey{deleteTuple}); err != nil {
 							return nil, err
 						}
 
 						log.Debug().Str("task_id", taskID).Str("assignee", assignee).Msg("Added assignee tuple")
-						log.Debug().Str("task_id", taskID).Interface("tuples", deleteTuples).Msg("Removed assignee tuples")
+						log.Debug().Str("task_id", taskID).Interface("assignee", oldAssignee).Msg("Removed assignee tuples")
 					}
 				}
 			}
 
 			return retVal, nil
 		})
-	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
+	},
+		hook.And(
+			hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne),
+			hook.Or(
+				hook.HasFields("assignee"),
+				hook.HasAddedFields("assignee"),
+				hook.HasClearedFields("assignee"),
+			),
+		),
+	)
 }

@@ -46,6 +46,7 @@ type ResolverRoot interface {
 	UpdateOrganizationInput() UpdateOrganizationInputResolver
 	UpdateProgramInput() UpdateProgramInputResolver
 	UpdateTFASettingInput() UpdateTFASettingInputResolver
+	UpdateTaskInput() UpdateTaskInputResolver
 }
 
 type DirectiveRoot struct {
@@ -1745,6 +1746,7 @@ type ComplexityRoot struct {
 		UpdateSubscriber                 func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                 func(childComplexity int, input generated.UpdateTFASettingInput) int
 		UpdateTask                       func(childComplexity int, id string, input generated.UpdateTaskInput) int
+		UpdateTaskComment                func(childComplexity int, id string, input generated.UpdateNoteInput) int
 		UpdateTemplate                   func(childComplexity int, id string, input generated.UpdateTemplateInput) int
 		UpdateUser                       func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
@@ -1839,20 +1841,18 @@ type ComplexityRoot struct {
 	}
 
 	Note struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		Entity      func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Program     func(childComplexity int) int
-		Subcontrols func(childComplexity int) int
-		Text        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		CreatedBy func(childComplexity int) int
+		DeletedAt func(childComplexity int) int
+		DeletedBy func(childComplexity int) int
+		DisplayID func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Owner     func(childComplexity int) int
+		OwnerID   func(childComplexity int) int
+		Task      func(childComplexity int) int
+		Text      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+		UpdatedBy func(childComplexity int) int
 	}
 
 	NoteConnection struct {
@@ -2705,6 +2705,7 @@ type ComplexityRoot struct {
 		Narratives                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeWhereInput) int
 		Node                           func(childComplexity int, id string) int
 		Nodes                          func(childComplexity int, ids []string) int
+		Note                           func(childComplexity int, id string) int
 		NoteHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteHistoryWhereInput) int
 		Notes                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
 		OrgMembership                  func(childComplexity int, id string) int
@@ -2991,7 +2992,6 @@ type ComplexityRoot struct {
 		ImplementationVerificationDate func(childComplexity int) int
 		MappedFrameworks               func(childComplexity int) int
 		Name                           func(childComplexity int) int
-		Notes                          func(childComplexity int) int
 		Owner                          func(childComplexity int) int
 		OwnerID                        func(childComplexity int) int
 		Programs                       func(childComplexity int) int
@@ -3003,7 +3003,6 @@ type ComplexityRoot struct {
 		Tasks                          func(childComplexity int) int
 		UpdatedAt                      func(childComplexity int) int
 		UpdatedBy                      func(childComplexity int) int
-		User                           func(childComplexity int) int
 		Version                        func(childComplexity int) int
 	}
 
@@ -3174,6 +3173,8 @@ type ComplexityRoot struct {
 		AssigneeID       func(childComplexity int) int
 		Assigner         func(childComplexity int) int
 		AssignerID       func(childComplexity int) int
+		Category         func(childComplexity int) int
+		Comments         func(childComplexity int) int
 		Completed        func(childComplexity int) int
 		Control          func(childComplexity int) int
 		ControlObjective func(childComplexity int) int
@@ -3191,7 +3192,6 @@ type ComplexityRoot struct {
 		InternalPolicy   func(childComplexity int) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
-		Priority         func(childComplexity int) int
 		Procedure        func(childComplexity int) int
 		Program          func(childComplexity int) int
 		Status           func(childComplexity int) int
@@ -3228,6 +3228,7 @@ type ComplexityRoot struct {
 	TaskHistory struct {
 		AssigneeID  func(childComplexity int) int
 		AssignerID  func(childComplexity int) int
+		Category    func(childComplexity int) int
 		Completed   func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
@@ -3241,7 +3242,6 @@ type ComplexityRoot struct {
 		ID          func(childComplexity int) int
 		Operation   func(childComplexity int) int
 		OwnerID     func(childComplexity int) int
-		Priority    func(childComplexity int) int
 		Ref         func(childComplexity int) int
 		Status      func(childComplexity int) int
 		Tags        func(childComplexity int) int
@@ -12263,6 +12263,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateTask(childComplexity, args["id"].(string), args["input"].(generated.UpdateTaskInput)), true
 
+	case "Mutation.updateTaskComment":
+		if e.complexity.Mutation.UpdateTaskComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTaskComment_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTaskComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput)), true
+
 	case "Mutation.updateTemplate":
 		if e.complexity.Mutation.UpdateTemplate == nil {
 			break
@@ -12719,13 +12731,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Note.DisplayID(childComplexity), true
 
-	case "Note.entity":
-		if e.complexity.Note.Entity == nil {
-			break
-		}
-
-		return e.complexity.Note.Entity(childComplexity), true
-
 	case "Note.id":
 		if e.complexity.Note.ID == nil {
 			break
@@ -12747,19 +12752,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Note.OwnerID(childComplexity), true
 
-	case "Note.program":
-		if e.complexity.Note.Program == nil {
+	case "Note.task":
+		if e.complexity.Note.Task == nil {
 			break
 		}
 
-		return e.complexity.Note.Program(childComplexity), true
-
-	case "Note.subcontrols":
-		if e.complexity.Note.Subcontrols == nil {
-			break
-		}
-
-		return e.complexity.Note.Subcontrols(childComplexity), true
+		return e.complexity.Note.Task(childComplexity), true
 
 	case "Note.text":
 		if e.complexity.Note.Text == nil {
@@ -17418,6 +17416,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]string)), true
 
+	case "Query.note":
+		if e.complexity.Query.Note == nil {
+			break
+		}
+
+		args, err := ec.field_Query_note_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Note(childComplexity, args["id"].(string)), true
+
 	case "Query.noteHistories":
 		if e.complexity.Query.NoteHistories == nil {
 			break
@@ -19241,13 +19251,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.Name(childComplexity), true
 
-	case "Subcontrol.notes":
-		if e.complexity.Subcontrol.Notes == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.Notes(childComplexity), true
-
 	case "Subcontrol.owner":
 		if e.complexity.Subcontrol.Owner == nil {
 			break
@@ -19324,13 +19327,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Subcontrol.UpdatedBy(childComplexity), true
-
-	case "Subcontrol.user":
-		if e.complexity.Subcontrol.User == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.User(childComplexity), true
 
 	case "Subcontrol.version":
 		if e.complexity.Subcontrol.Version == nil {
@@ -20018,6 +20014,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Task.AssignerID(childComplexity), true
 
+	case "Task.category":
+		if e.complexity.Task.Category == nil {
+			break
+		}
+
+		return e.complexity.Task.Category(childComplexity), true
+
+	case "Task.comments":
+		if e.complexity.Task.Comments == nil {
+			break
+		}
+
+		return e.complexity.Task.Comments(childComplexity), true
+
 	case "Task.completed":
 		if e.complexity.Task.Completed == nil {
 			break
@@ -20136,13 +20146,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Task.OwnerID(childComplexity), true
-
-	case "Task.priority":
-		if e.complexity.Task.Priority == nil {
-			break
-		}
-
-		return e.complexity.Task.Priority(childComplexity), true
 
 	case "Task.procedure":
 		if e.complexity.Task.Procedure == nil {
@@ -20270,6 +20273,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TaskHistory.AssignerID(childComplexity), true
 
+	case "TaskHistory.category":
+		if e.complexity.TaskHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.Category(childComplexity), true
+
 	case "TaskHistory.completed":
 		if e.complexity.TaskHistory.Completed == nil {
 			break
@@ -20360,13 +20370,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TaskHistory.OwnerID(childComplexity), true
-
-	case "TaskHistory.priority":
-		if e.complexity.TaskHistory.Priority == nil {
-			break
-		}
-
-		return e.complexity.TaskHistory.Priority(childComplexity), true
 
 	case "TaskHistory.ref":
 		if e.complexity.TaskHistory.Ref == nil {
@@ -24558,7 +24561,7 @@ type Control implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the name of the control
   """
@@ -24611,7 +24614,7 @@ type Control implements Node {
   example evidence to provide for the control
   """
   exampleEvidence: String
-  owner: Organization!
+  owner: Organization
   """
   groups that are blocked from viewing or editing the risk
   """
@@ -24687,7 +24690,7 @@ type ControlHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the name of the control
   """
@@ -24959,6 +24962,8 @@ input ControlHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -25195,7 +25200,7 @@ type ControlObjective implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the name of the control objective
   """
@@ -25244,7 +25249,7 @@ type ControlObjective implements Node {
   example evidence to provide for the control
   """
   exampleEvidence: String
-  owner: Organization!
+  owner: Organization
   """
   groups that are blocked from viewing or editing the risk
   """
@@ -25320,7 +25325,7 @@ type ControlObjectiveHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the name of the control objective
   """
@@ -25588,6 +25593,8 @@ input ControlObjectiveHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -25931,6 +25938,8 @@ input ControlObjectiveWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -26344,6 +26353,8 @@ input ControlWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -26801,7 +26812,7 @@ input CreateControlInput {
   example evidence to provide for the control
   """
   exampleEvidence: String
-  ownerID: ID!
+  ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
@@ -26873,7 +26884,7 @@ input CreateControlObjectiveInput {
   example evidence to provide for the control
   """
   exampleEvidence: String
-  ownerID: ID!
+  ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
@@ -26901,7 +26912,7 @@ input CreateDocumentDataInput {
   the json data of the document
   """
   data: JSON!
-  ownerID: ID!
+  ownerID: ID
   templateID: ID!
   entityIDs: [ID!]
   fileIDs: [ID!]
@@ -27022,7 +27033,7 @@ input CreateEvidenceInput {
   the url of the evidence if not uploaded directly to the system
   """
   url: String
-  ownerID: ID!
+  ownerID: ID
   controlObjectiveIDs: [ID!]
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
@@ -27349,7 +27360,7 @@ input CreateNarrativeInput {
   json data for the narrative document
   """
   details: Map
-  ownerID: ID!
+  ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
@@ -27369,9 +27380,7 @@ input CreateNoteInput {
   """
   text: String!
   ownerID: ID
-  entityID: ID
-  subcontrolIDs: [ID!]
-  programIDs: [ID!]
+  taskID: ID
 }
 """
 CreateOnboardingInput is used for create Onboarding object.
@@ -27737,7 +27746,7 @@ input CreateRiskInput {
   json data for the risk document
   """
   details: Map
-  ownerID: ID!
+  ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
@@ -27878,11 +27887,9 @@ input CreateSubcontrolInput {
   example evidence to provide for the control
   """
   exampleEvidence: String
-  ownerID: ID!
+  ownerID: ID
   controlIDs: [ID!]!
-  userIDs: [ID!]
   taskIDs: [ID!]
-  notesID: ID
   programIDs: [ID!]
   evidenceIDs: [ID!]
 }
@@ -27937,26 +27944,27 @@ input CreateTaskInput {
   """
   the details of the task
   """
-  details: Map
+  details: String
   """
   the status of the task
   """
   status: TaskTaskStatus
   """
+  the category of the task, e.g. evidence upload, risk review, policy review, etc.
+  """
+  category: String
+  """
   the due date of the task
   """
   due: Time
   """
-  the priority of the task
-  """
-  priority: TaskPriority
-  """
   the completion date of the task
   """
   completed: Time
-  ownerID: ID!
+  ownerID: ID
   assignerID: ID!
   assigneeID: ID
+  commentIDs: [ID!]
   groupIDs: [ID!]
   internalPolicyIDs: [ID!]
   procedureIDs: [ID!]
@@ -28121,7 +28129,7 @@ type DocumentData implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the template id of the document
   """
@@ -28130,7 +28138,7 @@ type DocumentData implements Node {
   the json data of the document
   """
   data: JSON!
-  owner: Organization!
+  owner: Organization
   template: Template!
   entity: [Entity!]
   files: [File!]
@@ -28183,7 +28191,7 @@ type DocumentDataHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the template id of the document
   """
@@ -28395,6 +28403,8 @@ input DocumentDataHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -28542,6 +28552,8 @@ input DocumentDataWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -30247,7 +30259,7 @@ type Evidence implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the name of the evidence
   """
@@ -30280,7 +30292,7 @@ type Evidence implements Node {
   the url of the evidence if not uploaded directly to the system
   """
   url: String
-  owner: Organization!
+  owner: Organization
   controlObjectives: [ControlObjective!]
   controls: [Control!]
   subcontrols: [Subcontrol!]
@@ -30340,7 +30352,7 @@ type EvidenceHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the name of the evidence
   """
@@ -30592,6 +30604,8 @@ input EvidenceHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -30858,6 +30872,8 @@ input EvidenceWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -35991,7 +36007,7 @@ type Narrative implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the name of the narrative
   """
@@ -36008,7 +36024,7 @@ type Narrative implements Node {
   json data for the narrative document
   """
   details: Map
-  owner: Organization!
+  owner: Organization
   """
   groups that are blocked from viewing or editing the risk
   """
@@ -36079,7 +36095,7 @@ type NarrativeHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the name of the narrative
   """
@@ -36315,6 +36331,8 @@ input NarrativeHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -36514,6 +36532,8 @@ input NarrativeWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -36637,7 +36657,7 @@ type Note implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -36645,9 +36665,7 @@ type Note implements Node {
   """
   text: String!
   owner: Organization
-  entity: Entity
-  subcontrols: [Subcontrol!]
-  program: [Program!]
+  task: Task
 }
 """
 A connection to a list of items.
@@ -36695,7 +36713,7 @@ type NoteHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -37112,20 +37130,10 @@ input NoteWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  entity edge predicates
+  task edge predicates
   """
-  hasEntity: Boolean
-  hasEntityWith: [EntityWhereInput!]
-  """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
-  """
-  program edge predicates
-  """
-  hasProgram: Boolean
-  hasProgramWith: [ProgramWhereInput!]
+  hasTask: Boolean
+  hasTaskWith: [TaskWhereInput!]
 }
 type Onboarding implements Node {
   id: ID!
@@ -44335,7 +44343,7 @@ type Risk implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the name of the risk
   """
@@ -44376,7 +44384,7 @@ type Risk implements Node {
   json data for the risk document
   """
   details: Map
-  owner: Organization!
+  owner: Organization
   """
   groups that are blocked from viewing or editing the risk
   """
@@ -44446,7 +44454,7 @@ type RiskHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the name of the risk
   """
@@ -44722,6 +44730,8 @@ input RiskHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -45027,6 +45037,8 @@ input RiskWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -46024,7 +46036,7 @@ type Subcontrol implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the name of the subcontrol
   """
@@ -46093,11 +46105,9 @@ type Subcontrol implements Node {
   example evidence to provide for the control
   """
   exampleEvidence: String
-  owner: Organization!
+  owner: Organization
   controls: [Control!]!
-  user: [User!]
   tasks: [Task!]
-  notes: Note
   programs: [Program!]
   evidence: [Evidence!]
 }
@@ -46153,7 +46163,7 @@ type SubcontrolHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the name of the subcontrol
   """
@@ -46441,6 +46451,8 @@ input SubcontrolHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -46864,6 +46876,8 @@ input SubcontrolWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -47153,20 +47167,10 @@ input SubcontrolWhereInput {
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
   """
-  user edge predicates
-  """
-  hasUser: Boolean
-  hasUserWith: [UserWhereInput!]
-  """
   tasks edge predicates
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
-  """
-  notes edge predicates
-  """
-  hasNotes: Boolean
-  hasNotesWith: [NoteWhereInput!]
   """
   programs edge predicates
   """
@@ -47638,7 +47642,7 @@ type Task implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: ID!
+  ownerID: ID
   """
   the title of the task
   """
@@ -47650,19 +47654,19 @@ type Task implements Node {
   """
   the details of the task
   """
-  details: Map
+  details: String
   """
   the status of the task
   """
   status: TaskTaskStatus!
   """
+  the category of the task, e.g. evidence upload, risk review, policy review, etc.
+  """
+  category: String
+  """
   the due date of the task
   """
   due: Time
-  """
-  the priority of the task
-  """
-  priority: TaskPriority!
   """
   the completion date of the task
   """
@@ -47675,9 +47679,13 @@ type Task implements Node {
   the id of the user who assigned the task
   """
   assignerID: ID!
-  owner: Organization!
+  owner: Organization
   assigner: User!
   assignee: User
+  """
+  conversations related to the task
+  """
+  comments: [Note!]
   group: [Group!]
   internalPolicy: [InternalPolicy!]
   procedure: [Procedure!]
@@ -47739,7 +47747,7 @@ type TaskHistory implements Node {
   """
   the ID of the organization owner of the object
   """
-  ownerID: String!
+  ownerID: String
   """
   the title of the task
   """
@@ -47751,19 +47759,19 @@ type TaskHistory implements Node {
   """
   the details of the task
   """
-  details: Map
+  details: String
   """
   the status of the task
   """
   status: TaskHistoryTaskStatus!
   """
+  the category of the task, e.g. evidence upload, risk review, policy review, etc.
+  """
+  category: String
+  """
   the due date of the task
   """
   due: Time
-  """
-  the priority of the task
-  """
-  priority: TaskHistoryPriority!
   """
   the completion date of the task
   """
@@ -47814,15 +47822,6 @@ enum TaskHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
   INSERT
   UPDATE
   DELETE
-}
-"""
-TaskHistoryPriority is enum for the field priority
-"""
-enum TaskHistoryPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -48014,6 +48013,8 @@ input TaskHistoryWhereInput {
   ownerIDContains: String
   ownerIDHasPrefix: String
   ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
@@ -48051,12 +48052,48 @@ input TaskHistoryWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+  """
   status field predicates
   """
   status: TaskHistoryTaskStatus
   statusNEQ: TaskHistoryTaskStatus
   statusIn: [TaskHistoryTaskStatus!]
   statusNotIn: [TaskHistoryTaskStatus!]
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
   due field predicates
   """
@@ -48070,13 +48107,6 @@ input TaskHistoryWhereInput {
   dueLTE: Time
   dueIsNil: Boolean
   dueNotNil: Boolean
-  """
-  priority field predicates
-  """
-  priority: TaskHistoryPriority
-  priorityNEQ: TaskHistoryPriority
-  priorityIn: [TaskHistoryPriority!]
-  priorityNotIn: [TaskHistoryPriority!]
   """
   completed field predicates
   """
@@ -48124,15 +48154,6 @@ input TaskHistoryWhereInput {
   assignerIDHasSuffix: String
   assignerIDEqualFold: String
   assignerIDContainsFold: String
-}
-"""
-TaskPriority is enum for the field priority
-"""
-enum TaskPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
 }
 """
 TaskTaskStatus is enum for the field status
@@ -48288,6 +48309,8 @@ input TaskWhereInput {
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
@@ -48325,12 +48348,48 @@ input TaskWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+  """
   status field predicates
   """
   status: TaskTaskStatus
   statusNEQ: TaskTaskStatus
   statusIn: [TaskTaskStatus!]
   statusNotIn: [TaskTaskStatus!]
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
   due field predicates
   """
@@ -48344,13 +48403,6 @@ input TaskWhereInput {
   dueLTE: Time
   dueIsNil: Boolean
   dueNotNil: Boolean
-  """
-  priority field predicates
-  """
-  priority: TaskPriority
-  priorityNEQ: TaskPriority
-  priorityIn: [TaskPriority!]
-  priorityNotIn: [TaskPriority!]
   """
   completed field predicates
   """
@@ -48413,6 +48465,11 @@ input TaskWhereInput {
   """
   hasAssignee: Boolean
   hasAssigneeWith: [UserWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
   """
   group edge predicates
   """
@@ -49274,7 +49331,6 @@ input UpdateControlInput {
   """
   exampleEvidence: String
   clearExampleEvidence: Boolean
-  ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -49385,7 +49441,6 @@ input UpdateControlObjectiveInput {
   """
   exampleEvidence: String
   clearExampleEvidence: Boolean
-  ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -49441,7 +49496,6 @@ input UpdateDocumentDataInput {
   the json data of the document
   """
   data: JSON
-  ownerID: ID
   templateID: ID
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
@@ -49620,7 +49674,6 @@ input UpdateEvidenceInput {
   """
   url: String
   clearURL: Boolean
-  ownerID: ID
   addControlObjectiveIDs: [ID!]
   removeControlObjectiveIDs: [ID!]
   clearControlObjectives: Boolean
@@ -50088,7 +50141,6 @@ input UpdateNarrativeInput {
   """
   details: Map
   clearDetails: Boolean
-  ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -50123,16 +50175,8 @@ input UpdateNoteInput {
   the text of the note
   """
   text: String
-  ownerID: ID
-  clearOwner: Boolean
-  entityID: ID
-  clearEntity: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearProgram: Boolean
+  taskID: ID
+  clearTask: Boolean
 }
 """
 UpdateOrgMembershipInput is used for update OrgMembership object.
@@ -50634,7 +50678,6 @@ input UpdateRiskInput {
   """
   details: Map
   clearDetails: Boolean
-  ownerID: ID
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -50828,17 +50871,11 @@ input UpdateSubcontrolInput {
   """
   exampleEvidence: String
   clearExampleEvidence: Boolean
-  ownerID: ID
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUser: Boolean
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
-  notesID: ID
-  clearNotes: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
@@ -50910,30 +50947,32 @@ input UpdateTaskInput {
   """
   the details of the task
   """
-  details: Map
+  details: String
   clearDetails: Boolean
   """
   the status of the task
   """
   status: TaskTaskStatus
   """
+  the category of the task, e.g. evidence upload, risk review, policy review, etc.
+  """
+  category: String
+  clearCategory: Boolean
+  """
   the due date of the task
   """
   due: Time
   clearDue: Boolean
   """
-  the priority of the task
-  """
-  priority: TaskPriority
-  """
   the completion date of the task
   """
   completed: Time
   clearCompleted: Boolean
-  ownerID: ID
-  assignerID: ID
   assigneeID: ID
   clearAssignee: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroup: Boolean
@@ -54103,6 +54142,40 @@ type NarrativeBulkCreatePayload {
     """
     narratives: [Narrative!]
 }`, BuiltIn: false},
+	{Name: "../schema/note.graphql", Input: `extend type Query {
+    """
+    Look up note by ID
+    """
+     note(
+        """
+        ID of the note
+        """
+        id: ID!
+    ): Note!
+}
+
+extend input UpdateTaskInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend type Mutation{
+    """
+    Update an existing task comment
+    """
+    updateTaskComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+    ): TaskUpdatePayload!
+}
+
+`, BuiltIn: false},
 	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
     """
     Create a new onboarding

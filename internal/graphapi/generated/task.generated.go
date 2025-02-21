@@ -93,10 +93,10 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_details(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
+			case "category":
+				return ec.fieldContext_Task_category(ctx, field)
 			case "due":
 				return ec.fieldContext_Task_due(ctx, field)
-			case "priority":
-				return ec.fieldContext_Task_priority(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
 			case "assigneeID":
@@ -109,6 +109,8 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
 				return ec.fieldContext_Task_assignee(ctx, field)
+			case "comments":
+				return ec.fieldContext_Task_comments(ctx, field)
 			case "group":
 				return ec.fieldContext_Task_group(ctx, field)
 			case "internalPolicy":
@@ -199,10 +201,10 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_details(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
+			case "category":
+				return ec.fieldContext_Task_category(ctx, field)
 			case "due":
 				return ec.fieldContext_Task_due(ctx, field)
-			case "priority":
-				return ec.fieldContext_Task_priority(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
 			case "assigneeID":
@@ -215,6 +217,8 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
 				return ec.fieldContext_Task_assignee(ctx, field)
+			case "comments":
+				return ec.fieldContext_Task_comments(ctx, field)
 			case "group":
 				return ec.fieldContext_Task_group(ctx, field)
 			case "internalPolicy":
@@ -349,10 +353,10 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_details(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
+			case "category":
+				return ec.fieldContext_Task_category(ctx, field)
 			case "due":
 				return ec.fieldContext_Task_due(ctx, field)
-			case "priority":
-				return ec.fieldContext_Task_priority(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
 			case "assigneeID":
@@ -365,6 +369,8 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
 				return ec.fieldContext_Task_assignee(ctx, field)
+			case "comments":
+				return ec.fieldContext_Task_comments(ctx, field)
 			case "group":
 				return ec.fieldContext_Task_group(ctx, field)
 			case "internalPolicy":

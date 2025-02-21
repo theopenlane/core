@@ -9,7 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/utils"
+	"github.com/theopenlane/core/internal/graphutils"
 )
 
 // InterceptorPresignedURL is an ent interceptor that sets the presignedURL field on the file query
@@ -29,7 +29,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			}
 
 			// get the fields that were queried and check for the presignedURL field
-			fields := utils.CheckForRequestedField(ctx, "presignedURL")
+			fields := graphutils.CheckForRequestedField(ctx, "presignedURL")
 
 			// if the SubscriptionURL field wasn't queried, return the result as is
 			if !fields {

@@ -5,7 +5,6 @@ import (
 	"database/sql"
 
 	"entgo.io/ent"
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/totp"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/graphutils"
 )
 
 // HookEnableTFA is a hook that generates the tfa secrets if the totp setting is set to allowed
@@ -78,9 +78,10 @@ func HookVerifyTFA() ent.Hook {
 			// if recovery codes are cleared, generate new ones
 			regenBackupCodes := false
 
-			if graphql.HasOperationContext(ctx) {
-				gtx := graphql.GetOperationContext(ctx)
-				regenBackupCodes, _ = gtx.Variables["input"].(map[string]interface{})["regenBackupCodes"].(bool)
+			requestInput := graphutils.GetMapInputVariableByName(ctx, "input")
+			if requestInput != nil {
+				i := *requestInput
+				regenBackupCodes, _ = i["regenBackupCodes"].(bool)
 			}
 
 			if (ok && verified) || regenBackupCodes {

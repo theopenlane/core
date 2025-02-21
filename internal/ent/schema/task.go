@@ -38,20 +38,19 @@ func (Task) Fields() []ent.Field {
 			).
 			Comment("the description of the task").
 			Optional(),
-		field.JSON("details", map[string]any{}).
+		field.Text("details").
 			Comment("the details of the task").
 			Optional(),
 		field.Enum("status").
 			GoType(enums.TaskStatus("")).
 			Comment("the status of the task").
 			Default(enums.TaskStatusOpen.String()),
+		field.String("category").
+			Comment("the category of the task, e.g. evidence upload, risk review, policy review, etc.").
+			Optional(),
 		field.Time("due").
 			Comment("the due date of the task").
 			Optional(),
-		field.Enum("priority").
-			GoType(enums.Priority("")).
-			Comment("the priority of the task").
-			Default(enums.PriorityMedium.String()),
 		field.Time("completed").
 			Comment("the completion date of the task").
 			Optional(),
@@ -59,6 +58,7 @@ func (Task) Fields() []ent.Field {
 			Comment("the id of the user who was assigned the task").
 			Optional(),
 		field.String("assigner_id").
+			Immutable().
 			Comment("the id of the user who assigned the task"),
 	}
 }
@@ -84,12 +84,15 @@ func (Task) Edges() []ent.Edge {
 		edge.From("assigner", User.Type).
 			Ref("assigner_tasks").
 			Field("assigner_id").
+			Immutable().
 			Required().
 			Unique(),
 		edge.From("assignee", User.Type).
 			Ref("assignee_tasks").
 			Field("assignee_id").
 			Unique(),
+		edge.To("comments", Note.Type).
+			Comment("conversations related to the task"),
 		edge.From("group", Group.Type).
 			Ref("tasks"),
 		edge.From("internal_policy", InternalPolicy.Type).

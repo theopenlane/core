@@ -123,7 +123,6 @@ type SchemaConfig struct {
 	ProgramProcedures                string // Program-procedures->Procedure table.
 	ProgramRisks                     string // Program-risks->Risk table.
 	ProgramTasks                     string // Program-tasks->Task table.
-	ProgramNotes                     string // Program-notes->Note table.
 	ProgramFiles                     string // Program-files->File table.
 	ProgramEvidence                  string // Program-evidence->Evidence table.
 	ProgramNarratives                string // Program-narratives->Narrative table.
@@ -159,7 +158,6 @@ type SchemaConfig struct {
 	UserFiles                        string // User-files->File table.
 	UserEvents                       string // User-events->Event table.
 	UserActionPlans                  string // User-action_plans->ActionPlan table.
-	UserSubcontrols                  string // User-subcontrols->Subcontrol table.
 	UserHistory                      string // UserHistory table.
 	UserSetting                      string // UserSetting table.
 	UserSettingFiles                 string // UserSetting-files->File table.
