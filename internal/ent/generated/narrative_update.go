@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -129,20 +128,6 @@ func (nu *NarrativeUpdate) ClearTags() *NarrativeUpdate {
 	return nu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (nu *NarrativeUpdate) SetOwnerID(s string) *NarrativeUpdate {
-	nu.mutation.SetOwnerID(s)
-	return nu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableOwnerID(s *string) *NarrativeUpdate {
-	if s != nil {
-		nu.SetOwnerID(*s)
-	}
-	return nu
-}
-
 // SetName sets the "name" field.
 func (nu *NarrativeUpdate) SetName(s string) *NarrativeUpdate {
 	nu.mutation.SetName(s)
@@ -207,11 +192,6 @@ func (nu *NarrativeUpdate) SetDetails(m map[string]interface{}) *NarrativeUpdate
 func (nu *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
 	nu.mutation.ClearDetails()
 	return nu
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (nu *NarrativeUpdate) SetOwner(o *Organization) *NarrativeUpdate {
-	return nu.SetOwnerID(o.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -337,12 +317,6 @@ func (nu *NarrativeUpdate) AddPrograms(p ...*Program) *NarrativeUpdate {
 // Mutation returns the NarrativeMutation object of the builder.
 func (nu *NarrativeUpdate) Mutation() *NarrativeMutation {
 	return nu.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (nu *NarrativeUpdate) ClearOwner() *NarrativeUpdate {
-	nu.mutation.ClearOwner()
-	return nu
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -557,18 +531,10 @@ func (nu *NarrativeUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (nu *NarrativeUpdate) check() error {
-	if v, ok := nu.mutation.OwnerID(); ok {
-		if err := narrative.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := nu.mutation.Name(); ok {
 		if err := narrative.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
 		}
-	}
-	if nu.mutation.OwnerCleared() && len(nu.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Narrative.owner"`)
 	}
 	return nil
 }
@@ -652,37 +618,6 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nu.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
-	}
-	if nu.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   narrative.OwnerTable,
-			Columns: []string{narrative.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.Narrative
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   narrative.OwnerTable,
-			Columns: []string{narrative.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.Narrative
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nu.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1182,20 +1117,6 @@ func (nuo *NarrativeUpdateOne) ClearTags() *NarrativeUpdateOne {
 	return nuo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (nuo *NarrativeUpdateOne) SetOwnerID(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetOwnerID(s)
-	return nuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableOwnerID(s *string) *NarrativeUpdateOne {
-	if s != nil {
-		nuo.SetOwnerID(*s)
-	}
-	return nuo
-}
-
 // SetName sets the "name" field.
 func (nuo *NarrativeUpdateOne) SetName(s string) *NarrativeUpdateOne {
 	nuo.mutation.SetName(s)
@@ -1260,11 +1181,6 @@ func (nuo *NarrativeUpdateOne) SetDetails(m map[string]interface{}) *NarrativeUp
 func (nuo *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
 	nuo.mutation.ClearDetails()
 	return nuo
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (nuo *NarrativeUpdateOne) SetOwner(o *Organization) *NarrativeUpdateOne {
-	return nuo.SetOwnerID(o.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -1390,12 +1306,6 @@ func (nuo *NarrativeUpdateOne) AddPrograms(p ...*Program) *NarrativeUpdateOne {
 // Mutation returns the NarrativeMutation object of the builder.
 func (nuo *NarrativeUpdateOne) Mutation() *NarrativeMutation {
 	return nuo.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (nuo *NarrativeUpdateOne) ClearOwner() *NarrativeUpdateOne {
-	nuo.mutation.ClearOwner()
-	return nuo
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1623,18 +1533,10 @@ func (nuo *NarrativeUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (nuo *NarrativeUpdateOne) check() error {
-	if v, ok := nuo.mutation.OwnerID(); ok {
-		if err := narrative.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := nuo.mutation.Name(); ok {
 		if err := narrative.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
 		}
-	}
-	if nuo.mutation.OwnerCleared() && len(nuo.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Narrative.owner"`)
 	}
 	return nil
 }
@@ -1735,37 +1637,6 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 	}
 	if nuo.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
-	}
-	if nuo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   narrative.OwnerTable,
-			Columns: []string{narrative.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.Narrative
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   narrative.OwnerTable,
-			Columns: []string{narrative.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.Narrative
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nuo.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

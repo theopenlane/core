@@ -35,12 +35,8 @@ const (
 	FieldText = "text"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeEntity holds the string denoting the entity edge name in mutations.
-	EdgeEntity = "entity"
-	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
-	EdgeSubcontrols = "subcontrols"
-	// EdgeProgram holds the string denoting the program edge name in mutations.
-	EdgeProgram = "program"
+	// EdgeTask holds the string denoting the task edge name in mutations.
+	EdgeTask = "task"
 	// Table holds the table name of the note in the database.
 	Table = "notes"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -50,25 +46,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// EntityTable is the table that holds the entity relation/edge.
-	EntityTable = "notes"
-	// EntityInverseTable is the table name for the Entity entity.
-	// It exists in this package in order to avoid circular dependency with the "entity" package.
-	EntityInverseTable = "entities"
-	// EntityColumn is the table column denoting the entity relation/edge.
-	EntityColumn = "entity_notes"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
-	SubcontrolsTable = "subcontrols"
-	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
-	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
-	SubcontrolsInverseTable = "subcontrols"
-	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
-	SubcontrolsColumn = "note_subcontrols"
-	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
-	ProgramTable = "program_notes"
-	// ProgramInverseTable is the table name for the Program entity.
-	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramInverseTable = "programs"
+	// TaskTable is the table that holds the task relation/edge.
+	TaskTable = "notes"
+	// TaskInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	TaskInverseTable = "tasks"
+	// TaskColumn is the table column denoting the task relation/edge.
+	TaskColumn = "task_comments"
 )
 
 // Columns holds all SQL columns for note fields.
@@ -89,13 +73,9 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"entity_notes",
+	"program_notes",
+	"task_comments",
 }
-
-var (
-	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
-	// primary key for the program relation (M2M).
-	ProgramPrimaryKey = []string{"program_id", "note_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -118,7 +98,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
+	Hooks        [7]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -197,38 +177,10 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByEntityField orders the results by entity field.
-func ByEntityField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByTaskField orders the results by task field.
+func ByTaskField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntityStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// BySubcontrolsCount orders the results by subcontrols count.
-func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
-	}
-}
-
-// BySubcontrols orders the results by subcontrols terms.
-func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByProgramCount orders the results by program count.
-func ByProgramCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProgramStep(), opts...)
-	}
-}
-
-// ByProgram orders the results by program terms.
-func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTaskStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -238,24 +190,10 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newEntityStep() *sqlgraph.Step {
+func newTaskStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntityInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, EntityTable, EntityColumn),
-	)
-}
-func newSubcontrolsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
-	)
-}
-func newProgramStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+		sqlgraph.To(TaskInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TaskTable, TaskColumn),
 	)
 }

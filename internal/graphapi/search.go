@@ -1034,12 +1034,10 @@ func adminSearchTasks(ctx context.Context, query string) ([]*generated.Task, err
 			task.OwnerIDContainsFold(query),     // search by OwnerID
 			task.TitleContainsFold(query),       // search by Title
 			task.DescriptionContainsFold(query), // search by Description
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $8", likeQuery)) // search by Details
-			},
-			task.AssigneeIDContainsFold(query), // search by AssigneeID
-			task.AssignerIDContainsFold(query), // search by AssignerID
+			task.DetailsContainsFold(query),     // search by Details
+			task.CategoryContainsFold(query),    // search by Category
+			task.AssigneeIDContainsFold(query),  // search by AssigneeID
+			task.AssignerIDContainsFold(query),  // search by AssignerID
 		),
 	).All(ctx)
 }

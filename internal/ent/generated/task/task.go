@@ -44,10 +44,10 @@ const (
 	FieldDetails = "details"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
 	// FieldDue holds the string denoting the due field in the database.
 	FieldDue = "due"
-	// FieldPriority holds the string denoting the priority field in the database.
-	FieldPriority = "priority"
 	// FieldCompleted holds the string denoting the completed field in the database.
 	FieldCompleted = "completed"
 	// FieldAssigneeID holds the string denoting the assignee_id field in the database.
@@ -60,6 +60,8 @@ const (
 	EdgeAssigner = "assigner"
 	// EdgeAssignee holds the string denoting the assignee edge name in mutations.
 	EdgeAssignee = "assignee"
+	// EdgeComments holds the string denoting the comments edge name in mutations.
+	EdgeComments = "comments"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
 	EdgeGroup = "group"
 	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
@@ -99,6 +101,13 @@ const (
 	AssigneeInverseTable = "users"
 	// AssigneeColumn is the table column denoting the assignee relation/edge.
 	AssigneeColumn = "assignee_id"
+	// CommentsTable is the table that holds the comments relation/edge.
+	CommentsTable = "notes"
+	// CommentsInverseTable is the table name for the Note entity.
+	// It exists in this package in order to avoid circular dependency with the "note" package.
+	CommentsInverseTable = "notes"
+	// CommentsColumn is the table column denoting the comments relation/edge.
+	CommentsColumn = "task_comments"
 	// GroupTable is the table that holds the group relation/edge. The primary key declared below.
 	GroupTable = "group_tasks"
 	// GroupInverseTable is the table name for the Group entity.
@@ -157,8 +166,8 @@ var Columns = []string{
 	FieldDescription,
 	FieldDetails,
 	FieldStatus,
+	FieldCategory,
 	FieldDue,
-	FieldPriority,
 	FieldCompleted,
 	FieldAssigneeID,
 	FieldAssignerID,
@@ -240,18 +249,6 @@ func StatusValidator(s enums.TaskStatus) error {
 	}
 }
 
-const DefaultPriority enums.Priority = "MEDIUM"
-
-// PriorityValidator is a validator for the "priority" field enum values. It is called by the builders before save.
-func PriorityValidator(pr enums.Priority) error {
-	switch pr.String() {
-	case "LOW", "MEDIUM", "HIGH", "CRITICAL":
-		return nil
-	default:
-		return fmt.Errorf("task: invalid enum value for priority field: %q", pr)
-	}
-}
-
 // OrderOption defines the ordering options for the Task queries.
 type OrderOption func(*sql.Selector)
 
@@ -310,19 +307,24 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
+}
+
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+}
+
 // ByDue orders the results by the due field.
 func ByDue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDue, opts...).ToFunc()
-}
-
-// ByPriority orders the results by the priority field.
-func ByPriority(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPriority, opts...).ToFunc()
 }
 
 // ByCompleted orders the results by the completed field.
@@ -358,6 +360,20 @@ func ByAssignerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByAssigneeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssigneeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCommentsCount orders the results by comments count.
+func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCommentsStep(), opts...)
+	}
+}
+
+// ByComments orders the results by comments terms.
+func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCommentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -493,6 +509,13 @@ func newAssigneeStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, AssigneeTable, AssigneeColumn),
 	)
 }
+func newCommentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CommentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+	)
+}
 func newGroupStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -555,11 +578,4 @@ var (
 	_ graphql.Marshaler = (*enums.TaskStatus)(nil)
 	// enums.TaskStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.TaskStatus)(nil)
-)
-
-var (
-	// enums.Priority must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.Priority)(nil)
-	// enums.Priority must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.Priority)(nil)
 )

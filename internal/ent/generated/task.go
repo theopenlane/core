@@ -44,13 +44,13 @@ type Task struct {
 	// the description of the task
 	Description string `json:"description,omitempty"`
 	// the details of the task
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details string `json:"details,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status,omitempty"`
+	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
+	Category string `json:"category,omitempty"`
 	// the due date of the task
 	Due time.Time `json:"due,omitempty"`
-	// the priority of the task
-	Priority enums.Priority `json:"priority,omitempty"`
 	// the completion date of the task
 	Completed time.Time `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
@@ -71,6 +71,8 @@ type TaskEdges struct {
 	Assigner *User `json:"assigner,omitempty"`
 	// Assignee holds the value of the assignee edge.
 	Assignee *User `json:"assignee,omitempty"`
+	// conversations related to the task
+	Comments []*Note `json:"comments,omitempty"`
 	// Group holds the value of the group edge.
 	Group []*Group `json:"group,omitempty"`
 	// InternalPolicy holds the value of the internal_policy edge.
@@ -89,10 +91,11 @@ type TaskEdges struct {
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
+	namedComments         map[string][]*Note
 	namedGroup            map[string][]*Group
 	namedInternalPolicy   map[string][]*InternalPolicy
 	namedProcedure        map[string][]*Procedure
@@ -136,10 +139,19 @@ func (e TaskEdges) AssigneeOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "assignee"}
 }
 
+// CommentsOrErr returns the Comments value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) CommentsOrErr() ([]*Note, error) {
+	if e.loadedTypes[3] {
+		return e.Comments, nil
+	}
+	return nil, &NotLoadedError{edge: "comments"}
+}
+
 // GroupOrErr returns the Group value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) GroupOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Group, nil
 	}
 	return nil, &NotLoadedError{edge: "group"}
@@ -148,7 +160,7 @@ func (e TaskEdges) GroupOrErr() ([]*Group, error) {
 // InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.InternalPolicy, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy"}
@@ -157,7 +169,7 @@ func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
 // ProcedureOrErr returns the Procedure value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Procedure, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure"}
@@ -166,7 +178,7 @@ func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -175,7 +187,7 @@ func (e TaskEdges) ControlOrErr() ([]*Control, error) {
 // ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.ControlObjective, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective"}
@@ -184,7 +196,7 @@ func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
 // SubcontrolOrErr returns the Subcontrol value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Subcontrol, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrol"}
@@ -193,7 +205,7 @@ func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -202,7 +214,7 @@ func (e TaskEdges) ProgramOrErr() ([]*Program, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -213,9 +225,9 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldTags, task.FieldDetails:
+		case task.FieldTags:
 			values[i] = new([]byte)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDisplayID, task.FieldDeletedBy, task.FieldOwnerID, task.FieldTitle, task.FieldDescription, task.FieldStatus, task.FieldPriority, task.FieldAssigneeID, task.FieldAssignerID:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDisplayID, task.FieldDeletedBy, task.FieldOwnerID, task.FieldTitle, task.FieldDescription, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt, task.FieldDue, task.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -309,12 +321,10 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				t.Description = value.String
 			}
 		case task.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &t.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				t.Details = value.String
 			}
 		case task.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -322,17 +332,17 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.Status = enums.TaskStatus(value.String)
 			}
+		case task.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				t.Category = value.String
+			}
 		case task.FieldDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due", values[i])
 			} else if value.Valid {
 				t.Due = value.Time
-			}
-		case task.FieldPriority:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field priority", values[i])
-			} else if value.Valid {
-				t.Priority = enums.Priority(value.String)
 			}
 		case task.FieldCompleted:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -378,6 +388,11 @@ func (t *Task) QueryAssigner() *UserQuery {
 // QueryAssignee queries the "assignee" edge of the Task entity.
 func (t *Task) QueryAssignee() *UserQuery {
 	return NewTaskClient(t.config).QueryAssignee(t)
+}
+
+// QueryComments queries the "comments" edge of the Task entity.
+func (t *Task) QueryComments() *NoteQuery {
+	return NewTaskClient(t.config).QueryComments(t)
 }
 
 // QueryGroup queries the "group" edge of the Task entity.
@@ -477,16 +492,16 @@ func (t *Task) String() string {
 	builder.WriteString(t.Description)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", t.Details))
+	builder.WriteString(t.Details)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", t.Status))
 	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(t.Category)
+	builder.WriteString(", ")
 	builder.WriteString("due=")
 	builder.WriteString(t.Due.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("priority=")
-	builder.WriteString(fmt.Sprintf("%v", t.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("completed=")
 	builder.WriteString(t.Completed.Format(time.ANSIC))
@@ -498,6 +513,30 @@ func (t *Task) String() string {
 	builder.WriteString(t.AssignerID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedComments returns the Comments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (t *Task) NamedComments(name string) ([]*Note, error) {
+	if t.Edges.namedComments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := t.Edges.namedComments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (t *Task) appendNamedComments(name string, edges ...*Note) {
+	if t.Edges.namedComments == nil {
+		t.Edges.namedComments = make(map[string][]*Note)
+	}
+	if len(edges) == 0 {
+		t.Edges.namedComments[name] = []*Note{}
+	} else {
+		t.Edges.namedComments[name] = append(t.Edges.namedComments[name], edges...)
+	}
 }
 
 // NamedGroup returns the Group named value or an error if the edge was not

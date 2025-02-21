@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -39,6 +40,7 @@ type TaskQuery struct {
 	withOwner                 *OrganizationQuery
 	withAssigner              *UserQuery
 	withAssignee              *UserQuery
+	withComments              *NoteQuery
 	withGroup                 *GroupQuery
 	withInternalPolicy        *InternalPolicyQuery
 	withProcedure             *ProcedureQuery
@@ -49,6 +51,7 @@ type TaskQuery struct {
 	withEvidence              *EvidenceQuery
 	loadTotal                 []func(context.Context, []*Task) error
 	modifiers                 []func(*sql.Selector)
+	withNamedComments         map[string]*NoteQuery
 	withNamedGroup            map[string]*GroupQuery
 	withNamedInternalPolicy   map[string]*InternalPolicyQuery
 	withNamedProcedure        map[string]*ProcedureQuery
@@ -162,6 +165,31 @@ func (tq *TaskQuery) QueryAssignee() *UserQuery {
 		schemaConfig := tq.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryComments chains the current query on the "comments" edge.
+func (tq *TaskQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, task.CommentsTable, task.CommentsColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -563,6 +591,7 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 		withOwner:            tq.withOwner.Clone(),
 		withAssigner:         tq.withAssigner.Clone(),
 		withAssignee:         tq.withAssignee.Clone(),
+		withComments:         tq.withComments.Clone(),
 		withGroup:            tq.withGroup.Clone(),
 		withInternalPolicy:   tq.withInternalPolicy.Clone(),
 		withProcedure:        tq.withProcedure.Clone(),
@@ -608,6 +637,17 @@ func (tq *TaskQuery) WithAssignee(opts ...func(*UserQuery)) *TaskQuery {
 		opt(query)
 	}
 	tq.withAssignee = query
+	return tq
+}
+
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithComments(opts ...func(*NoteQuery)) *TaskQuery {
+	query := (&NoteClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withComments = query
 	return tq
 }
 
@@ -783,10 +823,11 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	var (
 		nodes       = []*Task{}
 		_spec       = tq.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [12]bool{
 			tq.withOwner != nil,
 			tq.withAssigner != nil,
 			tq.withAssignee != nil,
+			tq.withComments != nil,
 			tq.withGroup != nil,
 			tq.withInternalPolicy != nil,
 			tq.withProcedure != nil,
@@ -835,6 +876,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	if query := tq.withAssignee; query != nil {
 		if err := tq.loadAssignee(ctx, query, nodes, nil,
 			func(n *Task, e *User) { n.Edges.Assignee = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withComments; query != nil {
+		if err := tq.loadComments(ctx, query, nodes,
+			func(n *Task) { n.Edges.Comments = []*Note{} },
+			func(n *Task, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -891,6 +939,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		if err := tq.loadEvidence(ctx, query, nodes,
 			func(n *Task) { n.Edges.Evidence = []*Evidence{} },
 			func(n *Task, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedComments {
+		if err := tq.loadComments(ctx, query, nodes,
+			func(n *Task) { n.appendNamedComments(name) },
+			func(n *Task, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1042,6 +1097,37 @@ func (tq *TaskQuery) loadAssignee(ctx context.Context, query *UserQuery, nodes [
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (tq *TaskQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Task, init func(*Task), assign func(*Task, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Task)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(task.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.task_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "task_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "task_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1647,6 +1733,20 @@ func (tq *TaskQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (tq *TaskQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskSelect {
 	tq.modifiers = append(tq.modifiers, modifiers...)
 	return tq.Select()
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *TaskQuery {
+	query := (&NoteClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedComments == nil {
+		tq.withNamedComments = make(map[string]*NoteQuery)
+	}
+	tq.withNamedComments[name] = query
+	return tq
 }
 
 // WithNamedGroup tells the query-builder to eager-load the nodes that are connected to the "group"

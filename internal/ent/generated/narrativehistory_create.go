@@ -157,6 +157,14 @@ func (nhc *NarrativeHistoryCreate) SetOwnerID(s string) *NarrativeHistoryCreate 
 	return nhc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableOwnerID(s *string) *NarrativeHistoryCreate {
+	if s != nil {
+		nhc.SetOwnerID(*s)
+	}
+	return nhc
+}
+
 // SetName sets the "name" field.
 func (nhc *NarrativeHistoryCreate) SetName(s string) *NarrativeHistoryCreate {
 	nhc.mutation.SetName(s)
@@ -283,9 +291,6 @@ func (nhc *NarrativeHistoryCreate) check() error {
 	}
 	if _, ok := nhc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "NarrativeHistory.display_id"`)}
-	}
-	if _, ok := nhc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "NarrativeHistory.owner_id"`)}
 	}
 	if _, ok := nhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "NarrativeHistory.name"`)}

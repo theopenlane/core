@@ -225,7 +225,7 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 			name: "happy path, using pat",
 			request: openlaneclient.CreateNarrativeInput{
 				Name:    "Narrative",
-				OwnerID: testUser1.OrganizationID,
+				OwnerID: &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),

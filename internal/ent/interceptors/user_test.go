@@ -26,6 +26,16 @@ func TestFilterType(t *testing.T) {
 			want: "org",
 		},
 		{
+			name: "task",
+			ctx: ent.NewQueryContext(graphql.WithRootFieldContext(context.Background(), &graphql.RootFieldContext{
+				Object: "task",
+			}), &ent.QueryContext{
+				Type: "",
+			},
+			),
+			want: "org",
+		},
+		{
 			name: "createGroup",
 			ctx: ent.NewQueryContext(graphql.WithRootFieldContext(context.Background(), &graphql.RootFieldContext{
 				Object: "createGroup",
@@ -110,7 +120,7 @@ func TestFilterType(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ft := filterType(tt.ctx)
+			ft := userFilterType(tt.ctx)
 
 			assert.Equal(t, tt.want, ft)
 		})

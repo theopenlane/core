@@ -123,12 +123,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Subcontrol_controls(ctx, field)
-			case "user":
-				return ec.fieldContext_Subcontrol_user(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Subcontrol_tasks(ctx, field)
-			case "notes":
-				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
 			case "evidence":
@@ -237,12 +233,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Subcontrol_controls(ctx, field)
-			case "user":
-				return ec.fieldContext_Subcontrol_user(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Subcontrol_tasks(ctx, field)
-			case "notes":
-				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
 			case "evidence":
@@ -395,12 +387,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Subcontrol_controls(ctx, field)
-			case "user":
-				return ec.fieldContext_Subcontrol_user(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Subcontrol_tasks(ctx, field)
-			case "notes":
-				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
 			case "evidence":

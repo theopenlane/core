@@ -33,6 +33,8 @@ func init() {
 	updateCmd.Flags().Duration("due", 0, "time until due date of the task")
 	updateCmd.Flags().StringP("add-group", "g", "", "group ID to own the task, this will give the group access to the task")
 	updateCmd.Flags().String("remove-group", "", "group ID to own the task, this will give the group access to the task")
+	updateCmd.Flags().StringP("add-comment", "c", "", "add a comment to the task")
+	updateCmd.Flags().String("delete-comment", "", "delete a comment by ID from the task")
 }
 
 // updateValidation validates the required fields for the command
@@ -78,6 +80,18 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 	group = cmd.Config.String("remove-group")
 	if group != "" {
 		input.RemoveGroupIDs = []string{group}
+	}
+
+	comment := cmd.Config.String("add-comment")
+	if comment != "" {
+		input.AddComment = &openlaneclient.CreateNoteInput{
+			Text: comment,
+		}
+	}
+
+	deleteCommentID := cmd.Config.String("delete-comment")
+	if deleteCommentID != "" {
+		input.RemoveCommentIDs = []string{deleteCommentID}
 	}
 
 	return id, input, nil

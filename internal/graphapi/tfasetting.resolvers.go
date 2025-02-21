@@ -7,10 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/graphutils"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -94,8 +94,13 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 		TfaSecret:  &secret,
 	}
 
-	gtx := graphql.GetOperationContext(ctx)
-	regenBackupCodes, _ := gtx.Variables["input"].(map[string]interface{})["regenBackupCodes"].(bool)
+	regenBackupCodes := false
+
+	requestInput := graphutils.GetMapInputVariableByName(ctx, "input")
+	if requestInput != nil {
+		r := *requestInput
+		regenBackupCodes, _ = r["regenBackupCodes"].(bool)
+	}
 
 	// only return the recovery codes if the TFA device has been verified or if the user requested new codes
 	if (input.Verified != nil && *input.Verified == true) || regenBackupCodes {

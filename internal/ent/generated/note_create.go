@@ -10,11 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
 // NoteCreate is the builder for creating a Note entity.
@@ -153,53 +151,23 @@ func (nc *NoteCreate) SetOwner(o *Organization) *NoteCreate {
 	return nc.SetOwnerID(o.ID)
 }
 
-// SetEntityID sets the "entity" edge to the Entity entity by ID.
-func (nc *NoteCreate) SetEntityID(id string) *NoteCreate {
-	nc.mutation.SetEntityID(id)
+// SetTaskID sets the "task" edge to the Task entity by ID.
+func (nc *NoteCreate) SetTaskID(id string) *NoteCreate {
+	nc.mutation.SetTaskID(id)
 	return nc
 }
 
-// SetNillableEntityID sets the "entity" edge to the Entity entity by ID if the given value is not nil.
-func (nc *NoteCreate) SetNillableEntityID(id *string) *NoteCreate {
+// SetNillableTaskID sets the "task" edge to the Task entity by ID if the given value is not nil.
+func (nc *NoteCreate) SetNillableTaskID(id *string) *NoteCreate {
 	if id != nil {
-		nc = nc.SetEntityID(*id)
+		nc = nc.SetTaskID(*id)
 	}
 	return nc
 }
 
-// SetEntity sets the "entity" edge to the Entity entity.
-func (nc *NoteCreate) SetEntity(e *Entity) *NoteCreate {
-	return nc.SetEntityID(e.ID)
-}
-
-// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (nc *NoteCreate) AddSubcontrolIDs(ids ...string) *NoteCreate {
-	nc.mutation.AddSubcontrolIDs(ids...)
-	return nc
-}
-
-// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (nc *NoteCreate) AddSubcontrols(s ...*Subcontrol) *NoteCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return nc.AddSubcontrolIDs(ids...)
-}
-
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
-func (nc *NoteCreate) AddProgramIDs(ids ...string) *NoteCreate {
-	nc.mutation.AddProgramIDs(ids...)
-	return nc
-}
-
-// AddProgram adds the "program" edges to the Program entity.
-func (nc *NoteCreate) AddProgram(p ...*Program) *NoteCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return nc.AddProgramIDs(ids...)
+// SetTask sets the "task" edge to the Task entity.
+func (nc *NoteCreate) SetTask(t *Task) *NoteCreate {
+	return nc.SetTaskID(t.ID)
 }
 
 // Mutation returns the NoteMutation object of the builder.
@@ -372,56 +340,22 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.EntityIDs(); len(nodes) > 0 {
+	if nodes := nc.mutation.TaskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   note.EntityTable,
-			Columns: []string{note.EntityColumn},
+			Table:   note.TaskTable,
+			Columns: []string{note.TaskColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nc.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.entity_notes = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := nc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nc.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := nc.mutation.ProgramIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nc.schemaConfig.ProgramNotes
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
+		_node.task_comments = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -13,12 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -26,19 +23,15 @@ import (
 // NoteQuery is the builder for querying Note entities.
 type NoteQuery struct {
 	config
-	ctx                  *QueryContext
-	order                []note.OrderOption
-	inters               []Interceptor
-	predicates           []predicate.Note
-	withOwner            *OrganizationQuery
-	withEntity           *EntityQuery
-	withSubcontrols      *SubcontrolQuery
-	withProgram          *ProgramQuery
-	withFKs              bool
-	loadTotal            []func(context.Context, []*Note) error
-	modifiers            []func(*sql.Selector)
-	withNamedSubcontrols map[string]*SubcontrolQuery
-	withNamedProgram     map[string]*ProgramQuery
+	ctx        *QueryContext
+	order      []note.OrderOption
+	inters     []Interceptor
+	predicates []predicate.Note
+	withOwner  *OrganizationQuery
+	withTask   *TaskQuery
+	withFKs    bool
+	loadTotal  []func(context.Context, []*Note) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -100,9 +93,9 @@ func (nq *NoteQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
-// QueryEntity chains the current query on the "entity" edge.
-func (nq *NoteQuery) QueryEntity() *EntityQuery {
-	query := (&EntityClient{config: nq.config}).Query()
+// QueryTask chains the current query on the "task" edge.
+func (nq *NoteQuery) QueryTask() *TaskQuery {
+	query := (&TaskClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -113,62 +106,12 @@ func (nq *NoteQuery) QueryEntity() *EntityQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, selector),
-			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, note.EntityTable, note.EntityColumn),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.TaskTable, note.TaskColumn),
 		)
 		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.Entity
+		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Note
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QuerySubcontrols chains the current query on the "subcontrols" edge.
-func (nq *NoteQuery) QuerySubcontrols() *SubcontrolQuery {
-	query := (&SubcontrolClient{config: nq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := nq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(note.Table, note.FieldID, selector),
-			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, note.SubcontrolsTable, note.SubcontrolsColumn),
-		)
-		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryProgram chains the current query on the "program" edge.
-func (nq *NoteQuery) QueryProgram() *ProgramQuery {
-	query := (&ProgramClient{config: nq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := nq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(note.Table, note.FieldID, selector),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, note.ProgramTable, note.ProgramPrimaryKey...),
-		)
-		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramNotes
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -362,15 +305,13 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 		return nil
 	}
 	return &NoteQuery{
-		config:          nq.config,
-		ctx:             nq.ctx.Clone(),
-		order:           append([]note.OrderOption{}, nq.order...),
-		inters:          append([]Interceptor{}, nq.inters...),
-		predicates:      append([]predicate.Note{}, nq.predicates...),
-		withOwner:       nq.withOwner.Clone(),
-		withEntity:      nq.withEntity.Clone(),
-		withSubcontrols: nq.withSubcontrols.Clone(),
-		withProgram:     nq.withProgram.Clone(),
+		config:     nq.config,
+		ctx:        nq.ctx.Clone(),
+		order:      append([]note.OrderOption{}, nq.order...),
+		inters:     append([]Interceptor{}, nq.inters...),
+		predicates: append([]predicate.Note{}, nq.predicates...),
+		withOwner:  nq.withOwner.Clone(),
+		withTask:   nq.withTask.Clone(),
 		// clone intermediate query.
 		sql:       nq.sql.Clone(),
 		path:      nq.path,
@@ -389,36 +330,14 @@ func (nq *NoteQuery) WithOwner(opts ...func(*OrganizationQuery)) *NoteQuery {
 	return nq
 }
 
-// WithEntity tells the query-builder to eager-load the nodes that are connected to
-// the "entity" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithEntity(opts ...func(*EntityQuery)) *NoteQuery {
-	query := (&EntityClient{config: nq.config}).Query()
+// WithTask tells the query-builder to eager-load the nodes that are connected to
+// the "task" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithTask(opts ...func(*TaskQuery)) *NoteQuery {
+	query := (&TaskClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withEntity = query
-	return nq
-}
-
-// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
-// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *NoteQuery {
-	query := (&SubcontrolClient{config: nq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	nq.withSubcontrols = query
-	return nq
-}
-
-// WithProgram tells the query-builder to eager-load the nodes that are connected to
-// the "program" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithProgram(opts ...func(*ProgramQuery)) *NoteQuery {
-	query := (&ProgramClient{config: nq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	nq.withProgram = query
+	nq.withTask = query
 	return nq
 }
 
@@ -507,14 +426,12 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = nq.withFKs
 		_spec       = nq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [2]bool{
 			nq.withOwner != nil,
-			nq.withEntity != nil,
-			nq.withSubcontrols != nil,
-			nq.withProgram != nil,
+			nq.withTask != nil,
 		}
 	)
-	if nq.withEntity != nil {
+	if nq.withTask != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -549,37 +466,9 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			return nil, err
 		}
 	}
-	if query := nq.withEntity; query != nil {
-		if err := nq.loadEntity(ctx, query, nodes, nil,
-			func(n *Note, e *Entity) { n.Edges.Entity = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := nq.withSubcontrols; query != nil {
-		if err := nq.loadSubcontrols(ctx, query, nodes,
-			func(n *Note) { n.Edges.Subcontrols = []*Subcontrol{} },
-			func(n *Note, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := nq.withProgram; query != nil {
-		if err := nq.loadProgram(ctx, query, nodes,
-			func(n *Note) { n.Edges.Program = []*Program{} },
-			func(n *Note, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range nq.withNamedSubcontrols {
-		if err := nq.loadSubcontrols(ctx, query, nodes,
-			func(n *Note) { n.appendNamedSubcontrols(name) },
-			func(n *Note, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range nq.withNamedProgram {
-		if err := nq.loadProgram(ctx, query, nodes,
-			func(n *Note) { n.appendNamedProgram(name) },
-			func(n *Note, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
+	if query := nq.withTask; query != nil {
+		if err := nq.loadTask(ctx, query, nodes, nil,
+			func(n *Note, e *Task) { n.Edges.Task = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -620,14 +509,14 @@ func (nq *NoteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, no
 	}
 	return nil
 }
-func (nq *NoteQuery) loadEntity(ctx context.Context, query *EntityQuery, nodes []*Note, init func(*Note), assign func(*Note, *Entity)) error {
+func (nq *NoteQuery) loadTask(ctx context.Context, query *TaskQuery, nodes []*Note, init func(*Note), assign func(*Note, *Task)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
-		if nodes[i].entity_notes == nil {
+		if nodes[i].task_comments == nil {
 			continue
 		}
-		fk := *nodes[i].entity_notes
+		fk := *nodes[i].task_comments
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -636,7 +525,7 @@ func (nq *NoteQuery) loadEntity(ctx context.Context, query *EntityQuery, nodes [
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(entity.IDIn(ids...))
+	query.Where(task.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -644,103 +533,10 @@ func (nq *NoteQuery) loadEntity(ctx context.Context, query *EntityQuery, nodes [
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "entity_notes" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "task_comments" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (nq *NoteQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Note, init func(*Note), assign func(*Note, *Subcontrol)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Note)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Subcontrol(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(note.SubcontrolsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.note_subcontrols
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "note_subcontrols" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "note_subcontrols" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (nq *NoteQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*Note, init func(*Note), assign func(*Note, *Program)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Note)
-	nids := make(map[string]map[*Note]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(note.ProgramTable)
-		joinT.Schema(nq.schemaConfig.ProgramNotes)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(note.ProgramPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(note.ProgramPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(note.ProgramPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Note]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
 		}
 	}
 	return nil
@@ -845,34 +641,6 @@ func (nq *NoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (nq *NoteQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
 	nq.modifiers = append(nq.modifiers, modifiers...)
 	return nq.Select()
-}
-
-// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *NoteQuery {
-	query := (&SubcontrolClient{config: nq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if nq.withNamedSubcontrols == nil {
-		nq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
-	}
-	nq.withNamedSubcontrols[name] = query
-	return nq
-}
-
-// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *NoteQuery {
-	query := (&ProgramClient{config: nq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if nq.withNamedProgram == nil {
-		nq.withNamedProgram = make(map[string]*ProgramQuery)
-	}
-	nq.withNamedProgram[name] = query
-	return nq
 }
 
 // NoteGroupBy is the group-by builder for Note entities.

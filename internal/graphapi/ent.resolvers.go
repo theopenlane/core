@@ -1198,6 +1198,11 @@ func (r *Resolver) UpdateTFASettingInput() gqlgenerated.UpdateTFASettingInputRes
 	return &updateTFASettingInputResolver{r}
 }
 
+// UpdateTaskInput returns gqlgenerated.UpdateTaskInputResolver implementation.
+func (r *Resolver) UpdateTaskInput() gqlgenerated.UpdateTaskInputResolver {
+	return &updateTaskInputResolver{r}
+}
+
 type groupResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
@@ -1208,3 +1213,4 @@ type updateGroupInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }
 type updateProgramInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
+type updateTaskInputResolver struct{ *Resolver }

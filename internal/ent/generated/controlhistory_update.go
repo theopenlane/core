@@ -122,20 +122,6 @@ func (chu *ControlHistoryUpdate) ClearTags() *ControlHistoryUpdate {
 	return chu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (chu *ControlHistoryUpdate) SetOwnerID(s string) *ControlHistoryUpdate {
-	chu.mutation.SetOwnerID(s)
-	return chu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableOwnerID(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetOwnerID(*s)
-	}
-	return chu
-}
-
 // SetName sets the "name" field.
 func (chu *ControlHistoryUpdate) SetName(s string) *ControlHistoryUpdate {
 	chu.mutation.SetName(s)
@@ -482,8 +468,8 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if chu.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.OwnerID(); ok {
-		_spec.SetField(controlhistory.FieldOwnerID, field.TypeString, value)
+	if chu.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := chu.mutation.Name(); ok {
 		_spec.SetField(controlhistory.FieldName, field.TypeString, value)
@@ -671,20 +657,6 @@ func (chuo *ControlHistoryUpdateOne) AppendTags(s []string) *ControlHistoryUpdat
 // ClearTags clears the value of the "tags" field.
 func (chuo *ControlHistoryUpdateOne) ClearTags() *ControlHistoryUpdateOne {
 	chuo.mutation.ClearTags()
-	return chuo
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (chuo *ControlHistoryUpdateOne) SetOwnerID(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetOwnerID(s)
-	return chuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableOwnerID(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetOwnerID(*s)
-	}
 	return chuo
 }
 
@@ -1064,8 +1036,8 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	if chuo.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.OwnerID(); ok {
-		_spec.SetField(controlhistory.FieldOwnerID, field.TypeString, value)
+	if chuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := chuo.mutation.Name(); ok {
 		_spec.SetField(controlhistory.FieldName, field.TypeString, value)

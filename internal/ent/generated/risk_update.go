@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -126,20 +125,6 @@ func (ru *RiskUpdate) AppendTags(s []string) *RiskUpdate {
 // ClearTags clears the value of the "tags" field.
 func (ru *RiskUpdate) ClearTags() *RiskUpdate {
 	ru.mutation.ClearTags()
-	return ru
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (ru *RiskUpdate) SetOwnerID(s string) *RiskUpdate {
-	ru.mutation.SetOwnerID(s)
-	return ru
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableOwnerID(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetOwnerID(*s)
-	}
 	return ru
 }
 
@@ -329,11 +314,6 @@ func (ru *RiskUpdate) ClearDetails() *RiskUpdate {
 	return ru
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (ru *RiskUpdate) SetOwner(o *Organization) *RiskUpdate {
-	return ru.SetOwnerID(o.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (ru *RiskUpdate) AddBlockedGroupIDs(ids ...string) *RiskUpdate {
 	ru.mutation.AddBlockedGroupIDs(ids...)
@@ -442,12 +422,6 @@ func (ru *RiskUpdate) AddPrograms(p ...*Program) *RiskUpdate {
 // Mutation returns the RiskMutation object of the builder.
 func (ru *RiskUpdate) Mutation() *RiskMutation {
 	return ru.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (ru *RiskUpdate) ClearOwner() *RiskUpdate {
-	ru.mutation.ClearOwner()
-	return ru
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -641,11 +615,6 @@ func (ru *RiskUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ru *RiskUpdate) check() error {
-	if v, ok := ru.mutation.OwnerID(); ok {
-		if err := risk.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Risk.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := ru.mutation.Name(); ok {
 		if err := risk.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
@@ -660,9 +629,6 @@ func (ru *RiskUpdate) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
-	}
-	if ru.mutation.OwnerCleared() && len(ru.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Risk.owner"`)
 	}
 	return nil
 }
@@ -782,37 +748,6 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
-	}
-	if ru.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   risk.OwnerTable,
-			Columns: []string{risk.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ru.schemaConfig.Risk
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ru.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   risk.OwnerTable,
-			Columns: []string{risk.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ru.schemaConfig.Risk
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ru.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1264,20 +1199,6 @@ func (ruo *RiskUpdateOne) ClearTags() *RiskUpdateOne {
 	return ruo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (ruo *RiskUpdateOne) SetOwnerID(s string) *RiskUpdateOne {
-	ruo.mutation.SetOwnerID(s)
-	return ruo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableOwnerID(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetOwnerID(*s)
-	}
-	return ruo
-}
-
 // SetName sets the "name" field.
 func (ruo *RiskUpdateOne) SetName(s string) *RiskUpdateOne {
 	ruo.mutation.SetName(s)
@@ -1464,11 +1385,6 @@ func (ruo *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
 	return ruo
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (ruo *RiskUpdateOne) SetOwner(o *Organization) *RiskUpdateOne {
-	return ruo.SetOwnerID(o.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (ruo *RiskUpdateOne) AddBlockedGroupIDs(ids ...string) *RiskUpdateOne {
 	ruo.mutation.AddBlockedGroupIDs(ids...)
@@ -1577,12 +1493,6 @@ func (ruo *RiskUpdateOne) AddPrograms(p ...*Program) *RiskUpdateOne {
 // Mutation returns the RiskMutation object of the builder.
 func (ruo *RiskUpdateOne) Mutation() *RiskMutation {
 	return ruo.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (ruo *RiskUpdateOne) ClearOwner() *RiskUpdateOne {
-	ruo.mutation.ClearOwner()
-	return ruo
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1789,11 +1699,6 @@ func (ruo *RiskUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ruo *RiskUpdateOne) check() error {
-	if v, ok := ruo.mutation.OwnerID(); ok {
-		if err := risk.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Risk.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := ruo.mutation.Name(); ok {
 		if err := risk.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
@@ -1808,9 +1713,6 @@ func (ruo *RiskUpdateOne) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
-	}
-	if ruo.mutation.OwnerCleared() && len(ruo.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Risk.owner"`)
 	}
 	return nil
 }
@@ -1947,37 +1849,6 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	}
 	if ruo.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
-	}
-	if ruo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   risk.OwnerTable,
-			Columns: []string{risk.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ruo.schemaConfig.Risk
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ruo.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   risk.OwnerTable,
-			Columns: []string{risk.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ruo.schemaConfig.Risk
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ruo.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

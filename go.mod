@@ -74,7 +74,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.8.2
 	github.com/theopenlane/newman v0.1.2
-	github.com/theopenlane/riverboat v0.0.8
+	github.com/theopenlane/riverboat v0.0.9
 	github.com/theopenlane/utils v0.4.3
 	github.com/vektah/gqlparser/v2 v2.5.22
 	github.com/wk8/go-ordered-map/v2 v2.1.8

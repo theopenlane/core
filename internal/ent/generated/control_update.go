@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -131,20 +130,6 @@ func (cu *ControlUpdate) AppendTags(s []string) *ControlUpdate {
 // ClearTags clears the value of the "tags" field.
 func (cu *ControlUpdate) ClearTags() *ControlUpdate {
 	cu.mutation.ClearTags()
-	return cu
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (cu *ControlUpdate) SetOwnerID(s string) *ControlUpdate {
-	cu.mutation.SetOwnerID(s)
-	return cu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableOwnerID(s *string) *ControlUpdate {
-	if s != nil {
-		cu.SetOwnerID(*s)
-	}
 	return cu
 }
 
@@ -394,11 +379,6 @@ func (cu *ControlUpdate) ClearExampleEvidence() *ControlUpdate {
 	return cu
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (cu *ControlUpdate) SetOwner(o *Organization) *ControlUpdate {
-	return cu.SetOwnerID(o.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (cu *ControlUpdate) AddBlockedGroupIDs(ids ...string) *ControlUpdate {
 	cu.mutation.AddBlockedGroupIDs(ids...)
@@ -597,12 +577,6 @@ func (cu *ControlUpdate) AddEvidence(e ...*Evidence) *ControlUpdate {
 // Mutation returns the ControlMutation object of the builder.
 func (cu *ControlUpdate) Mutation() *ControlMutation {
 	return cu.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (cu *ControlUpdate) ClearOwner() *ControlUpdate {
-	cu.mutation.ClearOwner()
-	return cu
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -922,18 +896,10 @@ func (cu *ControlUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cu *ControlUpdate) check() error {
-	if v, ok := cu.mutation.OwnerID(); ok {
-		if err := control.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := cu.mutation.Name(); ok {
 		if err := control.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Control.name": %w`, err)}
 		}
-	}
-	if cu.mutation.OwnerCleared() && len(cu.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Control.owner"`)
 	}
 	return nil
 }
@@ -1071,37 +1037,6 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.ExampleEvidenceCleared() {
 		_spec.ClearField(control.FieldExampleEvidence, field.TypeString)
-	}
-	if cu.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   control.OwnerTable,
-			Columns: []string{control.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cu.schemaConfig.Control
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   control.OwnerTable,
-			Columns: []string{control.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cu.schemaConfig.Control
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cu.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1841,20 +1776,6 @@ func (cuo *ControlUpdateOne) ClearTags() *ControlUpdateOne {
 	return cuo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (cuo *ControlUpdateOne) SetOwnerID(s string) *ControlUpdateOne {
-	cuo.mutation.SetOwnerID(s)
-	return cuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableOwnerID(s *string) *ControlUpdateOne {
-	if s != nil {
-		cuo.SetOwnerID(*s)
-	}
-	return cuo
-}
-
 // SetName sets the "name" field.
 func (cuo *ControlUpdateOne) SetName(s string) *ControlUpdateOne {
 	cuo.mutation.SetName(s)
@@ -2101,11 +2022,6 @@ func (cuo *ControlUpdateOne) ClearExampleEvidence() *ControlUpdateOne {
 	return cuo
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (cuo *ControlUpdateOne) SetOwner(o *Organization) *ControlUpdateOne {
-	return cuo.SetOwnerID(o.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (cuo *ControlUpdateOne) AddBlockedGroupIDs(ids ...string) *ControlUpdateOne {
 	cuo.mutation.AddBlockedGroupIDs(ids...)
@@ -2304,12 +2220,6 @@ func (cuo *ControlUpdateOne) AddEvidence(e ...*Evidence) *ControlUpdateOne {
 // Mutation returns the ControlMutation object of the builder.
 func (cuo *ControlUpdateOne) Mutation() *ControlMutation {
 	return cuo.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (cuo *ControlUpdateOne) ClearOwner() *ControlUpdateOne {
-	cuo.mutation.ClearOwner()
-	return cuo
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -2642,18 +2552,10 @@ func (cuo *ControlUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cuo *ControlUpdateOne) check() error {
-	if v, ok := cuo.mutation.OwnerID(); ok {
-		if err := control.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := cuo.mutation.Name(); ok {
 		if err := control.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Control.name": %w`, err)}
 		}
-	}
-	if cuo.mutation.OwnerCleared() && len(cuo.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Control.owner"`)
 	}
 	return nil
 }
@@ -2808,37 +2710,6 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	}
 	if cuo.mutation.ExampleEvidenceCleared() {
 		_spec.ClearField(control.FieldExampleEvidence, field.TypeString)
-	}
-	if cuo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   control.OwnerTable,
-			Columns: []string{control.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cuo.schemaConfig.Control
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   control.OwnerTable,
-			Columns: []string{control.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cuo.schemaConfig.Control
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cuo.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

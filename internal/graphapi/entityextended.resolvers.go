@@ -7,9 +7,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -35,14 +35,13 @@ func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.Upd
 	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil || ownerID == "" {
 		// get the entity id from the context
-		gtx := graphql.GetOperationContext(ctx)
-		id, ok := gtx.Variables["updateEntityId"]
-		if !ok {
+		id := graphutils.GetStringInputVariableByName(ctx, "id")
+		if id == nil {
 			return rout.NewMissingRequiredFieldError("entity id")
 		}
 
 		// get the entity in order to set the organization in the auth context
-		res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id.(string))
+		res, err := withTransactionalMutation(ctx).Entity.Get(ctx, *id)
 		if err != nil {
 			return parseRequestError(err, action{action: ActionUpdate, object: "entity"})
 		}

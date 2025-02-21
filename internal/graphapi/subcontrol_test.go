@@ -233,7 +233,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			request: openlaneclient.CreateSubcontrolInput{
 				Name:       "Subcontrol",
 				ControlIDs: []string{control1.ID},
-				OwnerID:    testUser1.OrganizationID,
+				OwnerID:    &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),

@@ -50,10 +50,10 @@ const (
 	FieldDetails = "details"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
 	// FieldDue holds the string denoting the due field in the database.
 	FieldDue = "due"
-	// FieldPriority holds the string denoting the priority field in the database.
-	FieldPriority = "priority"
 	// FieldCompleted holds the string denoting the completed field in the database.
 	FieldCompleted = "completed"
 	// FieldAssigneeID holds the string denoting the assignee_id field in the database.
@@ -83,8 +83,8 @@ var Columns = []string{
 	FieldDescription,
 	FieldDetails,
 	FieldStatus,
+	FieldCategory,
 	FieldDue,
-	FieldPriority,
 	FieldCompleted,
 	FieldAssigneeID,
 	FieldAssignerID,
@@ -140,18 +140,6 @@ func StatusValidator(s enums.TaskStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("taskhistory: invalid enum value for status field: %q", s)
-	}
-}
-
-const DefaultPriority enums.Priority = "MEDIUM"
-
-// PriorityValidator is a validator for the "priority" field enum values. It is called by the builders before save.
-func PriorityValidator(pr enums.Priority) error {
-	switch pr.String() {
-	case "LOW", "MEDIUM", "HIGH", "CRITICAL":
-		return nil
-	default:
-		return fmt.Errorf("taskhistory: invalid enum value for priority field: %q", pr)
 	}
 }
 
@@ -228,19 +216,24 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
+}
+
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+}
+
 // ByDue orders the results by the due field.
 func ByDue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDue, opts...).ToFunc()
-}
-
-// ByPriority orders the results by the priority field.
-func ByPriority(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPriority, opts...).ToFunc()
 }
 
 // ByCompleted orders the results by the completed field.
@@ -270,11 +263,4 @@ var (
 	_ graphql.Marshaler = (*enums.TaskStatus)(nil)
 	// enums.TaskStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.TaskStatus)(nil)
-)
-
-var (
-	// enums.Priority must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.Priority)(nil)
-	// enums.Priority must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.Priority)(nil)
 )

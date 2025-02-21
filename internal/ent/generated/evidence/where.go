@@ -652,6 +652,16 @@ func OwnerIDHasSuffix(v string) predicate.Evidence {
 	return predicate.Evidence(sql.FieldHasSuffix(FieldOwnerID, v))
 }
 
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotNull(FieldOwnerID))
+}
+
 // OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
 func OwnerIDEqualFold(v string) predicate.Evidence {
 	return predicate.Evidence(sql.FieldEqualFold(FieldOwnerID, v))

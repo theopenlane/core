@@ -134,6 +134,14 @@ func (cc *ControlCreate) SetOwnerID(s string) *ControlCreate {
 	return cc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableOwnerID(s *string) *ControlCreate {
+	if s != nil {
+		cc.SetOwnerID(*s)
+	}
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *ControlCreate) SetName(s string) *ControlCreate {
 	cc.mutation.SetName(s)
@@ -589,9 +597,6 @@ func (cc *ControlCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Control.display_id": %w`, err)}
 		}
 	}
-	if _, ok := cc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Control.owner_id"`)}
-	}
 	if v, ok := cc.mutation.OwnerID(); ok {
 		if err := control.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
@@ -604,9 +609,6 @@ func (cc *ControlCreate) check() error {
 		if err := control.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Control.name": %w`, err)}
 		}
-	}
-	if len(cc.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Control.owner"`)}
 	}
 	return nil
 }
