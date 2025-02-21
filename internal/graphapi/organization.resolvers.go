@@ -11,10 +11,17 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/iam/auth"
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
 func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error) {
+	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
+		log.Info().Msg("organization attempted to be created with non-JWT auth type")
+
+		return nil, ErrResourceNotAccessibleWithToken
+	}
+
 	// set the parent organization in the auth context, used when creating a sub-organization with a personal access token
 	if input.ParentID != nil {
 		if err := setOrganizationInAuthContext(ctx, input.ParentID); err != nil {

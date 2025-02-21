@@ -7,12 +7,20 @@ package graphapi
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/iam/auth"
 )
 
 // CreateOnboarding is the resolver for the createOnboarding field.
 func (r *mutationResolver) CreateOnboarding(ctx context.Context, input generated.CreateOnboardingInput) (*model.OnboardingCreatePayload, error) {
+	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
+		log.Info().Msg("organization attempted to be created with non-JWT auth type")
+
+		return nil, ErrResourceNotAccessibleWithToken
+	}
+
 	res, err := withTransactionalMutation(ctx).Onboarding.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "onboarding"})
