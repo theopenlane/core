@@ -104,8 +104,8 @@ github.com/VividCortex/ewma v1.2.0 h1:f58SaIzcDXrSy3kWaHNvuJgJ3Nmz59Zji6XoJR/q1o
 github.com/VividCortex/ewma v1.2.0/go.mod h1:nz4BbCtbLyFDeC9SUHbtcT5644juEuWfUAUnGx7j5l4=
 github.com/XSAM/otelsql v0.37.0 h1:ya5RNw028JW0eJW8Ma4AmoKxAYsJSGuNVbC7F1J457A=
 github.com/XSAM/otelsql v0.37.0/go.mod h1:LHbCu49iU8p255nCn1oi04oX2UjSoRcUMiKEHo2a5qM=
-github.com/Yamashou/gqlgenc v0.30.3 h1:a5RyDxLVQDgyQB1KqbvqkVdEmF0jUGybHNkLdDBRTBk=
-github.com/Yamashou/gqlgenc v0.30.3/go.mod h1:0VNZtzXhyDofkNNZXXPw8LSLvi3vyG6LXo7XvcWv2X4=
+github.com/Yamashou/gqlgenc v0.31.0 h1:t54Gi6Zx9Ub1oa/RvJ+DkOC1c2wdK1R4n7wyRBuQkyc=
+github.com/Yamashou/gqlgenc v0.31.0/go.mod h1:0VNZtzXhyDofkNNZXXPw8LSLvi3vyG6LXo7XvcWv2X4=
 github.com/Yiling-J/theine-go v0.6.0 h1:jv7V/tcD6ijL0T4kfbJDKP81TCZBkoriNTPSqwivWuY=
 github.com/Yiling-J/theine-go v0.6.0/go.mod h1:mdch1vjgGWd7s3rWKvY+MF5InRLfRv/CWVI9RVNQ8wY=
 github.com/agext/levenshtein v1.2.3 h1:YB2fHEn0UJagG8T1rrWknE3ZQzWM06O8AMAatNn7lmo=
