@@ -49,10 +49,10 @@ require (
 	github.com/openfga/go-sdk v0.6.5
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.1
-	github.com/projectdiscovery/cdncheck v1.1.6
+	github.com/projectdiscovery/cdncheck v1.1.7
 	github.com/projectdiscovery/dnsx v1.2.2
-	github.com/projectdiscovery/goflags v0.1.72
-	github.com/projectdiscovery/utils v0.4.11
+	github.com/projectdiscovery/goflags v0.1.73
+	github.com/projectdiscovery/utils v0.4.12
 	github.com/prometheus/client_golang v1.21.0
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.1
@@ -74,7 +74,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.8.2
 	github.com/theopenlane/newman v0.1.2
-	github.com/theopenlane/riverboat v0.0.8
+	github.com/theopenlane/riverboat v0.0.9
 	github.com/theopenlane/utils v0.4.3
 	github.com/vektah/gqlparser/v2 v2.5.22
 	github.com/wk8/go-ordered-map/v2 v2.1.8
@@ -285,15 +285,15 @@ require (
 	github.com/projectdiscovery/chaos-client v0.5.2 // indirect
 	github.com/projectdiscovery/dsl v0.3.13 // indirect
 	github.com/projectdiscovery/fastdialer v0.3.0 // indirect
-	github.com/projectdiscovery/gologger v1.1.44 // indirect
+	github.com/projectdiscovery/gologger v1.1.45 // indirect
 	github.com/projectdiscovery/gostruct v0.0.2 // indirect
-	github.com/projectdiscovery/hmap v0.0.79 // indirect
+	github.com/projectdiscovery/hmap v0.0.80 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
 	github.com/projectdiscovery/networkpolicy v0.1.1 // indirect
 	github.com/projectdiscovery/ratelimit v0.0.69 // indirect
 	github.com/projectdiscovery/retryabledns v1.0.94 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.99 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.100 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.3-0.20240823090925-0fe6f58b47b1 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -511,7 +511,7 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
 	github.com/projectdiscovery/subfinder/v2 v2.6.8
-	github.com/projectdiscovery/wappalyzergo v0.2.16
+	github.com/projectdiscovery/wappalyzergo v0.2.17
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
