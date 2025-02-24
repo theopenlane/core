@@ -2,6 +2,7 @@
 # Tuples for testing the FGA implementation
 # This file is specific to procedures
 ############################################
+
 # setup users and groups
 - user: user:ulid-group-editor
   relation: member
