@@ -1,0 +1,44 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to groups
+############################################
+
+# setup group with owner
+- user: organization:openlane
+  relation: parent
+  object: group:cat-lovers
+  condition:
+    name: public_group
+    context:
+      public: true
+# setup private group with owner
+- user: organization:openlane
+  relation: parent
+  object: group:cat-haters
+  condition:
+    name: public_group
+    context:
+      public: false
+# add group admin
+- user: user:ulid-of-owner
+  relation: admin
+  object: group:cat-lovers
+  # add group admin of private group
+- user: user:ulid-of-owner
+  relation: admin
+  object: group:cat-haters
+# add group member but not a member of the org
+- user: user:ulid-of-cat-lover-member
+  relation: member
+  object: group:cat-lovers
+# add audit log viewer
+- user: user:ulid-of-audit-log-viewer
+  relation: member
+  object: group:cat-lovers
+- user: user:ulid-of-audit-log-viewer
+  relation: audit_log_viewer
+  object: group:cat-lovers
+# add group member
+- user: user:ulid-of-member
+  relation: member
+  object: group:cat-lovers

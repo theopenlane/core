@@ -1,0 +1,39 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to evidence
+############################################
+
+- user: program:program-1
+  relation: parent
+  object: evidence:evidence-1
+- user: user:ulid-admin
+  relation: can_delete
+  object: evidence:evidence-1
+- user: task:task-1
+  relation: parent
+  object: evidence:evidence-1
+- user: user:ulid-task-assignee
+  relation: assignee
+  object: task:task-1
+- user: user:ulid-member
+  relation: member
+  object: program:program-1
+- user: user:ulid-member
+  relation: member
+  object: organization:openlane
+- user: user:group-editor
+  relation: member
+  object: group:editor-1
+- user: group:editor-1#member
+  relation: editor
+  object: evidence:evidence-1
+- user: organization:openlane
+  relation: parent
+  object: group:editor-1
+  condition:
+    name: public_group
+    context:
+      public: true
+- user: user:group-editor
+  relation: member
+  object: organization:openlane

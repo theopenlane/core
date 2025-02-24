@@ -1,125 +1,10 @@
 name: Openlane
 model_file: ../model/model.fga
-tuples:
-  -
-  # setup organization with empty domain condition
-  - user: organization:openlane#member
-    relation: access
-    object: organization:openlane
-    condition:
-      name: email_domains_allowed
-      context:
-        allowed_domains: []
-  # setup child organization with empty domain condition
-  - user: organization:foo#member
-    relation: access
-    object: organization:foo
-    condition:
-      name: email_domains_allowed
-      context:
-        allowed_domains: []
-  # setup parent child org relationship
-  - user: organization:openlane
-    relation: parent
-    object: organization:foo
-  # setup org primary owner
-  - user: user:ulid-of-owner
-    relation: _self
-    object: user:ulid-of-owner
-  - user: user:ulid-of-owner
-    relation: owner
-    object: organization:openlane
-  # setup org admin
-  - user: user:ulid-of-admin
-    relation: _self
-    object: user:ulid-of-admin
-  - user: user:ulid-of-admin
-    relation: admin
-    object: organization:openlane
-  # setup org member
-  - user: user:ulid-of-member
-    relation: _self
-    object: user:ulid-of-member
-  - user: user:ulid-of-member
-    relation: member
-    object: organization:openlane
-  # setup another org member
-  - user: user:ulid-of-member-2
-    relation: _self
-    object: user:ulid-of-member-2
-  - user: user:ulid-of-member-2
-    relation: member
-    object: organization:openlane
-  # setup audit log viewer
-  - user: user:ulid-of-audit-log-viewer
-    relation: _self
-    object: user:ulid-of-audit-log-viewer
-  - user: user:ulid-of-audit-log-viewer
-    relation: member
-    object: organization:openlane
-  - user: user:ulid-of-audit-log-viewer
-    relation: audit_log_viewer
-    object: organization:openlane
-  # setup service user
-  - user: service:ulid-of-service-editor
-    relation: _self
-    object: service:ulid-of-service-editor
-  - user: service:ulid-of-service-editor
-    relation: can_edit
-    object: organization:openlane
-  # setup service user
-  - user: service:ulid-of-service-viewer
-    relation: can_view
-    object: organization:openlane
-  # setup programs under org
-  - user: organization:openlane
-    relation: parent
-    object: program:program-1
-  - user: user:ulid-other-2
-    relation: _self
-    object: user:ulid-other-2
-  - user: user:ulid-other-2
-    relation: member
-    object: organization:openlane
-  # setup another program under org
-  - user: organization:openlane
-    relation: parent
-    object: program:program-2
-  - user: user:ulid-other-3
-    relation: _self
-    object: user:ulid-other-3
-  - user: user:ulid-other-3
-    relation: member
-    object: organization:openlane
-  # setup an auditor for the first program
-  - user: user:ulid-auditor
-    relation: auditor
-    object: program:program-1
+tuple_file: tuples/_tuples.yaml
 tests:
   - name: organization
     description: test organization relationships
-    tuples:
-      - user: user:support-user
-        relation: can_view
-        object: organization:openlane
-        condition:
-          name: time_based_grant
-          context:
-            grant_time: "2025-02-14T00:00:00Z"
-            grant_duration: 1h
-      -
-      # setup organization with empty domain condition
-      - user: organization:restricted#member
-        relation: access
-        object: organization:restricted
-        condition:
-          name: email_domains_allowed
-          context:
-            allowed_domains: ["meow.com"]
-      # setup org member
-      - user: user:ulid-of-member
-        relation: member
-        object: organization:restricted
+    tuple_file: tuples/organizations.yaml
     check:
       - user: user:ulid-of-owner
         object: organization:openlane
@@ -333,46 +218,7 @@ tests:
             - organization:openlane
   - name: groups
     description: test group relationships to their parent (organization)
-    tuples:
-      # setup group with owner
-      - user: organization:openlane
-        relation: parent
-        object: group:cat-lovers
-        condition:
-          name: public_group
-          context:
-            public: true
-      # setup private group with owner
-      - user: organization:openlane
-        relation: parent
-        object: group:cat-haters
-        condition:
-          name: public_group
-          context:
-            public: false
-      # add group admin
-      - user: user:ulid-of-owner
-        relation: admin
-        object: group:cat-lovers
-        # add group admin of private group
-      - user: user:ulid-of-owner
-        relation: admin
-        object: group:cat-haters
-      # add group member but not a member of the org
-      - user: user:ulid-of-cat-lover-member
-        relation: member
-        object: group:cat-lovers
-      # add audit log viewer
-      - user: user:ulid-of-audit-log-viewer
-        relation: member
-        object: group:cat-lovers
-      - user: user:ulid-of-audit-log-viewer
-        relation: audit_log_viewer
-        object: group:cat-lovers
-      # add group member
-      - user: user:ulid-of-member
-        relation: member
-        object: group:cat-lovers
+    tuple_file: tuples/groups.yaml
     check:
       - user: organization:openlane
         object: group:cat-lovers
@@ -446,118 +292,9 @@ tests:
           member:
   - name: files
     description: files can be associated to many objects and users can access files based on their permissions
-    tuples:
-      - user: user:ulid-admin
-        relation: can_delete
-        object: file:file-1
-      - user: user:ulid-other-1
-        relation: can_view
-        object: file:file-1 # direct access
-      - user: user:ulid-other-2
-        relation: member
-        object: program:program-1 # indirect access
-      - user: program:program-1
-        relation: parent
-        object: file:file-1 # program has access to file
-      - user: control:control-1
-        relation: parent
-        object: file:file-2 # control has access to file
-      - user: program:program-2
-        relation: parent
-        object: control:control-1 # program has access to control
-      - user: user:ulid-other-3
-        relation: admin
-        object: program:program-2
-      - user: contact:contact-1
-        relation: parent
-        object: file:file-3 # contact has access to file
-      -
-      #setup organization with empty domain condition
-      - user: organization:contact-org#member
-        relation: access
-        object: organization:contact-org
-        condition:
-          name: email_domains_allowed
-          context:
-            allowed_domains: []
-      - user: user:ulid-contact-1
-        relation: owner
-        object: organization:contact-org
-      - user: organization:contact-org
-        relation: parent
-        object: contact:contact-1
+    tuple_file: tuples/files.yaml
     check:
-      - user: user:ulid-admin # admin of the file should have all permissions
-        object: file:file-1
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
-      - user: user:ulid-other-1 # user with direct view access to file
-        object: file:file-1
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-other-2 # user with indirect view access to file
-        object: file:file-1
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-no-access # user with no access to file
-        object: file:file-1
-        assertions:
-          can_view: false
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-other-3 # admin of program that has access to file
-        object: file:file-2
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
-      - user: user:ulid-contact-1 # owner of contact org that is the parent of the file
-        object: file:file-3
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
-  - name: files
-    description: files can be associated to many objects and users can access files based on their permissions
-    tuples:
-      - user: user:ulid-admin
-        relation: can_delete
-        object: file:file-1
-      - user: user:ulid-other-1
-        relation: can_view
-        object: file:file-1 # direct access
-      - user: user:ulid-other-2
-        relation: member
-        object: program:program-1 # indirect access
-      - user: program:program-1
-        relation: parent
-        object: file:file-1 # program has access to file
-      - user: control:control-1
-        relation: parent
-        object: file:file-2 # control has access to file
-      - user: program:program-2
-        relation: parent
-        object: control:control-1 # program has access to control
-      - user: user:ulid-other-3
-        relation: admin
-        object: program:program-2
-      - user: contact:contact-1
-        relation: parent
-        object: file:file-3 # contact has access to file
-      - user: user:ulid-contact-1
-        relation: owner
-        object: organization:contact-org
-      - user: organization:contact-org
-        relation: parent
-        object: contact:contact-1
-    check:
-      - user: user:ulid-admin # admin of the file should have all permissions
+      - user: user:ulid-of-admin # admin of the file should have all permissions
         object: file:file-1
         assertions:
           can_view: true
@@ -595,59 +332,7 @@ tests:
           can_delete: true
   - name: tasks
     description: tasks can be associated to many objects and users can access tasks based on their permissions
-    tuples:
-      - user: user:ulid-of-admin
-        relation: parent # task creator
-        object: task:task-1
-      - user: organization:openlane#owner
-        relation: editor
-        object: task:task-1
-      - user: user:ulid-of-member
-        relation: assignee # assignee of the task
-        object: task:task-1
-      - user: user:ulid-of-member-2
-        relation: assigner # assigner of the task (this is usually the task creator but can be changed)
-        object: task:task-1
-      - user: user:ulid-other-1
-        relation: can_view
-        object: task:task-1 # direct access
-      - user: user:ulid-other-2
-        relation: member
-        object: program:program-1 # indirect access
-      - user: program:program-1
-        relation: parent
-        object: task:task-1 # program has access to task
-      - user: control:control-1
-        relation: parent
-        object: task:task-2 # control has access to task
-      - user: program:program-2
-        relation: parent
-        object: control:control-1 # program has access to control
-      - user: user:ulid-other-3
-        relation: admin
-        object: program:program-2
-      - user: group:group-1
-        relation: parent
-        object: task:task-3 # group has access to task
-      -
-      #setup organization with empty domain condition
-      - user: organization:group-org#member
-        relation: access
-        object: organization:group-org
-        condition:
-          name: email_domains_allowed
-          context:
-            allowed_domains: []
-      - user: user:ulid-group-1
-        relation: owner
-        object: organization:group-org
-      - user: organization:group-org
-        relation: parent
-        object: group:group-1
-        condition:
-          name: public_group
-          context:
-            public: true
+    tuple_file: tuples/tasks.yaml
     check:
       - user: user:ulid-of-admin # parent user of the task should have all permissions
         object: task:task-1
@@ -667,7 +352,7 @@ tests:
           can_view: true
           can_edit: true
           can_delete: false
-      - user: user:ulid-of-member-2 # assignr of the task should have all permissions
+      - user: user:ulid-of-member-2 # assigner of the task should have all permissions
         object: task:task-1
         assertions:
           can_view: true
@@ -679,11 +364,11 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-other-2 # user with indirect view access to task
+      - user: user:ulid-other-2 # user assignee of the task
         object: task:task-1
         assertions:
           can_view: true
-          can_edit: false
+          can_edit: true
           can_delete: false
       - user: user:ulid-no-access # user with no access to task
         object: task:task-1
@@ -703,58 +388,57 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-program-member # member access has view permissions to the notes
+        object: task:task-1
+        assertions:
+          can_view: true #
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-program-admin # program admin has edit access to the task
+        object: task:task-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-program-member # member access has view permissions to the notes
+        object: note:note-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-other-2 # program member access has view permissions to the notes attached to the task
+        object: note:note-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-program-admin # program admin has access to view notes
+        object: note:note-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-control-viewer # control viewer has access task 2
+        object: task:task-2
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-control-viewer # control viewer has no access to task 1
+        object: task:task-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-control-viewer # control viewer has no access to note 1, associated with task 1
+        object: note:note-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
   - name: procedures
     description: procedures are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
-    tuples:
-      # setup users and groups
-      - user: user:ulid-group-editor
-        relation: member
-        object: organization:openlane
-      - user: organization:openlane
-        relation: parent
-        object: group:group-editor
-        condition:
-          name: public_group
-          context:
-            public: true
-      - user: user:ulid-group-editor
-        relation: member
-        object: group:group-editor
-
-      - user: user:ulid-group-blocked
-        relation: member
-        object: organization:openlane
-      - user: organization:openlane
-        relation: parent
-        object: group:group-blocked
-        condition:
-          name: public_group
-          context:
-            public: true
-      - user: user:ulid-group-blocked
-        relation: member
-        object: group:group-blocked
-
-      # setup procedure
-      - user: user:ulid-admin
-        relation: admin
-        object: procedure:procedure-1
-      - user: organization:openlane
-        relation: parent
-        object: procedure:procedure-1
-
-      # setup group permissions for procedure
-      - user: group:group-editor#member
-        relation: editor
-        object: procedure:procedure-1
-      - user: group:group-blocked#member
-        relation: blocked
-        object: procedure:procedure-1
-
-      # setup view permissions for auditors
-      - user: program:program-1#auditor
-        relation: viewer
-        object: procedure:procedure-1
+    tuple_file: tuples/procedures.yaml
     check:
       - user: user:ulid-admin # admin of the procedure should have all permissions
         object: procedure:procedure-1
@@ -782,56 +466,7 @@ tests:
           can_delete: false
   - name: internal policies
     description: policies are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
-    tuples:
-      # setup users and groups
-      - user: user:ulid-group-editor
-        relation: member
-        object: organization:openlane
-      - user: organization:openlane
-        relation: parent
-        object: group:group-editor
-        condition:
-          name: public_group
-          context:
-            public: true
-      - user: user:ulid-group-editor
-        relation: member
-        object: group:group-editor
-
-      - user: user:ulid-group-blocked
-        relation: member
-        object: organization:openlane
-      - user: organization:openlane
-        relation: parent
-        object: group:group-blocked
-        condition:
-          name: public_group
-          context:
-            public: true
-      - user: user:ulid-group-blocked
-        relation: member
-        object: group:group-blocked
-
-      # setup internal_policy
-      - user: user:ulid-admin
-        relation: admin
-        object: internal_policy:internal_policy-1
-      - user: organization:openlane
-        relation: parent
-        object: internal_policy:internal_policy-1
-
-      # setup group permissions for internal_policy
-      - user: group:group-editor#member
-        relation: editor
-        object: internal_policy:internal_policy-1
-      - user: group:group-blocked#member
-        relation: blocked
-        object: internal_policy:internal_policy-1
-
-      # setup view permissions for auditors
-      - user: program:program-1#auditor
-        relation: viewer
-        object: internal_policy:internal_policy-1
+    tuple_file: tuples/policies.yaml
     check:
       - user: user:ulid-admin # admin of the internal_policy should have all permissions
         object: internal_policy:internal_policy-1
@@ -859,52 +494,7 @@ tests:
           can_delete: false
   - name: programs
     description: programs are associated with an organization
-    tuples:
-      # setup users and groups
-      - user: user:ulid-group-editor
-        relation: member
-        object: organization:openlane
-      - user: organization:openlane
-        relation: parent
-        object: group:group-editor
-        condition:
-          name: public_group
-          context:
-            public: true
-      - user: user:ulid-group-editor
-        relation: member
-        object: group:group-editor
-
-      - user: user:ulid-group-blocked
-        relation: member
-        object: organization:openlane
-      - user: organization:openlane
-        relation: parent
-        object: group:group-blocked
-        condition:
-          name: public_group
-          context:
-            public: true
-      - user: user:ulid-group-blocked
-        relation: member
-        object: group:group-blocked
-
-      - user: user:ulid-admin
-        relation: admin
-        object: organization:openlane
-
-      # setup programs
-      - user: user:ulid-admin
-        relation: admin
-        object: program:program-1
-
-      # setup group permissions for program
-      - user: group:group-editor#member
-        relation: editor
-        object: program:program-1
-      - user: group:group-blocked#member
-        relation: blocked
-        object: program:program-1
+    tuple_file: tuples/programs.yaml
     check:
       - user: user:ulid-admin # admin of the program should have all permissions
         object: program:program-1
@@ -926,42 +516,7 @@ tests:
           can_delete: false
   - name: evidence
     description: evidence are always with an organization, and can be linked to many objects within the system
-    tuples:
-      # Setup evidence object and relationships
-      - user: program:program-1
-        relation: parent
-        object: evidence:evidence-1
-      - user: user:ulid-admin
-        relation: can_delete
-        object: evidence:evidence-1
-      - user: task:task-1
-        relation: parent
-        object: evidence:evidence-1
-      - user: user:ulid-task-assignee
-        relation: assignee
-        object: task:task-1
-      - user: user:ulid-member
-        relation: member
-        object: program:program-1
-      - user: user:ulid-member
-        relation: member
-        object: organization:openlane
-      - user: user:group-editor
-        relation: member
-        object: group:editor-1
-      - user: group:editor-1#member
-        relation: editor
-        object: evidence:evidence-1
-      - user: organization:openlane
-        relation: parent
-        object: group:editor-1
-        condition:
-          name: public_group
-          context:
-            public: true
-      - user: user:group-editor
-        relation: member
-        object: organization:openlane
+    tuple_file: tuples/evidence.yaml
     check:
       - user: user:ulid-admin # has can_delete permission on the evidence
         object: evidence:evidence-1
@@ -989,22 +544,7 @@ tests:
           can_delete: true
   - name: notes
     description: notes can be associated to many objects and users can access notes based on their permissions
-    tuples:
-      - user: user:ulid-admin
-        relation: owner
-        object: note:note-1
-      - user: organization:openlane#owner
-        relation: editor
-        object: note:note-1
-      - user: user:ulid-other-1
-        relation: can_view
-        object: note:note-1 # direct access
-      - user: user:ulid-other-2
-        relation: assignee
-        object: task:task-1 # indirect access
-      - user: task:task-1
-        relation: parent
-        object: note:note-1 # task has access to note
+    tuple_file: tuples/notes.yaml
     check:
       - user: user:ulid-admin
         object: note:note-1
@@ -1018,15 +558,15 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-other-2 # user with indirect access to view note
-        object: note:note-1
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
       - user: user:ulid-of-owner
         object: note:note-1
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-of-owner-foobar # user of another org should have no access
+        object: note:note-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false

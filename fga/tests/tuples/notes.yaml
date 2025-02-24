@@ -1,0 +1,13 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to notes
+############################################
+- user: user:ulid-admin
+  relation: owner
+  object: note:note-1
+- user: organization:openlane#owner
+  relation: editor
+  object: note:note-1
+- user: user:ulid-other-1
+  relation: can_view
+  object: note:note-1 # direct access

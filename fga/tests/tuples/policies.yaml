@@ -1,0 +1,54 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to policies
+############################################
+
+# setup users and groups
+- user: user:ulid-group-editor
+  relation: member
+  object: organization:openlane
+- user: organization:openlane
+  relation: parent
+  object: group:group-editor
+  condition:
+    name: public_group
+    context:
+      public: true
+- user: user:ulid-group-editor
+  relation: member
+  object: group:group-editor
+
+- user: user:ulid-group-blocked
+  relation: member
+  object: organization:openlane
+- user: organization:openlane
+  relation: parent
+  object: group:group-blocked
+  condition:
+    name: public_group
+    context:
+      public: true
+- user: user:ulid-group-blocked
+  relation: member
+  object: group:group-blocked
+
+# setup internal_policy
+- user: user:ulid-admin
+  relation: admin
+  object: internal_policy:internal_policy-1
+- user: organization:openlane
+  relation: parent
+  object: internal_policy:internal_policy-1
+
+# setup group permissions for internal_policy
+- user: group:group-editor#member
+  relation: editor
+  object: internal_policy:internal_policy-1
+- user: group:group-blocked#member
+  relation: blocked
+  object: internal_policy:internal_policy-1
+
+# setup view permissions for auditors
+- user: program:program-1#auditor
+  relation: viewer
+  object: internal_policy:internal_policy-1
