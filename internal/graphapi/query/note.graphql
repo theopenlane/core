@@ -1,0 +1,11 @@
+query GetNoteByID($noteId: ID!) {
+  note(id: $noteId) {
+    id
+    displayID
+    text
+    createdAt
+    createdBy
+    updatedAt
+    updatedBy
+  }
+}

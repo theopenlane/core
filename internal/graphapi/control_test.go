@@ -229,7 +229,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			name: "happy path, using pat",
 			request: openlaneclient.CreateControlInput{
 				Name:    "Control",
-				OwnerID: testUser1.OrganizationID,
+				OwnerID: &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),

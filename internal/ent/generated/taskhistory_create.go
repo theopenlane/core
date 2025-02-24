@@ -158,6 +158,14 @@ func (thc *TaskHistoryCreate) SetOwnerID(s string) *TaskHistoryCreate {
 	return thc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableOwnerID(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetOwnerID(*s)
+	}
+	return thc
+}
+
 // SetTitle sets the "title" field.
 func (thc *TaskHistoryCreate) SetTitle(s string) *TaskHistoryCreate {
 	thc.mutation.SetTitle(s)
@@ -179,8 +187,16 @@ func (thc *TaskHistoryCreate) SetNillableDescription(s *string) *TaskHistoryCrea
 }
 
 // SetDetails sets the "details" field.
-func (thc *TaskHistoryCreate) SetDetails(m map[string]interface{}) *TaskHistoryCreate {
-	thc.mutation.SetDetails(m)
+func (thc *TaskHistoryCreate) SetDetails(s string) *TaskHistoryCreate {
+	thc.mutation.SetDetails(s)
+	return thc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableDetails(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetDetails(*s)
+	}
 	return thc
 }
 
@@ -198,6 +214,20 @@ func (thc *TaskHistoryCreate) SetNillableStatus(es *enums.TaskStatus) *TaskHisto
 	return thc
 }
 
+// SetCategory sets the "category" field.
+func (thc *TaskHistoryCreate) SetCategory(s string) *TaskHistoryCreate {
+	thc.mutation.SetCategory(s)
+	return thc
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableCategory(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetCategory(*s)
+	}
+	return thc
+}
+
 // SetDue sets the "due" field.
 func (thc *TaskHistoryCreate) SetDue(t time.Time) *TaskHistoryCreate {
 	thc.mutation.SetDue(t)
@@ -208,20 +238,6 @@ func (thc *TaskHistoryCreate) SetDue(t time.Time) *TaskHistoryCreate {
 func (thc *TaskHistoryCreate) SetNillableDue(t *time.Time) *TaskHistoryCreate {
 	if t != nil {
 		thc.SetDue(*t)
-	}
-	return thc
-}
-
-// SetPriority sets the "priority" field.
-func (thc *TaskHistoryCreate) SetPriority(e enums.Priority) *TaskHistoryCreate {
-	thc.mutation.SetPriority(e)
-	return thc
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillablePriority(e *enums.Priority) *TaskHistoryCreate {
-	if e != nil {
-		thc.SetPriority(*e)
 	}
 	return thc
 }
@@ -329,10 +345,6 @@ func (thc *TaskHistoryCreate) defaults() {
 		v := taskhistory.DefaultStatus
 		thc.mutation.SetStatus(v)
 	}
-	if _, ok := thc.mutation.Priority(); !ok {
-		v := taskhistory.DefaultPriority
-		thc.mutation.SetPriority(v)
-	}
 	if _, ok := thc.mutation.ID(); !ok {
 		v := taskhistory.DefaultID()
 		thc.mutation.SetID(v)
@@ -355,9 +367,6 @@ func (thc *TaskHistoryCreate) check() error {
 	if _, ok := thc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "TaskHistory.display_id"`)}
 	}
-	if _, ok := thc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "TaskHistory.owner_id"`)}
-	}
 	if _, ok := thc.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "TaskHistory.title"`)}
 	}
@@ -367,14 +376,6 @@ func (thc *TaskHistoryCreate) check() error {
 	if v, ok := thc.mutation.Status(); ok {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
-		}
-	}
-	if _, ok := thc.mutation.Priority(); !ok {
-		return &ValidationError{Name: "priority", err: errors.New(`generated: missing required field "TaskHistory.priority"`)}
-	}
-	if v, ok := thc.mutation.Priority(); ok {
-		if err := taskhistory.PriorityValidator(v); err != nil {
-			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.priority": %w`, err)}
 		}
 	}
 	if _, ok := thc.mutation.AssignerID(); !ok {
@@ -473,20 +474,20 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 		_node.Description = value
 	}
 	if value, ok := thc.mutation.Details(); ok {
-		_spec.SetField(taskhistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
 	if value, ok := thc.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
+	if value, ok := thc.mutation.Category(); ok {
+		_spec.SetField(taskhistory.FieldCategory, field.TypeString, value)
+		_node.Category = value
+	}
 	if value, ok := thc.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
 		_node.Due = value
-	}
-	if value, ok := thc.mutation.Priority(); ok {
-		_spec.SetField(taskhistory.FieldPriority, field.TypeEnum, value)
-		_node.Priority = value
 	}
 	if value, ok := thc.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)

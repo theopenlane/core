@@ -1292,11 +1292,11 @@ func HasNotes() predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, NotesTable, NotesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, NotesTable, NotesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.ProgramNotes
+		step.Edge.Schema = schemaConfig.Note
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1307,7 +1307,7 @@ func HasNotesWith(preds ...predicate.Note) predicate.Program {
 		step := newNotesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.ProgramNotes
+		step.Edge.Schema = schemaConfig.Note
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

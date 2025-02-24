@@ -129,6 +129,14 @@ func (rc *RiskCreate) SetOwnerID(s string) *RiskCreate {
 	return rc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableOwnerID(s *string) *RiskCreate {
+	if s != nil {
+		rc.SetOwnerID(*s)
+	}
+	return rc
+}
+
 // SetName sets the "name" field.
 func (rc *RiskCreate) SetName(s string) *RiskCreate {
 	rc.mutation.SetName(s)
@@ -460,9 +468,6 @@ func (rc *RiskCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Risk.display_id": %w`, err)}
 		}
 	}
-	if _, ok := rc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Risk.owner_id"`)}
-	}
 	if v, ok := rc.mutation.OwnerID(); ok {
 		if err := risk.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Risk.owner_id": %w`, err)}
@@ -485,9 +490,6 @@ func (rc *RiskCreate) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
-	}
-	if len(rc.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Risk.owner"`)}
 	}
 	return nil
 }

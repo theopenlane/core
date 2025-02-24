@@ -157,6 +157,14 @@ func (shc *SubcontrolHistoryCreate) SetOwnerID(s string) *SubcontrolHistoryCreat
 	return shc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableOwnerID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetOwnerID(*s)
+	}
+	return shc
+}
+
 // SetName sets the "name" field.
 func (shc *SubcontrolHistoryCreate) SetName(s string) *SubcontrolHistoryCreate {
 	shc.mutation.SetName(s)
@@ -465,9 +473,6 @@ func (shc *SubcontrolHistoryCreate) check() error {
 	}
 	if _, ok := shc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "SubcontrolHistory.display_id"`)}
-	}
-	if _, ok := shc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "SubcontrolHistory.owner_id"`)}
 	}
 	if _, ok := shc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "SubcontrolHistory.name"`)}

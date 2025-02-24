@@ -123,20 +123,6 @@ func (rhu *RiskHistoryUpdate) ClearTags() *RiskHistoryUpdate {
 	return rhu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (rhu *RiskHistoryUpdate) SetOwnerID(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetOwnerID(s)
-	return rhu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableOwnerID(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetOwnerID(*s)
-	}
-	return rhu
-}
-
 // SetName sets the "name" field.
 func (rhu *RiskHistoryUpdate) SetName(s string) *RiskHistoryUpdate {
 	rhu.mutation.SetName(s)
@@ -441,8 +427,8 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if rhu.mutation.TagsCleared() {
 		_spec.ClearField(riskhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := rhu.mutation.OwnerID(); ok {
-		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
+	if rhu.mutation.OwnerIDCleared() {
+		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := rhu.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
@@ -612,20 +598,6 @@ func (rhuo *RiskHistoryUpdateOne) AppendTags(s []string) *RiskHistoryUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (rhuo *RiskHistoryUpdateOne) ClearTags() *RiskHistoryUpdateOne {
 	rhuo.mutation.ClearTags()
-	return rhuo
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (rhuo *RiskHistoryUpdateOne) SetOwnerID(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetOwnerID(s)
-	return rhuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableOwnerID(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetOwnerID(*s)
-	}
 	return rhuo
 }
 
@@ -963,8 +935,8 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	if rhuo.mutation.TagsCleared() {
 		_spec.ClearField(riskhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := rhuo.mutation.OwnerID(); ok {
-		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
+	if rhuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := rhuo.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)

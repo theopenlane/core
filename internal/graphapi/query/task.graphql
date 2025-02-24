@@ -16,10 +16,19 @@ mutation CreateBulkCSVTask($input: Upload!) {
       createdBy
       description
       details
+      category
+      comments {
+        id
+        displayID
+        text
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
       due
       id
       displayID
-      priority
       status
       tags
       title
@@ -47,10 +56,19 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
       createdBy
       description
       details
+      category
+      comments {
+        id
+        displayID
+        text
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
       due
       id
       displayID
-      priority
       status
       tags
       title
@@ -78,11 +96,20 @@ mutation CreateTask($input: CreateTaskInput!) {
       createdBy
       description
       details
+      category
+      comments {
+        id
+        displayID
+        text
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
       due
       id
       ownerID
       displayID
-      priority
       status
       tags
       title
@@ -121,10 +148,19 @@ query GetAllTasks {
         createdBy
         description
         details
+        category
+        comments {
+          id
+          displayID
+          text
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         due
         id
         displayID
-        priority
         status
         tags
         title
@@ -156,10 +192,19 @@ query GetTaskByID($taskId: ID!) {
     createdBy
     description
     details
+    category
+    comments {
+      id
+      displayID
+      text
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+    }
     due
     id
     displayID
-    priority
     status
     tags
     title
@@ -187,10 +232,19 @@ query GetTasks($where: TaskWhereInput) {
         createdBy
         description
         details
+        category
+        comments {
+          id
+          displayID
+          text
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         due
         id
         displayID
-        priority
         status
         tags
         title
@@ -219,10 +273,59 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
       createdBy
       description
       details
+      category
+      comments {
+        id
+        displayID
+        text
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
       due
       id
       displayID
-      priority
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!) {
+  updateTaskComment(id: $updateTaskCommentId, input: $input) {
+    task {
+      assignee {
+        id
+        firstName
+        lastName
+      }
+      assigner {
+        id
+        firstName
+        lastName
+      }
+      completed
+      createdAt
+      createdBy
+      description
+      details
+      category
+      comments {
+        id
+        displayID
+        text
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
+      due
+      id
+      displayID
       status
       tags
       title

@@ -36,8 +36,8 @@ func (NoteHistory) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entfga.Annotations{
-			ObjectType:   "organization",
-			IDField:      "OwnerID",
+			ObjectType:   "note",
+			IDField:      "Ref",
 			IncludeHooks: false,
 		},
 	}
@@ -99,6 +99,6 @@ func (NoteHistory) Indexes() []ent.Index {
 // Interceptors of the NoteHistory
 func (NoteHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

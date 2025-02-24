@@ -90,12 +90,7 @@ func (Subcontrol) Edges() []ent.Edge {
 		edge.From("controls", Control.Type).
 			Required().
 			Ref("subcontrols"),
-		edge.From("user", User.Type).
-			Ref("subcontrols"),
 		edge.To("tasks", Task.Type),
-		edge.From("notes", Note.Type).
-			Unique().
-			Ref("subcontrols"),
 		edge.From("programs", Program.Type).
 			Ref("subcontrols"),
 		edge.From("evidence", Evidence.Type).

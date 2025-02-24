@@ -4,7 +4,7 @@ mutation CreateUser($input: CreateUserInput!, $avatarFile: Upload) {
       authProvider
       avatarRemoteURL
       avatarLocalFileID
-      avatarFile{
+      avatarFile {
         presignedURL
       }
       displayID
@@ -50,12 +50,40 @@ mutation DeleteUser($deleteUserId: ID!) {
   }
 }
 
+query GetAllUsers {
+  users {
+    edges {
+      node {
+        authProvider
+        avatarRemoteURL
+        avatarLocalFileID
+        avatarFile {
+          presignedURL
+        }
+        displayID
+        displayName
+        email
+        firstName
+        id
+        lastName
+        lastSeen
+        sub
+        tags
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
 query GetSelf {
   self {
     authProvider
     avatarRemoteURL
     avatarLocalFileID
-    avatarFile{
+    avatarFile {
       presignedURL
     }
     displayID
@@ -84,7 +112,7 @@ query GetSelf {
       updatedAt
       updatedBy
     }
-    tfaSettings{
+    tfaSettings {
       totpAllowed
       verified
     }
@@ -95,40 +123,12 @@ query GetSelf {
   }
 }
 
-query GetAllUsers {
-  users {
-    edges {
-      node {
-        authProvider
-        avatarRemoteURL
-        avatarLocalFileID
-        avatarFile{
-          presignedURL
-        }
-        displayID
-        displayName
-        email
-        firstName
-        id
-        lastName
-        lastSeen
-        sub
-        tags
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-}
-
 query GetUserByID($userId: ID!) {
   user(id: $userId) {
     authProvider
     avatarRemoteURL
     avatarLocalFileID
-    avatarFile{
+    avatarFile {
       presignedURL
     }
     displayID
@@ -178,7 +178,7 @@ query GetUserByIDWithOrgs($userId: ID!) {
     authProvider
     avatarRemoteURL
     avatarLocalFileID
-    avatarFile{
+    avatarFile {
       presignedURL
     }
     displayID
@@ -228,7 +228,7 @@ mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: U
       authProvider
       avatarRemoteURL
       avatarLocalFileID
-      avatarFile{
+      avatarFile {
         presignedURL
       }
       displayID

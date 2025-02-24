@@ -35,16 +35,20 @@ func consoleOutput(e any) error {
 	case *openlaneclient.GetAllTasks:
 		var nodes []*openlaneclient.GetAllTasks_Tasks_Edges_Node
 
-		for _, i := range v.Tasks.Edges {
-			nodes = append(nodes, i.Node)
+		if v != nil {
+			for _, i := range v.Tasks.Edges {
+				nodes = append(nodes, i.Node)
+			}
 		}
 
 		e = nodes
 	case *openlaneclient.GetTasks:
 		var nodes []*openlaneclient.GetTasks_Tasks_Edges_Node
 
-		for _, i := range v.Tasks.Edges {
-			nodes = append(nodes, i.Node)
+		if v != nil {
+			for _, i := range v.Tasks.Edges {
+				nodes = append(nodes, i.Node)
+			}
 		}
 
 		e = nodes
@@ -89,7 +93,7 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Task) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Title", "Description", "Details", "Assignee", "Assigner", "Status", "Due")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Title", "Description", "Details", "Category", "Assignee", "Assigner", "Status", "Due")
 
 	for _, i := range out {
 		assignee := ""
@@ -97,19 +101,23 @@ func tableOutput(out []openlaneclient.Task) {
 			assignee = i.Assignee.ID
 		}
 
-		var details string
-		if i.Details != nil {
-			for k, v := range i.Details {
-				details += k + ": " + v.(string) + "\n"
-			}
-		}
-
 		var dueDate string
 		if i.Due != nil {
 			dueDate = i.Due.Format(time.RFC3339)
 		}
 
-		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Description, details, assignee, i.Assigner.ID, i.Status, dueDate)
+		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Description, *i.Details, *i.Category, assignee, i.Assigner.ID, i.Status, dueDate)
+
+		if i.Comments != nil {
+			writer.AddRow("----------------------------------------")
+			writer.AddRow("COMMENTS", "CREATEDBY", "CREATEDAT")
+			writer.AddRow("----------------------------------------")
+			for _, c := range i.Comments {
+				writer.AddRow(c.Text, *c.CreatedBy, *c.CreatedAt)
+			}
+		}
+
+		writer.AddRow("") // blank row
 	}
 
 	writer.Render()

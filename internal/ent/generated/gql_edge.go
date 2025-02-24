@@ -113,7 +113,7 @@ func (c *Control) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = c.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (c *Control) BlockedGroups(ctx context.Context) (result []*Group, err error) {
@@ -277,7 +277,7 @@ func (co *ControlObjective) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = co.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (co *ControlObjective) BlockedGroups(ctx context.Context) (result []*Group, err error) {
@@ -441,7 +441,7 @@ func (dd *DocumentData) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = dd.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (dd *DocumentData) Template(ctx context.Context) (*Template, error) {
@@ -697,7 +697,7 @@ func (e *Evidence) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = e.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (e *Evidence) ControlObjectives(ctx context.Context) (result []*ControlObjective, err error) {
@@ -1465,7 +1465,7 @@ func (n *Narrative) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = n.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (n *Narrative) BlockedGroups(ctx context.Context) (result []*Group, err error) {
@@ -1572,36 +1572,12 @@ func (n *Note) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (n *Note) Entity(ctx context.Context) (*Entity, error) {
-	result, err := n.Edges.EntityOrErr()
+func (n *Note) Task(ctx context.Context) (*Task, error) {
+	result, err := n.Edges.TaskOrErr()
 	if IsNotLoaded(err) {
-		result, err = n.QueryEntity().Only(ctx)
+		result, err = n.QueryTask().Only(ctx)
 	}
 	return result, MaskNotFound(err)
-}
-
-func (n *Note) Subcontrols(ctx context.Context) (result []*Subcontrol, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = n.NamedSubcontrols(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = n.Edges.SubcontrolsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = n.QuerySubcontrols().All(ctx)
-	}
-	return result, err
-}
-
-func (n *Note) Program(ctx context.Context) (result []*Program, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = n.NamedProgram(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = n.Edges.ProgramOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = n.QueryProgram().All(ctx)
-	}
-	return result, err
 }
 
 func (o *Onboarding) Organization(ctx context.Context) (*Organization, error) {
@@ -2538,7 +2514,7 @@ func (r *Risk) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = r.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (r *Risk) BlockedGroups(ctx context.Context) (result []*Group, err error) {
@@ -2690,7 +2666,7 @@ func (s *Subcontrol) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = s.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (s *Subcontrol) Controls(ctx context.Context) (result []*Control, err error) {
@@ -2705,18 +2681,6 @@ func (s *Subcontrol) Controls(ctx context.Context) (result []*Control, err error
 	return result, err
 }
 
-func (s *Subcontrol) User(ctx context.Context) (result []*User, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = s.NamedUser(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = s.Edges.UserOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = s.QueryUser().All(ctx)
-	}
-	return result, err
-}
-
 func (s *Subcontrol) Tasks(ctx context.Context) (result []*Task, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = s.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2727,14 +2691,6 @@ func (s *Subcontrol) Tasks(ctx context.Context) (result []*Task, err error) {
 		result, err = s.QueryTasks().All(ctx)
 	}
 	return result, err
-}
-
-func (s *Subcontrol) Notes(ctx context.Context) (*Note, error) {
-	result, err := s.Edges.NotesOrErr()
-	if IsNotLoaded(err) {
-		result, err = s.QueryNotes().Only(ctx)
-	}
-	return result, MaskNotFound(err)
 }
 
 func (s *Subcontrol) Programs(ctx context.Context) (result []*Program, err error) {
@@ -2794,7 +2750,7 @@ func (t *Task) Owner(ctx context.Context) (*Organization, error) {
 	if IsNotLoaded(err) {
 		result, err = t.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (t *Task) Assigner(ctx context.Context) (*User, error) {
@@ -2811,6 +2767,18 @@ func (t *Task) Assignee(ctx context.Context) (*User, error) {
 		result, err = t.QueryAssignee().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (t *Task) Comments(ctx context.Context) (result []*Note, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedComments(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.CommentsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryComments().All(ctx)
+	}
+	return result, err
 }
 
 func (t *Task) Group(ctx context.Context) (result []*Group, err error) {

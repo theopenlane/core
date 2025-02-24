@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 
@@ -127,20 +126,6 @@ func (ddu *DocumentDataUpdate) ClearDeletedBy() *DocumentDataUpdate {
 	return ddu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (ddu *DocumentDataUpdate) SetOwnerID(s string) *DocumentDataUpdate {
-	ddu.mutation.SetOwnerID(s)
-	return ddu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableOwnerID(s *string) *DocumentDataUpdate {
-	if s != nil {
-		ddu.SetOwnerID(*s)
-	}
-	return ddu
-}
-
 // SetTemplateID sets the "template_id" field.
 func (ddu *DocumentDataUpdate) SetTemplateID(s string) *DocumentDataUpdate {
 	ddu.mutation.SetTemplateID(s)
@@ -159,11 +144,6 @@ func (ddu *DocumentDataUpdate) SetNillableTemplateID(s *string) *DocumentDataUpd
 func (ddu *DocumentDataUpdate) SetData(co customtypes.JSONObject) *DocumentDataUpdate {
 	ddu.mutation.SetData(co)
 	return ddu
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (ddu *DocumentDataUpdate) SetOwner(o *Organization) *DocumentDataUpdate {
-	return ddu.SetOwnerID(o.ID)
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
@@ -204,12 +184,6 @@ func (ddu *DocumentDataUpdate) AddFiles(f ...*File) *DocumentDataUpdate {
 // Mutation returns the DocumentDataMutation object of the builder.
 func (ddu *DocumentDataUpdate) Mutation() *DocumentDataMutation {
 	return ddu.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (ddu *DocumentDataUpdate) ClearOwner() *DocumentDataUpdate {
-	ddu.mutation.ClearOwner()
-	return ddu
 }
 
 // ClearTemplate clears the "template" edge to the Template entity.
@@ -304,14 +278,6 @@ func (ddu *DocumentDataUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ddu *DocumentDataUpdate) check() error {
-	if v, ok := ddu.mutation.OwnerID(); ok {
-		if err := documentdata.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DocumentData.owner_id": %w`, err)}
-		}
-	}
-	if ddu.mutation.OwnerCleared() && len(ddu.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DocumentData.owner"`)
-	}
 	if ddu.mutation.TemplateCleared() && len(ddu.mutation.TemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)
 	}
@@ -379,37 +345,6 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ddu.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
-	}
-	if ddu.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   documentdata.OwnerTable,
-			Columns: []string{documentdata.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ddu.schemaConfig.DocumentData
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ddu.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   documentdata.OwnerTable,
-			Columns: []string{documentdata.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ddu.schemaConfig.DocumentData
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ddu.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -652,20 +587,6 @@ func (dduo *DocumentDataUpdateOne) ClearDeletedBy() *DocumentDataUpdateOne {
 	return dduo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (dduo *DocumentDataUpdateOne) SetOwnerID(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetOwnerID(s)
-	return dduo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableOwnerID(s *string) *DocumentDataUpdateOne {
-	if s != nil {
-		dduo.SetOwnerID(*s)
-	}
-	return dduo
-}
-
 // SetTemplateID sets the "template_id" field.
 func (dduo *DocumentDataUpdateOne) SetTemplateID(s string) *DocumentDataUpdateOne {
 	dduo.mutation.SetTemplateID(s)
@@ -684,11 +605,6 @@ func (dduo *DocumentDataUpdateOne) SetNillableTemplateID(s *string) *DocumentDat
 func (dduo *DocumentDataUpdateOne) SetData(co customtypes.JSONObject) *DocumentDataUpdateOne {
 	dduo.mutation.SetData(co)
 	return dduo
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (dduo *DocumentDataUpdateOne) SetOwner(o *Organization) *DocumentDataUpdateOne {
-	return dduo.SetOwnerID(o.ID)
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
@@ -729,12 +645,6 @@ func (dduo *DocumentDataUpdateOne) AddFiles(f ...*File) *DocumentDataUpdateOne {
 // Mutation returns the DocumentDataMutation object of the builder.
 func (dduo *DocumentDataUpdateOne) Mutation() *DocumentDataMutation {
 	return dduo.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (dduo *DocumentDataUpdateOne) ClearOwner() *DocumentDataUpdateOne {
-	dduo.mutation.ClearOwner()
-	return dduo
 }
 
 // ClearTemplate clears the "template" edge to the Template entity.
@@ -842,14 +752,6 @@ func (dduo *DocumentDataUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (dduo *DocumentDataUpdateOne) check() error {
-	if v, ok := dduo.mutation.OwnerID(); ok {
-		if err := documentdata.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DocumentData.owner_id": %w`, err)}
-		}
-	}
-	if dduo.mutation.OwnerCleared() && len(dduo.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DocumentData.owner"`)
-	}
 	if dduo.mutation.TemplateCleared() && len(dduo.mutation.TemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)
 	}
@@ -934,37 +836,6 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	}
 	if value, ok := dduo.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
-	}
-	if dduo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   documentdata.OwnerTable,
-			Columns: []string{documentdata.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = dduo.schemaConfig.DocumentData
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := dduo.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   documentdata.OwnerTable,
-			Columns: []string{documentdata.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = dduo.schemaConfig.DocumentData
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if dduo.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{

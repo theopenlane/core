@@ -129,6 +129,14 @@ func (ec *EvidenceCreate) SetOwnerID(s string) *EvidenceCreate {
 	return ec
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (ec *EvidenceCreate) SetNillableOwnerID(s *string) *EvidenceCreate {
+	if s != nil {
+		ec.SetOwnerID(*s)
+	}
+	return ec
+}
+
 // SetName sets the "name" field.
 func (ec *EvidenceCreate) SetName(s string) *EvidenceCreate {
 	ec.mutation.SetName(s)
@@ -432,9 +440,6 @@ func (ec *EvidenceCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Evidence.display_id": %w`, err)}
 		}
 	}
-	if _, ok := ec.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Evidence.owner_id"`)}
-	}
 	if v, ok := ec.mutation.OwnerID(); ok {
 		if err := evidence.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Evidence.owner_id": %w`, err)}
@@ -450,9 +455,6 @@ func (ec *EvidenceCreate) check() error {
 	}
 	if _, ok := ec.mutation.CreationDate(); !ok {
 		return &ValidationError{Name: "creation_date", err: errors.New(`generated: missing required field "Evidence.creation_date"`)}
-	}
-	if len(ec.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Evidence.owner"`)}
 	}
 	return nil
 }

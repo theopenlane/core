@@ -137,11 +137,10 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				Title:       "test-task",
 				Description: lo.ToPtr("test description"),
 				Status:      &enums.TaskStatusInProgress,
-				Details: map[string]interface{}{
-					"task": "do all the things for the thing",
-				},
-				Due:        lo.ToPtr(time.Now().Add(time.Hour * 24)),
-				AssigneeID: &viewOnlyUser.ID, // assign the task to another user
+				Category:    lo.ToPtr("evidence upload"),
+				Details:     lo.ToPtr("do all the things for the thing"),
+				Due:         lo.ToPtr(time.Now().Add(time.Hour * 24)),
+				AssigneeID:  &viewOnlyUser.ID, // assign the task to another user
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -150,7 +149,7 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			name: "happy path, using pat",
 			request: openlaneclient.CreateTaskInput{
 				Title:   "test-task",
-				OwnerID: testUser1.OrganizationID,
+				OwnerID: &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -205,6 +204,12 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				assert.Equal(t, tc.request.Details, resp.CreateTask.Task.Details)
 			}
 
+			if tc.request.Category == nil {
+				assert.Empty(t, resp.CreateTask.Task.Category)
+			} else {
+				assert.Equal(t, tc.request.Category, resp.CreateTask.Task.Category)
+			}
+
 			if tc.request.Due == nil {
 				assert.Empty(t, resp.CreateTask.Task.Due)
 			} else {
@@ -220,24 +225,70 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	taskCommentID := ""
+
 	testCases := []struct {
-		name        string
-		request     openlaneclient.UpdateTaskInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name                 string
+		request              *openlaneclient.UpdateTaskInput
+		updateCommentRequest *openlaneclient.UpdateNoteInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedErr          string
 	}{
 		{
 			name: "happy path, update description",
-			request: openlaneclient.UpdateTaskInput{
+			request: &openlaneclient.UpdateTaskInput{
 				Description: lo.ToPtr(("makin' a list, checkin' it twice")),
+				AssigneeID:  &adminUser.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "happy path, add comment",
+			request: &openlaneclient.UpdateTaskInput{
+				AddComment: &openlaneclient.CreateNoteInput{
+					Text: "matt is the best",
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, update comment",
+			updateCommentRequest: &openlaneclient.UpdateNoteInput{
+				Text: lo.ToPtr("sarah is better"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, delete comment",
+			request: &openlaneclient.UpdateTaskInput{
+				DeleteComment: &taskCommentID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "update category",
+			request: &openlaneclient.UpdateTaskInput{
+				Category: lo.ToPtr("risk review"),
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
 			name: "update assignee",
-			request: openlaneclient.UpdateTaskInput{
+			request: &openlaneclient.UpdateTaskInput{
+				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "update assignee to same user, should not error",
+			request: &openlaneclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
 			},
 			client: suite.client.apiWithPAT,
@@ -245,16 +296,16 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 		},
 		{
 			name: "update status and details",
-			request: openlaneclient.UpdateTaskInput{
+			request: &openlaneclient.UpdateTaskInput{
 				Status:  &enums.TaskStatusInProgress,
-				Details: map[string]interface{}{"task": "do all the things for the thing"},
+				Details: lo.ToPtr("do all the things for the thing"),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "add to group",
-			request: openlaneclient.UpdateTaskInput{
+			request: &openlaneclient.UpdateTaskInput{
 				AddGroupIDs: []string{group.ID},
 			},
 			client: suite.client.api,
@@ -264,7 +315,26 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, tc.request)
+			var (
+				err         error
+				resp        *openlaneclient.UpdateTask
+				commentResp *openlaneclient.UpdateTaskComment
+			)
+
+			if tc.request != nil {
+				resp, err = tc.client.UpdateTask(tc.ctx, task.ID, *tc.request)
+				if tc.expectedErr != "" {
+					require.Error(t, err)
+					assert.ErrorContains(t, err, tc.expectedErr)
+					assert.Nil(t, resp)
+
+					return
+				}
+			} else if tc.updateCommentRequest != nil {
+				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest)
+
+			}
+
 			if tc.expectedErr != "" {
 				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -274,18 +344,58 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			}
 
 			require.NoError(t, err)
-			require.NotNil(t, resp)
 
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateTask.Task.Description)
-			}
+			if tc.request != nil {
+				require.NotNil(t, resp)
 
-			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, resp.UpdateTask.Task.Status)
-			}
+				if tc.request.Description != nil {
+					assert.Equal(t, *tc.request.Description, *resp.UpdateTask.Task.Description)
+				}
 
-			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.UpdateTask.Task.Details)
+				if tc.request.Status != nil {
+					assert.Equal(t, *tc.request.Status, resp.UpdateTask.Task.Status)
+				}
+
+				if tc.request.Details != nil {
+					assert.Equal(t, tc.request.Details, resp.UpdateTask.Task.Details)
+				}
+
+				if tc.request.Category != nil {
+					assert.Equal(t, *tc.request.Category, *resp.UpdateTask.Task.Category)
+				}
+
+				if tc.request.AddComment != nil {
+					assert.NotEmpty(t, resp.UpdateTask.Task.Comments)
+					assert.Equal(t, tc.request.AddComment.Text, resp.UpdateTask.Task.Comments[0].Text)
+
+					// there should only be one comment
+					require.Len(t, resp.UpdateTask.Task.Comments, 1)
+					taskCommentID = resp.UpdateTask.Task.Comments[0].ID
+
+					// user shouldn't be able to see the comment
+					checkResp, err := suite.client.api.GetNoteByID(viewOnlyUser.UserCtx, taskCommentID)
+					require.Error(t, err)
+					assert.Nil(t, checkResp)
+
+					// user should be able to see the comment because they are an the assignee
+					checkResp, err = suite.client.api.GetNoteByID(adminUser.UserCtx, taskCommentID)
+					require.Error(t, err)
+					assert.Nil(t, checkResp)
+
+					// org owner should be able to see the comment
+					checkResp, err = suite.client.api.GetNoteByID(testUser1.UserCtx, taskCommentID)
+					require.NoError(t, err)
+					assert.NotNil(t, checkResp)
+				} else if tc.request.DeleteComment != nil {
+					// should not have any comments
+					require.Len(t, resp.UpdateTask.Task.Comments, 0)
+				}
+			} else if tc.updateCommentRequest != nil {
+				require.NotNil(t, commentResp)
+
+				// should only have the original comment
+				require.Len(t, commentResp.UpdateTaskComment.Task.Comments, 1)
+				assert.Equal(t, *tc.updateCommentRequest.Text, commentResp.UpdateTaskComment.Task.Comments[0].Text)
 			}
 		})
 	}

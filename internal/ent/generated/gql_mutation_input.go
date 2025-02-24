@@ -514,7 +514,7 @@ type CreateControlInput struct {
 	MappedFrameworks    *string
 	Details             map[string]interface{}
 	ExampleEvidence     *string
-	OwnerID             string
+	OwnerID             *string
 	BlockedGroupIDs     []string
 	EditorIDs           []string
 	ViewerIDs           []string
@@ -572,7 +572,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ExampleEvidence; v != nil {
 		m.SetExampleEvidence(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -650,7 +652,6 @@ type UpdateControlInput struct {
 	Details                   map[string]interface{}
 	ClearExampleEvidence      bool
 	ExampleEvidence           *string
-	OwnerID                   *string
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string
 	RemoveBlockedGroupIDs     []string
@@ -777,9 +778,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ExampleEvidence; v != nil {
 		m.SetExampleEvidence(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -927,7 +925,7 @@ type CreateControlObjectiveInput struct {
 	MappedFrameworks     *string
 	Details              map[string]interface{}
 	ExampleEvidence      *string
-	OwnerID              string
+	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
 	ViewerIDs            []string
@@ -982,7 +980,9 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.ExampleEvidence; v != nil {
 		m.SetExampleEvidence(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -1058,7 +1058,6 @@ type UpdateControlObjectiveInput struct {
 	Details                   map[string]interface{}
 	ClearExampleEvidence      bool
 	ExampleEvidence           *string
-	OwnerID                   *string
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string
 	RemoveBlockedGroupIDs     []string
@@ -1179,9 +1178,6 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.ExampleEvidence; v != nil {
 		m.SetExampleEvidence(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -1318,7 +1314,7 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 type CreateDocumentDataInput struct {
 	Tags       []string
 	Data       customtypes.JSONObject
-	OwnerID    string
+	OwnerID    *string
 	TemplateID string
 	EntityIDs  []string
 	FileIDs    []string
@@ -1332,7 +1328,9 @@ func (i *CreateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	if v := i.Data; v != nil {
 		m.SetData(v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	m.SetTemplateID(i.TemplateID)
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
@@ -1354,7 +1352,6 @@ type UpdateDocumentDataInput struct {
 	Tags            []string
 	AppendTags      []string
 	Data            customtypes.JSONObject
-	OwnerID         *string
 	TemplateID      *string
 	ClearEntity     bool
 	AddEntityIDs    []string
@@ -1377,9 +1374,6 @@ func (i *UpdateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	}
 	if v := i.Data; v != nil {
 		m.SetData(v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
@@ -1949,7 +1943,7 @@ type CreateEvidenceInput struct {
 	Source              *string
 	IsAutomated         *bool
 	URL                 *string
-	OwnerID             string
+	OwnerID             *string
 	ControlObjectiveIDs []string
 	ControlIDs          []string
 	SubcontrolIDs       []string
@@ -1985,7 +1979,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.ControlObjectiveIDs; len(v) > 0 {
 		m.AddControlObjectiveIDs(v...)
 	}
@@ -2031,7 +2027,6 @@ type UpdateEvidenceInput struct {
 	IsAutomated               *bool
 	ClearURL                  bool
 	URL                       *string
-	OwnerID                   *string
 	ClearControlObjectives    bool
 	AddControlObjectiveIDs    []string
 	RemoveControlObjectiveIDs []string
@@ -2104,9 +2099,6 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearControlObjectives {
 		m.ClearControlObjectives()
@@ -3843,7 +3835,7 @@ type CreateNarrativeInput struct {
 	Description         *string
 	Satisfies           *string
 	Details             map[string]interface{}
-	OwnerID             string
+	OwnerID             *string
 	BlockedGroupIDs     []string
 	EditorIDs           []string
 	ViewerIDs           []string
@@ -3869,7 +3861,9 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -3914,7 +3908,6 @@ type UpdateNarrativeInput struct {
 	Satisfies                 *string
 	ClearDetails              bool
 	Details                   map[string]interface{}
-	OwnerID                   *string
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string
 	RemoveBlockedGroupIDs     []string
@@ -3972,9 +3965,6 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -4064,11 +4054,9 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Text          string
-	OwnerID       *string
-	EntityID      *string
-	SubcontrolIDs []string
-	ProgramIDs    []string
+	Text    string
+	OwnerID *string
+	TaskID  *string
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -4077,14 +4065,8 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.EntityID; v != nil {
-		m.SetEntityID(*v)
-	}
-	if v := i.SubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
+	if v := i.TaskID; v != nil {
+		m.SetTaskID(*v)
 	}
 }
 
@@ -4096,17 +4078,9 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	Text                *string
-	ClearOwner          bool
-	OwnerID             *string
-	ClearEntity         bool
-	EntityID            *string
-	ClearSubcontrols    bool
-	AddSubcontrolIDs    []string
-	RemoveSubcontrolIDs []string
-	ClearProgram        bool
-	AddProgramIDs       []string
-	RemoveProgramIDs    []string
+	Text      *string
+	ClearTask bool
+	TaskID    *string
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -4114,35 +4088,11 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.Text; v != nil {
 		m.SetText(*v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
+	if i.ClearTask {
+		m.ClearTask()
 	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if i.ClearEntity {
-		m.ClearEntity()
-	}
-	if v := i.EntityID; v != nil {
-		m.SetEntityID(*v)
-	}
-	if i.ClearSubcontrols {
-		m.ClearSubcontrols()
-	}
-	if v := i.AddSubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
-		m.RemoveSubcontrolIDs(v...)
-	}
-	if i.ClearProgram {
-		m.ClearProgram()
-	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
+	if v := i.TaskID; v != nil {
+		m.SetTaskID(*v)
 	}
 }
 
@@ -6031,7 +5981,7 @@ type CreateRiskInput struct {
 	Mitigation      *string
 	Satisfies       *string
 	Details         map[string]interface{}
-	OwnerID         string
+	OwnerID         *string
 	BlockedGroupIDs []string
 	EditorIDs       []string
 	ViewerIDs       []string
@@ -6074,7 +6024,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -6128,7 +6080,6 @@ type UpdateRiskInput struct {
 	Satisfies             *string
 	ClearDetails          bool
 	Details               map[string]interface{}
-	OwnerID               *string
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
 	RemoveBlockedGroupIDs []string
@@ -6219,9 +6170,6 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -6564,11 +6512,9 @@ type CreateSubcontrolInput struct {
 	ImplementationVerificationDate *time.Time
 	Details                        map[string]interface{}
 	ExampleEvidence                *string
-	OwnerID                        string
+	OwnerID                        *string
 	ControlIDs                     []string
-	UserIDs                        []string
 	TaskIDs                        []string
-	NotesID                        *string
 	ProgramIDs                     []string
 	EvidenceIDs                    []string
 }
@@ -6627,18 +6573,14 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ExampleEvidence; v != nil {
 		m.SetExampleEvidence(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
-	}
-	if v := i.NotesID; v != nil {
-		m.SetNotesID(*v)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -6692,17 +6634,11 @@ type UpdateSubcontrolInput struct {
 	Details                             map[string]interface{}
 	ClearExampleEvidence                bool
 	ExampleEvidence                     *string
-	OwnerID                             *string
 	AddControlIDs                       []string
 	RemoveControlIDs                    []string
-	ClearUser                           bool
-	AddUserIDs                          []string
-	RemoveUserIDs                       []string
 	ClearTasks                          bool
 	AddTaskIDs                          []string
 	RemoveTaskIDs                       []string
-	ClearNotes                          bool
-	NotesID                             *string
 	ClearPrograms                       bool
 	AddProgramIDs                       []string
 	RemoveProgramIDs                    []string
@@ -6821,23 +6757,11 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ExampleEvidence; v != nil {
 		m.SetExampleEvidence(*v)
 	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
 	if v := i.AddControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
-	}
-	if i.ClearUser {
-		m.ClearUser()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 	if i.ClearTasks {
 		m.ClearTasks()
@@ -6847,12 +6771,6 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
-	}
-	if i.ClearNotes {
-		m.ClearNotes()
-	}
-	if v := i.NotesID; v != nil {
-		m.SetNotesID(*v)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -7041,14 +6959,15 @@ type CreateTaskInput struct {
 	Tags                []string
 	Title               string
 	Description         *string
-	Details             map[string]interface{}
+	Details             *string
 	Status              *enums.TaskStatus
+	Category            *string
 	Due                 *time.Time
-	Priority            *enums.Priority
 	Completed           *time.Time
-	OwnerID             string
+	OwnerID             *string
 	AssignerID          string
 	AssigneeID          *string
+	CommentIDs          []string
 	GroupIDs            []string
 	InternalPolicyIDs   []string
 	ProcedureIDs        []string
@@ -7069,24 +6988,29 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 		m.SetDescription(*v)
 	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
 	if v := i.Due; v != nil {
 		m.SetDue(*v)
-	}
-	if v := i.Priority; v != nil {
-		m.SetPriority(*v)
 	}
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	m.SetAssignerID(i.AssignerID)
 	if v := i.AssigneeID; v != nil {
 		m.SetAssigneeID(*v)
+	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
 	}
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
@@ -7129,17 +7053,19 @@ type UpdateTaskInput struct {
 	ClearDescription          bool
 	Description               *string
 	ClearDetails              bool
-	Details                   map[string]interface{}
+	Details                   *string
 	Status                    *enums.TaskStatus
+	ClearCategory             bool
+	Category                  *string
 	ClearDue                  bool
 	Due                       *time.Time
-	Priority                  *enums.Priority
 	ClearCompleted            bool
 	Completed                 *time.Time
-	OwnerID                   *string
-	AssignerID                *string
 	ClearAssignee             bool
 	AssigneeID                *string
+	ClearComments             bool
+	AddCommentIDs             []string
+	RemoveCommentIDs          []string
 	ClearGroup                bool
 	AddGroupIDs               []string
 	RemoveGroupIDs            []string
@@ -7190,10 +7116,16 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 		m.ClearDetails()
 	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearCategory {
+		m.ClearCategory()
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
 	if i.ClearDue {
 		m.ClearDue()
@@ -7201,26 +7133,26 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.Due; v != nil {
 		m.SetDue(*v)
 	}
-	if v := i.Priority; v != nil {
-		m.SetPriority(*v)
-	}
 	if i.ClearCompleted {
 		m.ClearCompleted()
 	}
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
 	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.AssignerID; v != nil {
-		m.SetAssignerID(*v)
-	}
 	if i.ClearAssignee {
 		m.ClearAssignee()
 	}
 	if v := i.AssigneeID; v != nil {
 		m.SetAssigneeID(*v)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
 	}
 	if i.ClearGroup {
 		m.ClearGroup()

@@ -122,20 +122,6 @@ func (ehu *EvidenceHistoryUpdate) ClearTags() *EvidenceHistoryUpdate {
 	return ehu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (ehu *EvidenceHistoryUpdate) SetOwnerID(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetOwnerID(s)
-	return ehu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableOwnerID(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetOwnerID(*s)
-	}
-	return ehu
-}
-
 // SetName sets the "name" field.
 func (ehu *EvidenceHistoryUpdate) SetName(s string) *EvidenceHistoryUpdate {
 	ehu.mutation.SetName(s)
@@ -384,8 +370,8 @@ func (ehu *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if ehu.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ehu.mutation.OwnerID(); ok {
-		_spec.SetField(evidencehistory.FieldOwnerID, field.TypeString, value)
+	if ehu.mutation.OwnerIDCleared() {
+		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := ehu.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
@@ -540,20 +526,6 @@ func (ehuo *EvidenceHistoryUpdateOne) AppendTags(s []string) *EvidenceHistoryUpd
 // ClearTags clears the value of the "tags" field.
 func (ehuo *EvidenceHistoryUpdateOne) ClearTags() *EvidenceHistoryUpdateOne {
 	ehuo.mutation.ClearTags()
-	return ehuo
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetOwnerID(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetOwnerID(s)
-	return ehuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableOwnerID(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetOwnerID(*s)
-	}
 	return ehuo
 }
 
@@ -835,8 +807,8 @@ func (ehuo *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evide
 	if ehuo.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ehuo.mutation.OwnerID(); ok {
-		_spec.SetField(evidencehistory.FieldOwnerID, field.TypeString, value)
+	if ehuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := ehuo.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)

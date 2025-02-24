@@ -770,6 +770,16 @@ func OwnerIDHasSuffix(v string) predicate.NarrativeHistory {
 	return predicate.NarrativeHistory(sql.FieldHasSuffix(FieldOwnerID, v))
 }
 
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
 // OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
 func OwnerIDEqualFold(v string) predicate.NarrativeHistory {
 	return predicate.NarrativeHistory(sql.FieldEqualFold(FieldOwnerID, v))

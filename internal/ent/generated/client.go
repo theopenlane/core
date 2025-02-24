@@ -8714,57 +8714,19 @@ func (c *NoteClient) QueryOwner(n *Note) *OrganizationQuery {
 	return query
 }
 
-// QueryEntity queries the entity edge of a Note.
-func (c *NoteClient) QueryEntity(n *Note) *EntityQuery {
-	query := (&EntityClient{config: c.config}).Query()
+// QueryTask queries the task edge of a Note.
+func (c *NoteClient) QueryTask(n *Note) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, id),
-			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, note.EntityTable, note.EntityColumn),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.TaskTable, note.TaskColumn),
 		)
 		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.Entity
+		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Note
-		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QuerySubcontrols queries the subcontrols edge of a Note.
-func (c *NoteClient) QuerySubcontrols(n *Note) *SubcontrolQuery {
-	query := (&SubcontrolClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := n.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(note.Table, note.FieldID, id),
-			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, note.SubcontrolsTable, note.SubcontrolsColumn),
-		)
-		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
-		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryProgram queries the program edge of a Note.
-func (c *NoteClient) QueryProgram(n *Note) *ProgramQuery {
-	query := (&ProgramClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := n.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(note.Table, note.FieldID, id),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, note.ProgramTable, note.ProgramPrimaryKey...),
-		)
-		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramNotes
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12165,11 +12127,11 @@ func (c *ProgramClient) QueryNotes(pr *Program) *NoteQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, id),
 			sqlgraph.To(note.Table, note.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, program.NotesTable, program.NotesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, program.NotesTable, program.NotesColumn),
 		)
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.ProgramNotes
+		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13726,25 +13688,6 @@ func (c *SubcontrolClient) QueryControls(s *Subcontrol) *ControlQuery {
 	return query
 }
 
-// QueryUser queries the user edge of a Subcontrol.
-func (c *SubcontrolClient) QueryUser(s *Subcontrol) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.UserTable, subcontrol.UserPrimaryKey...),
-		)
-		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserSubcontrols
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryTasks queries the tasks edge of a Subcontrol.
 func (c *SubcontrolClient) QueryTasks(s *Subcontrol) *TaskQuery {
 	query := (&TaskClient{config: c.config}).Query()
@@ -13758,25 +13701,6 @@ func (c *SubcontrolClient) QueryTasks(s *Subcontrol) *TaskQuery {
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.SubcontrolTasks
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryNotes queries the notes edge of a Subcontrol.
-func (c *SubcontrolClient) QueryNotes(s *Subcontrol) *NoteQuery {
-	query := (&NoteClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(note.Table, note.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, subcontrol.NotesTable, subcontrol.NotesColumn),
-		)
-		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -14468,6 +14392,25 @@ func (c *TaskClient) QueryAssignee(t *Task) *UserQuery {
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Task.
+func (c *TaskClient) QueryComments(t *Task) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, task.CommentsTable, task.CommentsColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -15457,11 +15400,11 @@ func (c *UserClient) QuerySubcontrols(u *User) *SubcontrolQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, user.SubcontrolsTable, user.SubcontrolsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.SubcontrolsTable, user.SubcontrolsColumn),
 		)
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.UserSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}

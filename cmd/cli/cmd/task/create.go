@@ -29,7 +29,6 @@ func init() {
 	createCmd.Flags().StringP("status", "s", "", "status of the task")
 	createCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
 	createCmd.Flags().Duration("due", 0, "time until due date of the task")
-	createCmd.Flags().StringP("organization", "o", "", "organization ID to own the task, this will give the organization access to the task")
 	createCmd.Flags().StringP("group", "g", "", "group ID to own the task, this will give the group access to the task")
 }
 
@@ -61,11 +60,6 @@ func createValidation() (input openlaneclient.CreateTaskInput, err error) {
 	if due != 0 {
 		dueDate := time.Now().Add(due)
 		input.Due = &dueDate
-	}
-
-	organization := cmd.Config.String("organization")
-	if organization != "" {
-		input.OwnerID = organization
 	}
 
 	group := cmd.Config.String("group")

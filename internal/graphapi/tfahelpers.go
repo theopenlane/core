@@ -7,12 +7,12 @@ import (
 	"github.com/theopenlane/iam/totp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/utils"
+	"github.com/theopenlane/core/internal/graphutils"
 )
 
 // generateTFAQRCode generates a QR code for the user's TFA secret
 func (r *mutationResolver) generateTFAQRCode(ctx context.Context, settings *generated.TFASetting, email, userID string) (string, error) {
-	if !utils.CheckForRequestedField(ctx, "qrCode") {
+	if !graphutils.CheckForRequestedField(ctx, "qrCode") {
 		return "", nil
 	}
 
@@ -36,7 +36,7 @@ func (r *mutationResolver) generateTFAQRCode(ctx context.Context, settings *gene
 
 // getDecryptedTFASecret returns the TFA secret for the user, decrypted
 func (r *mutationResolver) getDecryptedTFASecret(ctx context.Context, settings *generated.TFASetting) (string, error) {
-	if !utils.CheckForRequestedField(ctx, "tfaSecret") {
+	if !graphutils.CheckForRequestedField(ctx, "tfaSecret") {
 		return "", nil
 	}
 

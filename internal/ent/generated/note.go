@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
 // Note is the model entity for the Note schema.
@@ -33,35 +33,30 @@ type Note struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the text of the note
 	Text string `json:"text,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NoteQuery when eager-loading is set.
-	Edges        NoteEdges `json:"edges"`
-	entity_notes *string
-	selectValues sql.SelectValues
+	Edges         NoteEdges `json:"edges"`
+	entity_notes  *string
+	program_notes *string
+	task_comments *string
+	selectValues  sql.SelectValues
 }
 
 // NoteEdges holds the relations/edges for other nodes in the graph.
 type NoteEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// Entity holds the value of the entity edge.
-	Entity *Entity `json:"entity,omitempty"`
-	// Subcontrols holds the value of the subcontrols edge.
-	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
-	// Program holds the value of the program edge.
-	Program []*Program `json:"program,omitempty"`
+	// Task holds the value of the task edge.
+	Task *Task `json:"task,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
-
-	namedSubcontrols map[string][]*Subcontrol
-	namedProgram     map[string][]*Program
+	totalCount [2]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -75,33 +70,15 @@ func (e NoteEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// EntityOrErr returns the Entity value or an error if the edge
+// TaskOrErr returns the Task value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e NoteEdges) EntityOrErr() (*Entity, error) {
-	if e.Entity != nil {
-		return e.Entity, nil
+func (e NoteEdges) TaskOrErr() (*Task, error) {
+	if e.Task != nil {
+		return e.Task, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: entity.Label}
+		return nil, &NotFoundError{label: task.Label}
 	}
-	return nil, &NotLoadedError{edge: "entity"}
-}
-
-// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
-// was not loaded in eager-loading.
-func (e NoteEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[2] {
-		return e.Subcontrols, nil
-	}
-	return nil, &NotLoadedError{edge: "subcontrols"}
-}
-
-// ProgramOrErr returns the Program value or an error if the edge
-// was not loaded in eager-loading.
-func (e NoteEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[3] {
-		return e.Program, nil
-	}
-	return nil, &NotLoadedError{edge: "program"}
+	return nil, &NotLoadedError{edge: "task"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -114,6 +91,10 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case note.ForeignKeys[0]: // entity_notes
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[1]: // program_notes
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[2]: // task_comments
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -197,6 +178,20 @@ func (n *Note) assignValues(columns []string, values []any) error {
 				n.entity_notes = new(string)
 				*n.entity_notes = value.String
 			}
+		case note.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_notes", values[i])
+			} else if value.Valid {
+				n.program_notes = new(string)
+				*n.program_notes = value.String
+			}
+		case note.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field task_comments", values[i])
+			} else if value.Valid {
+				n.task_comments = new(string)
+				*n.task_comments = value.String
+			}
 		default:
 			n.selectValues.Set(columns[i], values[i])
 		}
@@ -215,19 +210,9 @@ func (n *Note) QueryOwner() *OrganizationQuery {
 	return NewNoteClient(n.config).QueryOwner(n)
 }
 
-// QueryEntity queries the "entity" edge of the Note entity.
-func (n *Note) QueryEntity() *EntityQuery {
-	return NewNoteClient(n.config).QueryEntity(n)
-}
-
-// QuerySubcontrols queries the "subcontrols" edge of the Note entity.
-func (n *Note) QuerySubcontrols() *SubcontrolQuery {
-	return NewNoteClient(n.config).QuerySubcontrols(n)
-}
-
-// QueryProgram queries the "program" edge of the Note entity.
-func (n *Note) QueryProgram() *ProgramQuery {
-	return NewNoteClient(n.config).QueryProgram(n)
+// QueryTask queries the "task" edge of the Note entity.
+func (n *Note) QueryTask() *TaskQuery {
+	return NewNoteClient(n.config).QueryTask(n)
 }
 
 // Update returns a builder for updating this Note.
@@ -281,54 +266,6 @@ func (n *Note) String() string {
 	builder.WriteString(n.Text)
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (n *Note) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if n.Edges.namedSubcontrols == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := n.Edges.namedSubcontrols[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (n *Note) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if n.Edges.namedSubcontrols == nil {
-		n.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
-	}
-	if len(edges) == 0 {
-		n.Edges.namedSubcontrols[name] = []*Subcontrol{}
-	} else {
-		n.Edges.namedSubcontrols[name] = append(n.Edges.namedSubcontrols[name], edges...)
-	}
-}
-
-// NamedProgram returns the Program named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (n *Note) NamedProgram(name string) ([]*Program, error) {
-	if n.Edges.namedProgram == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := n.Edges.namedProgram[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (n *Note) appendNamedProgram(name string, edges ...*Program) {
-	if n.Edges.namedProgram == nil {
-		n.Edges.namedProgram = make(map[string][]*Program)
-	}
-	if len(edges) == 0 {
-		n.Edges.namedProgram[name] = []*Program{}
-	} else {
-		n.Edges.namedProgram[name] = append(n.Edges.namedProgram[name], edges...)
-	}
 }
 
 // Notes is a parsable slice of Note.

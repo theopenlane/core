@@ -365,6 +365,7 @@ query AdminSearch($query: String!) {
           title
           description
           details
+          category
           assigneeID
           assignerID
         }

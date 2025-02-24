@@ -158,6 +158,14 @@ func (rhc *RiskHistoryCreate) SetOwnerID(s string) *RiskHistoryCreate {
 	return rhc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableOwnerID(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetOwnerID(*s)
+	}
+	return rhc
+}
+
 // SetName sets the "name" field.
 func (rhc *RiskHistoryCreate) SetName(s string) *RiskHistoryCreate {
 	rhc.mutation.SetName(s)
@@ -376,9 +384,6 @@ func (rhc *RiskHistoryCreate) check() error {
 	}
 	if _, ok := rhc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "RiskHistory.display_id"`)}
-	}
-	if _, ok := rhc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "RiskHistory.owner_id"`)}
 	}
 	if _, ok := rhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "RiskHistory.name"`)}

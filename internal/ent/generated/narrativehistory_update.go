@@ -122,20 +122,6 @@ func (nhu *NarrativeHistoryUpdate) ClearTags() *NarrativeHistoryUpdate {
 	return nhu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (nhu *NarrativeHistoryUpdate) SetOwnerID(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetOwnerID(s)
-	return nhu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableOwnerID(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetOwnerID(*s)
-	}
-	return nhu
-}
-
 // SetName sets the "name" field.
 func (nhu *NarrativeHistoryUpdate) SetName(s string) *NarrativeHistoryUpdate {
 	nhu.mutation.SetName(s)
@@ -302,8 +288,8 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if nhu.mutation.TagsCleared() {
 		_spec.ClearField(narrativehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := nhu.mutation.OwnerID(); ok {
-		_spec.SetField(narrativehistory.FieldOwnerID, field.TypeString, value)
+	if nhu.mutation.OwnerIDCleared() {
+		_spec.ClearField(narrativehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := nhu.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)
@@ -437,20 +423,6 @@ func (nhuo *NarrativeHistoryUpdateOne) AppendTags(s []string) *NarrativeHistoryU
 // ClearTags clears the value of the "tags" field.
 func (nhuo *NarrativeHistoryUpdateOne) ClearTags() *NarrativeHistoryUpdateOne {
 	nhuo.mutation.ClearTags()
-	return nhuo
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetOwnerID(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetOwnerID(s)
-	return nhuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableOwnerID(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetOwnerID(*s)
-	}
 	return nhuo
 }
 
@@ -650,8 +622,8 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 	if nhuo.mutation.TagsCleared() {
 		_spec.ClearField(narrativehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := nhuo.mutation.OwnerID(); ok {
-		_spec.SetField(narrativehistory.FieldOwnerID, field.TypeString, value)
+	if nhuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(narrativehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := nhuo.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)
