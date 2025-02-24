@@ -2758,7 +2758,7 @@ func (t *Task) Assigner(ctx context.Context) (*User, error) {
 	if IsNotLoaded(err) {
 		result, err = t.QueryAssigner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (t *Task) Assignee(ctx context.Context) (*User, error) {

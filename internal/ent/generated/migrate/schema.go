@@ -2543,7 +2543,7 @@ var (
 		{Name: "due", Type: field.TypeTime, Nullable: true},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "assigner_id", Type: field.TypeString},
+		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
@@ -2562,7 +2562,7 @@ var (
 				Symbol:     "tasks_users_assigner_tasks",
 				Columns:    []*schema.Column{TasksColumns[17]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
@@ -2602,7 +2602,7 @@ var (
 		{Name: "due", Type: field.TypeTime, Nullable: true},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
-		{Name: "assigner_id", Type: field.TypeString},
+		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 	}
 	// TaskHistoryTable holds the schema information for the "task_history" table.
 	TaskHistoryTable = &schema.Table{

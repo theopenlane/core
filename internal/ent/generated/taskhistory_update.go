@@ -271,6 +271,26 @@ func (thu *TaskHistoryUpdate) ClearAssigneeID() *TaskHistoryUpdate {
 	return thu
 }
 
+// SetAssignerID sets the "assigner_id" field.
+func (thu *TaskHistoryUpdate) SetAssignerID(s string) *TaskHistoryUpdate {
+	thu.mutation.SetAssignerID(s)
+	return thu
+}
+
+// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
+func (thu *TaskHistoryUpdate) SetNillableAssignerID(s *string) *TaskHistoryUpdate {
+	if s != nil {
+		thu.SetAssignerID(*s)
+	}
+	return thu
+}
+
+// ClearAssignerID clears the value of the "assigner_id" field.
+func (thu *TaskHistoryUpdate) ClearAssignerID() *TaskHistoryUpdate {
+	thu.mutation.ClearAssignerID()
+	return thu
+}
+
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (thu *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
 	return thu.mutation
@@ -428,6 +448,12 @@ func (thu *TaskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if thu.mutation.AssigneeIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
+	}
+	if value, ok := thu.mutation.AssignerID(); ok {
+		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
+	}
+	if thu.mutation.AssignerIDCleared() {
+		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
 	}
 	_spec.Node.Schema = thu.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thu.schemaConfig)
@@ -691,6 +717,26 @@ func (thuo *TaskHistoryUpdateOne) ClearAssigneeID() *TaskHistoryUpdateOne {
 	return thuo
 }
 
+// SetAssignerID sets the "assigner_id" field.
+func (thuo *TaskHistoryUpdateOne) SetAssignerID(s string) *TaskHistoryUpdateOne {
+	thuo.mutation.SetAssignerID(s)
+	return thuo
+}
+
+// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
+func (thuo *TaskHistoryUpdateOne) SetNillableAssignerID(s *string) *TaskHistoryUpdateOne {
+	if s != nil {
+		thuo.SetAssignerID(*s)
+	}
+	return thuo
+}
+
+// ClearAssignerID clears the value of the "assigner_id" field.
+func (thuo *TaskHistoryUpdateOne) ClearAssignerID() *TaskHistoryUpdateOne {
+	thuo.mutation.ClearAssignerID()
+	return thuo
+}
+
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (thuo *TaskHistoryUpdateOne) Mutation() *TaskHistoryMutation {
 	return thuo.mutation
@@ -878,6 +924,12 @@ func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHisto
 	}
 	if thuo.mutation.AssigneeIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
+	}
+	if value, ok := thuo.mutation.AssignerID(); ok {
+		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
+	}
+	if thuo.mutation.AssignerIDCleared() {
+		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
 	}
 	_spec.Node.Schema = thuo.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thuo.schemaConfig)

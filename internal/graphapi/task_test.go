@@ -155,6 +155,14 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			ctx:    context.Background(),
 		},
 		{
+			name: "happy path, using api token",
+			request: openlaneclient.CreateTaskInput{
+				Title: "test-task",
+			},
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
+		},
+		{
 			name: "missing title, but display name provided",
 			request: openlaneclient.CreateTaskInput{
 				Description: lo.ToPtr("makin' a list, checkin' it twice"),
@@ -215,6 +223,24 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			} else {
 				assert.WithinDuration(t, *tc.request.Due, *resp.CreateTask.Task.Due, 10*time.Second)
 			}
+
+			if tc.request.AssigneeID == nil {
+				assert.Nil(t, resp.CreateTask.Task.Assignee)
+			} else {
+				require.NotNil(t, resp.CreateTask.Task.Assignee)
+
+				assert.Equal(t, *tc.request.AssigneeID, resp.CreateTask.Task.Assignee.ID)
+
+				// make sure the assignee can see the task
+				taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser.UserCtx, resp.CreateTask.Task.ID)
+				require.NoError(t, err)
+				assert.NotNil(t, taskResp)
+
+				// make sure the another org member cannot see the task
+				taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, resp.CreateTask.Task.ID)
+				require.Error(t, err)
+				assert.Nil(t, taskResp)
+			}
 		})
 	}
 }
@@ -222,11 +248,23 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 func (suite *GraphTestSuite) TestMutationUpdateTask() {
 	t := suite.T()
 
-	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	group := (&GroupBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	taskCommentID := ""
 
+	// make sure the user cannot can see the task before they are the assigner
+	taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
+	require.Error(t, err)
+	assert.Nil(t, taskResp)
+
+	// make sure the user cannot can see the task before they are the assignee
+	taskResp, err = suite.client.api.GetTaskByID(viewOnlyUser.UserCtx, task.ID)
+	require.Error(t, err)
+	assert.Nil(t, taskResp)
+
+	// NOTE: the tests and checks are ordered due to dependencies between updates
+	// if you update cases, they will most likely need to be added to the end of the list
 	testCases := []struct {
 		name                 string
 		request              *openlaneclient.UpdateTaskInput
@@ -242,7 +280,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				AssigneeID:  &adminUser.ID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path, add comment",
@@ -252,7 +290,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path, update comment",
@@ -260,7 +298,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				Text: lo.ToPtr("sarah is better"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path, delete comment",
@@ -268,10 +306,10 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				DeleteComment: &taskCommentID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "update category",
+			name: "update category using pat of owner",
 			request: &openlaneclient.UpdateTaskInput{
 				Category: lo.ToPtr("risk review"),
 			},
@@ -279,20 +317,28 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			ctx:    context.Background(),
 		},
 		{
-			name: "update assignee",
+			name: "update assignee to view only user",
 			request: &openlaneclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "clear assignee",
+			request: &openlaneclient.UpdateTaskInput{
+				ClearAssignee: lo.ToPtr(true),
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "update assignee to same user, should not error",
 			request: &openlaneclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "update status and details",
@@ -301,7 +347,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				Details: lo.ToPtr("do all the things for the thing"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "add to group",
@@ -309,7 +355,15 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				AddGroupIDs: []string{group.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "update assigner to another org member, this user should still be able to see it because they originally created it",
+			request: &openlaneclient.UpdateTaskInput{
+				AssignerID: lo.ToPtr(viewOnlyUser2.ID),
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
 		},
 	}
 
@@ -364,6 +418,30 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 					assert.Equal(t, *tc.request.Category, *resp.UpdateTask.Task.Category)
 				}
 
+				if tc.request.ClearAssignee != nil {
+					assert.Nil(t, resp.UpdateTask.Task.Assignee)
+
+					// the previous assignee should no longer be able to see the task
+					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser.UserCtx, resp.UpdateTask.Task.ID)
+					assert.Error(t, err)
+					assert.Nil(t, taskResp)
+				}
+
+				if tc.request.AssignerID != nil {
+					assert.NotNil(t, resp.UpdateTask.Task.Assigner)
+					assert.Equal(t, *tc.request.AssignerID, resp.UpdateTask.Task.Assigner.ID)
+
+					// make sure the assigner can see the task
+					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
+					assert.NoError(t, err)
+					assert.NotNil(t, taskResp)
+
+					// make sure the original creator can still see the task
+					taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, resp.UpdateTask.Task.ID)
+					require.NoError(t, err)
+					assert.NotNil(t, taskResp)
+				}
+
 				if tc.request.AddComment != nil {
 					assert.NotEmpty(t, resp.UpdateTask.Task.Comments)
 					assert.Equal(t, tc.request.AddComment.Text, resp.UpdateTask.Task.Comments[0].Text)
@@ -374,21 +452,21 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 
 					// user shouldn't be able to see the comment
 					checkResp, err := suite.client.api.GetNoteByID(viewOnlyUser.UserCtx, taskCommentID)
-					require.Error(t, err)
+					assert.Error(t, err)
 					assert.Nil(t, checkResp)
 
-					// user should be able to see the comment because they are an the assignee
+					// user should be able to see the comment since they created the task
 					checkResp, err = suite.client.api.GetNoteByID(adminUser.UserCtx, taskCommentID)
-					require.Error(t, err)
-					assert.Nil(t, checkResp)
+					assert.NoError(t, err)
+					assert.NotNil(t, checkResp)
 
 					// org owner should be able to see the comment
 					checkResp, err = suite.client.api.GetNoteByID(testUser1.UserCtx, taskCommentID)
-					require.NoError(t, err)
+					assert.NoError(t, err)
 					assert.NotNil(t, checkResp)
 				} else if tc.request.DeleteComment != nil {
 					// should not have any comments
-					require.Len(t, resp.UpdateTask.Task.Comments, 0)
+					assert.Len(t, resp.UpdateTask.Task.Comments, 0)
 				}
 			} else if tc.updateCommentRequest != nil {
 				require.NotNil(t, commentResp)

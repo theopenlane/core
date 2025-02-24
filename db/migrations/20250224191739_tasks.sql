@@ -3,7 +3,7 @@ ALTER TABLE "risk_history" ALTER COLUMN "owner_id" DROP NOT NULL;
 -- Modify "note_history" table
 ALTER TABLE "note_history" ALTER COLUMN "text" TYPE text;
 -- Modify "task_history" table
-ALTER TABLE "task_history" ALTER COLUMN "details" TYPE text, ALTER COLUMN "owner_id" DROP NOT NULL, DROP COLUMN "priority", ADD COLUMN "category" character varying NULL;
+ALTER TABLE "task_history" ALTER COLUMN "details" TYPE text, ALTER COLUMN "owner_id" DROP NOT NULL, DROP COLUMN "priority", ALTER COLUMN "assigner_id" DROP NOT NULL, ADD COLUMN "category" character varying NULL;
 -- Modify "subcontrol_history" table
 ALTER TABLE "subcontrol_history" ALTER COLUMN "owner_id" DROP NOT NULL;
 -- Modify "control_history" table
@@ -27,7 +27,7 @@ ALTER TABLE "evidences" DROP CONSTRAINT "evidences_organizations_evidence", ALTE
 -- Modify "narratives" table
 ALTER TABLE "narratives" DROP CONSTRAINT "narratives_organizations_narratives", ALTER COLUMN "owner_id" DROP NOT NULL, ADD CONSTRAINT "narratives_organizations_narratives" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- Modify "tasks" table
-ALTER TABLE "tasks" DROP CONSTRAINT "tasks_organizations_tasks", ALTER COLUMN "details" TYPE text, DROP COLUMN "priority", ALTER COLUMN "owner_id" DROP NOT NULL, ADD COLUMN "category" character varying NULL, ADD CONSTRAINT "tasks_organizations_tasks" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+ALTER TABLE "tasks" DROP CONSTRAINT "tasks_organizations_tasks", DROP CONSTRAINT "tasks_users_assigner_tasks", ALTER COLUMN "details" TYPE text, DROP COLUMN "priority", ALTER COLUMN "owner_id" DROP NOT NULL, ALTER COLUMN "assigner_id" DROP NOT NULL, ADD COLUMN "category" character varying NULL, ADD CONSTRAINT "tasks_organizations_tasks" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "tasks_users_assigner_tasks" FOREIGN KEY ("assigner_id") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- Modify "notes" table
 ALTER TABLE "notes" ALTER COLUMN "text" TYPE text, ADD COLUMN "program_notes" character varying NULL, ADD COLUMN "task_comments" character varying NULL, ADD CONSTRAINT "notes_programs_notes" FOREIGN KEY ("program_notes") REFERENCES "programs" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "notes_tasks_comments" FOREIGN KEY ("task_comments") REFERENCES "tasks" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- Modify "risks" table

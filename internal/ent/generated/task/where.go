@@ -1223,6 +1223,16 @@ func AssignerIDHasSuffix(v string) predicate.Task {
 	return predicate.Task(sql.FieldHasSuffix(FieldAssignerID, v))
 }
 
+// AssignerIDIsNil applies the IsNil predicate on the "assigner_id" field.
+func AssignerIDIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAssignerID))
+}
+
+// AssignerIDNotNil applies the NotNil predicate on the "assigner_id" field.
+func AssignerIDNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAssignerID))
+}
+
 // AssignerIDEqualFold applies the EqualFold predicate on the "assigner_id" field.
 func AssignerIDEqualFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldEqualFold(FieldAssignerID, v))

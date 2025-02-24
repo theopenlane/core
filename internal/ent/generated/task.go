@@ -55,7 +55,7 @@ type Task struct {
 	Completed time.Time `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID string `json:"assignee_id,omitempty"`
-	// the id of the user who assigned the task
+	// the id of the user who assigned the task, can be left empty if created by the system or a service token
 	AssignerID string `json:"assigner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TaskQuery when eager-loading is set.

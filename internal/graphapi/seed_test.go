@@ -19,6 +19,8 @@ var (
 	testUser2 testUserDetails
 	// viewOnlyUser is a test user that is a member of the first user's organization
 	viewOnlyUser testUserDetails
+	// viewOnlyUser2 is a test user that is an admin of the first user's organization
+	viewOnlyUser2 testUserDetails
 	// adminUser is a test user that is an admin of the first user's organization
 	adminUser testUserDetails
 )
@@ -84,11 +86,13 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	testUser1 = suite.userBuilder(ctx)
 	testUser2 = suite.userBuilder(ctx)
 
-	// setup a test user that is a member of an organization
+	// setup two test users that are members of the organization
 	viewOnlyUser = suite.userBuilder(ctx)
+	viewOnlyUser2 = suite.userBuilder(ctx)
 
 	// add the user to the organization
 	suite.addUserToOrganization(testUser1.UserCtx, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
 
 	// setup a test user that is an admin of an organization
 	adminUser = suite.userBuilder(ctx)

@@ -110025,9 +110025,22 @@ func (m *TaskMutation) OldAssignerID(ctx context.Context) (v string, err error) 
 	return oldValue.AssignerID, nil
 }
 
+// ClearAssignerID clears the value of the "assigner_id" field.
+func (m *TaskMutation) ClearAssignerID() {
+	m.assigner = nil
+	m.clearedFields[task.FieldAssignerID] = struct{}{}
+}
+
+// AssignerIDCleared returns if the "assigner_id" field was cleared in this mutation.
+func (m *TaskMutation) AssignerIDCleared() bool {
+	_, ok := m.clearedFields[task.FieldAssignerID]
+	return ok
+}
+
 // ResetAssignerID resets all changes to the "assigner_id" field.
 func (m *TaskMutation) ResetAssignerID() {
 	m.assigner = nil
+	delete(m.clearedFields, task.FieldAssignerID)
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -110065,7 +110078,7 @@ func (m *TaskMutation) ClearAssigner() {
 
 // AssignerCleared reports if the "assigner" edge to the User entity was cleared.
 func (m *TaskMutation) AssignerCleared() bool {
-	return m.clearedassigner
+	return m.AssignerIDCleared() || m.clearedassigner
 }
 
 // AssignerIDs returns the "assigner" edge IDs in the mutation.
@@ -110982,6 +110995,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldAssigneeID) {
 		fields = append(fields, task.FieldAssigneeID)
 	}
+	if m.FieldCleared(task.FieldAssignerID) {
+		fields = append(fields, task.FieldAssignerID)
+	}
 	return fields
 }
 
@@ -111037,6 +111053,9 @@ func (m *TaskMutation) ClearField(name string) error {
 		return nil
 	case task.FieldAssigneeID:
 		m.ClearAssigneeID()
+		return nil
+	case task.FieldAssignerID:
+		m.ClearAssignerID()
 		return nil
 	}
 	return fmt.Errorf("unknown Task nullable field %s", name)
@@ -112550,9 +112569,22 @@ func (m *TaskHistoryMutation) OldAssignerID(ctx context.Context) (v string, err 
 	return oldValue.AssignerID, nil
 }
 
+// ClearAssignerID clears the value of the "assigner_id" field.
+func (m *TaskHistoryMutation) ClearAssignerID() {
+	m.assigner_id = nil
+	m.clearedFields[taskhistory.FieldAssignerID] = struct{}{}
+}
+
+// AssignerIDCleared returns if the "assigner_id" field was cleared in this mutation.
+func (m *TaskHistoryMutation) AssignerIDCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldAssignerID]
+	return ok
+}
+
 // ResetAssignerID resets all changes to the "assigner_id" field.
 func (m *TaskHistoryMutation) ResetAssignerID() {
 	m.assigner_id = nil
+	delete(m.clearedFields, taskhistory.FieldAssignerID)
 }
 
 // Where appends a list predicates to the TaskHistoryMutation builder.
@@ -112985,6 +113017,9 @@ func (m *TaskHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(taskhistory.FieldAssigneeID) {
 		fields = append(fields, taskhistory.FieldAssigneeID)
 	}
+	if m.FieldCleared(taskhistory.FieldAssignerID) {
+		fields = append(fields, taskhistory.FieldAssignerID)
+	}
 	return fields
 }
 
@@ -113043,6 +113078,9 @@ func (m *TaskHistoryMutation) ClearField(name string) error {
 		return nil
 	case taskhistory.FieldAssigneeID:
 		m.ClearAssigneeID()
+		return nil
+	case taskhistory.FieldAssignerID:
+		m.ClearAssignerID()
 		return nil
 	}
 	return fmt.Errorf("unknown TaskHistory nullable field %s", name)

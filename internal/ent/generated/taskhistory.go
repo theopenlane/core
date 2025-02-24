@@ -60,7 +60,7 @@ type TaskHistory struct {
 	Completed time.Time `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID string `json:"assignee_id,omitempty"`
-	// the id of the user who assigned the task
+	// the id of the user who assigned the task, can be left empty if created by the system or a service token
 	AssignerID   string `json:"assigner_id,omitempty"`
 	selectValues sql.SelectValues
 }

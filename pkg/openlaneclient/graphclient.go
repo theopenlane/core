@@ -3545,7 +3545,7 @@ func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult) GetSubscribers() 
 
 type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
 	AssigneeID  *string  "json:\"assigneeID,omitempty\" graphql:\"assigneeID\""
-	AssignerID  string   "json:\"assignerID\" graphql:\"assignerID\""
+	AssignerID  *string  "json:\"assignerID,omitempty\" graphql:\"assignerID\""
 	Category    *string  "json:\"category,omitempty\" graphql:\"category\""
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
@@ -3563,7 +3563,7 @@ func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetAssigneeID() *
 	}
 	return t.AssigneeID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetAssignerID() string {
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetAssignerID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
 	}
@@ -44718,7 +44718,7 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Comments) GetUpdatedBy() *str
 
 type CreateBulkCSVTask_CreateBulkCSVTask_Tasks struct {
 	Assignee    *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                               "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                                            "json:\"completed,omitempty\" graphql:\"completed\""
@@ -44746,7 +44746,7 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetAssigner() *CreateBulkCSV
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCategory() *string {
 	if t == nil {
@@ -44955,7 +44955,7 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks_Comments) GetUpdatedBy() *string {
 
 type CreateBulkTask_CreateBulkTask_Tasks struct {
 	Assignee    *CreateBulkTask_CreateBulkTask_Tasks_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    CreateBulkTask_CreateBulkTask_Tasks_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *CreateBulkTask_CreateBulkTask_Tasks_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                         "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*CreateBulkTask_CreateBulkTask_Tasks_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                                      "json:\"completed,omitempty\" graphql:\"completed\""
@@ -44983,7 +44983,7 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks) GetAssigner() *CreateBulkTask_Crea
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCategory() *string {
 	if t == nil {
@@ -45192,7 +45192,7 @@ func (t *CreateTask_CreateTask_Task_Comments) GetUpdatedBy() *string {
 
 type CreateTask_CreateTask_Task struct {
 	Assignee    *CreateTask_CreateTask_Task_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    CreateTask_CreateTask_Task_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *CreateTask_CreateTask_Task_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*CreateTask_CreateTask_Task_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                             "json:\"completed,omitempty\" graphql:\"completed\""
@@ -45221,7 +45221,7 @@ func (t *CreateTask_CreateTask_Task) GetAssigner() *CreateTask_CreateTask_Task_A
 	if t == nil {
 		t = &CreateTask_CreateTask_Task{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *CreateTask_CreateTask_Task) GetCategory() *string {
 	if t == nil {
@@ -45465,7 +45465,7 @@ func (t *GetAllTasks_Tasks_Edges_Node_Comments) GetUpdatedBy() *string {
 
 type GetAllTasks_Tasks_Edges_Node struct {
 	Assignee    *GetAllTasks_Tasks_Edges_Node_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    GetAllTasks_Tasks_Edges_Node_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *GetAllTasks_Tasks_Edges_Node_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                  "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*GetAllTasks_Tasks_Edges_Node_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                               "json:\"completed,omitempty\" graphql:\"completed\""
@@ -45494,7 +45494,7 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetAssigner() *GetAllTasks_Tasks_Edges_No
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *GetAllTasks_Tasks_Edges_Node) GetCategory() *string {
 	if t == nil {
@@ -45738,7 +45738,7 @@ func (t *GetTaskByID_Task_Comments) GetUpdatedBy() *string {
 
 type GetTaskByID_Task struct {
 	Assignee    *GetTaskByID_Task_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    GetTaskByID_Task_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *GetTaskByID_Task_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                      "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*GetTaskByID_Task_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                   "json:\"completed,omitempty\" graphql:\"completed\""
@@ -45767,7 +45767,7 @@ func (t *GetTaskByID_Task) GetAssigner() *GetTaskByID_Task_Assigner {
 	if t == nil {
 		t = &GetTaskByID_Task{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *GetTaskByID_Task) GetCategory() *string {
 	if t == nil {
@@ -45971,7 +45971,7 @@ func (t *GetTasks_Tasks_Edges_Node_Comments) GetUpdatedBy() *string {
 
 type GetTasks_Tasks_Edges_Node struct {
 	Assignee    *GetTasks_Tasks_Edges_Node_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    GetTasks_Tasks_Edges_Node_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *GetTasks_Tasks_Edges_Node_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                               "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*GetTasks_Tasks_Edges_Node_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                            "json:\"completed,omitempty\" graphql:\"completed\""
@@ -45999,7 +45999,7 @@ func (t *GetTasks_Tasks_Edges_Node) GetAssigner() *GetTasks_Tasks_Edges_Node_Ass
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *GetTasks_Tasks_Edges_Node) GetCategory() *string {
 	if t == nil {
@@ -46219,7 +46219,7 @@ func (t *UpdateTask_UpdateTask_Task_Comments) GetUpdatedBy() *string {
 
 type UpdateTask_UpdateTask_Task struct {
 	Assignee    *UpdateTask_UpdateTask_Task_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    UpdateTask_UpdateTask_Task_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *UpdateTask_UpdateTask_Task_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*UpdateTask_UpdateTask_Task_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                             "json:\"completed,omitempty\" graphql:\"completed\""
@@ -46247,7 +46247,7 @@ func (t *UpdateTask_UpdateTask_Task) GetAssigner() *UpdateTask_UpdateTask_Task_A
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *UpdateTask_UpdateTask_Task) GetCategory() *string {
 	if t == nil {
@@ -46456,7 +46456,7 @@ func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments) GetUpdatedBy() *stri
 
 type UpdateTaskComment_UpdateTaskComment_Task struct {
 	Assignee    *UpdateTaskComment_UpdateTaskComment_Task_Assignee   "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    UpdateTaskComment_UpdateTaskComment_Task_Assigner    "json:\"assigner\" graphql:\"assigner\""
+	Assigner    *UpdateTaskComment_UpdateTaskComment_Task_Assigner   "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                              "json:\"category,omitempty\" graphql:\"category\""
 	Comments    []*UpdateTaskComment_UpdateTaskComment_Task_Comments "json:\"comments,omitempty\" graphql:\"comments\""
 	Completed   *time.Time                                           "json:\"completed,omitempty\" graphql:\"completed\""
@@ -46484,7 +46484,7 @@ func (t *UpdateTaskComment_UpdateTaskComment_Task) GetAssigner() *UpdateTaskComm
 	if t == nil {
 		t = &UpdateTaskComment_UpdateTaskComment_Task{}
 	}
-	return &t.Assigner
+	return t.Assigner
 }
 func (t *UpdateTaskComment_UpdateTaskComment_Task) GetCategory() *string {
 	if t == nil {

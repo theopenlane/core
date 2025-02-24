@@ -4052,7 +4052,7 @@ type CreateTaskInput struct {
 	// the completion date of the task
 	Completed           *time.Time `json:"completed,omitempty"`
 	OwnerID             *string    `json:"ownerID,omitempty"`
-	AssignerID          string     `json:"assignerID"`
+	AssignerID          *string    `json:"assignerID,omitempty"`
 	AssigneeID          *string    `json:"assigneeID,omitempty"`
 	CommentIDs          []string   `json:"commentIDs,omitempty"`
 	GroupIDs            []string   `json:"groupIDs,omitempty"`
@@ -18733,10 +18733,10 @@ type Task struct {
 	Completed *time.Time `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID *string `json:"assigneeID,omitempty"`
-	// the id of the user who assigned the task
-	AssignerID string        `json:"assignerID"`
+	// the id of the user who assigned the task, can be left empty if created by the system or a service token
+	AssignerID *string       `json:"assignerID,omitempty"`
 	Owner      *Organization `json:"owner,omitempty"`
-	Assigner   *User         `json:"assigner"`
+	Assigner   *User         `json:"assigner,omitempty"`
 	Assignee   *User         `json:"assignee,omitempty"`
 	// conversations related to the task
 	Comments         []*Note             `json:"comments,omitempty"`
@@ -18821,8 +18821,8 @@ type TaskHistory struct {
 	Completed *time.Time `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID *string `json:"assigneeID,omitempty"`
-	// the id of the user who assigned the task
-	AssignerID string `json:"assignerID"`
+	// the id of the user who assigned the task, can be left empty if created by the system or a service token
+	AssignerID *string `json:"assignerID,omitempty"`
 }
 
 func (TaskHistory) IsNode() {}
@@ -19120,6 +19120,8 @@ type TaskHistoryWhereInput struct {
 	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
 	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
 	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDIsNil        *bool    `json:"assignerIDIsNil,omitempty"`
+	AssignerIDNotNil       *bool    `json:"assignerIDNotNil,omitempty"`
 	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
 	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
 }
@@ -19381,6 +19383,8 @@ type TaskWhereInput struct {
 	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
 	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
 	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDIsNil        *bool    `json:"assignerIDIsNil,omitempty"`
+	AssignerIDNotNil       *bool    `json:"assignerIDNotNil,omitempty"`
 	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
 	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
 	// owner edge predicates
@@ -21324,6 +21328,8 @@ type UpdateTaskInput struct {
 	// the completion date of the task
 	Completed                 *time.Time       `json:"completed,omitempty"`
 	ClearCompleted            *bool            `json:"clearCompleted,omitempty"`
+	AssignerID                *string          `json:"assignerID,omitempty"`
+	ClearAssigner             *bool            `json:"clearAssigner,omitempty"`
 	AssigneeID                *string          `json:"assigneeID,omitempty"`
 	ClearAssignee             *bool            `json:"clearAssignee,omitempty"`
 	AddCommentIDs             []string         `json:"addCommentIDs,omitempty"`

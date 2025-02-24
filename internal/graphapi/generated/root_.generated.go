@@ -27962,7 +27962,7 @@ input CreateTaskInput {
   """
   completed: Time
   ownerID: ID
-  assignerID: ID!
+  assignerID: ID
   assigneeID: ID
   commentIDs: [ID!]
   groupIDs: [ID!]
@@ -47676,11 +47676,11 @@ type Task implements Node {
   """
   assigneeID: ID
   """
-  the id of the user who assigned the task
+  the id of the user who assigned the task, can be left empty if created by the system or a service token
   """
-  assignerID: ID!
+  assignerID: ID
   owner: Organization
-  assigner: User!
+  assigner: User
   assignee: User
   """
   conversations related to the task
@@ -47781,9 +47781,9 @@ type TaskHistory implements Node {
   """
   assigneeID: String
   """
-  the id of the user who assigned the task
+  the id of the user who assigned the task, can be left empty if created by the system or a service token
   """
-  assignerID: String!
+  assignerID: String
 }
 """
 A connection to a list of items.
@@ -48152,6 +48152,8 @@ input TaskHistoryWhereInput {
   assignerIDContains: String
   assignerIDHasPrefix: String
   assignerIDHasSuffix: String
+  assignerIDIsNil: Boolean
+  assignerIDNotNil: Boolean
   assignerIDEqualFold: String
   assignerIDContainsFold: String
 }
@@ -48448,6 +48450,8 @@ input TaskWhereInput {
   assignerIDContains: ID
   assignerIDHasPrefix: ID
   assignerIDHasSuffix: ID
+  assignerIDIsNil: Boolean
+  assignerIDNotNil: Boolean
   assignerIDEqualFold: ID
   assignerIDContainsFold: ID
   """
@@ -50968,6 +50972,8 @@ input UpdateTaskInput {
   """
   completed: Time
   clearCompleted: Boolean
+  assignerID: ID
+  clearAssigner: Boolean
   assigneeID: ID
   clearAssignee: Boolean
   addCommentIDs: [ID!]

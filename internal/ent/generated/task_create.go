@@ -252,6 +252,14 @@ func (tc *TaskCreate) SetAssignerID(s string) *TaskCreate {
 	return tc
 }
 
+// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAssignerID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetAssignerID(*s)
+	}
+	return tc
+}
+
 // SetID sets the "id" field.
 func (tc *TaskCreate) SetID(s string) *TaskCreate {
 	tc.mutation.SetID(s)
@@ -515,12 +523,6 @@ func (tc *TaskCreate) check() error {
 		if err := task.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
-	}
-	if _, ok := tc.mutation.AssignerID(); !ok {
-		return &ValidationError{Name: "assigner_id", err: errors.New(`generated: missing required field "Task.assigner_id"`)}
-	}
-	if len(tc.mutation.AssignerIDs()) == 0 {
-		return &ValidationError{Name: "assigner", err: errors.New(`generated: missing required edge "Task.assigner"`)}
 	}
 	return nil
 }

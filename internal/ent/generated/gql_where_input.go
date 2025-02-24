@@ -58601,6 +58601,8 @@ type TaskWhereInput struct {
 	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
 	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
 	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDIsNil        bool     `json:"assignerIDIsNil,omitempty"`
+	AssignerIDNotNil       bool     `json:"assignerIDNotNil,omitempty"`
 	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
 	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
 
@@ -59387,6 +59389,12 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.AssignerIDHasSuffix != nil {
 		predicates = append(predicates, task.AssignerIDHasSuffix(*i.AssignerIDHasSuffix))
 	}
+	if i.AssignerIDIsNil {
+		predicates = append(predicates, task.AssignerIDIsNil())
+	}
+	if i.AssignerIDNotNil {
+		predicates = append(predicates, task.AssignerIDNotNil())
+	}
 	if i.AssignerIDEqualFold != nil {
 		predicates = append(predicates, task.AssignerIDEqualFold(*i.AssignerIDEqualFold))
 	}
@@ -59916,6 +59924,8 @@ type TaskHistoryWhereInput struct {
 	AssignerIDContains     *string  `json:"assignerIDContains,omitempty"`
 	AssignerIDHasPrefix    *string  `json:"assignerIDHasPrefix,omitempty"`
 	AssignerIDHasSuffix    *string  `json:"assignerIDHasSuffix,omitempty"`
+	AssignerIDIsNil        bool     `json:"assignerIDIsNil,omitempty"`
+	AssignerIDNotNil       bool     `json:"assignerIDNotNil,omitempty"`
 	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
 	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
 }
@@ -60734,6 +60744,12 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.AssignerIDHasSuffix != nil {
 		predicates = append(predicates, taskhistory.AssignerIDHasSuffix(*i.AssignerIDHasSuffix))
+	}
+	if i.AssignerIDIsNil {
+		predicates = append(predicates, taskhistory.AssignerIDIsNil())
+	}
+	if i.AssignerIDNotNil {
+		predicates = append(predicates, taskhistory.AssignerIDNotNil())
 	}
 	if i.AssignerIDEqualFold != nil {
 		predicates = append(predicates, taskhistory.AssignerIDEqualFold(*i.AssignerIDEqualFold))

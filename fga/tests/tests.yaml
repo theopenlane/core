@@ -24,21 +24,36 @@ tuples:
     object: organization:foo
   # setup org primary owner
   - user: user:ulid-of-owner
+    relation: _self
+    object: user:ulid-of-owner
+  - user: user:ulid-of-owner
     relation: owner
     object: organization:openlane
   # setup org admin
+  - user: user:ulid-of-admin
+    relation: _self
+    object: user:ulid-of-admin
   - user: user:ulid-of-admin
     relation: admin
     object: organization:openlane
   # setup org member
   - user: user:ulid-of-member
+    relation: _self
+    object: user:ulid-of-member
+  - user: user:ulid-of-member
     relation: member
     object: organization:openlane
   # setup another org member
   - user: user:ulid-of-member-2
+    relation: _self
+    object: user:ulid-of-member-2
+  - user: user:ulid-of-member-2
     relation: member
     object: organization:openlane
   # setup audit log viewer
+  - user: user:ulid-of-audit-log-viewer
+    relation: _self
+    object: user:ulid-of-audit-log-viewer
   - user: user:ulid-of-audit-log-viewer
     relation: member
     object: organization:openlane
@@ -46,6 +61,9 @@ tuples:
     relation: audit_log_viewer
     object: organization:openlane
   # setup service user
+  - user: service:ulid-of-service-editor
+    relation: _self
+    object: service:ulid-of-service-editor
   - user: service:ulid-of-service-editor
     relation: can_edit
     object: organization:openlane
@@ -58,12 +76,18 @@ tuples:
     relation: parent
     object: program:program-1
   - user: user:ulid-other-2
+    relation: _self
+    object: user:ulid-other-2
+  - user: user:ulid-other-2
     relation: member
     object: organization:openlane
   # setup another program under org
   - user: organization:openlane
     relation: parent
     object: program:program-2
+  - user: user:ulid-other-3
+    relation: _self
+    object: user:ulid-other-3
   - user: user:ulid-other-3
     relation: member
     object: organization:openlane
@@ -572,8 +596,17 @@ tests:
   - name: tasks
     description: tasks can be associated to many objects and users can access tasks based on their permissions
     tuples:
-      - user: user:ulid-admin
-        relation: can_delete
+      - user: user:ulid-of-admin
+        relation: parent # task creator
+        object: task:task-1
+      - user: organization:openlane#owner
+        relation: editor
+        object: task:task-1
+      - user: user:ulid-of-member
+        relation: assignee # assignee of the task
+        object: task:task-1
+      - user: user:ulid-of-member-2
+        relation: assigner # assigner of the task (this is usually the task creator but can be changed)
         object: task:task-1
       - user: user:ulid-other-1
         relation: can_view
@@ -616,7 +649,25 @@ tests:
           context:
             public: true
     check:
-      - user: user:ulid-admin # admin of the task should have all permissions
+      - user: user:ulid-of-admin # parent user of the task should have all permissions
+        object: task:task-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner
+        object: task:task-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member # assignee of the task should have all permissions except delete
+        object: task:task-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:ulid-of-member-2 # assignr of the task should have all permissions
         object: task:task-1
         assertions:
           can_view: true

@@ -58,8 +58,8 @@ func (Task) Fields() []ent.Field {
 			Comment("the id of the user who was assigned the task").
 			Optional(),
 		field.String("assigner_id").
-			Immutable().
-			Comment("the id of the user who assigned the task"),
+			Optional().
+			Comment("the id of the user who assigned the task, can be left empty if created by the system or a service token"),
 	}
 }
 
@@ -84,8 +84,6 @@ func (Task) Edges() []ent.Edge {
 		edge.From("assigner", User.Type).
 			Ref("assigner_tasks").
 			Field("assigner_id").
-			Immutable().
-			Required().
 			Unique(),
 		edge.From("assignee", User.Type).
 			Ref("assignee_tasks").
@@ -125,7 +123,7 @@ func (Task) Annotations() []schema.Annotation {
 func (Task) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTaskCreate(),
-		hooks.HookTaskAssignee(),
+		hooks.HookTaskPermissions(),
 	}
 }
 

@@ -39,21 +39,21 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 			queryID:            testUser1.OrganizationID,
 			client:             suite.client.api,
 			ctx:                testUser1.UserCtx,
-			orgMembersExpected: 3, // owner, admin, and view only user
+			orgMembersExpected: 4, // owner, admin, and 2 view only users
 		},
 		{
 			name:               "happy path, get using api token",
 			queryID:            testUser1.OrganizationID,
 			client:             suite.client.apiWithToken,
 			ctx:                context.Background(),
-			orgMembersExpected: 3, // owner, admin, and view only user
+			orgMembersExpected: 4, // owner, admin, and 2 view only users
 		},
 		{
 			name:               "happy path, get using personal access token",
 			queryID:            testUser1.OrganizationID,
 			client:             suite.client.apiWithPAT,
 			ctx:                context.Background(),
-			orgMembersExpected: 3, // owner, admin, and view only user
+			orgMembersExpected: 4, // owner, admin, and 2 view only users
 		},
 		{
 			name:     "invalid-id",

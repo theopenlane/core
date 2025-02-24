@@ -6965,7 +6965,7 @@ type CreateTaskInput struct {
 	Due                 *time.Time
 	Completed           *time.Time
 	OwnerID             *string
-	AssignerID          string
+	AssignerID          *string
 	AssigneeID          *string
 	CommentIDs          []string
 	GroupIDs            []string
@@ -7005,7 +7005,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	m.SetAssignerID(i.AssignerID)
+	if v := i.AssignerID; v != nil {
+		m.SetAssignerID(*v)
+	}
 	if v := i.AssigneeID; v != nil {
 		m.SetAssigneeID(*v)
 	}
@@ -7061,6 +7063,8 @@ type UpdateTaskInput struct {
 	Due                       *time.Time
 	ClearCompleted            bool
 	Completed                 *time.Time
+	ClearAssigner             bool
+	AssignerID                *string
 	ClearAssignee             bool
 	AssigneeID                *string
 	ClearComments             bool
@@ -7138,6 +7142,12 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
+	}
+	if i.ClearAssigner {
+		m.ClearAssigner()
+	}
+	if v := i.AssignerID; v != nil {
+		m.SetAssignerID(*v)
 	}
 	if i.ClearAssignee {
 		m.ClearAssignee()

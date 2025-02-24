@@ -276,6 +276,14 @@ func (thc *TaskHistoryCreate) SetAssignerID(s string) *TaskHistoryCreate {
 	return thc
 }
 
+// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableAssignerID(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetAssignerID(*s)
+	}
+	return thc
+}
+
 // SetID sets the "id" field.
 func (thc *TaskHistoryCreate) SetID(s string) *TaskHistoryCreate {
 	thc.mutation.SetID(s)
@@ -377,9 +385,6 @@ func (thc *TaskHistoryCreate) check() error {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
 		}
-	}
-	if _, ok := thc.mutation.AssignerID(); !ok {
-		return &ValidationError{Name: "assigner_id", err: errors.New(`generated: missing required field "TaskHistory.assigner_id"`)}
 	}
 	return nil
 }

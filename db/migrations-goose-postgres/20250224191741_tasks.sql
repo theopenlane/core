@@ -4,7 +4,7 @@ ALTER TABLE "risk_history" ALTER COLUMN "owner_id" DROP NOT NULL;
 -- modify "note_history" table
 ALTER TABLE "note_history" ALTER COLUMN "text" TYPE text;
 -- modify "task_history" table
-ALTER TABLE "task_history" ALTER COLUMN "details" TYPE text, ALTER COLUMN "owner_id" DROP NOT NULL, DROP COLUMN "priority", ADD COLUMN "category" character varying NULL;
+ALTER TABLE "task_history" ALTER COLUMN "details" TYPE text, ALTER COLUMN "owner_id" DROP NOT NULL, DROP COLUMN "priority", ALTER COLUMN "assigner_id" DROP NOT NULL, ADD COLUMN "category" character varying NULL;
 -- modify "subcontrol_history" table
 ALTER TABLE "subcontrol_history" ALTER COLUMN "owner_id" DROP NOT NULL;
 -- modify "control_history" table
@@ -28,7 +28,7 @@ ALTER TABLE "evidences" DROP CONSTRAINT "evidences_organizations_evidence", ALTE
 -- modify "narratives" table
 ALTER TABLE "narratives" DROP CONSTRAINT "narratives_organizations_narratives", ALTER COLUMN "owner_id" DROP NOT NULL, ADD CONSTRAINT "narratives_organizations_narratives" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- modify "tasks" table
-ALTER TABLE "tasks" DROP CONSTRAINT "tasks_organizations_tasks", ALTER COLUMN "details" TYPE text, DROP COLUMN "priority", ALTER COLUMN "owner_id" DROP NOT NULL, ADD COLUMN "category" character varying NULL, ADD CONSTRAINT "tasks_organizations_tasks" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+ALTER TABLE "tasks" DROP CONSTRAINT "tasks_organizations_tasks", DROP CONSTRAINT "tasks_users_assigner_tasks", ALTER COLUMN "details" TYPE text, DROP COLUMN "priority", ALTER COLUMN "owner_id" DROP NOT NULL, ALTER COLUMN "assigner_id" DROP NOT NULL, ADD COLUMN "category" character varying NULL, ADD CONSTRAINT "tasks_organizations_tasks" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "tasks_users_assigner_tasks" FOREIGN KEY ("assigner_id") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- modify "notes" table
 ALTER TABLE "notes" ALTER COLUMN "text" TYPE text, ADD COLUMN "program_notes" character varying NULL, ADD COLUMN "task_comments" character varying NULL, ADD CONSTRAINT "notes_programs_notes" FOREIGN KEY ("program_notes") REFERENCES "programs" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "notes_tasks_comments" FOREIGN KEY ("task_comments") REFERENCES "tasks" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- modify "risks" table
@@ -44,7 +44,7 @@ ALTER TABLE "risks" DROP CONSTRAINT "risks_organizations_risks", ALTER COLUMN "o
 -- reverse: modify "notes" table
 ALTER TABLE "notes" DROP CONSTRAINT "notes_tasks_comments", DROP CONSTRAINT "notes_programs_notes", DROP COLUMN "task_comments", DROP COLUMN "program_notes", ALTER COLUMN "text" TYPE character varying;
 -- reverse: modify "tasks" table
-ALTER TABLE "tasks" DROP CONSTRAINT "tasks_organizations_tasks", DROP COLUMN "category", ALTER COLUMN "owner_id" SET NOT NULL, ADD COLUMN "priority" character varying NOT NULL DEFAULT 'MEDIUM', ALTER COLUMN "details" TYPE jsonb, ADD CONSTRAINT "tasks_organizations_tasks" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE "tasks" DROP CONSTRAINT "tasks_users_assigner_tasks", DROP CONSTRAINT "tasks_organizations_tasks", DROP COLUMN "category", ALTER COLUMN "assigner_id" SET NOT NULL, ALTER COLUMN "owner_id" SET NOT NULL, ADD COLUMN "priority" character varying NOT NULL DEFAULT 'MEDIUM', ALTER COLUMN "details" TYPE jsonb, ADD CONSTRAINT "tasks_users_assigner_tasks" FOREIGN KEY ("assigner_id") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION, ADD CONSTRAINT "tasks_organizations_tasks" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 -- reverse: modify "narratives" table
 ALTER TABLE "narratives" DROP CONSTRAINT "narratives_organizations_narratives", ALTER COLUMN "owner_id" SET NOT NULL, ADD CONSTRAINT "narratives_organizations_narratives" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 -- reverse: modify "evidences" table
@@ -68,7 +68,7 @@ ALTER TABLE "control_history" ALTER COLUMN "owner_id" SET NOT NULL;
 -- reverse: modify "subcontrol_history" table
 ALTER TABLE "subcontrol_history" ALTER COLUMN "owner_id" SET NOT NULL;
 -- reverse: modify "task_history" table
-ALTER TABLE "task_history" DROP COLUMN "category", ADD COLUMN "priority" character varying NOT NULL DEFAULT 'MEDIUM', ALTER COLUMN "owner_id" SET NOT NULL, ALTER COLUMN "details" TYPE jsonb;
+ALTER TABLE "task_history" DROP COLUMN "category", ALTER COLUMN "assigner_id" SET NOT NULL, ADD COLUMN "priority" character varying NOT NULL DEFAULT 'MEDIUM', ALTER COLUMN "owner_id" SET NOT NULL, ALTER COLUMN "details" TYPE jsonb;
 -- reverse: modify "note_history" table
 ALTER TABLE "note_history" ALTER COLUMN "text" TYPE character varying;
 -- reverse: modify "risk_history" table

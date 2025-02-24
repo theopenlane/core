@@ -1366,6 +1366,16 @@ func AssignerIDHasSuffix(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldHasSuffix(FieldAssignerID, v))
 }
 
+// AssignerIDIsNil applies the IsNil predicate on the "assigner_id" field.
+func AssignerIDIsNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIsNull(FieldAssignerID))
+}
+
+// AssignerIDNotNil applies the NotNil predicate on the "assigner_id" field.
+func AssignerIDNotNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotNull(FieldAssignerID))
+}
+
 // AssignerIDEqualFold applies the EqualFold predicate on the "assigner_id" field.
 func AssignerIDEqualFold(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEqualFold(FieldAssignerID, v))
