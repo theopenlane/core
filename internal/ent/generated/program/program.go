@@ -149,11 +149,13 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
-	// NotesTable is the table that holds the notes relation/edge. The primary key declared below.
-	NotesTable = "program_notes"
+	// NotesTable is the table that holds the notes relation/edge.
+	NotesTable = "notes"
 	// NotesInverseTable is the table name for the Note entity.
 	// It exists in this package in order to avoid circular dependency with the "note" package.
 	NotesInverseTable = "notes"
+	// NotesColumn is the table column denoting the notes relation/edge.
+	NotesColumn = "program_notes"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "program_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -246,9 +248,6 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"program_id", "task_id"}
-	// NotesPrimaryKey and NotesColumn2 are the table columns denoting the
-	// primary key for the notes relation (M2M).
-	NotesPrimaryKey = []string{"program_id", "note_id"}
 	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
 	// primary key for the files relation (M2M).
 	FilesPrimaryKey = []string{"program_id", "file_id"}
@@ -751,7 +750,7 @@ func newNotesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NotesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, NotesTable, NotesPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotesTable, NotesColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

@@ -93,7 +93,7 @@ func (Risk) Mixin() []ent.Mixin {
 		// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 		// it will also create program parent tuples for the risk when a program is associated to the risk
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"program_id"},
+			FieldNames:            []string{"program_id", "control_id", "procedure_id", "control_objective_id", "internal_policy_id", "subcontrol_id"},
 			WithOrganizationOwner: true,
 			Ref:                   "risks",
 		}),

@@ -49,18 +49,18 @@ type TaskHistory struct {
 	// the description of the task
 	Description string `json:"description,omitempty"`
 	// the details of the task
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details string `json:"details,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status,omitempty"`
+	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
+	Category string `json:"category,omitempty"`
 	// the due date of the task
 	Due time.Time `json:"due,omitempty"`
-	// the priority of the task
-	Priority enums.Priority `json:"priority,omitempty"`
 	// the completion date of the task
 	Completed time.Time `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID string `json:"assignee_id,omitempty"`
-	// the id of the user who assigned the task
+	// the id of the user who assigned the task, can be left empty if created by the system or a service token
 	AssignerID   string `json:"assigner_id,omitempty"`
 	selectValues sql.SelectValues
 }
@@ -70,11 +70,11 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case taskhistory.FieldTags, taskhistory.FieldDetails:
+		case taskhistory.FieldTags:
 			values[i] = new([]byte)
 		case taskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDisplayID, taskhistory.FieldDeletedBy, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldStatus, taskhistory.FieldPriority, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDisplayID, taskhistory.FieldDeletedBy, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt, taskhistory.FieldDue, taskhistory.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -186,12 +186,10 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 				th.Description = value.String
 			}
 		case taskhistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &th.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				th.Details = value.String
 			}
 		case taskhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -199,17 +197,17 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				th.Status = enums.TaskStatus(value.String)
 			}
+		case taskhistory.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				th.Category = value.String
+			}
 		case taskhistory.FieldDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due", values[i])
 			} else if value.Valid {
 				th.Due = value.Time
-			}
-		case taskhistory.FieldPriority:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field priority", values[i])
-			} else if value.Valid {
-				th.Priority = enums.Priority(value.String)
 			}
 		case taskhistory.FieldCompleted:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -308,16 +306,16 @@ func (th *TaskHistory) String() string {
 	builder.WriteString(th.Description)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", th.Details))
+	builder.WriteString(th.Details)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", th.Status))
 	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(th.Category)
+	builder.WriteString(", ")
 	builder.WriteString("due=")
 	builder.WriteString(th.Due.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("priority=")
-	builder.WriteString(fmt.Sprintf("%v", th.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("completed=")
 	builder.WriteString(th.Completed.Format(time.ANSIC))

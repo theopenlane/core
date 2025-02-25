@@ -157,6 +157,14 @@ func (ehc *EvidenceHistoryCreate) SetOwnerID(s string) *EvidenceHistoryCreate {
 	return ehc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (ehc *EvidenceHistoryCreate) SetNillableOwnerID(s *string) *EvidenceHistoryCreate {
+	if s != nil {
+		ehc.SetOwnerID(*s)
+	}
+	return ehc
+}
+
 // SetName sets the "name" field.
 func (ehc *EvidenceHistoryCreate) SetName(s string) *EvidenceHistoryCreate {
 	ehc.mutation.SetName(s)
@@ -359,9 +367,6 @@ func (ehc *EvidenceHistoryCreate) check() error {
 	}
 	if _, ok := ehc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "EvidenceHistory.display_id"`)}
-	}
-	if _, ok := ehc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "EvidenceHistory.owner_id"`)}
 	}
 	if _, ok := ehc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "EvidenceHistory.name"`)}

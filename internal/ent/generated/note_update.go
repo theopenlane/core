@@ -11,12 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -107,26 +104,6 @@ func (nu *NoteUpdate) ClearDeletedBy() *NoteUpdate {
 	return nu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (nu *NoteUpdate) SetOwnerID(s string) *NoteUpdate {
-	nu.mutation.SetOwnerID(s)
-	return nu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableOwnerID(s *string) *NoteUpdate {
-	if s != nil {
-		nu.SetOwnerID(*s)
-	}
-	return nu
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (nu *NoteUpdate) ClearOwnerID() *NoteUpdate {
-	nu.mutation.ClearOwnerID()
-	return nu
-}
-
 // SetText sets the "text" field.
 func (nu *NoteUpdate) SetText(s string) *NoteUpdate {
 	nu.mutation.SetText(s)
@@ -141,58 +118,23 @@ func (nu *NoteUpdate) SetNillableText(s *string) *NoteUpdate {
 	return nu
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (nu *NoteUpdate) SetOwner(o *Organization) *NoteUpdate {
-	return nu.SetOwnerID(o.ID)
-}
-
-// SetEntityID sets the "entity" edge to the Entity entity by ID.
-func (nu *NoteUpdate) SetEntityID(id string) *NoteUpdate {
-	nu.mutation.SetEntityID(id)
+// SetTaskID sets the "task" edge to the Task entity by ID.
+func (nu *NoteUpdate) SetTaskID(id string) *NoteUpdate {
+	nu.mutation.SetTaskID(id)
 	return nu
 }
 
-// SetNillableEntityID sets the "entity" edge to the Entity entity by ID if the given value is not nil.
-func (nu *NoteUpdate) SetNillableEntityID(id *string) *NoteUpdate {
+// SetNillableTaskID sets the "task" edge to the Task entity by ID if the given value is not nil.
+func (nu *NoteUpdate) SetNillableTaskID(id *string) *NoteUpdate {
 	if id != nil {
-		nu = nu.SetEntityID(*id)
+		nu = nu.SetTaskID(*id)
 	}
 	return nu
 }
 
-// SetEntity sets the "entity" edge to the Entity entity.
-func (nu *NoteUpdate) SetEntity(e *Entity) *NoteUpdate {
-	return nu.SetEntityID(e.ID)
-}
-
-// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (nu *NoteUpdate) AddSubcontrolIDs(ids ...string) *NoteUpdate {
-	nu.mutation.AddSubcontrolIDs(ids...)
-	return nu
-}
-
-// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (nu *NoteUpdate) AddSubcontrols(s ...*Subcontrol) *NoteUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return nu.AddSubcontrolIDs(ids...)
-}
-
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
-func (nu *NoteUpdate) AddProgramIDs(ids ...string) *NoteUpdate {
-	nu.mutation.AddProgramIDs(ids...)
-	return nu
-}
-
-// AddProgram adds the "program" edges to the Program entity.
-func (nu *NoteUpdate) AddProgram(p ...*Program) *NoteUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return nu.AddProgramIDs(ids...)
+// SetTask sets the "task" edge to the Task entity.
+func (nu *NoteUpdate) SetTask(t *Task) *NoteUpdate {
+	return nu.SetTaskID(t.ID)
 }
 
 // Mutation returns the NoteMutation object of the builder.
@@ -200,58 +142,10 @@ func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (nu *NoteUpdate) ClearOwner() *NoteUpdate {
-	nu.mutation.ClearOwner()
+// ClearTask clears the "task" edge to the Task entity.
+func (nu *NoteUpdate) ClearTask() *NoteUpdate {
+	nu.mutation.ClearTask()
 	return nu
-}
-
-// ClearEntity clears the "entity" edge to the Entity entity.
-func (nu *NoteUpdate) ClearEntity() *NoteUpdate {
-	nu.mutation.ClearEntity()
-	return nu
-}
-
-// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (nu *NoteUpdate) ClearSubcontrols() *NoteUpdate {
-	nu.mutation.ClearSubcontrols()
-	return nu
-}
-
-// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (nu *NoteUpdate) RemoveSubcontrolIDs(ids ...string) *NoteUpdate {
-	nu.mutation.RemoveSubcontrolIDs(ids...)
-	return nu
-}
-
-// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (nu *NoteUpdate) RemoveSubcontrols(s ...*Subcontrol) *NoteUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return nu.RemoveSubcontrolIDs(ids...)
-}
-
-// ClearProgram clears all "program" edges to the Program entity.
-func (nu *NoteUpdate) ClearProgram() *NoteUpdate {
-	nu.mutation.ClearProgram()
-	return nu
-}
-
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
-func (nu *NoteUpdate) RemoveProgramIDs(ids ...string) *NoteUpdate {
-	nu.mutation.RemoveProgramIDs(ids...)
-	return nu
-}
-
-// RemoveProgram removes "program" edges to Program entities.
-func (nu *NoteUpdate) RemoveProgram(p ...*Program) *NoteUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return nu.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -298,11 +192,6 @@ func (nu *NoteUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (nu *NoteUpdate) check() error {
-	if v, ok := nu.mutation.OwnerID(); ok {
-		if err := note.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Note.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := nu.mutation.Text(); ok {
 		if err := note.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "Note.text": %w`, err)}
@@ -362,159 +251,32 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := nu.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 	}
-	if nu.mutation.OwnerCleared() {
+	if nu.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   note.OwnerTable,
-			Columns: []string{note.OwnerColumn},
+			Table:   note.TaskTable,
+			Columns: []string{note.TaskColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := nu.mutation.TaskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   note.OwnerTable,
-			Columns: []string{note.OwnerColumn},
+			Table:   note.TaskTable,
+			Columns: []string{note.TaskColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Note
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if nu.mutation.EntityCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   note.EntityTable,
-			Columns: []string{note.EntityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.Note
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.EntityIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   note.EntityTable,
-			Columns: []string{note.EntityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.Note
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if nu.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.Subcontrol
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !nu.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if nu.mutation.ProgramCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.ProgramNotes
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nu.mutation.ProgramCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.ProgramNotes
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.ProgramIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nu.schemaConfig.ProgramNotes
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -616,26 +378,6 @@ func (nuo *NoteUpdateOne) ClearDeletedBy() *NoteUpdateOne {
 	return nuo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (nuo *NoteUpdateOne) SetOwnerID(s string) *NoteUpdateOne {
-	nuo.mutation.SetOwnerID(s)
-	return nuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableOwnerID(s *string) *NoteUpdateOne {
-	if s != nil {
-		nuo.SetOwnerID(*s)
-	}
-	return nuo
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (nuo *NoteUpdateOne) ClearOwnerID() *NoteUpdateOne {
-	nuo.mutation.ClearOwnerID()
-	return nuo
-}
-
 // SetText sets the "text" field.
 func (nuo *NoteUpdateOne) SetText(s string) *NoteUpdateOne {
 	nuo.mutation.SetText(s)
@@ -650,58 +392,23 @@ func (nuo *NoteUpdateOne) SetNillableText(s *string) *NoteUpdateOne {
 	return nuo
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (nuo *NoteUpdateOne) SetOwner(o *Organization) *NoteUpdateOne {
-	return nuo.SetOwnerID(o.ID)
-}
-
-// SetEntityID sets the "entity" edge to the Entity entity by ID.
-func (nuo *NoteUpdateOne) SetEntityID(id string) *NoteUpdateOne {
-	nuo.mutation.SetEntityID(id)
+// SetTaskID sets the "task" edge to the Task entity by ID.
+func (nuo *NoteUpdateOne) SetTaskID(id string) *NoteUpdateOne {
+	nuo.mutation.SetTaskID(id)
 	return nuo
 }
 
-// SetNillableEntityID sets the "entity" edge to the Entity entity by ID if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableEntityID(id *string) *NoteUpdateOne {
+// SetNillableTaskID sets the "task" edge to the Task entity by ID if the given value is not nil.
+func (nuo *NoteUpdateOne) SetNillableTaskID(id *string) *NoteUpdateOne {
 	if id != nil {
-		nuo = nuo.SetEntityID(*id)
+		nuo = nuo.SetTaskID(*id)
 	}
 	return nuo
 }
 
-// SetEntity sets the "entity" edge to the Entity entity.
-func (nuo *NoteUpdateOne) SetEntity(e *Entity) *NoteUpdateOne {
-	return nuo.SetEntityID(e.ID)
-}
-
-// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (nuo *NoteUpdateOne) AddSubcontrolIDs(ids ...string) *NoteUpdateOne {
-	nuo.mutation.AddSubcontrolIDs(ids...)
-	return nuo
-}
-
-// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (nuo *NoteUpdateOne) AddSubcontrols(s ...*Subcontrol) *NoteUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return nuo.AddSubcontrolIDs(ids...)
-}
-
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
-func (nuo *NoteUpdateOne) AddProgramIDs(ids ...string) *NoteUpdateOne {
-	nuo.mutation.AddProgramIDs(ids...)
-	return nuo
-}
-
-// AddProgram adds the "program" edges to the Program entity.
-func (nuo *NoteUpdateOne) AddProgram(p ...*Program) *NoteUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return nuo.AddProgramIDs(ids...)
+// SetTask sets the "task" edge to the Task entity.
+func (nuo *NoteUpdateOne) SetTask(t *Task) *NoteUpdateOne {
+	return nuo.SetTaskID(t.ID)
 }
 
 // Mutation returns the NoteMutation object of the builder.
@@ -709,58 +416,10 @@ func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
 	return nuo.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (nuo *NoteUpdateOne) ClearOwner() *NoteUpdateOne {
-	nuo.mutation.ClearOwner()
+// ClearTask clears the "task" edge to the Task entity.
+func (nuo *NoteUpdateOne) ClearTask() *NoteUpdateOne {
+	nuo.mutation.ClearTask()
 	return nuo
-}
-
-// ClearEntity clears the "entity" edge to the Entity entity.
-func (nuo *NoteUpdateOne) ClearEntity() *NoteUpdateOne {
-	nuo.mutation.ClearEntity()
-	return nuo
-}
-
-// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (nuo *NoteUpdateOne) ClearSubcontrols() *NoteUpdateOne {
-	nuo.mutation.ClearSubcontrols()
-	return nuo
-}
-
-// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (nuo *NoteUpdateOne) RemoveSubcontrolIDs(ids ...string) *NoteUpdateOne {
-	nuo.mutation.RemoveSubcontrolIDs(ids...)
-	return nuo
-}
-
-// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (nuo *NoteUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *NoteUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return nuo.RemoveSubcontrolIDs(ids...)
-}
-
-// ClearProgram clears all "program" edges to the Program entity.
-func (nuo *NoteUpdateOne) ClearProgram() *NoteUpdateOne {
-	nuo.mutation.ClearProgram()
-	return nuo
-}
-
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
-func (nuo *NoteUpdateOne) RemoveProgramIDs(ids ...string) *NoteUpdateOne {
-	nuo.mutation.RemoveProgramIDs(ids...)
-	return nuo
-}
-
-// RemoveProgram removes "program" edges to Program entities.
-func (nuo *NoteUpdateOne) RemoveProgram(p ...*Program) *NoteUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return nuo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the NoteUpdate builder.
@@ -820,11 +479,6 @@ func (nuo *NoteUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (nuo *NoteUpdateOne) check() error {
-	if v, ok := nuo.mutation.OwnerID(); ok {
-		if err := note.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Note.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := nuo.mutation.Text(); ok {
 		if err := note.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "Note.text": %w`, err)}
@@ -901,159 +555,32 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 	if value, ok := nuo.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 	}
-	if nuo.mutation.OwnerCleared() {
+	if nuo.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   note.OwnerTable,
-			Columns: []string{note.OwnerColumn},
+			Table:   note.TaskTable,
+			Columns: []string{note.TaskColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := nuo.mutation.TaskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   note.OwnerTable,
-			Columns: []string{note.OwnerColumn},
+			Table:   note.TaskTable,
+			Columns: []string{note.TaskColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Note
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if nuo.mutation.EntityCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   note.EntityTable,
-			Columns: []string{note.EntityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.Note
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.EntityIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   note.EntityTable,
-			Columns: []string{note.EntityColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.Note
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if nuo.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.Subcontrol
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !nuo.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   note.SubcontrolsTable,
-			Columns: []string{note.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if nuo.mutation.ProgramCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.ProgramNotes
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nuo.mutation.ProgramCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.ProgramNotes
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.ProgramIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   note.ProgramTable,
-			Columns: note.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = nuo.schemaConfig.ProgramNotes
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

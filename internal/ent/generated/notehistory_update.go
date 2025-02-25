@@ -103,26 +103,6 @@ func (nhu *NoteHistoryUpdate) ClearDeletedBy() *NoteHistoryUpdate {
 	return nhu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (nhu *NoteHistoryUpdate) SetOwnerID(s string) *NoteHistoryUpdate {
-	nhu.mutation.SetOwnerID(s)
-	return nhu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nhu *NoteHistoryUpdate) SetNillableOwnerID(s *string) *NoteHistoryUpdate {
-	if s != nil {
-		nhu.SetOwnerID(*s)
-	}
-	return nhu
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (nhu *NoteHistoryUpdate) ClearOwnerID() *NoteHistoryUpdate {
-	nhu.mutation.ClearOwnerID()
-	return nhu
-}
-
 // SetText sets the "text" field.
 func (nhu *NoteHistoryUpdate) SetText(s string) *NoteHistoryUpdate {
 	nhu.mutation.SetText(s)
@@ -226,9 +206,6 @@ func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nhu.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nhu.mutation.OwnerID(); ok {
-		_spec.SetField(notehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if nhu.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)
 	}
@@ -328,26 +305,6 @@ func (nhuo *NoteHistoryUpdateOne) SetNillableDeletedBy(s *string) *NoteHistoryUp
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (nhuo *NoteHistoryUpdateOne) ClearDeletedBy() *NoteHistoryUpdateOne {
 	nhuo.mutation.ClearDeletedBy()
-	return nhuo
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (nhuo *NoteHistoryUpdateOne) SetOwnerID(s string) *NoteHistoryUpdateOne {
-	nhuo.mutation.SetOwnerID(s)
-	return nhuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nhuo *NoteHistoryUpdateOne) SetNillableOwnerID(s *string) *NoteHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetOwnerID(*s)
-	}
-	return nhuo
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (nhuo *NoteHistoryUpdateOne) ClearOwnerID() *NoteHistoryUpdateOne {
-	nhuo.mutation.ClearOwnerID()
 	return nhuo
 }
 
@@ -483,9 +440,6 @@ func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHisto
 	}
 	if nhuo.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := nhuo.mutation.OwnerID(); ok {
-		_spec.SetField(notehistory.FieldOwnerID, field.TypeString, value)
 	}
 	if nhuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)

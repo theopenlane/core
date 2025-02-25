@@ -1,0 +1,33 @@
+extend type Query {
+    """
+    Look up note by ID
+    """
+     note(
+        """
+        ID of the note
+        """
+        id: ID!
+    ): Note!
+}
+
+extend input UpdateTaskInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend type Mutation{
+    """
+    Update an existing task comment
+    """
+    updateTaskComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+    ): TaskUpdatePayload!
+}
+

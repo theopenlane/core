@@ -1,0 +1,43 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to files
+############################################
+- user: user:ulid-of-admin
+  relation: parent
+  object: file:file-1
+- user: user:ulid-other-1
+  relation: can_view
+  object: file:file-1 # direct access
+- user: user:ulid-other-2
+  relation: member
+  object: program:program-1 # indirect access
+- user: program:program-1
+  relation: parent
+  object: file:file-1 # program has access to file
+- user: control:control-1
+  relation: parent
+  object: file:file-2 # control has access to file
+- user: program:program-2
+  relation: parent
+  object: control:control-1 # program has access to control
+- user: user:ulid-other-3
+  relation: admin
+  object: program:program-2
+- user: contact:contact-1
+  relation: parent
+  object: file:file-3 # contact has access to file
+-
+#setup organization with empty domain condition
+- user: organization:contact-org#member
+  relation: access
+  object: organization:contact-org
+  condition:
+    name: email_domains_allowed
+    context:
+      allowed_domains: []
+- user: user:ulid-contact-1
+  relation: owner
+  object: organization:contact-org
+- user: organization:contact-org
+  relation: parent
+  object: contact:contact-1

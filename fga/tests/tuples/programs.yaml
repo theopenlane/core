@@ -1,0 +1,50 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to programs
+############################################
+
+# setup users and groups
+- user: user:ulid-group-editor
+  relation: member
+  object: organization:openlane
+- user: organization:openlane
+  relation: parent
+  object: group:group-editor
+  condition:
+    name: public_group
+    context:
+      public: true
+- user: user:ulid-group-editor
+  relation: member
+  object: group:group-editor
+
+- user: user:ulid-group-blocked
+  relation: member
+  object: organization:openlane
+- user: organization:openlane
+  relation: parent
+  object: group:group-blocked
+  condition:
+    name: public_group
+    context:
+      public: true
+- user: user:ulid-group-blocked
+  relation: member
+  object: group:group-blocked
+
+- user: user:ulid-admin
+  relation: admin
+  object: organization:openlane
+
+# setup programs
+- user: user:ulid-admin
+  relation: admin
+  object: program:program-1
+
+# setup group permissions for program
+- user: group:group-editor#member
+  relation: editor
+  object: program:program-1
+- user: group:group-blocked#member
+  relation: blocked
+  object: program:program-1

@@ -1,4 +1,4 @@
-h1:a8h1nDb2wi6v89SnPa7C40TjpgeM2TI+7N1dNb4UwuA=
+h1:n2tOixib3/d0JFgChktlPfG8/xE8MW/A3mcXVQu2Bnc=
 20241211231032_init.sql h1:Cj6GduEDECy6Y+8DfI6767WosqG2AKWybIyJJ6AgKqA=
 20241212223714_consistent_naming.sql h1:RvnNmsStlHkmAdSCnX1fFh/KYgfj1RMYYEc4iCN9JcQ=
 20250109002850_billing_address.sql h1:m0ek3WXqRgS3+ZbSa/DcIMB16vb8Tjm2MgNqyRll3rU=
@@ -16,3 +16,4 @@ h1:a8h1nDb2wi6v89SnPa7C40TjpgeM2TI+7N1dNb4UwuA=
 20250204210422_creator_edge.sql h1:YxEKPaYFg3mKK+oguWVrtykUaicN0vMlTGd3+2FFW70=
 20250208014430_onboarding.sql h1:q4yecmc+gimy5BwWlgoyvFVHaIMbymc7fnBOGTKEcj8=
 20250220044406_org_settings_email_domains.sql h1:hP8w00BD64oe7OWsXlPJM92cqVtY0NIEIeonbnCsXnU=
+20250224191741_tasks.sql h1:v0CZ5nWgzjconA/hcat9QvZkmSBdxXkc/h84Erdcxnw=

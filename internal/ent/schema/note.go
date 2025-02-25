@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -25,7 +26,7 @@ type Note struct {
 // Fields of the Note
 func (Note) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("text").
+		field.Text("text").
 			Comment("the text of the note").
 			NotEmpty(),
 	}
@@ -37,19 +38,20 @@ func (Note) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.NewIDMixinWithPrefixedID("NTE"),
 		mixin.SoftDeleteMixin{},
-		NewOrgOwnMixinWithRef("notes"), // TODO: update to object owned mixin instead of org owned
-	}
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id"},
+			WithOrganizationOwner: true,
+			OwnerRelation:         fgax.OwnerRelation,
+			Ref:                   "notes",
+		})}
 }
 
 // Edges of the Note
 func (Note) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("entity", Entity.Type).
-			Unique().
-			Ref("notes"),
-		edge.To("subcontrols", Subcontrol.Type),
-		edge.From(("program"), Program.Type).
-			Ref("notes"),
+		edge.From("task", Task.Type).
+			Ref("comments").
+			Unique(),
 	}
 }
 
@@ -59,7 +61,7 @@ func (Note) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-		entfga.OrganizationInheritedChecks(), //  TODO (sfunk): update to be object owned checks
+		entfga.SelfAccessChecks(),
 		// skip generating the schema for this type, this schema is used through extended types
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),

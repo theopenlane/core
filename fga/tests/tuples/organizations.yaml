@@ -1,0 +1,24 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to organizations
+############################################
+- user: user:support-user
+  relation: can_view
+  object: organization:openlane
+  condition:
+    name: time_based_grant
+    context:
+      grant_time: "2025-02-14T00:00:00Z"
+      grant_duration: 1h
+# setup organization with empty domain condition
+- user: organization:restricted#member
+  relation: access
+  object: organization:restricted
+  condition:
+    name: email_domains_allowed
+    context:
+      allowed_domains: ["meow.com"]
+# setup org member
+- user: user:ulid-of-member
+  relation: member
+  object: organization:restricted

@@ -1,0 +1,124 @@
+############################################
+# Tuples for testing the FGA implementation
+# Description: Tuples for testing the FGA implementation
+#  this file contains tuples used across different tests
+############################################
+
+# setup organization with empty domain condition
+- user: organization:openlane#member
+  relation: access
+  object: organization:openlane
+  condition:
+    name: email_domains_allowed
+    context:
+      allowed_domains: []
+# setup child organization with empty domain condition
+- user: organization:foo#member
+  relation: access
+  object: organization:foo
+  condition:
+    name: email_domains_allowed
+    context:
+      allowed_domains: []
+# setup parent child org relationship
+- user: organization:openlane
+  relation: parent
+  object: organization:foo
+# setup org primary owner
+- user: user:ulid-of-owner
+  relation: _self
+  object: user:ulid-of-owner
+- user: user:ulid-of-owner
+  relation: owner
+  object: organization:openlane
+# setup org admin
+- user: user:ulid-of-admin
+  relation: _self
+  object: user:ulid-of-admin
+- user: user:ulid-of-admin
+  relation: admin
+  object: organization:openlane
+# setup org member
+- user: user:ulid-of-member
+  relation: _self
+  object: user:ulid-of-member
+- user: user:ulid-of-member
+  relation: member
+  object: organization:openlane
+# setup another org member
+- user: user:ulid-of-member-2
+  relation: _self
+  object: user:ulid-of-member-2
+- user: user:ulid-of-member-2
+  relation: member
+  object: organization:openlane
+# setup audit log viewer
+- user: user:ulid-of-audit-log-viewer
+  relation: _self
+  object: user:ulid-of-audit-log-viewer
+- user: user:ulid-of-audit-log-viewer
+  relation: member
+  object: organization:openlane
+- user: user:ulid-of-audit-log-viewer
+  relation: audit_log_viewer
+  object: organization:openlane
+# setup service user
+- user: service:ulid-of-service-editor
+  relation: _self
+  object: service:ulid-of-service-editor
+- user: service:ulid-of-service-editor
+  relation: can_edit
+  object: organization:openlane
+# setup service user
+- user: service:ulid-of-service-viewer
+  relation: can_view
+  object: organization:openlane
+# setup programs under org
+- user: organization:openlane
+  relation: parent
+  object: program:program-1
+- user: user:ulid-program-admin
+  relation: _self
+  object: user:ulid-program-admin
+- user: user:ulid-program-admin
+  relation: member
+  object: organization:openlane
+- user: user:ulid-program-admin
+  relation: admin
+  object: program:program-1
+- user: user:ulid-program-member
+  relation: _self
+  object: user:ulid-program-member
+- user: user:ulid-program-member
+  relation: member
+  object: organization:openlane
+- user: user:ulid-program-member
+  relation: member
+  object: program:program-1
+- user: user:ulid-other-2
+  relation: _self
+  object: user:ulid-other-2
+- user: user:ulid-other-2
+  relation: member
+  object: organization:openlane
+# setup another program under org
+- user: organization:openlane
+  relation: parent
+  object: program:program-2
+- user: user:ulid-other-3
+  relation: _self
+  object: user:ulid-other-3
+- user: user:ulid-other-3
+  relation: member
+  object: organization:openlane
+# setup an auditor for the first program
+- user: user:ulid-auditor
+  relation: auditor
+  object: program:program-1
+# setup org primary owner of another org
+- user: user:ulid-of-owner-foobar
+  relation: _self
+  object: user:ulid-of-owner-foobar
+- user: user:ulid-of-owner-foobar
+  relation: owner
+  object: organization:foobar

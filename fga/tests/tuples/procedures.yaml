@@ -1,0 +1,54 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to procedures
+############################################
+
+# setup users and groups
+- user: user:ulid-group-editor
+  relation: member
+  object: organization:openlane
+- user: organization:openlane
+  relation: parent
+  object: group:group-editor
+  condition:
+    name: public_group
+    context:
+      public: true
+- user: user:ulid-group-editor
+  relation: member
+  object: group:group-editor
+
+- user: user:ulid-group-blocked
+  relation: member
+  object: organization:openlane
+- user: organization:openlane
+  relation: parent
+  object: group:group-blocked
+  condition:
+    name: public_group
+    context:
+      public: true
+- user: user:ulid-group-blocked
+  relation: member
+  object: group:group-blocked
+
+# setup procedure
+- user: user:ulid-admin
+  relation: admin
+  object: procedure:procedure-1
+- user: organization:openlane
+  relation: parent
+  object: procedure:procedure-1
+
+# setup group permissions for procedure
+- user: group:group-editor#member
+  relation: editor
+  object: procedure:procedure-1
+- user: group:group-blocked#member
+  relation: blocked
+  object: procedure:procedure-1
+
+# setup view permissions for auditors
+- user: program:program-1#auditor
+  relation: viewer
+  object: procedure:procedure-1

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
@@ -415,4 +416,20 @@ func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID stri
 	}
 
 	return nil
+}
+
+// getOrgMemberID gets the org member id for the user in the organization if they are a member
+func getOrgMemberID(ctx context.Context, m GenericMutation, userID string, orgID string) (string, error) {
+	// ensure user is a member of the organization
+	orgMemberID, err := m.Client().OrgMembership.Query().
+		Where(orgmembership.UserID(userID)).
+		Where(orgmembership.OrganizationID(orgID)).
+		OnlyID(ctx)
+	if err != nil || orgMemberID == "" {
+		log.Error().Err(err).Msg("failed to get org membership, cannot add user to group")
+
+		return "", ErrUserNotInOrg
+	}
+
+	return orgMemberID, nil
 }

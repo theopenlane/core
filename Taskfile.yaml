@@ -21,7 +21,7 @@ includes:
 env:
   ATLAS_POSTGRES_DB_URI: "postgres:17-alpine"
   TEST_DB_URL: "docker://postgres:17-alpine"
-  TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
+  TEST_DB_CONTAINER_EXPIRY: "5" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
   # go build

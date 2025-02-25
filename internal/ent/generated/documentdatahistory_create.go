@@ -152,6 +152,14 @@ func (ddhc *DocumentDataHistoryCreate) SetOwnerID(s string) *DocumentDataHistory
 	return ddhc
 }
 
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableOwnerID(s *string) *DocumentDataHistoryCreate {
+	if s != nil {
+		ddhc.SetOwnerID(*s)
+	}
+	return ddhc
+}
+
 // SetTemplateID sets the "template_id" field.
 func (ddhc *DocumentDataHistoryCreate) SetTemplateID(s string) *DocumentDataHistoryCreate {
 	ddhc.mutation.SetTemplateID(s)
@@ -247,9 +255,6 @@ func (ddhc *DocumentDataHistoryCreate) check() error {
 		if err := documentdatahistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "DocumentDataHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := ddhc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "DocumentDataHistory.owner_id"`)}
 	}
 	if _, ok := ddhc.mutation.TemplateID(); !ok {
 		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "DocumentDataHistory.template_id"`)}

@@ -107,7 +107,7 @@ func (File) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames: []string{"organization_id", "program_id", "control_id", "procedure_id", "group_id", "template_id", "subcontrol_id", "document_data_id", "contact_id", "internal_policy_id", "narrative_id", "evidence_id"},
+			FieldNames: []string{"organization_id", "program_id", "control_id", "procedure_id", "template_id", "subcontrol_id", "document_data_id", "contact_id", "internal_policy_id", "narrative_id", "evidence_id"},
 			Ref:        "files",
 			HookFuncs:  []HookFunc{}, // use an empty hook, file processing is handled in middleware
 

@@ -77,7 +77,7 @@ func (suite *GraphTestSuite) TestQueryUsers() {
 		require.NotNil(t, resp.Users.Edges)
 
 		// make sure only the current user is returned
-		assert.Equal(t, len(resp.Users.Edges), 1)
+		assert.Len(t, resp.Users.Edges, 1)
 
 		// setup valid user context
 		reqCtx, err := userContextWithID(testUser1.ID)
@@ -90,7 +90,7 @@ func (suite *GraphTestSuite) TestQueryUsers() {
 		require.NotNil(t, resp.Users.Edges)
 
 		// only user that is making the request should be returned
-		assert.Equal(t, len(resp.Users.Edges), 1)
+		assert.Len(t, resp.Users.Edges, 1)
 
 		user1Found := false
 		user2Found := false

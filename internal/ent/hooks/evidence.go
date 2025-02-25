@@ -7,7 +7,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/utils"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -35,7 +34,7 @@ func HookEvidenceFiles() ent.Hook {
 
 // checkAvatarFile checks if an avatar file is provided and sets the local file ID
 // this can be used for any schema that has an avatar field
-func checkEvidenceFiles[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
+func checkEvidenceFiles[T GenericMutation](ctx context.Context, m T) (context.Context, error) {
 	key := "evidenceFiles"
 
 	// get the file from the context, if it exists

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // ObjectOwnedMixin is a mixin for object owned entities
@@ -32,6 +33,8 @@ type ObjectOwnedMixin struct {
 	Kind any
 	// FieldNames are the name of the field in the schema that can own / controls permissions of the object, e.g. "owner_id" or "program_id"
 	FieldNames []string
+	// OwnerRelation is the relation of the owner (user or service) that created the object, defaults to "parent"
+	OwnerRelation string
 	// SkipUserTuple skips the user tuple creation for the object owned mixin
 	SkipUserTuple bool
 	// Required makes the owner id field required as input
@@ -95,7 +98,9 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 		fields = append(fields,
 			field.String("owner_id").
 				Comment("the ID of the organization owner of the object").
-				NotEmpty())
+				Immutable(). // Immutable because it is set on creation and never changes
+				Optional().  // Optional because it doesn't need to be provided as input
+				NotEmpty())  // NotEmpty because it is required to be set in the database
 	}
 
 	// if the field name is not defined, skip adding fields
@@ -138,7 +143,7 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 		edges = append(edges,
 			edge.From("owner", Organization.Type).
 				Field("owner_id").
-				Required().
+				Immutable().
 				Unique().
 				Ref(o.Ref))
 	}
@@ -209,8 +214,13 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 // to add tuples to the database when creating or updating an object based on the edges
 // that can own the object
 var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
+	ownerRelation := fgax.ParentRelation
+	if o.OwnerRelation != "" {
+		ownerRelation = o.OwnerRelation
+	}
+
 	return hook.On(
-		hooks.HookObjectOwnedTuples(o.FieldNames, o.SkipUserTuple),
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, o.SkipUserTuple),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }

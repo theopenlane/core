@@ -392,17 +392,19 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 	}
 
 	// create user setting
-	userSetting := u.client.db.UserSetting.Create().SaveX(ctx)
+	userSetting, err := u.client.db.UserSetting.Create().Save(ctx)
+	require.NoError(t, err)
 
-	user := u.client.db.User.Create().
+	user, err := u.client.db.User.Create().
 		SetFirstName(u.FirstName).
 		SetLastName(u.LastName).
 		SetEmail(u.Email).
 		SetPassword(u.Password).
 		SetSetting(userSetting).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
-	_, err := user.Edges.Setting.DefaultOrg(ctx)
+	_, err = user.Edges.Setting.DefaultOrg(ctx)
 	require.NoError(t, err)
 
 	return user

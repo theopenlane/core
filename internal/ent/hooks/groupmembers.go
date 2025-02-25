@@ -5,12 +5,10 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 )
 
 func HookGroupMembers() ent.Hook {
@@ -39,14 +37,9 @@ func HookGroupMembers() ent.Hook {
 			}
 
 			// ensure user is a member of the organization
-			orgMemberID, err := m.Client().OrgMembership.Query().
-				Where(orgmembership.UserID(userID)).
-				Where(orgmembership.OrganizationID(group.OwnerID)).
-				OnlyID(ctx)
-			if err != nil || orgMemberID == "" {
-				log.Error().Err(err).Msg("failed to get org membership, cannot add user to group")
-
-				return nil, ErrUserNotInOrg
+			orgMemberID, err := getOrgMemberID(ctx, m, userID, group.OwnerID)
+			if err != nil {
+				return nil, err
 			}
 
 			m.SetOrgmembershipID(orgMemberID)

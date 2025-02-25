@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
@@ -76,7 +75,7 @@ type Subcontrol struct {
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
 	Edges                         SubcontrolEdges `json:"edges"`
 	control_objective_subcontrols *string
-	note_subcontrols              *string
+	user_subcontrols              *string
 	selectValues                  sql.SelectValues
 }
 
@@ -86,24 +85,19 @@ type SubcontrolEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
-	// User holds the value of the user edge.
-	User []*User `json:"user,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
-	// Notes holds the value of the notes edge.
-	Notes *Note `json:"notes,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [5]map[string]int
 
 	namedControls map[string][]*Control
-	namedUser     map[string][]*User
 	namedTasks    map[string][]*Task
 	namedPrograms map[string][]*Program
 	namedEvidence map[string][]*Evidence
@@ -129,39 +123,19 @@ func (e SubcontrolEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
-// UserOrErr returns the User value or an error if the edge
-// was not loaded in eager-loading.
-func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[2] {
-		return e.User, nil
-	}
-	return nil, &NotLoadedError{edge: "user"}
-}
-
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
-// NotesOrErr returns the Notes value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
-	if e.Notes != nil {
-		return e.Notes, nil
-	} else if e.loadedTypes[4] {
-		return nil, &NotFoundError{label: note.Label}
-	}
-	return nil, &NotLoadedError{edge: "notes"}
-}
-
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[3] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -170,7 +144,7 @@ func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[4] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -189,7 +163,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case subcontrol.ForeignKeys[0]: // control_objective_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // note_subcontrols
+		case subcontrol.ForeignKeys[1]: // user_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -381,10 +355,10 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			}
 		case subcontrol.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field note_subcontrols", values[i])
+				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
-				s.note_subcontrols = new(string)
-				*s.note_subcontrols = value.String
+				s.user_subcontrols = new(string)
+				*s.user_subcontrols = value.String
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -409,19 +383,9 @@ func (s *Subcontrol) QueryControls() *ControlQuery {
 	return NewSubcontrolClient(s.config).QueryControls(s)
 }
 
-// QueryUser queries the "user" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryUser() *UserQuery {
-	return NewSubcontrolClient(s.config).QueryUser(s)
-}
-
 // QueryTasks queries the "tasks" edge of the Subcontrol entity.
 func (s *Subcontrol) QueryTasks() *TaskQuery {
 	return NewSubcontrolClient(s.config).QueryTasks(s)
-}
-
-// QueryNotes queries the "notes" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryNotes() *NoteQuery {
-	return NewSubcontrolClient(s.config).QueryNotes(s)
 }
 
 // QueryPrograms queries the "programs" edge of the Subcontrol entity.
@@ -559,30 +523,6 @@ func (s *Subcontrol) appendNamedControls(name string, edges ...*Control) {
 		s.Edges.namedControls[name] = []*Control{}
 	} else {
 		s.Edges.namedControls[name] = append(s.Edges.namedControls[name], edges...)
-	}
-}
-
-// NamedUser returns the User named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (s *Subcontrol) NamedUser(name string) ([]*User, error) {
-	if s.Edges.namedUser == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := s.Edges.namedUser[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (s *Subcontrol) appendNamedUser(name string, edges ...*User) {
-	if s.Edges.namedUser == nil {
-		s.Edges.namedUser = make(map[string][]*User)
-	}
-	if len(edges) == 0 {
-		s.Edges.namedUser[name] = []*User{}
-	} else {
-		s.Edges.namedUser[name] = append(s.Edges.namedUser[name], edges...)
 	}
 }
 

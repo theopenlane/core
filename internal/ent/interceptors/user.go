@@ -2,7 +2,7 @@ package interceptors
 
 import (
 	"context"
-	"slices"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
@@ -33,7 +33,7 @@ func TraverseUser() ent.Interceptor {
 			return nil
 		}
 
-		switch filterType(ctx) {
+		switch userFilterType(ctx) {
 		// if we are looking at a user in the context of an organization or group
 		// filter for just those users
 		case "org":
@@ -55,48 +55,54 @@ func TraverseUser() ent.Interceptor {
 	})
 }
 
-// filterType returns the type of filter to apply to the query
-func filterType(ctx context.Context) string {
+const (
+	// userFilterTypeOrg is the filter type for organization level filtering
+	userFilterTypeOrg = "org"
+	// userFilterTypeUser is the filter type for user level filtering
+	userFilterTypeUser = "user"
+	// userFilterTypeNone is the filter type for no filtering
+	userFilterTypeNone = ""
+)
+
+// userFilterType returns the type of filter to apply to the query
+// when querying for users. This is based on the context of the query
+// if the root field being requested is a `user` it will filter on the authorized user
+// generally, requests will be filtered on the organization, to be able to see all users
+// within the organization
+func userFilterType(ctx context.Context) string {
 	rootFieldCtx := graphql.GetRootFieldContext(ctx)
 
-	// the extended resolvers allow members to be adding on creation or update of a group
-	// so we need to filter for the org
-	if rootFieldCtx != nil {
-		allowedCtx := []string{
-			"createGroup",
-			"updateGroup",
-			"createGroupByClone",
-			"createGroupWithMembers",
-			"createOrganizationWithMembers",
-			"createGroupMembership",
-			"updateGroupMembership",
-			"createProgramMembership",
-			"updateProgramMembership",
-			"createProgramWithMembers",
-			"createProgram",
-			"updateProgram",
-			"program",
-			"group",
-			"organization",
+	if rootFieldCtx != nil && rootFieldCtx.Object != "" {
+		nonOrgFilter := []string{
+			"user",
 		}
 
-		if slices.Contains(allowedCtx, rootFieldCtx.Object) {
-			return "org"
+		orgFilter := true
+
+		for _, t := range nonOrgFilter {
+			if strings.Contains(strings.ToLower(rootFieldCtx.Object), t) {
+				orgFilter = false
+				break
+			}
+		}
+
+		if orgFilter {
+			return userFilterTypeOrg
 		}
 	}
 
 	qCtx := ent.QueryFromContext(ctx)
 	if qCtx == nil {
-		return ""
+		return userFilterTypeNone
 	}
 
 	switch qCtx.Type {
-	case "OrgMembership", "GroupMembership", "Group", "ProgramMembership", "Program":
-		return "org"
 	case "Organization":
-		return "" // no filter because this is filtered at the org level
+		return userFilterTypeNone // no filter because this is filtered at the org level, which may be more than one organization
+	case "User", "UserSetting":
+		return userFilterTypeUser
 	default:
-		return "user"
+		return userFilterTypeOrg
 	}
 }
 

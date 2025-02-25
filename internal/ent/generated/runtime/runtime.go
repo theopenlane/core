@@ -1930,6 +1930,10 @@ func init() {
 	note.Hooks[3] = noteMixinHooks2[0]
 
 	note.Hooks[4] = noteMixinHooks3[0]
+
+	note.Hooks[5] = noteMixinHooks3[1]
+
+	note.Hooks[6] = noteMixinHooks3[2]
 	noteMixinInters2 := noteMixin[2].Interceptors()
 	noteMixinInters3 := noteMixin[3].Interceptors()
 	note.Interceptors[0] = noteMixinInters2[0]

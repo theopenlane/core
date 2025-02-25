@@ -2114,11 +2114,11 @@ func (th *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(th.Status, new.Status) {
 		changes = append(changes, NewChange(taskhistory.FieldStatus, th.Status, new.Status))
 	}
+	if !reflect.DeepEqual(th.Category, new.Category) {
+		changes = append(changes, NewChange(taskhistory.FieldCategory, th.Category, new.Category))
+	}
 	if !reflect.DeepEqual(th.Due, new.Due) {
 		changes = append(changes, NewChange(taskhistory.FieldDue, th.Due, new.Due))
-	}
-	if !reflect.DeepEqual(th.Priority, new.Priority) {
-		changes = append(changes, NewChange(taskhistory.FieldPriority, th.Priority, new.Priority))
 	}
 	if !reflect.DeepEqual(th.Completed, new.Completed) {
 		changes = append(changes, NewChange(taskhistory.FieldCompleted, th.Completed, new.Completed))

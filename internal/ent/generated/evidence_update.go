@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -126,20 +125,6 @@ func (eu *EvidenceUpdate) AppendTags(s []string) *EvidenceUpdate {
 // ClearTags clears the value of the "tags" field.
 func (eu *EvidenceUpdate) ClearTags() *EvidenceUpdate {
 	eu.mutation.ClearTags()
-	return eu
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (eu *EvidenceUpdate) SetOwnerID(s string) *EvidenceUpdate {
-	eu.mutation.SetOwnerID(s)
-	return eu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableOwnerID(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetOwnerID(*s)
-	}
 	return eu
 }
 
@@ -291,11 +276,6 @@ func (eu *EvidenceUpdate) ClearURL() *EvidenceUpdate {
 	return eu
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (eu *EvidenceUpdate) SetOwner(o *Organization) *EvidenceUpdate {
-	return eu.SetOwnerID(o.ID)
-}
-
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
 func (eu *EvidenceUpdate) AddControlObjectiveIDs(ids ...string) *EvidenceUpdate {
 	eu.mutation.AddControlObjectiveIDs(ids...)
@@ -389,12 +369,6 @@ func (eu *EvidenceUpdate) AddTasks(t ...*Task) *EvidenceUpdate {
 // Mutation returns the EvidenceMutation object of the builder.
 func (eu *EvidenceUpdate) Mutation() *EvidenceMutation {
 	return eu.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (eu *EvidenceUpdate) ClearOwner() *EvidenceUpdate {
-	eu.mutation.ClearOwner()
-	return eu
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
@@ -567,18 +541,10 @@ func (eu *EvidenceUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (eu *EvidenceUpdate) check() error {
-	if v, ok := eu.mutation.OwnerID(); ok {
-		if err := evidence.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Evidence.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := eu.mutation.Name(); ok {
 		if err := evidence.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Evidence.name": %w`, err)}
 		}
-	}
-	if eu.mutation.OwnerCleared() && len(eu.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Evidence.owner"`)
 	}
 	return nil
 }
@@ -683,37 +649,6 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.URLCleared() {
 		_spec.ClearField(evidence.FieldURL, field.TypeString)
-	}
-	if eu.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   evidence.OwnerTable,
-			Columns: []string{evidence.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.Evidence
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   evidence.OwnerTable,
-			Columns: []string{evidence.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.Evidence
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if eu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1117,20 +1052,6 @@ func (euo *EvidenceUpdateOne) ClearTags() *EvidenceUpdateOne {
 	return euo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (euo *EvidenceUpdateOne) SetOwnerID(s string) *EvidenceUpdateOne {
-	euo.mutation.SetOwnerID(s)
-	return euo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableOwnerID(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetOwnerID(*s)
-	}
-	return euo
-}
-
 // SetName sets the "name" field.
 func (euo *EvidenceUpdateOne) SetName(s string) *EvidenceUpdateOne {
 	euo.mutation.SetName(s)
@@ -1279,11 +1200,6 @@ func (euo *EvidenceUpdateOne) ClearURL() *EvidenceUpdateOne {
 	return euo
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (euo *EvidenceUpdateOne) SetOwner(o *Organization) *EvidenceUpdateOne {
-	return euo.SetOwnerID(o.ID)
-}
-
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
 func (euo *EvidenceUpdateOne) AddControlObjectiveIDs(ids ...string) *EvidenceUpdateOne {
 	euo.mutation.AddControlObjectiveIDs(ids...)
@@ -1377,12 +1293,6 @@ func (euo *EvidenceUpdateOne) AddTasks(t ...*Task) *EvidenceUpdateOne {
 // Mutation returns the EvidenceMutation object of the builder.
 func (euo *EvidenceUpdateOne) Mutation() *EvidenceMutation {
 	return euo.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (euo *EvidenceUpdateOne) ClearOwner() *EvidenceUpdateOne {
-	euo.mutation.ClearOwner()
-	return euo
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
@@ -1568,18 +1478,10 @@ func (euo *EvidenceUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (euo *EvidenceUpdateOne) check() error {
-	if v, ok := euo.mutation.OwnerID(); ok {
-		if err := evidence.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Evidence.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := euo.mutation.Name(); ok {
 		if err := evidence.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Evidence.name": %w`, err)}
 		}
-	}
-	if euo.mutation.OwnerCleared() && len(euo.mutation.OwnerIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Evidence.owner"`)
 	}
 	return nil
 }
@@ -1701,37 +1603,6 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if euo.mutation.URLCleared() {
 		_spec.ClearField(evidence.FieldURL, field.TypeString)
-	}
-	if euo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   evidence.OwnerTable,
-			Columns: []string{evidence.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.Evidence
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   evidence.OwnerTable,
-			Columns: []string{evidence.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.Evidence
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if euo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{

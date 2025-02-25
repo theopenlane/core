@@ -122,20 +122,6 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearTags() *ControlObjectiveHistoryU
 	return cohu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetOwnerID(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetOwnerID(s)
-	return cohu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableOwnerID(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetOwnerID(*s)
-	}
-	return cohu
-}
-
 // SetName sets the "name" field.
 func (cohu *ControlObjectiveHistoryUpdate) SetName(s string) *ControlObjectiveHistoryUpdate {
 	cohu.mutation.SetName(s)
@@ -462,8 +448,8 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.TagsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := cohu.mutation.OwnerID(); ok {
-		_spec.SetField(controlobjectivehistory.FieldOwnerID, field.TypeString, value)
+	if cohu.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := cohu.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)
@@ -645,20 +631,6 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) AppendTags(s []string) *ControlOb
 // ClearTags clears the value of the "tags" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) ClearTags() *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.ClearTags()
-	return cohuo
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetOwnerID(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetOwnerID(s)
-	return cohuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableOwnerID(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetOwnerID(*s)
-	}
 	return cohuo
 }
 
@@ -1018,8 +990,8 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.TagsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := cohuo.mutation.OwnerID(); ok {
-		_spec.SetField(controlobjectivehistory.FieldOwnerID, field.TypeString, value)
+	if cohuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := cohuo.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)
