@@ -449,11 +449,15 @@ func WithObjectStorage() ServerOption {
 			}
 
 			if s.Config.Settings.ObjectStorage.MaxUploadMemoryMB != 0 {
-				opts = append(opts, objects.WithMaxMemory(s.Config.Settings.ObjectStorage.MaxUploadMemoryMB*1024*1024)) // nolint:gomnd
+				opts = append(opts,
+					objects.WithMaxMemory(s.Config.Settings.ObjectStorage.MaxUploadMemoryMB*1024*1024), //nolint:gomnd
+				)
 			}
 
 			if s.Config.Settings.ObjectStorage.MaxUploadSizeMB != 0 {
-				opts = append(opts, objects.WithMaxFileSize(s.Config.Settings.ObjectStorage.MaxUploadSizeMB*1024*1024))
+				opts = append(opts,
+					objects.WithMaxFileSize(s.Config.Settings.ObjectStorage.MaxUploadSizeMB*1024*1024), //nolint:gomnd
+				)
 			}
 
 			s.Config.ObjectManager, err = objects.New(opts...)
