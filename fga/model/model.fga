@@ -130,7 +130,7 @@ type file
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
 
-    define parent: [user, program, organization, control, procedure, group, template, document_data, contact, internal_policy, narrative, evidence]
+    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence]
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
 # the program creator will be made the admin of the program and all other access with be assigned directly
@@ -198,7 +198,7 @@ type control_objective
     define can_edit: [user, service] or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user, service] or ((can_delete from parent or editor) but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, program]
+    define parent: [user, service, program, control, subcontrol]
     define viewer: [group#member]
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
@@ -211,7 +211,7 @@ type risk
     define can_edit: [user, service] or parent or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user, service] or ((can_delete from parent or can_edit from parent or editor) but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, program]
+    define parent: [user, service, program, control, control_objective, subcontrol, procedure, internal_policy]
     define viewer: [group#member] or editor
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
@@ -321,7 +321,7 @@ type task
     define assignee: [user]
     define assigner: [user]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, program, organization, control, procedure, group, internal_policy, subcontrol, control_objective]
+    define parent: [user, service, program, organization, control, procedure, internal_policy, subcontrol, control_objective]
     define editor: [organization#owner]
 # notes are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
 # do not inherit edit permissions from parent here like we do on other objects, only the original user (and org owner) can edit
@@ -330,7 +330,7 @@ type note
     define can_view: [user, service] or can_edit or can_view from parent
     define can_edit: [user, service] or owner or editor
     define can_delete: [user, service] or can_edit
-    define parent: [organization, program, organization, control, procedure, group, internal_policy, subcontrol, control_objective, task]
+    define parent: [organization, program, control, procedure, internal_policy, subcontrol, control_objective, task]
     define editor: [organization#owner]
     define owner : [user, service]
 type evidence
@@ -339,7 +339,7 @@ type evidence
     define can_edit: [user, service] or can_delete or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user, service] or ((can_delete from parent or editor) but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, program, organization, control, procedure, group, internal_policy, subcontrol, control_objective, task]
+    define parent: [user, service, program, organization, control, procedure, internal_policy, subcontrol, control_objective, task]
     define viewer: [group#member] or editor
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]

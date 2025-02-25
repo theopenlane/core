@@ -39,7 +39,7 @@ func (Note) Mixin() []ent.Mixin {
 		emixin.NewIDMixinWithPrefixedID("NTE"),
 		mixin.SoftDeleteMixin{},
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"group_id", "policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id"},
+			FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id"},
 			WithOrganizationOwner: true,
 			OwnerRelation:         fgax.OwnerRelation,
 			Ref:                   "notes",

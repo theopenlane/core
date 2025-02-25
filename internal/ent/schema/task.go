@@ -71,7 +71,7 @@ func (Task) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"group_id", "policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id"},
+			FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id"},
 			WithOrganizationOwner: true,
 			Ref:                   "tasks",
 		}),

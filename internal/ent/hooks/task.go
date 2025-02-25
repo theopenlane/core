@@ -58,7 +58,16 @@ func HookTaskPermissions() ent.Hook {
 			taskID, _ := m.ID()
 			assignee, ok := m.AssigneeID()
 
+			orgID, ownerOk := m.OwnerID()
+
 			if ok || m.AssigneeCleared() || slices.Contains(m.RemovedEdges(), assigneeField) {
+				if ownerOk {
+					// ensure the assignee is a member of the organization
+					if _, err := getOrgMemberID(ctx, m, assignee, orgID); err != nil {
+						return nil, err
+					}
+				}
+
 				// update the assignee tuple
 				if err := updateTaskAssigneeTuples(ctx, m, assignee, taskID); err != nil {
 					return nil, err
@@ -67,6 +76,13 @@ func HookTaskPermissions() ent.Hook {
 
 			assigner, ok := m.AssignerID()
 			if ok || m.AssignerCleared() || slices.Contains(m.RemovedEdges(), assignerField) {
+				if ownerOk {
+					// ensure the assigner is a member of the organization
+					if _, err := getOrgMemberID(ctx, m, assigner, orgID); err != nil {
+						return nil, err
+					}
+				}
+
 				// update the assigner tuple
 				if err := updateTaskAssignerTuples(ctx, m, assigner, taskID); err != nil {
 					return nil, err

@@ -382,12 +382,6 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-group-1 # owner of group org that is the parent of the task
-        object: task:task-3
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
       - user: user:ulid-program-member # member access has view permissions to the notes
         object: task:task-1
         assertions:
@@ -570,3 +564,187 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: controls and subcontrols
+    description: control access is granted via groups and the parent program, subcontrols inherit permissions from their parent control
+    tuple_file: tuples/controls.yaml
+    check:
+      - user: user:ulid-of-member # member of the program that has access to the control
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-another-member # no access to the control
+        object: control:control-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-editor
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-control-1-viewer
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-blocked
+        object: control:control-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # owner can view, edit, and delete the control
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member # member of the program that has access to the control
+        object: subcontrol:subcontrol-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-another-member # no access to the control
+        object: subcontrol:subcontrol-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-editor
+        object: subcontrol:subcontrol-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-control-1-viewer
+        object: subcontrol:subcontrol-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-blocked
+        object: subcontrol:subcontrol-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # owner can view, edit, and delete the control
+        object: subcontrol:subcontrol-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member # member of the program that has access to the control objective via the control
+        object: control_objective:control_objective-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-another-member # no access to the control objective
+        object: control_objective:control_objective-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-editor
+        object: control_objective:control_objective-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-control-1-viewer
+        object: control_objective:control_objective-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-blocked
+        object: control_objective:control_objective-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # owner can view, edit, and delete the control objective
+        object: control_objective:control_objective-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member # member of the program that has access to the control objective via the subcontrol
+        object: control_objective:control_objective-2
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-another-member # no access to the control objective
+        object: control_objective:control_objective-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-editor
+        object: control_objective:control_objective-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-control-1-viewer
+        object: control_objective:control_objective-2
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-blocked
+        object: control_objective:control_objective-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # owner can view, edit, and delete the control objective
+        object: control_objective:control_objective-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member # member of the program that has access to the control objective via the subcontrol
+        object: control_objective:control_objective-3
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-another-member # no access to the control objective
+        object: control_objective:control_objective-3
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-editor
+        object: control_objective:control_objective-3 # no access to the control objective, it was granted via a program
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-viewer
+        object: control_objective:control_objective-3 # no access to the control objective, it was granted via a program
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-control-1-blocked
+        object: control_objective:control_objective-3
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # owner can view, edit, and delete the control objective
+        object: control_objective:control_objective-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true

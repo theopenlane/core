@@ -1,0 +1,43 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to controls
+############################################
+- user: program:program-1
+  relation: parent
+  object: control:control-1
+- user: user:ulid-of-member
+  relation: member
+  object: program:program-1
+- user: group:group-control-1-editor#member
+  relation: editor
+  object: control:control-1
+- user: user:ulid-group-control-1-editor
+  relation: member
+  object: group:group-control-1-editor
+- user: group:group-control-1-viewer#member
+  relation: viewer
+  object: control:control-1
+- user: user:ulid-group-control-1-viewer
+  relation: member
+  object: group:group-control-1-viewer
+- user: group:group-control-1-blocked#member
+  relation: blocked
+  object: control:control-1
+- user: user:ulid-group-control-1-blocked
+  relation: member
+  object: group:group-control-1-editor
+- user: user:ulid-group-control-1-blocked # user is blocked which should take precedence over the editor group
+  relation: member
+  object: group:group-control-1-blocked
+- user: control:control-1
+  relation: parent
+  object: subcontrol:subcontrol-1
+- user: control:control-1
+  relation: parent
+  object: control_objective:control_objective-1
+- user: subcontrol:subcontrol-1
+  relation: parent
+  object: control_objective:control_objective-2
+- user: program:program-1
+  relation: parent
+  object: control_objective:control_objective-3

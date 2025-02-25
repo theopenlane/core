@@ -15,6 +15,7 @@ import (
 type GenericMutation interface {
 	ID() (id string, exists bool)
 	Type() string
+	Client() *generated.Client
 }
 
 // isDeleteOp checks if the mutation is a deletion operation.

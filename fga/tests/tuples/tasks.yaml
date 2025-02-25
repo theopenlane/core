@@ -38,9 +38,6 @@
 - user: user:ulid-other-3
   relation: admin
   object: program:program-2
-- user: group:group-1
-  relation: parent
-  object: task:task-3 # group has access to task
 #setup organization with empty domain condition
 - user: organization:group-org#member
   relation: access
