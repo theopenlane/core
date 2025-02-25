@@ -146,6 +146,16 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "create with assignee not in org should fail",
+			request: openlaneclient.CreateTaskInput{
+				Title:      "test-task",
+				AssigneeID: &testUser2.ID,
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "user not in organization",
+		},
+		{
 			name: "happy path, using pat",
 			request: openlaneclient.CreateTaskInput{
 				Title:   "test-task",
@@ -222,6 +232,15 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				assert.Empty(t, resp.CreateTask.Task.Due)
 			} else {
 				assert.WithinDuration(t, *tc.request.Due, *resp.CreateTask.Task.Due, 10*time.Second)
+			}
+
+			// when using an API token, the assigner is not set
+			if tc.client == suite.client.apiWithToken {
+				assert.Nil(t, resp.CreateTask.Task.Assigner)
+			} else {
+				// otherwise it defaults to the authorized user
+				assert.NotNil(t, resp.CreateTask.Task.Assigner)
+				assert.Equal(t, testUser1.ID, resp.CreateTask.Task.Assigner.ID)
 			}
 
 			if tc.request.AssigneeID == nil {
@@ -317,17 +336,18 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			ctx:    context.Background(),
 		},
 		{
+			name: "update assignee to user not in org should fail",
+			request: &openlaneclient.UpdateTaskInput{
+				AssigneeID: lo.ToPtr(testUser2.ID),
+			},
+			client:      suite.client.api,
+			ctx:         adminUser.UserCtx,
+			expectedErr: "user not in organization",
+		},
+		{
 			name: "update assignee to view only user",
 			request: &openlaneclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
-			},
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
-		},
-		{
-			name: "clear assignee",
-			request: &openlaneclient.UpdateTaskInput{
-				ClearAssignee: lo.ToPtr(true),
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -361,6 +381,22 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			name: "update assigner to another org member, this user should still be able to see it because they originally created it",
 			request: &openlaneclient.UpdateTaskInput{
 				AssignerID: lo.ToPtr(viewOnlyUser2.ID),
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "clear assignee",
+			request: &openlaneclient.UpdateTaskInput{
+				ClearAssignee: lo.ToPtr(true),
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "clear assigner",
+			request: &openlaneclient.UpdateTaskInput{
+				ClearAssigner: lo.ToPtr(true),
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -423,6 +459,15 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 
 					// the previous assignee should no longer be able to see the task
 					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser.UserCtx, resp.UpdateTask.Task.ID)
+					assert.Error(t, err)
+					assert.Nil(t, taskResp)
+				}
+
+				if tc.request.ClearAssigner != nil {
+					assert.Nil(t, resp.UpdateTask.Task.Assignee)
+
+					// the previous assigner should no longer be able to see the task
+					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
 					assert.Error(t, err)
 					assert.Nil(t, taskResp)
 				}
