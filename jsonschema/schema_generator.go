@@ -38,6 +38,7 @@ var includedPackages = []string{
 	"./internal/entdb",
 	"./internal/httpserve/handlers",
 	"./pkg/middleware",
+	"./pkg/objects",
 }
 
 // schemaConfig represents the configuration for the schema generator

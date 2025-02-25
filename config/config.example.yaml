@@ -118,6 +118,8 @@ objectStorage:
     keys:
         - uploadFile
     localURL: http://localhost:17608/files/
+    maxMemoryMB: 0
+    maxSizeMB: 0
     provider: ""
     region: ""
     secretKey: ""

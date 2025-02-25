@@ -19,6 +19,7 @@ func WithStorage(store Storage) Option {
 }
 
 // WithMaxFileSize allows you limit the size of file uploads to accept
+// expected input in bytes
 func WithMaxFileSize(i int64) Option {
 	return func(o *Objects) {
 		o.MaxSize = i
@@ -26,6 +27,7 @@ func WithMaxFileSize(i int64) Option {
 }
 
 // WithMaxMemory allows you limit the amount of memory to use when parsing a multipart form
+// expected input in bytes
 func WithMaxMemory(i int64) Option {
 	return func(o *Objects) {
 		o.MaxMemory = i

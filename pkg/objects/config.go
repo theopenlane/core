@@ -32,6 +32,10 @@ type Config struct {
 	// if the keys are not found, the request upload will be skipped
 	// this is not used when uploading files with gqlgen and the graphql handler
 	Keys []string `json:"keys" koanf:"keys" default:"[uploadFile]"`
+	// MaxUploadSizeMB is the maximum size of file uploads to accept in megabytes
+	MaxUploadSizeMB int64 `json:"maxSizeMB" koanf:"maxSizeMB"`
+	// MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form
+	MaxUploadMemoryMB int64 `json:"maxMemoryMB" koanf:"maxMemoryMB"`
 }
 
 var (
