@@ -649,6 +649,8 @@ Config defines the configuration settings for the default rate limiter
 |**defaultBucket**|`string`|||
 |**localURL**|`string`|||
 |[**keys**](#objectstoragekeys)|`string[]`|||
+|**maxSizeMB**|`integer`|||
+|**maxMemoryMB**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="objectstoragekeys"></a>

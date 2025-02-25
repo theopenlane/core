@@ -440,15 +440,23 @@ func WithObjectStorage() ServerOption {
 				}
 			}
 
-			s.Config.ObjectManager, err = objects.New(
-				objects.WithMaxFileSize(10<<20), // nolint:mnd
-				objects.WithMaxMemory(32<<20),   // nolint:mnd
+			opts := []objects.Option{objects.WithMaxFileSize(10 << 20), // nolint:mnd
 				objects.WithStorage(store),
 				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
 				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
 				objects.WithUploaderFunc(objmw.Upload),
 				objects.WithValidationFunc(objmw.MimeTypeValidator),
-			)
+			}
+
+			if s.Config.Settings.ObjectStorage.MaxUploadMemoryMB != 0 {
+				opts = append(opts, objects.WithMaxMemory(s.Config.Settings.ObjectStorage.MaxUploadMemoryMB*1024*1024)) // nolint:gomnd
+			}
+
+			if s.Config.Settings.ObjectStorage.MaxUploadSizeMB != 0 {
+				opts = append(opts, objects.WithMaxFileSize(s.Config.Settings.ObjectStorage.MaxUploadSizeMB*1024*1024))
+			}
+
+			s.Config.ObjectManager, err = objects.New(opts...)
 			if err != nil {
 				log.Panic().Err(err).Msg("Error creating object storage")
 			}

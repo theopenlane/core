@@ -600,6 +600,12 @@
         },
         "keys": {
           "$ref": "#/$defs/[]string"
+        },
+        "maxSizeMB": {
+          "type": "integer"
+        },
+        "maxMemoryMB": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
