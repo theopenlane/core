@@ -640,17 +640,17 @@ Config defines the configuration settings for the default rate limiter
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|||
-|**provider**|`string`|||
-|**accessKey**|`string`|||
-|**region**|`string`|||
-|**secretKey**|`string`|||
-|**credentialsJSON**|`string`|||
-|**defaultBucket**|`string`|||
-|**localURL**|`string`|||
+|**enabled**|`boolean`|Enabled indicates if the store is enabled<br/>||
+|**provider**|`string`|Provider is the name of the provider, eg. disk, s3, will default to disk if nothing is set<br/>||
+|**accessKey**|`string`|AccessKey is the access key for the storage provider<br/>||
+|**region**|`string`|Region is the region for the storage provider<br/>||
+|**secretKey**|`string`|SecretKey is the secret key for the storage provider<br/>||
+|**credentialsJSON**|`string`|CredentialsJSON is the credentials JSON for the storage provider<br/>||
+|**defaultBucket**|`string`|DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default<br/>this is the local path for disk storage or the bucket name for S3<br/>||
+|**localURL**|`string`|LocalURL is the URL to use for the "presigned" URL for the file when using local storage<br/>e.g for local development, this can be http://localhost:17608/files/<br/>||
 |[**keys**](#objectstoragekeys)|`string[]`|||
-|**maxSizeMB**|`integer`|||
-|**maxMemoryMB**|`integer`|||
+|**maxSizeMB**|`integer`|MaxUploadSizeMB is the maximum size of file uploads to accept in megabytes<br/>||
+|**maxMemoryMB**|`integer`|MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form<br/>||
 
 **Additional Properties:** not allowed  
 <a name="objectstoragekeys"></a>
