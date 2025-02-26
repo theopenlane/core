@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
 	emixin "github.com/theopenlane/entx/mixin"
@@ -81,5 +82,12 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 func (OrgSubscription) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorSubscriptionURL(),
+	}
+}
+
+// Edges of the OrgSubscription
+func (OrgSubscription) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("events", Event.Type),
 	}
 }

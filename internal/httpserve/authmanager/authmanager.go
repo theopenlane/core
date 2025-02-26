@@ -2,6 +2,7 @@ package authmanager
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -16,6 +17,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -97,6 +99,25 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	return auth, nil
 }
 
+var (
+	// ErrOrgSubscriptionNotActive is the error message when the organization subscription is not active
+	ErrOrgSubscriptionNotActive = errors.New("organization subscription is not active")
+)
+
+func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
+	subscription, err := a.db.OrgSubscription.Query().Where(orgsubscription.HasOwnerWith(organization.ID((orgID)))).Only(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	if !subscription.Active {
+		return false, ErrOrgSubscriptionNotActive
+	}
+
+	return true, nil
+
+}
+
 // createClaims creates the claims for the JWT token using the id for the user and organization
 // if not target org is provided, the user's default org is used
 func createClaimsWithOrg(u *generated.User, targetOrgID string) *tokens.Claims {
@@ -120,6 +141,19 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 	newTarget, err := a.authCheck(ctx, user, targetOrgID)
 	if err != nil {
 		if targetOrgID != "" {
+			active, err := a.checkActiveSubscription(ctx, targetOrgID)
+			if err != nil {
+				log.Error().Err(err).Msg("failed to find orgsubscription for organization")
+
+				return nil, err
+			}
+
+			if !active {
+				log.Error().Err(err).Msg("organization subscription is not active")
+
+				return nil, err
+			}
+
 			log.Error().Err(err).Msg("user attempting to switch into an org they cannot access, returning error")
 
 			return nil, err

@@ -21,9 +21,9 @@ func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
 }
 
 // HandleEvent umarshals event data and triggers a corresponding function to be executed based on case match
-func (sc *StripeClient) HandleEvent(c context.Context, e *stripe.Event) error {
+func (sc *StripeClient) HandleEvent(c context.Context, e *stripe.Event) (orgCust *OrganizationCustomer, err error) {
 	switch e.Type {
-	case "customer.subscription.updated", "customer.subscription.deleted", "customer.subscription.paused":
+	case "customer.subscription.updated", "customer.subscription.deleted", "customer.subscription.paused", "customer.subscription.trial_will_end":
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
 		if err == nil {
 			return sc.handleSubscriptionUpdated(subscription)
@@ -35,29 +35,32 @@ func (sc *StripeClient) HandleEvent(c context.Context, e *stripe.Event) error {
 		}
 	}
 
-	return nil
+	return orgCust, nil
 }
 
 // handleSubscriptionUpdated handles subscription updated events
-func (sc *StripeClient) handleSubscriptionUpdated(s *stripe.Subscription) error {
-	_, err := sc.GetSubscriptionByID(s.ID)
+func (sc *StripeClient) handleSubscriptionUpdated(s *stripe.Subscription) (orgCust *OrganizationCustomer, err error) {
+	orgCust = &OrganizationCustomer{}
+	subs, err := sc.GetSubscriptionByID(s.ID)
 	if err != nil {
-		return err
+		return orgCust, err
 	}
 
-	// TODO implement update logic; for now just confirm the lookup flow is successful and print the event
+	internalSubs := sc.mapStripeSubscription(subs)
 
-	return nil
+	orgCust.Subscription = *internalSubs
+
+	return orgCust, nil
 }
 
 // handlePaymentIntent handles payment intent events
-func (sc *StripeClient) handlePaymentIntent(c context.Context, stripeCust *stripe.PaymentIntent) error {
-	_, err := sc.GetCustomerByStripeID(c, stripeCust.ID)
+func (sc *StripeClient) handlePaymentIntent(c context.Context, stripeCust *stripe.PaymentIntent) (orgCust *OrganizationCustomer, err error) {
+	_, err = sc.GetCustomerByStripeID(c, stripeCust.ID)
 	if err != nil {
-		return err
+		return orgCust, err
 	}
 
 	// TODO implement payment intent logic; for now just confirm the lookup flow is successful and print the event
 
-	return nil
+	return orgCust, nil
 }

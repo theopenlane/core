@@ -36,7 +36,8 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 	}
 
 	if !exists {
-		if err := h.Entitlements.HandleEvent(req.Context(), &event); err != nil {
+		_, err := h.Entitlements.HandleEvent(req.Context(), &event)
+		if err != nil {
 			return h.InternalServerError(ctx, err)
 		}
 
