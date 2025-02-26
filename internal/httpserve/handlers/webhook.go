@@ -41,9 +41,11 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 			return h.InternalServerError(ctx, err)
 		}
 
+		meow := "meow"
+
 		input := ent.CreateEventInput{
-			EventID:   &event.ID,
-			EventType: "stripe",
+			EventID:   event.ID,
+			EventType: &meow,
 			// TODO unmarshall event data into internal event
 		}
 

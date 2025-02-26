@@ -42,6 +42,7 @@ func (sc *StripeClient) HandleEvent(c context.Context, e *stripe.Event) (orgCust
 func (sc *StripeClient) handleSubscriptionUpdated(s *stripe.Subscription) (orgCust *OrganizationCustomer, err error) {
 	orgCust = &OrganizationCustomer{}
 	subs, err := sc.GetSubscriptionByID(s.ID)
+
 	if err != nil {
 		return orgCust, err
 	}

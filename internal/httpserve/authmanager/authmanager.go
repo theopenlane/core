@@ -115,7 +115,6 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 	}
 
 	return true, nil
-
 }
 
 // createClaims creates the claims for the JWT token using the id for the user and organization
