@@ -1091,6 +1091,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.OrgSubscription {
 	})
 }
 
+// HasEvents applies the HasEdge predicate on the "events" edge.
+func HasEvents() predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEventsWith applies the HasEdge predicate on the "events" edge with a given conditions (other predicates).
+func HasEventsWith(preds ...predicate.Event) predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := newEventsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.OrgSubscription) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.AndPredicates(predicates...))

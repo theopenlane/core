@@ -31,6 +31,22 @@ type APIToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   owner: Organization
 }
 """
@@ -237,6 +253,62 @@ input APITokenWhereInput {
   lastUsedAtLTE: Time
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  isActiveIsNil: Boolean
+  isActiveNotNil: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonGT: String
+  revokedReasonGTE: String
+  revokedReasonLT: String
+  revokedReasonLTE: String
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByGT: String
+  revokedByGTE: String
+  revokedByLT: String
+  revokedByLTE: String
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtNEQ: Time
+  revokedAtIn: [Time!]
+  revokedAtNotIn: [Time!]
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -3736,6 +3808,22 @@ input CreateAPITokenInput {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   ownerID: ID
 }
 """
@@ -4049,10 +4137,42 @@ input CreateEventInput {
   tags associated with the object
   """
   tags: [String!]
-  eventID: String
+  """
+  the unique identifier of the event as it relates to the source or outside system
+  """
+  eventID: String!
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
-  eventType: String!
+  """
+  the type of event
+  """
+  eventType: String
+  """
+  event metadata
+  """
   metadata: Map
+  """
+  the source of the event
+  """
+  source: String
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  """
+  the time the event was processed
+  """
+  processedAt: Time
   userIDs: [ID!]
   groupIDs: [ID!]
   integrationIDs: [ID!]
@@ -4062,6 +4182,7 @@ input CreateEventInput {
   hushIDs: [ID!]
   subscriberIDs: [ID!]
   fileIDs: [ID!]
+  orgsubscriptionIDs: [ID!]
 }
 """
 CreateEvidenceInput is used for create Evidence object.
@@ -4639,6 +4760,22 @@ input CreatePersonalAccessTokenInput {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   ownerID: ID!
   organizationIDs: [ID!]
   eventIDs: [ID!]
@@ -6845,10 +6982,42 @@ type Event implements Node {
   tags associated with the object
   """
   tags: [String!]
-  eventID: String
+  """
+  the unique identifier of the event as it relates to the source or outside system
+  """
+  eventID: String!
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
-  eventType: String!
+  """
+  the type of event
+  """
+  eventType: String
+  """
+  event metadata
+  """
   metadata: Map
+  """
+  the source of the event
+  """
+  source: String
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  """
+  the time the event was processed
+  """
+  processedAt: Time
   user: [User!]
   group: [Group!]
   integration: [Integration!]
@@ -6860,6 +7029,7 @@ type Event implements Node {
   groupmembership: [GroupMembership!]
   subscriber: [Subscriber!]
   file: [File!]
+  orgsubscription: [OrgSubscription!]
 }
 """
 A connection to a list of items.
@@ -6904,10 +7074,42 @@ type EventHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
-  eventID: String
+  """
+  the unique identifier of the event as it relates to the source or outside system
+  """
+  eventID: String!
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
-  eventType: String!
+  """
+  the type of event
+  """
+  eventType: String
+  """
+  event metadata
+  """
   metadata: Map
+  """
+  the source of the event
+  """
+  source: String
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  """
+  the time the event was processed
+  """
+  processedAt: Time
 }
 """
 A connection to a list of items.
@@ -7080,8 +7282,6 @@ input EventHistoryWhereInput {
   eventIDContains: String
   eventIDHasPrefix: String
   eventIDHasSuffix: String
-  eventIDIsNil: Boolean
-  eventIDNotNil: Boolean
   eventIDEqualFold: String
   eventIDContainsFold: String
   """
@@ -7116,8 +7316,84 @@ input EventHistoryWhereInput {
   eventTypeContains: String
   eventTypeHasPrefix: String
   eventTypeHasSuffix: String
+  eventTypeIsNil: Boolean
+  eventTypeNotNil: Boolean
   eventTypeEqualFold: String
   eventTypeContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  additional_processing_required field predicates
+  """
+  additionalProcessingRequired: Boolean
+  additionalProcessingRequiredNEQ: Boolean
+  additionalProcessingRequiredIsNil: Boolean
+  additionalProcessingRequiredNotNil: Boolean
+  """
+  additional_processing_details field predicates
+  """
+  additionalProcessingDetails: String
+  additionalProcessingDetailsNEQ: String
+  additionalProcessingDetailsIn: [String!]
+  additionalProcessingDetailsNotIn: [String!]
+  additionalProcessingDetailsGT: String
+  additionalProcessingDetailsGTE: String
+  additionalProcessingDetailsLT: String
+  additionalProcessingDetailsLTE: String
+  additionalProcessingDetailsContains: String
+  additionalProcessingDetailsHasPrefix: String
+  additionalProcessingDetailsHasSuffix: String
+  additionalProcessingDetailsIsNil: Boolean
+  additionalProcessingDetailsNotNil: Boolean
+  additionalProcessingDetailsEqualFold: String
+  additionalProcessingDetailsContainsFold: String
+  """
+  processed_by field predicates
+  """
+  processedBy: String
+  processedByNEQ: String
+  processedByIn: [String!]
+  processedByNotIn: [String!]
+  processedByGT: String
+  processedByGTE: String
+  processedByLT: String
+  processedByLTE: String
+  processedByContains: String
+  processedByHasPrefix: String
+  processedByHasSuffix: String
+  processedByIsNil: Boolean
+  processedByNotNil: Boolean
+  processedByEqualFold: String
+  processedByContainsFold: String
+  """
+  processed_at field predicates
+  """
+  processedAt: Time
+  processedAtNEQ: Time
+  processedAtIn: [Time!]
+  processedAtNotIn: [Time!]
+  processedAtGT: Time
+  processedAtGTE: Time
+  processedAtLT: Time
+  processedAtLTE: Time
+  processedAtIsNil: Boolean
+  processedAtNotNil: Boolean
 }
 """
 EventWhereInput is used for filtering Event objects.
@@ -7216,8 +7492,6 @@ input EventWhereInput {
   eventIDContains: String
   eventIDHasPrefix: String
   eventIDHasSuffix: String
-  eventIDIsNil: Boolean
-  eventIDNotNil: Boolean
   eventIDEqualFold: String
   eventIDContainsFold: String
   """
@@ -7252,8 +7526,84 @@ input EventWhereInput {
   eventTypeContains: String
   eventTypeHasPrefix: String
   eventTypeHasSuffix: String
+  eventTypeIsNil: Boolean
+  eventTypeNotNil: Boolean
   eventTypeEqualFold: String
   eventTypeContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  additional_processing_required field predicates
+  """
+  additionalProcessingRequired: Boolean
+  additionalProcessingRequiredNEQ: Boolean
+  additionalProcessingRequiredIsNil: Boolean
+  additionalProcessingRequiredNotNil: Boolean
+  """
+  additional_processing_details field predicates
+  """
+  additionalProcessingDetails: String
+  additionalProcessingDetailsNEQ: String
+  additionalProcessingDetailsIn: [String!]
+  additionalProcessingDetailsNotIn: [String!]
+  additionalProcessingDetailsGT: String
+  additionalProcessingDetailsGTE: String
+  additionalProcessingDetailsLT: String
+  additionalProcessingDetailsLTE: String
+  additionalProcessingDetailsContains: String
+  additionalProcessingDetailsHasPrefix: String
+  additionalProcessingDetailsHasSuffix: String
+  additionalProcessingDetailsIsNil: Boolean
+  additionalProcessingDetailsNotNil: Boolean
+  additionalProcessingDetailsEqualFold: String
+  additionalProcessingDetailsContainsFold: String
+  """
+  processed_by field predicates
+  """
+  processedBy: String
+  processedByNEQ: String
+  processedByIn: [String!]
+  processedByNotIn: [String!]
+  processedByGT: String
+  processedByGTE: String
+  processedByLT: String
+  processedByLTE: String
+  processedByContains: String
+  processedByHasPrefix: String
+  processedByHasSuffix: String
+  processedByIsNil: Boolean
+  processedByNotNil: Boolean
+  processedByEqualFold: String
+  processedByContainsFold: String
+  """
+  processed_at field predicates
+  """
+  processedAt: Time
+  processedAtNEQ: Time
+  processedAtIn: [Time!]
+  processedAtNotIn: [Time!]
+  processedAtGT: Time
+  processedAtGTE: Time
+  processedAtLT: Time
+  processedAtLTE: Time
+  processedAtIsNil: Boolean
+  processedAtNotNil: Boolean
   """
   user edge predicates
   """
@@ -7309,6 +7659,11 @@ input EventWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  orgsubscription edge predicates
+  """
+  hasOrgsubscription: Boolean
+  hasOrgsubscriptionWith: [OrgSubscriptionWhereInput!]
 }
 type Evidence implements Node {
   id: ID!
@@ -14824,6 +15179,7 @@ type OrgSubscription implements Node {
   """
   featureLookupKeys: [String!]
   owner: Organization
+  events: [Event!]
 }
 """
 A connection to a list of items.
@@ -15475,6 +15831,11 @@ input OrgSubscriptionWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  events edge predicates
+  """
+  hasEvents: Boolean
+  hasEventsWith: [EventWhereInput!]
 }
 type Organization implements Node {
   id: ID!
@@ -17154,6 +17515,22 @@ type PersonalAccessToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   owner: User!
   """
   the organization(s) the token is associated with
@@ -17347,6 +17724,62 @@ input PersonalAccessTokenWhereInput {
   lastUsedAtLTE: Time
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  isActiveIsNil: Boolean
+  isActiveNotNil: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonGT: String
+  revokedReasonGTE: String
+  revokedReasonLT: String
+  revokedReasonLTE: String
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByGT: String
+  revokedByGTE: String
+  revokedByLT: String
+  revokedByLTE: String
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtNEQ: Time
+  revokedAtIn: [Time!]
+  revokedAtNotIn: [Time!]
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -26164,6 +26597,26 @@ input UpdateAPITokenInput {
   clearScopes: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  clearIsActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  clearRevokedBy: Boolean
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -26618,13 +27071,46 @@ input UpdateEventInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
-  eventID: String
-  clearEventID: Boolean
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
   clearCorrelationID: Boolean
+  """
+  the type of event
+  """
   eventType: String
+  clearEventType: Boolean
+  """
+  event metadata
+  """
   metadata: Map
   clearMetadata: Boolean
+  """
+  the source of the event
+  """
+  source: String
+  clearSource: Boolean
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  clearAdditionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  clearAdditionalProcessingDetails: Boolean
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  clearProcessedBy: Boolean
+  """
+  the time the event was processed
+  """
+  processedAt: Time
+  clearProcessedAt: Boolean
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUser: Boolean
@@ -26652,6 +27138,9 @@ input UpdateEventInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFile: Boolean
+  addOrgsubscriptionIDs: [ID!]
+  removeOrgsubscriptionIDs: [ID!]
+  clearOrgsubscription: Boolean
 }
 """
 UpdateEvidenceInput is used for update Evidence object.
@@ -27458,6 +27947,26 @@ input UpdatePersonalAccessTokenInput {
   clearScopes: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  clearIsActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  clearRevokedBy: Boolean
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganizations: Boolean

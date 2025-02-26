@@ -12,13 +12,17 @@ import (
 
 // CreateAPITokenInput represents a mutation input for creating apitokens.
 type CreateAPITokenInput struct {
-	Tags        []string
-	Name        string
-	ExpiresAt   *time.Time
-	Description *string
-	Scopes      []string
-	LastUsedAt  *time.Time
-	OwnerID     *string
+	Tags          []string
+	Name          string
+	ExpiresAt     *time.Time
+	Description   *string
+	Scopes        []string
+	LastUsedAt    *time.Time
+	IsActive      *bool
+	RevokedReason *string
+	RevokedBy     *string
+	RevokedAt     *time.Time
+	OwnerID       *string
 }
 
 // Mutate applies the CreateAPITokenInput on the APITokenMutation builder.
@@ -39,6 +43,18 @@ func (i *CreateAPITokenInput) Mutate(m *APITokenMutation) {
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
 	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -52,19 +68,27 @@ func (c *APITokenCreate) SetInput(i CreateAPITokenInput) *APITokenCreate {
 
 // UpdateAPITokenInput represents a mutation input for updating apitokens.
 type UpdateAPITokenInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	Name             *string
-	ClearDescription bool
-	Description      *string
-	ClearScopes      bool
-	Scopes           []string
-	AppendScopes     []string
-	ClearLastUsedAt  bool
-	LastUsedAt       *time.Time
-	ClearOwner       bool
-	OwnerID          *string
+	ClearTags          bool
+	Tags               []string
+	AppendTags         []string
+	Name               *string
+	ClearDescription   bool
+	Description        *string
+	ClearScopes        bool
+	Scopes             []string
+	AppendScopes       []string
+	ClearLastUsedAt    bool
+	LastUsedAt         *time.Time
+	ClearIsActive      bool
+	IsActive           *bool
+	ClearRevokedReason bool
+	RevokedReason      *string
+	ClearRevokedBy     bool
+	RevokedBy          *string
+	ClearRevokedAt     bool
+	RevokedAt          *time.Time
+	ClearOwner         bool
+	OwnerID            *string
 }
 
 // Mutate applies the UpdateAPITokenInput on the APITokenMutation builder.
@@ -101,6 +125,30 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
+	}
+	if i.ClearIsActive {
+		m.ClearIsActive()
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearRevokedReason {
+		m.ClearRevokedReason()
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if i.ClearRevokedBy {
+		m.ClearRevokedBy()
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if i.ClearRevokedAt {
+		m.ClearRevokedAt()
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -1704,20 +1752,26 @@ func (c *EntityTypeUpdateOne) SetInput(i UpdateEntityTypeInput) *EntityTypeUpdat
 
 // CreateEventInput represents a mutation input for creating events.
 type CreateEventInput struct {
-	Tags                   []string
-	EventID                *string
-	CorrelationID          *string
-	EventType              string
-	Metadata               map[string]interface{}
-	UserIDs                []string
-	GroupIDs               []string
-	IntegrationIDs         []string
-	OrganizationIDs        []string
-	InviteIDs              []string
-	PersonalAccessTokenIDs []string
-	HushIDs                []string
-	SubscriberIDs          []string
-	FileIDs                []string
+	Tags                         []string
+	EventID                      string
+	CorrelationID                *string
+	EventType                    *string
+	Metadata                     map[string]interface{}
+	Source                       *string
+	AdditionalProcessingRequired *bool
+	AdditionalProcessingDetails  *string
+	ProcessedBy                  *string
+	ProcessedAt                  *time.Time
+	UserIDs                      []string
+	GroupIDs                     []string
+	IntegrationIDs               []string
+	OrganizationIDs              []string
+	InviteIDs                    []string
+	PersonalAccessTokenIDs       []string
+	HushIDs                      []string
+	SubscriberIDs                []string
+	FileIDs                      []string
+	OrgsubscriptionIDs           []string
 }
 
 // Mutate applies the CreateEventInput on the EventMutation builder.
@@ -1725,15 +1779,30 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	if v := i.EventID; v != nil {
-		m.SetEventID(*v)
-	}
+	m.SetEventID(i.EventID)
 	if v := i.CorrelationID; v != nil {
 		m.SetCorrelationID(*v)
 	}
-	m.SetEventType(i.EventType)
+	if v := i.EventType; v != nil {
+		m.SetEventType(*v)
+	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.AdditionalProcessingRequired; v != nil {
+		m.SetAdditionalProcessingRequired(*v)
+	}
+	if v := i.AdditionalProcessingDetails; v != nil {
+		m.SetAdditionalProcessingDetails(*v)
+	}
+	if v := i.ProcessedBy; v != nil {
+		m.SetProcessedBy(*v)
+	}
+	if v := i.ProcessedAt; v != nil {
+		m.SetProcessedAt(*v)
 	}
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
@@ -1762,6 +1831,9 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.OrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateEventInput on the EventCreate builder.
@@ -1772,43 +1844,55 @@ func (c *EventCreate) SetInput(i CreateEventInput) *EventCreate {
 
 // UpdateEventInput represents a mutation input for updating events.
 type UpdateEventInput struct {
-	ClearTags                    bool
-	Tags                         []string
-	AppendTags                   []string
-	ClearEventID                 bool
-	EventID                      *string
-	ClearCorrelationID           bool
-	CorrelationID                *string
-	EventType                    *string
-	ClearMetadata                bool
-	Metadata                     map[string]interface{}
-	ClearUser                    bool
-	AddUserIDs                   []string
-	RemoveUserIDs                []string
-	ClearGroup                   bool
-	AddGroupIDs                  []string
-	RemoveGroupIDs               []string
-	ClearIntegration             bool
-	AddIntegrationIDs            []string
-	RemoveIntegrationIDs         []string
-	ClearOrganization            bool
-	AddOrganizationIDs           []string
-	RemoveOrganizationIDs        []string
-	ClearInvite                  bool
-	AddInviteIDs                 []string
-	RemoveInviteIDs              []string
-	ClearPersonalAccessToken     bool
-	AddPersonalAccessTokenIDs    []string
-	RemovePersonalAccessTokenIDs []string
-	ClearHush                    bool
-	AddHushIDs                   []string
-	RemoveHushIDs                []string
-	ClearSubscriber              bool
-	AddSubscriberIDs             []string
-	RemoveSubscriberIDs          []string
-	ClearFile                    bool
-	AddFileIDs                   []string
-	RemoveFileIDs                []string
+	ClearTags                         bool
+	Tags                              []string
+	AppendTags                        []string
+	ClearCorrelationID                bool
+	CorrelationID                     *string
+	ClearEventType                    bool
+	EventType                         *string
+	ClearMetadata                     bool
+	Metadata                          map[string]interface{}
+	ClearSource                       bool
+	Source                            *string
+	ClearAdditionalProcessingRequired bool
+	AdditionalProcessingRequired      *bool
+	ClearAdditionalProcessingDetails  bool
+	AdditionalProcessingDetails       *string
+	ClearProcessedBy                  bool
+	ProcessedBy                       *string
+	ClearProcessedAt                  bool
+	ProcessedAt                       *time.Time
+	ClearUser                         bool
+	AddUserIDs                        []string
+	RemoveUserIDs                     []string
+	ClearGroup                        bool
+	AddGroupIDs                       []string
+	RemoveGroupIDs                    []string
+	ClearIntegration                  bool
+	AddIntegrationIDs                 []string
+	RemoveIntegrationIDs              []string
+	ClearOrganization                 bool
+	AddOrganizationIDs                []string
+	RemoveOrganizationIDs             []string
+	ClearInvite                       bool
+	AddInviteIDs                      []string
+	RemoveInviteIDs                   []string
+	ClearPersonalAccessToken          bool
+	AddPersonalAccessTokenIDs         []string
+	RemovePersonalAccessTokenIDs      []string
+	ClearHush                         bool
+	AddHushIDs                        []string
+	RemoveHushIDs                     []string
+	ClearSubscriber                   bool
+	AddSubscriberIDs                  []string
+	RemoveSubscriberIDs               []string
+	ClearFile                         bool
+	AddFileIDs                        []string
+	RemoveFileIDs                     []string
+	ClearOrgsubscription              bool
+	AddOrgsubscriptionIDs             []string
+	RemoveOrgsubscriptionIDs          []string
 }
 
 // Mutate applies the UpdateEventInput on the EventMutation builder.
@@ -1822,17 +1906,14 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if i.ClearEventID {
-		m.ClearEventID()
-	}
-	if v := i.EventID; v != nil {
-		m.SetEventID(*v)
-	}
 	if i.ClearCorrelationID {
 		m.ClearCorrelationID()
 	}
 	if v := i.CorrelationID; v != nil {
 		m.SetCorrelationID(*v)
+	}
+	if i.ClearEventType {
+		m.ClearEventType()
 	}
 	if v := i.EventType; v != nil {
 		m.SetEventType(*v)
@@ -1842,6 +1923,36 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearAdditionalProcessingRequired {
+		m.ClearAdditionalProcessingRequired()
+	}
+	if v := i.AdditionalProcessingRequired; v != nil {
+		m.SetAdditionalProcessingRequired(*v)
+	}
+	if i.ClearAdditionalProcessingDetails {
+		m.ClearAdditionalProcessingDetails()
+	}
+	if v := i.AdditionalProcessingDetails; v != nil {
+		m.SetAdditionalProcessingDetails(*v)
+	}
+	if i.ClearProcessedBy {
+		m.ClearProcessedBy()
+	}
+	if v := i.ProcessedBy; v != nil {
+		m.SetProcessedBy(*v)
+	}
+	if i.ClearProcessedAt {
+		m.ClearProcessedAt()
+	}
+	if v := i.ProcessedAt; v != nil {
+		m.SetProcessedAt(*v)
 	}
 	if i.ClearUser {
 		m.ClearUser()
@@ -1923,6 +2034,15 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearOrgsubscription {
+		m.ClearOrgsubscription()
+	}
+	if v := i.AddOrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
+	}
+	if v := i.RemoveOrgsubscriptionIDs; len(v) > 0 {
+		m.RemoveOrgsubscriptionIDs(v...)
 	}
 }
 
@@ -5150,6 +5270,10 @@ type CreatePersonalAccessTokenInput struct {
 	Description     *string
 	Scopes          []string
 	LastUsedAt      *time.Time
+	IsActive        *bool
+	RevokedReason   *string
+	RevokedBy       *string
+	RevokedAt       *time.Time
 	OwnerID         string
 	OrganizationIDs []string
 	EventIDs        []string
@@ -5172,6 +5296,18 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
 	}
 	m.SetOwnerID(i.OwnerID)
 	if v := i.OrganizationIDs; len(v) > 0 {
@@ -5201,6 +5337,14 @@ type UpdatePersonalAccessTokenInput struct {
 	AppendScopes          []string
 	ClearLastUsedAt       bool
 	LastUsedAt            *time.Time
+	ClearIsActive         bool
+	IsActive              *bool
+	ClearRevokedReason    bool
+	RevokedReason         *string
+	ClearRevokedBy        bool
+	RevokedBy             *string
+	ClearRevokedAt        bool
+	RevokedAt             *time.Time
 	ClearOrganizations    bool
 	AddOrganizationIDs    []string
 	RemoveOrganizationIDs []string
@@ -5243,6 +5387,30 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
+	}
+	if i.ClearIsActive {
+		m.ClearIsActive()
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearRevokedReason {
+		m.ClearRevokedReason()
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if i.ClearRevokedBy {
+		m.ClearRevokedBy()
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if i.ClearRevokedAt {
+		m.ClearRevokedAt()
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
 	}
 	if i.ClearOrganizations {
 		m.ClearOrganizations()

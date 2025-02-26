@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -47,6 +48,7 @@ type EventQuery struct {
 	withGroupmembership          *GroupMembershipQuery
 	withSubscriber               *SubscriberQuery
 	withFile                     *FileQuery
+	withOrgsubscription          *OrgSubscriptionQuery
 	loadTotal                    []func(context.Context, []*Event) error
 	modifiers                    []func(*sql.Selector)
 	withNamedUser                map[string]*UserQuery
@@ -60,6 +62,7 @@ type EventQuery struct {
 	withNamedGroupmembership     map[string]*GroupMembershipQuery
 	withNamedSubscriber          map[string]*SubscriberQuery
 	withNamedFile                map[string]*FileQuery
+	withNamedOrgsubscription     map[string]*OrgSubscriptionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -371,6 +374,31 @@ func (eq *EventQuery) QueryFile() *FileQuery {
 	return query
 }
 
+// QueryOrgsubscription chains the current query on the "orgsubscription" edge.
+func (eq *EventQuery) QueryOrgsubscription() *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, selector),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgsubscriptionTable, event.OrgsubscriptionPrimaryKey...),
+		)
+		schemaConfig := eq.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Event entity from the query.
 // Returns a *NotFoundError when no Event was found.
 func (eq *EventQuery) First(ctx context.Context) (*Event, error) {
@@ -574,6 +602,7 @@ func (eq *EventQuery) Clone() *EventQuery {
 		withGroupmembership:     eq.withGroupmembership.Clone(),
 		withSubscriber:          eq.withSubscriber.Clone(),
 		withFile:                eq.withFile.Clone(),
+		withOrgsubscription:     eq.withOrgsubscription.Clone(),
 		// clone intermediate query.
 		sql:       eq.sql.Clone(),
 		path:      eq.path,
@@ -702,6 +731,17 @@ func (eq *EventQuery) WithFile(opts ...func(*FileQuery)) *EventQuery {
 	return eq
 }
 
+// WithOrgsubscription tells the query-builder to eager-load the nodes that are connected to
+// the "orgsubscription" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *EventQuery) WithOrgsubscription(opts ...func(*OrgSubscriptionQuery)) *EventQuery {
+	query := (&OrgSubscriptionClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withOrgsubscription = query
+	return eq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -780,7 +820,7 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 	var (
 		nodes       = []*Event{}
 		_spec       = eq.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [12]bool{
 			eq.withUser != nil,
 			eq.withGroup != nil,
 			eq.withIntegration != nil,
@@ -792,6 +832,7 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 			eq.withGroupmembership != nil,
 			eq.withSubscriber != nil,
 			eq.withFile != nil,
+			eq.withOrgsubscription != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -896,6 +937,13 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 			return nil, err
 		}
 	}
+	if query := eq.withOrgsubscription; query != nil {
+		if err := eq.loadOrgsubscription(ctx, query, nodes,
+			func(n *Event) { n.Edges.Orgsubscription = []*OrgSubscription{} },
+			func(n *Event, e *OrgSubscription) { n.Edges.Orgsubscription = append(n.Edges.Orgsubscription, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range eq.withNamedUser {
 		if err := eq.loadUser(ctx, query, nodes,
 			func(n *Event) { n.appendNamedUser(name) },
@@ -970,6 +1018,13 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 		if err := eq.loadFile(ctx, query, nodes,
 			func(n *Event) { n.appendNamedFile(name) },
 			func(n *Event, e *File) { n.appendNamedFile(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range eq.withNamedOrgsubscription {
+		if err := eq.loadOrgsubscription(ctx, query, nodes,
+			func(n *Event) { n.appendNamedOrgsubscription(name) },
+			func(n *Event, e *OrgSubscription) { n.appendNamedOrgsubscription(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1663,6 +1718,68 @@ func (eq *EventQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*E
 	}
 	return nil
 }
+func (eq *EventQuery) loadOrgsubscription(ctx context.Context, query *OrgSubscriptionQuery, nodes []*Event, init func(*Event), assign func(*Event, *OrgSubscription)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Event)
+	nids := make(map[string]map[*Event]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(event.OrgsubscriptionTable)
+		joinT.Schema(eq.schemaConfig.OrgSubscriptionEvents)
+		s.Join(joinT).On(s.C(orgsubscription.FieldID), joinT.C(event.OrgsubscriptionPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(event.OrgsubscriptionPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(event.OrgsubscriptionPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Event]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*OrgSubscription](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "orgsubscription" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (eq *EventQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := eq.querySpec()
@@ -1913,6 +2030,20 @@ func (eq *EventQuery) WithNamedFile(name string, opts ...func(*FileQuery)) *Even
 		eq.withNamedFile = make(map[string]*FileQuery)
 	}
 	eq.withNamedFile[name] = query
+	return eq
+}
+
+// WithNamedOrgsubscription tells the query-builder to eager-load the nodes that are connected to the "orgsubscription"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (eq *EventQuery) WithNamedOrgsubscription(name string, opts ...func(*OrgSubscriptionQuery)) *EventQuery {
+	query := (&OrgSubscriptionClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if eq.withNamedOrgsubscription == nil {
+		eq.withNamedOrgsubscription = make(map[string]*OrgSubscriptionQuery)
+	}
+	eq.withNamedOrgsubscription[name] = query
 	return eq
 }
 

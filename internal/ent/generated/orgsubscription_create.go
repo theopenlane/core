@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/pkg/models"
@@ -269,6 +270,21 @@ func (osc *OrgSubscriptionCreate) SetOwner(o *Organization) *OrgSubscriptionCrea
 	return osc.SetOwnerID(o.ID)
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (osc *OrgSubscriptionCreate) AddEventIDs(ids ...string) *OrgSubscriptionCreate {
+	osc.mutation.AddEventIDs(ids...)
+	return osc
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (osc *OrgSubscriptionCreate) AddEvents(e ...*Event) *OrgSubscriptionCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osc.AddEventIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osc *OrgSubscriptionCreate) Mutation() *OrgSubscriptionMutation {
 	return osc.mutation
@@ -468,6 +484,23 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

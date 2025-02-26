@@ -98,20 +98,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "APIToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			apitoken.FieldCreatedAt:   {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
-			apitoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
-			apitoken.FieldCreatedBy:   {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
-			apitoken.FieldUpdatedBy:   {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
-			apitoken.FieldDeletedAt:   {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
-			apitoken.FieldDeletedBy:   {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
-			apitoken.FieldTags:        {Type: field.TypeJSON, Column: apitoken.FieldTags},
-			apitoken.FieldOwnerID:     {Type: field.TypeString, Column: apitoken.FieldOwnerID},
-			apitoken.FieldName:        {Type: field.TypeString, Column: apitoken.FieldName},
-			apitoken.FieldToken:       {Type: field.TypeString, Column: apitoken.FieldToken},
-			apitoken.FieldExpiresAt:   {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
-			apitoken.FieldDescription: {Type: field.TypeString, Column: apitoken.FieldDescription},
-			apitoken.FieldScopes:      {Type: field.TypeJSON, Column: apitoken.FieldScopes},
-			apitoken.FieldLastUsedAt:  {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
+			apitoken.FieldCreatedAt:     {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
+			apitoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
+			apitoken.FieldCreatedBy:     {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
+			apitoken.FieldUpdatedBy:     {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
+			apitoken.FieldDeletedAt:     {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
+			apitoken.FieldDeletedBy:     {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
+			apitoken.FieldTags:          {Type: field.TypeJSON, Column: apitoken.FieldTags},
+			apitoken.FieldOwnerID:       {Type: field.TypeString, Column: apitoken.FieldOwnerID},
+			apitoken.FieldName:          {Type: field.TypeString, Column: apitoken.FieldName},
+			apitoken.FieldToken:         {Type: field.TypeString, Column: apitoken.FieldToken},
+			apitoken.FieldExpiresAt:     {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
+			apitoken.FieldDescription:   {Type: field.TypeString, Column: apitoken.FieldDescription},
+			apitoken.FieldScopes:        {Type: field.TypeJSON, Column: apitoken.FieldScopes},
+			apitoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
+			apitoken.FieldIsActive:      {Type: field.TypeBool, Column: apitoken.FieldIsActive},
+			apitoken.FieldRevokedReason: {Type: field.TypeString, Column: apitoken.FieldRevokedReason},
+			apitoken.FieldRevokedBy:     {Type: field.TypeString, Column: apitoken.FieldRevokedBy},
+			apitoken.FieldRevokedAt:     {Type: field.TypeTime, Column: apitoken.FieldRevokedAt},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -562,15 +566,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Event",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			event.FieldCreatedAt:     {Type: field.TypeTime, Column: event.FieldCreatedAt},
-			event.FieldUpdatedAt:     {Type: field.TypeTime, Column: event.FieldUpdatedAt},
-			event.FieldCreatedBy:     {Type: field.TypeString, Column: event.FieldCreatedBy},
-			event.FieldUpdatedBy:     {Type: field.TypeString, Column: event.FieldUpdatedBy},
-			event.FieldTags:          {Type: field.TypeJSON, Column: event.FieldTags},
-			event.FieldEventID:       {Type: field.TypeString, Column: event.FieldEventID},
-			event.FieldCorrelationID: {Type: field.TypeString, Column: event.FieldCorrelationID},
-			event.FieldEventType:     {Type: field.TypeString, Column: event.FieldEventType},
-			event.FieldMetadata:      {Type: field.TypeJSON, Column: event.FieldMetadata},
+			event.FieldCreatedAt:                    {Type: field.TypeTime, Column: event.FieldCreatedAt},
+			event.FieldUpdatedAt:                    {Type: field.TypeTime, Column: event.FieldUpdatedAt},
+			event.FieldCreatedBy:                    {Type: field.TypeString, Column: event.FieldCreatedBy},
+			event.FieldUpdatedBy:                    {Type: field.TypeString, Column: event.FieldUpdatedBy},
+			event.FieldTags:                         {Type: field.TypeJSON, Column: event.FieldTags},
+			event.FieldEventID:                      {Type: field.TypeString, Column: event.FieldEventID},
+			event.FieldCorrelationID:                {Type: field.TypeString, Column: event.FieldCorrelationID},
+			event.FieldEventType:                    {Type: field.TypeString, Column: event.FieldEventType},
+			event.FieldMetadata:                     {Type: field.TypeJSON, Column: event.FieldMetadata},
+			event.FieldSource:                       {Type: field.TypeString, Column: event.FieldSource},
+			event.FieldAdditionalProcessingRequired: {Type: field.TypeBool, Column: event.FieldAdditionalProcessingRequired},
+			event.FieldAdditionalProcessingDetails:  {Type: field.TypeString, Column: event.FieldAdditionalProcessingDetails},
+			event.FieldProcessedBy:                  {Type: field.TypeString, Column: event.FieldProcessedBy},
+			event.FieldProcessedAt:                  {Type: field.TypeTime, Column: event.FieldProcessedAt},
 		},
 	}
 	graph.Nodes[17] = &sqlgraph.Node{
@@ -584,18 +593,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EventHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			eventhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: eventhistory.FieldHistoryTime},
-			eventhistory.FieldRef:           {Type: field.TypeString, Column: eventhistory.FieldRef},
-			eventhistory.FieldOperation:     {Type: field.TypeEnum, Column: eventhistory.FieldOperation},
-			eventhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: eventhistory.FieldCreatedAt},
-			eventhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: eventhistory.FieldUpdatedAt},
-			eventhistory.FieldCreatedBy:     {Type: field.TypeString, Column: eventhistory.FieldCreatedBy},
-			eventhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: eventhistory.FieldUpdatedBy},
-			eventhistory.FieldTags:          {Type: field.TypeJSON, Column: eventhistory.FieldTags},
-			eventhistory.FieldEventID:       {Type: field.TypeString, Column: eventhistory.FieldEventID},
-			eventhistory.FieldCorrelationID: {Type: field.TypeString, Column: eventhistory.FieldCorrelationID},
-			eventhistory.FieldEventType:     {Type: field.TypeString, Column: eventhistory.FieldEventType},
-			eventhistory.FieldMetadata:      {Type: field.TypeJSON, Column: eventhistory.FieldMetadata},
+			eventhistory.FieldHistoryTime:                  {Type: field.TypeTime, Column: eventhistory.FieldHistoryTime},
+			eventhistory.FieldRef:                          {Type: field.TypeString, Column: eventhistory.FieldRef},
+			eventhistory.FieldOperation:                    {Type: field.TypeEnum, Column: eventhistory.FieldOperation},
+			eventhistory.FieldCreatedAt:                    {Type: field.TypeTime, Column: eventhistory.FieldCreatedAt},
+			eventhistory.FieldUpdatedAt:                    {Type: field.TypeTime, Column: eventhistory.FieldUpdatedAt},
+			eventhistory.FieldCreatedBy:                    {Type: field.TypeString, Column: eventhistory.FieldCreatedBy},
+			eventhistory.FieldUpdatedBy:                    {Type: field.TypeString, Column: eventhistory.FieldUpdatedBy},
+			eventhistory.FieldTags:                         {Type: field.TypeJSON, Column: eventhistory.FieldTags},
+			eventhistory.FieldEventID:                      {Type: field.TypeString, Column: eventhistory.FieldEventID},
+			eventhistory.FieldCorrelationID:                {Type: field.TypeString, Column: eventhistory.FieldCorrelationID},
+			eventhistory.FieldEventType:                    {Type: field.TypeString, Column: eventhistory.FieldEventType},
+			eventhistory.FieldMetadata:                     {Type: field.TypeJSON, Column: eventhistory.FieldMetadata},
+			eventhistory.FieldSource:                       {Type: field.TypeString, Column: eventhistory.FieldSource},
+			eventhistory.FieldAdditionalProcessingRequired: {Type: field.TypeBool, Column: eventhistory.FieldAdditionalProcessingRequired},
+			eventhistory.FieldAdditionalProcessingDetails:  {Type: field.TypeString, Column: eventhistory.FieldAdditionalProcessingDetails},
+			eventhistory.FieldProcessedBy:                  {Type: field.TypeString, Column: eventhistory.FieldProcessedBy},
+			eventhistory.FieldProcessedAt:                  {Type: field.TypeTime, Column: eventhistory.FieldProcessedAt},
 		},
 	}
 	graph.Nodes[18] = &sqlgraph.Node{
@@ -1478,20 +1492,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "PersonalAccessToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			personalaccesstoken.FieldCreatedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
-			personalaccesstoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
-			personalaccesstoken.FieldCreatedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
-			personalaccesstoken.FieldUpdatedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
-			personalaccesstoken.FieldDeletedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
-			personalaccesstoken.FieldDeletedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
-			personalaccesstoken.FieldTags:        {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
-			personalaccesstoken.FieldOwnerID:     {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
-			personalaccesstoken.FieldName:        {Type: field.TypeString, Column: personalaccesstoken.FieldName},
-			personalaccesstoken.FieldToken:       {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
-			personalaccesstoken.FieldExpiresAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
-			personalaccesstoken.FieldDescription: {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
-			personalaccesstoken.FieldScopes:      {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
-			personalaccesstoken.FieldLastUsedAt:  {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
+			personalaccesstoken.FieldCreatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
+			personalaccesstoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
+			personalaccesstoken.FieldCreatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
+			personalaccesstoken.FieldUpdatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
+			personalaccesstoken.FieldDeletedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
+			personalaccesstoken.FieldDeletedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
+			personalaccesstoken.FieldTags:          {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
+			personalaccesstoken.FieldOwnerID:       {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
+			personalaccesstoken.FieldName:          {Type: field.TypeString, Column: personalaccesstoken.FieldName},
+			personalaccesstoken.FieldToken:         {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
+			personalaccesstoken.FieldExpiresAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
+			personalaccesstoken.FieldDescription:   {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
+			personalaccesstoken.FieldScopes:        {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
+			personalaccesstoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
+			personalaccesstoken.FieldIsActive:      {Type: field.TypeBool, Column: personalaccesstoken.FieldIsActive},
+			personalaccesstoken.FieldRevokedReason: {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedReason},
+			personalaccesstoken.FieldRevokedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedBy},
+			personalaccesstoken.FieldRevokedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldRevokedAt},
 		},
 	}
 	graph.Nodes[50] = &sqlgraph.Node{
@@ -2949,6 +2967,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"orgsubscription",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+		},
+		"Event",
+		"OrgSubscription",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3979,6 +4009,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"OrgSubscription",
 		"Organization",
+	)
+	graph.MustAddE(
+		"events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+		},
+		"OrgSubscription",
+		"Event",
 	)
 	graph.MustAddE(
 		"control_creators",
@@ -5753,6 +5795,26 @@ func (f *APITokenFilter) WhereScopes(p entql.BytesP) {
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
 func (f *APITokenFilter) WhereLastUsedAt(p entql.TimeP) {
 	f.Where(p.Field(apitoken.FieldLastUsedAt))
+}
+
+// WhereIsActive applies the entql bool predicate on the is_active field.
+func (f *APITokenFilter) WhereIsActive(p entql.BoolP) {
+	f.Where(p.Field(apitoken.FieldIsActive))
+}
+
+// WhereRevokedReason applies the entql string predicate on the revoked_reason field.
+func (f *APITokenFilter) WhereRevokedReason(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldRevokedReason))
+}
+
+// WhereRevokedBy applies the entql string predicate on the revoked_by field.
+func (f *APITokenFilter) WhereRevokedBy(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldRevokedBy))
+}
+
+// WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
+func (f *APITokenFilter) WhereRevokedAt(p entql.TimeP) {
+	f.Where(p.Field(apitoken.FieldRevokedAt))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -8350,6 +8412,31 @@ func (f *EventFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(event.FieldMetadata))
 }
 
+// WhereSource applies the entql string predicate on the source field.
+func (f *EventFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(event.FieldSource))
+}
+
+// WhereAdditionalProcessingRequired applies the entql bool predicate on the additional_processing_required field.
+func (f *EventFilter) WhereAdditionalProcessingRequired(p entql.BoolP) {
+	f.Where(p.Field(event.FieldAdditionalProcessingRequired))
+}
+
+// WhereAdditionalProcessingDetails applies the entql string predicate on the additional_processing_details field.
+func (f *EventFilter) WhereAdditionalProcessingDetails(p entql.StringP) {
+	f.Where(p.Field(event.FieldAdditionalProcessingDetails))
+}
+
+// WhereProcessedBy applies the entql string predicate on the processed_by field.
+func (f *EventFilter) WhereProcessedBy(p entql.StringP) {
+	f.Where(p.Field(event.FieldProcessedBy))
+}
+
+// WhereProcessedAt applies the entql time.Time predicate on the processed_at field.
+func (f *EventFilter) WhereProcessedAt(p entql.TimeP) {
+	f.Where(p.Field(event.FieldProcessedAt))
+}
+
 // WhereHasUser applies a predicate to check if query has an edge user.
 func (f *EventFilter) WhereHasUser() {
 	f.Where(entql.HasEdge("user"))
@@ -8504,6 +8591,20 @@ func (f *EventFilter) WhereHasFileWith(preds ...predicate.File) {
 	})))
 }
 
+// WhereHasOrgsubscription applies a predicate to check if query has an edge orgsubscription.
+func (f *EventFilter) WhereHasOrgsubscription() {
+	f.Where(entql.HasEdge("orgsubscription"))
+}
+
+// WhereHasOrgsubscriptionWith applies a predicate to check if query has an edge orgsubscription with a given conditions (other predicates).
+func (f *EventFilter) WhereHasOrgsubscriptionWith(preds ...predicate.OrgSubscription) {
+	f.Where(entql.HasEdgeWith("orgsubscription", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (ehq *EventHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	ehq.predicates = append(ehq.predicates, pred)
@@ -8602,6 +8703,31 @@ func (f *EventHistoryFilter) WhereEventType(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *EventHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(eventhistory.FieldMetadata))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *EventHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldSource))
+}
+
+// WhereAdditionalProcessingRequired applies the entql bool predicate on the additional_processing_required field.
+func (f *EventHistoryFilter) WhereAdditionalProcessingRequired(p entql.BoolP) {
+	f.Where(p.Field(eventhistory.FieldAdditionalProcessingRequired))
+}
+
+// WhereAdditionalProcessingDetails applies the entql string predicate on the additional_processing_details field.
+func (f *EventHistoryFilter) WhereAdditionalProcessingDetails(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldAdditionalProcessingDetails))
+}
+
+// WhereProcessedBy applies the entql string predicate on the processed_by field.
+func (f *EventHistoryFilter) WhereProcessedBy(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldProcessedBy))
+}
+
+// WhereProcessedAt applies the entql time.Time predicate on the processed_at field.
+func (f *EventHistoryFilter) WhereProcessedAt(p entql.TimeP) {
+	f.Where(p.Field(eventhistory.FieldProcessedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12618,6 +12744,20 @@ func (f *OrgSubscriptionFilter) WhereHasOwnerWith(preds ...predicate.Organizatio
 	})))
 }
 
+// WhereHasEvents applies a predicate to check if query has an edge events.
+func (f *OrgSubscriptionFilter) WhereHasEvents() {
+	f.Where(entql.HasEdge("events"))
+}
+
+// WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
+func (f *OrgSubscriptionFilter) WhereHasEventsWith(preds ...predicate.Event) {
+	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (oshq *OrgSubscriptionHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	oshq.predicates = append(oshq.predicates, pred)
@@ -14102,6 +14242,26 @@ func (f *PersonalAccessTokenFilter) WhereScopes(p entql.BytesP) {
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
 func (f *PersonalAccessTokenFilter) WhereLastUsedAt(p entql.TimeP) {
 	f.Where(p.Field(personalaccesstoken.FieldLastUsedAt))
+}
+
+// WhereIsActive applies the entql bool predicate on the is_active field.
+func (f *PersonalAccessTokenFilter) WhereIsActive(p entql.BoolP) {
+	f.Where(p.Field(personalaccesstoken.FieldIsActive))
+}
+
+// WhereRevokedReason applies the entql string predicate on the revoked_reason field.
+func (f *PersonalAccessTokenFilter) WhereRevokedReason(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldRevokedReason))
+}
+
+// WhereRevokedBy applies the entql string predicate on the revoked_by field.
+func (f *PersonalAccessTokenFilter) WhereRevokedBy(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldRevokedBy))
+}
+
+// WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
+func (f *PersonalAccessTokenFilter) WhereRevokedAt(p entql.TimeP) {
+	f.Where(p.Field(personalaccesstoken.FieldRevokedAt))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

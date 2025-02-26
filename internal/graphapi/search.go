@@ -79,6 +79,8 @@ func adminSearchAPITokens(ctx context.Context, query string) ([]*generated.APITo
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(scopes)::text LIKE $6", likeQuery)) // search by Scopes
 			},
+			apitoken.RevokedReasonContainsFold(query), // search by RevokedReason
+			apitoken.RevokedByContainsFold(query),     // search by RevokedBy
 		),
 	).All(ctx)
 }
@@ -382,6 +384,9 @@ func adminSearchEvents(ctx context.Context, query string) ([]*generated.Event, e
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(metadata)::text LIKE $6", likeQuery)) // search by Metadata
 			},
+			event.SourceContainsFold(query),                      // search by Source
+			event.AdditionalProcessingDetailsContainsFold(query), // search by AdditionalProcessingDetails
+			event.ProcessedByContainsFold(query),                 // search by ProcessedBy
 		),
 	).All(ctx)
 }
@@ -755,6 +760,8 @@ func adminSearchPersonalAccessTokens(ctx context.Context, query string) ([]*gene
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(scopes)::text LIKE $5", likeQuery)) // search by Scopes
 			},
+			personalaccesstoken.RevokedReasonContainsFold(query), // search by RevokedReason
+			personalaccesstoken.RevokedByContainsFold(query),     // search by RevokedBy
 		),
 	).All(ctx)
 }

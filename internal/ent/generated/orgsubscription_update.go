@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -339,6 +340,21 @@ func (osu *OrgSubscriptionUpdate) SetOwner(o *Organization) *OrgSubscriptionUpda
 	return osu.SetOwnerID(o.ID)
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (osu *OrgSubscriptionUpdate) AddEventIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.AddEventIDs(ids...)
+	return osu
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (osu *OrgSubscriptionUpdate) AddEvents(e ...*Event) *OrgSubscriptionUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osu.AddEventIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 	return osu.mutation
@@ -348,6 +364,27 @@ func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 func (osu *OrgSubscriptionUpdate) ClearOwner() *OrgSubscriptionUpdate {
 	osu.mutation.ClearOwner()
 	return osu
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (osu *OrgSubscriptionUpdate) ClearEvents() *OrgSubscriptionUpdate {
+	osu.mutation.ClearEvents()
+	return osu
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (osu *OrgSubscriptionUpdate) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.RemoveEventIDs(ids...)
+	return osu
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (osu *OrgSubscriptionUpdate) RemoveEvents(e ...*Event) *OrgSubscriptionUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osu.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -554,6 +591,54 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -888,6 +973,21 @@ func (osuo *OrgSubscriptionUpdateOne) SetOwner(o *Organization) *OrgSubscription
 	return osuo.SetOwnerID(o.ID)
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (osuo *OrgSubscriptionUpdateOne) AddEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.AddEventIDs(ids...)
+	return osuo
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (osuo *OrgSubscriptionUpdateOne) AddEvents(e ...*Event) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osuo.AddEventIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 	return osuo.mutation
@@ -897,6 +997,27 @@ func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 func (osuo *OrgSubscriptionUpdateOne) ClearOwner() *OrgSubscriptionUpdateOne {
 	osuo.mutation.ClearOwner()
 	return osuo
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (osuo *OrgSubscriptionUpdateOne) ClearEvents() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearEvents()
+	return osuo
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (osuo *OrgSubscriptionUpdateOne) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.RemoveEventIDs(ids...)
+	return osuo
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (osuo *OrgSubscriptionUpdateOne) RemoveEvents(e ...*Event) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osuo.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgSubscriptionUpdate builder.
@@ -1133,6 +1254,54 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: orgsubscription.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

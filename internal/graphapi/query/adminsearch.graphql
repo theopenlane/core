@@ -9,6 +9,8 @@ query AdminSearch($query: String!) {
           ownerID
           name
           scopes
+          revokedReason
+          revokedBy
         }
       }
       ... on ActionPlanSearchResult {
@@ -122,6 +124,9 @@ query AdminSearch($query: String!) {
           correlationID
           eventType
           metadata
+          source
+          additionalProcessingDetails
+          processedBy
         }
       }
       ... on EvidenceSearchResult {
@@ -256,6 +261,8 @@ query AdminSearch($query: String!) {
           tags
           name
           scopes
+          revokedReason
+          revokedBy
         }
       }
       ... on ProcedureSearchResult {

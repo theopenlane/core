@@ -155,6 +155,10 @@ func init() {
 	apitokenDescToken := apitokenFields[1].Descriptor()
 	// apitoken.DefaultToken holds the default value on creation for the token field.
 	apitoken.DefaultToken = apitokenDescToken.Default.(func() string)
+	// apitokenDescIsActive is the schema descriptor for is_active field.
+	apitokenDescIsActive := apitokenFields[6].Descriptor()
+	// apitoken.DefaultIsActive holds the default value on creation for the is_active field.
+	apitoken.DefaultIsActive = apitokenDescIsActive.Default.(bool)
 	// apitokenDescID is the schema descriptor for id field.
 	apitokenDescID := apitokenMixinFields2[0].Descriptor()
 	// apitoken.DefaultID holds the default value on creation for the id field.
@@ -946,6 +950,10 @@ func init() {
 	eventDescTags := eventMixinFields2[0].Descriptor()
 	// event.DefaultTags holds the default value on creation for the tags field.
 	event.DefaultTags = eventDescTags.Default.([]string)
+	// eventDescAdditionalProcessingRequired is the schema descriptor for additional_processing_required field.
+	eventDescAdditionalProcessingRequired := eventFields[5].Descriptor()
+	// event.DefaultAdditionalProcessingRequired holds the default value on creation for the additional_processing_required field.
+	event.DefaultAdditionalProcessingRequired = eventDescAdditionalProcessingRequired.Default.(bool)
 	// eventDescID is the schema descriptor for id field.
 	eventDescID := eventMixinFields1[0].Descriptor()
 	// event.DefaultID holds the default value on creation for the id field.
@@ -970,6 +978,10 @@ func init() {
 	eventhistoryDescTags := eventhistoryFields[8].Descriptor()
 	// eventhistory.DefaultTags holds the default value on creation for the tags field.
 	eventhistory.DefaultTags = eventhistoryDescTags.Default.([]string)
+	// eventhistoryDescAdditionalProcessingRequired is the schema descriptor for additional_processing_required field.
+	eventhistoryDescAdditionalProcessingRequired := eventhistoryFields[14].Descriptor()
+	// eventhistory.DefaultAdditionalProcessingRequired holds the default value on creation for the additional_processing_required field.
+	eventhistory.DefaultAdditionalProcessingRequired = eventhistoryDescAdditionalProcessingRequired.Default.(bool)
 	// eventhistoryDescID is the schema descriptor for id field.
 	eventhistoryDescID := eventhistoryFields[7].Descriptor()
 	// eventhistory.DefaultID holds the default value on creation for the id field.
@@ -2575,6 +2587,10 @@ func init() {
 	personalaccesstokenDescToken := personalaccesstokenFields[1].Descriptor()
 	// personalaccesstoken.DefaultToken holds the default value on creation for the token field.
 	personalaccesstoken.DefaultToken = personalaccesstokenDescToken.Default.(func() string)
+	// personalaccesstokenDescIsActive is the schema descriptor for is_active field.
+	personalaccesstokenDescIsActive := personalaccesstokenFields[6].Descriptor()
+	// personalaccesstoken.DefaultIsActive holds the default value on creation for the is_active field.
+	personalaccesstoken.DefaultIsActive = personalaccesstokenDescIsActive.Default.(bool)
 	// personalaccesstokenDescID is the schema descriptor for id field.
 	personalaccesstokenDescID := personalaccesstokenMixinFields2[0].Descriptor()
 	// personalaccesstoken.DefaultID holds the default value on creation for the id field.

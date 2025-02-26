@@ -47,6 +47,14 @@ type PersonalAccessToken struct {
 	Scopes []string `json:"scopes,omitempty"`
 	// LastUsedAt holds the value of the "last_used_at" field.
 	LastUsedAt *time.Time `json:"last_used_at,omitempty"`
+	// whether the token is active
+	IsActive bool `json:"is_active,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revoked_reason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revoked_by,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time `json:"revoked_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonalAccessTokenQuery when eager-loading is set.
 	Edges        PersonalAccessTokenEdges `json:"edges"`
@@ -107,9 +115,11 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case personalaccesstoken.FieldTags, personalaccesstoken.FieldScopes:
 			values[i] = new([]byte)
-		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
+		case personalaccesstoken.FieldIsActive:
+			values[i] = new(sql.NullBool)
+		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription, personalaccesstoken.FieldRevokedReason, personalaccesstoken.FieldRevokedBy:
 			values[i] = new(sql.NullString)
-		case personalaccesstoken.FieldCreatedAt, personalaccesstoken.FieldUpdatedAt, personalaccesstoken.FieldDeletedAt, personalaccesstoken.FieldExpiresAt, personalaccesstoken.FieldLastUsedAt:
+		case personalaccesstoken.FieldCreatedAt, personalaccesstoken.FieldUpdatedAt, personalaccesstoken.FieldDeletedAt, personalaccesstoken.FieldExpiresAt, personalaccesstoken.FieldLastUsedAt, personalaccesstoken.FieldRevokedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -223,6 +233,33 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 				pat.LastUsedAt = new(time.Time)
 				*pat.LastUsedAt = value.Time
 			}
+		case personalaccesstoken.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_active", values[i])
+			} else if value.Valid {
+				pat.IsActive = value.Bool
+			}
+		case personalaccesstoken.FieldRevokedReason:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revoked_reason", values[i])
+			} else if value.Valid {
+				pat.RevokedReason = new(string)
+				*pat.RevokedReason = value.String
+			}
+		case personalaccesstoken.FieldRevokedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revoked_by", values[i])
+			} else if value.Valid {
+				pat.RevokedBy = new(string)
+				*pat.RevokedBy = value.String
+			}
+		case personalaccesstoken.FieldRevokedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field revoked_at", values[i])
+			} else if value.Valid {
+				pat.RevokedAt = new(time.Time)
+				*pat.RevokedAt = value.Time
+			}
 		default:
 			pat.selectValues.Set(columns[i], values[i])
 		}
@@ -319,6 +356,24 @@ func (pat *PersonalAccessToken) String() string {
 	builder.WriteString(", ")
 	if v := pat.LastUsedAt; v != nil {
 		builder.WriteString("last_used_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("is_active=")
+	builder.WriteString(fmt.Sprintf("%v", pat.IsActive))
+	builder.WriteString(", ")
+	if v := pat.RevokedReason; v != nil {
+		builder.WriteString("revoked_reason=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := pat.RevokedBy; v != nil {
+		builder.WriteString("revoked_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := pat.RevokedAt; v != nil {
+		builder.WriteString("revoked_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteByte(')')

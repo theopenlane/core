@@ -47,6 +47,14 @@ type APIToken struct {
 	Scopes []string `json:"scopes,omitempty"`
 	// LastUsedAt holds the value of the "last_used_at" field.
 	LastUsedAt *time.Time `json:"last_used_at,omitempty"`
+	// whether the token is active
+	IsActive bool `json:"is_active,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revoked_reason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revoked_by,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time `json:"revoked_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the APITokenQuery when eager-loading is set.
 	Edges        APITokenEdges `json:"edges"`
@@ -82,9 +90,11 @@ func (*APIToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apitoken.FieldTags, apitoken.FieldScopes:
 			values[i] = new([]byte)
-		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription:
+		case apitoken.FieldIsActive:
+			values[i] = new(sql.NullBool)
+		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription, apitoken.FieldRevokedReason, apitoken.FieldRevokedBy:
 			values[i] = new(sql.NullString)
-		case apitoken.FieldCreatedAt, apitoken.FieldUpdatedAt, apitoken.FieldDeletedAt, apitoken.FieldExpiresAt, apitoken.FieldLastUsedAt:
+		case apitoken.FieldCreatedAt, apitoken.FieldUpdatedAt, apitoken.FieldDeletedAt, apitoken.FieldExpiresAt, apitoken.FieldLastUsedAt, apitoken.FieldRevokedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -198,6 +208,33 @@ func (at *APIToken) assignValues(columns []string, values []any) error {
 				at.LastUsedAt = new(time.Time)
 				*at.LastUsedAt = value.Time
 			}
+		case apitoken.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_active", values[i])
+			} else if value.Valid {
+				at.IsActive = value.Bool
+			}
+		case apitoken.FieldRevokedReason:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revoked_reason", values[i])
+			} else if value.Valid {
+				at.RevokedReason = new(string)
+				*at.RevokedReason = value.String
+			}
+		case apitoken.FieldRevokedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revoked_by", values[i])
+			} else if value.Valid {
+				at.RevokedBy = new(string)
+				*at.RevokedBy = value.String
+			}
+		case apitoken.FieldRevokedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field revoked_at", values[i])
+			} else if value.Valid {
+				at.RevokedAt = new(time.Time)
+				*at.RevokedAt = value.Time
+			}
 		default:
 			at.selectValues.Set(columns[i], values[i])
 		}
@@ -284,6 +321,24 @@ func (at *APIToken) String() string {
 	builder.WriteString(", ")
 	if v := at.LastUsedAt; v != nil {
 		builder.WriteString("last_used_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("is_active=")
+	builder.WriteString(fmt.Sprintf("%v", at.IsActive))
+	builder.WriteString(", ")
+	if v := at.RevokedReason; v != nil {
+		builder.WriteString("revoked_reason=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := at.RevokedBy; v != nil {
+		builder.WriteString("revoked_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := at.RevokedAt; v != nil {
+		builder.WriteString("revoked_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteByte(')')

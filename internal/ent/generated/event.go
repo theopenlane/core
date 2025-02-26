@@ -28,14 +28,24 @@ type Event struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// EventID holds the value of the "event_id" field.
+	// the unique identifier of the event as it relates to the source or outside system
 	EventID string `json:"event_id,omitempty"`
-	// CorrelationID holds the value of the "correlation_id" field.
+	// an identifier to correleate the event to another object or source, if needed
 	CorrelationID string `json:"correlation_id,omitempty"`
-	// EventType holds the value of the "event_type" field.
+	// the type of event
 	EventType string `json:"event_type,omitempty"`
-	// Metadata holds the value of the "metadata" field.
+	// event metadata
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the source of the event
+	Source string `json:"source,omitempty"`
+	// indicates if additional processing is required for the event
+	AdditionalProcessingRequired bool `json:"additional_processing_required,omitempty"`
+	// details about the additional processing required
+	AdditionalProcessingDetails string `json:"additional_processing_details,omitempty"`
+	// the listener ID who processed the event
+	ProcessedBy string `json:"processed_by,omitempty"`
+	// the time the event was processed
+	ProcessedAt time.Time `json:"processed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EventQuery when eager-loading is set.
 	Edges        EventEdges `json:"edges"`
@@ -66,11 +76,13 @@ type EventEdges struct {
 	Subscriber []*Subscriber `json:"subscriber,omitempty"`
 	// File holds the value of the file edge.
 	File []*File `json:"file,omitempty"`
+	// Orgsubscription holds the value of the orgsubscription edge.
+	Orgsubscription []*OrgSubscription `json:"orgsubscription,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
 	namedUser                map[string][]*User
 	namedGroup               map[string][]*Group
@@ -83,6 +95,7 @@ type EventEdges struct {
 	namedGroupmembership     map[string][]*GroupMembership
 	namedSubscriber          map[string][]*Subscriber
 	namedFile                map[string][]*File
+	namedOrgsubscription     map[string][]*OrgSubscription
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -184,6 +197,15 @@ func (e EventEdges) FileOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "file"}
 }
 
+// OrgsubscriptionOrErr returns the Orgsubscription value or an error if the edge
+// was not loaded in eager-loading.
+func (e EventEdges) OrgsubscriptionOrErr() ([]*OrgSubscription, error) {
+	if e.loadedTypes[11] {
+		return e.Orgsubscription, nil
+	}
+	return nil, &NotLoadedError{edge: "orgsubscription"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Event) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -191,9 +213,11 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case event.FieldTags, event.FieldMetadata:
 			values[i] = new([]byte)
-		case event.FieldID, event.FieldCreatedBy, event.FieldUpdatedBy, event.FieldEventID, event.FieldCorrelationID, event.FieldEventType:
+		case event.FieldAdditionalProcessingRequired:
+			values[i] = new(sql.NullBool)
+		case event.FieldID, event.FieldCreatedBy, event.FieldUpdatedBy, event.FieldEventID, event.FieldCorrelationID, event.FieldEventType, event.FieldSource, event.FieldAdditionalProcessingDetails, event.FieldProcessedBy:
 			values[i] = new(sql.NullString)
-		case event.FieldCreatedAt, event.FieldUpdatedAt:
+		case event.FieldCreatedAt, event.FieldUpdatedAt, event.FieldProcessedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -274,6 +298,36 @@ func (e *Event) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case event.FieldSource:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				e.Source = value.String
+			}
+		case event.FieldAdditionalProcessingRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_processing_required", values[i])
+			} else if value.Valid {
+				e.AdditionalProcessingRequired = value.Bool
+			}
+		case event.FieldAdditionalProcessingDetails:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_processing_details", values[i])
+			} else if value.Valid {
+				e.AdditionalProcessingDetails = value.String
+			}
+		case event.FieldProcessedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field processed_by", values[i])
+			} else if value.Valid {
+				e.ProcessedBy = value.String
+			}
+		case event.FieldProcessedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field processed_at", values[i])
+			} else if value.Valid {
+				e.ProcessedAt = value.Time
+			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -342,6 +396,11 @@ func (e *Event) QueryFile() *FileQuery {
 	return NewEventClient(e.config).QueryFile(e)
 }
 
+// QueryOrgsubscription queries the "orgsubscription" edge of the Event entity.
+func (e *Event) QueryOrgsubscription() *OrgSubscriptionQuery {
+	return NewEventClient(e.config).QueryOrgsubscription(e)
+}
+
 // Update returns a builder for updating this Event.
 // Note that you need to call Event.Unwrap() before calling this method if this Event
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -391,6 +450,21 @@ func (e *Event) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", e.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(e.Source)
+	builder.WriteString(", ")
+	builder.WriteString("additional_processing_required=")
+	builder.WriteString(fmt.Sprintf("%v", e.AdditionalProcessingRequired))
+	builder.WriteString(", ")
+	builder.WriteString("additional_processing_details=")
+	builder.WriteString(e.AdditionalProcessingDetails)
+	builder.WriteString(", ")
+	builder.WriteString("processed_by=")
+	builder.WriteString(e.ProcessedBy)
+	builder.WriteString(", ")
+	builder.WriteString("processed_at=")
+	builder.WriteString(e.ProcessedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -656,6 +730,30 @@ func (e *Event) appendNamedFile(name string, edges ...*File) {
 		e.Edges.namedFile[name] = []*File{}
 	} else {
 		e.Edges.namedFile[name] = append(e.Edges.namedFile[name], edges...)
+	}
+}
+
+// NamedOrgsubscription returns the Orgsubscription named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Event) NamedOrgsubscription(name string) ([]*OrgSubscription, error) {
+	if e.Edges.namedOrgsubscription == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedOrgsubscription[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Event) appendNamedOrgsubscription(name string, edges ...*OrgSubscription) {
+	if e.Edges.namedOrgsubscription == nil {
+		e.Edges.namedOrgsubscription = make(map[string][]*OrgSubscription)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedOrgsubscription[name] = []*OrgSubscription{}
+	} else {
+		e.Edges.namedOrgsubscription[name] = append(e.Edges.namedOrgsubscription[name], edges...)
 	}
 }
 

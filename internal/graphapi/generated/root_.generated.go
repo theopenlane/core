@@ -54,22 +54,26 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	APIToken struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		ExpiresAt   func(childComplexity int) int
-		ID          func(childComplexity int) int
-		LastUsedAt  func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Scopes      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Token       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		ExpiresAt     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IsActive      func(childComplexity int) int
+		LastUsedAt    func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		RevokedAt     func(childComplexity int) int
+		RevokedBy     func(childComplexity int) int
+		RevokedReason func(childComplexity int) int
+		Scopes        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Token         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	APITokenBulkCreatePayload struct {
@@ -753,27 +757,33 @@ type ComplexityRoot struct {
 	}
 
 	Event struct {
-		CorrelationID       func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		EventID             func(childComplexity int) int
-		EventType           func(childComplexity int) int
-		File                func(childComplexity int) int
-		Group               func(childComplexity int) int
-		Groupmembership     func(childComplexity int) int
-		Hush                func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		Integration         func(childComplexity int) int
-		Invite              func(childComplexity int) int
-		Metadata            func(childComplexity int) int
-		Organization        func(childComplexity int) int
-		Orgmembership       func(childComplexity int) int
-		PersonalAccessToken func(childComplexity int) int
-		Subscriber          func(childComplexity int) int
-		Tags                func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
-		User                func(childComplexity int) int
+		AdditionalProcessingDetails  func(childComplexity int) int
+		AdditionalProcessingRequired func(childComplexity int) int
+		CorrelationID                func(childComplexity int) int
+		CreatedAt                    func(childComplexity int) int
+		CreatedBy                    func(childComplexity int) int
+		EventID                      func(childComplexity int) int
+		EventType                    func(childComplexity int) int
+		File                         func(childComplexity int) int
+		Group                        func(childComplexity int) int
+		Groupmembership              func(childComplexity int) int
+		Hush                         func(childComplexity int) int
+		ID                           func(childComplexity int) int
+		Integration                  func(childComplexity int) int
+		Invite                       func(childComplexity int) int
+		Metadata                     func(childComplexity int) int
+		Organization                 func(childComplexity int) int
+		Orgmembership                func(childComplexity int) int
+		Orgsubscription              func(childComplexity int) int
+		PersonalAccessToken          func(childComplexity int) int
+		ProcessedAt                  func(childComplexity int) int
+		ProcessedBy                  func(childComplexity int) int
+		Source                       func(childComplexity int) int
+		Subscriber                   func(childComplexity int) int
+		Tags                         func(childComplexity int) int
+		UpdatedAt                    func(childComplexity int) int
+		UpdatedBy                    func(childComplexity int) int
+		User                         func(childComplexity int) int
 	}
 
 	EventBulkCreatePayload struct {
@@ -800,19 +810,24 @@ type ComplexityRoot struct {
 	}
 
 	EventHistory struct {
-		CorrelationID func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		EventID       func(childComplexity int) int
-		EventType     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Metadata      func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		AdditionalProcessingDetails  func(childComplexity int) int
+		AdditionalProcessingRequired func(childComplexity int) int
+		CorrelationID                func(childComplexity int) int
+		CreatedAt                    func(childComplexity int) int
+		CreatedBy                    func(childComplexity int) int
+		EventID                      func(childComplexity int) int
+		EventType                    func(childComplexity int) int
+		HistoryTime                  func(childComplexity int) int
+		ID                           func(childComplexity int) int
+		Metadata                     func(childComplexity int) int
+		Operation                    func(childComplexity int) int
+		ProcessedAt                  func(childComplexity int) int
+		ProcessedBy                  func(childComplexity int) int
+		Ref                          func(childComplexity int) int
+		Source                       func(childComplexity int) int
+		Tags                         func(childComplexity int) int
+		UpdatedAt                    func(childComplexity int) int
+		UpdatedBy                    func(childComplexity int) int
 	}
 
 	EventHistoryConnection struct {
@@ -1986,6 +2001,7 @@ type ComplexityRoot struct {
 		CreatedBy                func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
+		Events                   func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
 		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
@@ -2284,10 +2300,14 @@ type ComplexityRoot struct {
 		Events        func(childComplexity int) int
 		ExpiresAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
+		IsActive      func(childComplexity int) int
 		LastUsedAt    func(childComplexity int) int
 		Name          func(childComplexity int) int
 		Organizations func(childComplexity int) int
 		Owner         func(childComplexity int) int
+		RevokedAt     func(childComplexity int) int
+		RevokedBy     func(childComplexity int) int
+		RevokedReason func(childComplexity int) int
 		Scopes        func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Token         func(childComplexity int) int
@@ -3609,6 +3629,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.APIToken.ID(childComplexity), true
 
+	case "APIToken.isActive":
+		if e.complexity.APIToken.IsActive == nil {
+			break
+		}
+
+		return e.complexity.APIToken.IsActive(childComplexity), true
+
 	case "APIToken.lastUsedAt":
 		if e.complexity.APIToken.LastUsedAt == nil {
 			break
@@ -3636,6 +3663,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.APIToken.OwnerID(childComplexity), true
+
+	case "APIToken.revokedAt":
+		if e.complexity.APIToken.RevokedAt == nil {
+			break
+		}
+
+		return e.complexity.APIToken.RevokedAt(childComplexity), true
+
+	case "APIToken.revokedBy":
+		if e.complexity.APIToken.RevokedBy == nil {
+			break
+		}
+
+		return e.complexity.APIToken.RevokedBy(childComplexity), true
+
+	case "APIToken.revokedReason":
+		if e.complexity.APIToken.RevokedReason == nil {
+			break
+		}
+
+		return e.complexity.APIToken.RevokedReason(childComplexity), true
 
 	case "APIToken.scopes":
 		if e.complexity.APIToken.Scopes == nil {
@@ -6605,6 +6653,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EntityUpdatePayload.Entity(childComplexity), true
 
+	case "Event.additionalProcessingDetails":
+		if e.complexity.Event.AdditionalProcessingDetails == nil {
+			break
+		}
+
+		return e.complexity.Event.AdditionalProcessingDetails(childComplexity), true
+
+	case "Event.additionalProcessingRequired":
+		if e.complexity.Event.AdditionalProcessingRequired == nil {
+			break
+		}
+
+		return e.complexity.Event.AdditionalProcessingRequired(childComplexity), true
+
 	case "Event.correlationID":
 		if e.complexity.Event.CorrelationID == nil {
 			break
@@ -6710,12 +6772,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Event.Orgmembership(childComplexity), true
 
+	case "Event.orgsubscription":
+		if e.complexity.Event.Orgsubscription == nil {
+			break
+		}
+
+		return e.complexity.Event.Orgsubscription(childComplexity), true
+
 	case "Event.personalAccessToken":
 		if e.complexity.Event.PersonalAccessToken == nil {
 			break
 		}
 
 		return e.complexity.Event.PersonalAccessToken(childComplexity), true
+
+	case "Event.processedAt":
+		if e.complexity.Event.ProcessedAt == nil {
+			break
+		}
+
+		return e.complexity.Event.ProcessedAt(childComplexity), true
+
+	case "Event.processedBy":
+		if e.complexity.Event.ProcessedBy == nil {
+			break
+		}
+
+		return e.complexity.Event.ProcessedBy(childComplexity), true
+
+	case "Event.source":
+		if e.complexity.Event.Source == nil {
+			break
+		}
+
+		return e.complexity.Event.Source(childComplexity), true
 
 	case "Event.subscriber":
 		if e.complexity.Event.Subscriber == nil {
@@ -6808,6 +6898,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EventEdge.Node(childComplexity), true
 
+	case "EventHistory.additionalProcessingDetails":
+		if e.complexity.EventHistory.AdditionalProcessingDetails == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.AdditionalProcessingDetails(childComplexity), true
+
+	case "EventHistory.additionalProcessingRequired":
+		if e.complexity.EventHistory.AdditionalProcessingRequired == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.AdditionalProcessingRequired(childComplexity), true
+
 	case "EventHistory.correlationID":
 		if e.complexity.EventHistory.CorrelationID == nil {
 			break
@@ -6871,12 +6975,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EventHistory.Operation(childComplexity), true
 
+	case "EventHistory.processedAt":
+		if e.complexity.EventHistory.ProcessedAt == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.ProcessedAt(childComplexity), true
+
+	case "EventHistory.processedBy":
+		if e.complexity.EventHistory.ProcessedBy == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.ProcessedBy(childComplexity), true
+
 	case "EventHistory.ref":
 		if e.complexity.EventHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.EventHistory.Ref(childComplexity), true
+
+	case "EventHistory.source":
+		if e.complexity.EventHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.Source(childComplexity), true
 
 	case "EventHistory.tags":
 		if e.complexity.EventHistory.Tags == nil {
@@ -13335,6 +13460,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.DeletedBy(childComplexity), true
 
+	case "OrgSubscription.events":
+		if e.complexity.OrgSubscription.Events == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.Events(childComplexity), true
+
 	case "OrgSubscription.expiresAt":
 		if e.complexity.OrgSubscription.ExpiresAt == nil {
 			break
@@ -14796,6 +14928,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonalAccessToken.ID(childComplexity), true
 
+	case "PersonalAccessToken.isActive":
+		if e.complexity.PersonalAccessToken.IsActive == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.IsActive(childComplexity), true
+
 	case "PersonalAccessToken.lastUsedAt":
 		if e.complexity.PersonalAccessToken.LastUsedAt == nil {
 			break
@@ -14823,6 +14962,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonalAccessToken.Owner(childComplexity), true
+
+	case "PersonalAccessToken.revokedAt":
+		if e.complexity.PersonalAccessToken.RevokedAt == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.RevokedAt(childComplexity), true
+
+	case "PersonalAccessToken.revokedBy":
+		if e.complexity.PersonalAccessToken.RevokedBy == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.RevokedBy(childComplexity), true
+
+	case "PersonalAccessToken.revokedReason":
+		if e.complexity.PersonalAccessToken.RevokedReason == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.RevokedReason(childComplexity), true
 
 	case "PersonalAccessToken.scopes":
 		if e.complexity.PersonalAccessToken.Scopes == nil {
@@ -22949,6 +23109,22 @@ type APIToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   owner: Organization
 }
 """
@@ -23155,6 +23331,62 @@ input APITokenWhereInput {
   lastUsedAtLTE: Time
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  isActiveIsNil: Boolean
+  isActiveNotNil: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonGT: String
+  revokedReasonGTE: String
+  revokedReasonLT: String
+  revokedReasonLTE: String
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByGT: String
+  revokedByGTE: String
+  revokedByLT: String
+  revokedByLTE: String
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtNEQ: Time
+  revokedAtIn: [Time!]
+  revokedAtNotIn: [Time!]
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -26654,6 +26886,22 @@ input CreateAPITokenInput {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   ownerID: ID
 }
 """
@@ -26967,10 +27215,42 @@ input CreateEventInput {
   tags associated with the object
   """
   tags: [String!]
-  eventID: String
+  """
+  the unique identifier of the event as it relates to the source or outside system
+  """
+  eventID: String!
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
-  eventType: String!
+  """
+  the type of event
+  """
+  eventType: String
+  """
+  event metadata
+  """
   metadata: Map
+  """
+  the source of the event
+  """
+  source: String
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  """
+  the time the event was processed
+  """
+  processedAt: Time
   userIDs: [ID!]
   groupIDs: [ID!]
   integrationIDs: [ID!]
@@ -26980,6 +27260,7 @@ input CreateEventInput {
   hushIDs: [ID!]
   subscriberIDs: [ID!]
   fileIDs: [ID!]
+  orgsubscriptionIDs: [ID!]
 }
 """
 CreateEvidenceInput is used for create Evidence object.
@@ -27557,6 +27838,22 @@ input CreatePersonalAccessTokenInput {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   ownerID: ID!
   organizationIDs: [ID!]
   eventIDs: [ID!]
@@ -29763,10 +30060,42 @@ type Event implements Node {
   tags associated with the object
   """
   tags: [String!]
-  eventID: String
+  """
+  the unique identifier of the event as it relates to the source or outside system
+  """
+  eventID: String!
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
-  eventType: String!
+  """
+  the type of event
+  """
+  eventType: String
+  """
+  event metadata
+  """
   metadata: Map
+  """
+  the source of the event
+  """
+  source: String
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  """
+  the time the event was processed
+  """
+  processedAt: Time
   user: [User!]
   group: [Group!]
   integration: [Integration!]
@@ -29778,6 +30107,7 @@ type Event implements Node {
   groupmembership: [GroupMembership!]
   subscriber: [Subscriber!]
   file: [File!]
+  orgsubscription: [OrgSubscription!]
 }
 """
 A connection to a list of items.
@@ -29822,10 +30152,42 @@ type EventHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
-  eventID: String
+  """
+  the unique identifier of the event as it relates to the source or outside system
+  """
+  eventID: String!
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
-  eventType: String!
+  """
+  the type of event
+  """
+  eventType: String
+  """
+  event metadata
+  """
   metadata: Map
+  """
+  the source of the event
+  """
+  source: String
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  """
+  the time the event was processed
+  """
+  processedAt: Time
 }
 """
 A connection to a list of items.
@@ -29998,8 +30360,6 @@ input EventHistoryWhereInput {
   eventIDContains: String
   eventIDHasPrefix: String
   eventIDHasSuffix: String
-  eventIDIsNil: Boolean
-  eventIDNotNil: Boolean
   eventIDEqualFold: String
   eventIDContainsFold: String
   """
@@ -30034,8 +30394,84 @@ input EventHistoryWhereInput {
   eventTypeContains: String
   eventTypeHasPrefix: String
   eventTypeHasSuffix: String
+  eventTypeIsNil: Boolean
+  eventTypeNotNil: Boolean
   eventTypeEqualFold: String
   eventTypeContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  additional_processing_required field predicates
+  """
+  additionalProcessingRequired: Boolean
+  additionalProcessingRequiredNEQ: Boolean
+  additionalProcessingRequiredIsNil: Boolean
+  additionalProcessingRequiredNotNil: Boolean
+  """
+  additional_processing_details field predicates
+  """
+  additionalProcessingDetails: String
+  additionalProcessingDetailsNEQ: String
+  additionalProcessingDetailsIn: [String!]
+  additionalProcessingDetailsNotIn: [String!]
+  additionalProcessingDetailsGT: String
+  additionalProcessingDetailsGTE: String
+  additionalProcessingDetailsLT: String
+  additionalProcessingDetailsLTE: String
+  additionalProcessingDetailsContains: String
+  additionalProcessingDetailsHasPrefix: String
+  additionalProcessingDetailsHasSuffix: String
+  additionalProcessingDetailsIsNil: Boolean
+  additionalProcessingDetailsNotNil: Boolean
+  additionalProcessingDetailsEqualFold: String
+  additionalProcessingDetailsContainsFold: String
+  """
+  processed_by field predicates
+  """
+  processedBy: String
+  processedByNEQ: String
+  processedByIn: [String!]
+  processedByNotIn: [String!]
+  processedByGT: String
+  processedByGTE: String
+  processedByLT: String
+  processedByLTE: String
+  processedByContains: String
+  processedByHasPrefix: String
+  processedByHasSuffix: String
+  processedByIsNil: Boolean
+  processedByNotNil: Boolean
+  processedByEqualFold: String
+  processedByContainsFold: String
+  """
+  processed_at field predicates
+  """
+  processedAt: Time
+  processedAtNEQ: Time
+  processedAtIn: [Time!]
+  processedAtNotIn: [Time!]
+  processedAtGT: Time
+  processedAtGTE: Time
+  processedAtLT: Time
+  processedAtLTE: Time
+  processedAtIsNil: Boolean
+  processedAtNotNil: Boolean
 }
 """
 EventWhereInput is used for filtering Event objects.
@@ -30134,8 +30570,6 @@ input EventWhereInput {
   eventIDContains: String
   eventIDHasPrefix: String
   eventIDHasSuffix: String
-  eventIDIsNil: Boolean
-  eventIDNotNil: Boolean
   eventIDEqualFold: String
   eventIDContainsFold: String
   """
@@ -30170,8 +30604,84 @@ input EventWhereInput {
   eventTypeContains: String
   eventTypeHasPrefix: String
   eventTypeHasSuffix: String
+  eventTypeIsNil: Boolean
+  eventTypeNotNil: Boolean
   eventTypeEqualFold: String
   eventTypeContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  additional_processing_required field predicates
+  """
+  additionalProcessingRequired: Boolean
+  additionalProcessingRequiredNEQ: Boolean
+  additionalProcessingRequiredIsNil: Boolean
+  additionalProcessingRequiredNotNil: Boolean
+  """
+  additional_processing_details field predicates
+  """
+  additionalProcessingDetails: String
+  additionalProcessingDetailsNEQ: String
+  additionalProcessingDetailsIn: [String!]
+  additionalProcessingDetailsNotIn: [String!]
+  additionalProcessingDetailsGT: String
+  additionalProcessingDetailsGTE: String
+  additionalProcessingDetailsLT: String
+  additionalProcessingDetailsLTE: String
+  additionalProcessingDetailsContains: String
+  additionalProcessingDetailsHasPrefix: String
+  additionalProcessingDetailsHasSuffix: String
+  additionalProcessingDetailsIsNil: Boolean
+  additionalProcessingDetailsNotNil: Boolean
+  additionalProcessingDetailsEqualFold: String
+  additionalProcessingDetailsContainsFold: String
+  """
+  processed_by field predicates
+  """
+  processedBy: String
+  processedByNEQ: String
+  processedByIn: [String!]
+  processedByNotIn: [String!]
+  processedByGT: String
+  processedByGTE: String
+  processedByLT: String
+  processedByLTE: String
+  processedByContains: String
+  processedByHasPrefix: String
+  processedByHasSuffix: String
+  processedByIsNil: Boolean
+  processedByNotNil: Boolean
+  processedByEqualFold: String
+  processedByContainsFold: String
+  """
+  processed_at field predicates
+  """
+  processedAt: Time
+  processedAtNEQ: Time
+  processedAtIn: [Time!]
+  processedAtNotIn: [Time!]
+  processedAtGT: Time
+  processedAtGTE: Time
+  processedAtLT: Time
+  processedAtLTE: Time
+  processedAtIsNil: Boolean
+  processedAtNotNil: Boolean
   """
   user edge predicates
   """
@@ -30227,6 +30737,11 @@ input EventWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  orgsubscription edge predicates
+  """
+  hasOrgsubscription: Boolean
+  hasOrgsubscriptionWith: [OrgSubscriptionWhereInput!]
 }
 type Evidence implements Node {
   id: ID!
@@ -37742,6 +38257,7 @@ type OrgSubscription implements Node {
   """
   featureLookupKeys: [String!]
   owner: Organization
+  events: [Event!]
 }
 """
 A connection to a list of items.
@@ -38393,6 +38909,11 @@ input OrgSubscriptionWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  events edge predicates
+  """
+  hasEvents: Boolean
+  hasEventsWith: [EventWhereInput!]
 }
 type Organization implements Node {
   id: ID!
@@ -40072,6 +40593,22 @@ type PersonalAccessToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   owner: User!
   """
   the organization(s) the token is associated with
@@ -40265,6 +40802,62 @@ input PersonalAccessTokenWhereInput {
   lastUsedAtLTE: Time
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  isActiveIsNil: Boolean
+  isActiveNotNil: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonGT: String
+  revokedReasonGTE: String
+  revokedReasonLT: String
+  revokedReasonLTE: String
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByGT: String
+  revokedByGTE: String
+  revokedByLT: String
+  revokedByLTE: String
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtNEQ: Time
+  revokedAtIn: [Time!]
+  revokedAtNotIn: [Time!]
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -49082,6 +49675,26 @@ input UpdateAPITokenInput {
   clearScopes: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  clearIsActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  clearRevokedBy: Boolean
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -49536,13 +50149,46 @@ input UpdateEventInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
-  eventID: String
-  clearEventID: Boolean
+  """
+  an identifier to correleate the event to another object or source, if needed
+  """
   correlationID: String
   clearCorrelationID: Boolean
+  """
+  the type of event
+  """
   eventType: String
+  clearEventType: Boolean
+  """
+  event metadata
+  """
   metadata: Map
   clearMetadata: Boolean
+  """
+  the source of the event
+  """
+  source: String
+  clearSource: Boolean
+  """
+  indicates if additional processing is required for the event
+  """
+  additionalProcessingRequired: Boolean
+  clearAdditionalProcessingRequired: Boolean
+  """
+  details about the additional processing required
+  """
+  additionalProcessingDetails: String
+  clearAdditionalProcessingDetails: Boolean
+  """
+  the listener ID who processed the event
+  """
+  processedBy: String
+  clearProcessedBy: Boolean
+  """
+  the time the event was processed
+  """
+  processedAt: Time
+  clearProcessedAt: Boolean
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUser: Boolean
@@ -49570,6 +50216,9 @@ input UpdateEventInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFile: Boolean
+  addOrgsubscriptionIDs: [ID!]
+  removeOrgsubscriptionIDs: [ID!]
+  clearOrgsubscription: Boolean
 }
 """
 UpdateEvidenceInput is used for update Evidence object.
@@ -50376,6 +51025,26 @@ input UpdatePersonalAccessTokenInput {
   clearScopes: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  clearIsActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  clearRevokedBy: Boolean
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganizations: Boolean

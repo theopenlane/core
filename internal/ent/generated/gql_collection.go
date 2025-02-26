@@ -188,6 +188,26 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, apitoken.FieldLastUsedAt)
 				fieldSeen[apitoken.FieldLastUsedAt] = struct{}{}
 			}
+		case "isActive":
+			if _, ok := fieldSeen[apitoken.FieldIsActive]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldIsActive)
+				fieldSeen[apitoken.FieldIsActive] = struct{}{}
+			}
+		case "revokedReason":
+			if _, ok := fieldSeen[apitoken.FieldRevokedReason]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldRevokedReason)
+				fieldSeen[apitoken.FieldRevokedReason] = struct{}{}
+			}
+		case "revokedBy":
+			if _, ok := fieldSeen[apitoken.FieldRevokedBy]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldRevokedBy)
+				fieldSeen[apitoken.FieldRevokedBy] = struct{}{}
+			}
+		case "revokedAt":
+			if _, ok := fieldSeen[apitoken.FieldRevokedAt]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldRevokedAt)
+				fieldSeen[apitoken.FieldRevokedAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -3144,6 +3164,19 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			e.WithNamedFile(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
+
+		case "orgsubscription":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrgSubscriptionClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, orgsubscriptionImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedOrgsubscription(alias, func(wq *OrgSubscriptionQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[event.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, event.FieldCreatedAt)
@@ -3188,6 +3221,31 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[event.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, event.FieldMetadata)
 				fieldSeen[event.FieldMetadata] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[event.FieldSource]; !ok {
+				selectedFields = append(selectedFields, event.FieldSource)
+				fieldSeen[event.FieldSource] = struct{}{}
+			}
+		case "additionalProcessingRequired":
+			if _, ok := fieldSeen[event.FieldAdditionalProcessingRequired]; !ok {
+				selectedFields = append(selectedFields, event.FieldAdditionalProcessingRequired)
+				fieldSeen[event.FieldAdditionalProcessingRequired] = struct{}{}
+			}
+		case "additionalProcessingDetails":
+			if _, ok := fieldSeen[event.FieldAdditionalProcessingDetails]; !ok {
+				selectedFields = append(selectedFields, event.FieldAdditionalProcessingDetails)
+				fieldSeen[event.FieldAdditionalProcessingDetails] = struct{}{}
+			}
+		case "processedBy":
+			if _, ok := fieldSeen[event.FieldProcessedBy]; !ok {
+				selectedFields = append(selectedFields, event.FieldProcessedBy)
+				fieldSeen[event.FieldProcessedBy] = struct{}{}
+			}
+		case "processedAt":
+			if _, ok := fieldSeen[event.FieldProcessedAt]; !ok {
+				selectedFields = append(selectedFields, event.FieldProcessedAt)
+				fieldSeen[event.FieldProcessedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3310,6 +3368,31 @@ func (eh *EventHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[eventhistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, eventhistory.FieldMetadata)
 				fieldSeen[eventhistory.FieldMetadata] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[eventhistory.FieldSource]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldSource)
+				fieldSeen[eventhistory.FieldSource] = struct{}{}
+			}
+		case "additionalProcessingRequired":
+			if _, ok := fieldSeen[eventhistory.FieldAdditionalProcessingRequired]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldAdditionalProcessingRequired)
+				fieldSeen[eventhistory.FieldAdditionalProcessingRequired] = struct{}{}
+			}
+		case "additionalProcessingDetails":
+			if _, ok := fieldSeen[eventhistory.FieldAdditionalProcessingDetails]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldAdditionalProcessingDetails)
+				fieldSeen[eventhistory.FieldAdditionalProcessingDetails] = struct{}{}
+			}
+		case "processedBy":
+			if _, ok := fieldSeen[eventhistory.FieldProcessedBy]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldProcessedBy)
+				fieldSeen[eventhistory.FieldProcessedBy] = struct{}{}
+			}
+		case "processedAt":
+			if _, ok := fieldSeen[eventhistory.FieldProcessedAt]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldProcessedAt)
+				fieldSeen[eventhistory.FieldProcessedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -7812,6 +7895,19 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, orgsubscription.FieldOwnerID)
 				fieldSeen[orgsubscription.FieldOwnerID] = struct{}{}
 			}
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: os.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+				return err
+			}
+			os.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[orgsubscription.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldCreatedAt)
@@ -9517,6 +9613,26 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[personalaccesstoken.FieldLastUsedAt]; !ok {
 				selectedFields = append(selectedFields, personalaccesstoken.FieldLastUsedAt)
 				fieldSeen[personalaccesstoken.FieldLastUsedAt] = struct{}{}
+			}
+		case "isActive":
+			if _, ok := fieldSeen[personalaccesstoken.FieldIsActive]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldIsActive)
+				fieldSeen[personalaccesstoken.FieldIsActive] = struct{}{}
+			}
+		case "revokedReason":
+			if _, ok := fieldSeen[personalaccesstoken.FieldRevokedReason]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldRevokedReason)
+				fieldSeen[personalaccesstoken.FieldRevokedReason] = struct{}{}
+			}
+		case "revokedBy":
+			if _, ok := fieldSeen[personalaccesstoken.FieldRevokedBy]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldRevokedBy)
+				fieldSeen[personalaccesstoken.FieldRevokedBy] = struct{}{}
+			}
+		case "revokedAt":
+			if _, ok := fieldSeen[personalaccesstoken.FieldRevokedAt]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldRevokedAt)
+				fieldSeen[personalaccesstoken.FieldRevokedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":

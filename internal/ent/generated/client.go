@@ -4410,6 +4410,25 @@ func (c *EventClient) QueryFile(e *Event) *FileQuery {
 	return query
 }
 
+// QueryOrgsubscription queries the orgsubscription edge of a Event.
+func (c *EventClient) QueryOrgsubscription(e *Event) *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, id),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgsubscriptionTable, event.OrgsubscriptionPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *EventClient) Hooks() []Hook {
 	hooks := c.hooks.Event
@@ -9533,6 +9552,25 @@ func (c *OrgSubscriptionClient) QueryOwner(os *OrgSubscription) *OrganizationQue
 		schemaConfig := os.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryEvents(os *OrgSubscription) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, orgsubscription.EventsTable, orgsubscription.EventsPrimaryKey...),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
 	}

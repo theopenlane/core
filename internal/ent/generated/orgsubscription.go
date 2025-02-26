@@ -68,11 +68,15 @@ type OrgSubscription struct {
 type OrgSubscriptionEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Events holds the value of the events edge.
+	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
+
+	namedEvents map[string][]*Event
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -84,6 +88,15 @@ func (e OrgSubscriptionEdges) OwnerOrErr() (*Organization, error) {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// EventsOrErr returns the Events value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrgSubscriptionEdges) EventsOrErr() ([]*Event, error) {
+	if e.loadedTypes[1] {
+		return e.Events, nil
+	}
+	return nil, &NotLoadedError{edge: "events"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -255,6 +268,11 @@ func (os *OrgSubscription) QueryOwner() *OrganizationQuery {
 	return NewOrgSubscriptionClient(os.config).QueryOwner(os)
 }
 
+// QueryEvents queries the "events" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryEvents() *EventQuery {
+	return NewOrgSubscriptionClient(os.config).QueryEvents(os)
+}
+
 // Update returns a builder for updating this OrgSubscription.
 // Note that you need to call OrgSubscription.Unwrap() before calling this method if this OrgSubscription
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -335,6 +353,30 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString(fmt.Sprintf("%v", os.FeatureLookupKeys))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedEvents returns the Events named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (os *OrgSubscription) NamedEvents(name string) ([]*Event, error) {
+	if os.Edges.namedEvents == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := os.Edges.namedEvents[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (os *OrgSubscription) appendNamedEvents(name string, edges ...*Event) {
+	if os.Edges.namedEvents == nil {
+		os.Edges.namedEvents = make(map[string][]*Event)
+	}
+	if len(edges) == 0 {
+		os.Edges.namedEvents[name] = []*Event{}
+	} else {
+		os.Edges.namedEvents[name] = append(os.Edges.namedEvents[name], edges...)
+	}
 }
 
 // OrgSubscriptions is a parsable slice of OrgSubscription.

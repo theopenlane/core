@@ -235,6 +235,86 @@ func (atu *APITokenUpdate) ClearLastUsedAt() *APITokenUpdate {
 	return atu
 }
 
+// SetIsActive sets the "is_active" field.
+func (atu *APITokenUpdate) SetIsActive(b bool) *APITokenUpdate {
+	atu.mutation.SetIsActive(b)
+	return atu
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableIsActive(b *bool) *APITokenUpdate {
+	if b != nil {
+		atu.SetIsActive(*b)
+	}
+	return atu
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (atu *APITokenUpdate) ClearIsActive() *APITokenUpdate {
+	atu.mutation.ClearIsActive()
+	return atu
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (atu *APITokenUpdate) SetRevokedReason(s string) *APITokenUpdate {
+	atu.mutation.SetRevokedReason(s)
+	return atu
+}
+
+// SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableRevokedReason(s *string) *APITokenUpdate {
+	if s != nil {
+		atu.SetRevokedReason(*s)
+	}
+	return atu
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (atu *APITokenUpdate) ClearRevokedReason() *APITokenUpdate {
+	atu.mutation.ClearRevokedReason()
+	return atu
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (atu *APITokenUpdate) SetRevokedBy(s string) *APITokenUpdate {
+	atu.mutation.SetRevokedBy(s)
+	return atu
+}
+
+// SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableRevokedBy(s *string) *APITokenUpdate {
+	if s != nil {
+		atu.SetRevokedBy(*s)
+	}
+	return atu
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (atu *APITokenUpdate) ClearRevokedBy() *APITokenUpdate {
+	atu.mutation.ClearRevokedBy()
+	return atu
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (atu *APITokenUpdate) SetRevokedAt(t time.Time) *APITokenUpdate {
+	atu.mutation.SetRevokedAt(t)
+	return atu
+}
+
+// SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableRevokedAt(t *time.Time) *APITokenUpdate {
+	if t != nil {
+		atu.SetRevokedAt(*t)
+	}
+	return atu
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (atu *APITokenUpdate) ClearRevokedAt() *APITokenUpdate {
+	atu.mutation.ClearRevokedAt()
+	return atu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (atu *APITokenUpdate) SetOwner(o *Organization) *APITokenUpdate {
 	return atu.SetOwnerID(o.ID)
@@ -398,6 +478,30 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if atu.mutation.LastUsedAtCleared() {
 		_spec.ClearField(apitoken.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := atu.mutation.IsActive(); ok {
+		_spec.SetField(apitoken.FieldIsActive, field.TypeBool, value)
+	}
+	if atu.mutation.IsActiveCleared() {
+		_spec.ClearField(apitoken.FieldIsActive, field.TypeBool)
+	}
+	if value, ok := atu.mutation.RevokedReason(); ok {
+		_spec.SetField(apitoken.FieldRevokedReason, field.TypeString, value)
+	}
+	if atu.mutation.RevokedReasonCleared() {
+		_spec.ClearField(apitoken.FieldRevokedReason, field.TypeString)
+	}
+	if value, ok := atu.mutation.RevokedBy(); ok {
+		_spec.SetField(apitoken.FieldRevokedBy, field.TypeString, value)
+	}
+	if atu.mutation.RevokedByCleared() {
+		_spec.ClearField(apitoken.FieldRevokedBy, field.TypeString)
+	}
+	if value, ok := atu.mutation.RevokedAt(); ok {
+		_spec.SetField(apitoken.FieldRevokedAt, field.TypeTime, value)
+	}
+	if atu.mutation.RevokedAtCleared() {
+		_spec.ClearField(apitoken.FieldRevokedAt, field.TypeTime)
 	}
 	if atu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -656,6 +760,86 @@ func (atuo *APITokenUpdateOne) ClearLastUsedAt() *APITokenUpdateOne {
 	return atuo
 }
 
+// SetIsActive sets the "is_active" field.
+func (atuo *APITokenUpdateOne) SetIsActive(b bool) *APITokenUpdateOne {
+	atuo.mutation.SetIsActive(b)
+	return atuo
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableIsActive(b *bool) *APITokenUpdateOne {
+	if b != nil {
+		atuo.SetIsActive(*b)
+	}
+	return atuo
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (atuo *APITokenUpdateOne) ClearIsActive() *APITokenUpdateOne {
+	atuo.mutation.ClearIsActive()
+	return atuo
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (atuo *APITokenUpdateOne) SetRevokedReason(s string) *APITokenUpdateOne {
+	atuo.mutation.SetRevokedReason(s)
+	return atuo
+}
+
+// SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableRevokedReason(s *string) *APITokenUpdateOne {
+	if s != nil {
+		atuo.SetRevokedReason(*s)
+	}
+	return atuo
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (atuo *APITokenUpdateOne) ClearRevokedReason() *APITokenUpdateOne {
+	atuo.mutation.ClearRevokedReason()
+	return atuo
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (atuo *APITokenUpdateOne) SetRevokedBy(s string) *APITokenUpdateOne {
+	atuo.mutation.SetRevokedBy(s)
+	return atuo
+}
+
+// SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableRevokedBy(s *string) *APITokenUpdateOne {
+	if s != nil {
+		atuo.SetRevokedBy(*s)
+	}
+	return atuo
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (atuo *APITokenUpdateOne) ClearRevokedBy() *APITokenUpdateOne {
+	atuo.mutation.ClearRevokedBy()
+	return atuo
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (atuo *APITokenUpdateOne) SetRevokedAt(t time.Time) *APITokenUpdateOne {
+	atuo.mutation.SetRevokedAt(t)
+	return atuo
+}
+
+// SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableRevokedAt(t *time.Time) *APITokenUpdateOne {
+	if t != nil {
+		atuo.SetRevokedAt(*t)
+	}
+	return atuo
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (atuo *APITokenUpdateOne) ClearRevokedAt() *APITokenUpdateOne {
+	atuo.mutation.ClearRevokedAt()
+	return atuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (atuo *APITokenUpdateOne) SetOwner(o *Organization) *APITokenUpdateOne {
 	return atuo.SetOwnerID(o.ID)
@@ -849,6 +1033,30 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 	}
 	if atuo.mutation.LastUsedAtCleared() {
 		_spec.ClearField(apitoken.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := atuo.mutation.IsActive(); ok {
+		_spec.SetField(apitoken.FieldIsActive, field.TypeBool, value)
+	}
+	if atuo.mutation.IsActiveCleared() {
+		_spec.ClearField(apitoken.FieldIsActive, field.TypeBool)
+	}
+	if value, ok := atuo.mutation.RevokedReason(); ok {
+		_spec.SetField(apitoken.FieldRevokedReason, field.TypeString, value)
+	}
+	if atuo.mutation.RevokedReasonCleared() {
+		_spec.ClearField(apitoken.FieldRevokedReason, field.TypeString)
+	}
+	if value, ok := atuo.mutation.RevokedBy(); ok {
+		_spec.SetField(apitoken.FieldRevokedBy, field.TypeString, value)
+	}
+	if atuo.mutation.RevokedByCleared() {
+		_spec.ClearField(apitoken.FieldRevokedBy, field.TypeString)
+	}
+	if value, ok := atuo.mutation.RevokedAt(); ok {
+		_spec.SetField(apitoken.FieldRevokedAt, field.TypeTime, value)
+	}
+	if atuo.mutation.RevokedAtCleared() {
+		_spec.ClearField(apitoken.FieldRevokedAt, field.TypeTime)
 	}
 	if atuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

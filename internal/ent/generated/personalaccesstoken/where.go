@@ -127,6 +127,26 @@ func LastUsedAt(v time.Time) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldEQ(FieldLastUsedAt, v))
 }
 
+// IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
+func IsActive(v bool) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldIsActive, v))
+}
+
+// RevokedReason applies equality check predicate on the "revoked_reason" field. It's identical to RevokedReasonEQ.
+func RevokedReason(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldRevokedReason, v))
+}
+
+// RevokedBy applies equality check predicate on the "revoked_by" field. It's identical to RevokedByEQ.
+func RevokedBy(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldRevokedBy, v))
+}
+
+// RevokedAt applies equality check predicate on the "revoked_at" field. It's identical to RevokedAtEQ.
+func RevokedAt(v time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldRevokedAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldEQ(FieldCreatedAt, v))
@@ -890,6 +910,226 @@ func LastUsedAtIsNil() predicate.PersonalAccessToken {
 // LastUsedAtNotNil applies the NotNil predicate on the "last_used_at" field.
 func LastUsedAtNotNil() predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldNotNull(FieldLastUsedAt))
+}
+
+// IsActiveEQ applies the EQ predicate on the "is_active" field.
+func IsActiveEQ(v bool) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldIsActive, v))
+}
+
+// IsActiveNEQ applies the NEQ predicate on the "is_active" field.
+func IsActiveNEQ(v bool) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNEQ(FieldIsActive, v))
+}
+
+// IsActiveIsNil applies the IsNil predicate on the "is_active" field.
+func IsActiveIsNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIsNull(FieldIsActive))
+}
+
+// IsActiveNotNil applies the NotNil predicate on the "is_active" field.
+func IsActiveNotNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotNull(FieldIsActive))
+}
+
+// RevokedReasonEQ applies the EQ predicate on the "revoked_reason" field.
+func RevokedReasonEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldRevokedReason, v))
+}
+
+// RevokedReasonNEQ applies the NEQ predicate on the "revoked_reason" field.
+func RevokedReasonNEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNEQ(FieldRevokedReason, v))
+}
+
+// RevokedReasonIn applies the In predicate on the "revoked_reason" field.
+func RevokedReasonIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIn(FieldRevokedReason, vs...))
+}
+
+// RevokedReasonNotIn applies the NotIn predicate on the "revoked_reason" field.
+func RevokedReasonNotIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotIn(FieldRevokedReason, vs...))
+}
+
+// RevokedReasonGT applies the GT predicate on the "revoked_reason" field.
+func RevokedReasonGT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGT(FieldRevokedReason, v))
+}
+
+// RevokedReasonGTE applies the GTE predicate on the "revoked_reason" field.
+func RevokedReasonGTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGTE(FieldRevokedReason, v))
+}
+
+// RevokedReasonLT applies the LT predicate on the "revoked_reason" field.
+func RevokedReasonLT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLT(FieldRevokedReason, v))
+}
+
+// RevokedReasonLTE applies the LTE predicate on the "revoked_reason" field.
+func RevokedReasonLTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLTE(FieldRevokedReason, v))
+}
+
+// RevokedReasonContains applies the Contains predicate on the "revoked_reason" field.
+func RevokedReasonContains(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContains(FieldRevokedReason, v))
+}
+
+// RevokedReasonHasPrefix applies the HasPrefix predicate on the "revoked_reason" field.
+func RevokedReasonHasPrefix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasPrefix(FieldRevokedReason, v))
+}
+
+// RevokedReasonHasSuffix applies the HasSuffix predicate on the "revoked_reason" field.
+func RevokedReasonHasSuffix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasSuffix(FieldRevokedReason, v))
+}
+
+// RevokedReasonIsNil applies the IsNil predicate on the "revoked_reason" field.
+func RevokedReasonIsNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIsNull(FieldRevokedReason))
+}
+
+// RevokedReasonNotNil applies the NotNil predicate on the "revoked_reason" field.
+func RevokedReasonNotNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotNull(FieldRevokedReason))
+}
+
+// RevokedReasonEqualFold applies the EqualFold predicate on the "revoked_reason" field.
+func RevokedReasonEqualFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEqualFold(FieldRevokedReason, v))
+}
+
+// RevokedReasonContainsFold applies the ContainsFold predicate on the "revoked_reason" field.
+func RevokedReasonContainsFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContainsFold(FieldRevokedReason, v))
+}
+
+// RevokedByEQ applies the EQ predicate on the "revoked_by" field.
+func RevokedByEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldRevokedBy, v))
+}
+
+// RevokedByNEQ applies the NEQ predicate on the "revoked_by" field.
+func RevokedByNEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNEQ(FieldRevokedBy, v))
+}
+
+// RevokedByIn applies the In predicate on the "revoked_by" field.
+func RevokedByIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIn(FieldRevokedBy, vs...))
+}
+
+// RevokedByNotIn applies the NotIn predicate on the "revoked_by" field.
+func RevokedByNotIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotIn(FieldRevokedBy, vs...))
+}
+
+// RevokedByGT applies the GT predicate on the "revoked_by" field.
+func RevokedByGT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGT(FieldRevokedBy, v))
+}
+
+// RevokedByGTE applies the GTE predicate on the "revoked_by" field.
+func RevokedByGTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGTE(FieldRevokedBy, v))
+}
+
+// RevokedByLT applies the LT predicate on the "revoked_by" field.
+func RevokedByLT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLT(FieldRevokedBy, v))
+}
+
+// RevokedByLTE applies the LTE predicate on the "revoked_by" field.
+func RevokedByLTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLTE(FieldRevokedBy, v))
+}
+
+// RevokedByContains applies the Contains predicate on the "revoked_by" field.
+func RevokedByContains(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContains(FieldRevokedBy, v))
+}
+
+// RevokedByHasPrefix applies the HasPrefix predicate on the "revoked_by" field.
+func RevokedByHasPrefix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasPrefix(FieldRevokedBy, v))
+}
+
+// RevokedByHasSuffix applies the HasSuffix predicate on the "revoked_by" field.
+func RevokedByHasSuffix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasSuffix(FieldRevokedBy, v))
+}
+
+// RevokedByIsNil applies the IsNil predicate on the "revoked_by" field.
+func RevokedByIsNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIsNull(FieldRevokedBy))
+}
+
+// RevokedByNotNil applies the NotNil predicate on the "revoked_by" field.
+func RevokedByNotNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotNull(FieldRevokedBy))
+}
+
+// RevokedByEqualFold applies the EqualFold predicate on the "revoked_by" field.
+func RevokedByEqualFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEqualFold(FieldRevokedBy, v))
+}
+
+// RevokedByContainsFold applies the ContainsFold predicate on the "revoked_by" field.
+func RevokedByContainsFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContainsFold(FieldRevokedBy, v))
+}
+
+// RevokedAtEQ applies the EQ predicate on the "revoked_at" field.
+func RevokedAtEQ(v time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldRevokedAt, v))
+}
+
+// RevokedAtNEQ applies the NEQ predicate on the "revoked_at" field.
+func RevokedAtNEQ(v time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNEQ(FieldRevokedAt, v))
+}
+
+// RevokedAtIn applies the In predicate on the "revoked_at" field.
+func RevokedAtIn(vs ...time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIn(FieldRevokedAt, vs...))
+}
+
+// RevokedAtNotIn applies the NotIn predicate on the "revoked_at" field.
+func RevokedAtNotIn(vs ...time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotIn(FieldRevokedAt, vs...))
+}
+
+// RevokedAtGT applies the GT predicate on the "revoked_at" field.
+func RevokedAtGT(v time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGT(FieldRevokedAt, v))
+}
+
+// RevokedAtGTE applies the GTE predicate on the "revoked_at" field.
+func RevokedAtGTE(v time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGTE(FieldRevokedAt, v))
+}
+
+// RevokedAtLT applies the LT predicate on the "revoked_at" field.
+func RevokedAtLT(v time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLT(FieldRevokedAt, v))
+}
+
+// RevokedAtLTE applies the LTE predicate on the "revoked_at" field.
+func RevokedAtLTE(v time.Time) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLTE(FieldRevokedAt, v))
+}
+
+// RevokedAtIsNil applies the IsNil predicate on the "revoked_at" field.
+func RevokedAtIsNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIsNull(FieldRevokedAt))
+}
+
+// RevokedAtNotNil applies the NotNil predicate on the "revoked_at" field.
+func RevokedAtNotNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotNull(FieldRevokedAt))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

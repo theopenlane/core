@@ -110,6 +110,31 @@ func EventType(v string) predicate.EventHistory {
 	return predicate.EventHistory(sql.FieldEQ(FieldEventType, v))
 }
 
+// Source applies equality check predicate on the "source" field. It's identical to SourceEQ.
+func Source(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldSource, v))
+}
+
+// AdditionalProcessingRequired applies equality check predicate on the "additional_processing_required" field. It's identical to AdditionalProcessingRequiredEQ.
+func AdditionalProcessingRequired(v bool) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldAdditionalProcessingRequired, v))
+}
+
+// AdditionalProcessingDetails applies equality check predicate on the "additional_processing_details" field. It's identical to AdditionalProcessingDetailsEQ.
+func AdditionalProcessingDetails(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldAdditionalProcessingDetails, v))
+}
+
+// ProcessedBy applies equality check predicate on the "processed_by" field. It's identical to ProcessedByEQ.
+func ProcessedBy(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldProcessedBy, v))
+}
+
+// ProcessedAt applies equality check predicate on the "processed_at" field. It's identical to ProcessedAtEQ.
+func ProcessedAt(v time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldProcessedAt, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.EventHistory {
 	return predicate.EventHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -560,16 +585,6 @@ func EventIDHasSuffix(v string) predicate.EventHistory {
 	return predicate.EventHistory(sql.FieldHasSuffix(FieldEventID, v))
 }
 
-// EventIDIsNil applies the IsNil predicate on the "event_id" field.
-func EventIDIsNil() predicate.EventHistory {
-	return predicate.EventHistory(sql.FieldIsNull(FieldEventID))
-}
-
-// EventIDNotNil applies the NotNil predicate on the "event_id" field.
-func EventIDNotNil() predicate.EventHistory {
-	return predicate.EventHistory(sql.FieldNotNull(FieldEventID))
-}
-
 // EventIDEqualFold applies the EqualFold predicate on the "event_id" field.
 func EventIDEqualFold(v string) predicate.EventHistory {
 	return predicate.EventHistory(sql.FieldEqualFold(FieldEventID, v))
@@ -710,6 +725,16 @@ func EventTypeHasSuffix(v string) predicate.EventHistory {
 	return predicate.EventHistory(sql.FieldHasSuffix(FieldEventType, v))
 }
 
+// EventTypeIsNil applies the IsNil predicate on the "event_type" field.
+func EventTypeIsNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIsNull(FieldEventType))
+}
+
+// EventTypeNotNil applies the NotNil predicate on the "event_type" field.
+func EventTypeNotNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotNull(FieldEventType))
+}
+
 // EventTypeEqualFold applies the EqualFold predicate on the "event_type" field.
 func EventTypeEqualFold(v string) predicate.EventHistory {
 	return predicate.EventHistory(sql.FieldEqualFold(FieldEventType, v))
@@ -728,6 +753,301 @@ func MetadataIsNil() predicate.EventHistory {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.EventHistory {
 	return predicate.EventHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// SourceEQ applies the EQ predicate on the "source" field.
+func SourceEQ(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldSource, v))
+}
+
+// SourceNEQ applies the NEQ predicate on the "source" field.
+func SourceNEQ(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNEQ(FieldSource, v))
+}
+
+// SourceIn applies the In predicate on the "source" field.
+func SourceIn(vs ...string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIn(FieldSource, vs...))
+}
+
+// SourceNotIn applies the NotIn predicate on the "source" field.
+func SourceNotIn(vs ...string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotIn(FieldSource, vs...))
+}
+
+// SourceGT applies the GT predicate on the "source" field.
+func SourceGT(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGT(FieldSource, v))
+}
+
+// SourceGTE applies the GTE predicate on the "source" field.
+func SourceGTE(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGTE(FieldSource, v))
+}
+
+// SourceLT applies the LT predicate on the "source" field.
+func SourceLT(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLT(FieldSource, v))
+}
+
+// SourceLTE applies the LTE predicate on the "source" field.
+func SourceLTE(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLTE(FieldSource, v))
+}
+
+// SourceContains applies the Contains predicate on the "source" field.
+func SourceContains(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldContains(FieldSource, v))
+}
+
+// SourceHasPrefix applies the HasPrefix predicate on the "source" field.
+func SourceHasPrefix(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldHasPrefix(FieldSource, v))
+}
+
+// SourceHasSuffix applies the HasSuffix predicate on the "source" field.
+func SourceHasSuffix(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldHasSuffix(FieldSource, v))
+}
+
+// SourceIsNil applies the IsNil predicate on the "source" field.
+func SourceIsNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIsNull(FieldSource))
+}
+
+// SourceNotNil applies the NotNil predicate on the "source" field.
+func SourceNotNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotNull(FieldSource))
+}
+
+// SourceEqualFold applies the EqualFold predicate on the "source" field.
+func SourceEqualFold(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEqualFold(FieldSource, v))
+}
+
+// SourceContainsFold applies the ContainsFold predicate on the "source" field.
+func SourceContainsFold(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldContainsFold(FieldSource, v))
+}
+
+// AdditionalProcessingRequiredEQ applies the EQ predicate on the "additional_processing_required" field.
+func AdditionalProcessingRequiredEQ(v bool) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldAdditionalProcessingRequired, v))
+}
+
+// AdditionalProcessingRequiredNEQ applies the NEQ predicate on the "additional_processing_required" field.
+func AdditionalProcessingRequiredNEQ(v bool) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNEQ(FieldAdditionalProcessingRequired, v))
+}
+
+// AdditionalProcessingRequiredIsNil applies the IsNil predicate on the "additional_processing_required" field.
+func AdditionalProcessingRequiredIsNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIsNull(FieldAdditionalProcessingRequired))
+}
+
+// AdditionalProcessingRequiredNotNil applies the NotNil predicate on the "additional_processing_required" field.
+func AdditionalProcessingRequiredNotNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotNull(FieldAdditionalProcessingRequired))
+}
+
+// AdditionalProcessingDetailsEQ applies the EQ predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsEQ(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsNEQ applies the NEQ predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsNEQ(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNEQ(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsIn applies the In predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsIn(vs ...string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIn(FieldAdditionalProcessingDetails, vs...))
+}
+
+// AdditionalProcessingDetailsNotIn applies the NotIn predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsNotIn(vs ...string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotIn(FieldAdditionalProcessingDetails, vs...))
+}
+
+// AdditionalProcessingDetailsGT applies the GT predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsGT(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGT(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsGTE applies the GTE predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsGTE(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGTE(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsLT applies the LT predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsLT(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLT(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsLTE applies the LTE predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsLTE(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLTE(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsContains applies the Contains predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsContains(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldContains(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsHasPrefix applies the HasPrefix predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsHasPrefix(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldHasPrefix(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsHasSuffix applies the HasSuffix predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsHasSuffix(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldHasSuffix(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsIsNil applies the IsNil predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsIsNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIsNull(FieldAdditionalProcessingDetails))
+}
+
+// AdditionalProcessingDetailsNotNil applies the NotNil predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsNotNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotNull(FieldAdditionalProcessingDetails))
+}
+
+// AdditionalProcessingDetailsEqualFold applies the EqualFold predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsEqualFold(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEqualFold(FieldAdditionalProcessingDetails, v))
+}
+
+// AdditionalProcessingDetailsContainsFold applies the ContainsFold predicate on the "additional_processing_details" field.
+func AdditionalProcessingDetailsContainsFold(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldContainsFold(FieldAdditionalProcessingDetails, v))
+}
+
+// ProcessedByEQ applies the EQ predicate on the "processed_by" field.
+func ProcessedByEQ(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldProcessedBy, v))
+}
+
+// ProcessedByNEQ applies the NEQ predicate on the "processed_by" field.
+func ProcessedByNEQ(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNEQ(FieldProcessedBy, v))
+}
+
+// ProcessedByIn applies the In predicate on the "processed_by" field.
+func ProcessedByIn(vs ...string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIn(FieldProcessedBy, vs...))
+}
+
+// ProcessedByNotIn applies the NotIn predicate on the "processed_by" field.
+func ProcessedByNotIn(vs ...string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotIn(FieldProcessedBy, vs...))
+}
+
+// ProcessedByGT applies the GT predicate on the "processed_by" field.
+func ProcessedByGT(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGT(FieldProcessedBy, v))
+}
+
+// ProcessedByGTE applies the GTE predicate on the "processed_by" field.
+func ProcessedByGTE(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGTE(FieldProcessedBy, v))
+}
+
+// ProcessedByLT applies the LT predicate on the "processed_by" field.
+func ProcessedByLT(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLT(FieldProcessedBy, v))
+}
+
+// ProcessedByLTE applies the LTE predicate on the "processed_by" field.
+func ProcessedByLTE(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLTE(FieldProcessedBy, v))
+}
+
+// ProcessedByContains applies the Contains predicate on the "processed_by" field.
+func ProcessedByContains(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldContains(FieldProcessedBy, v))
+}
+
+// ProcessedByHasPrefix applies the HasPrefix predicate on the "processed_by" field.
+func ProcessedByHasPrefix(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldHasPrefix(FieldProcessedBy, v))
+}
+
+// ProcessedByHasSuffix applies the HasSuffix predicate on the "processed_by" field.
+func ProcessedByHasSuffix(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldHasSuffix(FieldProcessedBy, v))
+}
+
+// ProcessedByIsNil applies the IsNil predicate on the "processed_by" field.
+func ProcessedByIsNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIsNull(FieldProcessedBy))
+}
+
+// ProcessedByNotNil applies the NotNil predicate on the "processed_by" field.
+func ProcessedByNotNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotNull(FieldProcessedBy))
+}
+
+// ProcessedByEqualFold applies the EqualFold predicate on the "processed_by" field.
+func ProcessedByEqualFold(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEqualFold(FieldProcessedBy, v))
+}
+
+// ProcessedByContainsFold applies the ContainsFold predicate on the "processed_by" field.
+func ProcessedByContainsFold(v string) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldContainsFold(FieldProcessedBy, v))
+}
+
+// ProcessedAtEQ applies the EQ predicate on the "processed_at" field.
+func ProcessedAtEQ(v time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldEQ(FieldProcessedAt, v))
+}
+
+// ProcessedAtNEQ applies the NEQ predicate on the "processed_at" field.
+func ProcessedAtNEQ(v time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNEQ(FieldProcessedAt, v))
+}
+
+// ProcessedAtIn applies the In predicate on the "processed_at" field.
+func ProcessedAtIn(vs ...time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIn(FieldProcessedAt, vs...))
+}
+
+// ProcessedAtNotIn applies the NotIn predicate on the "processed_at" field.
+func ProcessedAtNotIn(vs ...time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotIn(FieldProcessedAt, vs...))
+}
+
+// ProcessedAtGT applies the GT predicate on the "processed_at" field.
+func ProcessedAtGT(v time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGT(FieldProcessedAt, v))
+}
+
+// ProcessedAtGTE applies the GTE predicate on the "processed_at" field.
+func ProcessedAtGTE(v time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldGTE(FieldProcessedAt, v))
+}
+
+// ProcessedAtLT applies the LT predicate on the "processed_at" field.
+func ProcessedAtLT(v time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLT(FieldProcessedAt, v))
+}
+
+// ProcessedAtLTE applies the LTE predicate on the "processed_at" field.
+func ProcessedAtLTE(v time.Time) predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldLTE(FieldProcessedAt, v))
+}
+
+// ProcessedAtIsNil applies the IsNil predicate on the "processed_at" field.
+func ProcessedAtIsNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldIsNull(FieldProcessedAt))
+}
+
+// ProcessedAtNotNil applies the NotNil predicate on the "processed_at" field.
+func ProcessedAtNotNil() predicate.EventHistory {
+	return predicate.EventHistory(sql.FieldNotNull(FieldProcessedAt))
 }
 
 // And groups predicates with the AND operator between them.

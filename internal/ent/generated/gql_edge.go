@@ -692,6 +692,18 @@ func (e *Event) File(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
+func (e *Event) Orgsubscription(ctx context.Context) (result []*OrgSubscription, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = e.NamedOrgsubscription(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = e.Edges.OrgsubscriptionOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = e.QueryOrgsubscription().All(ctx)
+	}
+	return result, err
+}
+
 func (e *Evidence) Owner(ctx context.Context) (*Organization, error) {
 	result, err := e.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -1646,6 +1658,18 @@ func (os *OrgSubscription) Owner(ctx context.Context) (*Organization, error) {
 		result, err = os.QueryOwner().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (os *OrgSubscription) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = os.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = os.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = os.QueryEvents().All(ctx)
+	}
+	return result, err
 }
 
 func (o *Organization) ControlCreators(ctx context.Context) (result []*Group, err error) {

@@ -1389,12 +1389,14 @@ func (t *GetActionPlanHistories_ActionPlanHistories) GetEdges() []*GetActionPlan
 }
 
 type AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	Name          string   "json:\"name\" graphql:\"name\""
+	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetDeletedBy() *string {
@@ -1420,6 +1422,18 @@ func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetOwnerI
 		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
 	}
 	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetRevokedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.RevokedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetRevokedReason() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.RevokedReason
 }
 func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetScopes() []string {
 	if t == nil {
@@ -2076,27 +2090,36 @@ func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult) GetEntityTypes() 
 }
 
 type AdminSearch_AdminSearch_Nodes_EventSearchResult_Events struct {
-	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType     string         "json:\"eventType\" graphql:\"eventType\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	AdditionalProcessingDetails *string        "json:\"additionalProcessingDetails,omitempty\" graphql:\"additionalProcessingDetails\""
+	CorrelationID               *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	EventID                     string         "json:\"eventID\" graphql:\"eventID\""
+	EventType                   *string        "json:\"eventType,omitempty\" graphql:\"eventType\""
+	ID                          string         "json:\"id\" graphql:\"id\""
+	Metadata                    map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	ProcessedBy                 *string        "json:\"processedBy,omitempty\" graphql:\"processedBy\""
+	Source                      *string        "json:\"source,omitempty\" graphql:\"source\""
+	Tags                        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetAdditionalProcessingDetails() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.AdditionalProcessingDetails
+}
 func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetCorrelationID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
 	}
 	return t.CorrelationID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
 	}
 	return t.EventID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventType() string {
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventType() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
 	}
@@ -2113,6 +2136,18 @@ func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetMetadata() m
 		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
 	}
 	return t.Metadata
+}
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetProcessedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.ProcessedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetSource() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.Source
 }
 func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetTags() []string {
 	if t == nil {
@@ -2891,11 +2926,13 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult) GetOrgan
 }
 
 type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	Name          string   "json:\"name\" graphql:\"name\""
+	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetDeletedBy() *string {
@@ -2915,6 +2952,18 @@ func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalA
 		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
 	}
 	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetRevokedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.RevokedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetRevokedReason() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.RevokedReason
 }
 func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetScopes() []string {
 	if t == nil {
@@ -12113,8 +12162,8 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership) GetID() s
 
 type CreateBulkCSVEvent_CreateBulkCSVEvent_Events struct {
 	CorrelationID       *string                                                             "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventID             *string                                                             "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType           string                                                              "json:\"eventType\" graphql:\"eventType\""
+	EventID             string                                                              "json:\"eventID\" graphql:\"eventID\""
+	EventType           *string                                                             "json:\"eventType,omitempty\" graphql:\"eventType\""
 	Group               []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group               "json:\"group,omitempty\" graphql:\"group\""
 	Groupmembership     []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
 	Hush                []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
@@ -12134,13 +12183,13 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetCorrelationID() *strin
 	}
 	return t.CorrelationID
 }
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventID() *string {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventID() string {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.EventID
 }
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventType() string {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventType() *string {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
@@ -12325,8 +12374,8 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events_Groupmembership) GetID() string 
 
 type CreateBulkEvent_CreateBulkEvent_Events struct {
 	CorrelationID       *string                                                       "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventID             *string                                                       "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType           string                                                        "json:\"eventType\" graphql:\"eventType\""
+	EventID             string                                                        "json:\"eventID\" graphql:\"eventID\""
+	EventType           *string                                                       "json:\"eventType,omitempty\" graphql:\"eventType\""
 	Group               []*CreateBulkEvent_CreateBulkEvent_Events_Group               "json:\"group,omitempty\" graphql:\"group\""
 	Groupmembership     []*CreateBulkEvent_CreateBulkEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
 	Hush                []*CreateBulkEvent_CreateBulkEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
@@ -12346,13 +12395,13 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events) GetCorrelationID() *string {
 	}
 	return t.CorrelationID
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventID() *string {
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventID() string {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
 	return t.EventID
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventType() string {
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventType() *string {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
@@ -12537,8 +12586,8 @@ func (t *CreateEvent_CreateEvent_Event_Groupmembership) GetID() string {
 
 type CreateEvent_CreateEvent_Event struct {
 	CorrelationID       *string                                              "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventID             *string                                              "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType           string                                               "json:\"eventType\" graphql:\"eventType\""
+	EventID             string                                               "json:\"eventID\" graphql:\"eventID\""
+	EventType           *string                                              "json:\"eventType,omitempty\" graphql:\"eventType\""
 	Group               []*CreateEvent_CreateEvent_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
 	Groupmembership     []*CreateEvent_CreateEvent_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
 	Hush                []*CreateEvent_CreateEvent_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
@@ -12558,13 +12607,13 @@ func (t *CreateEvent_CreateEvent_Event) GetCorrelationID() *string {
 	}
 	return t.CorrelationID
 }
-func (t *CreateEvent_CreateEvent_Event) GetEventID() *string {
+func (t *CreateEvent_CreateEvent_Event) GetEventID() string {
 	if t == nil {
 		t = &CreateEvent_CreateEvent_Event{}
 	}
 	return t.EventID
 }
-func (t *CreateEvent_CreateEvent_Event) GetEventType() string {
+func (t *CreateEvent_CreateEvent_Event) GetEventType() *string {
 	if t == nil {
 		t = &CreateEvent_CreateEvent_Event{}
 	}
@@ -12762,8 +12811,8 @@ type GetAllEvents_Events_Edges_Node struct {
 	CorrelationID       *string                                               "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt           *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy           *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID             *string                                               "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType           string                                                "json:\"eventType\" graphql:\"eventType\""
+	EventID             string                                                "json:\"eventID\" graphql:\"eventID\""
+	EventType           *string                                               "json:\"eventType,omitempty\" graphql:\"eventType\""
 	Group               []*GetAllEvents_Events_Edges_Node_Group               "json:\"group,omitempty\" graphql:\"group\""
 	Groupmembership     []*GetAllEvents_Events_Edges_Node_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
 	Hush                []*GetAllEvents_Events_Edges_Node_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
@@ -12797,13 +12846,13 @@ func (t *GetAllEvents_Events_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllEvents_Events_Edges_Node) GetEventID() *string {
+func (t *GetAllEvents_Events_Edges_Node) GetEventID() string {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
 	return t.EventID
 }
-func (t *GetAllEvents_Events_Edges_Node) GetEventType() string {
+func (t *GetAllEvents_Events_Edges_Node) GetEventType() *string {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
@@ -13013,8 +13062,8 @@ type GetEventByID_Event struct {
 	CorrelationID       *string                                   "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt           *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy           *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID             *string                                   "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType           string                                    "json:\"eventType\" graphql:\"eventType\""
+	EventID             string                                    "json:\"eventID\" graphql:\"eventID\""
+	EventType           *string                                   "json:\"eventType,omitempty\" graphql:\"eventType\""
 	Group               []*GetEventByID_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
 	Groupmembership     []*GetEventByID_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
 	Hush                []*GetEventByID_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
@@ -13048,13 +13097,13 @@ func (t *GetEventByID_Event) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetEventByID_Event) GetEventID() *string {
+func (t *GetEventByID_Event) GetEventID() string {
 	if t == nil {
 		t = &GetEventByID_Event{}
 	}
 	return t.EventID
 }
-func (t *GetEventByID_Event) GetEventType() string {
+func (t *GetEventByID_Event) GetEventType() *string {
 	if t == nil {
 		t = &GetEventByID_Event{}
 	}
@@ -13141,8 +13190,8 @@ func (t *GetEventByID_Event) GetUser() []*GetEventByID_Event_User {
 
 type GetEvents_Events_Edges_Node struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType     string         "json:\"eventType\" graphql:\"eventType\""
+	EventID       string         "json:\"eventID\" graphql:\"eventID\""
+	EventType     *string        "json:\"eventType,omitempty\" graphql:\"eventType\""
 	ID            string         "json:\"id\" graphql:\"id\""
 	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
 }
@@ -13153,13 +13202,13 @@ func (t *GetEvents_Events_Edges_Node) GetCorrelationID() *string {
 	}
 	return t.CorrelationID
 }
-func (t *GetEvents_Events_Edges_Node) GetEventID() *string {
+func (t *GetEvents_Events_Edges_Node) GetEventID() string {
 	if t == nil {
 		t = &GetEvents_Events_Edges_Node{}
 	}
 	return t.EventID
 }
-func (t *GetEvents_Events_Edges_Node) GetEventType() string {
+func (t *GetEvents_Events_Edges_Node) GetEventType() *string {
 	if t == nil {
 		t = &GetEvents_Events_Edges_Node{}
 	}
@@ -13303,8 +13352,8 @@ type UpdateEvent_UpdateEvent_Event struct {
 	CorrelationID       *string                                              "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt           *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy           *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID             *string                                              "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType           string                                               "json:\"eventType\" graphql:\"eventType\""
+	EventID             string                                               "json:\"eventID\" graphql:\"eventID\""
+	EventType           *string                                              "json:\"eventType,omitempty\" graphql:\"eventType\""
 	Group               []*UpdateEvent_UpdateEvent_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
 	Groupmembership     []*UpdateEvent_UpdateEvent_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
 	Hush                []*UpdateEvent_UpdateEvent_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
@@ -13338,13 +13387,13 @@ func (t *UpdateEvent_UpdateEvent_Event) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *UpdateEvent_UpdateEvent_Event) GetEventID() *string {
+func (t *UpdateEvent_UpdateEvent_Event) GetEventID() string {
 	if t == nil {
 		t = &UpdateEvent_UpdateEvent_Event{}
 	}
 	return t.EventID
 }
-func (t *UpdateEvent_UpdateEvent_Event) GetEventType() string {
+func (t *UpdateEvent_UpdateEvent_Event) GetEventType() *string {
 	if t == nil {
 		t = &UpdateEvent_UpdateEvent_Event{}
 	}
@@ -13444,8 +13493,8 @@ type GetAllEventHistories_EventHistories_Edges_Node struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType     string         "json:\"eventType\" graphql:\"eventType\""
+	EventID       string         "json:\"eventID\" graphql:\"eventID\""
+	EventType     *string        "json:\"eventType,omitempty\" graphql:\"eventType\""
 	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string         "json:\"id\" graphql:\"id\""
 	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -13474,13 +13523,13 @@ func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCreatedBy() *string 
 	}
 	return t.CreatedBy
 }
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetEventID() *string {
+func (t *GetAllEventHistories_EventHistories_Edges_Node) GetEventID() string {
 	if t == nil {
 		t = &GetAllEventHistories_EventHistories_Edges_Node{}
 	}
 	return t.EventID
 }
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetEventType() string {
+func (t *GetAllEventHistories_EventHistories_Edges_Node) GetEventType() *string {
 	if t == nil {
 		t = &GetAllEventHistories_EventHistories_Edges_Node{}
 	}
@@ -13561,8 +13610,8 @@ type GetEventHistories_EventHistories_Edges_Node struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType     string         "json:\"eventType\" graphql:\"eventType\""
+	EventID       string         "json:\"eventID\" graphql:\"eventID\""
+	EventType     *string        "json:\"eventType,omitempty\" graphql:\"eventType\""
 	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string         "json:\"id\" graphql:\"id\""
 	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -13591,13 +13640,13 @@ func (t *GetEventHistories_EventHistories_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetEventHistories_EventHistories_Edges_Node) GetEventID() *string {
+func (t *GetEventHistories_EventHistories_Edges_Node) GetEventID() string {
 	if t == nil {
 		t = &GetEventHistories_EventHistories_Edges_Node{}
 	}
 	return t.EventID
 }
-func (t *GetEventHistories_EventHistories_Edges_Node) GetEventType() string {
+func (t *GetEventHistories_EventHistories_Edges_Node) GetEventType() *string {
 	if t == nil {
 		t = &GetEventHistories_EventHistories_Edges_Node{}
 	}
@@ -53786,6 +53835,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					name
 					scopes
+					revokedReason
+					revokedBy
 				}
 			}
 			... on ActionPlanSearchResult {
@@ -53899,6 +53950,9 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					correlationID
 					eventType
 					metadata
+					source
+					additionalProcessingDetails
+					processedBy
 				}
 			}
 			... on EvidenceSearchResult {
@@ -54033,6 +54087,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					name
 					scopes
+					revokedReason
+					revokedBy
 				}
 			}
 			... on ProcedureSearchResult {

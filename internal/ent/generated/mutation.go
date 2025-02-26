@@ -178,30 +178,34 @@ const (
 // APITokenMutation represents an operation that mutates the APIToken nodes in the graph.
 type APITokenMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	created_at    *time.Time
-	updated_at    *time.Time
-	created_by    *string
-	updated_by    *string
-	deleted_at    *time.Time
-	deleted_by    *string
-	tags          *[]string
-	appendtags    []string
-	name          *string
-	token         *string
-	expires_at    *time.Time
-	description   *string
-	scopes        *[]string
-	appendscopes  []string
-	last_used_at  *time.Time
-	clearedFields map[string]struct{}
-	owner         *string
-	clearedowner  bool
-	done          bool
-	oldValue      func(context.Context) (*APIToken, error)
-	predicates    []predicate.APIToken
+	op             Op
+	typ            string
+	id             *string
+	created_at     *time.Time
+	updated_at     *time.Time
+	created_by     *string
+	updated_by     *string
+	deleted_at     *time.Time
+	deleted_by     *string
+	tags           *[]string
+	appendtags     []string
+	name           *string
+	token          *string
+	expires_at     *time.Time
+	description    *string
+	scopes         *[]string
+	appendscopes   []string
+	last_used_at   *time.Time
+	is_active      *bool
+	revoked_reason *string
+	revoked_by     *string
+	revoked_at     *time.Time
+	clearedFields  map[string]struct{}
+	owner          *string
+	clearedowner   bool
+	done           bool
+	oldValue       func(context.Context) (*APIToken, error)
+	predicates     []predicate.APIToken
 }
 
 var _ ent.Mutation = (*APITokenMutation)(nil)
@@ -1000,6 +1004,202 @@ func (m *APITokenMutation) ResetLastUsedAt() {
 	delete(m.clearedFields, apitoken.FieldLastUsedAt)
 }
 
+// SetIsActive sets the "is_active" field.
+func (m *APITokenMutation) SetIsActive(b bool) {
+	m.is_active = &b
+}
+
+// IsActive returns the value of the "is_active" field in the mutation.
+func (m *APITokenMutation) IsActive() (r bool, exists bool) {
+	v := m.is_active
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsActive returns the old "is_active" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldIsActive(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsActive requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsActive: %w", err)
+	}
+	return oldValue.IsActive, nil
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (m *APITokenMutation) ClearIsActive() {
+	m.is_active = nil
+	m.clearedFields[apitoken.FieldIsActive] = struct{}{}
+}
+
+// IsActiveCleared returns if the "is_active" field was cleared in this mutation.
+func (m *APITokenMutation) IsActiveCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldIsActive]
+	return ok
+}
+
+// ResetIsActive resets all changes to the "is_active" field.
+func (m *APITokenMutation) ResetIsActive() {
+	m.is_active = nil
+	delete(m.clearedFields, apitoken.FieldIsActive)
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (m *APITokenMutation) SetRevokedReason(s string) {
+	m.revoked_reason = &s
+}
+
+// RevokedReason returns the value of the "revoked_reason" field in the mutation.
+func (m *APITokenMutation) RevokedReason() (r string, exists bool) {
+	v := m.revoked_reason
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedReason returns the old "revoked_reason" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldRevokedReason(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedReason is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedReason requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedReason: %w", err)
+	}
+	return oldValue.RevokedReason, nil
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (m *APITokenMutation) ClearRevokedReason() {
+	m.revoked_reason = nil
+	m.clearedFields[apitoken.FieldRevokedReason] = struct{}{}
+}
+
+// RevokedReasonCleared returns if the "revoked_reason" field was cleared in this mutation.
+func (m *APITokenMutation) RevokedReasonCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldRevokedReason]
+	return ok
+}
+
+// ResetRevokedReason resets all changes to the "revoked_reason" field.
+func (m *APITokenMutation) ResetRevokedReason() {
+	m.revoked_reason = nil
+	delete(m.clearedFields, apitoken.FieldRevokedReason)
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (m *APITokenMutation) SetRevokedBy(s string) {
+	m.revoked_by = &s
+}
+
+// RevokedBy returns the value of the "revoked_by" field in the mutation.
+func (m *APITokenMutation) RevokedBy() (r string, exists bool) {
+	v := m.revoked_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedBy returns the old "revoked_by" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldRevokedBy(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedBy: %w", err)
+	}
+	return oldValue.RevokedBy, nil
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (m *APITokenMutation) ClearRevokedBy() {
+	m.revoked_by = nil
+	m.clearedFields[apitoken.FieldRevokedBy] = struct{}{}
+}
+
+// RevokedByCleared returns if the "revoked_by" field was cleared in this mutation.
+func (m *APITokenMutation) RevokedByCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldRevokedBy]
+	return ok
+}
+
+// ResetRevokedBy resets all changes to the "revoked_by" field.
+func (m *APITokenMutation) ResetRevokedBy() {
+	m.revoked_by = nil
+	delete(m.clearedFields, apitoken.FieldRevokedBy)
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (m *APITokenMutation) SetRevokedAt(t time.Time) {
+	m.revoked_at = &t
+}
+
+// RevokedAt returns the value of the "revoked_at" field in the mutation.
+func (m *APITokenMutation) RevokedAt() (r time.Time, exists bool) {
+	v := m.revoked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedAt returns the old "revoked_at" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldRevokedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedAt: %w", err)
+	}
+	return oldValue.RevokedAt, nil
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (m *APITokenMutation) ClearRevokedAt() {
+	m.revoked_at = nil
+	m.clearedFields[apitoken.FieldRevokedAt] = struct{}{}
+}
+
+// RevokedAtCleared returns if the "revoked_at" field was cleared in this mutation.
+func (m *APITokenMutation) RevokedAtCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldRevokedAt]
+	return ok
+}
+
+// ResetRevokedAt resets all changes to the "revoked_at" field.
+func (m *APITokenMutation) ResetRevokedAt() {
+	m.revoked_at = nil
+	delete(m.clearedFields, apitoken.FieldRevokedAt)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *APITokenMutation) ClearOwner() {
 	m.clearedowner = true
@@ -1061,7 +1261,7 @@ func (m *APITokenMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *APITokenMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, apitoken.FieldCreatedAt)
 	}
@@ -1104,6 +1304,18 @@ func (m *APITokenMutation) Fields() []string {
 	if m.last_used_at != nil {
 		fields = append(fields, apitoken.FieldLastUsedAt)
 	}
+	if m.is_active != nil {
+		fields = append(fields, apitoken.FieldIsActive)
+	}
+	if m.revoked_reason != nil {
+		fields = append(fields, apitoken.FieldRevokedReason)
+	}
+	if m.revoked_by != nil {
+		fields = append(fields, apitoken.FieldRevokedBy)
+	}
+	if m.revoked_at != nil {
+		fields = append(fields, apitoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -1140,6 +1352,14 @@ func (m *APITokenMutation) Field(name string) (ent.Value, bool) {
 		return m.Scopes()
 	case apitoken.FieldLastUsedAt:
 		return m.LastUsedAt()
+	case apitoken.FieldIsActive:
+		return m.IsActive()
+	case apitoken.FieldRevokedReason:
+		return m.RevokedReason()
+	case apitoken.FieldRevokedBy:
+		return m.RevokedBy()
+	case apitoken.FieldRevokedAt:
+		return m.RevokedAt()
 	}
 	return nil, false
 }
@@ -1177,6 +1397,14 @@ func (m *APITokenMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldScopes(ctx)
 	case apitoken.FieldLastUsedAt:
 		return m.OldLastUsedAt(ctx)
+	case apitoken.FieldIsActive:
+		return m.OldIsActive(ctx)
+	case apitoken.FieldRevokedReason:
+		return m.OldRevokedReason(ctx)
+	case apitoken.FieldRevokedBy:
+		return m.OldRevokedBy(ctx)
+	case apitoken.FieldRevokedAt:
+		return m.OldRevokedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown APIToken field %s", name)
 }
@@ -1284,6 +1512,34 @@ func (m *APITokenMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLastUsedAt(v)
 		return nil
+	case apitoken.FieldIsActive:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsActive(v)
+		return nil
+	case apitoken.FieldRevokedReason:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedReason(v)
+		return nil
+	case apitoken.FieldRevokedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedBy(v)
+		return nil
+	case apitoken.FieldRevokedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown APIToken field %s", name)
 }
@@ -1350,6 +1606,18 @@ func (m *APITokenMutation) ClearedFields() []string {
 	if m.FieldCleared(apitoken.FieldLastUsedAt) {
 		fields = append(fields, apitoken.FieldLastUsedAt)
 	}
+	if m.FieldCleared(apitoken.FieldIsActive) {
+		fields = append(fields, apitoken.FieldIsActive)
+	}
+	if m.FieldCleared(apitoken.FieldRevokedReason) {
+		fields = append(fields, apitoken.FieldRevokedReason)
+	}
+	if m.FieldCleared(apitoken.FieldRevokedBy) {
+		fields = append(fields, apitoken.FieldRevokedBy)
+	}
+	if m.FieldCleared(apitoken.FieldRevokedAt) {
+		fields = append(fields, apitoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -1400,6 +1668,18 @@ func (m *APITokenMutation) ClearField(name string) error {
 	case apitoken.FieldLastUsedAt:
 		m.ClearLastUsedAt()
 		return nil
+	case apitoken.FieldIsActive:
+		m.ClearIsActive()
+		return nil
+	case apitoken.FieldRevokedReason:
+		m.ClearRevokedReason()
+		return nil
+	case apitoken.FieldRevokedBy:
+		m.ClearRevokedBy()
+		return nil
+	case apitoken.FieldRevokedAt:
+		m.ClearRevokedAt()
+		return nil
 	}
 	return fmt.Errorf("unknown APIToken nullable field %s", name)
 }
@@ -1449,6 +1729,18 @@ func (m *APITokenMutation) ResetField(name string) error {
 		return nil
 	case apitoken.FieldLastUsedAt:
 		m.ResetLastUsedAt()
+		return nil
+	case apitoken.FieldIsActive:
+		m.ResetIsActive()
+		return nil
+	case apitoken.FieldRevokedReason:
+		m.ResetRevokedReason()
+		return nil
+	case apitoken.FieldRevokedBy:
+		m.ResetRevokedBy()
+		return nil
+	case apitoken.FieldRevokedAt:
+		m.ResetRevokedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown APIToken field %s", name)
@@ -26641,56 +26933,64 @@ func (m *EntityTypeHistoryMutation) ResetEdge(name string) error {
 // EventMutation represents an operation that mutates the Event nodes in the graph.
 type EventMutation struct {
 	config
-	op                           Op
-	typ                          string
-	id                           *string
-	created_at                   *time.Time
-	updated_at                   *time.Time
-	created_by                   *string
-	updated_by                   *string
-	tags                         *[]string
-	appendtags                   []string
-	event_id                     *string
-	correlation_id               *string
-	event_type                   *string
-	metadata                     *map[string]interface{}
-	clearedFields                map[string]struct{}
-	user                         map[string]struct{}
-	removeduser                  map[string]struct{}
-	cleareduser                  bool
-	group                        map[string]struct{}
-	removedgroup                 map[string]struct{}
-	clearedgroup                 bool
-	integration                  map[string]struct{}
-	removedintegration           map[string]struct{}
-	clearedintegration           bool
-	organization                 map[string]struct{}
-	removedorganization          map[string]struct{}
-	clearedorganization          bool
-	invite                       map[string]struct{}
-	removedinvite                map[string]struct{}
-	clearedinvite                bool
-	personal_access_token        map[string]struct{}
-	removedpersonal_access_token map[string]struct{}
-	clearedpersonal_access_token bool
-	hush                         map[string]struct{}
-	removedhush                  map[string]struct{}
-	clearedhush                  bool
-	orgmembership                map[string]struct{}
-	removedorgmembership         map[string]struct{}
-	clearedorgmembership         bool
-	groupmembership              map[string]struct{}
-	removedgroupmembership       map[string]struct{}
-	clearedgroupmembership       bool
-	subscriber                   map[string]struct{}
-	removedsubscriber            map[string]struct{}
-	clearedsubscriber            bool
-	file                         map[string]struct{}
-	removedfile                  map[string]struct{}
-	clearedfile                  bool
-	done                         bool
-	oldValue                     func(context.Context) (*Event, error)
-	predicates                   []predicate.Event
+	op                             Op
+	typ                            string
+	id                             *string
+	created_at                     *time.Time
+	updated_at                     *time.Time
+	created_by                     *string
+	updated_by                     *string
+	tags                           *[]string
+	appendtags                     []string
+	event_id                       *string
+	correlation_id                 *string
+	event_type                     *string
+	metadata                       *map[string]interface{}
+	source                         *string
+	additional_processing_required *bool
+	additional_processing_details  *string
+	processed_by                   *string
+	processed_at                   *time.Time
+	clearedFields                  map[string]struct{}
+	user                           map[string]struct{}
+	removeduser                    map[string]struct{}
+	cleareduser                    bool
+	group                          map[string]struct{}
+	removedgroup                   map[string]struct{}
+	clearedgroup                   bool
+	integration                    map[string]struct{}
+	removedintegration             map[string]struct{}
+	clearedintegration             bool
+	organization                   map[string]struct{}
+	removedorganization            map[string]struct{}
+	clearedorganization            bool
+	invite                         map[string]struct{}
+	removedinvite                  map[string]struct{}
+	clearedinvite                  bool
+	personal_access_token          map[string]struct{}
+	removedpersonal_access_token   map[string]struct{}
+	clearedpersonal_access_token   bool
+	hush                           map[string]struct{}
+	removedhush                    map[string]struct{}
+	clearedhush                    bool
+	orgmembership                  map[string]struct{}
+	removedorgmembership           map[string]struct{}
+	clearedorgmembership           bool
+	groupmembership                map[string]struct{}
+	removedgroupmembership         map[string]struct{}
+	clearedgroupmembership         bool
+	subscriber                     map[string]struct{}
+	removedsubscriber              map[string]struct{}
+	clearedsubscriber              bool
+	file                           map[string]struct{}
+	removedfile                    map[string]struct{}
+	clearedfile                    bool
+	orgsubscription                map[string]struct{}
+	removedorgsubscription         map[string]struct{}
+	clearedorgsubscription         bool
+	done                           bool
+	oldValue                       func(context.Context) (*Event, error)
+	predicates                     []predicate.Event
 }
 
 var _ ent.Mutation = (*EventMutation)(nil)
@@ -27089,22 +27389,9 @@ func (m *EventMutation) OldEventID(ctx context.Context) (v string, err error) {
 	return oldValue.EventID, nil
 }
 
-// ClearEventID clears the value of the "event_id" field.
-func (m *EventMutation) ClearEventID() {
-	m.event_id = nil
-	m.clearedFields[event.FieldEventID] = struct{}{}
-}
-
-// EventIDCleared returns if the "event_id" field was cleared in this mutation.
-func (m *EventMutation) EventIDCleared() bool {
-	_, ok := m.clearedFields[event.FieldEventID]
-	return ok
-}
-
 // ResetEventID resets all changes to the "event_id" field.
 func (m *EventMutation) ResetEventID() {
 	m.event_id = nil
-	delete(m.clearedFields, event.FieldEventID)
 }
 
 // SetCorrelationID sets the "correlation_id" field.
@@ -27187,9 +27474,22 @@ func (m *EventMutation) OldEventType(ctx context.Context) (v string, err error) 
 	return oldValue.EventType, nil
 }
 
+// ClearEventType clears the value of the "event_type" field.
+func (m *EventMutation) ClearEventType() {
+	m.event_type = nil
+	m.clearedFields[event.FieldEventType] = struct{}{}
+}
+
+// EventTypeCleared returns if the "event_type" field was cleared in this mutation.
+func (m *EventMutation) EventTypeCleared() bool {
+	_, ok := m.clearedFields[event.FieldEventType]
+	return ok
+}
+
 // ResetEventType resets all changes to the "event_type" field.
 func (m *EventMutation) ResetEventType() {
 	m.event_type = nil
+	delete(m.clearedFields, event.FieldEventType)
 }
 
 // SetMetadata sets the "metadata" field.
@@ -27239,6 +27539,251 @@ func (m *EventMutation) MetadataCleared() bool {
 func (m *EventMutation) ResetMetadata() {
 	m.metadata = nil
 	delete(m.clearedFields, event.FieldMetadata)
+}
+
+// SetSource sets the "source" field.
+func (m *EventMutation) SetSource(s string) {
+	m.source = &s
+}
+
+// Source returns the value of the "source" field in the mutation.
+func (m *EventMutation) Source() (r string, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSource returns the old "source" field's value of the Event entity.
+// If the Event object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventMutation) OldSource(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSource is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSource requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSource: %w", err)
+	}
+	return oldValue.Source, nil
+}
+
+// ClearSource clears the value of the "source" field.
+func (m *EventMutation) ClearSource() {
+	m.source = nil
+	m.clearedFields[event.FieldSource] = struct{}{}
+}
+
+// SourceCleared returns if the "source" field was cleared in this mutation.
+func (m *EventMutation) SourceCleared() bool {
+	_, ok := m.clearedFields[event.FieldSource]
+	return ok
+}
+
+// ResetSource resets all changes to the "source" field.
+func (m *EventMutation) ResetSource() {
+	m.source = nil
+	delete(m.clearedFields, event.FieldSource)
+}
+
+// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
+func (m *EventMutation) SetAdditionalProcessingRequired(b bool) {
+	m.additional_processing_required = &b
+}
+
+// AdditionalProcessingRequired returns the value of the "additional_processing_required" field in the mutation.
+func (m *EventMutation) AdditionalProcessingRequired() (r bool, exists bool) {
+	v := m.additional_processing_required
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalProcessingRequired returns the old "additional_processing_required" field's value of the Event entity.
+// If the Event object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventMutation) OldAdditionalProcessingRequired(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalProcessingRequired is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalProcessingRequired requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalProcessingRequired: %w", err)
+	}
+	return oldValue.AdditionalProcessingRequired, nil
+}
+
+// ClearAdditionalProcessingRequired clears the value of the "additional_processing_required" field.
+func (m *EventMutation) ClearAdditionalProcessingRequired() {
+	m.additional_processing_required = nil
+	m.clearedFields[event.FieldAdditionalProcessingRequired] = struct{}{}
+}
+
+// AdditionalProcessingRequiredCleared returns if the "additional_processing_required" field was cleared in this mutation.
+func (m *EventMutation) AdditionalProcessingRequiredCleared() bool {
+	_, ok := m.clearedFields[event.FieldAdditionalProcessingRequired]
+	return ok
+}
+
+// ResetAdditionalProcessingRequired resets all changes to the "additional_processing_required" field.
+func (m *EventMutation) ResetAdditionalProcessingRequired() {
+	m.additional_processing_required = nil
+	delete(m.clearedFields, event.FieldAdditionalProcessingRequired)
+}
+
+// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
+func (m *EventMutation) SetAdditionalProcessingDetails(s string) {
+	m.additional_processing_details = &s
+}
+
+// AdditionalProcessingDetails returns the value of the "additional_processing_details" field in the mutation.
+func (m *EventMutation) AdditionalProcessingDetails() (r string, exists bool) {
+	v := m.additional_processing_details
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalProcessingDetails returns the old "additional_processing_details" field's value of the Event entity.
+// If the Event object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventMutation) OldAdditionalProcessingDetails(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalProcessingDetails is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalProcessingDetails requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalProcessingDetails: %w", err)
+	}
+	return oldValue.AdditionalProcessingDetails, nil
+}
+
+// ClearAdditionalProcessingDetails clears the value of the "additional_processing_details" field.
+func (m *EventMutation) ClearAdditionalProcessingDetails() {
+	m.additional_processing_details = nil
+	m.clearedFields[event.FieldAdditionalProcessingDetails] = struct{}{}
+}
+
+// AdditionalProcessingDetailsCleared returns if the "additional_processing_details" field was cleared in this mutation.
+func (m *EventMutation) AdditionalProcessingDetailsCleared() bool {
+	_, ok := m.clearedFields[event.FieldAdditionalProcessingDetails]
+	return ok
+}
+
+// ResetAdditionalProcessingDetails resets all changes to the "additional_processing_details" field.
+func (m *EventMutation) ResetAdditionalProcessingDetails() {
+	m.additional_processing_details = nil
+	delete(m.clearedFields, event.FieldAdditionalProcessingDetails)
+}
+
+// SetProcessedBy sets the "processed_by" field.
+func (m *EventMutation) SetProcessedBy(s string) {
+	m.processed_by = &s
+}
+
+// ProcessedBy returns the value of the "processed_by" field in the mutation.
+func (m *EventMutation) ProcessedBy() (r string, exists bool) {
+	v := m.processed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProcessedBy returns the old "processed_by" field's value of the Event entity.
+// If the Event object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventMutation) OldProcessedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProcessedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProcessedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProcessedBy: %w", err)
+	}
+	return oldValue.ProcessedBy, nil
+}
+
+// ClearProcessedBy clears the value of the "processed_by" field.
+func (m *EventMutation) ClearProcessedBy() {
+	m.processed_by = nil
+	m.clearedFields[event.FieldProcessedBy] = struct{}{}
+}
+
+// ProcessedByCleared returns if the "processed_by" field was cleared in this mutation.
+func (m *EventMutation) ProcessedByCleared() bool {
+	_, ok := m.clearedFields[event.FieldProcessedBy]
+	return ok
+}
+
+// ResetProcessedBy resets all changes to the "processed_by" field.
+func (m *EventMutation) ResetProcessedBy() {
+	m.processed_by = nil
+	delete(m.clearedFields, event.FieldProcessedBy)
+}
+
+// SetProcessedAt sets the "processed_at" field.
+func (m *EventMutation) SetProcessedAt(t time.Time) {
+	m.processed_at = &t
+}
+
+// ProcessedAt returns the value of the "processed_at" field in the mutation.
+func (m *EventMutation) ProcessedAt() (r time.Time, exists bool) {
+	v := m.processed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProcessedAt returns the old "processed_at" field's value of the Event entity.
+// If the Event object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventMutation) OldProcessedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProcessedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProcessedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProcessedAt: %w", err)
+	}
+	return oldValue.ProcessedAt, nil
+}
+
+// ClearProcessedAt clears the value of the "processed_at" field.
+func (m *EventMutation) ClearProcessedAt() {
+	m.processed_at = nil
+	m.clearedFields[event.FieldProcessedAt] = struct{}{}
+}
+
+// ProcessedAtCleared returns if the "processed_at" field was cleared in this mutation.
+func (m *EventMutation) ProcessedAtCleared() bool {
+	_, ok := m.clearedFields[event.FieldProcessedAt]
+	return ok
+}
+
+// ResetProcessedAt resets all changes to the "processed_at" field.
+func (m *EventMutation) ResetProcessedAt() {
+	m.processed_at = nil
+	delete(m.clearedFields, event.FieldProcessedAt)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by ids.
@@ -27835,6 +28380,60 @@ func (m *EventMutation) ResetFile() {
 	m.removedfile = nil
 }
 
+// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by ids.
+func (m *EventMutation) AddOrgsubscriptionIDs(ids ...string) {
+	if m.orgsubscription == nil {
+		m.orgsubscription = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.orgsubscription[ids[i]] = struct{}{}
+	}
+}
+
+// ClearOrgsubscription clears the "orgsubscription" edge to the OrgSubscription entity.
+func (m *EventMutation) ClearOrgsubscription() {
+	m.clearedorgsubscription = true
+}
+
+// OrgsubscriptionCleared reports if the "orgsubscription" edge to the OrgSubscription entity was cleared.
+func (m *EventMutation) OrgsubscriptionCleared() bool {
+	return m.clearedorgsubscription
+}
+
+// RemoveOrgsubscriptionIDs removes the "orgsubscription" edge to the OrgSubscription entity by IDs.
+func (m *EventMutation) RemoveOrgsubscriptionIDs(ids ...string) {
+	if m.removedorgsubscription == nil {
+		m.removedorgsubscription = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.orgsubscription, ids[i])
+		m.removedorgsubscription[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedOrgsubscription returns the removed IDs of the "orgsubscription" edge to the OrgSubscription entity.
+func (m *EventMutation) RemovedOrgsubscriptionIDs() (ids []string) {
+	for id := range m.removedorgsubscription {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// OrgsubscriptionIDs returns the "orgsubscription" edge IDs in the mutation.
+func (m *EventMutation) OrgsubscriptionIDs() (ids []string) {
+	for id := range m.orgsubscription {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetOrgsubscription resets all changes to the "orgsubscription" edge.
+func (m *EventMutation) ResetOrgsubscription() {
+	m.orgsubscription = nil
+	m.clearedorgsubscription = false
+	m.removedorgsubscription = nil
+}
+
 // Where appends a list predicates to the EventMutation builder.
 func (m *EventMutation) Where(ps ...predicate.Event) {
 	m.predicates = append(m.predicates, ps...)
@@ -27869,7 +28468,7 @@ func (m *EventMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EventMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 14)
 	if m.created_at != nil {
 		fields = append(fields, event.FieldCreatedAt)
 	}
@@ -27897,6 +28496,21 @@ func (m *EventMutation) Fields() []string {
 	if m.metadata != nil {
 		fields = append(fields, event.FieldMetadata)
 	}
+	if m.source != nil {
+		fields = append(fields, event.FieldSource)
+	}
+	if m.additional_processing_required != nil {
+		fields = append(fields, event.FieldAdditionalProcessingRequired)
+	}
+	if m.additional_processing_details != nil {
+		fields = append(fields, event.FieldAdditionalProcessingDetails)
+	}
+	if m.processed_by != nil {
+		fields = append(fields, event.FieldProcessedBy)
+	}
+	if m.processed_at != nil {
+		fields = append(fields, event.FieldProcessedAt)
+	}
 	return fields
 }
 
@@ -27923,6 +28537,16 @@ func (m *EventMutation) Field(name string) (ent.Value, bool) {
 		return m.EventType()
 	case event.FieldMetadata:
 		return m.Metadata()
+	case event.FieldSource:
+		return m.Source()
+	case event.FieldAdditionalProcessingRequired:
+		return m.AdditionalProcessingRequired()
+	case event.FieldAdditionalProcessingDetails:
+		return m.AdditionalProcessingDetails()
+	case event.FieldProcessedBy:
+		return m.ProcessedBy()
+	case event.FieldProcessedAt:
+		return m.ProcessedAt()
 	}
 	return nil, false
 }
@@ -27950,6 +28574,16 @@ func (m *EventMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldEventType(ctx)
 	case event.FieldMetadata:
 		return m.OldMetadata(ctx)
+	case event.FieldSource:
+		return m.OldSource(ctx)
+	case event.FieldAdditionalProcessingRequired:
+		return m.OldAdditionalProcessingRequired(ctx)
+	case event.FieldAdditionalProcessingDetails:
+		return m.OldAdditionalProcessingDetails(ctx)
+	case event.FieldProcessedBy:
+		return m.OldProcessedBy(ctx)
+	case event.FieldProcessedAt:
+		return m.OldProcessedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Event field %s", name)
 }
@@ -28022,6 +28656,41 @@ func (m *EventMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMetadata(v)
 		return nil
+	case event.FieldSource:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSource(v)
+		return nil
+	case event.FieldAdditionalProcessingRequired:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalProcessingRequired(v)
+		return nil
+	case event.FieldAdditionalProcessingDetails:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalProcessingDetails(v)
+		return nil
+	case event.FieldProcessedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProcessedBy(v)
+		return nil
+	case event.FieldProcessedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProcessedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Event field %s", name)
 }
@@ -28067,14 +28736,29 @@ func (m *EventMutation) ClearedFields() []string {
 	if m.FieldCleared(event.FieldTags) {
 		fields = append(fields, event.FieldTags)
 	}
-	if m.FieldCleared(event.FieldEventID) {
-		fields = append(fields, event.FieldEventID)
-	}
 	if m.FieldCleared(event.FieldCorrelationID) {
 		fields = append(fields, event.FieldCorrelationID)
 	}
+	if m.FieldCleared(event.FieldEventType) {
+		fields = append(fields, event.FieldEventType)
+	}
 	if m.FieldCleared(event.FieldMetadata) {
 		fields = append(fields, event.FieldMetadata)
+	}
+	if m.FieldCleared(event.FieldSource) {
+		fields = append(fields, event.FieldSource)
+	}
+	if m.FieldCleared(event.FieldAdditionalProcessingRequired) {
+		fields = append(fields, event.FieldAdditionalProcessingRequired)
+	}
+	if m.FieldCleared(event.FieldAdditionalProcessingDetails) {
+		fields = append(fields, event.FieldAdditionalProcessingDetails)
+	}
+	if m.FieldCleared(event.FieldProcessedBy) {
+		fields = append(fields, event.FieldProcessedBy)
+	}
+	if m.FieldCleared(event.FieldProcessedAt) {
+		fields = append(fields, event.FieldProcessedAt)
 	}
 	return fields
 }
@@ -28105,14 +28789,29 @@ func (m *EventMutation) ClearField(name string) error {
 	case event.FieldTags:
 		m.ClearTags()
 		return nil
-	case event.FieldEventID:
-		m.ClearEventID()
-		return nil
 	case event.FieldCorrelationID:
 		m.ClearCorrelationID()
 		return nil
+	case event.FieldEventType:
+		m.ClearEventType()
+		return nil
 	case event.FieldMetadata:
 		m.ClearMetadata()
+		return nil
+	case event.FieldSource:
+		m.ClearSource()
+		return nil
+	case event.FieldAdditionalProcessingRequired:
+		m.ClearAdditionalProcessingRequired()
+		return nil
+	case event.FieldAdditionalProcessingDetails:
+		m.ClearAdditionalProcessingDetails()
+		return nil
+	case event.FieldProcessedBy:
+		m.ClearProcessedBy()
+		return nil
+	case event.FieldProcessedAt:
+		m.ClearProcessedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Event nullable field %s", name)
@@ -28149,13 +28848,28 @@ func (m *EventMutation) ResetField(name string) error {
 	case event.FieldMetadata:
 		m.ResetMetadata()
 		return nil
+	case event.FieldSource:
+		m.ResetSource()
+		return nil
+	case event.FieldAdditionalProcessingRequired:
+		m.ResetAdditionalProcessingRequired()
+		return nil
+	case event.FieldAdditionalProcessingDetails:
+		m.ResetAdditionalProcessingDetails()
+		return nil
+	case event.FieldProcessedBy:
+		m.ResetProcessedBy()
+		return nil
+	case event.FieldProcessedAt:
+		m.ResetProcessedAt()
+		return nil
 	}
 	return fmt.Errorf("unknown Event field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EventMutation) AddedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.user != nil {
 		edges = append(edges, event.EdgeUser)
 	}
@@ -28188,6 +28902,9 @@ func (m *EventMutation) AddedEdges() []string {
 	}
 	if m.file != nil {
 		edges = append(edges, event.EdgeFile)
+	}
+	if m.orgsubscription != nil {
+		edges = append(edges, event.EdgeOrgsubscription)
 	}
 	return edges
 }
@@ -28262,13 +28979,19 @@ func (m *EventMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case event.EdgeOrgsubscription:
+		ids := make([]ent.Value, 0, len(m.orgsubscription))
+		for id := range m.orgsubscription {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EventMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.removeduser != nil {
 		edges = append(edges, event.EdgeUser)
 	}
@@ -28301,6 +29024,9 @@ func (m *EventMutation) RemovedEdges() []string {
 	}
 	if m.removedfile != nil {
 		edges = append(edges, event.EdgeFile)
+	}
+	if m.removedorgsubscription != nil {
+		edges = append(edges, event.EdgeOrgsubscription)
 	}
 	return edges
 }
@@ -28375,13 +29101,19 @@ func (m *EventMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case event.EdgeOrgsubscription:
+		ids := make([]ent.Value, 0, len(m.removedorgsubscription))
+		for id := range m.removedorgsubscription {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EventMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.cleareduser {
 		edges = append(edges, event.EdgeUser)
 	}
@@ -28415,6 +29147,9 @@ func (m *EventMutation) ClearedEdges() []string {
 	if m.clearedfile {
 		edges = append(edges, event.EdgeFile)
 	}
+	if m.clearedorgsubscription {
+		edges = append(edges, event.EdgeOrgsubscription)
+	}
 	return edges
 }
 
@@ -28444,6 +29179,8 @@ func (m *EventMutation) EdgeCleared(name string) bool {
 		return m.clearedsubscriber
 	case event.EdgeFile:
 		return m.clearedfile
+	case event.EdgeOrgsubscription:
+		return m.clearedorgsubscription
 	}
 	return false
 }
@@ -28493,6 +29230,9 @@ func (m *EventMutation) ResetEdge(name string) error {
 	case event.EdgeFile:
 		m.ResetFile()
 		return nil
+	case event.EdgeOrgsubscription:
+		m.ResetOrgsubscription()
+		return nil
 	}
 	return fmt.Errorf("unknown Event edge %s", name)
 }
@@ -28500,26 +29240,31 @@ func (m *EventMutation) ResetEdge(name string) error {
 // EventHistoryMutation represents an operation that mutates the EventHistory nodes in the graph.
 type EventHistoryMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *string
-	history_time   *time.Time
-	ref            *string
-	operation      *history.OpType
-	created_at     *time.Time
-	updated_at     *time.Time
-	created_by     *string
-	updated_by     *string
-	tags           *[]string
-	appendtags     []string
-	event_id       *string
-	correlation_id *string
-	event_type     *string
-	metadata       *map[string]interface{}
-	clearedFields  map[string]struct{}
-	done           bool
-	oldValue       func(context.Context) (*EventHistory, error)
-	predicates     []predicate.EventHistory
+	op                             Op
+	typ                            string
+	id                             *string
+	history_time                   *time.Time
+	ref                            *string
+	operation                      *history.OpType
+	created_at                     *time.Time
+	updated_at                     *time.Time
+	created_by                     *string
+	updated_by                     *string
+	tags                           *[]string
+	appendtags                     []string
+	event_id                       *string
+	correlation_id                 *string
+	event_type                     *string
+	metadata                       *map[string]interface{}
+	source                         *string
+	additional_processing_required *bool
+	additional_processing_details  *string
+	processed_by                   *string
+	processed_at                   *time.Time
+	clearedFields                  map[string]struct{}
+	done                           bool
+	oldValue                       func(context.Context) (*EventHistory, error)
+	predicates                     []predicate.EventHistory
 }
 
 var _ ent.Mutation = (*EventHistoryMutation)(nil)
@@ -29039,22 +29784,9 @@ func (m *EventHistoryMutation) OldEventID(ctx context.Context) (v string, err er
 	return oldValue.EventID, nil
 }
 
-// ClearEventID clears the value of the "event_id" field.
-func (m *EventHistoryMutation) ClearEventID() {
-	m.event_id = nil
-	m.clearedFields[eventhistory.FieldEventID] = struct{}{}
-}
-
-// EventIDCleared returns if the "event_id" field was cleared in this mutation.
-func (m *EventHistoryMutation) EventIDCleared() bool {
-	_, ok := m.clearedFields[eventhistory.FieldEventID]
-	return ok
-}
-
 // ResetEventID resets all changes to the "event_id" field.
 func (m *EventHistoryMutation) ResetEventID() {
 	m.event_id = nil
-	delete(m.clearedFields, eventhistory.FieldEventID)
 }
 
 // SetCorrelationID sets the "correlation_id" field.
@@ -29137,9 +29869,22 @@ func (m *EventHistoryMutation) OldEventType(ctx context.Context) (v string, err 
 	return oldValue.EventType, nil
 }
 
+// ClearEventType clears the value of the "event_type" field.
+func (m *EventHistoryMutation) ClearEventType() {
+	m.event_type = nil
+	m.clearedFields[eventhistory.FieldEventType] = struct{}{}
+}
+
+// EventTypeCleared returns if the "event_type" field was cleared in this mutation.
+func (m *EventHistoryMutation) EventTypeCleared() bool {
+	_, ok := m.clearedFields[eventhistory.FieldEventType]
+	return ok
+}
+
 // ResetEventType resets all changes to the "event_type" field.
 func (m *EventHistoryMutation) ResetEventType() {
 	m.event_type = nil
+	delete(m.clearedFields, eventhistory.FieldEventType)
 }
 
 // SetMetadata sets the "metadata" field.
@@ -29191,6 +29936,251 @@ func (m *EventHistoryMutation) ResetMetadata() {
 	delete(m.clearedFields, eventhistory.FieldMetadata)
 }
 
+// SetSource sets the "source" field.
+func (m *EventHistoryMutation) SetSource(s string) {
+	m.source = &s
+}
+
+// Source returns the value of the "source" field in the mutation.
+func (m *EventHistoryMutation) Source() (r string, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSource returns the old "source" field's value of the EventHistory entity.
+// If the EventHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventHistoryMutation) OldSource(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSource is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSource requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSource: %w", err)
+	}
+	return oldValue.Source, nil
+}
+
+// ClearSource clears the value of the "source" field.
+func (m *EventHistoryMutation) ClearSource() {
+	m.source = nil
+	m.clearedFields[eventhistory.FieldSource] = struct{}{}
+}
+
+// SourceCleared returns if the "source" field was cleared in this mutation.
+func (m *EventHistoryMutation) SourceCleared() bool {
+	_, ok := m.clearedFields[eventhistory.FieldSource]
+	return ok
+}
+
+// ResetSource resets all changes to the "source" field.
+func (m *EventHistoryMutation) ResetSource() {
+	m.source = nil
+	delete(m.clearedFields, eventhistory.FieldSource)
+}
+
+// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
+func (m *EventHistoryMutation) SetAdditionalProcessingRequired(b bool) {
+	m.additional_processing_required = &b
+}
+
+// AdditionalProcessingRequired returns the value of the "additional_processing_required" field in the mutation.
+func (m *EventHistoryMutation) AdditionalProcessingRequired() (r bool, exists bool) {
+	v := m.additional_processing_required
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalProcessingRequired returns the old "additional_processing_required" field's value of the EventHistory entity.
+// If the EventHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventHistoryMutation) OldAdditionalProcessingRequired(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalProcessingRequired is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalProcessingRequired requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalProcessingRequired: %w", err)
+	}
+	return oldValue.AdditionalProcessingRequired, nil
+}
+
+// ClearAdditionalProcessingRequired clears the value of the "additional_processing_required" field.
+func (m *EventHistoryMutation) ClearAdditionalProcessingRequired() {
+	m.additional_processing_required = nil
+	m.clearedFields[eventhistory.FieldAdditionalProcessingRequired] = struct{}{}
+}
+
+// AdditionalProcessingRequiredCleared returns if the "additional_processing_required" field was cleared in this mutation.
+func (m *EventHistoryMutation) AdditionalProcessingRequiredCleared() bool {
+	_, ok := m.clearedFields[eventhistory.FieldAdditionalProcessingRequired]
+	return ok
+}
+
+// ResetAdditionalProcessingRequired resets all changes to the "additional_processing_required" field.
+func (m *EventHistoryMutation) ResetAdditionalProcessingRequired() {
+	m.additional_processing_required = nil
+	delete(m.clearedFields, eventhistory.FieldAdditionalProcessingRequired)
+}
+
+// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
+func (m *EventHistoryMutation) SetAdditionalProcessingDetails(s string) {
+	m.additional_processing_details = &s
+}
+
+// AdditionalProcessingDetails returns the value of the "additional_processing_details" field in the mutation.
+func (m *EventHistoryMutation) AdditionalProcessingDetails() (r string, exists bool) {
+	v := m.additional_processing_details
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalProcessingDetails returns the old "additional_processing_details" field's value of the EventHistory entity.
+// If the EventHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventHistoryMutation) OldAdditionalProcessingDetails(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalProcessingDetails is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalProcessingDetails requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalProcessingDetails: %w", err)
+	}
+	return oldValue.AdditionalProcessingDetails, nil
+}
+
+// ClearAdditionalProcessingDetails clears the value of the "additional_processing_details" field.
+func (m *EventHistoryMutation) ClearAdditionalProcessingDetails() {
+	m.additional_processing_details = nil
+	m.clearedFields[eventhistory.FieldAdditionalProcessingDetails] = struct{}{}
+}
+
+// AdditionalProcessingDetailsCleared returns if the "additional_processing_details" field was cleared in this mutation.
+func (m *EventHistoryMutation) AdditionalProcessingDetailsCleared() bool {
+	_, ok := m.clearedFields[eventhistory.FieldAdditionalProcessingDetails]
+	return ok
+}
+
+// ResetAdditionalProcessingDetails resets all changes to the "additional_processing_details" field.
+func (m *EventHistoryMutation) ResetAdditionalProcessingDetails() {
+	m.additional_processing_details = nil
+	delete(m.clearedFields, eventhistory.FieldAdditionalProcessingDetails)
+}
+
+// SetProcessedBy sets the "processed_by" field.
+func (m *EventHistoryMutation) SetProcessedBy(s string) {
+	m.processed_by = &s
+}
+
+// ProcessedBy returns the value of the "processed_by" field in the mutation.
+func (m *EventHistoryMutation) ProcessedBy() (r string, exists bool) {
+	v := m.processed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProcessedBy returns the old "processed_by" field's value of the EventHistory entity.
+// If the EventHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventHistoryMutation) OldProcessedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProcessedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProcessedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProcessedBy: %w", err)
+	}
+	return oldValue.ProcessedBy, nil
+}
+
+// ClearProcessedBy clears the value of the "processed_by" field.
+func (m *EventHistoryMutation) ClearProcessedBy() {
+	m.processed_by = nil
+	m.clearedFields[eventhistory.FieldProcessedBy] = struct{}{}
+}
+
+// ProcessedByCleared returns if the "processed_by" field was cleared in this mutation.
+func (m *EventHistoryMutation) ProcessedByCleared() bool {
+	_, ok := m.clearedFields[eventhistory.FieldProcessedBy]
+	return ok
+}
+
+// ResetProcessedBy resets all changes to the "processed_by" field.
+func (m *EventHistoryMutation) ResetProcessedBy() {
+	m.processed_by = nil
+	delete(m.clearedFields, eventhistory.FieldProcessedBy)
+}
+
+// SetProcessedAt sets the "processed_at" field.
+func (m *EventHistoryMutation) SetProcessedAt(t time.Time) {
+	m.processed_at = &t
+}
+
+// ProcessedAt returns the value of the "processed_at" field in the mutation.
+func (m *EventHistoryMutation) ProcessedAt() (r time.Time, exists bool) {
+	v := m.processed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProcessedAt returns the old "processed_at" field's value of the EventHistory entity.
+// If the EventHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EventHistoryMutation) OldProcessedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProcessedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProcessedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProcessedAt: %w", err)
+	}
+	return oldValue.ProcessedAt, nil
+}
+
+// ClearProcessedAt clears the value of the "processed_at" field.
+func (m *EventHistoryMutation) ClearProcessedAt() {
+	m.processed_at = nil
+	m.clearedFields[eventhistory.FieldProcessedAt] = struct{}{}
+}
+
+// ProcessedAtCleared returns if the "processed_at" field was cleared in this mutation.
+func (m *EventHistoryMutation) ProcessedAtCleared() bool {
+	_, ok := m.clearedFields[eventhistory.FieldProcessedAt]
+	return ok
+}
+
+// ResetProcessedAt resets all changes to the "processed_at" field.
+func (m *EventHistoryMutation) ResetProcessedAt() {
+	m.processed_at = nil
+	delete(m.clearedFields, eventhistory.FieldProcessedAt)
+}
+
 // Where appends a list predicates to the EventHistoryMutation builder.
 func (m *EventHistoryMutation) Where(ps ...predicate.EventHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -29225,7 +30215,7 @@ func (m *EventHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EventHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 17)
 	if m.history_time != nil {
 		fields = append(fields, eventhistory.FieldHistoryTime)
 	}
@@ -29262,6 +30252,21 @@ func (m *EventHistoryMutation) Fields() []string {
 	if m.metadata != nil {
 		fields = append(fields, eventhistory.FieldMetadata)
 	}
+	if m.source != nil {
+		fields = append(fields, eventhistory.FieldSource)
+	}
+	if m.additional_processing_required != nil {
+		fields = append(fields, eventhistory.FieldAdditionalProcessingRequired)
+	}
+	if m.additional_processing_details != nil {
+		fields = append(fields, eventhistory.FieldAdditionalProcessingDetails)
+	}
+	if m.processed_by != nil {
+		fields = append(fields, eventhistory.FieldProcessedBy)
+	}
+	if m.processed_at != nil {
+		fields = append(fields, eventhistory.FieldProcessedAt)
+	}
 	return fields
 }
 
@@ -29294,6 +30299,16 @@ func (m *EventHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.EventType()
 	case eventhistory.FieldMetadata:
 		return m.Metadata()
+	case eventhistory.FieldSource:
+		return m.Source()
+	case eventhistory.FieldAdditionalProcessingRequired:
+		return m.AdditionalProcessingRequired()
+	case eventhistory.FieldAdditionalProcessingDetails:
+		return m.AdditionalProcessingDetails()
+	case eventhistory.FieldProcessedBy:
+		return m.ProcessedBy()
+	case eventhistory.FieldProcessedAt:
+		return m.ProcessedAt()
 	}
 	return nil, false
 }
@@ -29327,6 +30342,16 @@ func (m *EventHistoryMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldEventType(ctx)
 	case eventhistory.FieldMetadata:
 		return m.OldMetadata(ctx)
+	case eventhistory.FieldSource:
+		return m.OldSource(ctx)
+	case eventhistory.FieldAdditionalProcessingRequired:
+		return m.OldAdditionalProcessingRequired(ctx)
+	case eventhistory.FieldAdditionalProcessingDetails:
+		return m.OldAdditionalProcessingDetails(ctx)
+	case eventhistory.FieldProcessedBy:
+		return m.OldProcessedBy(ctx)
+	case eventhistory.FieldProcessedAt:
+		return m.OldProcessedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown EventHistory field %s", name)
 }
@@ -29420,6 +30445,41 @@ func (m *EventHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMetadata(v)
 		return nil
+	case eventhistory.FieldSource:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSource(v)
+		return nil
+	case eventhistory.FieldAdditionalProcessingRequired:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalProcessingRequired(v)
+		return nil
+	case eventhistory.FieldAdditionalProcessingDetails:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalProcessingDetails(v)
+		return nil
+	case eventhistory.FieldProcessedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProcessedBy(v)
+		return nil
+	case eventhistory.FieldProcessedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProcessedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown EventHistory field %s", name)
 }
@@ -29468,14 +30528,29 @@ func (m *EventHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(eventhistory.FieldTags) {
 		fields = append(fields, eventhistory.FieldTags)
 	}
-	if m.FieldCleared(eventhistory.FieldEventID) {
-		fields = append(fields, eventhistory.FieldEventID)
-	}
 	if m.FieldCleared(eventhistory.FieldCorrelationID) {
 		fields = append(fields, eventhistory.FieldCorrelationID)
 	}
+	if m.FieldCleared(eventhistory.FieldEventType) {
+		fields = append(fields, eventhistory.FieldEventType)
+	}
 	if m.FieldCleared(eventhistory.FieldMetadata) {
 		fields = append(fields, eventhistory.FieldMetadata)
+	}
+	if m.FieldCleared(eventhistory.FieldSource) {
+		fields = append(fields, eventhistory.FieldSource)
+	}
+	if m.FieldCleared(eventhistory.FieldAdditionalProcessingRequired) {
+		fields = append(fields, eventhistory.FieldAdditionalProcessingRequired)
+	}
+	if m.FieldCleared(eventhistory.FieldAdditionalProcessingDetails) {
+		fields = append(fields, eventhistory.FieldAdditionalProcessingDetails)
+	}
+	if m.FieldCleared(eventhistory.FieldProcessedBy) {
+		fields = append(fields, eventhistory.FieldProcessedBy)
+	}
+	if m.FieldCleared(eventhistory.FieldProcessedAt) {
+		fields = append(fields, eventhistory.FieldProcessedAt)
 	}
 	return fields
 }
@@ -29509,14 +30584,29 @@ func (m *EventHistoryMutation) ClearField(name string) error {
 	case eventhistory.FieldTags:
 		m.ClearTags()
 		return nil
-	case eventhistory.FieldEventID:
-		m.ClearEventID()
-		return nil
 	case eventhistory.FieldCorrelationID:
 		m.ClearCorrelationID()
 		return nil
+	case eventhistory.FieldEventType:
+		m.ClearEventType()
+		return nil
 	case eventhistory.FieldMetadata:
 		m.ClearMetadata()
+		return nil
+	case eventhistory.FieldSource:
+		m.ClearSource()
+		return nil
+	case eventhistory.FieldAdditionalProcessingRequired:
+		m.ClearAdditionalProcessingRequired()
+		return nil
+	case eventhistory.FieldAdditionalProcessingDetails:
+		m.ClearAdditionalProcessingDetails()
+		return nil
+	case eventhistory.FieldProcessedBy:
+		m.ClearProcessedBy()
+		return nil
+	case eventhistory.FieldProcessedAt:
+		m.ClearProcessedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown EventHistory nullable field %s", name)
@@ -29561,6 +30651,21 @@ func (m *EventHistoryMutation) ResetField(name string) error {
 		return nil
 	case eventhistory.FieldMetadata:
 		m.ResetMetadata()
+		return nil
+	case eventhistory.FieldSource:
+		m.ResetSource()
+		return nil
+	case eventhistory.FieldAdditionalProcessingRequired:
+		m.ResetAdditionalProcessingRequired()
+		return nil
+	case eventhistory.FieldAdditionalProcessingDetails:
+		m.ResetAdditionalProcessingDetails()
+		return nil
+	case eventhistory.FieldProcessedBy:
+		m.ResetProcessedBy()
+		return nil
+	case eventhistory.FieldProcessedAt:
+		m.ResetProcessedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown EventHistory field %s", name)
@@ -66949,6 +68054,9 @@ type OrgSubscriptionMutation struct {
 	clearedFields              map[string]struct{}
 	owner                      *string
 	clearedowner               bool
+	events                     map[string]struct{}
+	removedevents              map[string]struct{}
+	clearedevents              bool
 	done                       bool
 	oldValue                   func(context.Context) (*OrgSubscription, error)
 	predicates                 []predicate.OrgSubscription
@@ -68002,6 +69110,60 @@ func (m *OrgSubscriptionMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *OrgSubscriptionMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *OrgSubscriptionMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *OrgSubscriptionMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *OrgSubscriptionMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *OrgSubscriptionMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *OrgSubscriptionMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *OrgSubscriptionMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
 // Where appends a list predicates to the OrgSubscriptionMutation builder.
 func (m *OrgSubscriptionMutation) Where(ps ...predicate.OrgSubscription) {
 	m.predicates = append(m.predicates, ps...)
@@ -68529,9 +69691,12 @@ func (m *OrgSubscriptionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrgSubscriptionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.owner != nil {
 		edges = append(edges, orgsubscription.EdgeOwner)
+	}
+	if m.events != nil {
+		edges = append(edges, orgsubscription.EdgeEvents)
 	}
 	return edges
 }
@@ -68544,27 +69709,47 @@ func (m *OrgSubscriptionMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
+	case orgsubscription.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrgSubscriptionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.removedevents != nil {
+		edges = append(edges, orgsubscription.EdgeEvents)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *OrgSubscriptionMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case orgsubscription.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrgSubscriptionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedowner {
 		edges = append(edges, orgsubscription.EdgeOwner)
+	}
+	if m.clearedevents {
+		edges = append(edges, orgsubscription.EdgeEvents)
 	}
 	return edges
 }
@@ -68575,6 +69760,8 @@ func (m *OrgSubscriptionMutation) EdgeCleared(name string) bool {
 	switch name {
 	case orgsubscription.EdgeOwner:
 		return m.clearedowner
+	case orgsubscription.EdgeEvents:
+		return m.clearedevents
 	}
 	return false
 }
@@ -68596,6 +69783,9 @@ func (m *OrgSubscriptionMutation) ResetEdge(name string) error {
 	switch name {
 	case orgsubscription.EdgeOwner:
 		m.ResetOwner()
+		return nil
+	case orgsubscription.EdgeEvents:
+		m.ResetEvents()
 		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscription edge %s", name)
@@ -81241,6 +82431,10 @@ type PersonalAccessTokenMutation struct {
 	scopes               *[]string
 	appendscopes         []string
 	last_used_at         *time.Time
+	is_active            *bool
+	revoked_reason       *string
+	revoked_by           *string
+	revoked_at           *time.Time
 	clearedFields        map[string]struct{}
 	owner                *string
 	clearedowner         bool
@@ -82038,6 +83232,202 @@ func (m *PersonalAccessTokenMutation) ResetLastUsedAt() {
 	delete(m.clearedFields, personalaccesstoken.FieldLastUsedAt)
 }
 
+// SetIsActive sets the "is_active" field.
+func (m *PersonalAccessTokenMutation) SetIsActive(b bool) {
+	m.is_active = &b
+}
+
+// IsActive returns the value of the "is_active" field in the mutation.
+func (m *PersonalAccessTokenMutation) IsActive() (r bool, exists bool) {
+	v := m.is_active
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsActive returns the old "is_active" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldIsActive(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsActive requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsActive: %w", err)
+	}
+	return oldValue.IsActive, nil
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (m *PersonalAccessTokenMutation) ClearIsActive() {
+	m.is_active = nil
+	m.clearedFields[personalaccesstoken.FieldIsActive] = struct{}{}
+}
+
+// IsActiveCleared returns if the "is_active" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) IsActiveCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldIsActive]
+	return ok
+}
+
+// ResetIsActive resets all changes to the "is_active" field.
+func (m *PersonalAccessTokenMutation) ResetIsActive() {
+	m.is_active = nil
+	delete(m.clearedFields, personalaccesstoken.FieldIsActive)
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (m *PersonalAccessTokenMutation) SetRevokedReason(s string) {
+	m.revoked_reason = &s
+}
+
+// RevokedReason returns the value of the "revoked_reason" field in the mutation.
+func (m *PersonalAccessTokenMutation) RevokedReason() (r string, exists bool) {
+	v := m.revoked_reason
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedReason returns the old "revoked_reason" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldRevokedReason(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedReason is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedReason requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedReason: %w", err)
+	}
+	return oldValue.RevokedReason, nil
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (m *PersonalAccessTokenMutation) ClearRevokedReason() {
+	m.revoked_reason = nil
+	m.clearedFields[personalaccesstoken.FieldRevokedReason] = struct{}{}
+}
+
+// RevokedReasonCleared returns if the "revoked_reason" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) RevokedReasonCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldRevokedReason]
+	return ok
+}
+
+// ResetRevokedReason resets all changes to the "revoked_reason" field.
+func (m *PersonalAccessTokenMutation) ResetRevokedReason() {
+	m.revoked_reason = nil
+	delete(m.clearedFields, personalaccesstoken.FieldRevokedReason)
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (m *PersonalAccessTokenMutation) SetRevokedBy(s string) {
+	m.revoked_by = &s
+}
+
+// RevokedBy returns the value of the "revoked_by" field in the mutation.
+func (m *PersonalAccessTokenMutation) RevokedBy() (r string, exists bool) {
+	v := m.revoked_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedBy returns the old "revoked_by" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldRevokedBy(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedBy: %w", err)
+	}
+	return oldValue.RevokedBy, nil
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (m *PersonalAccessTokenMutation) ClearRevokedBy() {
+	m.revoked_by = nil
+	m.clearedFields[personalaccesstoken.FieldRevokedBy] = struct{}{}
+}
+
+// RevokedByCleared returns if the "revoked_by" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) RevokedByCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldRevokedBy]
+	return ok
+}
+
+// ResetRevokedBy resets all changes to the "revoked_by" field.
+func (m *PersonalAccessTokenMutation) ResetRevokedBy() {
+	m.revoked_by = nil
+	delete(m.clearedFields, personalaccesstoken.FieldRevokedBy)
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (m *PersonalAccessTokenMutation) SetRevokedAt(t time.Time) {
+	m.revoked_at = &t
+}
+
+// RevokedAt returns the value of the "revoked_at" field in the mutation.
+func (m *PersonalAccessTokenMutation) RevokedAt() (r time.Time, exists bool) {
+	v := m.revoked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedAt returns the old "revoked_at" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldRevokedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedAt: %w", err)
+	}
+	return oldValue.RevokedAt, nil
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (m *PersonalAccessTokenMutation) ClearRevokedAt() {
+	m.revoked_at = nil
+	m.clearedFields[personalaccesstoken.FieldRevokedAt] = struct{}{}
+}
+
+// RevokedAtCleared returns if the "revoked_at" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) RevokedAtCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldRevokedAt]
+	return ok
+}
+
+// ResetRevokedAt resets all changes to the "revoked_at" field.
+func (m *PersonalAccessTokenMutation) ResetRevokedAt() {
+	m.revoked_at = nil
+	delete(m.clearedFields, personalaccesstoken.FieldRevokedAt)
+}
+
 // ClearOwner clears the "owner" edge to the User entity.
 func (m *PersonalAccessTokenMutation) ClearOwner() {
 	m.clearedowner = true
@@ -82207,7 +83597,7 @@ func (m *PersonalAccessTokenMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonalAccessTokenMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, personalaccesstoken.FieldCreatedAt)
 	}
@@ -82250,6 +83640,18 @@ func (m *PersonalAccessTokenMutation) Fields() []string {
 	if m.last_used_at != nil {
 		fields = append(fields, personalaccesstoken.FieldLastUsedAt)
 	}
+	if m.is_active != nil {
+		fields = append(fields, personalaccesstoken.FieldIsActive)
+	}
+	if m.revoked_reason != nil {
+		fields = append(fields, personalaccesstoken.FieldRevokedReason)
+	}
+	if m.revoked_by != nil {
+		fields = append(fields, personalaccesstoken.FieldRevokedBy)
+	}
+	if m.revoked_at != nil {
+		fields = append(fields, personalaccesstoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -82286,6 +83688,14 @@ func (m *PersonalAccessTokenMutation) Field(name string) (ent.Value, bool) {
 		return m.Scopes()
 	case personalaccesstoken.FieldLastUsedAt:
 		return m.LastUsedAt()
+	case personalaccesstoken.FieldIsActive:
+		return m.IsActive()
+	case personalaccesstoken.FieldRevokedReason:
+		return m.RevokedReason()
+	case personalaccesstoken.FieldRevokedBy:
+		return m.RevokedBy()
+	case personalaccesstoken.FieldRevokedAt:
+		return m.RevokedAt()
 	}
 	return nil, false
 }
@@ -82323,6 +83733,14 @@ func (m *PersonalAccessTokenMutation) OldField(ctx context.Context, name string)
 		return m.OldScopes(ctx)
 	case personalaccesstoken.FieldLastUsedAt:
 		return m.OldLastUsedAt(ctx)
+	case personalaccesstoken.FieldIsActive:
+		return m.OldIsActive(ctx)
+	case personalaccesstoken.FieldRevokedReason:
+		return m.OldRevokedReason(ctx)
+	case personalaccesstoken.FieldRevokedBy:
+		return m.OldRevokedBy(ctx)
+	case personalaccesstoken.FieldRevokedAt:
+		return m.OldRevokedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown PersonalAccessToken field %s", name)
 }
@@ -82430,6 +83848,34 @@ func (m *PersonalAccessTokenMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetLastUsedAt(v)
 		return nil
+	case personalaccesstoken.FieldIsActive:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsActive(v)
+		return nil
+	case personalaccesstoken.FieldRevokedReason:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedReason(v)
+		return nil
+	case personalaccesstoken.FieldRevokedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedBy(v)
+		return nil
+	case personalaccesstoken.FieldRevokedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken field %s", name)
 }
@@ -82493,6 +83939,18 @@ func (m *PersonalAccessTokenMutation) ClearedFields() []string {
 	if m.FieldCleared(personalaccesstoken.FieldLastUsedAt) {
 		fields = append(fields, personalaccesstoken.FieldLastUsedAt)
 	}
+	if m.FieldCleared(personalaccesstoken.FieldIsActive) {
+		fields = append(fields, personalaccesstoken.FieldIsActive)
+	}
+	if m.FieldCleared(personalaccesstoken.FieldRevokedReason) {
+		fields = append(fields, personalaccesstoken.FieldRevokedReason)
+	}
+	if m.FieldCleared(personalaccesstoken.FieldRevokedBy) {
+		fields = append(fields, personalaccesstoken.FieldRevokedBy)
+	}
+	if m.FieldCleared(personalaccesstoken.FieldRevokedAt) {
+		fields = append(fields, personalaccesstoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -82539,6 +83997,18 @@ func (m *PersonalAccessTokenMutation) ClearField(name string) error {
 		return nil
 	case personalaccesstoken.FieldLastUsedAt:
 		m.ClearLastUsedAt()
+		return nil
+	case personalaccesstoken.FieldIsActive:
+		m.ClearIsActive()
+		return nil
+	case personalaccesstoken.FieldRevokedReason:
+		m.ClearRevokedReason()
+		return nil
+	case personalaccesstoken.FieldRevokedBy:
+		m.ClearRevokedBy()
+		return nil
+	case personalaccesstoken.FieldRevokedAt:
+		m.ClearRevokedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken nullable field %s", name)
@@ -82589,6 +84059,18 @@ func (m *PersonalAccessTokenMutation) ResetField(name string) error {
 		return nil
 	case personalaccesstoken.FieldLastUsedAt:
 		m.ResetLastUsedAt()
+		return nil
+	case personalaccesstoken.FieldIsActive:
+		m.ResetIsActive()
+		return nil
+	case personalaccesstoken.FieldRevokedReason:
+		m.ResetRevokedReason()
+		return nil
+	case personalaccesstoken.FieldRevokedBy:
+		m.ResetRevokedBy()
+		return nil
+	case personalaccesstoken.FieldRevokedAt:
+		m.ResetRevokedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken field %s", name)

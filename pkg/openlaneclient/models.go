@@ -36,10 +36,18 @@ type APIToken struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string       `json:"description,omitempty"`
-	Scopes      []string      `json:"scopes,omitempty"`
-	LastUsedAt  *time.Time    `json:"lastUsedAt,omitempty"`
-	Owner       *Organization `json:"owner,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Scopes      []string   `json:"scopes,omitempty"`
+	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time    `json:"revokedAt,omitempty"`
+	Owner     *Organization `json:"owner,omitempty"`
 }
 
 func (APIToken) IsNode() {}
@@ -242,6 +250,54 @@ type APITokenWhereInput struct {
 	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
 	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// is_active field predicates
+	IsActive       *bool `json:"isActive,omitempty"`
+	IsActiveNeq    *bool `json:"isActiveNEQ,omitempty"`
+	IsActiveIsNil  *bool `json:"isActiveIsNil,omitempty"`
+	IsActiveNotNil *bool `json:"isActiveNotNil,omitempty"`
+	// revoked_reason field predicates
+	RevokedReason             *string  `json:"revokedReason,omitempty"`
+	RevokedReasonNeq          *string  `json:"revokedReasonNEQ,omitempty"`
+	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
+	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
+	RevokedReasonGt           *string  `json:"revokedReasonGT,omitempty"`
+	RevokedReasonGte          *string  `json:"revokedReasonGTE,omitempty"`
+	RevokedReasonLt           *string  `json:"revokedReasonLT,omitempty"`
+	RevokedReasonLte          *string  `json:"revokedReasonLTE,omitempty"`
+	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
+	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
+	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
+	RevokedReasonIsNil        *bool    `json:"revokedReasonIsNil,omitempty"`
+	RevokedReasonNotNil       *bool    `json:"revokedReasonNotNil,omitempty"`
+	RevokedReasonEqualFold    *string  `json:"revokedReasonEqualFold,omitempty"`
+	RevokedReasonContainsFold *string  `json:"revokedReasonContainsFold,omitempty"`
+	// revoked_by field predicates
+	RevokedBy             *string  `json:"revokedBy,omitempty"`
+	RevokedByNeq          *string  `json:"revokedByNEQ,omitempty"`
+	RevokedByIn           []string `json:"revokedByIn,omitempty"`
+	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
+	RevokedByGt           *string  `json:"revokedByGT,omitempty"`
+	RevokedByGte          *string  `json:"revokedByGTE,omitempty"`
+	RevokedByLt           *string  `json:"revokedByLT,omitempty"`
+	RevokedByLte          *string  `json:"revokedByLTE,omitempty"`
+	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
+	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
+	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
+	RevokedByIsNil        *bool    `json:"revokedByIsNil,omitempty"`
+	RevokedByNotNil       *bool    `json:"revokedByNotNil,omitempty"`
+	RevokedByEqualFold    *string  `json:"revokedByEqualFold,omitempty"`
+	RevokedByContainsFold *string  `json:"revokedByContainsFold,omitempty"`
+	// revoked_at field predicates
+	RevokedAt       *time.Time   `json:"revokedAt,omitempty"`
+	RevokedAtNeq    *time.Time   `json:"revokedAtNEQ,omitempty"`
+	RevokedAtIn     []*time.Time `json:"revokedAtIn,omitempty"`
+	RevokedAtNotIn  []*time.Time `json:"revokedAtNotIn,omitempty"`
+	RevokedAtGt     *time.Time   `json:"revokedAtGT,omitempty"`
+	RevokedAtGte    *time.Time   `json:"revokedAtGTE,omitempty"`
+	RevokedAtLt     *time.Time   `json:"revokedAtLT,omitempty"`
+	RevokedAtLte    *time.Time   `json:"revokedAtLTE,omitempty"`
+	RevokedAtIsNil  *bool        `json:"revokedAtIsNil,omitempty"`
+	RevokedAtNotNil *bool        `json:"revokedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -3180,7 +3236,15 @@ type CreateAPITokenInput struct {
 	Description *string    `json:"description,omitempty"`
 	Scopes      []string   `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
-	OwnerID     *string    `json:"ownerID,omitempty"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time `json:"revokedAt,omitempty"`
+	OwnerID   *string    `json:"ownerID,omitempty"`
 }
 
 // CreateActionPlanInput is used for create ActionPlan object.
@@ -3382,20 +3446,35 @@ type CreateEntityTypeInput struct {
 // Input was generated by ent.
 type CreateEventInput struct {
 	// tags associated with the object
-	Tags                   []string       `json:"tags,omitempty"`
-	EventID                *string        `json:"eventID,omitempty"`
-	CorrelationID          *string        `json:"correlationID,omitempty"`
-	EventType              string         `json:"eventType"`
-	Metadata               map[string]any `json:"metadata,omitempty"`
-	UserIDs                []string       `json:"userIDs,omitempty"`
-	GroupIDs               []string       `json:"groupIDs,omitempty"`
-	IntegrationIDs         []string       `json:"integrationIDs,omitempty"`
-	OrganizationIDs        []string       `json:"organizationIDs,omitempty"`
-	InviteIDs              []string       `json:"inviteIDs,omitempty"`
-	PersonalAccessTokenIDs []string       `json:"personalAccessTokenIDs,omitempty"`
-	HushIDs                []string       `json:"hushIDs,omitempty"`
-	SubscriberIDs          []string       `json:"subscriberIDs,omitempty"`
-	FileIDs                []string       `json:"fileIDs,omitempty"`
+	Tags []string `json:"tags,omitempty"`
+	// the unique identifier of the event as it relates to the source or outside system
+	EventID string `json:"eventID"`
+	// an identifier to correleate the event to another object or source, if needed
+	CorrelationID *string `json:"correlationID,omitempty"`
+	// the type of event
+	EventType *string `json:"eventType,omitempty"`
+	// event metadata
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the source of the event
+	Source *string `json:"source,omitempty"`
+	// indicates if additional processing is required for the event
+	AdditionalProcessingRequired *bool `json:"additionalProcessingRequired,omitempty"`
+	// details about the additional processing required
+	AdditionalProcessingDetails *string `json:"additionalProcessingDetails,omitempty"`
+	// the listener ID who processed the event
+	ProcessedBy *string `json:"processedBy,omitempty"`
+	// the time the event was processed
+	ProcessedAt            *time.Time `json:"processedAt,omitempty"`
+	UserIDs                []string   `json:"userIDs,omitempty"`
+	GroupIDs               []string   `json:"groupIDs,omitempty"`
+	IntegrationIDs         []string   `json:"integrationIDs,omitempty"`
+	OrganizationIDs        []string   `json:"organizationIDs,omitempty"`
+	InviteIDs              []string   `json:"inviteIDs,omitempty"`
+	PersonalAccessTokenIDs []string   `json:"personalAccessTokenIDs,omitempty"`
+	HushIDs                []string   `json:"hushIDs,omitempty"`
+	SubscriberIDs          []string   `json:"subscriberIDs,omitempty"`
+	FileIDs                []string   `json:"fileIDs,omitempty"`
+	OrgsubscriptionIDs     []string   `json:"orgsubscriptionIDs,omitempty"`
 }
 
 // CreateEvidenceInput is used for create Evidence object.
@@ -3795,9 +3874,17 @@ type CreatePersonalAccessTokenInput struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description     *string    `json:"description,omitempty"`
-	Scopes          []string   `json:"scopes,omitempty"`
-	LastUsedAt      *time.Time `json:"lastUsedAt,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Scopes      []string   `json:"scopes,omitempty"`
+	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt       *time.Time `json:"revokedAt,omitempty"`
 	OwnerID         string     `json:"ownerID"`
 	OrganizationIDs []string   `json:"organizationIDs,omitempty"`
 	EventIDs        []string   `json:"eventIDs,omitempty"`
@@ -5538,11 +5625,25 @@ type Event struct {
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags                []string               `json:"tags,omitempty"`
-	EventID             *string                `json:"eventID,omitempty"`
-	CorrelationID       *string                `json:"correlationID,omitempty"`
-	EventType           string                 `json:"eventType"`
-	Metadata            map[string]any         `json:"metadata,omitempty"`
+	Tags []string `json:"tags,omitempty"`
+	// the unique identifier of the event as it relates to the source or outside system
+	EventID string `json:"eventID"`
+	// an identifier to correleate the event to another object or source, if needed
+	CorrelationID *string `json:"correlationID,omitempty"`
+	// the type of event
+	EventType *string `json:"eventType,omitempty"`
+	// event metadata
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the source of the event
+	Source *string `json:"source,omitempty"`
+	// indicates if additional processing is required for the event
+	AdditionalProcessingRequired *bool `json:"additionalProcessingRequired,omitempty"`
+	// details about the additional processing required
+	AdditionalProcessingDetails *string `json:"additionalProcessingDetails,omitempty"`
+	// the listener ID who processed the event
+	ProcessedBy *string `json:"processedBy,omitempty"`
+	// the time the event was processed
+	ProcessedAt         *time.Time             `json:"processedAt,omitempty"`
 	User                []*User                `json:"user,omitempty"`
 	Group               []*Group               `json:"group,omitempty"`
 	Integration         []*Integration         `json:"integration,omitempty"`
@@ -5554,6 +5655,7 @@ type Event struct {
 	Groupmembership     []*GroupMembership     `json:"groupmembership,omitempty"`
 	Subscriber          []*Subscriber          `json:"subscriber,omitempty"`
 	File                []*File                `json:"file,omitempty"`
+	Orgsubscription     []*OrgSubscription     `json:"orgsubscription,omitempty"`
 }
 
 func (Event) IsNode() {}
@@ -5604,11 +5706,25 @@ type EventHistory struct {
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags          []string       `json:"tags,omitempty"`
-	EventID       *string        `json:"eventID,omitempty"`
-	CorrelationID *string        `json:"correlationID,omitempty"`
-	EventType     string         `json:"eventType"`
-	Metadata      map[string]any `json:"metadata,omitempty"`
+	Tags []string `json:"tags,omitempty"`
+	// the unique identifier of the event as it relates to the source or outside system
+	EventID string `json:"eventID"`
+	// an identifier to correleate the event to another object or source, if needed
+	CorrelationID *string `json:"correlationID,omitempty"`
+	// the type of event
+	EventType *string `json:"eventType,omitempty"`
+	// event metadata
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the source of the event
+	Source *string `json:"source,omitempty"`
+	// indicates if additional processing is required for the event
+	AdditionalProcessingRequired *bool `json:"additionalProcessingRequired,omitempty"`
+	// details about the additional processing required
+	AdditionalProcessingDetails *string `json:"additionalProcessingDetails,omitempty"`
+	// the listener ID who processed the event
+	ProcessedBy *string `json:"processedBy,omitempty"`
+	// the time the event was processed
+	ProcessedAt *time.Time `json:"processedAt,omitempty"`
 }
 
 func (EventHistory) IsNode() {}
@@ -5744,8 +5860,6 @@ type EventHistoryWhereInput struct {
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
-	EventIDIsNil        *bool    `json:"eventIDIsNil,omitempty"`
-	EventIDNotNil       *bool    `json:"eventIDNotNil,omitempty"`
 	EventIDEqualFold    *string  `json:"eventIDEqualFold,omitempty"`
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 	// correlation_id field predicates
@@ -5776,8 +5890,74 @@ type EventHistoryWhereInput struct {
 	EventTypeContains     *string  `json:"eventTypeContains,omitempty"`
 	EventTypeHasPrefix    *string  `json:"eventTypeHasPrefix,omitempty"`
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
+	EventTypeIsNil        *bool    `json:"eventTypeIsNil,omitempty"`
+	EventTypeNotNil       *bool    `json:"eventTypeNotNil,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// additional_processing_required field predicates
+	AdditionalProcessingRequired       *bool `json:"additionalProcessingRequired,omitempty"`
+	AdditionalProcessingRequiredNeq    *bool `json:"additionalProcessingRequiredNEQ,omitempty"`
+	AdditionalProcessingRequiredIsNil  *bool `json:"additionalProcessingRequiredIsNil,omitempty"`
+	AdditionalProcessingRequiredNotNil *bool `json:"additionalProcessingRequiredNotNil,omitempty"`
+	// additional_processing_details field predicates
+	AdditionalProcessingDetails             *string  `json:"additionalProcessingDetails,omitempty"`
+	AdditionalProcessingDetailsNeq          *string  `json:"additionalProcessingDetailsNEQ,omitempty"`
+	AdditionalProcessingDetailsIn           []string `json:"additionalProcessingDetailsIn,omitempty"`
+	AdditionalProcessingDetailsNotIn        []string `json:"additionalProcessingDetailsNotIn,omitempty"`
+	AdditionalProcessingDetailsGt           *string  `json:"additionalProcessingDetailsGT,omitempty"`
+	AdditionalProcessingDetailsGte          *string  `json:"additionalProcessingDetailsGTE,omitempty"`
+	AdditionalProcessingDetailsLt           *string  `json:"additionalProcessingDetailsLT,omitempty"`
+	AdditionalProcessingDetailsLte          *string  `json:"additionalProcessingDetailsLTE,omitempty"`
+	AdditionalProcessingDetailsContains     *string  `json:"additionalProcessingDetailsContains,omitempty"`
+	AdditionalProcessingDetailsHasPrefix    *string  `json:"additionalProcessingDetailsHasPrefix,omitempty"`
+	AdditionalProcessingDetailsHasSuffix    *string  `json:"additionalProcessingDetailsHasSuffix,omitempty"`
+	AdditionalProcessingDetailsIsNil        *bool    `json:"additionalProcessingDetailsIsNil,omitempty"`
+	AdditionalProcessingDetailsNotNil       *bool    `json:"additionalProcessingDetailsNotNil,omitempty"`
+	AdditionalProcessingDetailsEqualFold    *string  `json:"additionalProcessingDetailsEqualFold,omitempty"`
+	AdditionalProcessingDetailsContainsFold *string  `json:"additionalProcessingDetailsContainsFold,omitempty"`
+	// processed_by field predicates
+	ProcessedBy             *string  `json:"processedBy,omitempty"`
+	ProcessedByNeq          *string  `json:"processedByNEQ,omitempty"`
+	ProcessedByIn           []string `json:"processedByIn,omitempty"`
+	ProcessedByNotIn        []string `json:"processedByNotIn,omitempty"`
+	ProcessedByGt           *string  `json:"processedByGT,omitempty"`
+	ProcessedByGte          *string  `json:"processedByGTE,omitempty"`
+	ProcessedByLt           *string  `json:"processedByLT,omitempty"`
+	ProcessedByLte          *string  `json:"processedByLTE,omitempty"`
+	ProcessedByContains     *string  `json:"processedByContains,omitempty"`
+	ProcessedByHasPrefix    *string  `json:"processedByHasPrefix,omitempty"`
+	ProcessedByHasSuffix    *string  `json:"processedByHasSuffix,omitempty"`
+	ProcessedByIsNil        *bool    `json:"processedByIsNil,omitempty"`
+	ProcessedByNotNil       *bool    `json:"processedByNotNil,omitempty"`
+	ProcessedByEqualFold    *string  `json:"processedByEqualFold,omitempty"`
+	ProcessedByContainsFold *string  `json:"processedByContainsFold,omitempty"`
+	// processed_at field predicates
+	ProcessedAt       *time.Time   `json:"processedAt,omitempty"`
+	ProcessedAtNeq    *time.Time   `json:"processedAtNEQ,omitempty"`
+	ProcessedAtIn     []*time.Time `json:"processedAtIn,omitempty"`
+	ProcessedAtNotIn  []*time.Time `json:"processedAtNotIn,omitempty"`
+	ProcessedAtGt     *time.Time   `json:"processedAtGT,omitempty"`
+	ProcessedAtGte    *time.Time   `json:"processedAtGTE,omitempty"`
+	ProcessedAtLt     *time.Time   `json:"processedAtLT,omitempty"`
+	ProcessedAtLte    *time.Time   `json:"processedAtLTE,omitempty"`
+	ProcessedAtIsNil  *bool        `json:"processedAtIsNil,omitempty"`
+	ProcessedAtNotNil *bool        `json:"processedAtNotNil,omitempty"`
 }
 
 type EventSearchResult struct {
@@ -5875,8 +6055,6 @@ type EventWhereInput struct {
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
-	EventIDIsNil        *bool    `json:"eventIDIsNil,omitempty"`
-	EventIDNotNil       *bool    `json:"eventIDNotNil,omitempty"`
 	EventIDEqualFold    *string  `json:"eventIDEqualFold,omitempty"`
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 	// correlation_id field predicates
@@ -5907,8 +6085,74 @@ type EventWhereInput struct {
 	EventTypeContains     *string  `json:"eventTypeContains,omitempty"`
 	EventTypeHasPrefix    *string  `json:"eventTypeHasPrefix,omitempty"`
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
+	EventTypeIsNil        *bool    `json:"eventTypeIsNil,omitempty"`
+	EventTypeNotNil       *bool    `json:"eventTypeNotNil,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// additional_processing_required field predicates
+	AdditionalProcessingRequired       *bool `json:"additionalProcessingRequired,omitempty"`
+	AdditionalProcessingRequiredNeq    *bool `json:"additionalProcessingRequiredNEQ,omitempty"`
+	AdditionalProcessingRequiredIsNil  *bool `json:"additionalProcessingRequiredIsNil,omitempty"`
+	AdditionalProcessingRequiredNotNil *bool `json:"additionalProcessingRequiredNotNil,omitempty"`
+	// additional_processing_details field predicates
+	AdditionalProcessingDetails             *string  `json:"additionalProcessingDetails,omitempty"`
+	AdditionalProcessingDetailsNeq          *string  `json:"additionalProcessingDetailsNEQ,omitempty"`
+	AdditionalProcessingDetailsIn           []string `json:"additionalProcessingDetailsIn,omitempty"`
+	AdditionalProcessingDetailsNotIn        []string `json:"additionalProcessingDetailsNotIn,omitempty"`
+	AdditionalProcessingDetailsGt           *string  `json:"additionalProcessingDetailsGT,omitempty"`
+	AdditionalProcessingDetailsGte          *string  `json:"additionalProcessingDetailsGTE,omitempty"`
+	AdditionalProcessingDetailsLt           *string  `json:"additionalProcessingDetailsLT,omitempty"`
+	AdditionalProcessingDetailsLte          *string  `json:"additionalProcessingDetailsLTE,omitempty"`
+	AdditionalProcessingDetailsContains     *string  `json:"additionalProcessingDetailsContains,omitempty"`
+	AdditionalProcessingDetailsHasPrefix    *string  `json:"additionalProcessingDetailsHasPrefix,omitempty"`
+	AdditionalProcessingDetailsHasSuffix    *string  `json:"additionalProcessingDetailsHasSuffix,omitempty"`
+	AdditionalProcessingDetailsIsNil        *bool    `json:"additionalProcessingDetailsIsNil,omitempty"`
+	AdditionalProcessingDetailsNotNil       *bool    `json:"additionalProcessingDetailsNotNil,omitempty"`
+	AdditionalProcessingDetailsEqualFold    *string  `json:"additionalProcessingDetailsEqualFold,omitempty"`
+	AdditionalProcessingDetailsContainsFold *string  `json:"additionalProcessingDetailsContainsFold,omitempty"`
+	// processed_by field predicates
+	ProcessedBy             *string  `json:"processedBy,omitempty"`
+	ProcessedByNeq          *string  `json:"processedByNEQ,omitempty"`
+	ProcessedByIn           []string `json:"processedByIn,omitempty"`
+	ProcessedByNotIn        []string `json:"processedByNotIn,omitempty"`
+	ProcessedByGt           *string  `json:"processedByGT,omitempty"`
+	ProcessedByGte          *string  `json:"processedByGTE,omitempty"`
+	ProcessedByLt           *string  `json:"processedByLT,omitempty"`
+	ProcessedByLte          *string  `json:"processedByLTE,omitempty"`
+	ProcessedByContains     *string  `json:"processedByContains,omitempty"`
+	ProcessedByHasPrefix    *string  `json:"processedByHasPrefix,omitempty"`
+	ProcessedByHasSuffix    *string  `json:"processedByHasSuffix,omitempty"`
+	ProcessedByIsNil        *bool    `json:"processedByIsNil,omitempty"`
+	ProcessedByNotNil       *bool    `json:"processedByNotNil,omitempty"`
+	ProcessedByEqualFold    *string  `json:"processedByEqualFold,omitempty"`
+	ProcessedByContainsFold *string  `json:"processedByContainsFold,omitempty"`
+	// processed_at field predicates
+	ProcessedAt       *time.Time   `json:"processedAt,omitempty"`
+	ProcessedAtNeq    *time.Time   `json:"processedAtNEQ,omitempty"`
+	ProcessedAtIn     []*time.Time `json:"processedAtIn,omitempty"`
+	ProcessedAtNotIn  []*time.Time `json:"processedAtNotIn,omitempty"`
+	ProcessedAtGt     *time.Time   `json:"processedAtGT,omitempty"`
+	ProcessedAtGte    *time.Time   `json:"processedAtGTE,omitempty"`
+	ProcessedAtLt     *time.Time   `json:"processedAtLT,omitempty"`
+	ProcessedAtLte    *time.Time   `json:"processedAtLTE,omitempty"`
+	ProcessedAtIsNil  *bool        `json:"processedAtIsNil,omitempty"`
+	ProcessedAtNotNil *bool        `json:"processedAtNotNil,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
@@ -5942,6 +6186,9 @@ type EventWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// orgsubscription edge predicates
+	HasOrgsubscription     *bool                        `json:"hasOrgsubscription,omitempty"`
+	HasOrgsubscriptionWith []*OrgSubscriptionWhereInput `json:"hasOrgsubscriptionWith,omitempty"`
 }
 
 type Evidence struct {
@@ -12140,6 +12387,7 @@ type OrgSubscription struct {
 	// the feature lookup keys associated with the subscription
 	FeatureLookupKeys []string      `json:"featureLookupKeys,omitempty"`
 	Owner             *Organization `json:"owner,omitempty"`
+	Events            []*Event      `json:"events,omitempty"`
 	SubscriptionURL   *string       `json:"subscriptionURL,omitempty"`
 }
 
@@ -12677,6 +12925,9 @@ type OrgSubscriptionWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// events edge predicates
+	HasEvents     *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 }
 
 type Organization struct {
@@ -13970,7 +14221,15 @@ type PersonalAccessToken struct {
 	Description *string    `json:"description,omitempty"`
 	Scopes      []string   `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
-	Owner       *User      `json:"owner"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time `json:"revokedAt,omitempty"`
+	Owner     *User      `json:"owner"`
 	// the organization(s) the token is associated with
 	Organizations []*Organization `json:"organizations,omitempty"`
 	Events        []*Event        `json:"events,omitempty"`
@@ -14160,6 +14419,54 @@ type PersonalAccessTokenWhereInput struct {
 	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
 	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// is_active field predicates
+	IsActive       *bool `json:"isActive,omitempty"`
+	IsActiveNeq    *bool `json:"isActiveNEQ,omitempty"`
+	IsActiveIsNil  *bool `json:"isActiveIsNil,omitempty"`
+	IsActiveNotNil *bool `json:"isActiveNotNil,omitempty"`
+	// revoked_reason field predicates
+	RevokedReason             *string  `json:"revokedReason,omitempty"`
+	RevokedReasonNeq          *string  `json:"revokedReasonNEQ,omitempty"`
+	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
+	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
+	RevokedReasonGt           *string  `json:"revokedReasonGT,omitempty"`
+	RevokedReasonGte          *string  `json:"revokedReasonGTE,omitempty"`
+	RevokedReasonLt           *string  `json:"revokedReasonLT,omitempty"`
+	RevokedReasonLte          *string  `json:"revokedReasonLTE,omitempty"`
+	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
+	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
+	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
+	RevokedReasonIsNil        *bool    `json:"revokedReasonIsNil,omitempty"`
+	RevokedReasonNotNil       *bool    `json:"revokedReasonNotNil,omitempty"`
+	RevokedReasonEqualFold    *string  `json:"revokedReasonEqualFold,omitempty"`
+	RevokedReasonContainsFold *string  `json:"revokedReasonContainsFold,omitempty"`
+	// revoked_by field predicates
+	RevokedBy             *string  `json:"revokedBy,omitempty"`
+	RevokedByNeq          *string  `json:"revokedByNEQ,omitempty"`
+	RevokedByIn           []string `json:"revokedByIn,omitempty"`
+	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
+	RevokedByGt           *string  `json:"revokedByGT,omitempty"`
+	RevokedByGte          *string  `json:"revokedByGTE,omitempty"`
+	RevokedByLt           *string  `json:"revokedByLT,omitempty"`
+	RevokedByLte          *string  `json:"revokedByLTE,omitempty"`
+	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
+	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
+	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
+	RevokedByIsNil        *bool    `json:"revokedByIsNil,omitempty"`
+	RevokedByNotNil       *bool    `json:"revokedByNotNil,omitempty"`
+	RevokedByEqualFold    *string  `json:"revokedByEqualFold,omitempty"`
+	RevokedByContainsFold *string  `json:"revokedByContainsFold,omitempty"`
+	// revoked_at field predicates
+	RevokedAt       *time.Time   `json:"revokedAt,omitempty"`
+	RevokedAtNeq    *time.Time   `json:"revokedAtNEQ,omitempty"`
+	RevokedAtIn     []*time.Time `json:"revokedAtIn,omitempty"`
+	RevokedAtNotIn  []*time.Time `json:"revokedAtNotIn,omitempty"`
+	RevokedAtGt     *time.Time   `json:"revokedAtGT,omitempty"`
+	RevokedAtGte    *time.Time   `json:"revokedAtGTE,omitempty"`
+	RevokedAtLt     *time.Time   `json:"revokedAtLT,omitempty"`
+	RevokedAtLte    *time.Time   `json:"revokedAtLTE,omitempty"`
+	RevokedAtIsNil  *bool        `json:"revokedAtIsNil,omitempty"`
+	RevokedAtNotNil *bool        `json:"revokedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
 	HasOwnerWith []*UserWhereInput `json:"hasOwnerWith,omitempty"`
@@ -19847,8 +20154,20 @@ type UpdateAPITokenInput struct {
 	ClearScopes      *bool      `json:"clearScopes,omitempty"`
 	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
 	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
-	OwnerID          *string    `json:"ownerID,omitempty"`
-	ClearOwner       *bool      `json:"clearOwner,omitempty"`
+	// whether the token is active
+	IsActive      *bool `json:"isActive,omitempty"`
+	ClearIsActive *bool `json:"clearIsActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason      *string `json:"revokedReason,omitempty"`
+	ClearRevokedReason *bool   `json:"clearRevokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy      *string `json:"revokedBy,omitempty"`
+	ClearRevokedBy *bool   `json:"clearRevokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt      *time.Time `json:"revokedAt,omitempty"`
+	ClearRevokedAt *bool      `json:"clearRevokedAt,omitempty"`
+	OwnerID        *string    `json:"ownerID,omitempty"`
+	ClearOwner     *bool      `json:"clearOwner,omitempty"`
 }
 
 // UpdateActionPlanInput is used for update ActionPlan object.
@@ -20183,43 +20502,63 @@ type UpdateEntityTypeInput struct {
 // Input was generated by ent.
 type UpdateEventInput struct {
 	// tags associated with the object
-	Tags                         []string       `json:"tags,omitempty"`
-	AppendTags                   []string       `json:"appendTags,omitempty"`
-	ClearTags                    *bool          `json:"clearTags,omitempty"`
-	EventID                      *string        `json:"eventID,omitempty"`
-	ClearEventID                 *bool          `json:"clearEventID,omitempty"`
-	CorrelationID                *string        `json:"correlationID,omitempty"`
-	ClearCorrelationID           *bool          `json:"clearCorrelationID,omitempty"`
-	EventType                    *string        `json:"eventType,omitempty"`
-	Metadata                     map[string]any `json:"metadata,omitempty"`
-	ClearMetadata                *bool          `json:"clearMetadata,omitempty"`
-	AddUserIDs                   []string       `json:"addUserIDs,omitempty"`
-	RemoveUserIDs                []string       `json:"removeUserIDs,omitempty"`
-	ClearUser                    *bool          `json:"clearUser,omitempty"`
-	AddGroupIDs                  []string       `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs               []string       `json:"removeGroupIDs,omitempty"`
-	ClearGroup                   *bool          `json:"clearGroup,omitempty"`
-	AddIntegrationIDs            []string       `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs         []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegration             *bool          `json:"clearIntegration,omitempty"`
-	AddOrganizationIDs           []string       `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs        []string       `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization            *bool          `json:"clearOrganization,omitempty"`
-	AddInviteIDs                 []string       `json:"addInviteIDs,omitempty"`
-	RemoveInviteIDs              []string       `json:"removeInviteIDs,omitempty"`
-	ClearInvite                  *bool          `json:"clearInvite,omitempty"`
-	AddPersonalAccessTokenIDs    []string       `json:"addPersonalAccessTokenIDs,omitempty"`
-	RemovePersonalAccessTokenIDs []string       `json:"removePersonalAccessTokenIDs,omitempty"`
-	ClearPersonalAccessToken     *bool          `json:"clearPersonalAccessToken,omitempty"`
-	AddHushIDs                   []string       `json:"addHushIDs,omitempty"`
-	RemoveHushIDs                []string       `json:"removeHushIDs,omitempty"`
-	ClearHush                    *bool          `json:"clearHush,omitempty"`
-	AddSubscriberIDs             []string       `json:"addSubscriberIDs,omitempty"`
-	RemoveSubscriberIDs          []string       `json:"removeSubscriberIDs,omitempty"`
-	ClearSubscriber              *bool          `json:"clearSubscriber,omitempty"`
-	AddFileIDs                   []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                []string       `json:"removeFileIDs,omitempty"`
-	ClearFile                    *bool          `json:"clearFile,omitempty"`
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// an identifier to correleate the event to another object or source, if needed
+	CorrelationID      *string `json:"correlationID,omitempty"`
+	ClearCorrelationID *bool   `json:"clearCorrelationID,omitempty"`
+	// the type of event
+	EventType      *string `json:"eventType,omitempty"`
+	ClearEventType *bool   `json:"clearEventType,omitempty"`
+	// event metadata
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// the source of the event
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// indicates if additional processing is required for the event
+	AdditionalProcessingRequired      *bool `json:"additionalProcessingRequired,omitempty"`
+	ClearAdditionalProcessingRequired *bool `json:"clearAdditionalProcessingRequired,omitempty"`
+	// details about the additional processing required
+	AdditionalProcessingDetails      *string `json:"additionalProcessingDetails,omitempty"`
+	ClearAdditionalProcessingDetails *bool   `json:"clearAdditionalProcessingDetails,omitempty"`
+	// the listener ID who processed the event
+	ProcessedBy      *string `json:"processedBy,omitempty"`
+	ClearProcessedBy *bool   `json:"clearProcessedBy,omitempty"`
+	// the time the event was processed
+	ProcessedAt                  *time.Time `json:"processedAt,omitempty"`
+	ClearProcessedAt             *bool      `json:"clearProcessedAt,omitempty"`
+	AddUserIDs                   []string   `json:"addUserIDs,omitempty"`
+	RemoveUserIDs                []string   `json:"removeUserIDs,omitempty"`
+	ClearUser                    *bool      `json:"clearUser,omitempty"`
+	AddGroupIDs                  []string   `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs               []string   `json:"removeGroupIDs,omitempty"`
+	ClearGroup                   *bool      `json:"clearGroup,omitempty"`
+	AddIntegrationIDs            []string   `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs         []string   `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegration             *bool      `json:"clearIntegration,omitempty"`
+	AddOrganizationIDs           []string   `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs        []string   `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganization            *bool      `json:"clearOrganization,omitempty"`
+	AddInviteIDs                 []string   `json:"addInviteIDs,omitempty"`
+	RemoveInviteIDs              []string   `json:"removeInviteIDs,omitempty"`
+	ClearInvite                  *bool      `json:"clearInvite,omitempty"`
+	AddPersonalAccessTokenIDs    []string   `json:"addPersonalAccessTokenIDs,omitempty"`
+	RemovePersonalAccessTokenIDs []string   `json:"removePersonalAccessTokenIDs,omitempty"`
+	ClearPersonalAccessToken     *bool      `json:"clearPersonalAccessToken,omitempty"`
+	AddHushIDs                   []string   `json:"addHushIDs,omitempty"`
+	RemoveHushIDs                []string   `json:"removeHushIDs,omitempty"`
+	ClearHush                    *bool      `json:"clearHush,omitempty"`
+	AddSubscriberIDs             []string   `json:"addSubscriberIDs,omitempty"`
+	RemoveSubscriberIDs          []string   `json:"removeSubscriberIDs,omitempty"`
+	ClearSubscriber              *bool      `json:"clearSubscriber,omitempty"`
+	AddFileIDs                   []string   `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                []string   `json:"removeFileIDs,omitempty"`
+	ClearFile                    *bool      `json:"clearFile,omitempty"`
+	AddOrgsubscriptionIDs        []string   `json:"addOrgsubscriptionIDs,omitempty"`
+	RemoveOrgsubscriptionIDs     []string   `json:"removeOrgsubscriptionIDs,omitempty"`
+	ClearOrgsubscription         *bool      `json:"clearOrgsubscription,omitempty"`
 }
 
 // UpdateEvidenceInput is used for update Evidence object.
@@ -20861,13 +21200,25 @@ type UpdatePersonalAccessTokenInput struct {
 	// the name associated with the token
 	Name *string `json:"name,omitempty"`
 	// a description of the token's purpose
-	Description           *string    `json:"description,omitempty"`
-	ClearDescription      *bool      `json:"clearDescription,omitempty"`
-	Scopes                []string   `json:"scopes,omitempty"`
-	AppendScopes          []string   `json:"appendScopes,omitempty"`
-	ClearScopes           *bool      `json:"clearScopes,omitempty"`
-	LastUsedAt            *time.Time `json:"lastUsedAt,omitempty"`
-	ClearLastUsedAt       *bool      `json:"clearLastUsedAt,omitempty"`
+	Description      *string    `json:"description,omitempty"`
+	ClearDescription *bool      `json:"clearDescription,omitempty"`
+	Scopes           []string   `json:"scopes,omitempty"`
+	AppendScopes     []string   `json:"appendScopes,omitempty"`
+	ClearScopes      *bool      `json:"clearScopes,omitempty"`
+	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
+	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
+	// whether the token is active
+	IsActive      *bool `json:"isActive,omitempty"`
+	ClearIsActive *bool `json:"clearIsActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason      *string `json:"revokedReason,omitempty"`
+	ClearRevokedReason *bool   `json:"clearRevokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy      *string `json:"revokedBy,omitempty"`
+	ClearRevokedBy *bool   `json:"clearRevokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt             *time.Time `json:"revokedAt,omitempty"`
+	ClearRevokedAt        *bool      `json:"clearRevokedAt,omitempty"`
 	AddOrganizationIDs    []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganizations    *bool      `json:"clearOrganizations,omitempty"`

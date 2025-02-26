@@ -95,6 +95,14 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_APIToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_APIToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_APIToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_APIToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -173,6 +181,14 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_APIToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_APIToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_APIToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_APIToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -295,6 +311,14 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_APIToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_APIToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_APIToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_APIToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
