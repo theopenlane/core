@@ -285,7 +285,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "missing required edge",
+			expectedErr: "cannot be null",
 		},
 		{
 			name: "missing required name",
