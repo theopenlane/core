@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
 	// "github.com/theopenlane/iam/entfga"
 )
 
@@ -53,6 +54,7 @@ func (Evidence) Fields() []ent.Field {
 			Default(false),
 		field.String("url").
 			Optional().
+			Validate(validator.ValidateURL()).
 			Comment("the url of the evidence if not uploaded directly to the system"),
 	}
 }

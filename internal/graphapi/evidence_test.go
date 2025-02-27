@@ -321,11 +321,21 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
+		{
+			name: "invalid url",
+			request: openlaneclient.CreateEvidenceInput{
+				Name: "TSK-11123F Evidence",
+				URL:  lo.ToPtr("invalid"),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "invalid or unparsable field",
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			if tc.files != nil && len(tc.files) > 0 {
+			if len(tc.files) > 0 {
 				expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
 			}
 
@@ -480,7 +490,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEvidence() {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			if tc.files != nil && len(tc.files) > 0 {
+			if len(tc.files) > 0 {
 				expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
 			}
 
