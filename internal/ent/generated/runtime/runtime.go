@@ -1055,6 +1055,10 @@ func init() {
 	evidenceDescIsAutomated := evidenceFields[6].Descriptor()
 	// evidence.DefaultIsAutomated holds the default value on creation for the is_automated field.
 	evidence.DefaultIsAutomated = evidenceDescIsAutomated.Default.(bool)
+	// evidenceDescURL is the schema descriptor for url field.
+	evidenceDescURL := evidenceFields[7].Descriptor()
+	// evidence.URLValidator is a validator for the "url" field. It is called by the builders before save.
+	evidence.URLValidator = evidenceDescURL.Validators[0].(func(string) error)
 	// evidenceDescID is the schema descriptor for id field.
 	evidenceDescID := evidenceMixinFields1[0].Descriptor()
 	// evidence.DefaultID holds the default value on creation for the id field.
