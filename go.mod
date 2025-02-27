@@ -291,7 +291,7 @@ require (
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
 	github.com/projectdiscovery/networkpolicy v0.1.1 // indirect
-	github.com/projectdiscovery/ratelimit v0.0.69 // indirect
+	github.com/projectdiscovery/ratelimit v0.0.70 // indirect
 	github.com/projectdiscovery/retryabledns v1.0.94 // indirect
 	github.com/projectdiscovery/retryablehttp-go v1.0.100 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.3-0.20240823090925-0fe6f58b47b1 // indirect
@@ -510,7 +510,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
-	github.com/projectdiscovery/subfinder/v2 v2.6.8
+	github.com/projectdiscovery/subfinder/v2 v2.7.0
 	github.com/projectdiscovery/wappalyzergo v0.2.17
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
