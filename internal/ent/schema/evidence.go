@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	// "github.com/theopenlane/iam/entfga"
 )
 
 // Evidence holds the schema definition for the Evidence entity
