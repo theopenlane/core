@@ -70,8 +70,6 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 // FindOrCreateCustomer attempts to lookup a customer by the organization ID which is set in both the
 // name field attribute as well as in the object metadata field
 func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *OrganizationCustomer) (*OrganizationCustomer, error) {
-	log.Debug().Str("organization_id", o.OrganizationID).Msg("searching for customer")
-
 	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", o.OrganizationID))
 	if err != nil {
 		return nil, err
@@ -79,23 +77,18 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 	switch len(customers) {
 	case 0:
-		log.Debug().Str("organization_id", o.OrganizationID).Msg("no customer found, creating")
-
 		customer, err := sc.CreateCustomer(o)
 		if err != nil {
 			return nil, err
 		}
 
-		log.Debug().Str("customer_id", customer.ID).Msg("customer created")
-
-		subs, err := sc.CreateTrialSubscription(customer.ID)
+		subs, err := sc.CreateTrialSubscription(customer)
 		if err != nil {
 			return nil, err
 		}
 
-		log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subs.ID).Msg("trial subscription created")
-
 		o.StripeCustomerID = customer.ID
+		o.Metadata = customer.Metadata
 		o.Subscription = *subs
 
 		// get features and retry up to 5 times	if we don't have any
@@ -112,8 +105,6 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 			// if we have features, break out of the loop
 			if len(feats) > 0 {
-				log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customer.ID).Msg("features found for customer")
-
 				break
 			}
 
@@ -133,7 +124,6 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 		return o, nil
 	case 1:
-		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
 		o.StripeCustomerID = customers[0].ID
 
 		feats, featNames, err := sc.retrieveActiveEntitlements(customers[0].ID)
@@ -148,8 +138,6 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		}
 
 		if len(featNames) > 0 {
-			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Strs("features_names", featNames).Msg("found features for customer")
-
 			o.FeatureNames = featNames
 		}
 
@@ -206,4 +194,33 @@ func (sc *StripeClient) DeleteCustomer(id string) error {
 	}
 
 	return nil
+}
+
+func (sc *StripeClient) MapStripeCustomer(c *stripe.Customer) *OrganizationCustomer {
+	var orgID, orgSettingsID, orgSubscriptionID string
+
+	for k, v := range c.Metadata {
+		if k == "organization_id" {
+			orgID = v
+			break
+		}
+		if k == "organization_settings_id" {
+			orgSettingsID = v
+			break
+		}
+		if k == "organization_subscription_id" {
+			orgSubscriptionID = v
+			break
+		}
+	}
+
+	//if c.Subscriptions.Data[0].ID
+
+	return &OrganizationCustomer{
+		StripeCustomerID:           c.ID,
+		OrganizationID:             orgID,
+		OrganizationName:           c.Metadata["organization_name"],
+		OrganizationSettingsID:     orgSettingsID,
+		OrganizationSubscriptionID: orgSubscriptionID,
+	}
 }

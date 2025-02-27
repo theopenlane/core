@@ -47,7 +47,7 @@ func (sc *StripeClient) handleSubscriptionUpdated(s *stripe.Subscription) (orgCu
 		return orgCust, err
 	}
 
-	internalSubs := sc.mapStripeSubscription(subs)
+	internalSubs := sc.MapStripeSubscription(subs)
 
 	orgCust.Subscription = *internalSubs
 

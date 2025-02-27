@@ -22,7 +22,7 @@ func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscript
 	})
 
 	if !i.Next() {
-		sub, err := sc.CreateTrialSubscription(customerID)
+		sub, err := sc.CreateTrialSubscription(&stripe.Customer{ID: customerID})
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to create trial subscription")
 			return nil, err
@@ -32,7 +32,7 @@ func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscript
 	}
 
 	// assumes customer can only have 1 subscription if there are any
-	subs := sc.mapStripeSubscription(i.Subscription())
+	subs := sc.MapStripeSubscription(i.Subscription())
 
 	return subs, nil
 }
@@ -84,9 +84,9 @@ func (sc *StripeClient) CancelSubscription(id string, params *stripe.Subscriptio
 var trialdays int64 = 30
 
 // CreateTrialSubscription creates a trial subscription with the configured price
-func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscription, error) {
+func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscription, error) {
 	params := &stripe.SubscriptionParams{
-		Customer: stripe.String(customerID),
+		Customer: stripe.String(cust.ID),
 		Items: []*stripe.SubscriptionItemsParams{
 			{
 				Price: &sc.Config.TrialSubscriptionPriceID,
@@ -96,6 +96,7 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 		PaymentSettings: &stripe.SubscriptionPaymentSettingsParams{
 			SaveDefaultPaymentMethod: stripe.String(string(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription)),
 		},
+		Metadata:         cust.Metadata,
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
 		TrialSettings: &stripe.SubscriptionTrialSettingsParams{
 			EndBehavior: &stripe.SubscriptionTrialSettingsEndBehaviorParams{
@@ -112,7 +113,7 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 
 	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
-	mappedsubscription := sc.mapStripeSubscription(subs)
+	mappedsubscription := sc.MapStripeSubscription(subs)
 
 	return mappedsubscription, nil
 }
@@ -167,7 +168,7 @@ func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string,
 }
 
 // mapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
-func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscription {
+func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscription {
 	subscript := Subscription{}
 
 	prices := []Price{}

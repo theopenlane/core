@@ -9,12 +9,14 @@ import (
 
 // OrganizationCustomer is a struct which holds both internal organization infos and external stripe infos
 type OrganizationCustomer struct {
-	OrganizationID         string `json:"organization_id"`
-	OrganizationSettingsID string `json:"organization_settings_id"`
-	StripeCustomerID       string `json:"stripe_customer_id"`
-	OrganizationName       string `json:"organization_name"`
-	Features               []string
-	FeatureNames           []string
+	OrganizationID             string `json:"organization_id"`
+	OrganizationSettingsID     string `json:"organization_settings_id"`
+	OrganizationSubscriptionID string `json:"organization_subscription_id"`
+	StripeCustomerID           string `json:"stripe_customer_id"`
+	StripeSubscriptionID       string `json:"stripe_subscription_id"`
+	OrganizationName           string `json:"organization_name"`
+	Features                   []string
+	FeatureNames               []string
 	Subscription
 	ContactInfo
 }
@@ -45,9 +47,10 @@ func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 			Country:    o.Country,
 		},
 		Metadata: map[string]string{
-			"organization_id":          o.OrganizationID,
-			"organization_settings_id": o.OrganizationSettingsID,
-			"organization_name":        o.OrganizationName,
+			"organization_id":              o.OrganizationID,
+			"organization_settings_id":     o.OrganizationSettingsID,
+			"organization_name":            o.OrganizationName,
+			"organization_subscription_id": o.OrganizationSubscriptionID,
 		},
 	}
 }
@@ -76,6 +79,7 @@ type Customer struct {
 	Plans          []Plan `json:"plans" yaml:"plans"`
 	StripeParams   *stripe.CustomerParams
 	StripeCustomer []stripe.Customer
+	Metadata       map[string]string
 }
 
 // Plan is the recurring context that holds the payment information
@@ -112,6 +116,7 @@ type Subscription struct {
 	StripeCustomerID   string
 	OrganizationID     string
 	DaysUntilDue       int64
+	Metadata           map[string]string
 }
 
 // Product holds what we'd more commply call a "tier"
