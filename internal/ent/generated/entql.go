@@ -1295,6 +1295,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldActive:                   {Type: field.TypeBool, Column: orgsubscription.FieldActive},
 			orgsubscription.FieldStripeCustomerID:         {Type: field.TypeString, Column: orgsubscription.FieldStripeCustomerID},
 			orgsubscription.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscription.FieldExpiresAt},
+			orgsubscription.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscription.FieldTrialExpiresAt},
+			orgsubscription.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscription.FieldDaysUntilDue},
+			orgsubscription.FieldPaymentMethodAdded:       {Type: field.TypeBool, Column: orgsubscription.FieldPaymentMethodAdded},
 			orgsubscription.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscription.FieldFeatures},
 			orgsubscription.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscription.FieldFeatureLookupKeys},
 		},
@@ -1329,6 +1332,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldActive:                   {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldActive},
 			orgsubscriptionhistory.FieldStripeCustomerID:         {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeCustomerID},
 			orgsubscriptionhistory.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldExpiresAt},
+			orgsubscriptionhistory.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldTrialExpiresAt},
+			orgsubscriptionhistory.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDaysUntilDue},
+			orgsubscriptionhistory.FieldPaymentMethodAdded:       {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldPaymentMethodAdded},
 			orgsubscriptionhistory.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatures},
 			orgsubscriptionhistory.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatureLookupKeys},
 		},
@@ -12720,6 +12726,21 @@ func (f *OrgSubscriptionFilter) WhereExpiresAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscription.FieldExpiresAt))
 }
 
+// WhereTrialExpiresAt applies the entql time.Time predicate on the trial_expires_at field.
+func (f *OrgSubscriptionFilter) WhereTrialExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(orgsubscription.FieldTrialExpiresAt))
+}
+
+// WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
+func (f *OrgSubscriptionFilter) WhereDaysUntilDue(p entql.StringP) {
+	f.Where(p.Field(orgsubscription.FieldDaysUntilDue))
+}
+
+// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
+func (f *OrgSubscriptionFilter) WherePaymentMethodAdded(p entql.BoolP) {
+	f.Where(p.Field(orgsubscription.FieldPaymentMethodAdded))
+}
+
 // WhereFeatures applies the entql json.RawMessage predicate on the features field.
 func (f *OrgSubscriptionFilter) WhereFeatures(p entql.BytesP) {
 	f.Where(p.Field(orgsubscription.FieldFeatures))
@@ -12891,6 +12912,21 @@ func (f *OrgSubscriptionHistoryFilter) WhereStripeCustomerID(p entql.StringP) {
 // WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
 func (f *OrgSubscriptionHistoryFilter) WhereExpiresAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldExpiresAt))
+}
+
+// WhereTrialExpiresAt applies the entql time.Time predicate on the trial_expires_at field.
+func (f *OrgSubscriptionHistoryFilter) WhereTrialExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldTrialExpiresAt))
+}
+
+// WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
+func (f *OrgSubscriptionHistoryFilter) WhereDaysUntilDue(p entql.StringP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldDaysUntilDue))
+}
+
+// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
+func (f *OrgSubscriptionHistoryFilter) WherePaymentMethodAdded(p entql.BoolP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldPaymentMethodAdded))
 }
 
 // WhereFeatures applies the entql json.RawMessage predicate on the features field.

@@ -136,6 +136,7 @@ func (h *Handler) updateOrgSubscription(ctx context.Context, s *stripe.Subscript
 	}
 
 	var orgSubscriptionID string
+
 	for key, value := range stripeCust.Metadata {
 		if key == "organization_subscription_id" {
 			orgSubscriptionID = value

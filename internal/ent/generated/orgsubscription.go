@@ -52,6 +52,12 @@ type OrgSubscription struct {
 	StripeCustomerID string `json:"stripe_customer_id,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
+	// the time the trial is set to expire
+	TrialExpiresAt *time.Time `json:"trial_expires_at,omitempty"`
+	// number of days until there is a due payment
+	DaysUntilDue *string `json:"days_until_due,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded *bool `json:"payment_method_added,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -106,11 +112,11 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case orgsubscription.FieldTags, orgsubscription.FieldProductPrice, orgsubscription.FieldFeatures, orgsubscription.FieldFeatureLookupKeys:
 			values[i] = new([]byte)
-		case orgsubscription.FieldActive:
+		case orgsubscription.FieldActive, orgsubscription.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
-		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
+		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID, orgsubscription.FieldDaysUntilDue:
 			values[i] = new(sql.NullString)
-		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt:
+		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt, orgsubscription.FieldTrialExpiresAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -234,6 +240,27 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 				os.ExpiresAt = new(time.Time)
 				*os.ExpiresAt = value.Time
 			}
+		case orgsubscription.FieldTrialExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field trial_expires_at", values[i])
+			} else if value.Valid {
+				os.TrialExpiresAt = new(time.Time)
+				*os.TrialExpiresAt = value.Time
+			}
+		case orgsubscription.FieldDaysUntilDue:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field days_until_due", values[i])
+			} else if value.Valid {
+				os.DaysUntilDue = new(string)
+				*os.DaysUntilDue = value.String
+			}
+		case orgsubscription.FieldPaymentMethodAdded:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
+			} else if value.Valid {
+				os.PaymentMethodAdded = new(bool)
+				*os.PaymentMethodAdded = value.Bool
+			}
 		case orgsubscription.FieldFeatures:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field features", values[i])
@@ -344,6 +371,21 @@ func (os *OrgSubscription) String() string {
 	if v := os.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := os.TrialExpiresAt; v != nil {
+		builder.WriteString("trial_expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := os.DaysUntilDue; v != nil {
+		builder.WriteString("days_until_due=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := os.PaymentMethodAdded; v != nil {
+		builder.WriteString("payment_method_added=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("features=")

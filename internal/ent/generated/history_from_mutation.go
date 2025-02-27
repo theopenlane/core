@@ -4636,6 +4636,18 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetNillableExpiresAt(&expiresAt)
 	}
 
+	if trialExpiresAt, exists := m.TrialExpiresAt(); exists {
+		create = create.SetNillableTrialExpiresAt(&trialExpiresAt)
+	}
+
+	if daysUntilDue, exists := m.DaysUntilDue(); exists {
+		create = create.SetNillableDaysUntilDue(&daysUntilDue)
+	}
+
+	if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
+		create = create.SetNillablePaymentMethodAdded(&paymentMethodAdded)
+	}
+
 	if features, exists := m.Features(); exists {
 		create = create.SetFeatures(features)
 	}
@@ -4770,6 +4782,24 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetNillableExpiresAt(orgsubscription.ExpiresAt)
 		}
 
+		if trialExpiresAt, exists := m.TrialExpiresAt(); exists {
+			create = create.SetNillableTrialExpiresAt(&trialExpiresAt)
+		} else {
+			create = create.SetNillableTrialExpiresAt(orgsubscription.TrialExpiresAt)
+		}
+
+		if daysUntilDue, exists := m.DaysUntilDue(); exists {
+			create = create.SetNillableDaysUntilDue(&daysUntilDue)
+		} else {
+			create = create.SetNillableDaysUntilDue(orgsubscription.DaysUntilDue)
+		}
+
+		if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
+			create = create.SetNillablePaymentMethodAdded(&paymentMethodAdded)
+		} else {
+			create = create.SetNillablePaymentMethodAdded(orgsubscription.PaymentMethodAdded)
+		}
+
 		if features, exists := m.Features(); exists {
 			create = create.SetFeatures(features)
 		} else {
@@ -4830,6 +4860,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetActive(orgsubscription.Active).
 			SetStripeCustomerID(orgsubscription.StripeCustomerID).
 			SetNillableExpiresAt(orgsubscription.ExpiresAt).
+			SetNillableTrialExpiresAt(orgsubscription.TrialExpiresAt).
+			SetNillableDaysUntilDue(orgsubscription.DaysUntilDue).
+			SetNillablePaymentMethodAdded(orgsubscription.PaymentMethodAdded).
 			SetFeatures(orgsubscription.Features).
 			SetFeatureLookupKeys(orgsubscription.FeatureLookupKeys).
 			Save(ctx)

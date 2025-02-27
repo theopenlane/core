@@ -68047,6 +68047,9 @@ type OrgSubscriptionMutation struct {
 	active                     *bool
 	stripe_customer_id         *string
 	expires_at                 *time.Time
+	trial_expires_at           *time.Time
+	days_until_due             *string
+	payment_method_added       *bool
 	features                   *[]string
 	appendfeatures             []string
 	feature_lookup_keys        *[]string
@@ -68953,6 +68956,153 @@ func (m *OrgSubscriptionMutation) ResetExpiresAt() {
 	delete(m.clearedFields, orgsubscription.FieldExpiresAt)
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (m *OrgSubscriptionMutation) SetTrialExpiresAt(t time.Time) {
+	m.trial_expires_at = &t
+}
+
+// TrialExpiresAt returns the value of the "trial_expires_at" field in the mutation.
+func (m *OrgSubscriptionMutation) TrialExpiresAt() (r time.Time, exists bool) {
+	v := m.trial_expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTrialExpiresAt returns the old "trial_expires_at" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldTrialExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTrialExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTrialExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTrialExpiresAt: %w", err)
+	}
+	return oldValue.TrialExpiresAt, nil
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (m *OrgSubscriptionMutation) ClearTrialExpiresAt() {
+	m.trial_expires_at = nil
+	m.clearedFields[orgsubscription.FieldTrialExpiresAt] = struct{}{}
+}
+
+// TrialExpiresAtCleared returns if the "trial_expires_at" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) TrialExpiresAtCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldTrialExpiresAt]
+	return ok
+}
+
+// ResetTrialExpiresAt resets all changes to the "trial_expires_at" field.
+func (m *OrgSubscriptionMutation) ResetTrialExpiresAt() {
+	m.trial_expires_at = nil
+	delete(m.clearedFields, orgsubscription.FieldTrialExpiresAt)
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (m *OrgSubscriptionMutation) SetDaysUntilDue(s string) {
+	m.days_until_due = &s
+}
+
+// DaysUntilDue returns the value of the "days_until_due" field in the mutation.
+func (m *OrgSubscriptionMutation) DaysUntilDue() (r string, exists bool) {
+	v := m.days_until_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDaysUntilDue returns the old "days_until_due" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldDaysUntilDue(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDaysUntilDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDaysUntilDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDaysUntilDue: %w", err)
+	}
+	return oldValue.DaysUntilDue, nil
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (m *OrgSubscriptionMutation) ClearDaysUntilDue() {
+	m.days_until_due = nil
+	m.clearedFields[orgsubscription.FieldDaysUntilDue] = struct{}{}
+}
+
+// DaysUntilDueCleared returns if the "days_until_due" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) DaysUntilDueCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldDaysUntilDue]
+	return ok
+}
+
+// ResetDaysUntilDue resets all changes to the "days_until_due" field.
+func (m *OrgSubscriptionMutation) ResetDaysUntilDue() {
+	m.days_until_due = nil
+	delete(m.clearedFields, orgsubscription.FieldDaysUntilDue)
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (m *OrgSubscriptionMutation) SetPaymentMethodAdded(b bool) {
+	m.payment_method_added = &b
+}
+
+// PaymentMethodAdded returns the value of the "payment_method_added" field in the mutation.
+func (m *OrgSubscriptionMutation) PaymentMethodAdded() (r bool, exists bool) {
+	v := m.payment_method_added
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPaymentMethodAdded returns the old "payment_method_added" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldPaymentMethodAdded(ctx context.Context) (v *bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPaymentMethodAdded is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPaymentMethodAdded requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPaymentMethodAdded: %w", err)
+	}
+	return oldValue.PaymentMethodAdded, nil
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (m *OrgSubscriptionMutation) ClearPaymentMethodAdded() {
+	m.payment_method_added = nil
+	m.clearedFields[orgsubscription.FieldPaymentMethodAdded] = struct{}{}
+}
+
+// PaymentMethodAddedCleared returns if the "payment_method_added" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) PaymentMethodAddedCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldPaymentMethodAdded]
+	return ok
+}
+
+// ResetPaymentMethodAdded resets all changes to the "payment_method_added" field.
+func (m *OrgSubscriptionMutation) ResetPaymentMethodAdded() {
+	m.payment_method_added = nil
+	delete(m.clearedFields, orgsubscription.FieldPaymentMethodAdded)
+}
+
 // SetFeatures sets the "features" field.
 func (m *OrgSubscriptionMutation) SetFeatures(s []string) {
 	m.features = &s
@@ -69198,7 +69348,7 @@ func (m *OrgSubscriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, orgsubscription.FieldCreatedAt)
 	}
@@ -69247,6 +69397,15 @@ func (m *OrgSubscriptionMutation) Fields() []string {
 	if m.expires_at != nil {
 		fields = append(fields, orgsubscription.FieldExpiresAt)
 	}
+	if m.trial_expires_at != nil {
+		fields = append(fields, orgsubscription.FieldTrialExpiresAt)
+	}
+	if m.days_until_due != nil {
+		fields = append(fields, orgsubscription.FieldDaysUntilDue)
+	}
+	if m.payment_method_added != nil {
+		fields = append(fields, orgsubscription.FieldPaymentMethodAdded)
+	}
 	if m.features != nil {
 		fields = append(fields, orgsubscription.FieldFeatures)
 	}
@@ -69293,6 +69452,12 @@ func (m *OrgSubscriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.StripeCustomerID()
 	case orgsubscription.FieldExpiresAt:
 		return m.ExpiresAt()
+	case orgsubscription.FieldTrialExpiresAt:
+		return m.TrialExpiresAt()
+	case orgsubscription.FieldDaysUntilDue:
+		return m.DaysUntilDue()
+	case orgsubscription.FieldPaymentMethodAdded:
+		return m.PaymentMethodAdded()
 	case orgsubscription.FieldFeatures:
 		return m.Features()
 	case orgsubscription.FieldFeatureLookupKeys:
@@ -69338,6 +69503,12 @@ func (m *OrgSubscriptionMutation) OldField(ctx context.Context, name string) (en
 		return m.OldStripeCustomerID(ctx)
 	case orgsubscription.FieldExpiresAt:
 		return m.OldExpiresAt(ctx)
+	case orgsubscription.FieldTrialExpiresAt:
+		return m.OldTrialExpiresAt(ctx)
+	case orgsubscription.FieldDaysUntilDue:
+		return m.OldDaysUntilDue(ctx)
+	case orgsubscription.FieldPaymentMethodAdded:
+		return m.OldPaymentMethodAdded(ctx)
 	case orgsubscription.FieldFeatures:
 		return m.OldFeatures(ctx)
 	case orgsubscription.FieldFeatureLookupKeys:
@@ -69463,6 +69634,27 @@ func (m *OrgSubscriptionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExpiresAt(v)
 		return nil
+	case orgsubscription.FieldTrialExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTrialExpiresAt(v)
+		return nil
+	case orgsubscription.FieldDaysUntilDue:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDaysUntilDue(v)
+		return nil
+	case orgsubscription.FieldPaymentMethodAdded:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPaymentMethodAdded(v)
+		return nil
 	case orgsubscription.FieldFeatures:
 		v, ok := value.([]string)
 		if !ok {
@@ -69552,6 +69744,15 @@ func (m *OrgSubscriptionMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscription.FieldExpiresAt) {
 		fields = append(fields, orgsubscription.FieldExpiresAt)
 	}
+	if m.FieldCleared(orgsubscription.FieldTrialExpiresAt) {
+		fields = append(fields, orgsubscription.FieldTrialExpiresAt)
+	}
+	if m.FieldCleared(orgsubscription.FieldDaysUntilDue) {
+		fields = append(fields, orgsubscription.FieldDaysUntilDue)
+	}
+	if m.FieldCleared(orgsubscription.FieldPaymentMethodAdded) {
+		fields = append(fields, orgsubscription.FieldPaymentMethodAdded)
+	}
 	if m.FieldCleared(orgsubscription.FieldFeatures) {
 		fields = append(fields, orgsubscription.FieldFeatures)
 	}
@@ -69617,6 +69818,15 @@ func (m *OrgSubscriptionMutation) ClearField(name string) error {
 	case orgsubscription.FieldExpiresAt:
 		m.ClearExpiresAt()
 		return nil
+	case orgsubscription.FieldTrialExpiresAt:
+		m.ClearTrialExpiresAt()
+		return nil
+	case orgsubscription.FieldDaysUntilDue:
+		m.ClearDaysUntilDue()
+		return nil
+	case orgsubscription.FieldPaymentMethodAdded:
+		m.ClearPaymentMethodAdded()
+		return nil
 	case orgsubscription.FieldFeatures:
 		m.ClearFeatures()
 		return nil
@@ -69678,6 +69888,15 @@ func (m *OrgSubscriptionMutation) ResetField(name string) error {
 		return nil
 	case orgsubscription.FieldExpiresAt:
 		m.ResetExpiresAt()
+		return nil
+	case orgsubscription.FieldTrialExpiresAt:
+		m.ResetTrialExpiresAt()
+		return nil
+	case orgsubscription.FieldDaysUntilDue:
+		m.ResetDaysUntilDue()
+		return nil
+	case orgsubscription.FieldPaymentMethodAdded:
+		m.ResetPaymentMethodAdded()
 		return nil
 	case orgsubscription.FieldFeatures:
 		m.ResetFeatures()
@@ -69817,6 +70036,9 @@ type OrgSubscriptionHistoryMutation struct {
 	active                     *bool
 	stripe_customer_id         *string
 	expires_at                 *time.Time
+	trial_expires_at           *time.Time
+	days_until_due             *string
+	payment_method_added       *bool
 	features                   *[]string
 	appendfeatures             []string
 	feature_lookup_keys        *[]string
@@ -70839,6 +71061,153 @@ func (m *OrgSubscriptionHistoryMutation) ResetExpiresAt() {
 	delete(m.clearedFields, orgsubscriptionhistory.FieldExpiresAt)
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (m *OrgSubscriptionHistoryMutation) SetTrialExpiresAt(t time.Time) {
+	m.trial_expires_at = &t
+}
+
+// TrialExpiresAt returns the value of the "trial_expires_at" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) TrialExpiresAt() (r time.Time, exists bool) {
+	v := m.trial_expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTrialExpiresAt returns the old "trial_expires_at" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldTrialExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTrialExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTrialExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTrialExpiresAt: %w", err)
+	}
+	return oldValue.TrialExpiresAt, nil
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (m *OrgSubscriptionHistoryMutation) ClearTrialExpiresAt() {
+	m.trial_expires_at = nil
+	m.clearedFields[orgsubscriptionhistory.FieldTrialExpiresAt] = struct{}{}
+}
+
+// TrialExpiresAtCleared returns if the "trial_expires_at" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) TrialExpiresAtCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldTrialExpiresAt]
+	return ok
+}
+
+// ResetTrialExpiresAt resets all changes to the "trial_expires_at" field.
+func (m *OrgSubscriptionHistoryMutation) ResetTrialExpiresAt() {
+	m.trial_expires_at = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldTrialExpiresAt)
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (m *OrgSubscriptionHistoryMutation) SetDaysUntilDue(s string) {
+	m.days_until_due = &s
+}
+
+// DaysUntilDue returns the value of the "days_until_due" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) DaysUntilDue() (r string, exists bool) {
+	v := m.days_until_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDaysUntilDue returns the old "days_until_due" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldDaysUntilDue(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDaysUntilDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDaysUntilDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDaysUntilDue: %w", err)
+	}
+	return oldValue.DaysUntilDue, nil
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (m *OrgSubscriptionHistoryMutation) ClearDaysUntilDue() {
+	m.days_until_due = nil
+	m.clearedFields[orgsubscriptionhistory.FieldDaysUntilDue] = struct{}{}
+}
+
+// DaysUntilDueCleared returns if the "days_until_due" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) DaysUntilDueCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldDaysUntilDue]
+	return ok
+}
+
+// ResetDaysUntilDue resets all changes to the "days_until_due" field.
+func (m *OrgSubscriptionHistoryMutation) ResetDaysUntilDue() {
+	m.days_until_due = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldDaysUntilDue)
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (m *OrgSubscriptionHistoryMutation) SetPaymentMethodAdded(b bool) {
+	m.payment_method_added = &b
+}
+
+// PaymentMethodAdded returns the value of the "payment_method_added" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) PaymentMethodAdded() (r bool, exists bool) {
+	v := m.payment_method_added
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPaymentMethodAdded returns the old "payment_method_added" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldPaymentMethodAdded(ctx context.Context) (v *bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPaymentMethodAdded is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPaymentMethodAdded requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPaymentMethodAdded: %w", err)
+	}
+	return oldValue.PaymentMethodAdded, nil
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (m *OrgSubscriptionHistoryMutation) ClearPaymentMethodAdded() {
+	m.payment_method_added = nil
+	m.clearedFields[orgsubscriptionhistory.FieldPaymentMethodAdded] = struct{}{}
+}
+
+// PaymentMethodAddedCleared returns if the "payment_method_added" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) PaymentMethodAddedCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldPaymentMethodAdded]
+	return ok
+}
+
+// ResetPaymentMethodAdded resets all changes to the "payment_method_added" field.
+func (m *OrgSubscriptionHistoryMutation) ResetPaymentMethodAdded() {
+	m.payment_method_added = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldPaymentMethodAdded)
+}
+
 // SetFeatures sets the "features" field.
 func (m *OrgSubscriptionHistoryMutation) SetFeatures(s []string) {
 	m.features = &s
@@ -71003,7 +71372,7 @@ func (m *OrgSubscriptionHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 24)
 	if m.history_time != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldHistoryTime)
 	}
@@ -71061,6 +71430,15 @@ func (m *OrgSubscriptionHistoryMutation) Fields() []string {
 	if m.expires_at != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldExpiresAt)
 	}
+	if m.trial_expires_at != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldTrialExpiresAt)
+	}
+	if m.days_until_due != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldDaysUntilDue)
+	}
+	if m.payment_method_added != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldPaymentMethodAdded)
+	}
 	if m.features != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldFeatures)
 	}
@@ -71113,6 +71491,12 @@ func (m *OrgSubscriptionHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.StripeCustomerID()
 	case orgsubscriptionhistory.FieldExpiresAt:
 		return m.ExpiresAt()
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		return m.TrialExpiresAt()
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		return m.DaysUntilDue()
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		return m.PaymentMethodAdded()
 	case orgsubscriptionhistory.FieldFeatures:
 		return m.Features()
 	case orgsubscriptionhistory.FieldFeatureLookupKeys:
@@ -71164,6 +71548,12 @@ func (m *OrgSubscriptionHistoryMutation) OldField(ctx context.Context, name stri
 		return m.OldStripeCustomerID(ctx)
 	case orgsubscriptionhistory.FieldExpiresAt:
 		return m.OldExpiresAt(ctx)
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		return m.OldTrialExpiresAt(ctx)
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		return m.OldDaysUntilDue(ctx)
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		return m.OldPaymentMethodAdded(ctx)
 	case orgsubscriptionhistory.FieldFeatures:
 		return m.OldFeatures(ctx)
 	case orgsubscriptionhistory.FieldFeatureLookupKeys:
@@ -71310,6 +71700,27 @@ func (m *OrgSubscriptionHistoryMutation) SetField(name string, value ent.Value) 
 		}
 		m.SetExpiresAt(v)
 		return nil
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTrialExpiresAt(v)
+		return nil
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDaysUntilDue(v)
+		return nil
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPaymentMethodAdded(v)
+		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		v, ok := value.([]string)
 		if !ok {
@@ -71402,6 +71813,15 @@ func (m *OrgSubscriptionHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscriptionhistory.FieldExpiresAt) {
 		fields = append(fields, orgsubscriptionhistory.FieldExpiresAt)
 	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldTrialExpiresAt) {
+		fields = append(fields, orgsubscriptionhistory.FieldTrialExpiresAt)
+	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldDaysUntilDue) {
+		fields = append(fields, orgsubscriptionhistory.FieldDaysUntilDue)
+	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldPaymentMethodAdded) {
+		fields = append(fields, orgsubscriptionhistory.FieldPaymentMethodAdded)
+	}
 	if m.FieldCleared(orgsubscriptionhistory.FieldFeatures) {
 		fields = append(fields, orgsubscriptionhistory.FieldFeatures)
 	}
@@ -71469,6 +71889,15 @@ func (m *OrgSubscriptionHistoryMutation) ClearField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldExpiresAt:
 		m.ClearExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		m.ClearTrialExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		m.ClearDaysUntilDue()
+		return nil
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		m.ClearPaymentMethodAdded()
 		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		m.ClearFeatures()
@@ -71540,6 +71969,15 @@ func (m *OrgSubscriptionHistoryMutation) ResetField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldExpiresAt:
 		m.ResetExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		m.ResetTrialExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		m.ResetDaysUntilDue()
+		return nil
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		m.ResetPaymentMethodAdded()
 		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		m.ResetFeatures()

@@ -224,6 +224,7 @@ query AdminSearch($query: String!) {
           stripeProductTierID
           stripeSubscriptionStatus
           stripeCustomerID
+          daysUntilDue
           features
           featureLookupKeys
         }

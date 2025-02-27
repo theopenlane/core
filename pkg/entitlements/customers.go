@@ -204,17 +204,19 @@ func (sc *StripeClient) MapStripeCustomer(c *stripe.Customer) *OrganizationCusto
 			orgID = v
 			break
 		}
+
 		if k == "organization_settings_id" {
 			orgSettingsID = v
 			break
 		}
+
 		if k == "organization_subscription_id" {
 			orgSubscriptionID = v
 			break
 		}
 	}
 
-	//if c.Subscriptions.Data[0].ID
+	// if c.Subscriptions.Data[0].ID
 
 	return &OrganizationCustomer{
 		StripeCustomerID:           c.ID,

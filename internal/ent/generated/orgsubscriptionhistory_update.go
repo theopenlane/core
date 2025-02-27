@@ -297,6 +297,66 @@ func (oshu *OrgSubscriptionHistoryUpdate) ClearExpiresAt() *OrgSubscriptionHisto
 	return oshu
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetTrialExpiresAt(t time.Time) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetTrialExpiresAt(t)
+	return oshu
+}
+
+// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
+func (oshu *OrgSubscriptionHistoryUpdate) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionHistoryUpdate {
+	if t != nil {
+		oshu.SetTrialExpiresAt(*t)
+	}
+	return oshu
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearTrialExpiresAt() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearTrialExpiresAt()
+	return oshu
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetDaysUntilDue(s string) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetDaysUntilDue(s)
+	return oshu
+}
+
+// SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
+func (oshu *OrgSubscriptionHistoryUpdate) SetNillableDaysUntilDue(s *string) *OrgSubscriptionHistoryUpdate {
+	if s != nil {
+		oshu.SetDaysUntilDue(*s)
+	}
+	return oshu
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearDaysUntilDue() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearDaysUntilDue()
+	return oshu
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetPaymentMethodAdded(b bool) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetPaymentMethodAdded(b)
+	return oshu
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (oshu *OrgSubscriptionHistoryUpdate) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionHistoryUpdate {
+	if b != nil {
+		oshu.SetPaymentMethodAdded(*b)
+	}
+	return oshu
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearPaymentMethodAdded() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearPaymentMethodAdded()
+	return oshu
+}
+
 // SetFeatures sets the "features" field.
 func (oshu *OrgSubscriptionHistoryUpdate) SetFeatures(s []string) *OrgSubscriptionHistoryUpdate {
 	oshu.mutation.SetFeatures(s)
@@ -483,6 +543,24 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if oshu.mutation.ExpiresAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime)
+	}
+	if value, ok := oshu.mutation.TrialExpiresAt(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldTrialExpiresAt, field.TypeTime, value)
+	}
+	if oshu.mutation.TrialExpiresAtCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldTrialExpiresAt, field.TypeTime)
+	}
+	if value, ok := oshu.mutation.DaysUntilDue(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString, value)
+	}
+	if oshu.mutation.DaysUntilDueCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString)
+	}
+	if value, ok := oshu.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if oshu.mutation.PaymentMethodAddedCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool)
 	}
 	if value, ok := oshu.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)
@@ -794,6 +872,66 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearExpiresAt() *OrgSubscriptionH
 	return oshuo
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetTrialExpiresAt(t time.Time) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetTrialExpiresAt(t)
+	return oshuo
+}
+
+// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionHistoryUpdateOne {
+	if t != nil {
+		oshuo.SetTrialExpiresAt(*t)
+	}
+	return oshuo
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearTrialExpiresAt() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearTrialExpiresAt()
+	return oshuo
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetDaysUntilDue(s string) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetDaysUntilDue(s)
+	return oshuo
+}
+
+// SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableDaysUntilDue(s *string) *OrgSubscriptionHistoryUpdateOne {
+	if s != nil {
+		oshuo.SetDaysUntilDue(*s)
+	}
+	return oshuo
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearDaysUntilDue() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearDaysUntilDue()
+	return oshuo
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetPaymentMethodAdded(b bool) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetPaymentMethodAdded(b)
+	return oshuo
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionHistoryUpdateOne {
+	if b != nil {
+		oshuo.SetPaymentMethodAdded(*b)
+	}
+	return oshuo
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearPaymentMethodAdded() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearPaymentMethodAdded()
+	return oshuo
+}
+
 // SetFeatures sets the "features" field.
 func (oshuo *OrgSubscriptionHistoryUpdateOne) SetFeatures(s []string) *OrgSubscriptionHistoryUpdateOne {
 	oshuo.mutation.SetFeatures(s)
@@ -1010,6 +1148,24 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if oshuo.mutation.ExpiresAtCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime)
+	}
+	if value, ok := oshuo.mutation.TrialExpiresAt(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldTrialExpiresAt, field.TypeTime, value)
+	}
+	if oshuo.mutation.TrialExpiresAtCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldTrialExpiresAt, field.TypeTime)
+	}
+	if value, ok := oshuo.mutation.DaysUntilDue(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString, value)
+	}
+	if oshuo.mutation.DaysUntilDueCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if oshuo.mutation.PaymentMethodAddedCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool)
 	}
 	if value, ok := oshuo.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)

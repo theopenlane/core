@@ -2671,6 +2671,7 @@ func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult) GetNarratives() []
 }
 
 type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions struct {
+	DaysUntilDue             *string       "json:\"daysUntilDue,omitempty\" graphql:\"daysUntilDue\""
 	DeletedBy                *string       "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
@@ -2685,6 +2686,12 @@ type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions 
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDaysUntilDue() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+	}
+	return t.DaysUntilDue
+}
 func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
@@ -54050,6 +54057,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					stripeProductTierID
 					stripeSubscriptionStatus
 					stripeCustomerID
+					daysUntilDue
 					features
 					featureLookupKeys
 				}

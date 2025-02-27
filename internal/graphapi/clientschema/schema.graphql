@@ -17761,6 +17761,18 @@ type OrgSubscription implements Node {
 	"""
 	expiresAt: Time
 	"""
+	the time the trial is set to expire
+	"""
+	trialExpiresAt: Time
+	"""
+	number of days until there is a due payment
+	"""
+	daysUntilDue: String
+	"""
+	whether or not a payment method has been added to the account
+	"""
+	paymentMethodAdded: Boolean
+	"""
 	the features associated with the subscription
 	"""
 	features: [String!]
@@ -17853,6 +17865,18 @@ type OrgSubscriptionHistory implements Node {
 	the time the subscription is set to expire; only populated if subscription is cancelled
 	"""
 	expiresAt: Time
+	"""
+	the time the trial is set to expire
+	"""
+	trialExpiresAt: Time
+	"""
+	number of days until there is a due payment
+	"""
+	daysUntilDue: String
+	"""
+	whether or not a payment method has been added to the account
+	"""
+	paymentMethodAdded: Boolean
 	"""
 	the features associated with the subscription
 	"""
@@ -18176,6 +18200,44 @@ input OrgSubscriptionHistoryWhereInput {
 	expiresAtLTE: Time
 	expiresAtIsNil: Boolean
 	expiresAtNotNil: Boolean
+	"""
+	trial_expires_at field predicates
+	"""
+	trialExpiresAt: Time
+	trialExpiresAtNEQ: Time
+	trialExpiresAtIn: [Time!]
+	trialExpiresAtNotIn: [Time!]
+	trialExpiresAtGT: Time
+	trialExpiresAtGTE: Time
+	trialExpiresAtLT: Time
+	trialExpiresAtLTE: Time
+	trialExpiresAtIsNil: Boolean
+	trialExpiresAtNotNil: Boolean
+	"""
+	days_until_due field predicates
+	"""
+	daysUntilDue: String
+	daysUntilDueNEQ: String
+	daysUntilDueIn: [String!]
+	daysUntilDueNotIn: [String!]
+	daysUntilDueGT: String
+	daysUntilDueGTE: String
+	daysUntilDueLT: String
+	daysUntilDueLTE: String
+	daysUntilDueContains: String
+	daysUntilDueHasPrefix: String
+	daysUntilDueHasSuffix: String
+	daysUntilDueIsNil: Boolean
+	daysUntilDueNotNil: Boolean
+	daysUntilDueEqualFold: String
+	daysUntilDueContainsFold: String
+	"""
+	payment_method_added field predicates
+	"""
+	paymentMethodAdded: Boolean
+	paymentMethodAddedNEQ: Boolean
+	paymentMethodAddedIsNil: Boolean
+	paymentMethodAddedNotNil: Boolean
 }
 type OrgSubscriptionSearchResult {
 	orgSubscriptions: [OrgSubscription!]
@@ -18420,6 +18482,44 @@ input OrgSubscriptionWhereInput {
 	expiresAtLTE: Time
 	expiresAtIsNil: Boolean
 	expiresAtNotNil: Boolean
+	"""
+	trial_expires_at field predicates
+	"""
+	trialExpiresAt: Time
+	trialExpiresAtNEQ: Time
+	trialExpiresAtIn: [Time!]
+	trialExpiresAtNotIn: [Time!]
+	trialExpiresAtGT: Time
+	trialExpiresAtGTE: Time
+	trialExpiresAtLT: Time
+	trialExpiresAtLTE: Time
+	trialExpiresAtIsNil: Boolean
+	trialExpiresAtNotNil: Boolean
+	"""
+	days_until_due field predicates
+	"""
+	daysUntilDue: String
+	daysUntilDueNEQ: String
+	daysUntilDueIn: [String!]
+	daysUntilDueNotIn: [String!]
+	daysUntilDueGT: String
+	daysUntilDueGTE: String
+	daysUntilDueLT: String
+	daysUntilDueLTE: String
+	daysUntilDueContains: String
+	daysUntilDueHasPrefix: String
+	daysUntilDueHasSuffix: String
+	daysUntilDueIsNil: Boolean
+	daysUntilDueNotNil: Boolean
+	daysUntilDueEqualFold: String
+	daysUntilDueContainsFold: String
+	"""
+	payment_method_added field predicates
+	"""
+	paymentMethodAdded: Boolean
+	paymentMethodAddedNEQ: Boolean
+	paymentMethodAddedIsNil: Boolean
+	paymentMethodAddedNotNil: Boolean
 	"""
 	owner edge predicates
 	"""

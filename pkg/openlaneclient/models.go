@@ -12382,6 +12382,12 @@ type OrgSubscription struct {
 	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+	// the time the trial is set to expire
+	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
+	// number of days until there is a due payment
+	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -12442,6 +12448,12 @@ type OrgSubscriptionHistory struct {
 	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+	// the time the trial is set to expire
+	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
+	// number of days until there is a due payment
+	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -12706,6 +12718,38 @@ type OrgSubscriptionHistoryWhereInput struct {
 	ExpiresAtLte    *time.Time   `json:"expiresAtLTE,omitempty"`
 	ExpiresAtIsNil  *bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil *bool        `json:"expiresAtNotNil,omitempty"`
+	// trial_expires_at field predicates
+	TrialExpiresAt       *time.Time   `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNeq    *time.Time   `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []*time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []*time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGt     *time.Time   `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGte    *time.Time   `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLt     *time.Time   `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLte    *time.Time   `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  *bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil *bool        `json:"trialExpiresAtNotNil,omitempty"`
+	// days_until_due field predicates
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNeq          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGt           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGte          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLt           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLte          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        *bool    `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       *bool    `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+	// payment_method_added field predicates
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNeq    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  *bool `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil *bool `json:"paymentMethodAddedNotNil,omitempty"`
 }
 
 type OrgSubscriptionSearchResult struct {
@@ -12922,6 +12966,38 @@ type OrgSubscriptionWhereInput struct {
 	ExpiresAtLte    *time.Time   `json:"expiresAtLTE,omitempty"`
 	ExpiresAtIsNil  *bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil *bool        `json:"expiresAtNotNil,omitempty"`
+	// trial_expires_at field predicates
+	TrialExpiresAt       *time.Time   `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNeq    *time.Time   `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []*time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []*time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGt     *time.Time   `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGte    *time.Time   `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLt     *time.Time   `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLte    *time.Time   `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  *bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil *bool        `json:"trialExpiresAtNotNil,omitempty"`
+	// days_until_due field predicates
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNeq          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGt           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGte          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLt           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLte          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        *bool    `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       *bool    `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+	// payment_method_added field predicates
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNeq    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  *bool `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil *bool `json:"paymentMethodAddedNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

@@ -1627,6 +1627,9 @@ var (
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
+		{Name: "payment_method_added", Type: field.TypeBool, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
 		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -1639,7 +1642,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[18]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1667,6 +1670,9 @@ var (
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
+		{Name: "payment_method_added", Type: field.TypeBool, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
 		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 	}

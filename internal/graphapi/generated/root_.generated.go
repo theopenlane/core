@@ -1999,6 +1999,7 @@ type ComplexityRoot struct {
 		Active                   func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
+		DaysUntilDue             func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
 		Events                   func(childComplexity int) int
@@ -2008,6 +2009,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
 		StripeCustomerID         func(childComplexity int) int
@@ -2016,6 +2018,7 @@ type ComplexityRoot struct {
 		StripeSubscriptionStatus func(childComplexity int) int
 		SubscriptionURL          func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		TrialExpiresAt           func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 	}
@@ -2035,6 +2038,7 @@ type ComplexityRoot struct {
 		Active                   func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
+		DaysUntilDue             func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
@@ -2044,6 +2048,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
 		Ref                      func(childComplexity int) int
@@ -2052,6 +2057,7 @@ type ComplexityRoot struct {
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		TrialExpiresAt           func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 	}
@@ -13446,6 +13452,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.CreatedBy(childComplexity), true
 
+	case "OrgSubscription.daysUntilDue":
+		if e.complexity.OrgSubscription.DaysUntilDue == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.DaysUntilDue(childComplexity), true
+
 	case "OrgSubscription.deletedAt":
 		if e.complexity.OrgSubscription.DeletedAt == nil {
 			break
@@ -13509,6 +13522,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.OwnerID(childComplexity), true
 
+	case "OrgSubscription.paymentMethodAdded":
+		if e.complexity.OrgSubscription.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.PaymentMethodAdded(childComplexity), true
+
 	case "OrgSubscription.productPrice":
 		if e.complexity.OrgSubscription.ProductPrice == nil {
 			break
@@ -13564,6 +13584,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscription.Tags(childComplexity), true
+
+	case "OrgSubscription.trialExpiresAt":
+		if e.complexity.OrgSubscription.TrialExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.TrialExpiresAt(childComplexity), true
 
 	case "OrgSubscription.updatedAt":
 		if e.complexity.OrgSubscription.UpdatedAt == nil {
@@ -13635,6 +13662,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscriptionHistory.CreatedBy(childComplexity), true
 
+	case "OrgSubscriptionHistory.daysUntilDue":
+		if e.complexity.OrgSubscriptionHistory.DaysUntilDue == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.DaysUntilDue(childComplexity), true
+
 	case "OrgSubscriptionHistory.deletedAt":
 		if e.complexity.OrgSubscriptionHistory.DeletedAt == nil {
 			break
@@ -13698,6 +13732,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscriptionHistory.OwnerID(childComplexity), true
 
+	case "OrgSubscriptionHistory.paymentMethodAdded":
+		if e.complexity.OrgSubscriptionHistory.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.PaymentMethodAdded(childComplexity), true
+
 	case "OrgSubscriptionHistory.productPrice":
 		if e.complexity.OrgSubscriptionHistory.ProductPrice == nil {
 			break
@@ -13753,6 +13794,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscriptionHistory.Tags(childComplexity), true
+
+	case "OrgSubscriptionHistory.trialExpiresAt":
+		if e.complexity.OrgSubscriptionHistory.TrialExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.TrialExpiresAt(childComplexity), true
 
 	case "OrgSubscriptionHistory.updatedAt":
 		if e.complexity.OrgSubscriptionHistory.UpdatedAt == nil {
@@ -38249,6 +38297,18 @@ type OrgSubscription implements Node {
   """
   expiresAt: Time
   """
+  the time the trial is set to expire
+  """
+  trialExpiresAt: Time
+  """
+  number of days until there is a due payment
+  """
+  daysUntilDue: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean
+  """
   the features associated with the subscription
   """
   features: [String!]
@@ -38340,6 +38400,18 @@ type OrgSubscriptionHistory implements Node {
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
   expiresAt: Time
+  """
+  the time the trial is set to expire
+  """
+  trialExpiresAt: Time
+  """
+  number of days until there is a due payment
+  """
+  daysUntilDue: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -38663,6 +38735,44 @@ input OrgSubscriptionHistoryWhereInput {
   expiresAtLTE: Time
   expiresAtIsNil: Boolean
   expiresAtNotNil: Boolean
+  """
+  trial_expires_at field predicates
+  """
+  trialExpiresAt: Time
+  trialExpiresAtNEQ: Time
+  trialExpiresAtIn: [Time!]
+  trialExpiresAtNotIn: [Time!]
+  trialExpiresAtGT: Time
+  trialExpiresAtGTE: Time
+  trialExpiresAtLT: Time
+  trialExpiresAtLTE: Time
+  trialExpiresAtIsNil: Boolean
+  trialExpiresAtNotNil: Boolean
+  """
+  days_until_due field predicates
+  """
+  daysUntilDue: String
+  daysUntilDueNEQ: String
+  daysUntilDueIn: [String!]
+  daysUntilDueNotIn: [String!]
+  daysUntilDueGT: String
+  daysUntilDueGTE: String
+  daysUntilDueLT: String
+  daysUntilDueLTE: String
+  daysUntilDueContains: String
+  daysUntilDueHasPrefix: String
+  daysUntilDueHasSuffix: String
+  daysUntilDueIsNil: Boolean
+  daysUntilDueNotNil: Boolean
+  daysUntilDueEqualFold: String
+  daysUntilDueContainsFold: String
+  """
+  payment_method_added field predicates
+  """
+  paymentMethodAdded: Boolean
+  paymentMethodAddedNEQ: Boolean
+  paymentMethodAddedIsNil: Boolean
+  paymentMethodAddedNotNil: Boolean
 }
 """
 OrgSubscriptionWhereInput is used for filtering OrgSubscription objects.
@@ -38904,6 +39014,44 @@ input OrgSubscriptionWhereInput {
   expiresAtLTE: Time
   expiresAtIsNil: Boolean
   expiresAtNotNil: Boolean
+  """
+  trial_expires_at field predicates
+  """
+  trialExpiresAt: Time
+  trialExpiresAtNEQ: Time
+  trialExpiresAtIn: [Time!]
+  trialExpiresAtNotIn: [Time!]
+  trialExpiresAtGT: Time
+  trialExpiresAtGTE: Time
+  trialExpiresAtLT: Time
+  trialExpiresAtLTE: Time
+  trialExpiresAtIsNil: Boolean
+  trialExpiresAtNotNil: Boolean
+  """
+  days_until_due field predicates
+  """
+  daysUntilDue: String
+  daysUntilDueNEQ: String
+  daysUntilDueIn: [String!]
+  daysUntilDueNotIn: [String!]
+  daysUntilDueGT: String
+  daysUntilDueGTE: String
+  daysUntilDueLT: String
+  daysUntilDueLTE: String
+  daysUntilDueContains: String
+  daysUntilDueHasPrefix: String
+  daysUntilDueHasSuffix: String
+  daysUntilDueIsNil: Boolean
+  daysUntilDueNotNil: Boolean
+  daysUntilDueEqualFold: String
+  daysUntilDueContainsFold: String
+  """
+  payment_method_added field predicates
+  """
+  paymentMethodAdded: Boolean
+  paymentMethodAddedNEQ: Boolean
+  paymentMethodAddedIsNil: Boolean
+  paymentMethodAddedNotNil: Boolean
   """
   owner edge predicates
   """

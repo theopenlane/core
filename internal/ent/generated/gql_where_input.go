@@ -37524,6 +37524,41 @@ type OrgSubscriptionWhereInput struct {
 	ExpiresAtIsNil  bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
 
+	// "trial_expires_at" field predicates.
+	TrialExpiresAt       *time.Time  `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNEQ    *time.Time  `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGT     *time.Time  `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGTE    *time.Time  `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLT     *time.Time  `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLTE    *time.Time  `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil bool        `json:"trialExpiresAtNotNil,omitempty"`
+
+	// "days_until_due" field predicates.
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNEQ          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGT           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGTE          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLT           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLTE          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        bool     `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+
+	// "payment_method_added" field predicates.
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNEQ    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  bool  `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil bool  `json:"paymentMethodAddedNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -38165,6 +38200,93 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 	if i.ExpiresAtNotNil {
 		predicates = append(predicates, orgsubscription.ExpiresAtNotNil())
 	}
+	if i.TrialExpiresAt != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtEQ(*i.TrialExpiresAt))
+	}
+	if i.TrialExpiresAtNEQ != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtNEQ(*i.TrialExpiresAtNEQ))
+	}
+	if len(i.TrialExpiresAtIn) > 0 {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtIn(i.TrialExpiresAtIn...))
+	}
+	if len(i.TrialExpiresAtNotIn) > 0 {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtNotIn(i.TrialExpiresAtNotIn...))
+	}
+	if i.TrialExpiresAtGT != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtGT(*i.TrialExpiresAtGT))
+	}
+	if i.TrialExpiresAtGTE != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtGTE(*i.TrialExpiresAtGTE))
+	}
+	if i.TrialExpiresAtLT != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtLT(*i.TrialExpiresAtLT))
+	}
+	if i.TrialExpiresAtLTE != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtLTE(*i.TrialExpiresAtLTE))
+	}
+	if i.TrialExpiresAtIsNil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtIsNil())
+	}
+	if i.TrialExpiresAtNotNil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtNotNil())
+	}
+	if i.DaysUntilDue != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueEQ(*i.DaysUntilDue))
+	}
+	if i.DaysUntilDueNEQ != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueNEQ(*i.DaysUntilDueNEQ))
+	}
+	if len(i.DaysUntilDueIn) > 0 {
+		predicates = append(predicates, orgsubscription.DaysUntilDueIn(i.DaysUntilDueIn...))
+	}
+	if len(i.DaysUntilDueNotIn) > 0 {
+		predicates = append(predicates, orgsubscription.DaysUntilDueNotIn(i.DaysUntilDueNotIn...))
+	}
+	if i.DaysUntilDueGT != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueGT(*i.DaysUntilDueGT))
+	}
+	if i.DaysUntilDueGTE != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueGTE(*i.DaysUntilDueGTE))
+	}
+	if i.DaysUntilDueLT != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueLT(*i.DaysUntilDueLT))
+	}
+	if i.DaysUntilDueLTE != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueLTE(*i.DaysUntilDueLTE))
+	}
+	if i.DaysUntilDueContains != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueContains(*i.DaysUntilDueContains))
+	}
+	if i.DaysUntilDueHasPrefix != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueHasPrefix(*i.DaysUntilDueHasPrefix))
+	}
+	if i.DaysUntilDueHasSuffix != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueHasSuffix(*i.DaysUntilDueHasSuffix))
+	}
+	if i.DaysUntilDueIsNil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueIsNil())
+	}
+	if i.DaysUntilDueNotNil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueNotNil())
+	}
+	if i.DaysUntilDueEqualFold != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueEqualFold(*i.DaysUntilDueEqualFold))
+	}
+	if i.DaysUntilDueContainsFold != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
+	}
+	if i.PaymentMethodAdded != nil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedEQ(*i.PaymentMethodAdded))
+	}
+	if i.PaymentMethodAddedNEQ != nil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedNEQ(*i.PaymentMethodAddedNEQ))
+	}
+	if i.PaymentMethodAddedIsNil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedIsNil())
+	}
+	if i.PaymentMethodAddedNotNil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedNotNil())
+	}
 
 	if i.HasOwner != nil {
 		p := orgsubscription.HasOwner()
@@ -38468,6 +38590,41 @@ type OrgSubscriptionHistoryWhereInput struct {
 	ExpiresAtLTE    *time.Time  `json:"expiresAtLTE,omitempty"`
 	ExpiresAtIsNil  bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
+
+	// "trial_expires_at" field predicates.
+	TrialExpiresAt       *time.Time  `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNEQ    *time.Time  `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGT     *time.Time  `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGTE    *time.Time  `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLT     *time.Time  `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLTE    *time.Time  `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil bool        `json:"trialExpiresAtNotNil,omitempty"`
+
+	// "days_until_due" field predicates.
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNEQ          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGT           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGTE          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLT           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLTE          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        bool     `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+
+	// "payment_method_added" field predicates.
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNEQ    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  bool  `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil bool  `json:"paymentMethodAddedNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39182,6 +39339,93 @@ func (i *OrgSubscriptionHistoryWhereInput) P() (predicate.OrgSubscriptionHistory
 	}
 	if i.ExpiresAtNotNil {
 		predicates = append(predicates, orgsubscriptionhistory.ExpiresAtNotNil())
+	}
+	if i.TrialExpiresAt != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtEQ(*i.TrialExpiresAt))
+	}
+	if i.TrialExpiresAtNEQ != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtNEQ(*i.TrialExpiresAtNEQ))
+	}
+	if len(i.TrialExpiresAtIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtIn(i.TrialExpiresAtIn...))
+	}
+	if len(i.TrialExpiresAtNotIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtNotIn(i.TrialExpiresAtNotIn...))
+	}
+	if i.TrialExpiresAtGT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtGT(*i.TrialExpiresAtGT))
+	}
+	if i.TrialExpiresAtGTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtGTE(*i.TrialExpiresAtGTE))
+	}
+	if i.TrialExpiresAtLT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtLT(*i.TrialExpiresAtLT))
+	}
+	if i.TrialExpiresAtLTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtLTE(*i.TrialExpiresAtLTE))
+	}
+	if i.TrialExpiresAtIsNil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtIsNil())
+	}
+	if i.TrialExpiresAtNotNil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtNotNil())
+	}
+	if i.DaysUntilDue != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueEQ(*i.DaysUntilDue))
+	}
+	if i.DaysUntilDueNEQ != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueNEQ(*i.DaysUntilDueNEQ))
+	}
+	if len(i.DaysUntilDueIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueIn(i.DaysUntilDueIn...))
+	}
+	if len(i.DaysUntilDueNotIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueNotIn(i.DaysUntilDueNotIn...))
+	}
+	if i.DaysUntilDueGT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueGT(*i.DaysUntilDueGT))
+	}
+	if i.DaysUntilDueGTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueGTE(*i.DaysUntilDueGTE))
+	}
+	if i.DaysUntilDueLT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueLT(*i.DaysUntilDueLT))
+	}
+	if i.DaysUntilDueLTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueLTE(*i.DaysUntilDueLTE))
+	}
+	if i.DaysUntilDueContains != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueContains(*i.DaysUntilDueContains))
+	}
+	if i.DaysUntilDueHasPrefix != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueHasPrefix(*i.DaysUntilDueHasPrefix))
+	}
+	if i.DaysUntilDueHasSuffix != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueHasSuffix(*i.DaysUntilDueHasSuffix))
+	}
+	if i.DaysUntilDueIsNil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueIsNil())
+	}
+	if i.DaysUntilDueNotNil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueNotNil())
+	}
+	if i.DaysUntilDueEqualFold != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueEqualFold(*i.DaysUntilDueEqualFold))
+	}
+	if i.DaysUntilDueContainsFold != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
+	}
+	if i.PaymentMethodAdded != nil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedEQ(*i.PaymentMethodAdded))
+	}
+	if i.PaymentMethodAddedNEQ != nil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedNEQ(*i.PaymentMethodAddedNEQ))
+	}
+	if i.PaymentMethodAddedIsNil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedIsNil())
+	}
+	if i.PaymentMethodAddedNotNil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedNotNil())
 	}
 
 	switch len(predicates) {

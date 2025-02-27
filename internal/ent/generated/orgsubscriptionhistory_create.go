@@ -272,6 +272,48 @@ func (oshc *OrgSubscriptionHistoryCreate) SetNillableExpiresAt(t *time.Time) *Or
 	return oshc
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetTrialExpiresAt(t time.Time) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetTrialExpiresAt(t)
+	return oshc
+}
+
+// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionHistoryCreate {
+	if t != nil {
+		oshc.SetTrialExpiresAt(*t)
+	}
+	return oshc
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetDaysUntilDue(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetDaysUntilDue(s)
+	return oshc
+}
+
+// SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableDaysUntilDue(s *string) *OrgSubscriptionHistoryCreate {
+	if s != nil {
+		oshc.SetDaysUntilDue(*s)
+	}
+	return oshc
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetPaymentMethodAdded(b bool) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetPaymentMethodAdded(b)
+	return oshc
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionHistoryCreate {
+	if b != nil {
+		oshc.SetPaymentMethodAdded(*b)
+	}
+	return oshc
+}
+
 // SetFeatures sets the "features" field.
 func (oshc *OrgSubscriptionHistoryCreate) SetFeatures(s []string) *OrgSubscriptionHistoryCreate {
 	oshc.mutation.SetFeatures(s)
@@ -486,6 +528,18 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 	if value, ok := oshc.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
+	}
+	if value, ok := oshc.mutation.TrialExpiresAt(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldTrialExpiresAt, field.TypeTime, value)
+		_node.TrialExpiresAt = &value
+	}
+	if value, ok := oshc.mutation.DaysUntilDue(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString, value)
+		_node.DaysUntilDue = &value
+	}
+	if value, ok := oshc.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
+		_node.PaymentMethodAdded = &value
 	}
 	if value, ok := oshc.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)

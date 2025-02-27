@@ -1498,6 +1498,12 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_stripeCustomerID(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
+			case "trialExpiresAt":
+				return ec.fieldContext_OrgSubscription_trialExpiresAt(ctx, field)
+			case "daysUntilDue":
+				return ec.fieldContext_OrgSubscription_daysUntilDue(ctx, field)
+			case "paymentMethodAdded":
+				return ec.fieldContext_OrgSubscription_paymentMethodAdded(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
 			case "featureLookupKeys":

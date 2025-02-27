@@ -13,7 +13,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v81"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -271,7 +270,7 @@ func handleOrganizationSettingsCreate(event soiree.Event) error {
 }
 
 // createInternalOrgSubscription creates an internal org subscription
-func createInternalOrgSubscription(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) (orgSubs *generated.OrgSubscription, err error) {
+func createInternalOrgSubscription(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) (orgSubs *entgen.OrgSubscription, err error) {
 	productName := ""
 	productPrice := models.Price{}
 

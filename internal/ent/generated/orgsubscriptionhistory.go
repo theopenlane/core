@@ -58,6 +58,12 @@ type OrgSubscriptionHistory struct {
 	StripeCustomerID string `json:"stripe_customer_id,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
+	// the time the trial is set to expire
+	TrialExpiresAt *time.Time `json:"trial_expires_at,omitempty"`
+	// number of days until there is a due payment
+	DaysUntilDue *string `json:"days_until_due,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded *bool `json:"payment_method_added,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -74,11 +80,11 @@ func (*OrgSubscriptionHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orgsubscriptionhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case orgsubscriptionhistory.FieldActive:
+		case orgsubscriptionhistory.FieldActive, orgsubscriptionhistory.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
-		case orgsubscriptionhistory.FieldID, orgsubscriptionhistory.FieldRef, orgsubscriptionhistory.FieldCreatedBy, orgsubscriptionhistory.FieldUpdatedBy, orgsubscriptionhistory.FieldDeletedBy, orgsubscriptionhistory.FieldOwnerID, orgsubscriptionhistory.FieldStripeSubscriptionID, orgsubscriptionhistory.FieldProductTier, orgsubscriptionhistory.FieldStripeProductTierID, orgsubscriptionhistory.FieldStripeSubscriptionStatus, orgsubscriptionhistory.FieldStripeCustomerID:
+		case orgsubscriptionhistory.FieldID, orgsubscriptionhistory.FieldRef, orgsubscriptionhistory.FieldCreatedBy, orgsubscriptionhistory.FieldUpdatedBy, orgsubscriptionhistory.FieldDeletedBy, orgsubscriptionhistory.FieldOwnerID, orgsubscriptionhistory.FieldStripeSubscriptionID, orgsubscriptionhistory.FieldProductTier, orgsubscriptionhistory.FieldStripeProductTierID, orgsubscriptionhistory.FieldStripeSubscriptionStatus, orgsubscriptionhistory.FieldStripeCustomerID, orgsubscriptionhistory.FieldDaysUntilDue:
 			values[i] = new(sql.NullString)
-		case orgsubscriptionhistory.FieldHistoryTime, orgsubscriptionhistory.FieldCreatedAt, orgsubscriptionhistory.FieldUpdatedAt, orgsubscriptionhistory.FieldDeletedAt, orgsubscriptionhistory.FieldExpiresAt:
+		case orgsubscriptionhistory.FieldHistoryTime, orgsubscriptionhistory.FieldCreatedAt, orgsubscriptionhistory.FieldUpdatedAt, orgsubscriptionhistory.FieldDeletedAt, orgsubscriptionhistory.FieldExpiresAt, orgsubscriptionhistory.FieldTrialExpiresAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -220,6 +226,27 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 				osh.ExpiresAt = new(time.Time)
 				*osh.ExpiresAt = value.Time
 			}
+		case orgsubscriptionhistory.FieldTrialExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field trial_expires_at", values[i])
+			} else if value.Valid {
+				osh.TrialExpiresAt = new(time.Time)
+				*osh.TrialExpiresAt = value.Time
+			}
+		case orgsubscriptionhistory.FieldDaysUntilDue:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field days_until_due", values[i])
+			} else if value.Valid {
+				osh.DaysUntilDue = new(string)
+				*osh.DaysUntilDue = value.String
+			}
+		case orgsubscriptionhistory.FieldPaymentMethodAdded:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
+			} else if value.Valid {
+				osh.PaymentMethodAdded = new(bool)
+				*osh.PaymentMethodAdded = value.Bool
+			}
 		case orgsubscriptionhistory.FieldFeatures:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field features", values[i])
@@ -329,6 +356,21 @@ func (osh *OrgSubscriptionHistory) String() string {
 	if v := osh.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := osh.TrialExpiresAt; v != nil {
+		builder.WriteString("trial_expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := osh.DaysUntilDue; v != nil {
+		builder.WriteString("days_until_due=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := osh.PaymentMethodAdded; v != nil {
+		builder.WriteString("payment_method_added=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("features=")

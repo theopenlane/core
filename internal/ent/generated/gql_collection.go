@@ -7988,6 +7988,21 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, orgsubscription.FieldExpiresAt)
 				fieldSeen[orgsubscription.FieldExpiresAt] = struct{}{}
 			}
+		case "trialExpiresAt":
+			if _, ok := fieldSeen[orgsubscription.FieldTrialExpiresAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldTrialExpiresAt)
+				fieldSeen[orgsubscription.FieldTrialExpiresAt] = struct{}{}
+			}
+		case "daysUntilDue":
+			if _, ok := fieldSeen[orgsubscription.FieldDaysUntilDue]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldDaysUntilDue)
+				fieldSeen[orgsubscription.FieldDaysUntilDue] = struct{}{}
+			}
+		case "paymentMethodAdded":
+			if _, ok := fieldSeen[orgsubscription.FieldPaymentMethodAdded]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldPaymentMethodAdded)
+				fieldSeen[orgsubscription.FieldPaymentMethodAdded] = struct{}{}
+			}
 		case "features":
 			if _, ok := fieldSeen[orgsubscription.FieldFeatures]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldFeatures)
@@ -8154,6 +8169,21 @@ func (osh *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldExpiresAt]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldExpiresAt)
 				fieldSeen[orgsubscriptionhistory.FieldExpiresAt] = struct{}{}
+			}
+		case "trialExpiresAt":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldTrialExpiresAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldTrialExpiresAt)
+				fieldSeen[orgsubscriptionhistory.FieldTrialExpiresAt] = struct{}{}
+			}
+		case "daysUntilDue":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldDaysUntilDue]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldDaysUntilDue)
+				fieldSeen[orgsubscriptionhistory.FieldDaysUntilDue] = struct{}{}
+			}
+		case "paymentMethodAdded":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldPaymentMethodAdded]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldPaymentMethodAdded)
+				fieldSeen[orgsubscriptionhistory.FieldPaymentMethodAdded] = struct{}{}
 			}
 		case "features":
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldFeatures]; !ok {
