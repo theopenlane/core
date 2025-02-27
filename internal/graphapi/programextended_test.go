@@ -67,7 +67,7 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationCreateFull() {
+func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 	t := suite.T()
 
 	members := []*openlaneclient.CreateMemberWithProgramInput{
