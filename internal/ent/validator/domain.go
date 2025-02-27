@@ -16,6 +16,7 @@ var (
 )
 
 // ValidateDomains validates a list of domains and returns an error if any of them are invalid
+// domains can be up to 255 characters long and follow a known domain regex
 func ValidateDomains() func(domains []string) error {
 	return func(domains []string) error {
 		for _, domain := range domains {
@@ -34,6 +35,7 @@ func ValidateDomains() func(domains []string) error {
 }
 
 // ValidateURL validates a url and returns an error if it is invalid
+// urls can be up to 2048 characters long and follow the same domain regex
 func ValidateURL() func(u string) error {
 	return func(u string) error {
 		// ensure the domain is not too long
@@ -50,6 +52,7 @@ func ValidateURL() func(u string) error {
 	}
 }
 
+// validateURL validates a url or domain and returns an error if it is invalid
 func validateURL(inputURL string) error {
 	// parse the url
 	parsedURL, err := url.Parse(inputURL)
