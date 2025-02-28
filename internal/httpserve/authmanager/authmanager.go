@@ -242,6 +242,19 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		orgID = au.OrganizationID
 	}
 
+	active, err := a.checkActiveSubscription(ctx, orgID)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to find orgsubscription for organization")
+
+		return
+	}
+
+	if !active {
+		log.Error().Err(err).Msg("organization subscription is not active")
+
+		return
+	}
+
 	// ensure user is already a member of the destination organization
 	req := fgax.AccessCheck{
 		SubjectID:   au.SubjectID,

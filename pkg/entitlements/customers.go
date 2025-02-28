@@ -98,7 +98,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		const maxRetries = 5
 
 		for i := range maxRetries {
-			feats, featNames, err = sc.retrieveActiveEntitlements(customer.ID)
+			feats, featNames, err = sc.RetrieveActiveEntitlements(customer.ID)
 			if err != nil {
 				return nil, err
 			}
@@ -117,8 +117,6 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			log.Warn().Str("customer_id", customer.ID).Msg("no features found for customer")
 		}
 
-		log.Debug().Str("organization_id", o.OrganizationID).Strs("features", feats).Str("customer_id", customer.ID).Msg("found features for customer")
-
 		o.Features = feats
 		o.FeatureNames = featNames
 
@@ -126,14 +124,13 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 	case 1:
 		o.StripeCustomerID = customers[0].ID
 
-		feats, featNames, err := sc.retrieveActiveEntitlements(customers[0].ID)
+		feats, featNames, err := sc.RetrieveActiveEntitlements(customers[0].ID)
 		if err != nil {
 			return nil, err
 		}
 
 		if len(feats) > 0 {
 			// if we have feats, lets update the customer object in case things have changed or we missed something
-			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Strs("features", feats).Msg("found features for customer")
 			o.Features = feats
 		}
 

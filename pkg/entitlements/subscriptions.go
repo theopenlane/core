@@ -142,7 +142,8 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 	}, nil
 }
 
-func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string, []string, error) {
+// RetrieveActiveEntitlements retrieves the active entitlements for a customer
+func (sc *StripeClient) RetrieveActiveEntitlements(customerID string) ([]string, []string, error) {
 	params := &stripe.EntitlementsActiveEntitlementListParams{
 		Customer: stripe.String(customerID),
 		Expand:   []*string{stripe.String("data.feature")},

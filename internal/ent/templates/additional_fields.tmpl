@@ -1,6 +1,7 @@
 {{ define "model/fields/additional" }}
     {{- if eq $.Name "OrgSubscription" }}
         SubscriptionURL string `json:"subscriptionURL,omitempty"`
+        ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
     {{- end }}
     {{- if eq $.Name "File" }}
         PresignedURL string `json:"presignedURL,omitempty"`
