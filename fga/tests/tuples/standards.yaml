@@ -1,0 +1,20 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to controls
+############################################
+# specific view access to standard
+- user: user:ulid-of-member
+  relation: viewer
+  object: standard:standard-1
+# allow all users to view public standards
+- user: user:*
+  relation: can_view
+  object: standard:standard-system-owned-1
+# specific editor access
+- user: user:ulid-of-member-2
+  relation: editor
+  object: standard:standard-2
+# org owned standard
+- user: organization:openlane
+  relation: parent
+  object: standard:standard-org-custom

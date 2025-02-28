@@ -90,4 +90,18 @@ models:
   Price:
     model:
       - github.com/theopenlane/core/pkg/models.Price
-
+  AssessmentObjective:
+    model:
+      - github.com/theopenlane/core/pkg/models.AssessmentObjective
+  AssessmentMethod:
+    model:
+      - github.com/theopenlane/core/pkg/models.AssessmentMethod
+  Reference:
+    model:
+      - github.com/theopenlane/core/pkg/models.Reference
+  ImplementationGuidance:
+    model:
+      - github.com/theopenlane/core/pkg/models.ImplementationGuidance
+  ExampleEvidence:
+    model:
+      - github.com/theopenlane/core/pkg/models.ExampleEvidence
