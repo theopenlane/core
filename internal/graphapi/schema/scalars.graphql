@@ -1,3 +1,8 @@
 scalar Upload
 scalar Address
 scalar Price
+scalar AssessmentObjective
+scalar AssessmentMethod
+scalar ExampleEvidence
+scalar Reference
+scalar ImplementationGuidance

@@ -10,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
@@ -79,7 +80,23 @@ func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*mode
 
 // Standard is the resolver for the standard field.
 func (r *queryResolver) Standard(ctx context.Context, id string) (*generated.Standard, error) {
-	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
+	query := withTransactionalMutation(ctx).Standard.Query().Where(standard.ID(id))
+
+	// if graphutils.CheckForRequestedField(ctx, generated.TypeControl) {
+	// 	query.WithNamedControls("controls", func(q *generated.ControlQuery) {
+	// 		filter := q.Where(control.StandardID(id))
+
+	// 		if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+	// 			filter.WithNamedControlObjectives("controlObjectives")
+	// 		}
+
+	// 		if graphutils.CheckForRequestedField(ctx, generated.TypeSubcontrol) {
+	// 			filter.WithNamedSubcontrols("subcontrols")
+	// 		}
+	// 	})
+	// }
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
 	}
