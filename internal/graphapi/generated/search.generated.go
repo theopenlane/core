@@ -1514,6 +1514,10 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_events(ctx, field)
 			case "subscriptionURL":
 				return ec.fieldContext_OrgSubscription_subscriptionURL(ctx, field)
+			case "managePaymentMethods":
+				return ec.fieldContext_OrgSubscription_managePaymentMethods(ctx, field)
+			case "cancellation":
+				return ec.fieldContext_OrgSubscription_cancellation(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgSubscription", field.Name)
 		},

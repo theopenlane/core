@@ -149,6 +149,14 @@ type Checkout struct {
 	URL string `json:"url"`
 }
 
+// BillingPortalSession holds the billing portal session information
+type BillingPortalSession struct {
+	ManageSubscription string `json:"manage_subscription"`
+	PaymentMethods     string `json:"payment_methods"`
+	Cancellation       string `json:"cancellation"`
+	HomePage           string `json:"home_page"`
+}
+
 // Feature are part of a product
 type Feature struct {
 	ID        string `json:"id" yaml:"id"`

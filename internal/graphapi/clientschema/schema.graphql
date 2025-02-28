@@ -17783,6 +17783,8 @@ type OrgSubscription implements Node {
 	owner: Organization
 	events: [Event!]
 	subscriptionURL: String
+	managePaymentMethods: String
+	cancellation: String
 }
 """
 A connection to a list of items.

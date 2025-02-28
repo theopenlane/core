@@ -12391,10 +12391,12 @@ type OrgSubscription struct {
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys []string      `json:"featureLookupKeys,omitempty"`
-	Owner             *Organization `json:"owner,omitempty"`
-	Events            []*Event      `json:"events,omitempty"`
-	SubscriptionURL   *string       `json:"subscriptionURL,omitempty"`
+	FeatureLookupKeys    []string      `json:"featureLookupKeys,omitempty"`
+	Owner                *Organization `json:"owner,omitempty"`
+	Events               []*Event      `json:"events,omitempty"`
+	SubscriptionURL      *string       `json:"subscriptionURL,omitempty"`
+	ManagePaymentMethods *string       `json:"managePaymentMethods,omitempty"`
+	Cancellation         *string       `json:"cancellation,omitempty"`
 }
 
 func (OrgSubscription) IsNode() {}

@@ -142,6 +142,55 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 	}, nil
 }
 
+// CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
+func (sc *StripeClient) CreateBillingPortalPaymentMethods(subsID, custID string) (BillingPortalSession, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("payment_method_update"),
+		},
+	}
+
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
+	if err != nil {
+		return BillingPortalSession{}, err
+	}
+
+	return BillingPortalSession{
+		PaymentMethods: billingPortalSession.URL,
+	}, nil
+}
+
+// CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
+func (sc *StripeClient) CancellationBillingPortalSession(subsID, custID string) (BillingPortalSession, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL, // this is the "return back to website" URL, not a cancellation / update specific one
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("subscription_cancel"),
+			SubscriptionCancel: &stripe.BillingPortalSessionFlowDataSubscriptionCancelParams{
+				Subscription: &subsID,
+			},
+			AfterCompletion: &stripe.BillingPortalSessionFlowDataAfterCompletionParams{
+				Type: stripe.String("redirect"),
+				Redirect: &stripe.BillingPortalSessionFlowDataAfterCompletionRedirectParams{
+					ReturnURL: &sc.Config.StripeCancellationReturnURL,
+				},
+			},
+		},
+	}
+
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
+	if err != nil {
+		return BillingPortalSession{}, err
+	}
+
+	return BillingPortalSession{
+		Cancellation: billingPortalSession.URL,
+	}, nil
+}
+
 // RetrieveActiveEntitlements retrieves the active entitlements for a customer
 func (sc *StripeClient) RetrieveActiveEntitlements(customerID string) ([]string, []string, error) {
 	params := &stripe.EntitlementsActiveEntitlementListParams{

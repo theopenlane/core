@@ -1997,6 +1997,7 @@ type ComplexityRoot struct {
 
 	OrgSubscription struct {
 		Active                   func(childComplexity int) int
+		Cancellation             func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DaysUntilDue             func(childComplexity int) int
@@ -2007,6 +2008,7 @@ type ComplexityRoot struct {
 		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
 		ID                       func(childComplexity int) int
+		ManagePaymentMethods     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		PaymentMethodAdded       func(childComplexity int) int
@@ -13438,6 +13440,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.Active(childComplexity), true
 
+	case "OrgSubscription.cancellation":
+		if e.complexity.OrgSubscription.Cancellation == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.Cancellation(childComplexity), true
+
 	case "OrgSubscription.createdAt":
 		if e.complexity.OrgSubscription.CreatedAt == nil {
 			break
@@ -13507,6 +13516,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscription.ID(childComplexity), true
+
+	case "OrgSubscription.managePaymentMethods":
+		if e.complexity.OrgSubscription.ManagePaymentMethods == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.ManagePaymentMethods(childComplexity), true
 
 	case "OrgSubscription.owner":
 		if e.complexity.OrgSubscription.Owner == nil {
@@ -55309,6 +55325,8 @@ type OrgMembershipBulkCreatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/orgsubscriptionextended.graphql", Input: `extend type OrgSubscription {
     subscriptionURL: String
+    managePaymentMethods: String
+    cancellation: String
 }`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
