@@ -2,29 +2,30 @@
 mutation CreateBulkCSVSubcontrol($input: Upload!) {
   createBulkCSVSubcontrol(input: $input) {
     subcontrols {
-      class
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlID
+      controlQuestions
+      controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      implementationDate
-      implementationEvidence
-      implementationStatus
-      implementationVerification
-      implementationVerificationDate
-      mappedFrameworks
-      name
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
       status
-      subcontrolNumber
-      subcontrolType
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
@@ -32,29 +33,30 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
 mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
   createBulkSubcontrol(input: $input) {
     subcontrols {
-      class
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlID
+      controlQuestions
+      controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      implementationDate
-      implementationEvidence
-      implementationStatus
-      implementationVerification
-      implementationVerificationDate
-      mappedFrameworks
-      name
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
       status
-      subcontrolNumber
-      subcontrolType
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
@@ -62,33 +64,30 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
 mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
   createSubcontrol(input: $input) {
     subcontrol {
-      class
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlID
+      controlQuestions
+      controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      implementationDate
-      implementationEvidence
-      implementationStatus
-      implementationVerification
-      implementationVerificationDate
-      mappedFrameworks
-      name
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
       status
-      subcontrolNumber
-      subcontrolType
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
-      controls {
-        id
-        name
-      }
     }
   }
 }
@@ -103,66 +102,60 @@ query GetAllSubcontrols {
   subcontrols {
     edges {
       node {
-        class
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlID
+        controlQuestions
+        controlType
         createdAt
         createdBy
         description
-        details
         displayID
-        family
+        exampleEvidence
         id
-        implementationDate
-        implementationEvidence
-        implementationStatus
-        implementationVerification
-        implementationVerificationDate
-        mappedFrameworks
-        name
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        references
         source
         status
-        subcontrolNumber
-        subcontrolType
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
-        controls {
-          id
-          name
-        }
       }
     }
   }
 }
 query GetSubcontrolByID($subcontrolId: ID!) {
   subcontrol(id: $subcontrolId) {
-    class
+    assessmentMethods
+    assessmentObjectives
+    category
+    categoryID
+    controlID
+    controlQuestions
+    controlType
     createdAt
     createdBy
     description
-    details
     displayID
-    family
+    exampleEvidence
     id
-    implementationDate
-    implementationEvidence
-    implementationStatus
-    implementationVerification
-    implementationVerificationDate
-    mappedFrameworks
-    name
+    implementationGuidance
+    mappedCategories
+    ownerID
+    refCode
+    references
     source
     status
-    subcontrolNumber
-    subcontrolType
+    subcategory
     tags
     updatedAt
     updatedBy
-    version
-    controls {
-      id
-      name
-    }
   }
 }
 
@@ -170,33 +163,30 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
   subcontrols(where: $where) {
     edges {
       node {
-        class
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlID
+        controlQuestions
+        controlType
         createdAt
         createdBy
         description
-        details
         displayID
-        family
+        exampleEvidence
         id
-        implementationDate
-        implementationEvidence
-        implementationStatus
-        implementationVerification
-        implementationVerificationDate
-        mappedFrameworks
-        name
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        references
         source
         status
-        subcontrolNumber
-        subcontrolType
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
-        controls {
-          id
-          name
-        }
       }
     }
   }
@@ -204,33 +194,30 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
 mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
   updateSubcontrol(id: $updateSubcontrolId, input: $input) {
     subcontrol {
-      class
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlID
+      controlQuestions
+      controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      implementationDate
-      implementationEvidence
-      implementationStatus
-      implementationVerification
-      implementationVerificationDate
-      mappedFrameworks
-      name
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
       status
-      subcontrolNumber
-      subcontrolType
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
-      controls {
-        id
-        name
-      }
     }
   }
 }

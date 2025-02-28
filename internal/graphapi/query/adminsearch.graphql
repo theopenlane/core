@@ -45,19 +45,30 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
-          name
+          refCode
           description
           status
-          controlType
-          version
-          controlNumber
-          family
-          class
-          source
-          satisfies
-          mappedFrameworks
-          details
+          category
+          categoryID
+          subcategory
+          mappedCategories
+          assessmentObjectives
+          assessmentMethods
+          controlQuestions
+          implementationGuidance
           exampleEvidence
+          references
+          standardID
+        }
+      }
+      ... on ControlImplementationSearchResult {
+        controlImplementations {
+          id
+          deletedBy
+          tags
+          controlID
+          status
+          details
         }
       }
       ... on ControlObjectiveSearchResult {
@@ -68,17 +79,12 @@ query AdminSearch($query: String!) {
           tags
           ownerID
           name
-          description
+          desiredOutcome
           status
           controlObjectiveType
           version
-          controlNumber
-          family
-          class
-          source
-          mappedFrameworks
-          details
-          exampleEvidence
+          category
+          subcategory
         }
       }
       ... on DocumentDataSearchResult {
@@ -194,6 +200,17 @@ query AdminSearch($query: String!) {
           details
         }
       }
+      ... on MappedControlSearchResult {
+        mappedControls {
+          id
+          deletedBy
+          tags
+          controlID
+          mappedControlID
+          mappingType
+          relation
+        }
+      }
       ... on NarrativeSearchResult {
         narratives {
           deletedBy
@@ -203,7 +220,6 @@ query AdminSearch($query: String!) {
           ownerID
           name
           description
-          satisfies
           details
         }
       }
@@ -309,16 +325,18 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
+          ownerID
           name
+          shortName
+          framework
           description
-          family
+          governingBody
+          domains
+          link
           status
           standardType
           version
-          purposeAndScope
-          background
-          satisfies
-          details
+          revision
         }
       }
       ... on SubcontrolSearchResult {
@@ -328,21 +346,20 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
-          name
+          refCode
           description
           status
-          subcontrolType
-          version
-          subcontrolNumber
-          family
-          class
-          source
-          mappedFrameworks
-          implementationEvidence
-          implementationStatus
-          implementationVerification
-          details
+          category
+          categoryID
+          subcategory
+          mappedCategories
+          assessmentObjectives
+          assessmentMethods
+          controlQuestions
+          implementationGuidance
           exampleEvidence
+          references
+          controlID
         }
       }
       ... on SubscriberSearchResult {

@@ -8,7 +8,6 @@ mutation CreateBulkCSVNarrative($input: Upload!) {
       displayID
       id
       name
-      satisfies
       tags
       updatedAt
       updatedBy
@@ -26,7 +25,6 @@ mutation CreateBulkNarrative($input: [CreateNarrativeInput!]) {
       displayID
       id
       name
-      satisfies
       tags
       updatedAt
       updatedBy
@@ -44,7 +42,6 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
       displayID
       id
       name
-      satisfies
       tags
       updatedAt
       updatedBy
@@ -85,7 +82,6 @@ query GetAllNarratives {
         displayID
         id
         name
-        satisfies
         tags
         updatedAt
         updatedBy
@@ -119,7 +115,6 @@ query GetNarrativeByID($narrativeId: ID!) {
     displayID
     id
     name
-    satisfies
     tags
     updatedAt
     updatedBy
@@ -153,7 +148,6 @@ query GetNarratives($where: NarrativeWhereInput) {
         displayID
         id
         name
-        satisfies
         tags
         updatedAt
         updatedBy
@@ -188,7 +182,6 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
       displayID
       id
       name
-      satisfies
       tags
       updatedAt
       updatedBy
