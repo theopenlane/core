@@ -1,56 +1,48 @@
 
 
-query GetAllStandardHistories {
-  standardHistories {
+query GetAllControlImplementationHistories {
+  controlImplementationHistories {
     edges {
       node {
-        background
+        controlID
         createdAt
         createdBy
-        description
         details
-        family
         historyTime
         id
-        name
+        implementationDate
         operation
-        purposeAndScope
         ref
-        satisfies
-        standardType
         status
         tags
         updatedAt
         updatedBy
-        version
+        verificationDate
+        verified
       }
     }
   }
 }
 
-query GetStandardHistories($where: StandardHistoryWhereInput) {
-  standardHistories(where: $where) {
+query GetControlImplementationHistories($where: ControlImplementationHistoryWhereInput) {
+  controlImplementationHistories(where: $where) {
     edges {
       node {
-        background
+        controlID
         createdAt
         createdBy
-        description
         details
-        family
         historyTime
         id
-        name
+        implementationDate
         operation
-        purposeAndScope
         ref
-        satisfies
-        standardType
         status
         tags
         updatedAt
         updatedBy
-        version
+        verificationDate
+        verified
       }
     }
   }

@@ -22,21 +22,29 @@ query GlobalSearch($query: String!) {
       }
       ... on ControlSearchResult {
         controls {
+          category
           description
           displayID
-          family
           id
-          name
+          mappedCategories
+          refCode
+          subcategory
+          tags
+        }
+      }
+      ... on ControlImplementationSearchResult {
+        controlImplementations {
+          id
           tags
         }
       }
       ... on ControlObjectiveSearchResult {
         controlObjectives {
-          description
+          category
           displayID
-          family
           id
           name
+          subcategory
           tags
         }
       }
@@ -104,6 +112,12 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
+      ... on MappedControlSearchResult {
+        mappedControls {
+          id
+          tags
+        }
+      }
       ... on NarrativeSearchResult {
         narratives {
           description
@@ -168,19 +182,21 @@ query GlobalSearch($query: String!) {
       }
       ... on StandardSearchResult {
         standards {
-          description
           id
           name
+          shortName
           tags
         }
       }
       ... on SubcontrolSearchResult {
         subcontrols {
+          category
+          description
           displayID
-          family
           id
-          name
-          subcontrolType
+          mappedCategories
+          refCode
+          subcategory
           tags
         }
       }

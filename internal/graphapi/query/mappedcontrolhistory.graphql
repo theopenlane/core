@@ -1,16 +1,19 @@
-query GetAllNarrativeHistories {
-  narrativeHistories {
+
+
+query GetAllMappedControlHistories {
+  mappedControlHistories {
     edges {
       node {
+        controlID
         createdAt
         createdBy
-        description
-        details
         historyTime
         id
-        name
+        mappedControlID
+        mappingType
         operation
         ref
+        relation
         tags
         updatedAt
         updatedBy
@@ -19,19 +22,20 @@ query GetAllNarrativeHistories {
   }
 }
 
-query GetNarrativeHistories($where: NarrativeHistoryWhereInput) {
-  narrativeHistories(where: $where) {
+query GetMappedControlHistories($where: MappedControlHistoryWhereInput) {
+  mappedControlHistories(where: $where) {
     edges {
       node {
+        controlID
         createdAt
         createdBy
-        description
-        details
         historyTime
         id
-        name
+        mappedControlID
+        mappingType
         operation
         ref
+        relation
         tags
         updatedAt
         updatedBy

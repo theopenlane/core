@@ -748,3 +748,55 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+  - name: standard
+    description: standards can be made public with system-owned standards, or organizations can create their own custom standards
+    tuple_file: tuples/standards.yaml
+    check: 
+      - user: user:ulid-of-member
+        object: standard:standard-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user:  user:ulid-of-member-2
+        object: standard:standard-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member
+        object: standard:standard-system-owned-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member-2
+        object: standard:standard-system-owned-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member
+        object: standard:standard-org-custom
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-admin
+        object: standard:standard-org-custom
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner
+        object: standard:standard-org-custom
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner-foobar
+        object: standard:standard-org-custom
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false

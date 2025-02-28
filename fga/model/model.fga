@@ -343,7 +343,18 @@ type evidence
     define viewer: [group#member] or editor
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
-
+type standard 
+  relations
+    #  user:* is used for system-owned public standards that are available to all users
+    define can_view: [user:*] or viewer or parent_viewer
+    define can_edit: editor or parent_editor
+    define can_delete: editor or parent_editor
+    define parent_viewer: member from parent
+    define parent_editor: admin from parent or owner from parent
+    define viewer: [user, service] or editor
+    define editor: [user, service]
+    # this is used for organization custom standards that are only available to the organization
+    define parent: [organization]
 ## Conditions
 # Public groups access; affects the view access of users in the organization
 condition public_group(public: bool) {

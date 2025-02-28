@@ -1,0 +1,125 @@
+
+mutation CreateBulkCSVMappedControl($input: Upload!) {
+  createBulkCSVMappedControl(input: $input) {
+    mappedControls {
+      controlID
+      createdAt
+      createdBy
+      id
+      mappedControlID
+      mappingType
+      relation
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkMappedControl($input: [CreateMappedControlInput!]) {
+  createBulkMappedControl(input: $input) {
+    mappedControls {
+      controlID
+      createdAt
+      createdBy
+      id
+      mappedControlID
+      mappingType
+      relation
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateMappedControl($input: CreateMappedControlInput!) {
+  createMappedControl(input: $input) {
+    mappedControl {
+      controlID
+      createdAt
+      createdBy
+      id
+      mappedControlID
+      mappingType
+      relation
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteMappedControl($deleteMappedControlId: ID!) {
+  deleteMappedControl(id: $deleteMappedControlId) {
+    deletedID
+  }
+}
+
+query GetAllMappedControls {
+  mappedControls {
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        id
+        mappedControlID
+        mappingType
+        relation
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetMappedControlByID($mappedControlId: ID!) {
+  mappedControl(id: $mappedControlId) {
+    controlID
+    createdAt
+    createdBy
+    id
+    mappedControlID
+    mappingType
+    relation
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetMappedControls($where: MappedControlWhereInput) {
+  mappedControls(where: $where) {
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        id
+        mappedControlID
+        mappingType
+        relation
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedControlInput!) {
+  updateMappedControl(id: $updateMappedControlId, input: $input) {
+    mappedControl {
+      controlID
+      createdAt
+      createdBy
+      id
+      mappedControlID
+      mappingType
+      relation
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
