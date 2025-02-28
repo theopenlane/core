@@ -9,7 +9,10 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Standard defines the standard schema.
@@ -22,49 +25,69 @@ func (Standard) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			NotEmpty().
-			Comment("the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.").
+			Annotations(
+				entx.FieldSearchable(),
+			).
+			Comment("the long name of the standard body").
 			Annotations(entx.FieldSearchable()),
-		field.Text("description").
+		field.String("short_name").
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
 			).
-			Comment("description of the standard"),
-		field.String("family").
+			Comment("short name of the standard, e.g. SOC 2, ISO 27001, etc."),
+		field.Text("framework").
 			Optional().
-			Comment("family of the standard, e.g. 800-53, 800-171, 27001, etc."),
+			Comment("unique identifier of the standard with version"),
+		field.String("description").
+			Optional().
+			Comment("description of the standard"),
+		field.String("governing_body").
+			Optional().
+			Comment("governing body of the standard, e.g. AICPA, etc."),
+		field.Strings("domains").
+			Optional().
+			Comment("domains the standard covers, e.g. availability, confidentiality, etc."),
+		field.String("link").
+			Optional().
+			Comment("link to the official standard documentation"),
 		field.String("status").
 			Optional().
 			Comment("status of the standard - active, deprecated, etc."),
+		field.Bool("is_public").
+			Optional().
+			Default(false).
+			// don't expose these fields in the mutation input
+			Annotations(entgql.Skip(^entgql.SkipType)).
+			Comment("indicates if the standard should be made available to all users, only for public standards"),
+		field.Bool("free_to_use").
+			Optional().
+			Default(false).
+			// don't expose these fields in the mutation input
+			Annotations(entgql.Skip(^entgql.SkipType)).
+			Comment("indicates if the standard is freely distributable under a trial license, only for public standards"),
+		field.Bool("system_owned").
+			Optional().
+			Default(false).
+			// don't expose these fields in the mutation input
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
+			Comment("indicates if the standard is owned by the the openlane system"),
 		field.String("standard_type").
 			Optional().
 			Comment("type of the standard - security, privacy, etc."),
 		field.String("version").
 			Optional().
 			Comment("version of the standard"),
-		field.Text("purpose_and_scope").
+		field.String("revision").
 			Optional().
-			Comment("purpose and scope"),
-		field.Text("background").
-			Optional().
-			Comment("background of the standard"),
-		field.Text("satisfies").
-			Optional().
-			Comment("which controls are satisfied by the standard"),
-		field.JSON("details", map[string]any{}).
-			Optional().
-			Comment("json data with details of the standard"),
+			Comment("internal revision of the standard"),
 	}
 }
 
 // Edges of the Standard
 func (Standard) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("control_objectives", ControlObjective.Type),
 		edge.To("controls", Control.Type),
-		edge.To("procedures", Procedure.Type),
-		edge.To("action_plans", ActionPlan.Type),
-		edge.To("programs", Program.Type),
 	}
 }
 
@@ -75,6 +98,14 @@ func (Standard) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		NewOrgOwnMixinWithRef("standards"),
+	}
+}
+
+// Interceptors of the Standard
+func (Standard) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.TraverseStandard(),
 	}
 }
 
@@ -85,4 +116,17 @@ func (Standard) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 	}
+}
+
+// Policy of the Standard
+func (Standard) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			privacy.AlwaysAllowRule(),
+		),
+		policy.WithMutationRules(
+			// policy.CheckCreateAccess(),
+			privacy.AlwaysAllowRule(),
+		),
+	)
 }

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ControlObjective defines the controlobjective schema.
@@ -31,65 +32,60 @@ func (ControlObjective) Fields() []ent.Field {
 				entx.FieldSearchable(),
 			).
 			Comment("the name of the control objective"),
-		field.Text("description").
+		field.Text("desired_outcome").
 			Optional().
-			Annotations(
-				entx.FieldSearchable(),
-			).
-			Comment("description of the control objective"),
+			Comment("the desired outcome or target of the control objective"),
 		field.String("status").
 			Optional().
 			Comment("status of the control objective"),
+		field.Enum("source").
+			GoType(enums.ControlSource("")).
+			Optional().
+			Comment("source of the control, e.g. framework, template, custom, etc."),
 		field.String("control_objective_type").
 			Optional().
-			Comment("type of the control objective"),
+			Comment("type of the control objective e.g. compliance, financial, operational, etc."),
 		field.String("version").
 			Optional().
 			Comment("version of the control objective"),
-		field.String("control_number").
-			Optional().
-			Comment("number of the control objective"),
-		field.Text("family").
+		field.String("category").
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
 			).
-			Comment("family of the control objective"),
-		field.String("class").
+			Comment("category of the control"),
+		field.String("subcategory").
 			Optional().
-			Comment("class associated with the control objective"),
-		field.String("source").
-			Optional().
-			Comment("source of the control objective, e.g. framework, template, user-defined, etc."),
-		field.Text("mapped_frameworks").
-			Optional().
-			Comment("mapped frameworks"),
-		field.JSON("details", map[string]any{}).
-			Optional().
-			Comment("json data including details of the control objective"),
-		field.Text("example_evidence").
-			Comment("example evidence to provide for the control").
-			Optional(),
+			Annotations(
+				entx.FieldSearchable(),
+			).
+			Comment("subcategory of the control"),
 	}
 }
 
 // Edges of the ControlObjective
 func (ControlObjective) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("internal_policies", InternalPolicy.Type).
-			Ref("control_objectives"),
-		edge.To("controls", Control.Type),
-		edge.To("procedures", Procedure.Type),
-		edge.To("risks", Risk.Type),
-		edge.To("subcontrols", Subcontrol.Type),
-		edge.From("standard", Standard.Type).
-			Ref("control_objectives"),
-		edge.To("narratives", Narrative.Type),
-		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
 			Ref("control_objectives"),
 		edge.From("evidence", Evidence.Type).
 			Ref("control_objectives"),
+
+		// control objectives can map to multiple controls and subcontrols
+		edge.From("controls", Control.Type).
+			Ref("control_objectives"),
+		edge.From("subcontrols", Subcontrol.Type).
+			Ref("control_objectives"),
+
+		edge.From("internal_policies", InternalPolicy.Type).
+			Ref("control_objectives"),
+
+		edge.To("procedures", Procedure.Type),
+
+		edge.To("risks", Risk.Type),
+		edge.To("narratives", Narrative.Type),
+
+		edge.To("tasks", Task.Type),
 	}
 }
 

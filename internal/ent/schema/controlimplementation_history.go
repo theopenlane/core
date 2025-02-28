@@ -11,22 +11,21 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
 
-// StandardHistory holds the schema definition for the StandardHistory entity.
-type StandardHistory struct {
+// ControlImplementationHistory holds the schema definition for the ControlImplementationHistory entity.
+type ControlImplementationHistory struct {
 	ent.Schema
 }
 
-// Annotations of the StandardHistory.
-func (StandardHistory) Annotations() []schema.Annotation {
+// Annotations of the ControlImplementationHistory.
+func (ControlImplementationHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
 		entsql.Annotation{
-			Table: "standard_history",
+			Table: "control_implementation_history",
 		},
 		history.Annotations{
 			IsHistory: true,
@@ -37,8 +36,8 @@ func (StandardHistory) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the StandardHistory.
-func (StandardHistory) Fields() []ent.Field {
+// Fields of the ControlImplementationHistory.
+func (ControlImplementationHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Default(time.Now).
@@ -54,7 +53,7 @@ func (StandardHistory) Fields() []ent.Field {
 	// get the fields from the mixins
 	// we only want to include mixin fields, not edges
 	// so this prevents FKs back to the main tables
-	mixins := Standard{}.Mixin()
+	mixins := ControlImplementation{}.Mixin()
 	for _, mixin := range mixins {
 		for _, field := range mixin.Fields() {
 			// make sure the mixed in fields do not have unique constraints
@@ -68,7 +67,7 @@ func (StandardHistory) Fields() []ent.Field {
 		}
 	}
 
-	original := Standard{}
+	original := ControlImplementation{}
 	for _, field := range original.Fields() {
 		// make sure the fields do not have unique constraints
 		field.Descriptor().Unique = false
@@ -83,16 +82,9 @@ func (StandardHistory) Fields() []ent.Field {
 	return historyFields
 }
 
-// Indexes of the StandardHistory
-func (StandardHistory) Indexes() []ent.Index {
+// Indexes of the ControlImplementationHistory
+func (ControlImplementationHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
-	}
-}
-
-// Interceptors of the StandardHistory
-func (StandardHistory) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}
 }
