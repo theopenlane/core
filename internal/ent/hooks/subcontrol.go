@@ -37,12 +37,12 @@ func HookSubcontrolUpdate() ent.Hook {
 			// ensure that the subcontrol has at least one control assigned
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-			controls, err := sc.Controls(allowCtx)
+			control, err := sc.Control(allowCtx)
 			if err != nil {
 				return retVal, err
 			}
 
-			if len(controls) == 0 {
+			if control == nil {
 				return nil, ErrNoControls
 			}
 

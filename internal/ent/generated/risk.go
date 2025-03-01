@@ -62,6 +62,7 @@ type Risk struct {
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
 	control_objective_risks *string
+	subcontrol_risks        *string
 	selectValues            sql.SelectValues
 }
 
@@ -184,6 +185,8 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case risk.ForeignKeys[0]: // control_objective_risks
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[1]: // subcontrol_risks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -330,6 +333,13 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.control_objective_risks = new(string)
 				*r.control_objective_risks = value.String
+			}
+		case risk.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_risks", values[i])
+			} else if value.Valid {
+				r.subcontrol_risks = new(string)
+				*r.subcontrol_risks = value.String
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])

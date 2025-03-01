@@ -41,14 +41,16 @@ type Narrative struct {
 	Name string `json:"name,omitempty"`
 	// the description of the narrative
 	Description string `json:"description,omitempty"`
-	// which controls are satisfied by the narrative
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data for the narrative document
-	Details map[string]interface{} `json:"details,omitempty"`
+	// text data for the narrative document
+	Details string `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NarrativeQuery when eager-loading is set.
-	Edges        NarrativeEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                        NarrativeEdges `json:"edges"`
+	control_objective_narratives *string
+	internal_policy_narratives   *string
+	procedure_narratives         *string
+	subcontrol_narratives        *string
+	selectValues                 sql.SelectValues
 }
 
 // NarrativeEdges holds the relations/edges for other nodes in the graph.
@@ -61,30 +63,21 @@ type NarrativeEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
-	// InternalPolicy holds the value of the internal_policy edge.
-	InternalPolicy []*InternalPolicy `json:"internal_policy,omitempty"`
-	// Control holds the value of the control edge.
-	Control []*Control `json:"control,omitempty"`
-	// Procedure holds the value of the procedure edge.
-	Procedure []*Procedure `json:"procedure,omitempty"`
-	// ControlObjective holds the value of the control_objective edge.
-	ControlObjective []*ControlObjective `json:"control_objective,omitempty"`
+	// which controls are satisfied by the narrative
+	Satisfies []*Control `json:"satisfies,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [6]map[string]int
 
-	namedBlockedGroups    map[string][]*Group
-	namedEditors          map[string][]*Group
-	namedViewers          map[string][]*Group
-	namedInternalPolicy   map[string][]*InternalPolicy
-	namedControl          map[string][]*Control
-	namedProcedure        map[string][]*Procedure
-	namedControlObjective map[string][]*ControlObjective
-	namedPrograms         map[string][]*Program
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+	namedViewers       map[string][]*Group
+	namedSatisfies     map[string][]*Control
+	namedPrograms      map[string][]*Program
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -125,46 +118,19 @@ func (e NarrativeEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
-// InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
+// SatisfiesOrErr returns the Satisfies value or an error if the edge
 // was not loaded in eager-loading.
-func (e NarrativeEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
+func (e NarrativeEdges) SatisfiesOrErr() ([]*Control, error) {
 	if e.loadedTypes[4] {
-		return e.InternalPolicy, nil
+		return e.Satisfies, nil
 	}
-	return nil, &NotLoadedError{edge: "internal_policy"}
-}
-
-// ControlOrErr returns the Control value or an error if the edge
-// was not loaded in eager-loading.
-func (e NarrativeEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[5] {
-		return e.Control, nil
-	}
-	return nil, &NotLoadedError{edge: "control"}
-}
-
-// ProcedureOrErr returns the Procedure value or an error if the edge
-// was not loaded in eager-loading.
-func (e NarrativeEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[6] {
-		return e.Procedure, nil
-	}
-	return nil, &NotLoadedError{edge: "procedure"}
-}
-
-// ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
-// was not loaded in eager-loading.
-func (e NarrativeEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[7] {
-		return e.ControlObjective, nil
-	}
-	return nil, &NotLoadedError{edge: "control_objective"}
+	return nil, &NotLoadedError{edge: "satisfies"}
 }
 
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[5] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -175,12 +141,20 @@ func (*Narrative) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case narrative.FieldTags, narrative.FieldDetails:
+		case narrative.FieldTags:
 			values[i] = new([]byte)
-		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldDeletedBy, narrative.FieldDisplayID, narrative.FieldOwnerID, narrative.FieldName, narrative.FieldDescription, narrative.FieldSatisfies:
+		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldDeletedBy, narrative.FieldDisplayID, narrative.FieldOwnerID, narrative.FieldName, narrative.FieldDescription, narrative.FieldDetails:
 			values[i] = new(sql.NullString)
 		case narrative.FieldCreatedAt, narrative.FieldUpdatedAt, narrative.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case narrative.ForeignKeys[0]: // control_objective_narratives
+			values[i] = new(sql.NullString)
+		case narrative.ForeignKeys[1]: // internal_policy_narratives
+			values[i] = new(sql.NullString)
+		case narrative.ForeignKeys[2]: // procedure_narratives
+			values[i] = new(sql.NullString)
+		case narrative.ForeignKeys[3]: // subcontrol_narratives
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -270,19 +244,39 @@ func (n *Narrative) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.Description = value.String
 			}
-		case narrative.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				n.Satisfies = value.String
-			}
 		case narrative.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &n.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				n.Details = value.String
+			}
+		case narrative.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_objective_narratives", values[i])
+			} else if value.Valid {
+				n.control_objective_narratives = new(string)
+				*n.control_objective_narratives = value.String
+			}
+		case narrative.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_narratives", values[i])
+			} else if value.Valid {
+				n.internal_policy_narratives = new(string)
+				*n.internal_policy_narratives = value.String
+			}
+		case narrative.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_narratives", values[i])
+			} else if value.Valid {
+				n.procedure_narratives = new(string)
+				*n.procedure_narratives = value.String
+			}
+		case narrative.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_narratives", values[i])
+			} else if value.Valid {
+				n.subcontrol_narratives = new(string)
+				*n.subcontrol_narratives = value.String
 			}
 		default:
 			n.selectValues.Set(columns[i], values[i])
@@ -317,24 +311,9 @@ func (n *Narrative) QueryViewers() *GroupQuery {
 	return NewNarrativeClient(n.config).QueryViewers(n)
 }
 
-// QueryInternalPolicy queries the "internal_policy" edge of the Narrative entity.
-func (n *Narrative) QueryInternalPolicy() *InternalPolicyQuery {
-	return NewNarrativeClient(n.config).QueryInternalPolicy(n)
-}
-
-// QueryControl queries the "control" edge of the Narrative entity.
-func (n *Narrative) QueryControl() *ControlQuery {
-	return NewNarrativeClient(n.config).QueryControl(n)
-}
-
-// QueryProcedure queries the "procedure" edge of the Narrative entity.
-func (n *Narrative) QueryProcedure() *ProcedureQuery {
-	return NewNarrativeClient(n.config).QueryProcedure(n)
-}
-
-// QueryControlObjective queries the "control_objective" edge of the Narrative entity.
-func (n *Narrative) QueryControlObjective() *ControlObjectiveQuery {
-	return NewNarrativeClient(n.config).QueryControlObjective(n)
+// QuerySatisfies queries the "satisfies" edge of the Narrative entity.
+func (n *Narrative) QuerySatisfies() *ControlQuery {
+	return NewNarrativeClient(n.config).QuerySatisfies(n)
 }
 
 // QueryPrograms queries the "programs" edge of the Narrative entity.
@@ -398,11 +377,8 @@ func (n *Narrative) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(n.Description)
 	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(n.Satisfies)
-	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", n.Details))
+	builder.WriteString(n.Details)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -479,99 +455,27 @@ func (n *Narrative) appendNamedViewers(name string, edges ...*Group) {
 	}
 }
 
-// NamedInternalPolicy returns the InternalPolicy named value or an error if the edge was not
+// NamedSatisfies returns the Satisfies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedInternalPolicy(name string) ([]*InternalPolicy, error) {
-	if n.Edges.namedInternalPolicy == nil {
+func (n *Narrative) NamedSatisfies(name string) ([]*Control, error) {
+	if n.Edges.namedSatisfies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedInternalPolicy[name]
+	nodes, ok := n.Edges.namedSatisfies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedInternalPolicy(name string, edges ...*InternalPolicy) {
-	if n.Edges.namedInternalPolicy == nil {
-		n.Edges.namedInternalPolicy = make(map[string][]*InternalPolicy)
+func (n *Narrative) appendNamedSatisfies(name string, edges ...*Control) {
+	if n.Edges.namedSatisfies == nil {
+		n.Edges.namedSatisfies = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedInternalPolicy[name] = []*InternalPolicy{}
+		n.Edges.namedSatisfies[name] = []*Control{}
 	} else {
-		n.Edges.namedInternalPolicy[name] = append(n.Edges.namedInternalPolicy[name], edges...)
-	}
-}
-
-// NamedControl returns the Control named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (n *Narrative) NamedControl(name string) ([]*Control, error) {
-	if n.Edges.namedControl == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := n.Edges.namedControl[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (n *Narrative) appendNamedControl(name string, edges ...*Control) {
-	if n.Edges.namedControl == nil {
-		n.Edges.namedControl = make(map[string][]*Control)
-	}
-	if len(edges) == 0 {
-		n.Edges.namedControl[name] = []*Control{}
-	} else {
-		n.Edges.namedControl[name] = append(n.Edges.namedControl[name], edges...)
-	}
-}
-
-// NamedProcedure returns the Procedure named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (n *Narrative) NamedProcedure(name string) ([]*Procedure, error) {
-	if n.Edges.namedProcedure == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := n.Edges.namedProcedure[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (n *Narrative) appendNamedProcedure(name string, edges ...*Procedure) {
-	if n.Edges.namedProcedure == nil {
-		n.Edges.namedProcedure = make(map[string][]*Procedure)
-	}
-	if len(edges) == 0 {
-		n.Edges.namedProcedure[name] = []*Procedure{}
-	} else {
-		n.Edges.namedProcedure[name] = append(n.Edges.namedProcedure[name], edges...)
-	}
-}
-
-// NamedControlObjective returns the ControlObjective named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (n *Narrative) NamedControlObjective(name string) ([]*ControlObjective, error) {
-	if n.Edges.namedControlObjective == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := n.Edges.namedControlObjective[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (n *Narrative) appendNamedControlObjective(name string, edges ...*ControlObjective) {
-	if n.Edges.namedControlObjective == nil {
-		n.Edges.namedControlObjective = make(map[string][]*ControlObjective)
-	}
-	if len(edges) == 0 {
-		n.Edges.namedControlObjective[name] = []*ControlObjective{}
-	} else {
-		n.Edges.namedControlObjective[name] = append(n.Edges.namedControlObjective[name], edges...)
+		n.Edges.namedSatisfies[name] = append(n.Edges.namedSatisfies[name], edges...)
 	}
 }
 

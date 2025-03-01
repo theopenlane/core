@@ -105,9 +105,24 @@ func DeletedBy(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldName, v))
+}
+
+// ShortName applies equality check predicate on the "short_name" field. It's identical to ShortNameEQ.
+func ShortName(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldShortName, v))
+}
+
+// Framework applies equality check predicate on the "framework" field. It's identical to FrameworkEQ.
+func Framework(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldFramework, v))
 }
 
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
@@ -115,14 +130,34 @@ func Description(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldDescription, v))
 }
 
-// Family applies equality check predicate on the "family" field. It's identical to FamilyEQ.
-func Family(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldFamily, v))
+// GoverningBody applies equality check predicate on the "governing_body" field. It's identical to GoverningBodyEQ.
+func GoverningBody(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldGoverningBody, v))
+}
+
+// Link applies equality check predicate on the "link" field. It's identical to LinkEQ.
+func Link(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldLink, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldStatus, v))
+}
+
+// IsPublic applies equality check predicate on the "is_public" field. It's identical to IsPublicEQ.
+func IsPublic(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldIsPublic, v))
+}
+
+// FreeToUse applies equality check predicate on the "free_to_use" field. It's identical to FreeToUseEQ.
+func FreeToUse(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldFreeToUse, v))
+}
+
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldSystemOwned, v))
 }
 
 // StandardType applies equality check predicate on the "standard_type" field. It's identical to StandardTypeEQ.
@@ -135,19 +170,9 @@ func Version(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldVersion, v))
 }
 
-// PurposeAndScope applies equality check predicate on the "purpose_and_scope" field. It's identical to PurposeAndScopeEQ.
-func PurposeAndScope(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldPurposeAndScope, v))
-}
-
-// Background applies equality check predicate on the "background" field. It's identical to BackgroundEQ.
-func Background(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldBackground, v))
-}
-
-// Satisfies applies equality check predicate on the "satisfies" field. It's identical to SatisfiesEQ.
-func Satisfies(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldSatisfies, v))
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldRevision, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -670,6 +695,81 @@ func TagsNotNil() predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldNotNull(FieldTags))
 }
 
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldName, v))
@@ -733,6 +833,156 @@ func NameEqualFold(v string) predicate.StandardHistory {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldName, v))
+}
+
+// ShortNameEQ applies the EQ predicate on the "short_name" field.
+func ShortNameEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldShortName, v))
+}
+
+// ShortNameNEQ applies the NEQ predicate on the "short_name" field.
+func ShortNameNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldShortName, v))
+}
+
+// ShortNameIn applies the In predicate on the "short_name" field.
+func ShortNameIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldShortName, vs...))
+}
+
+// ShortNameNotIn applies the NotIn predicate on the "short_name" field.
+func ShortNameNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldShortName, vs...))
+}
+
+// ShortNameGT applies the GT predicate on the "short_name" field.
+func ShortNameGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldShortName, v))
+}
+
+// ShortNameGTE applies the GTE predicate on the "short_name" field.
+func ShortNameGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldShortName, v))
+}
+
+// ShortNameLT applies the LT predicate on the "short_name" field.
+func ShortNameLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldShortName, v))
+}
+
+// ShortNameLTE applies the LTE predicate on the "short_name" field.
+func ShortNameLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldShortName, v))
+}
+
+// ShortNameContains applies the Contains predicate on the "short_name" field.
+func ShortNameContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldShortName, v))
+}
+
+// ShortNameHasPrefix applies the HasPrefix predicate on the "short_name" field.
+func ShortNameHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldShortName, v))
+}
+
+// ShortNameHasSuffix applies the HasSuffix predicate on the "short_name" field.
+func ShortNameHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldShortName, v))
+}
+
+// ShortNameIsNil applies the IsNil predicate on the "short_name" field.
+func ShortNameIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldShortName))
+}
+
+// ShortNameNotNil applies the NotNil predicate on the "short_name" field.
+func ShortNameNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldShortName))
+}
+
+// ShortNameEqualFold applies the EqualFold predicate on the "short_name" field.
+func ShortNameEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldShortName, v))
+}
+
+// ShortNameContainsFold applies the ContainsFold predicate on the "short_name" field.
+func ShortNameContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldShortName, v))
+}
+
+// FrameworkEQ applies the EQ predicate on the "framework" field.
+func FrameworkEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldFramework, v))
+}
+
+// FrameworkNEQ applies the NEQ predicate on the "framework" field.
+func FrameworkNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldFramework, v))
+}
+
+// FrameworkIn applies the In predicate on the "framework" field.
+func FrameworkIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldFramework, vs...))
+}
+
+// FrameworkNotIn applies the NotIn predicate on the "framework" field.
+func FrameworkNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldFramework, vs...))
+}
+
+// FrameworkGT applies the GT predicate on the "framework" field.
+func FrameworkGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldFramework, v))
+}
+
+// FrameworkGTE applies the GTE predicate on the "framework" field.
+func FrameworkGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldFramework, v))
+}
+
+// FrameworkLT applies the LT predicate on the "framework" field.
+func FrameworkLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldFramework, v))
+}
+
+// FrameworkLTE applies the LTE predicate on the "framework" field.
+func FrameworkLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldFramework, v))
+}
+
+// FrameworkContains applies the Contains predicate on the "framework" field.
+func FrameworkContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldFramework, v))
+}
+
+// FrameworkHasPrefix applies the HasPrefix predicate on the "framework" field.
+func FrameworkHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldFramework, v))
+}
+
+// FrameworkHasSuffix applies the HasSuffix predicate on the "framework" field.
+func FrameworkHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldFramework, v))
+}
+
+// FrameworkIsNil applies the IsNil predicate on the "framework" field.
+func FrameworkIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldFramework))
+}
+
+// FrameworkNotNil applies the NotNil predicate on the "framework" field.
+func FrameworkNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldFramework))
+}
+
+// FrameworkEqualFold applies the EqualFold predicate on the "framework" field.
+func FrameworkEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldFramework, v))
+}
+
+// FrameworkContainsFold applies the ContainsFold predicate on the "framework" field.
+func FrameworkContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldFramework, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.
@@ -810,79 +1060,164 @@ func DescriptionContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldDescription, v))
 }
 
-// FamilyEQ applies the EQ predicate on the "family" field.
-func FamilyEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldFamily, v))
+// GoverningBodyEQ applies the EQ predicate on the "governing_body" field.
+func GoverningBodyEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldGoverningBody, v))
 }
 
-// FamilyNEQ applies the NEQ predicate on the "family" field.
-func FamilyNEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNEQ(FieldFamily, v))
+// GoverningBodyNEQ applies the NEQ predicate on the "governing_body" field.
+func GoverningBodyNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldGoverningBody, v))
 }
 
-// FamilyIn applies the In predicate on the "family" field.
-func FamilyIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIn(FieldFamily, vs...))
+// GoverningBodyIn applies the In predicate on the "governing_body" field.
+func GoverningBodyIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldGoverningBody, vs...))
 }
 
-// FamilyNotIn applies the NotIn predicate on the "family" field.
-func FamilyNotIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotIn(FieldFamily, vs...))
+// GoverningBodyNotIn applies the NotIn predicate on the "governing_body" field.
+func GoverningBodyNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldGoverningBody, vs...))
 }
 
-// FamilyGT applies the GT predicate on the "family" field.
-func FamilyGT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGT(FieldFamily, v))
+// GoverningBodyGT applies the GT predicate on the "governing_body" field.
+func GoverningBodyGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldGoverningBody, v))
 }
 
-// FamilyGTE applies the GTE predicate on the "family" field.
-func FamilyGTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGTE(FieldFamily, v))
+// GoverningBodyGTE applies the GTE predicate on the "governing_body" field.
+func GoverningBodyGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldGoverningBody, v))
 }
 
-// FamilyLT applies the LT predicate on the "family" field.
-func FamilyLT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLT(FieldFamily, v))
+// GoverningBodyLT applies the LT predicate on the "governing_body" field.
+func GoverningBodyLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldGoverningBody, v))
 }
 
-// FamilyLTE applies the LTE predicate on the "family" field.
-func FamilyLTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLTE(FieldFamily, v))
+// GoverningBodyLTE applies the LTE predicate on the "governing_body" field.
+func GoverningBodyLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldGoverningBody, v))
 }
 
-// FamilyContains applies the Contains predicate on the "family" field.
-func FamilyContains(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContains(FieldFamily, v))
+// GoverningBodyContains applies the Contains predicate on the "governing_body" field.
+func GoverningBodyContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldGoverningBody, v))
 }
 
-// FamilyHasPrefix applies the HasPrefix predicate on the "family" field.
-func FamilyHasPrefix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasPrefix(FieldFamily, v))
+// GoverningBodyHasPrefix applies the HasPrefix predicate on the "governing_body" field.
+func GoverningBodyHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldGoverningBody, v))
 }
 
-// FamilyHasSuffix applies the HasSuffix predicate on the "family" field.
-func FamilyHasSuffix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasSuffix(FieldFamily, v))
+// GoverningBodyHasSuffix applies the HasSuffix predicate on the "governing_body" field.
+func GoverningBodyHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldGoverningBody, v))
 }
 
-// FamilyIsNil applies the IsNil predicate on the "family" field.
-func FamilyIsNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIsNull(FieldFamily))
+// GoverningBodyIsNil applies the IsNil predicate on the "governing_body" field.
+func GoverningBodyIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldGoverningBody))
 }
 
-// FamilyNotNil applies the NotNil predicate on the "family" field.
-func FamilyNotNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotNull(FieldFamily))
+// GoverningBodyNotNil applies the NotNil predicate on the "governing_body" field.
+func GoverningBodyNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldGoverningBody))
 }
 
-// FamilyEqualFold applies the EqualFold predicate on the "family" field.
-func FamilyEqualFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEqualFold(FieldFamily, v))
+// GoverningBodyEqualFold applies the EqualFold predicate on the "governing_body" field.
+func GoverningBodyEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldGoverningBody, v))
 }
 
-// FamilyContainsFold applies the ContainsFold predicate on the "family" field.
-func FamilyContainsFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContainsFold(FieldFamily, v))
+// GoverningBodyContainsFold applies the ContainsFold predicate on the "governing_body" field.
+func GoverningBodyContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldGoverningBody, v))
+}
+
+// DomainsIsNil applies the IsNil predicate on the "domains" field.
+func DomainsIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldDomains))
+}
+
+// DomainsNotNil applies the NotNil predicate on the "domains" field.
+func DomainsNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldDomains))
+}
+
+// LinkEQ applies the EQ predicate on the "link" field.
+func LinkEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldLink, v))
+}
+
+// LinkNEQ applies the NEQ predicate on the "link" field.
+func LinkNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldLink, v))
+}
+
+// LinkIn applies the In predicate on the "link" field.
+func LinkIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldLink, vs...))
+}
+
+// LinkNotIn applies the NotIn predicate on the "link" field.
+func LinkNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldLink, vs...))
+}
+
+// LinkGT applies the GT predicate on the "link" field.
+func LinkGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldLink, v))
+}
+
+// LinkGTE applies the GTE predicate on the "link" field.
+func LinkGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldLink, v))
+}
+
+// LinkLT applies the LT predicate on the "link" field.
+func LinkLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldLink, v))
+}
+
+// LinkLTE applies the LTE predicate on the "link" field.
+func LinkLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldLink, v))
+}
+
+// LinkContains applies the Contains predicate on the "link" field.
+func LinkContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldLink, v))
+}
+
+// LinkHasPrefix applies the HasPrefix predicate on the "link" field.
+func LinkHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldLink, v))
+}
+
+// LinkHasSuffix applies the HasSuffix predicate on the "link" field.
+func LinkHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldLink, v))
+}
+
+// LinkIsNil applies the IsNil predicate on the "link" field.
+func LinkIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldLink))
+}
+
+// LinkNotNil applies the NotNil predicate on the "link" field.
+func LinkNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldLink))
+}
+
+// LinkEqualFold applies the EqualFold predicate on the "link" field.
+func LinkEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldLink, v))
+}
+
+// LinkContainsFold applies the ContainsFold predicate on the "link" field.
+func LinkContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldLink, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
@@ -958,6 +1293,66 @@ func StatusEqualFold(v string) predicate.StandardHistory {
 // StatusContainsFold applies the ContainsFold predicate on the "status" field.
 func StatusContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// IsPublicEQ applies the EQ predicate on the "is_public" field.
+func IsPublicEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldIsPublic, v))
+}
+
+// IsPublicNEQ applies the NEQ predicate on the "is_public" field.
+func IsPublicNEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldIsPublic, v))
+}
+
+// IsPublicIsNil applies the IsNil predicate on the "is_public" field.
+func IsPublicIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldIsPublic))
+}
+
+// IsPublicNotNil applies the NotNil predicate on the "is_public" field.
+func IsPublicNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldIsPublic))
+}
+
+// FreeToUseEQ applies the EQ predicate on the "free_to_use" field.
+func FreeToUseEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldFreeToUse, v))
+}
+
+// FreeToUseNEQ applies the NEQ predicate on the "free_to_use" field.
+func FreeToUseNEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldFreeToUse, v))
+}
+
+// FreeToUseIsNil applies the IsNil predicate on the "free_to_use" field.
+func FreeToUseIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldFreeToUse))
+}
+
+// FreeToUseNotNil applies the NotNil predicate on the "free_to_use" field.
+func FreeToUseNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldFreeToUse))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldSystemOwned))
 }
 
 // StandardTypeEQ applies the EQ predicate on the "standard_type" field.
@@ -1110,239 +1505,79 @@ func VersionContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldVersion, v))
 }
 
-// PurposeAndScopeEQ applies the EQ predicate on the "purpose_and_scope" field.
-func PurposeAndScopeEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldPurposeAndScope, v))
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldRevision, v))
 }
 
-// PurposeAndScopeNEQ applies the NEQ predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNEQ(FieldPurposeAndScope, v))
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldRevision, v))
 }
 
-// PurposeAndScopeIn applies the In predicate on the "purpose_and_scope" field.
-func PurposeAndScopeIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIn(FieldPurposeAndScope, vs...))
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldRevision, vs...))
 }
 
-// PurposeAndScopeNotIn applies the NotIn predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNotIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotIn(FieldPurposeAndScope, vs...))
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldRevision, vs...))
 }
 
-// PurposeAndScopeGT applies the GT predicate on the "purpose_and_scope" field.
-func PurposeAndScopeGT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGT(FieldPurposeAndScope, v))
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldRevision, v))
 }
 
-// PurposeAndScopeGTE applies the GTE predicate on the "purpose_and_scope" field.
-func PurposeAndScopeGTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGTE(FieldPurposeAndScope, v))
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldRevision, v))
 }
 
-// PurposeAndScopeLT applies the LT predicate on the "purpose_and_scope" field.
-func PurposeAndScopeLT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLT(FieldPurposeAndScope, v))
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldRevision, v))
 }
 
-// PurposeAndScopeLTE applies the LTE predicate on the "purpose_and_scope" field.
-func PurposeAndScopeLTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLTE(FieldPurposeAndScope, v))
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldRevision, v))
 }
 
-// PurposeAndScopeContains applies the Contains predicate on the "purpose_and_scope" field.
-func PurposeAndScopeContains(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContains(FieldPurposeAndScope, v))
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldRevision, v))
 }
 
-// PurposeAndScopeHasPrefix applies the HasPrefix predicate on the "purpose_and_scope" field.
-func PurposeAndScopeHasPrefix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasPrefix(FieldPurposeAndScope, v))
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldRevision, v))
 }
 
-// PurposeAndScopeHasSuffix applies the HasSuffix predicate on the "purpose_and_scope" field.
-func PurposeAndScopeHasSuffix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasSuffix(FieldPurposeAndScope, v))
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldRevision, v))
 }
 
-// PurposeAndScopeIsNil applies the IsNil predicate on the "purpose_and_scope" field.
-func PurposeAndScopeIsNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIsNull(FieldPurposeAndScope))
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldRevision))
 }
 
-// PurposeAndScopeNotNil applies the NotNil predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNotNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotNull(FieldPurposeAndScope))
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldRevision))
 }
 
-// PurposeAndScopeEqualFold applies the EqualFold predicate on the "purpose_and_scope" field.
-func PurposeAndScopeEqualFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEqualFold(FieldPurposeAndScope, v))
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldRevision, v))
 }
 
-// PurposeAndScopeContainsFold applies the ContainsFold predicate on the "purpose_and_scope" field.
-func PurposeAndScopeContainsFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContainsFold(FieldPurposeAndScope, v))
-}
-
-// BackgroundEQ applies the EQ predicate on the "background" field.
-func BackgroundEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldBackground, v))
-}
-
-// BackgroundNEQ applies the NEQ predicate on the "background" field.
-func BackgroundNEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNEQ(FieldBackground, v))
-}
-
-// BackgroundIn applies the In predicate on the "background" field.
-func BackgroundIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIn(FieldBackground, vs...))
-}
-
-// BackgroundNotIn applies the NotIn predicate on the "background" field.
-func BackgroundNotIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotIn(FieldBackground, vs...))
-}
-
-// BackgroundGT applies the GT predicate on the "background" field.
-func BackgroundGT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGT(FieldBackground, v))
-}
-
-// BackgroundGTE applies the GTE predicate on the "background" field.
-func BackgroundGTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGTE(FieldBackground, v))
-}
-
-// BackgroundLT applies the LT predicate on the "background" field.
-func BackgroundLT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLT(FieldBackground, v))
-}
-
-// BackgroundLTE applies the LTE predicate on the "background" field.
-func BackgroundLTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLTE(FieldBackground, v))
-}
-
-// BackgroundContains applies the Contains predicate on the "background" field.
-func BackgroundContains(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContains(FieldBackground, v))
-}
-
-// BackgroundHasPrefix applies the HasPrefix predicate on the "background" field.
-func BackgroundHasPrefix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasPrefix(FieldBackground, v))
-}
-
-// BackgroundHasSuffix applies the HasSuffix predicate on the "background" field.
-func BackgroundHasSuffix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasSuffix(FieldBackground, v))
-}
-
-// BackgroundIsNil applies the IsNil predicate on the "background" field.
-func BackgroundIsNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIsNull(FieldBackground))
-}
-
-// BackgroundNotNil applies the NotNil predicate on the "background" field.
-func BackgroundNotNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotNull(FieldBackground))
-}
-
-// BackgroundEqualFold applies the EqualFold predicate on the "background" field.
-func BackgroundEqualFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEqualFold(FieldBackground, v))
-}
-
-// BackgroundContainsFold applies the ContainsFold predicate on the "background" field.
-func BackgroundContainsFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContainsFold(FieldBackground, v))
-}
-
-// SatisfiesEQ applies the EQ predicate on the "satisfies" field.
-func SatisfiesEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldSatisfies, v))
-}
-
-// SatisfiesNEQ applies the NEQ predicate on the "satisfies" field.
-func SatisfiesNEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNEQ(FieldSatisfies, v))
-}
-
-// SatisfiesIn applies the In predicate on the "satisfies" field.
-func SatisfiesIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIn(FieldSatisfies, vs...))
-}
-
-// SatisfiesNotIn applies the NotIn predicate on the "satisfies" field.
-func SatisfiesNotIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotIn(FieldSatisfies, vs...))
-}
-
-// SatisfiesGT applies the GT predicate on the "satisfies" field.
-func SatisfiesGT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGT(FieldSatisfies, v))
-}
-
-// SatisfiesGTE applies the GTE predicate on the "satisfies" field.
-func SatisfiesGTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGTE(FieldSatisfies, v))
-}
-
-// SatisfiesLT applies the LT predicate on the "satisfies" field.
-func SatisfiesLT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLT(FieldSatisfies, v))
-}
-
-// SatisfiesLTE applies the LTE predicate on the "satisfies" field.
-func SatisfiesLTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLTE(FieldSatisfies, v))
-}
-
-// SatisfiesContains applies the Contains predicate on the "satisfies" field.
-func SatisfiesContains(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContains(FieldSatisfies, v))
-}
-
-// SatisfiesHasPrefix applies the HasPrefix predicate on the "satisfies" field.
-func SatisfiesHasPrefix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasPrefix(FieldSatisfies, v))
-}
-
-// SatisfiesHasSuffix applies the HasSuffix predicate on the "satisfies" field.
-func SatisfiesHasSuffix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasSuffix(FieldSatisfies, v))
-}
-
-// SatisfiesIsNil applies the IsNil predicate on the "satisfies" field.
-func SatisfiesIsNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIsNull(FieldSatisfies))
-}
-
-// SatisfiesNotNil applies the NotNil predicate on the "satisfies" field.
-func SatisfiesNotNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotNull(FieldSatisfies))
-}
-
-// SatisfiesEqualFold applies the EqualFold predicate on the "satisfies" field.
-func SatisfiesEqualFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEqualFold(FieldSatisfies, v))
-}
-
-// SatisfiesContainsFold applies the ContainsFold predicate on the "satisfies" field.
-func SatisfiesContainsFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContainsFold(FieldSatisfies, v))
-}
-
-// DetailsIsNil applies the IsNil predicate on the "details" field.
-func DetailsIsNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIsNull(FieldDetails))
-}
-
-// DetailsNotNil applies the NotNil predicate on the "details" field.
-func DetailsNotNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotNull(FieldDetails))
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // And groups predicates with the AND operator between them.

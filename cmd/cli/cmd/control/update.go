@@ -24,17 +24,8 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "control id to update")
 
 	// command line flags for the update command
-	updateCmd.Flags().StringP("name", "n", "", "name of the control")
+	updateCmd.Flags().StringP("ref-code", "r", "", "the unique reference code of the control")
 	updateCmd.Flags().StringP("description", "d", "", "description of the control")
-	updateCmd.Flags().StringP("status", "s", "", "status of the control")
-	updateCmd.Flags().StringP("type", "t", "", "type of the control")
-	updateCmd.Flags().StringP("version", "v", "", "version of the control")
-	updateCmd.Flags().StringP("number", "u", "", "number of the control")
-	updateCmd.Flags().StringP("family", "f", "", "family of the control")
-	updateCmd.Flags().StringP("class", "l", "", "class of the control")
-	updateCmd.Flags().StringP("source", "o", "", "source of the control")
-	updateCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks with the control")
-	updateCmd.Flags().StringP("satisfies", "a", "", "control objectives satisfied by the control")
 
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the control")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the control")
@@ -51,59 +42,14 @@ func updateValidation() (id string, input openlaneclient.UpdateControlInput, err
 
 	// validation of required fields for the update command
 	// output the input struct with the required fields and optional fields based on the command line flags
-	name := cmd.Config.String("name")
-	if name != "" {
-		input.Name = &name
+	refCode := cmd.Config.String("ref-code")
+	if refCode != "" {
+		input.RefCode = &refCode
 	}
 
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
-	}
-
-	status := cmd.Config.String("status")
-	if status != "" {
-		input.Status = &status
-	}
-
-	controlType := cmd.Config.String("type")
-	if controlType != "" {
-		input.ControlType = &controlType
-	}
-
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
-	}
-
-	number := cmd.Config.String("number")
-	if number != "" {
-		input.ControlNumber = &number
-	}
-
-	family := cmd.Config.String("family")
-	if family != "" {
-		input.Family = &family
-	}
-
-	class := cmd.Config.String("class")
-	if class != "" {
-		input.Class = &class
-	}
-
-	source := cmd.Config.String("source")
-	if source != "" {
-		input.Source = &source
-	}
-
-	frameworks := cmd.Config.String("mapped-frameworks")
-	if frameworks != "" {
-		input.MappedFrameworks = &frameworks
-	}
-
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
 	}
 
 	addPrograms := cmd.Config.Strings("add-programs")

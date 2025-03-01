@@ -125,9 +125,9 @@ func Description(v string) predicate.NarrativeHistory {
 	return predicate.NarrativeHistory(sql.FieldEQ(FieldDescription, v))
 }
 
-// Satisfies applies equality check predicate on the "satisfies" field. It's identical to SatisfiesEQ.
-func Satisfies(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldEQ(FieldSatisfies, v))
+// Details applies equality check predicate on the "details" field. It's identical to DetailsEQ.
+func Details(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldEQ(FieldDetails, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -930,79 +930,59 @@ func DescriptionContainsFold(v string) predicate.NarrativeHistory {
 	return predicate.NarrativeHistory(sql.FieldContainsFold(FieldDescription, v))
 }
 
-// SatisfiesEQ applies the EQ predicate on the "satisfies" field.
-func SatisfiesEQ(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldEQ(FieldSatisfies, v))
+// DetailsEQ applies the EQ predicate on the "details" field.
+func DetailsEQ(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldEQ(FieldDetails, v))
 }
 
-// SatisfiesNEQ applies the NEQ predicate on the "satisfies" field.
-func SatisfiesNEQ(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldNEQ(FieldSatisfies, v))
+// DetailsNEQ applies the NEQ predicate on the "details" field.
+func DetailsNEQ(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldNEQ(FieldDetails, v))
 }
 
-// SatisfiesIn applies the In predicate on the "satisfies" field.
-func SatisfiesIn(vs ...string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldIn(FieldSatisfies, vs...))
+// DetailsIn applies the In predicate on the "details" field.
+func DetailsIn(vs ...string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldIn(FieldDetails, vs...))
 }
 
-// SatisfiesNotIn applies the NotIn predicate on the "satisfies" field.
-func SatisfiesNotIn(vs ...string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldNotIn(FieldSatisfies, vs...))
+// DetailsNotIn applies the NotIn predicate on the "details" field.
+func DetailsNotIn(vs ...string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldNotIn(FieldDetails, vs...))
 }
 
-// SatisfiesGT applies the GT predicate on the "satisfies" field.
-func SatisfiesGT(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldGT(FieldSatisfies, v))
+// DetailsGT applies the GT predicate on the "details" field.
+func DetailsGT(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldGT(FieldDetails, v))
 }
 
-// SatisfiesGTE applies the GTE predicate on the "satisfies" field.
-func SatisfiesGTE(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldGTE(FieldSatisfies, v))
+// DetailsGTE applies the GTE predicate on the "details" field.
+func DetailsGTE(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldGTE(FieldDetails, v))
 }
 
-// SatisfiesLT applies the LT predicate on the "satisfies" field.
-func SatisfiesLT(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldLT(FieldSatisfies, v))
+// DetailsLT applies the LT predicate on the "details" field.
+func DetailsLT(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldLT(FieldDetails, v))
 }
 
-// SatisfiesLTE applies the LTE predicate on the "satisfies" field.
-func SatisfiesLTE(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldLTE(FieldSatisfies, v))
+// DetailsLTE applies the LTE predicate on the "details" field.
+func DetailsLTE(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldLTE(FieldDetails, v))
 }
 
-// SatisfiesContains applies the Contains predicate on the "satisfies" field.
-func SatisfiesContains(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldContains(FieldSatisfies, v))
+// DetailsContains applies the Contains predicate on the "details" field.
+func DetailsContains(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldContains(FieldDetails, v))
 }
 
-// SatisfiesHasPrefix applies the HasPrefix predicate on the "satisfies" field.
-func SatisfiesHasPrefix(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldHasPrefix(FieldSatisfies, v))
+// DetailsHasPrefix applies the HasPrefix predicate on the "details" field.
+func DetailsHasPrefix(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldHasPrefix(FieldDetails, v))
 }
 
-// SatisfiesHasSuffix applies the HasSuffix predicate on the "satisfies" field.
-func SatisfiesHasSuffix(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldHasSuffix(FieldSatisfies, v))
-}
-
-// SatisfiesIsNil applies the IsNil predicate on the "satisfies" field.
-func SatisfiesIsNil() predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldIsNull(FieldSatisfies))
-}
-
-// SatisfiesNotNil applies the NotNil predicate on the "satisfies" field.
-func SatisfiesNotNil() predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldNotNull(FieldSatisfies))
-}
-
-// SatisfiesEqualFold applies the EqualFold predicate on the "satisfies" field.
-func SatisfiesEqualFold(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldEqualFold(FieldSatisfies, v))
-}
-
-// SatisfiesContainsFold applies the ContainsFold predicate on the "satisfies" field.
-func SatisfiesContainsFold(v string) predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldContainsFold(FieldSatisfies, v))
+// DetailsHasSuffix applies the HasSuffix predicate on the "details" field.
+func DetailsHasSuffix(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldHasSuffix(FieldDetails, v))
 }
 
 // DetailsIsNil applies the IsNil predicate on the "details" field.
@@ -1013,6 +993,16 @@ func DetailsIsNil() predicate.NarrativeHistory {
 // DetailsNotNil applies the NotNil predicate on the "details" field.
 func DetailsNotNil() predicate.NarrativeHistory {
 	return predicate.NarrativeHistory(sql.FieldNotNull(FieldDetails))
+}
+
+// DetailsEqualFold applies the EqualFold predicate on the "details" field.
+func DetailsEqualFold(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldEqualFold(FieldDetails, v))
+}
+
+// DetailsContainsFold applies the ContainsFold predicate on the "details" field.
+func DetailsContainsFold(v string) predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldContainsFold(FieldDetails, v))
 }
 
 // And groups predicates with the AND operator between them.

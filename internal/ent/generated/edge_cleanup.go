@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -84,6 +85,18 @@ func ControlEdgeCleanup(ctx context.Context, id string) error {
 
 func ControlHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ControlImplementationEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlimplementation edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ControlImplementationHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlimplementationhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -266,6 +279,18 @@ func InternalPolicyHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func MappedControlEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappedcontrol edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func MappedControlHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappedcontrolhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -505,6 +530,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Evidence.Query().Where((evidence.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if evidenceCount, err := FromContext(ctx).Evidence.Delete().Where(evidence.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", evidenceCount).Msg("deleting evidence")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Standard.Query().Where((standard.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if standardCount, err := FromContext(ctx).Standard.Delete().Where(standard.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", standardCount).Msg("deleting standard")
 			return err
 		}
 	}

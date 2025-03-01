@@ -30,5 +30,5 @@ func unmarshalGQL[T any](v any, a T) error {
 		return err
 	}
 
-	return err
+	return nil
 }

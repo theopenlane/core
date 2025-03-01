@@ -146,6 +146,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_risks",
+	"subcontrol_risks",
 }
 
 var (

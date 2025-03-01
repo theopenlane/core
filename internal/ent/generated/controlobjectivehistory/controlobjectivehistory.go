@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -43,28 +44,20 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
+	// FieldDesiredOutcome holds the string denoting the desired_outcome field in the database.
+	FieldDesiredOutcome = "desired_outcome"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
 	// FieldControlObjectiveType holds the string denoting the control_objective_type field in the database.
 	FieldControlObjectiveType = "control_objective_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
-	// FieldControlNumber holds the string denoting the control_number field in the database.
-	FieldControlNumber = "control_number"
-	// FieldFamily holds the string denoting the family field in the database.
-	FieldFamily = "family"
-	// FieldClass holds the string denoting the class field in the database.
-	FieldClass = "class"
-	// FieldSource holds the string denoting the source field in the database.
-	FieldSource = "source"
-	// FieldMappedFrameworks holds the string denoting the mapped_frameworks field in the database.
-	FieldMappedFrameworks = "mapped_frameworks"
-	// FieldDetails holds the string denoting the details field in the database.
-	FieldDetails = "details"
-	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
-	FieldExampleEvidence = "example_evidence"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
+	// FieldSubcategory holds the string denoting the subcategory field in the database.
+	FieldSubcategory = "subcategory"
 	// Table holds the table name of the controlobjectivehistory in the database.
 	Table = "control_objective_history"
 )
@@ -85,17 +78,13 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldName,
-	FieldDescription,
+	FieldDesiredOutcome,
 	FieldStatus,
+	FieldSource,
 	FieldControlObjectiveType,
 	FieldVersion,
-	FieldControlNumber,
-	FieldFamily,
-	FieldClass,
-	FieldSource,
-	FieldMappedFrameworks,
-	FieldDetails,
-	FieldExampleEvidence,
+	FieldCategory,
+	FieldSubcategory,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -136,6 +125,16 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("controlobjectivehistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+// SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
+func SourceValidator(s enums.ControlSource) error {
+	switch s.String() {
+	case "FRAMEWORK", "TEMPLATE", "CUSTOM", "IMPORTED":
+		return nil
+	default:
+		return fmt.Errorf("controlobjectivehistory: invalid enum value for source field: %q", s)
 	}
 }
 
@@ -207,14 +206,19 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+// ByDesiredOutcome orders the results by the desired_outcome field.
+func ByDesiredOutcome(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDesiredOutcome, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
 // ByControlObjectiveType orders the results by the control_objective_type field.
@@ -227,34 +231,14 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
-// ByControlNumber orders the results by the control_number field.
-func ByControlNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlNumber, opts...).ToFunc()
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
-// ByFamily orders the results by the family field.
-func ByFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFamily, opts...).ToFunc()
-}
-
-// ByClass orders the results by the class field.
-func ByClass(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldClass, opts...).ToFunc()
-}
-
-// BySource orders the results by the source field.
-func BySource(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSource, opts...).ToFunc()
-}
-
-// ByMappedFrameworks orders the results by the mapped_frameworks field.
-func ByMappedFrameworks(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappedFrameworks, opts...).ToFunc()
-}
-
-// ByExampleEvidence orders the results by the example_evidence field.
-func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
+// BySubcategory orders the results by the subcategory field.
+func BySubcategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubcategory, opts...).ToFunc()
 }
 
 var (
@@ -262,4 +246,11 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.ControlSource must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlSource)(nil)
+	// enums.ControlSource must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlSource)(nil)
 )

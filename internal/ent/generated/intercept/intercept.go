@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -43,6 +45,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -327,6 +331,60 @@ func (f TraverseControlHistory) Traverse(ctx context.Context, q generated.Query)
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ControlHistoryQuery", q)
+}
+
+// The ControlImplementationFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ControlImplementationFunc func(context.Context, *generated.ControlImplementationQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ControlImplementationFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ControlImplementationQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ControlImplementationQuery", q)
+}
+
+// The TraverseControlImplementation type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseControlImplementation func(context.Context, *generated.ControlImplementationQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseControlImplementation) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseControlImplementation) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlImplementationQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ControlImplementationQuery", q)
+}
+
+// The ControlImplementationHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ControlImplementationHistoryFunc func(context.Context, *generated.ControlImplementationHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ControlImplementationHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ControlImplementationHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ControlImplementationHistoryQuery", q)
+}
+
+// The TraverseControlImplementationHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseControlImplementationHistory func(context.Context, *generated.ControlImplementationHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseControlImplementationHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseControlImplementationHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlImplementationHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ControlImplementationHistoryQuery", q)
 }
 
 // The ControlObjectiveFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1083,6 +1141,60 @@ func (f TraverseInvite) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.InviteQuery", q)
+}
+
+// The MappedControlFunc type is an adapter to allow the use of ordinary function as a Querier.
+type MappedControlFunc func(context.Context, *generated.MappedControlQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f MappedControlFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.MappedControlQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.MappedControlQuery", q)
+}
+
+// The TraverseMappedControl type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseMappedControl func(context.Context, *generated.MappedControlQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseMappedControl) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseMappedControl) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappedControlQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.MappedControlQuery", q)
+}
+
+// The MappedControlHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type MappedControlHistoryFunc func(context.Context, *generated.MappedControlHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f MappedControlHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.MappedControlHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.MappedControlHistoryQuery", q)
+}
+
+// The TraverseMappedControlHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseMappedControlHistory func(context.Context, *generated.MappedControlHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseMappedControlHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseMappedControlHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappedControlHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.MappedControlHistoryQuery", q)
 }
 
 // The NarrativeFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2128,6 +2240,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ControlQuery, predicate.Control, control.OrderOption]{typ: generated.TypeControl, tq: q}, nil
 	case *generated.ControlHistoryQuery:
 		return &query[*generated.ControlHistoryQuery, predicate.ControlHistory, controlhistory.OrderOption]{typ: generated.TypeControlHistory, tq: q}, nil
+	case *generated.ControlImplementationQuery:
+		return &query[*generated.ControlImplementationQuery, predicate.ControlImplementation, controlimplementation.OrderOption]{typ: generated.TypeControlImplementation, tq: q}, nil
+	case *generated.ControlImplementationHistoryQuery:
+		return &query[*generated.ControlImplementationHistoryQuery, predicate.ControlImplementationHistory, controlimplementationhistory.OrderOption]{typ: generated.TypeControlImplementationHistory, tq: q}, nil
 	case *generated.ControlObjectiveQuery:
 		return &query[*generated.ControlObjectiveQuery, predicate.ControlObjective, controlobjective.OrderOption]{typ: generated.TypeControlObjective, tq: q}, nil
 	case *generated.ControlObjectiveHistoryQuery:
@@ -2184,6 +2300,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.InternalPolicyHistoryQuery, predicate.InternalPolicyHistory, internalpolicyhistory.OrderOption]{typ: generated.TypeInternalPolicyHistory, tq: q}, nil
 	case *generated.InviteQuery:
 		return &query[*generated.InviteQuery, predicate.Invite, invite.OrderOption]{typ: generated.TypeInvite, tq: q}, nil
+	case *generated.MappedControlQuery:
+		return &query[*generated.MappedControlQuery, predicate.MappedControl, mappedcontrol.OrderOption]{typ: generated.TypeMappedControl, tq: q}, nil
+	case *generated.MappedControlHistoryQuery:
+		return &query[*generated.MappedControlHistoryQuery, predicate.MappedControlHistory, mappedcontrolhistory.OrderOption]{typ: generated.TypeMappedControlHistory, tq: q}, nil
 	case *generated.NarrativeQuery:
 		return &query[*generated.NarrativeQuery, predicate.Narrative, narrative.OrderOption]{typ: generated.TypeNarrative, tq: q}, nil
 	case *generated.NarrativeHistoryQuery:

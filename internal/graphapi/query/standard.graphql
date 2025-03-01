@@ -1,0 +1,202 @@
+
+mutation CreateBulkCSVStandard($input: Upload!) {
+  createBulkCSVStandard(input: $input) {
+    standards {
+      createdAt
+      createdBy
+      description
+      domains
+      framework
+      freeToUse
+      governingBody
+      id
+      isPublic
+      link
+      name
+      ownerID
+      revision
+      shortName
+      standardType
+      status
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkStandard($input: [CreateStandardInput!]) {
+  createBulkStandard(input: $input) {
+    standards {
+      createdAt
+      createdBy
+      description
+      domains
+      framework
+      freeToUse
+      governingBody
+      id
+      isPublic
+      link
+      name
+      ownerID
+      revision
+      shortName
+      standardType
+      status
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateStandard($input: CreateStandardInput!) {
+  createStandard(input: $input) {
+    standard {
+      createdAt
+      createdBy
+      description
+      domains
+      framework
+      freeToUse
+      governingBody
+      id
+      isPublic
+      link
+      name
+      ownerID
+      revision
+      shortName
+      standardType
+      status
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteStandard($deleteStandardId: ID!) {
+  deleteStandard(id: $deleteStandardId) {
+    deletedID
+  }
+}
+
+query GetAllStandards {
+  standards {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        domains
+        framework
+        freeToUse
+        governingBody
+        id
+        isPublic
+        link
+        name
+        ownerID
+        revision
+        shortName
+        standardType
+        status
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+query GetStandardByID($standardId: ID!) {
+  standard(id: $standardId) {
+    createdAt
+    createdBy
+    description
+    domains
+    framework
+    freeToUse
+    governingBody
+    id
+    isPublic
+    link
+    name
+    ownerID
+    revision
+    shortName
+    standardType
+    status
+    systemOwned
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetStandards($where: StandardWhereInput) {
+  standards(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        domains
+        framework
+        freeToUse
+        governingBody
+        id
+        isPublic
+        link
+        name
+        ownerID
+        revision
+        shortName
+        standardType
+        status
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
+  updateStandard(id: $updateStandardId, input: $input) {
+    standard {
+      createdAt
+      createdBy
+      description
+      domains
+      framework
+      freeToUse
+      governingBody
+      id
+      isPublic
+      link
+      name
+      ownerID
+      revision
+      shortName
+      standardType
+      status
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}

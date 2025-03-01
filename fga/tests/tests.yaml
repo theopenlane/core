@@ -751,14 +751,14 @@ tests:
   - name: standard
     description: standards can be made public with system-owned standards, or organizations can create their own custom standards
     tuple_file: tuples/standards.yaml
-    check: 
+    check:
       - user: user:ulid-of-member
         object: standard:standard-1
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
-      - user:  user:ulid-of-member-2
+      - user: user:ulid-of-member-2
         object: standard:standard-2
         assertions:
           can_view: true
