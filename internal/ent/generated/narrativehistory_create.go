@@ -185,23 +185,17 @@ func (nhc *NarrativeHistoryCreate) SetNillableDescription(s *string) *NarrativeH
 	return nhc
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (nhc *NarrativeHistoryCreate) SetSatisfies(s string) *NarrativeHistoryCreate {
-	nhc.mutation.SetSatisfies(s)
-	return nhc
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (nhc *NarrativeHistoryCreate) SetNillableSatisfies(s *string) *NarrativeHistoryCreate {
-	if s != nil {
-		nhc.SetSatisfies(*s)
-	}
-	return nhc
-}
-
 // SetDetails sets the "details" field.
-func (nhc *NarrativeHistoryCreate) SetDetails(m map[string]interface{}) *NarrativeHistoryCreate {
-	nhc.mutation.SetDetails(m)
+func (nhc *NarrativeHistoryCreate) SetDetails(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetDetails(s)
+	return nhc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableDetails(s *string) *NarrativeHistoryCreate {
+	if s != nil {
+		nhc.SetDetails(*s)
+	}
 	return nhc
 }
 
@@ -387,12 +381,8 @@ func (nhc *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cr
 		_spec.SetField(narrativehistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := nhc.mutation.Satisfies(); ok {
-		_spec.SetField(narrativehistory.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
-	}
 	if value, ok := nhc.mutation.Details(); ok {
-		_spec.SetField(narrativehistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(narrativehistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
 	return _node, _spec

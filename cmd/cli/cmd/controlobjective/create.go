@@ -23,15 +23,7 @@ func init() {
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "name of the control objective")
-	createCmd.Flags().StringP("description", "d", "", "description of the control objective")
-	createCmd.Flags().StringP("status", "s", "", "status of the control objective")
-	createCmd.Flags().StringP("type", "t", "", "type of the control objective")
-	createCmd.Flags().StringP("version", "v", "", "version of the control objective")
-	createCmd.Flags().StringP("control-number", "c", "", "number of the control objective")
-	createCmd.Flags().StringP("family", "f", "", "family of the control objective")
-	createCmd.Flags().StringP("class", "l", "", "class associated with the control objective")
-	createCmd.Flags().StringP("source", "o", "", "source of the control objective")
-	createCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks")
+
 	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the control objective")
 	createCmd.Flags().StringSliceP("editors", "e", []string{}, "group ID(s) given editor access to the control objective")
 	createCmd.Flags().StringSliceP("viewers", "w", []string{}, "group ID(s) given viewer access to the control objective")
@@ -47,51 +39,6 @@ func createValidation() (input openlaneclient.CreateControlObjectiveInput, err e
 	}
 
 	input.ProgramIDs = cmd.Config.Strings("programs")
-
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
-	}
-
-	status := cmd.Config.String("status")
-	if status != "" {
-		input.Status = &status
-	}
-
-	controlObjectiveType := cmd.Config.String("type")
-	if controlObjectiveType != "" {
-		input.ControlObjectiveType = &controlObjectiveType
-	}
-
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
-	}
-
-	controlNumber := cmd.Config.String("control-number")
-	if controlNumber != "" {
-		input.ControlNumber = &controlNumber
-	}
-
-	family := cmd.Config.String("family")
-	if family != "" {
-		input.Family = &family
-	}
-
-	class := cmd.Config.String("class")
-	if class != "" {
-		input.Class = &class
-	}
-
-	source := cmd.Config.String("source")
-	if source != "" {
-		input.Source = &source
-	}
-
-	mappedFrameworks := cmd.Config.String("mapped-frameworks")
-	if mappedFrameworks != "" {
-		input.MappedFrameworks = &mappedFrameworks
-	}
 
 	viewerGroupIDs := cmd.Config.Strings("viewers")
 	if len(viewerGroupIDs) > 0 {

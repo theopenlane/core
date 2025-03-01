@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -165,9 +167,9 @@ func (chc *ControlHistoryCreate) SetNillableOwnerID(s *string) *ControlHistoryCr
 	return chc
 }
 
-// SetName sets the "name" field.
-func (chc *ControlHistoryCreate) SetName(s string) *ControlHistoryCreate {
-	chc.mutation.SetName(s)
+// SetRefCode sets the "ref_code" field.
+func (chc *ControlHistoryCreate) SetRefCode(s string) *ControlHistoryCreate {
+	chc.mutation.SetRefCode(s)
 	return chc
 }
 
@@ -199,134 +201,128 @@ func (chc *ControlHistoryCreate) SetNillableStatus(s *string) *ControlHistoryCre
 	return chc
 }
 
-// SetControlType sets the "control_type" field.
-func (chc *ControlHistoryCreate) SetControlType(s string) *ControlHistoryCreate {
-	chc.mutation.SetControlType(s)
-	return chc
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableControlType(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetControlType(*s)
-	}
-	return chc
-}
-
-// SetVersion sets the "version" field.
-func (chc *ControlHistoryCreate) SetVersion(s string) *ControlHistoryCreate {
-	chc.mutation.SetVersion(s)
-	return chc
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableVersion(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetVersion(*s)
-	}
-	return chc
-}
-
-// SetControlNumber sets the "control_number" field.
-func (chc *ControlHistoryCreate) SetControlNumber(s string) *ControlHistoryCreate {
-	chc.mutation.SetControlNumber(s)
-	return chc
-}
-
-// SetNillableControlNumber sets the "control_number" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableControlNumber(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetControlNumber(*s)
-	}
-	return chc
-}
-
-// SetFamily sets the "family" field.
-func (chc *ControlHistoryCreate) SetFamily(s string) *ControlHistoryCreate {
-	chc.mutation.SetFamily(s)
-	return chc
-}
-
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableFamily(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetFamily(*s)
-	}
-	return chc
-}
-
-// SetClass sets the "class" field.
-func (chc *ControlHistoryCreate) SetClass(s string) *ControlHistoryCreate {
-	chc.mutation.SetClass(s)
-	return chc
-}
-
-// SetNillableClass sets the "class" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableClass(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetClass(*s)
-	}
-	return chc
-}
-
 // SetSource sets the "source" field.
-func (chc *ControlHistoryCreate) SetSource(s string) *ControlHistoryCreate {
-	chc.mutation.SetSource(s)
+func (chc *ControlHistoryCreate) SetSource(es enums.ControlSource) *ControlHistoryCreate {
+	chc.mutation.SetSource(es)
 	return chc
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableSource(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetSource(*s)
+func (chc *ControlHistoryCreate) SetNillableSource(es *enums.ControlSource) *ControlHistoryCreate {
+	if es != nil {
+		chc.SetSource(*es)
 	}
 	return chc
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (chc *ControlHistoryCreate) SetSatisfies(s string) *ControlHistoryCreate {
-	chc.mutation.SetSatisfies(s)
+// SetControlType sets the "control_type" field.
+func (chc *ControlHistoryCreate) SetControlType(et enums.ControlType) *ControlHistoryCreate {
+	chc.mutation.SetControlType(et)
 	return chc
 }
 
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableSatisfies(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetSatisfies(*s)
+// SetNillableControlType sets the "control_type" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableControlType(et *enums.ControlType) *ControlHistoryCreate {
+	if et != nil {
+		chc.SetControlType(*et)
 	}
 	return chc
 }
 
-// SetMappedFrameworks sets the "mapped_frameworks" field.
-func (chc *ControlHistoryCreate) SetMappedFrameworks(s string) *ControlHistoryCreate {
-	chc.mutation.SetMappedFrameworks(s)
+// SetCategory sets the "category" field.
+func (chc *ControlHistoryCreate) SetCategory(s string) *ControlHistoryCreate {
+	chc.mutation.SetCategory(s)
 	return chc
 }
 
-// SetNillableMappedFrameworks sets the "mapped_frameworks" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableMappedFrameworks(s *string) *ControlHistoryCreate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableCategory(s *string) *ControlHistoryCreate {
 	if s != nil {
-		chc.SetMappedFrameworks(*s)
+		chc.SetCategory(*s)
 	}
 	return chc
 }
 
-// SetDetails sets the "details" field.
-func (chc *ControlHistoryCreate) SetDetails(m map[string]interface{}) *ControlHistoryCreate {
-	chc.mutation.SetDetails(m)
+// SetCategoryID sets the "category_id" field.
+func (chc *ControlHistoryCreate) SetCategoryID(s string) *ControlHistoryCreate {
+	chc.mutation.SetCategoryID(s)
+	return chc
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableCategoryID(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetCategoryID(*s)
+	}
+	return chc
+}
+
+// SetSubcategory sets the "subcategory" field.
+func (chc *ControlHistoryCreate) SetSubcategory(s string) *ControlHistoryCreate {
+	chc.mutation.SetSubcategory(s)
+	return chc
+}
+
+// SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableSubcategory(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetSubcategory(*s)
+	}
+	return chc
+}
+
+// SetMappedCategories sets the "mapped_categories" field.
+func (chc *ControlHistoryCreate) SetMappedCategories(s []string) *ControlHistoryCreate {
+	chc.mutation.SetMappedCategories(s)
+	return chc
+}
+
+// SetAssessmentObjectives sets the "assessment_objectives" field.
+func (chc *ControlHistoryCreate) SetAssessmentObjectives(mo []models.AssessmentObjective) *ControlHistoryCreate {
+	chc.mutation.SetAssessmentObjectives(mo)
+	return chc
+}
+
+// SetAssessmentMethods sets the "assessment_methods" field.
+func (chc *ControlHistoryCreate) SetAssessmentMethods(mm []models.AssessmentMethod) *ControlHistoryCreate {
+	chc.mutation.SetAssessmentMethods(mm)
+	return chc
+}
+
+// SetControlQuestions sets the "control_questions" field.
+func (chc *ControlHistoryCreate) SetControlQuestions(s []string) *ControlHistoryCreate {
+	chc.mutation.SetControlQuestions(s)
+	return chc
+}
+
+// SetImplementationGuidance sets the "implementation_guidance" field.
+func (chc *ControlHistoryCreate) SetImplementationGuidance(mg []models.ImplementationGuidance) *ControlHistoryCreate {
+	chc.mutation.SetImplementationGuidance(mg)
 	return chc
 }
 
 // SetExampleEvidence sets the "example_evidence" field.
-func (chc *ControlHistoryCreate) SetExampleEvidence(s string) *ControlHistoryCreate {
-	chc.mutation.SetExampleEvidence(s)
+func (chc *ControlHistoryCreate) SetExampleEvidence(me []models.ExampleEvidence) *ControlHistoryCreate {
+	chc.mutation.SetExampleEvidence(me)
 	return chc
 }
 
-// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableExampleEvidence(s *string) *ControlHistoryCreate {
+// SetReferences sets the "references" field.
+func (chc *ControlHistoryCreate) SetReferences(m []models.Reference) *ControlHistoryCreate {
+	chc.mutation.SetReferences(m)
+	return chc
+}
+
+// SetStandardID sets the "standard_id" field.
+func (chc *ControlHistoryCreate) SetStandardID(s string) *ControlHistoryCreate {
+	chc.mutation.SetStandardID(s)
+	return chc
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableStandardID(s *string) *ControlHistoryCreate {
 	if s != nil {
-		chc.SetExampleEvidence(*s)
+		chc.SetStandardID(*s)
 	}
 	return chc
 }
@@ -418,8 +414,18 @@ func (chc *ControlHistoryCreate) check() error {
 	if _, ok := chc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlHistory.display_id"`)}
 	}
-	if _, ok := chc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlHistory.name"`)}
+	if _, ok := chc.mutation.RefCode(); !ok {
+		return &ValidationError{Name: "ref_code", err: errors.New(`generated: missing required field "ControlHistory.ref_code"`)}
+	}
+	if v, ok := chc.mutation.Source(); ok {
+		if err := controlhistory.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.source": %w`, err)}
+		}
+	}
+	if v, ok := chc.mutation.ControlType(); ok {
+		if err := controlhistory.ControlTypeValidator(v); err != nil {
+			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.control_type": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -505,9 +511,9 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_spec.SetField(controlhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := chc.mutation.Name(); ok {
-		_spec.SetField(controlhistory.FieldName, field.TypeString, value)
-		_node.Name = value
+	if value, ok := chc.mutation.RefCode(); ok {
+		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)
+		_node.RefCode = value
 	}
 	if value, ok := chc.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
@@ -517,45 +523,57 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_spec.SetField(controlhistory.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
-	if value, ok := chc.mutation.ControlType(); ok {
-		_spec.SetField(controlhistory.FieldControlType, field.TypeString, value)
-		_node.ControlType = value
-	}
-	if value, ok := chc.mutation.Version(); ok {
-		_spec.SetField(controlhistory.FieldVersion, field.TypeString, value)
-		_node.Version = value
-	}
-	if value, ok := chc.mutation.ControlNumber(); ok {
-		_spec.SetField(controlhistory.FieldControlNumber, field.TypeString, value)
-		_node.ControlNumber = value
-	}
-	if value, ok := chc.mutation.Family(); ok {
-		_spec.SetField(controlhistory.FieldFamily, field.TypeString, value)
-		_node.Family = value
-	}
-	if value, ok := chc.mutation.Class(); ok {
-		_spec.SetField(controlhistory.FieldClass, field.TypeString, value)
-		_node.Class = value
-	}
 	if value, ok := chc.mutation.Source(); ok {
-		_spec.SetField(controlhistory.FieldSource, field.TypeString, value)
+		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if value, ok := chc.mutation.Satisfies(); ok {
-		_spec.SetField(controlhistory.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
+	if value, ok := chc.mutation.ControlType(); ok {
+		_spec.SetField(controlhistory.FieldControlType, field.TypeEnum, value)
+		_node.ControlType = value
 	}
-	if value, ok := chc.mutation.MappedFrameworks(); ok {
-		_spec.SetField(controlhistory.FieldMappedFrameworks, field.TypeString, value)
-		_node.MappedFrameworks = value
+	if value, ok := chc.mutation.Category(); ok {
+		_spec.SetField(controlhistory.FieldCategory, field.TypeString, value)
+		_node.Category = value
 	}
-	if value, ok := chc.mutation.Details(); ok {
-		_spec.SetField(controlhistory.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
+	if value, ok := chc.mutation.CategoryID(); ok {
+		_spec.SetField(controlhistory.FieldCategoryID, field.TypeString, value)
+		_node.CategoryID = value
+	}
+	if value, ok := chc.mutation.Subcategory(); ok {
+		_spec.SetField(controlhistory.FieldSubcategory, field.TypeString, value)
+		_node.Subcategory = value
+	}
+	if value, ok := chc.mutation.MappedCategories(); ok {
+		_spec.SetField(controlhistory.FieldMappedCategories, field.TypeJSON, value)
+		_node.MappedCategories = value
+	}
+	if value, ok := chc.mutation.AssessmentObjectives(); ok {
+		_spec.SetField(controlhistory.FieldAssessmentObjectives, field.TypeJSON, value)
+		_node.AssessmentObjectives = value
+	}
+	if value, ok := chc.mutation.AssessmentMethods(); ok {
+		_spec.SetField(controlhistory.FieldAssessmentMethods, field.TypeJSON, value)
+		_node.AssessmentMethods = value
+	}
+	if value, ok := chc.mutation.ControlQuestions(); ok {
+		_spec.SetField(controlhistory.FieldControlQuestions, field.TypeJSON, value)
+		_node.ControlQuestions = value
+	}
+	if value, ok := chc.mutation.ImplementationGuidance(); ok {
+		_spec.SetField(controlhistory.FieldImplementationGuidance, field.TypeJSON, value)
+		_node.ImplementationGuidance = value
 	}
 	if value, ok := chc.mutation.ExampleEvidence(); ok {
-		_spec.SetField(controlhistory.FieldExampleEvidence, field.TypeString, value)
+		_spec.SetField(controlhistory.FieldExampleEvidence, field.TypeJSON, value)
 		_node.ExampleEvidence = value
+	}
+	if value, ok := chc.mutation.References(); ok {
+		_spec.SetField(controlhistory.FieldReferences, field.TypeJSON, value)
+		_node.References = value
+	}
+	if value, ok := chc.mutation.StandardID(); ok {
+		_spec.SetField(controlhistory.FieldStandardID, field.TypeString, value)
+		_node.StandardID = value
 	}
 	return _node, _spec
 }

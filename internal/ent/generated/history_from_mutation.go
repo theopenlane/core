@@ -572,8 +572,8 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
-	if name, exists := m.Name(); exists {
-		create = create.SetName(name)
+	if refCode, exists := m.RefCode(); exists {
+		create = create.SetRefCode(refCode)
 	}
 
 	if description, exists := m.Description(); exists {
@@ -584,44 +584,56 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
-	if controlType, exists := m.ControlType(); exists {
-		create = create.SetControlType(controlType)
-	}
-
-	if version, exists := m.Version(); exists {
-		create = create.SetVersion(version)
-	}
-
-	if controlNumber, exists := m.ControlNumber(); exists {
-		create = create.SetControlNumber(controlNumber)
-	}
-
-	if family, exists := m.Family(); exists {
-		create = create.SetFamily(family)
-	}
-
-	if class, exists := m.Class(); exists {
-		create = create.SetClass(class)
-	}
-
 	if source, exists := m.Source(); exists {
 		create = create.SetSource(source)
 	}
 
-	if satisfies, exists := m.Satisfies(); exists {
-		create = create.SetSatisfies(satisfies)
+	if controlType, exists := m.ControlType(); exists {
+		create = create.SetControlType(controlType)
 	}
 
-	if mappedFrameworks, exists := m.MappedFrameworks(); exists {
-		create = create.SetMappedFrameworks(mappedFrameworks)
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
 	}
 
-	if details, exists := m.Details(); exists {
-		create = create.SetDetails(details)
+	if categoryID, exists := m.CategoryID(); exists {
+		create = create.SetCategoryID(categoryID)
+	}
+
+	if subcategory, exists := m.Subcategory(); exists {
+		create = create.SetSubcategory(subcategory)
+	}
+
+	if mappedCategories, exists := m.MappedCategories(); exists {
+		create = create.SetMappedCategories(mappedCategories)
+	}
+
+	if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
+		create = create.SetAssessmentObjectives(assessmentObjectives)
+	}
+
+	if assessmentMethods, exists := m.AssessmentMethods(); exists {
+		create = create.SetAssessmentMethods(assessmentMethods)
+	}
+
+	if controlQuestions, exists := m.ControlQuestions(); exists {
+		create = create.SetControlQuestions(controlQuestions)
+	}
+
+	if implementationGuidance, exists := m.ImplementationGuidance(); exists {
+		create = create.SetImplementationGuidance(implementationGuidance)
 	}
 
 	if exampleEvidence, exists := m.ExampleEvidence(); exists {
 		create = create.SetExampleEvidence(exampleEvidence)
+	}
+
+	if references, exists := m.References(); exists {
+		create = create.SetReferences(references)
+	}
+
+	if standardID, exists := m.StandardID(); exists {
+		create = create.SetStandardID(standardID)
 	}
 
 	_, err := create.Save(ctx)
@@ -708,10 +720,10 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(control.OwnerID)
 		}
 
-		if name, exists := m.Name(); exists {
-			create = create.SetName(name)
+		if refCode, exists := m.RefCode(); exists {
+			create = create.SetRefCode(refCode)
 		} else {
-			create = create.SetName(control.Name)
+			create = create.SetRefCode(control.RefCode)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -726,64 +738,82 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(control.Status)
 		}
 
-		if controlType, exists := m.ControlType(); exists {
-			create = create.SetControlType(controlType)
-		} else {
-			create = create.SetControlType(control.ControlType)
-		}
-
-		if version, exists := m.Version(); exists {
-			create = create.SetVersion(version)
-		} else {
-			create = create.SetVersion(control.Version)
-		}
-
-		if controlNumber, exists := m.ControlNumber(); exists {
-			create = create.SetControlNumber(controlNumber)
-		} else {
-			create = create.SetControlNumber(control.ControlNumber)
-		}
-
-		if family, exists := m.Family(); exists {
-			create = create.SetFamily(family)
-		} else {
-			create = create.SetFamily(control.Family)
-		}
-
-		if class, exists := m.Class(); exists {
-			create = create.SetClass(class)
-		} else {
-			create = create.SetClass(control.Class)
-		}
-
 		if source, exists := m.Source(); exists {
 			create = create.SetSource(source)
 		} else {
 			create = create.SetSource(control.Source)
 		}
 
-		if satisfies, exists := m.Satisfies(); exists {
-			create = create.SetSatisfies(satisfies)
+		if controlType, exists := m.ControlType(); exists {
+			create = create.SetControlType(controlType)
 		} else {
-			create = create.SetSatisfies(control.Satisfies)
+			create = create.SetControlType(control.ControlType)
 		}
 
-		if mappedFrameworks, exists := m.MappedFrameworks(); exists {
-			create = create.SetMappedFrameworks(mappedFrameworks)
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
 		} else {
-			create = create.SetMappedFrameworks(control.MappedFrameworks)
+			create = create.SetCategory(control.Category)
 		}
 
-		if details, exists := m.Details(); exists {
-			create = create.SetDetails(details)
+		if categoryID, exists := m.CategoryID(); exists {
+			create = create.SetCategoryID(categoryID)
 		} else {
-			create = create.SetDetails(control.Details)
+			create = create.SetCategoryID(control.CategoryID)
+		}
+
+		if subcategory, exists := m.Subcategory(); exists {
+			create = create.SetSubcategory(subcategory)
+		} else {
+			create = create.SetSubcategory(control.Subcategory)
+		}
+
+		if mappedCategories, exists := m.MappedCategories(); exists {
+			create = create.SetMappedCategories(mappedCategories)
+		} else {
+			create = create.SetMappedCategories(control.MappedCategories)
+		}
+
+		if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
+			create = create.SetAssessmentObjectives(assessmentObjectives)
+		} else {
+			create = create.SetAssessmentObjectives(control.AssessmentObjectives)
+		}
+
+		if assessmentMethods, exists := m.AssessmentMethods(); exists {
+			create = create.SetAssessmentMethods(assessmentMethods)
+		} else {
+			create = create.SetAssessmentMethods(control.AssessmentMethods)
+		}
+
+		if controlQuestions, exists := m.ControlQuestions(); exists {
+			create = create.SetControlQuestions(controlQuestions)
+		} else {
+			create = create.SetControlQuestions(control.ControlQuestions)
+		}
+
+		if implementationGuidance, exists := m.ImplementationGuidance(); exists {
+			create = create.SetImplementationGuidance(implementationGuidance)
+		} else {
+			create = create.SetImplementationGuidance(control.ImplementationGuidance)
 		}
 
 		if exampleEvidence, exists := m.ExampleEvidence(); exists {
 			create = create.SetExampleEvidence(exampleEvidence)
 		} else {
 			create = create.SetExampleEvidence(control.ExampleEvidence)
+		}
+
+		if references, exists := m.References(); exists {
+			create = create.SetReferences(references)
+		} else {
+			create = create.SetReferences(control.References)
+		}
+
+		if standardID, exists := m.StandardID(); exists {
+			create = create.SetStandardID(standardID)
+		} else {
+			create = create.SetStandardID(control.StandardID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -827,19 +857,251 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(control.DisplayID).
 			SetTags(control.Tags).
 			SetOwnerID(control.OwnerID).
-			SetName(control.Name).
+			SetRefCode(control.RefCode).
 			SetDescription(control.Description).
 			SetStatus(control.Status).
-			SetControlType(control.ControlType).
-			SetVersion(control.Version).
-			SetControlNumber(control.ControlNumber).
-			SetFamily(control.Family).
-			SetClass(control.Class).
 			SetSource(control.Source).
-			SetSatisfies(control.Satisfies).
-			SetMappedFrameworks(control.MappedFrameworks).
-			SetDetails(control.Details).
+			SetControlType(control.ControlType).
+			SetCategory(control.Category).
+			SetCategoryID(control.CategoryID).
+			SetSubcategory(control.Subcategory).
+			SetMappedCategories(control.MappedCategories).
+			SetAssessmentObjectives(control.AssessmentObjectives).
+			SetAssessmentMethods(control.AssessmentMethods).
+			SetControlQuestions(control.ControlQuestions).
+			SetImplementationGuidance(control.ImplementationGuidance).
 			SetExampleEvidence(control.ExampleEvidence).
+			SetReferences(control.References).
+			SetStandardID(control.StandardID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ControlImplementationHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if controlID, exists := m.ControlID(); exists {
+		create = create.SetControlID(controlID)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if implementationDate, exists := m.ImplementationDate(); exists {
+		create = create.SetImplementationDate(implementationDate)
+	}
+
+	if verified, exists := m.Verified(); exists {
+		create = create.SetVerified(verified)
+	}
+
+	if verificationDate, exists := m.VerificationDate(); exists {
+		create = create.SetVerificationDate(verificationDate)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		controlimplementation, err := client.ControlImplementation.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ControlImplementationHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(controlimplementation.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(controlimplementation.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(controlimplementation.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(controlimplementation.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(controlimplementation.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(controlimplementation.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(controlimplementation.Tags)
+		}
+
+		if controlID, exists := m.ControlID(); exists {
+			create = create.SetControlID(controlID)
+		} else {
+			create = create.SetControlID(controlimplementation.ControlID)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(controlimplementation.Status)
+		}
+
+		if implementationDate, exists := m.ImplementationDate(); exists {
+			create = create.SetImplementationDate(implementationDate)
+		} else {
+			create = create.SetImplementationDate(controlimplementation.ImplementationDate)
+		}
+
+		if verified, exists := m.Verified(); exists {
+			create = create.SetVerified(verified)
+		} else {
+			create = create.SetVerified(controlimplementation.Verified)
+		}
+
+		if verificationDate, exists := m.VerificationDate(); exists {
+			create = create.SetVerificationDate(verificationDate)
+		} else {
+			create = create.SetVerificationDate(controlimplementation.VerificationDate)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(controlimplementation.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		controlimplementation, err := client.ControlImplementation.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ControlImplementationHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(controlimplementation.CreatedAt).
+			SetUpdatedAt(controlimplementation.UpdatedAt).
+			SetCreatedBy(controlimplementation.CreatedBy).
+			SetUpdatedBy(controlimplementation.UpdatedBy).
+			SetDeletedAt(controlimplementation.DeletedAt).
+			SetDeletedBy(controlimplementation.DeletedBy).
+			SetTags(controlimplementation.Tags).
+			SetControlID(controlimplementation.ControlID).
+			SetStatus(controlimplementation.Status).
+			SetImplementationDate(controlimplementation.ImplementationDate).
+			SetVerified(controlimplementation.Verified).
+			SetVerificationDate(controlimplementation.VerificationDate).
+			SetDetails(controlimplementation.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -904,12 +1166,16 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetName(name)
 	}
 
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
+	if desiredOutcome, exists := m.DesiredOutcome(); exists {
+		create = create.SetDesiredOutcome(desiredOutcome)
 	}
 
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
 	}
 
 	if controlObjectiveType, exists := m.ControlObjectiveType(); exists {
@@ -920,32 +1186,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetVersion(version)
 	}
 
-	if controlNumber, exists := m.ControlNumber(); exists {
-		create = create.SetControlNumber(controlNumber)
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
 	}
 
-	if family, exists := m.Family(); exists {
-		create = create.SetFamily(family)
-	}
-
-	if class, exists := m.Class(); exists {
-		create = create.SetClass(class)
-	}
-
-	if source, exists := m.Source(); exists {
-		create = create.SetSource(source)
-	}
-
-	if mappedFrameworks, exists := m.MappedFrameworks(); exists {
-		create = create.SetMappedFrameworks(mappedFrameworks)
-	}
-
-	if details, exists := m.Details(); exists {
-		create = create.SetDetails(details)
-	}
-
-	if exampleEvidence, exists := m.ExampleEvidence(); exists {
-		create = create.SetExampleEvidence(exampleEvidence)
+	if subcategory, exists := m.Subcategory(); exists {
+		create = create.SetSubcategory(subcategory)
 	}
 
 	_, err := create.Save(ctx)
@@ -1038,16 +1284,22 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetName(controlobjective.Name)
 		}
 
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
+		if desiredOutcome, exists := m.DesiredOutcome(); exists {
+			create = create.SetDesiredOutcome(desiredOutcome)
 		} else {
-			create = create.SetDescription(controlobjective.Description)
+			create = create.SetDesiredOutcome(controlobjective.DesiredOutcome)
 		}
 
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(controlobjective.Status)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(controlobjective.Source)
 		}
 
 		if controlObjectiveType, exists := m.ControlObjectiveType(); exists {
@@ -1062,46 +1314,16 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetVersion(controlobjective.Version)
 		}
 
-		if controlNumber, exists := m.ControlNumber(); exists {
-			create = create.SetControlNumber(controlNumber)
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
 		} else {
-			create = create.SetControlNumber(controlobjective.ControlNumber)
+			create = create.SetCategory(controlobjective.Category)
 		}
 
-		if family, exists := m.Family(); exists {
-			create = create.SetFamily(family)
+		if subcategory, exists := m.Subcategory(); exists {
+			create = create.SetSubcategory(subcategory)
 		} else {
-			create = create.SetFamily(controlobjective.Family)
-		}
-
-		if class, exists := m.Class(); exists {
-			create = create.SetClass(class)
-		} else {
-			create = create.SetClass(controlobjective.Class)
-		}
-
-		if source, exists := m.Source(); exists {
-			create = create.SetSource(source)
-		} else {
-			create = create.SetSource(controlobjective.Source)
-		}
-
-		if mappedFrameworks, exists := m.MappedFrameworks(); exists {
-			create = create.SetMappedFrameworks(mappedFrameworks)
-		} else {
-			create = create.SetMappedFrameworks(controlobjective.MappedFrameworks)
-		}
-
-		if details, exists := m.Details(); exists {
-			create = create.SetDetails(details)
-		} else {
-			create = create.SetDetails(controlobjective.Details)
-		}
-
-		if exampleEvidence, exists := m.ExampleEvidence(); exists {
-			create = create.SetExampleEvidence(exampleEvidence)
-		} else {
-			create = create.SetExampleEvidence(controlobjective.ExampleEvidence)
+			create = create.SetSubcategory(controlobjective.Subcategory)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -1146,17 +1368,13 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetTags(controlobjective.Tags).
 			SetOwnerID(controlobjective.OwnerID).
 			SetName(controlobjective.Name).
-			SetDescription(controlobjective.Description).
+			SetDesiredOutcome(controlobjective.DesiredOutcome).
 			SetStatus(controlobjective.Status).
+			SetSource(controlobjective.Source).
 			SetControlObjectiveType(controlobjective.ControlObjectiveType).
 			SetVersion(controlobjective.Version).
-			SetControlNumber(controlobjective.ControlNumber).
-			SetFamily(controlobjective.Family).
-			SetClass(controlobjective.Class).
-			SetSource(controlobjective.Source).
-			SetMappedFrameworks(controlobjective.MappedFrameworks).
-			SetDetails(controlobjective.Details).
-			SetExampleEvidence(controlobjective.ExampleEvidence).
+			SetCategory(controlobjective.Category).
+			SetSubcategory(controlobjective.Subcategory).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -3903,6 +4121,213 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.MappedControlHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if controlID, exists := m.ControlID(); exists {
+		create = create.SetControlID(controlID)
+	}
+
+	if mappedControlID, exists := m.MappedControlID(); exists {
+		create = create.SetMappedControlID(mappedControlID)
+	}
+
+	if mappingType, exists := m.MappingType(); exists {
+		create = create.SetMappingType(mappingType)
+	}
+
+	if relation, exists := m.Relation(); exists {
+		create = create.SetRelation(relation)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		mappedcontrol, err := client.MappedControl.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.MappedControlHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(mappedcontrol.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(mappedcontrol.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(mappedcontrol.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(mappedcontrol.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(mappedcontrol.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(mappedcontrol.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(mappedcontrol.Tags)
+		}
+
+		if controlID, exists := m.ControlID(); exists {
+			create = create.SetControlID(controlID)
+		} else {
+			create = create.SetControlID(mappedcontrol.ControlID)
+		}
+
+		if mappedControlID, exists := m.MappedControlID(); exists {
+			create = create.SetMappedControlID(mappedControlID)
+		} else {
+			create = create.SetMappedControlID(mappedcontrol.MappedControlID)
+		}
+
+		if mappingType, exists := m.MappingType(); exists {
+			create = create.SetMappingType(mappingType)
+		} else {
+			create = create.SetMappingType(mappedcontrol.MappingType)
+		}
+
+		if relation, exists := m.Relation(); exists {
+			create = create.SetRelation(relation)
+		} else {
+			create = create.SetRelation(mappedcontrol.Relation)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		mappedcontrol, err := client.MappedControl.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.MappedControlHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(mappedcontrol.CreatedAt).
+			SetUpdatedAt(mappedcontrol.UpdatedAt).
+			SetCreatedBy(mappedcontrol.CreatedBy).
+			SetUpdatedBy(mappedcontrol.UpdatedBy).
+			SetDeletedAt(mappedcontrol.DeletedAt).
+			SetDeletedBy(mappedcontrol.DeletedBy).
+			SetTags(mappedcontrol.Tags).
+			SetControlID(mappedcontrol.ControlID).
+			SetMappedControlID(mappedcontrol.MappedControlID).
+			SetMappingType(mappedcontrol.MappingType).
+			SetRelation(mappedcontrol.Relation).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
@@ -3960,10 +4385,6 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
-	}
-
-	if satisfies, exists := m.Satisfies(); exists {
-		create = create.SetSatisfies(satisfies)
 	}
 
 	if details, exists := m.Details(); exists {
@@ -4066,12 +4487,6 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(narrative.Description)
 		}
 
-		if satisfies, exists := m.Satisfies(); exists {
-			create = create.SetSatisfies(satisfies)
-		} else {
-			create = create.SetSatisfies(narrative.Satisfies)
-		}
-
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
@@ -4121,7 +4536,6 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetOwnerID(narrative.OwnerID).
 			SetName(narrative.Name).
 			SetDescription(narrative.Description).
-			SetSatisfies(narrative.Satisfies).
 			SetDetails(narrative.Details).
 			Save(ctx)
 		if err != nil {
@@ -6412,20 +6826,52 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
+	}
+
+	if shortName, exists := m.ShortName(); exists {
+		create = create.SetShortName(shortName)
+	}
+
+	if framework, exists := m.Framework(); exists {
+		create = create.SetFramework(framework)
 	}
 
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
 	}
 
-	if family, exists := m.Family(); exists {
-		create = create.SetFamily(family)
+	if governingBody, exists := m.GoverningBody(); exists {
+		create = create.SetGoverningBody(governingBody)
+	}
+
+	if domains, exists := m.Domains(); exists {
+		create = create.SetDomains(domains)
+	}
+
+	if link, exists := m.Link(); exists {
+		create = create.SetLink(link)
 	}
 
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
+	}
+
+	if isPublic, exists := m.IsPublic(); exists {
+		create = create.SetIsPublic(isPublic)
+	}
+
+	if freeToUse, exists := m.FreeToUse(); exists {
+		create = create.SetFreeToUse(freeToUse)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
 	}
 
 	if standardType, exists := m.StandardType(); exists {
@@ -6436,20 +6882,8 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetVersion(version)
 	}
 
-	if purposeAndScope, exists := m.PurposeAndScope(); exists {
-		create = create.SetPurposeAndScope(purposeAndScope)
-	}
-
-	if background, exists := m.Background(); exists {
-		create = create.SetBackground(background)
-	}
-
-	if satisfies, exists := m.Satisfies(); exists {
-		create = create.SetSatisfies(satisfies)
-	}
-
-	if details, exists := m.Details(); exists {
-		create = create.SetDetails(details)
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
 	}
 
 	_, err := create.Save(ctx)
@@ -6524,10 +6958,28 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(standard.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(standard.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
 			create = create.SetName(standard.Name)
+		}
+
+		if shortName, exists := m.ShortName(); exists {
+			create = create.SetShortName(shortName)
+		} else {
+			create = create.SetShortName(standard.ShortName)
+		}
+
+		if framework, exists := m.Framework(); exists {
+			create = create.SetFramework(framework)
+		} else {
+			create = create.SetFramework(standard.Framework)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -6536,16 +6988,46 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(standard.Description)
 		}
 
-		if family, exists := m.Family(); exists {
-			create = create.SetFamily(family)
+		if governingBody, exists := m.GoverningBody(); exists {
+			create = create.SetGoverningBody(governingBody)
 		} else {
-			create = create.SetFamily(standard.Family)
+			create = create.SetGoverningBody(standard.GoverningBody)
+		}
+
+		if domains, exists := m.Domains(); exists {
+			create = create.SetDomains(domains)
+		} else {
+			create = create.SetDomains(standard.Domains)
+		}
+
+		if link, exists := m.Link(); exists {
+			create = create.SetLink(link)
+		} else {
+			create = create.SetLink(standard.Link)
 		}
 
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(standard.Status)
+		}
+
+		if isPublic, exists := m.IsPublic(); exists {
+			create = create.SetIsPublic(isPublic)
+		} else {
+			create = create.SetIsPublic(standard.IsPublic)
+		}
+
+		if freeToUse, exists := m.FreeToUse(); exists {
+			create = create.SetFreeToUse(freeToUse)
+		} else {
+			create = create.SetFreeToUse(standard.FreeToUse)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(standard.SystemOwned)
 		}
 
 		if standardType, exists := m.StandardType(); exists {
@@ -6560,28 +7042,10 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVersion(standard.Version)
 		}
 
-		if purposeAndScope, exists := m.PurposeAndScope(); exists {
-			create = create.SetPurposeAndScope(purposeAndScope)
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
 		} else {
-			create = create.SetPurposeAndScope(standard.PurposeAndScope)
-		}
-
-		if background, exists := m.Background(); exists {
-			create = create.SetBackground(background)
-		} else {
-			create = create.SetBackground(standard.Background)
-		}
-
-		if satisfies, exists := m.Satisfies(); exists {
-			create = create.SetSatisfies(satisfies)
-		} else {
-			create = create.SetSatisfies(standard.Satisfies)
-		}
-
-		if details, exists := m.Details(); exists {
-			create = create.SetDetails(details)
-		} else {
-			create = create.SetDetails(standard.Details)
+			create = create.SetRevision(standard.Revision)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6623,16 +7087,21 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedAt(standard.DeletedAt).
 			SetDeletedBy(standard.DeletedBy).
 			SetTags(standard.Tags).
+			SetOwnerID(standard.OwnerID).
 			SetName(standard.Name).
+			SetShortName(standard.ShortName).
+			SetFramework(standard.Framework).
 			SetDescription(standard.Description).
-			SetFamily(standard.Family).
+			SetGoverningBody(standard.GoverningBody).
+			SetDomains(standard.Domains).
+			SetLink(standard.Link).
 			SetStatus(standard.Status).
+			SetIsPublic(standard.IsPublic).
+			SetFreeToUse(standard.FreeToUse).
+			SetSystemOwned(standard.SystemOwned).
 			SetStandardType(standard.StandardType).
 			SetVersion(standard.Version).
-			SetPurposeAndScope(standard.PurposeAndScope).
-			SetBackground(standard.Background).
-			SetSatisfies(standard.Satisfies).
-			SetDetails(standard.Details).
+			SetRevision(standard.Revision).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6693,8 +7162,8 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetOwnerID(ownerID)
 	}
 
-	if name, exists := m.Name(); exists {
-		create = create.SetName(name)
+	if refCode, exists := m.RefCode(); exists {
+		create = create.SetRefCode(refCode)
 	}
 
 	if description, exists := m.Description(); exists {
@@ -6705,60 +7174,56 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetStatus(status)
 	}
 
-	if subcontrolType, exists := m.SubcontrolType(); exists {
-		create = create.SetSubcontrolType(subcontrolType)
-	}
-
-	if version, exists := m.Version(); exists {
-		create = create.SetVersion(version)
-	}
-
-	if subcontrolNumber, exists := m.SubcontrolNumber(); exists {
-		create = create.SetSubcontrolNumber(subcontrolNumber)
-	}
-
-	if family, exists := m.Family(); exists {
-		create = create.SetFamily(family)
-	}
-
-	if class, exists := m.Class(); exists {
-		create = create.SetClass(class)
-	}
-
 	if source, exists := m.Source(); exists {
 		create = create.SetSource(source)
 	}
 
-	if mappedFrameworks, exists := m.MappedFrameworks(); exists {
-		create = create.SetMappedFrameworks(mappedFrameworks)
+	if controlType, exists := m.ControlType(); exists {
+		create = create.SetControlType(controlType)
 	}
 
-	if implementationEvidence, exists := m.ImplementationEvidence(); exists {
-		create = create.SetImplementationEvidence(implementationEvidence)
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
 	}
 
-	if implementationStatus, exists := m.ImplementationStatus(); exists {
-		create = create.SetImplementationStatus(implementationStatus)
+	if categoryID, exists := m.CategoryID(); exists {
+		create = create.SetCategoryID(categoryID)
 	}
 
-	if implementationDate, exists := m.ImplementationDate(); exists {
-		create = create.SetImplementationDate(implementationDate)
+	if subcategory, exists := m.Subcategory(); exists {
+		create = create.SetSubcategory(subcategory)
 	}
 
-	if implementationVerification, exists := m.ImplementationVerification(); exists {
-		create = create.SetImplementationVerification(implementationVerification)
+	if mappedCategories, exists := m.MappedCategories(); exists {
+		create = create.SetMappedCategories(mappedCategories)
 	}
 
-	if implementationVerificationDate, exists := m.ImplementationVerificationDate(); exists {
-		create = create.SetImplementationVerificationDate(implementationVerificationDate)
+	if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
+		create = create.SetAssessmentObjectives(assessmentObjectives)
 	}
 
-	if details, exists := m.Details(); exists {
-		create = create.SetDetails(details)
+	if assessmentMethods, exists := m.AssessmentMethods(); exists {
+		create = create.SetAssessmentMethods(assessmentMethods)
+	}
+
+	if controlQuestions, exists := m.ControlQuestions(); exists {
+		create = create.SetControlQuestions(controlQuestions)
+	}
+
+	if implementationGuidance, exists := m.ImplementationGuidance(); exists {
+		create = create.SetImplementationGuidance(implementationGuidance)
 	}
 
 	if exampleEvidence, exists := m.ExampleEvidence(); exists {
 		create = create.SetExampleEvidence(exampleEvidence)
+	}
+
+	if references, exists := m.References(); exists {
+		create = create.SetReferences(references)
+	}
+
+	if controlID, exists := m.ControlID(); exists {
+		create = create.SetControlID(controlID)
 	}
 
 	_, err := create.Save(ctx)
@@ -6845,10 +7310,10 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetOwnerID(subcontrol.OwnerID)
 		}
 
-		if name, exists := m.Name(); exists {
-			create = create.SetName(name)
+		if refCode, exists := m.RefCode(); exists {
+			create = create.SetRefCode(refCode)
 		} else {
-			create = create.SetName(subcontrol.Name)
+			create = create.SetRefCode(subcontrol.RefCode)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -6863,88 +7328,82 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetStatus(subcontrol.Status)
 		}
 
-		if subcontrolType, exists := m.SubcontrolType(); exists {
-			create = create.SetSubcontrolType(subcontrolType)
-		} else {
-			create = create.SetSubcontrolType(subcontrol.SubcontrolType)
-		}
-
-		if version, exists := m.Version(); exists {
-			create = create.SetVersion(version)
-		} else {
-			create = create.SetVersion(subcontrol.Version)
-		}
-
-		if subcontrolNumber, exists := m.SubcontrolNumber(); exists {
-			create = create.SetSubcontrolNumber(subcontrolNumber)
-		} else {
-			create = create.SetSubcontrolNumber(subcontrol.SubcontrolNumber)
-		}
-
-		if family, exists := m.Family(); exists {
-			create = create.SetFamily(family)
-		} else {
-			create = create.SetFamily(subcontrol.Family)
-		}
-
-		if class, exists := m.Class(); exists {
-			create = create.SetClass(class)
-		} else {
-			create = create.SetClass(subcontrol.Class)
-		}
-
 		if source, exists := m.Source(); exists {
 			create = create.SetSource(source)
 		} else {
 			create = create.SetSource(subcontrol.Source)
 		}
 
-		if mappedFrameworks, exists := m.MappedFrameworks(); exists {
-			create = create.SetMappedFrameworks(mappedFrameworks)
+		if controlType, exists := m.ControlType(); exists {
+			create = create.SetControlType(controlType)
 		} else {
-			create = create.SetMappedFrameworks(subcontrol.MappedFrameworks)
+			create = create.SetControlType(subcontrol.ControlType)
 		}
 
-		if implementationEvidence, exists := m.ImplementationEvidence(); exists {
-			create = create.SetImplementationEvidence(implementationEvidence)
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
 		} else {
-			create = create.SetImplementationEvidence(subcontrol.ImplementationEvidence)
+			create = create.SetCategory(subcontrol.Category)
 		}
 
-		if implementationStatus, exists := m.ImplementationStatus(); exists {
-			create = create.SetImplementationStatus(implementationStatus)
+		if categoryID, exists := m.CategoryID(); exists {
+			create = create.SetCategoryID(categoryID)
 		} else {
-			create = create.SetImplementationStatus(subcontrol.ImplementationStatus)
+			create = create.SetCategoryID(subcontrol.CategoryID)
 		}
 
-		if implementationDate, exists := m.ImplementationDate(); exists {
-			create = create.SetImplementationDate(implementationDate)
+		if subcategory, exists := m.Subcategory(); exists {
+			create = create.SetSubcategory(subcategory)
 		} else {
-			create = create.SetImplementationDate(subcontrol.ImplementationDate)
+			create = create.SetSubcategory(subcontrol.Subcategory)
 		}
 
-		if implementationVerification, exists := m.ImplementationVerification(); exists {
-			create = create.SetImplementationVerification(implementationVerification)
+		if mappedCategories, exists := m.MappedCategories(); exists {
+			create = create.SetMappedCategories(mappedCategories)
 		} else {
-			create = create.SetImplementationVerification(subcontrol.ImplementationVerification)
+			create = create.SetMappedCategories(subcontrol.MappedCategories)
 		}
 
-		if implementationVerificationDate, exists := m.ImplementationVerificationDate(); exists {
-			create = create.SetImplementationVerificationDate(implementationVerificationDate)
+		if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
+			create = create.SetAssessmentObjectives(assessmentObjectives)
 		} else {
-			create = create.SetImplementationVerificationDate(subcontrol.ImplementationVerificationDate)
+			create = create.SetAssessmentObjectives(subcontrol.AssessmentObjectives)
 		}
 
-		if details, exists := m.Details(); exists {
-			create = create.SetDetails(details)
+		if assessmentMethods, exists := m.AssessmentMethods(); exists {
+			create = create.SetAssessmentMethods(assessmentMethods)
 		} else {
-			create = create.SetDetails(subcontrol.Details)
+			create = create.SetAssessmentMethods(subcontrol.AssessmentMethods)
+		}
+
+		if controlQuestions, exists := m.ControlQuestions(); exists {
+			create = create.SetControlQuestions(controlQuestions)
+		} else {
+			create = create.SetControlQuestions(subcontrol.ControlQuestions)
+		}
+
+		if implementationGuidance, exists := m.ImplementationGuidance(); exists {
+			create = create.SetImplementationGuidance(implementationGuidance)
+		} else {
+			create = create.SetImplementationGuidance(subcontrol.ImplementationGuidance)
 		}
 
 		if exampleEvidence, exists := m.ExampleEvidence(); exists {
 			create = create.SetExampleEvidence(exampleEvidence)
 		} else {
 			create = create.SetExampleEvidence(subcontrol.ExampleEvidence)
+		}
+
+		if references, exists := m.References(); exists {
+			create = create.SetReferences(references)
+		} else {
+			create = create.SetReferences(subcontrol.References)
+		}
+
+		if controlID, exists := m.ControlID(); exists {
+			create = create.SetControlID(controlID)
+		} else {
+			create = create.SetControlID(subcontrol.ControlID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6988,23 +7447,22 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDisplayID(subcontrol.DisplayID).
 			SetTags(subcontrol.Tags).
 			SetOwnerID(subcontrol.OwnerID).
-			SetName(subcontrol.Name).
+			SetRefCode(subcontrol.RefCode).
 			SetDescription(subcontrol.Description).
 			SetStatus(subcontrol.Status).
-			SetSubcontrolType(subcontrol.SubcontrolType).
-			SetVersion(subcontrol.Version).
-			SetSubcontrolNumber(subcontrol.SubcontrolNumber).
-			SetFamily(subcontrol.Family).
-			SetClass(subcontrol.Class).
 			SetSource(subcontrol.Source).
-			SetMappedFrameworks(subcontrol.MappedFrameworks).
-			SetImplementationEvidence(subcontrol.ImplementationEvidence).
-			SetImplementationStatus(subcontrol.ImplementationStatus).
-			SetImplementationDate(subcontrol.ImplementationDate).
-			SetImplementationVerification(subcontrol.ImplementationVerification).
-			SetImplementationVerificationDate(subcontrol.ImplementationVerificationDate).
-			SetDetails(subcontrol.Details).
+			SetControlType(subcontrol.ControlType).
+			SetCategory(subcontrol.Category).
+			SetCategoryID(subcontrol.CategoryID).
+			SetSubcategory(subcontrol.Subcategory).
+			SetMappedCategories(subcontrol.MappedCategories).
+			SetAssessmentObjectives(subcontrol.AssessmentObjectives).
+			SetAssessmentMethods(subcontrol.AssessmentMethods).
+			SetControlQuestions(subcontrol.ControlQuestions).
+			SetImplementationGuidance(subcontrol.ImplementationGuidance).
 			SetExampleEvidence(subcontrol.ExampleEvidence).
+			SetReferences(subcontrol.References).
+			SetControlID(subcontrol.ControlID).
 			Save(ctx)
 		if err != nil {
 			return err

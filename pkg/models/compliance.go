@@ -27,7 +27,7 @@ type AssessmentMethod struct {
 // ExampleEvidence is example evidence that can be used to satisfy the control
 type ExampleEvidence struct {
 	// DocumentationType is the documentation artifact type for the example evidence
-	DocumentationType string `json:"documentation_type,omitempty"`
+	DocumentationType string `json:"documentationType,omitempty"`
 	// Description is the description of the example documentation artifact for the evidence
 	Description string `json:"description,omitempty"`
 }
@@ -38,8 +38,8 @@ type ExampleEvidence struct {
 // if the reference id is different, the guidance is from an external source
 type ImplementationGuidance struct {
 	// ReferenceID is the unique identifier for where the guidance was sourced from
-	ReferenceID string `json:"reference_id,omitempty"`
-	// Guidance are tje steps to take to implement the control
+	ReferenceID string `json:"referenceId,omitempty"`
+	// Guidance are the steps to take to implement the control
 	Guidance []string `json:"guidance,omitempty"`
 }
 

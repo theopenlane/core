@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -209,21 +208,6 @@ func (apc *ActionPlanCreate) SetNillableID(s *string) *ActionPlanCreate {
 		apc.SetID(*s)
 	}
 	return apc
-}
-
-// AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
-func (apc *ActionPlanCreate) AddStandardIDs(ids ...string) *ActionPlanCreate {
-	apc.mutation.AddStandardIDs(ids...)
-	return apc
-}
-
-// AddStandard adds the "standard" edges to the Standard entity.
-func (apc *ActionPlanCreate) AddStandard(s ...*Standard) *ActionPlanCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return apc.AddStandardIDs(ids...)
 }
 
 // AddRiskIDs adds the "risk" edge to the Risk entity by IDs.
@@ -447,23 +431,6 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := apc.mutation.Details(); ok {
 		_spec.SetField(actionplan.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
-	}
-	if nodes := apc.mutation.StandardIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.StandardTable,
-			Columns: actionplan.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apc.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := apc.mutation.RiskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

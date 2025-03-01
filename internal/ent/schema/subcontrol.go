@@ -3,9 +3,11 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -87,6 +89,16 @@ func (Subcontrol) Mixin() []ent.Mixin {
 			WithOrganizationOwner: true,
 			Ref:                   "subcontrols",
 		}),
+	}
+}
+
+func (Subcontrol) Indexes() []ent.Index {
+	return []ent.Index{
+		// ref_code should be unique within the parent control
+		index.Fields("control_id", "ref_code").
+			Unique().Annotations(
+			entsql.IndexWhere("deleted_at is NULL"),
+		),
 	}
 }
 

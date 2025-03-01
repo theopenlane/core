@@ -40,6 +40,56 @@ import (
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx context.Context, v any) (models.AssessmentMethod, error) {
+	var res models.AssessmentMethod
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx context.Context, sel ast.SelectionSet, v models.AssessmentMethod) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx context.Context, v any) (models.AssessmentObjective, error) {
+	var res models.AssessmentObjective
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx context.Context, sel ast.SelectionSet, v models.AssessmentObjective) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx context.Context, v any) (models.ExampleEvidence, error) {
+	var res models.ExampleEvidence
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx context.Context, sel ast.SelectionSet, v models.ExampleEvidence) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx context.Context, v any) (models.ImplementationGuidance, error) {
+	var res models.ImplementationGuidance
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx context.Context, sel ast.SelectionSet, v models.ImplementationGuidance) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, v any) (models.Reference, error) {
+	var res models.Reference
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, sel ast.SelectionSet, v models.Reference) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, v any) (graphql.Upload, error) {
 	res, err := graphql.UnmarshalUpload(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -102,6 +152,158 @@ func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 	return v
 }
 
+func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethodᚄ(ctx context.Context, v any) ([]models.AssessmentMethod, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]models.AssessmentMethod, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethodᚄ(ctx context.Context, sel ast.SelectionSet, v []models.AssessmentMethod) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOAssessmentObjective2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjectiveᚄ(ctx context.Context, v any) ([]models.AssessmentObjective, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]models.AssessmentObjective, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjectiveᚄ(ctx context.Context, sel ast.SelectionSet, v []models.AssessmentObjective) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, v any) ([]models.ExampleEvidence, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]models.ExampleEvidence, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.ExampleEvidence) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidanceᚄ(ctx context.Context, v any) ([]models.ImplementationGuidance, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]models.ImplementationGuidance, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidanceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.ImplementationGuidance) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalOPrice2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐPrice(ctx context.Context, v any) (models.Price, error) {
 	var res models.Price
 	err := res.UnmarshalGQL(v)
@@ -110,6 +312,44 @@ func (ec *executionContext) unmarshalOPrice2githubᚗcomᚋtheopenlaneᚋcoreᚋ
 
 func (ec *executionContext) marshalOPrice2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐPrice(ctx context.Context, sel ast.SelectionSet, v models.Price) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]models.Reference, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReferenceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Reference) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx context.Context, v any) ([]*graphql.Upload, error) {

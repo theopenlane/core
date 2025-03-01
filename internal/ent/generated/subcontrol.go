@@ -10,8 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Subcontrol is the model entity for the Subcontrol schema.
@@ -37,70 +41,91 @@ type Subcontrol struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the name of the subcontrol
-	Name string `json:"name,omitempty"`
-	// description of the subcontrol
+	// the reference code for the control that is unique within the standard
+	RefCode string `json:"ref_code,omitempty"`
+	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
-	// status of the subcontrol
+	// status of the control
 	Status string `json:"status,omitempty"`
-	// type of the subcontrol
-	SubcontrolType string `json:"subcontrol_type,omitempty"`
-	// version of the control
-	Version string `json:"version,omitempty"`
-	// number of the subcontrol
-	SubcontrolNumber string `json:"subcontrol_number,omitempty"`
-	// subcontrol family
-	Family string `json:"family,omitempty"`
-	// subcontrol class
-	Class string `json:"class,omitempty"`
-	// source of the control, e.g. framework, template, user-defined, etc.
-	Source string `json:"source,omitempty"`
-	// mapped frameworks that the subcontrol is part of
-	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// implementation evidence of the subcontrol
-	ImplementationEvidence string `json:"implementation_evidence,omitempty"`
-	// implementation status
-	ImplementationStatus string `json:"implementation_status,omitempty"`
-	// date the subcontrol was implemented
-	ImplementationDate time.Time `json:"implementation_date,omitempty"`
-	// implementation verification
-	ImplementationVerification string `json:"implementation_verification,omitempty"`
-	// date the subcontrol implementation was verified
-	ImplementationVerificationDate time.Time `json:"implementation_verification_date,omitempty"`
-	// json data details of the subcontrol
-	Details map[string]interface{} `json:"details,omitempty"`
-	// example evidence to provide for the control
-	ExampleEvidence string `json:"example_evidence,omitempty"`
+	// source of the control, e.g. framework, template, custom, etc.
+	Source enums.ControlSource `json:"source,omitempty"`
+	// type of the control e.g. preventive, detective, corrective, or deterrent.
+	ControlType enums.ControlType `json:"control_type,omitempty"`
+	// category of the control
+	Category string `json:"category,omitempty"`
+	// category id of the control
+	CategoryID string `json:"category_id,omitempty"`
+	// subcategory of the control
+	Subcategory string `json:"subcategory,omitempty"`
+	// mapped categories of the control to other standards
+	MappedCategories []string `json:"mapped_categories,omitempty"`
+	// objectives of the audit assessment for the control
+	AssessmentObjectives []models.AssessmentObjective `json:"assessment_objectives,omitempty"`
+	// methods used to verify the control implementation during an audit
+	AssessmentMethods []models.AssessmentMethod `json:"assessment_methods,omitempty"`
+	// questions to ask to verify the control
+	ControlQuestions []string `json:"control_questions,omitempty"`
+	// implementation guidance for the control
+	ImplementationGuidance []models.ImplementationGuidance `json:"implementation_guidance,omitempty"`
+	// examples of evidence for the control
+	ExampleEvidence []models.ExampleEvidence `json:"example_evidence,omitempty"`
+	// references for the control
+	References []models.Reference `json:"references,omitempty"`
+	// the id of the parent control
+	ControlID string `json:"control_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
-	Edges                         SubcontrolEdges `json:"edges"`
-	control_objective_subcontrols *string
-	user_subcontrols              *string
-	selectValues                  sql.SelectValues
+	Edges                    SubcontrolEdges `json:"edges"`
+	program_subcontrols      *string
+	subcontrol_control_owner *string
+	subcontrol_delegate      *string
+	user_subcontrols         *string
+	selectValues             sql.SelectValues
 }
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
 type SubcontrolEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// Controls holds the value of the controls edge.
-	Controls []*Control `json:"controls,omitempty"`
-	// Tasks holds the value of the tasks edge.
-	Tasks []*Task `json:"tasks,omitempty"`
-	// Programs holds the value of the programs edge.
-	Programs []*Program `json:"programs,omitempty"`
+	// Control holds the value of the control edge.
+	Control *Control `json:"control,omitempty"`
+	// MappedControls holds the value of the mapped_controls edge.
+	MappedControls []*Control `json:"mapped_controls,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
+	// Narratives holds the value of the narratives edge.
+	Narratives []*Narrative `json:"narratives,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// Procedures holds the value of the procedures edge.
+	Procedures []*Procedure `json:"procedures,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
+	// the user who is responsible for the subcontrol, defaults to the parent control owner if not set
+	ControlOwner *User `json:"control_owner,omitempty"`
+	// temporary delegate for the control, used for temporary control ownership
+	Delegate *User `json:"delegate,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [13]map[string]int
 
-	namedControls map[string][]*Control
-	namedTasks    map[string][]*Task
-	namedPrograms map[string][]*Program
-	namedEvidence map[string][]*Evidence
+	namedMappedControls    map[string][]*Control
+	namedEvidence          map[string][]*Evidence
+	namedControlObjectives map[string][]*ControlObjective
+	namedTasks             map[string][]*Task
+	namedNarratives        map[string][]*Narrative
+	namedRisks             map[string][]*Risk
+	namedActionPlans       map[string][]*ActionPlan
+	namedProcedures        map[string][]*Procedure
+	namedInternalPolicies  map[string][]*InternalPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -114,40 +139,118 @@ func (e SubcontrolEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// ControlsOrErr returns the Controls value or an error if the edge
-// was not loaded in eager-loading.
-func (e SubcontrolEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
-		return e.Controls, nil
+// ControlOrErr returns the Control value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) ControlOrErr() (*Control, error) {
+	if e.Control != nil {
+		return e.Control, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: control.Label}
 	}
-	return nil, &NotLoadedError{edge: "controls"}
+	return nil, &NotLoadedError{edge: "control"}
 }
 
-// TasksOrErr returns the Tasks value or an error if the edge
+// MappedControlsOrErr returns the MappedControls value or an error if the edge
 // was not loaded in eager-loading.
-func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
+func (e SubcontrolEdges) MappedControlsOrErr() ([]*Control, error) {
 	if e.loadedTypes[2] {
-		return e.Tasks, nil
+		return e.MappedControls, nil
 	}
-	return nil, &NotLoadedError{edge: "tasks"}
-}
-
-// ProgramsOrErr returns the Programs value or an error if the edge
-// was not loaded in eager-loading.
-func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[3] {
-		return e.Programs, nil
-	}
-	return nil, &NotLoadedError{edge: "programs"}
+	return nil, &NotLoadedError{edge: "mapped_controls"}
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
+}
+
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
+	if e.loadedTypes[4] {
+		return e.ControlObjectives, nil
+	}
+	return nil, &NotLoadedError{edge: "control_objectives"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[5] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// NarrativesOrErr returns the Narratives value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) NarrativesOrErr() ([]*Narrative, error) {
+	if e.loadedTypes[6] {
+		return e.Narratives, nil
+	}
+	return nil, &NotLoadedError{edge: "narratives"}
+}
+
+// RisksOrErr returns the Risks value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) RisksOrErr() ([]*Risk, error) {
+	if e.loadedTypes[7] {
+		return e.Risks, nil
+	}
+	return nil, &NotLoadedError{edge: "risks"}
+}
+
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
+	if e.loadedTypes[8] {
+		return e.ActionPlans, nil
+	}
+	return nil, &NotLoadedError{edge: "action_plans"}
+}
+
+// ProceduresOrErr returns the Procedures value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) ProceduresOrErr() ([]*Procedure, error) {
+	if e.loadedTypes[9] {
+		return e.Procedures, nil
+	}
+	return nil, &NotLoadedError{edge: "procedures"}
+}
+
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[10] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
+// ControlOwnerOrErr returns the ControlOwner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) ControlOwnerOrErr() (*User, error) {
+	if e.ControlOwner != nil {
+		return e.ControlOwner, nil
+	} else if e.loadedTypes[11] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "control_owner"}
+}
+
+// DelegateOrErr returns the Delegate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) DelegateOrErr() (*User, error) {
+	if e.Delegate != nil {
+		return e.Delegate, nil
+	} else if e.loadedTypes[12] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -155,15 +258,19 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case subcontrol.FieldTags, subcontrol.FieldDetails:
+		case subcontrol.FieldTags, subcontrol.FieldMappedCategories, subcontrol.FieldAssessmentObjectives, subcontrol.FieldAssessmentMethods, subcontrol.FieldControlQuestions, subcontrol.FieldImplementationGuidance, subcontrol.FieldExampleEvidence, subcontrol.FieldReferences:
 			values[i] = new([]byte)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldOwnerID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification, subcontrol.FieldExampleEvidence:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldOwnerID, subcontrol.FieldRefCode, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSource, subcontrol.FieldControlType, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlID:
 			values[i] = new(sql.NullString)
-		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt, subcontrol.FieldImplementationDate, subcontrol.FieldImplementationVerificationDate:
+		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case subcontrol.ForeignKeys[0]: // control_objective_subcontrols
+		case subcontrol.ForeignKeys[0]: // program_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // user_subcontrols
+		case subcontrol.ForeignKeys[1]: // subcontrol_control_owner
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[2]: // subcontrol_delegate
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[3]: // user_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -242,11 +349,11 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.OwnerID = value.String
 			}
-		case subcontrol.FieldName:
+		case subcontrol.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
+				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
 			} else if value.Valid {
-				s.Name = value.String
+				s.RefCode = value.String
 			}
 		case subcontrol.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -260,100 +367,120 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Status = value.String
 			}
-		case subcontrol.FieldSubcontrolType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field subcontrol_type", values[i])
-			} else if value.Valid {
-				s.SubcontrolType = value.String
-			}
-		case subcontrol.FieldVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
-			} else if value.Valid {
-				s.Version = value.String
-			}
-		case subcontrol.FieldSubcontrolNumber:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field subcontrol_number", values[i])
-			} else if value.Valid {
-				s.SubcontrolNumber = value.String
-			}
-		case subcontrol.FieldFamily:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field family", values[i])
-			} else if value.Valid {
-				s.Family = value.String
-			}
-		case subcontrol.FieldClass:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field class", values[i])
-			} else if value.Valid {
-				s.Class = value.String
-			}
 		case subcontrol.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				s.Source = value.String
+				s.Source = enums.ControlSource(value.String)
 			}
-		case subcontrol.FieldMappedFrameworks:
+		case subcontrol.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_frameworks", values[i])
+				return fmt.Errorf("unexpected type %T for field control_type", values[i])
 			} else if value.Valid {
-				s.MappedFrameworks = value.String
+				s.ControlType = enums.ControlType(value.String)
 			}
-		case subcontrol.FieldImplementationEvidence:
+		case subcontrol.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field implementation_evidence", values[i])
+				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				s.ImplementationEvidence = value.String
+				s.Category = value.String
 			}
-		case subcontrol.FieldImplementationStatus:
+		case subcontrol.FieldCategoryID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field implementation_status", values[i])
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
-				s.ImplementationStatus = value.String
+				s.CategoryID = value.String
 			}
-		case subcontrol.FieldImplementationDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field implementation_date", values[i])
-			} else if value.Valid {
-				s.ImplementationDate = value.Time
-			}
-		case subcontrol.FieldImplementationVerification:
+		case subcontrol.FieldSubcategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field implementation_verification", values[i])
+				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
 			} else if value.Valid {
-				s.ImplementationVerification = value.String
+				s.Subcategory = value.String
 			}
-		case subcontrol.FieldImplementationVerificationDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field implementation_verification_date", values[i])
-			} else if value.Valid {
-				s.ImplementationVerificationDate = value.Time
-			}
-		case subcontrol.FieldDetails:
+		case subcontrol.FieldMappedCategories:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
+				return fmt.Errorf("unexpected type %T for field mapped_categories", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
+				if err := json.Unmarshal(*value, &s.MappedCategories); err != nil {
+					return fmt.Errorf("unmarshal field mapped_categories: %w", err)
+				}
+			}
+		case subcontrol.FieldAssessmentObjectives:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_objectives", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.AssessmentObjectives); err != nil {
+					return fmt.Errorf("unmarshal field assessment_objectives: %w", err)
+				}
+			}
+		case subcontrol.FieldAssessmentMethods:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_methods", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.AssessmentMethods); err != nil {
+					return fmt.Errorf("unmarshal field assessment_methods: %w", err)
+				}
+			}
+		case subcontrol.FieldControlQuestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field control_questions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.ControlQuestions); err != nil {
+					return fmt.Errorf("unmarshal field control_questions: %w", err)
+				}
+			}
+		case subcontrol.FieldImplementationGuidance:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_guidance", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.ImplementationGuidance); err != nil {
+					return fmt.Errorf("unmarshal field implementation_guidance: %w", err)
 				}
 			}
 		case subcontrol.FieldExampleEvidence:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.ExampleEvidence); err != nil {
+					return fmt.Errorf("unmarshal field example_evidence: %w", err)
+				}
+			}
+		case subcontrol.FieldReferences:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field references", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.References); err != nil {
+					return fmt.Errorf("unmarshal field references: %w", err)
+				}
+			}
+		case subcontrol.FieldControlID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_id", values[i])
 			} else if value.Valid {
-				s.ExampleEvidence = value.String
+				s.ControlID = value.String
 			}
 		case subcontrol.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_objective_subcontrols", values[i])
+				return fmt.Errorf("unexpected type %T for field program_subcontrols", values[i])
 			} else if value.Valid {
-				s.control_objective_subcontrols = new(string)
-				*s.control_objective_subcontrols = value.String
+				s.program_subcontrols = new(string)
+				*s.program_subcontrols = value.String
 			}
 		case subcontrol.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_control_owner", values[i])
+			} else if value.Valid {
+				s.subcontrol_control_owner = new(string)
+				*s.subcontrol_control_owner = value.String
+			}
+		case subcontrol.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_delegate", values[i])
+			} else if value.Valid {
+				s.subcontrol_delegate = new(string)
+				*s.subcontrol_delegate = value.String
+			}
+		case subcontrol.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
@@ -378,9 +505,24 @@ func (s *Subcontrol) QueryOwner() *OrganizationQuery {
 	return NewSubcontrolClient(s.config).QueryOwner(s)
 }
 
-// QueryControls queries the "controls" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryControls() *ControlQuery {
-	return NewSubcontrolClient(s.config).QueryControls(s)
+// QueryControl queries the "control" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryControl() *ControlQuery {
+	return NewSubcontrolClient(s.config).QueryControl(s)
+}
+
+// QueryMappedControls queries the "mapped_controls" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryMappedControls() *ControlQuery {
+	return NewSubcontrolClient(s.config).QueryMappedControls(s)
+}
+
+// QueryEvidence queries the "evidence" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryEvidence() *EvidenceQuery {
+	return NewSubcontrolClient(s.config).QueryEvidence(s)
+}
+
+// QueryControlObjectives queries the "control_objectives" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewSubcontrolClient(s.config).QueryControlObjectives(s)
 }
 
 // QueryTasks queries the "tasks" edge of the Subcontrol entity.
@@ -388,14 +530,39 @@ func (s *Subcontrol) QueryTasks() *TaskQuery {
 	return NewSubcontrolClient(s.config).QueryTasks(s)
 }
 
-// QueryPrograms queries the "programs" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryPrograms() *ProgramQuery {
-	return NewSubcontrolClient(s.config).QueryPrograms(s)
+// QueryNarratives queries the "narratives" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryNarratives() *NarrativeQuery {
+	return NewSubcontrolClient(s.config).QueryNarratives(s)
 }
 
-// QueryEvidence queries the "evidence" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryEvidence() *EvidenceQuery {
-	return NewSubcontrolClient(s.config).QueryEvidence(s)
+// QueryRisks queries the "risks" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryRisks() *RiskQuery {
+	return NewSubcontrolClient(s.config).QueryRisks(s)
+}
+
+// QueryActionPlans queries the "action_plans" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryActionPlans() *ActionPlanQuery {
+	return NewSubcontrolClient(s.config).QueryActionPlans(s)
+}
+
+// QueryProcedures queries the "procedures" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryProcedures() *ProcedureQuery {
+	return NewSubcontrolClient(s.config).QueryProcedures(s)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewSubcontrolClient(s.config).QueryInternalPolicies(s)
+}
+
+// QueryControlOwner queries the "control_owner" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryControlOwner() *UserQuery {
+	return NewSubcontrolClient(s.config).QueryControlOwner(s)
+}
+
+// QueryDelegate queries the "delegate" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryDelegate() *UserQuery {
+	return NewSubcontrolClient(s.config).QueryDelegate(s)
 }
 
 // Update returns a builder for updating this Subcontrol.
@@ -448,8 +615,8 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(s.OwnerID)
 	builder.WriteString(", ")
-	builder.WriteString("name=")
-	builder.WriteString(s.Name)
+	builder.WriteString("ref_code=")
+	builder.WriteString(s.RefCode)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(s.Description)
@@ -457,72 +624,117 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(s.Status)
 	builder.WriteString(", ")
-	builder.WriteString("subcontrol_type=")
-	builder.WriteString(s.SubcontrolType)
-	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(s.Version)
-	builder.WriteString(", ")
-	builder.WriteString("subcontrol_number=")
-	builder.WriteString(s.SubcontrolNumber)
-	builder.WriteString(", ")
-	builder.WriteString("family=")
-	builder.WriteString(s.Family)
-	builder.WriteString(", ")
-	builder.WriteString("class=")
-	builder.WriteString(s.Class)
-	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(s.Source)
+	builder.WriteString(fmt.Sprintf("%v", s.Source))
 	builder.WriteString(", ")
-	builder.WriteString("mapped_frameworks=")
-	builder.WriteString(s.MappedFrameworks)
+	builder.WriteString("control_type=")
+	builder.WriteString(fmt.Sprintf("%v", s.ControlType))
 	builder.WriteString(", ")
-	builder.WriteString("implementation_evidence=")
-	builder.WriteString(s.ImplementationEvidence)
+	builder.WriteString("category=")
+	builder.WriteString(s.Category)
 	builder.WriteString(", ")
-	builder.WriteString("implementation_status=")
-	builder.WriteString(s.ImplementationStatus)
+	builder.WriteString("category_id=")
+	builder.WriteString(s.CategoryID)
 	builder.WriteString(", ")
-	builder.WriteString("implementation_date=")
-	builder.WriteString(s.ImplementationDate.Format(time.ANSIC))
+	builder.WriteString("subcategory=")
+	builder.WriteString(s.Subcategory)
 	builder.WriteString(", ")
-	builder.WriteString("implementation_verification=")
-	builder.WriteString(s.ImplementationVerification)
+	builder.WriteString("mapped_categories=")
+	builder.WriteString(fmt.Sprintf("%v", s.MappedCategories))
 	builder.WriteString(", ")
-	builder.WriteString("implementation_verification_date=")
-	builder.WriteString(s.ImplementationVerificationDate.Format(time.ANSIC))
+	builder.WriteString("assessment_objectives=")
+	builder.WriteString(fmt.Sprintf("%v", s.AssessmentObjectives))
 	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", s.Details))
+	builder.WriteString("assessment_methods=")
+	builder.WriteString(fmt.Sprintf("%v", s.AssessmentMethods))
+	builder.WriteString(", ")
+	builder.WriteString("control_questions=")
+	builder.WriteString(fmt.Sprintf("%v", s.ControlQuestions))
+	builder.WriteString(", ")
+	builder.WriteString("implementation_guidance=")
+	builder.WriteString(fmt.Sprintf("%v", s.ImplementationGuidance))
 	builder.WriteString(", ")
 	builder.WriteString("example_evidence=")
-	builder.WriteString(s.ExampleEvidence)
+	builder.WriteString(fmt.Sprintf("%v", s.ExampleEvidence))
+	builder.WriteString(", ")
+	builder.WriteString("references=")
+	builder.WriteString(fmt.Sprintf("%v", s.References))
+	builder.WriteString(", ")
+	builder.WriteString("control_id=")
+	builder.WriteString(s.ControlID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NamedControls returns the Controls named value or an error if the edge was not
+// NamedMappedControls returns the MappedControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedControls(name string) ([]*Control, error) {
-	if s.Edges.namedControls == nil {
+func (s *Subcontrol) NamedMappedControls(name string) ([]*Control, error) {
+	if s.Edges.namedMappedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedControls[name]
+	nodes, ok := s.Edges.namedMappedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedControls(name string, edges ...*Control) {
-	if s.Edges.namedControls == nil {
-		s.Edges.namedControls = make(map[string][]*Control)
+func (s *Subcontrol) appendNamedMappedControls(name string, edges ...*Control) {
+	if s.Edges.namedMappedControls == nil {
+		s.Edges.namedMappedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedControls[name] = []*Control{}
+		s.Edges.namedMappedControls[name] = []*Control{}
 	} else {
-		s.Edges.namedControls[name] = append(s.Edges.namedControls[name], edges...)
+		s.Edges.namedMappedControls[name] = append(s.Edges.namedMappedControls[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedEvidence(name string) ([]*Evidence, error) {
+	if s.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedEvidence(name string, edges ...*Evidence) {
+	if s.Edges.namedEvidence == nil {
+		s.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		s.Edges.namedEvidence[name] = append(s.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if s.Edges.namedControlObjectives == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedControlObjectives[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if s.Edges.namedControlObjectives == nil {
+		s.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedControlObjectives[name] = []*ControlObjective{}
+	} else {
+		s.Edges.namedControlObjectives[name] = append(s.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
@@ -550,51 +762,123 @@ func (s *Subcontrol) appendNamedTasks(name string, edges ...*Task) {
 	}
 }
 
-// NamedPrograms returns the Programs named value or an error if the edge was not
+// NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedPrograms(name string) ([]*Program, error) {
-	if s.Edges.namedPrograms == nil {
+func (s *Subcontrol) NamedNarratives(name string) ([]*Narrative, error) {
+	if s.Edges.namedNarratives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedPrograms[name]
+	nodes, ok := s.Edges.namedNarratives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedPrograms(name string, edges ...*Program) {
-	if s.Edges.namedPrograms == nil {
-		s.Edges.namedPrograms = make(map[string][]*Program)
+func (s *Subcontrol) appendNamedNarratives(name string, edges ...*Narrative) {
+	if s.Edges.namedNarratives == nil {
+		s.Edges.namedNarratives = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedPrograms[name] = []*Program{}
+		s.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
-		s.Edges.namedPrograms[name] = append(s.Edges.namedPrograms[name], edges...)
+		s.Edges.namedNarratives[name] = append(s.Edges.namedNarratives[name], edges...)
 	}
 }
 
-// NamedEvidence returns the Evidence named value or an error if the edge was not
+// NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedEvidence(name string) ([]*Evidence, error) {
-	if s.Edges.namedEvidence == nil {
+func (s *Subcontrol) NamedRisks(name string) ([]*Risk, error) {
+	if s.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedEvidence[name]
+	nodes, ok := s.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedEvidence(name string, edges ...*Evidence) {
-	if s.Edges.namedEvidence == nil {
-		s.Edges.namedEvidence = make(map[string][]*Evidence)
+func (s *Subcontrol) appendNamedRisks(name string, edges ...*Risk) {
+	if s.Edges.namedRisks == nil {
+		s.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedEvidence[name] = []*Evidence{}
+		s.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		s.Edges.namedEvidence[name] = append(s.Edges.namedEvidence[name], edges...)
+		s.Edges.namedRisks[name] = append(s.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if s.Edges.namedActionPlans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedActionPlans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if s.Edges.namedActionPlans == nil {
+		s.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedActionPlans[name] = []*ActionPlan{}
+	} else {
+		s.Edges.namedActionPlans[name] = append(s.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedProcedures returns the Procedures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedProcedures(name string) ([]*Procedure, error) {
+	if s.Edges.namedProcedures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedProcedures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedProcedures(name string, edges ...*Procedure) {
+	if s.Edges.namedProcedures == nil {
+		s.Edges.namedProcedures = make(map[string][]*Procedure)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedProcedures[name] = []*Procedure{}
+	} else {
+		s.Edges.namedProcedures[name] = append(s.Edges.namedProcedures[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if s.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if s.Edges.namedInternalPolicies == nil {
+		s.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		s.Edges.namedInternalPolicies[name] = append(s.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 

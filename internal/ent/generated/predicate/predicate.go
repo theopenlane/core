@@ -27,6 +27,12 @@ type Control func(*sql.Selector)
 // ControlHistory is the predicate function for controlhistory builders.
 type ControlHistory func(*sql.Selector)
 
+// ControlImplementation is the predicate function for controlimplementation builders.
+type ControlImplementation func(*sql.Selector)
+
+// ControlImplementationHistory is the predicate function for controlimplementationhistory builders.
+type ControlImplementationHistory func(*sql.Selector)
+
 // ControlObjective is the predicate function for controlobjective builders.
 type ControlObjective func(*sql.Selector)
 
@@ -110,6 +116,12 @@ type InternalPolicyHistory func(*sql.Selector)
 
 // Invite is the predicate function for invite builders.
 type Invite func(*sql.Selector)
+
+// MappedControl is the predicate function for mappedcontrol builders.
+type MappedControl func(*sql.Selector)
+
+// MappedControlHistory is the predicate function for mappedcontrolhistory builders.
+type MappedControlHistory func(*sql.Selector)
 
 // Narrative is the predicate function for narrative builders.
 type Narrative func(*sql.Selector)

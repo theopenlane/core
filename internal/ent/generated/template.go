@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/enums"
@@ -44,9 +43,9 @@ type Template struct {
 	// the description of the template
 	Description string `json:"description,omitempty"`
 	// the jsonschema object of the template
-	Jsonconfig customtypes.JSONObject `json:"jsonconfig,omitempty"`
+	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema customtypes.JSONObject `json:"uischema,omitempty"`
+	Uischema map[string]interface{} `json:"uischema,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TemplateQuery when eager-loading is set.
 	Edges        TemplateEdges `json:"edges"`

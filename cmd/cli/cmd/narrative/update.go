@@ -26,7 +26,7 @@ func init() {
 	// command line flags for the update command
 	updateCmd.Flags().StringP("name", "n", "", "name of the narrative")
 	updateCmd.Flags().StringP("description", "d", "", "description of the narrative")
-	updateCmd.Flags().StringP("satisfies", "a", "", "which controls are satisfied by the narrative")
+
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the narrative")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the narrative")
 }
@@ -48,11 +48,6 @@ func updateValidation() (id string, input openlaneclient.UpdateNarrativeInput, e
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
-	}
-
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
 	}
 
 	addPrograms := cmd.Config.Strings("add-programs")

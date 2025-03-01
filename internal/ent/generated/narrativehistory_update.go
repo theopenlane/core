@@ -156,29 +156,17 @@ func (nhu *NarrativeHistoryUpdate) ClearDescription() *NarrativeHistoryUpdate {
 	return nhu
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (nhu *NarrativeHistoryUpdate) SetSatisfies(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetSatisfies(s)
-	return nhu
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableSatisfies(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetSatisfies(*s)
-	}
-	return nhu
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (nhu *NarrativeHistoryUpdate) ClearSatisfies() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearSatisfies()
-	return nhu
-}
-
 // SetDetails sets the "details" field.
-func (nhu *NarrativeHistoryUpdate) SetDetails(m map[string]interface{}) *NarrativeHistoryUpdate {
-	nhu.mutation.SetDetails(m)
+func (nhu *NarrativeHistoryUpdate) SetDetails(s string) *NarrativeHistoryUpdate {
+	nhu.mutation.SetDetails(s)
+	return nhu
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (nhu *NarrativeHistoryUpdate) SetNillableDetails(s *string) *NarrativeHistoryUpdate {
+	if s != nil {
+		nhu.SetDetails(*s)
+	}
 	return nhu
 }
 
@@ -300,17 +288,11 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if nhu.mutation.DescriptionCleared() {
 		_spec.ClearField(narrativehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := nhu.mutation.Satisfies(); ok {
-		_spec.SetField(narrativehistory.FieldSatisfies, field.TypeString, value)
-	}
-	if nhu.mutation.SatisfiesCleared() {
-		_spec.ClearField(narrativehistory.FieldSatisfies, field.TypeString)
-	}
 	if value, ok := nhu.mutation.Details(); ok {
-		_spec.SetField(narrativehistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(narrativehistory.FieldDetails, field.TypeString, value)
 	}
 	if nhu.mutation.DetailsCleared() {
-		_spec.ClearField(narrativehistory.FieldDetails, field.TypeJSON)
+		_spec.ClearField(narrativehistory.FieldDetails, field.TypeString)
 	}
 	_spec.Node.Schema = nhu.schemaConfig.NarrativeHistory
 	ctx = internal.NewSchemaConfigContext(ctx, nhu.schemaConfig)
@@ -460,29 +442,17 @@ func (nhuo *NarrativeHistoryUpdateOne) ClearDescription() *NarrativeHistoryUpdat
 	return nhuo
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetSatisfies(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetSatisfies(s)
-	return nhuo
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableSatisfies(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetSatisfies(*s)
-	}
-	return nhuo
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearSatisfies() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearSatisfies()
-	return nhuo
-}
-
 // SetDetails sets the "details" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetDetails(m map[string]interface{}) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetDetails(m)
+func (nhuo *NarrativeHistoryUpdateOne) SetDetails(s string) *NarrativeHistoryUpdateOne {
+	nhuo.mutation.SetDetails(s)
+	return nhuo
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (nhuo *NarrativeHistoryUpdateOne) SetNillableDetails(s *string) *NarrativeHistoryUpdateOne {
+	if s != nil {
+		nhuo.SetDetails(*s)
+	}
 	return nhuo
 }
 
@@ -634,17 +604,11 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 	if nhuo.mutation.DescriptionCleared() {
 		_spec.ClearField(narrativehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.Satisfies(); ok {
-		_spec.SetField(narrativehistory.FieldSatisfies, field.TypeString, value)
-	}
-	if nhuo.mutation.SatisfiesCleared() {
-		_spec.ClearField(narrativehistory.FieldSatisfies, field.TypeString)
-	}
 	if value, ok := nhuo.mutation.Details(); ok {
-		_spec.SetField(narrativehistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(narrativehistory.FieldDetails, field.TypeString, value)
 	}
 	if nhuo.mutation.DetailsCleared() {
-		_spec.ClearField(narrativehistory.FieldDetails, field.TypeJSON)
+		_spec.ClearField(narrativehistory.FieldDetails, field.TypeString)
 	}
 	_spec.Node.Schema = nhuo.schemaConfig.NarrativeHistory
 	ctx = internal.NewSchemaConfigContext(ctx, nhuo.schemaConfig)

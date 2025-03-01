@@ -260,10 +260,6 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 // if it is not set, it will return an empty string
 // this function does not ensure that the mutation was successful, it only extracts the id
 func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, parentField string) ([]string, error) {
-	if v, ok := m.Field(parentField); ok {
-		return []string{v.(string)}, nil
-	}
-
 	// check if the edges were set on the mutation
 	edges := m.RemovedEdges()
 	for _, e := range edges {

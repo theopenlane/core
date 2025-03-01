@@ -26,6 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -54,6 +56,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -127,6 +131,10 @@ type Client struct {
 	Control *ControlClient
 	// ControlHistory is the client for interacting with the ControlHistory builders.
 	ControlHistory *ControlHistoryClient
+	// ControlImplementation is the client for interacting with the ControlImplementation builders.
+	ControlImplementation *ControlImplementationClient
+	// ControlImplementationHistory is the client for interacting with the ControlImplementationHistory builders.
+	ControlImplementationHistory *ControlImplementationHistoryClient
 	// ControlObjective is the client for interacting with the ControlObjective builders.
 	ControlObjective *ControlObjectiveClient
 	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
@@ -183,6 +191,10 @@ type Client struct {
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// MappedControl is the client for interacting with the MappedControl builders.
+	MappedControl *MappedControlClient
+	// MappedControlHistory is the client for interacting with the MappedControlHistory builders.
+	MappedControlHistory *MappedControlHistoryClient
 	// Narrative is the client for interacting with the Narrative builders.
 	Narrative *NarrativeClient
 	// NarrativeHistory is the client for interacting with the NarrativeHistory builders.
@@ -286,6 +298,8 @@ func (c *Client) init() {
 	c.ContactHistory = NewContactHistoryClient(c.config)
 	c.Control = NewControlClient(c.config)
 	c.ControlHistory = NewControlHistoryClient(c.config)
+	c.ControlImplementation = NewControlImplementationClient(c.config)
+	c.ControlImplementationHistory = NewControlImplementationHistoryClient(c.config)
 	c.ControlObjective = NewControlObjectiveClient(c.config)
 	c.ControlObjectiveHistory = NewControlObjectiveHistoryClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
@@ -314,6 +328,8 @@ func (c *Client) init() {
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
 	c.InternalPolicyHistory = NewInternalPolicyHistoryClient(c.config)
 	c.Invite = NewInviteClient(c.config)
+	c.MappedControl = NewMappedControlClient(c.config)
+	c.MappedControlHistory = NewMappedControlHistoryClient(c.config)
 	c.Narrative = NewNarrativeClient(c.config)
 	c.NarrativeHistory = NewNarrativeHistoryClient(c.config)
 	c.Note = NewNoteClient(c.config)
@@ -519,81 +535,85 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		APIToken:                   NewAPITokenClient(cfg),
-		ActionPlan:                 NewActionPlanClient(cfg),
-		ActionPlanHistory:          NewActionPlanHistoryClient(cfg),
-		Contact:                    NewContactClient(cfg),
-		ContactHistory:             NewContactHistoryClient(cfg),
-		Control:                    NewControlClient(cfg),
-		ControlHistory:             NewControlHistoryClient(cfg),
-		ControlObjective:           NewControlObjectiveClient(cfg),
-		ControlObjectiveHistory:    NewControlObjectiveHistoryClient(cfg),
-		DocumentData:               NewDocumentDataClient(cfg),
-		DocumentDataHistory:        NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
-		Entity:                     NewEntityClient(cfg),
-		EntityHistory:              NewEntityHistoryClient(cfg),
-		EntityType:                 NewEntityTypeClient(cfg),
-		EntityTypeHistory:          NewEntityTypeHistoryClient(cfg),
-		Event:                      NewEventClient(cfg),
-		EventHistory:               NewEventHistoryClient(cfg),
-		Evidence:                   NewEvidenceClient(cfg),
-		EvidenceHistory:            NewEvidenceHistoryClient(cfg),
-		File:                       NewFileClient(cfg),
-		FileHistory:                NewFileHistoryClient(cfg),
-		Group:                      NewGroupClient(cfg),
-		GroupHistory:               NewGroupHistoryClient(cfg),
-		GroupMembership:            NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:     NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:               NewGroupSettingClient(cfg),
-		GroupSettingHistory:        NewGroupSettingHistoryClient(cfg),
-		Hush:                       NewHushClient(cfg),
-		HushHistory:                NewHushHistoryClient(cfg),
-		Integration:                NewIntegrationClient(cfg),
-		IntegrationHistory:         NewIntegrationHistoryClient(cfg),
-		InternalPolicy:             NewInternalPolicyClient(cfg),
-		InternalPolicyHistory:      NewInternalPolicyHistoryClient(cfg),
-		Invite:                     NewInviteClient(cfg),
-		Narrative:                  NewNarrativeClient(cfg),
-		NarrativeHistory:           NewNarrativeHistoryClient(cfg),
-		Note:                       NewNoteClient(cfg),
-		NoteHistory:                NewNoteHistoryClient(cfg),
-		Onboarding:                 NewOnboardingClient(cfg),
-		OrgMembership:              NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:       NewOrgMembershipHistoryClient(cfg),
-		OrgSubscription:            NewOrgSubscriptionClient(cfg),
-		OrgSubscriptionHistory:     NewOrgSubscriptionHistoryClient(cfg),
-		Organization:               NewOrganizationClient(cfg),
-		OrganizationHistory:        NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:        NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory: NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
-		Procedure:                  NewProcedureClient(cfg),
-		ProcedureHistory:           NewProcedureHistoryClient(cfg),
-		Program:                    NewProgramClient(cfg),
-		ProgramHistory:             NewProgramHistoryClient(cfg),
-		ProgramMembership:          NewProgramMembershipClient(cfg),
-		ProgramMembershipHistory:   NewProgramMembershipHistoryClient(cfg),
-		Risk:                       NewRiskClient(cfg),
-		RiskHistory:                NewRiskHistoryClient(cfg),
-		Standard:                   NewStandardClient(cfg),
-		StandardHistory:            NewStandardHistoryClient(cfg),
-		Subcontrol:                 NewSubcontrolClient(cfg),
-		SubcontrolHistory:          NewSubcontrolHistoryClient(cfg),
-		Subscriber:                 NewSubscriberClient(cfg),
-		TFASetting:                 NewTFASettingClient(cfg),
-		Task:                       NewTaskClient(cfg),
-		TaskHistory:                NewTaskHistoryClient(cfg),
-		Template:                   NewTemplateClient(cfg),
-		TemplateHistory:            NewTemplateHistoryClient(cfg),
-		User:                       NewUserClient(cfg),
-		UserHistory:                NewUserHistoryClient(cfg),
-		UserSetting:                NewUserSettingClient(cfg),
-		UserSettingHistory:         NewUserSettingHistoryClient(cfg),
-		Webauthn:                   NewWebauthnClient(cfg),
+		ctx:                          ctx,
+		config:                       cfg,
+		APIToken:                     NewAPITokenClient(cfg),
+		ActionPlan:                   NewActionPlanClient(cfg),
+		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
+		Contact:                      NewContactClient(cfg),
+		ContactHistory:               NewContactHistoryClient(cfg),
+		Control:                      NewControlClient(cfg),
+		ControlHistory:               NewControlHistoryClient(cfg),
+		ControlImplementation:        NewControlImplementationClient(cfg),
+		ControlImplementationHistory: NewControlImplementationHistoryClient(cfg),
+		ControlObjective:             NewControlObjectiveClient(cfg),
+		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
+		DocumentData:                 NewDocumentDataClient(cfg),
+		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
+		Entity:                       NewEntityClient(cfg),
+		EntityHistory:                NewEntityHistoryClient(cfg),
+		EntityType:                   NewEntityTypeClient(cfg),
+		EntityTypeHistory:            NewEntityTypeHistoryClient(cfg),
+		Event:                        NewEventClient(cfg),
+		EventHistory:                 NewEventHistoryClient(cfg),
+		Evidence:                     NewEvidenceClient(cfg),
+		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
+		File:                         NewFileClient(cfg),
+		FileHistory:                  NewFileHistoryClient(cfg),
+		Group:                        NewGroupClient(cfg),
+		GroupHistory:                 NewGroupHistoryClient(cfg),
+		GroupMembership:              NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:       NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                 NewGroupSettingClient(cfg),
+		GroupSettingHistory:          NewGroupSettingHistoryClient(cfg),
+		Hush:                         NewHushClient(cfg),
+		HushHistory:                  NewHushHistoryClient(cfg),
+		Integration:                  NewIntegrationClient(cfg),
+		IntegrationHistory:           NewIntegrationHistoryClient(cfg),
+		InternalPolicy:               NewInternalPolicyClient(cfg),
+		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
+		Invite:                       NewInviteClient(cfg),
+		MappedControl:                NewMappedControlClient(cfg),
+		MappedControlHistory:         NewMappedControlHistoryClient(cfg),
+		Narrative:                    NewNarrativeClient(cfg),
+		NarrativeHistory:             NewNarrativeHistoryClient(cfg),
+		Note:                         NewNoteClient(cfg),
+		NoteHistory:                  NewNoteHistoryClient(cfg),
+		Onboarding:                   NewOnboardingClient(cfg),
+		OrgMembership:                NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:         NewOrgMembershipHistoryClient(cfg),
+		OrgSubscription:              NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:       NewOrgSubscriptionHistoryClient(cfg),
+		Organization:                 NewOrganizationClient(cfg),
+		OrganizationHistory:          NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:          NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:   NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:           NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:          NewPersonalAccessTokenClient(cfg),
+		Procedure:                    NewProcedureClient(cfg),
+		ProcedureHistory:             NewProcedureHistoryClient(cfg),
+		Program:                      NewProgramClient(cfg),
+		ProgramHistory:               NewProgramHistoryClient(cfg),
+		ProgramMembership:            NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
+		Risk:                         NewRiskClient(cfg),
+		RiskHistory:                  NewRiskHistoryClient(cfg),
+		Standard:                     NewStandardClient(cfg),
+		StandardHistory:              NewStandardHistoryClient(cfg),
+		Subcontrol:                   NewSubcontrolClient(cfg),
+		SubcontrolHistory:            NewSubcontrolHistoryClient(cfg),
+		Subscriber:                   NewSubscriberClient(cfg),
+		TFASetting:                   NewTFASettingClient(cfg),
+		Task:                         NewTaskClient(cfg),
+		TaskHistory:                  NewTaskHistoryClient(cfg),
+		Template:                     NewTemplateClient(cfg),
+		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		User:                         NewUserClient(cfg),
+		UserHistory:                  NewUserHistoryClient(cfg),
+		UserSetting:                  NewUserSettingClient(cfg),
+		UserSettingHistory:           NewUserSettingHistoryClient(cfg),
+		Webauthn:                     NewWebauthnClient(cfg),
 	}, nil
 }
 
@@ -611,81 +631,85 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		APIToken:                   NewAPITokenClient(cfg),
-		ActionPlan:                 NewActionPlanClient(cfg),
-		ActionPlanHistory:          NewActionPlanHistoryClient(cfg),
-		Contact:                    NewContactClient(cfg),
-		ContactHistory:             NewContactHistoryClient(cfg),
-		Control:                    NewControlClient(cfg),
-		ControlHistory:             NewControlHistoryClient(cfg),
-		ControlObjective:           NewControlObjectiveClient(cfg),
-		ControlObjectiveHistory:    NewControlObjectiveHistoryClient(cfg),
-		DocumentData:               NewDocumentDataClient(cfg),
-		DocumentDataHistory:        NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
-		Entity:                     NewEntityClient(cfg),
-		EntityHistory:              NewEntityHistoryClient(cfg),
-		EntityType:                 NewEntityTypeClient(cfg),
-		EntityTypeHistory:          NewEntityTypeHistoryClient(cfg),
-		Event:                      NewEventClient(cfg),
-		EventHistory:               NewEventHistoryClient(cfg),
-		Evidence:                   NewEvidenceClient(cfg),
-		EvidenceHistory:            NewEvidenceHistoryClient(cfg),
-		File:                       NewFileClient(cfg),
-		FileHistory:                NewFileHistoryClient(cfg),
-		Group:                      NewGroupClient(cfg),
-		GroupHistory:               NewGroupHistoryClient(cfg),
-		GroupMembership:            NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:     NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:               NewGroupSettingClient(cfg),
-		GroupSettingHistory:        NewGroupSettingHistoryClient(cfg),
-		Hush:                       NewHushClient(cfg),
-		HushHistory:                NewHushHistoryClient(cfg),
-		Integration:                NewIntegrationClient(cfg),
-		IntegrationHistory:         NewIntegrationHistoryClient(cfg),
-		InternalPolicy:             NewInternalPolicyClient(cfg),
-		InternalPolicyHistory:      NewInternalPolicyHistoryClient(cfg),
-		Invite:                     NewInviteClient(cfg),
-		Narrative:                  NewNarrativeClient(cfg),
-		NarrativeHistory:           NewNarrativeHistoryClient(cfg),
-		Note:                       NewNoteClient(cfg),
-		NoteHistory:                NewNoteHistoryClient(cfg),
-		Onboarding:                 NewOnboardingClient(cfg),
-		OrgMembership:              NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:       NewOrgMembershipHistoryClient(cfg),
-		OrgSubscription:            NewOrgSubscriptionClient(cfg),
-		OrgSubscriptionHistory:     NewOrgSubscriptionHistoryClient(cfg),
-		Organization:               NewOrganizationClient(cfg),
-		OrganizationHistory:        NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:        NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory: NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
-		Procedure:                  NewProcedureClient(cfg),
-		ProcedureHistory:           NewProcedureHistoryClient(cfg),
-		Program:                    NewProgramClient(cfg),
-		ProgramHistory:             NewProgramHistoryClient(cfg),
-		ProgramMembership:          NewProgramMembershipClient(cfg),
-		ProgramMembershipHistory:   NewProgramMembershipHistoryClient(cfg),
-		Risk:                       NewRiskClient(cfg),
-		RiskHistory:                NewRiskHistoryClient(cfg),
-		Standard:                   NewStandardClient(cfg),
-		StandardHistory:            NewStandardHistoryClient(cfg),
-		Subcontrol:                 NewSubcontrolClient(cfg),
-		SubcontrolHistory:          NewSubcontrolHistoryClient(cfg),
-		Subscriber:                 NewSubscriberClient(cfg),
-		TFASetting:                 NewTFASettingClient(cfg),
-		Task:                       NewTaskClient(cfg),
-		TaskHistory:                NewTaskHistoryClient(cfg),
-		Template:                   NewTemplateClient(cfg),
-		TemplateHistory:            NewTemplateHistoryClient(cfg),
-		User:                       NewUserClient(cfg),
-		UserHistory:                NewUserHistoryClient(cfg),
-		UserSetting:                NewUserSettingClient(cfg),
-		UserSettingHistory:         NewUserSettingHistoryClient(cfg),
-		Webauthn:                   NewWebauthnClient(cfg),
+		ctx:                          ctx,
+		config:                       cfg,
+		APIToken:                     NewAPITokenClient(cfg),
+		ActionPlan:                   NewActionPlanClient(cfg),
+		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
+		Contact:                      NewContactClient(cfg),
+		ContactHistory:               NewContactHistoryClient(cfg),
+		Control:                      NewControlClient(cfg),
+		ControlHistory:               NewControlHistoryClient(cfg),
+		ControlImplementation:        NewControlImplementationClient(cfg),
+		ControlImplementationHistory: NewControlImplementationHistoryClient(cfg),
+		ControlObjective:             NewControlObjectiveClient(cfg),
+		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
+		DocumentData:                 NewDocumentDataClient(cfg),
+		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
+		Entity:                       NewEntityClient(cfg),
+		EntityHistory:                NewEntityHistoryClient(cfg),
+		EntityType:                   NewEntityTypeClient(cfg),
+		EntityTypeHistory:            NewEntityTypeHistoryClient(cfg),
+		Event:                        NewEventClient(cfg),
+		EventHistory:                 NewEventHistoryClient(cfg),
+		Evidence:                     NewEvidenceClient(cfg),
+		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
+		File:                         NewFileClient(cfg),
+		FileHistory:                  NewFileHistoryClient(cfg),
+		Group:                        NewGroupClient(cfg),
+		GroupHistory:                 NewGroupHistoryClient(cfg),
+		GroupMembership:              NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:       NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                 NewGroupSettingClient(cfg),
+		GroupSettingHistory:          NewGroupSettingHistoryClient(cfg),
+		Hush:                         NewHushClient(cfg),
+		HushHistory:                  NewHushHistoryClient(cfg),
+		Integration:                  NewIntegrationClient(cfg),
+		IntegrationHistory:           NewIntegrationHistoryClient(cfg),
+		InternalPolicy:               NewInternalPolicyClient(cfg),
+		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
+		Invite:                       NewInviteClient(cfg),
+		MappedControl:                NewMappedControlClient(cfg),
+		MappedControlHistory:         NewMappedControlHistoryClient(cfg),
+		Narrative:                    NewNarrativeClient(cfg),
+		NarrativeHistory:             NewNarrativeHistoryClient(cfg),
+		Note:                         NewNoteClient(cfg),
+		NoteHistory:                  NewNoteHistoryClient(cfg),
+		Onboarding:                   NewOnboardingClient(cfg),
+		OrgMembership:                NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:         NewOrgMembershipHistoryClient(cfg),
+		OrgSubscription:              NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:       NewOrgSubscriptionHistoryClient(cfg),
+		Organization:                 NewOrganizationClient(cfg),
+		OrganizationHistory:          NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:          NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:   NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:           NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:          NewPersonalAccessTokenClient(cfg),
+		Procedure:                    NewProcedureClient(cfg),
+		ProcedureHistory:             NewProcedureHistoryClient(cfg),
+		Program:                      NewProgramClient(cfg),
+		ProgramHistory:               NewProgramHistoryClient(cfg),
+		ProgramMembership:            NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
+		Risk:                         NewRiskClient(cfg),
+		RiskHistory:                  NewRiskHistoryClient(cfg),
+		Standard:                     NewStandardClient(cfg),
+		StandardHistory:              NewStandardHistoryClient(cfg),
+		Subcontrol:                   NewSubcontrolClient(cfg),
+		SubcontrolHistory:            NewSubcontrolHistoryClient(cfg),
+		Subscriber:                   NewSubscriberClient(cfg),
+		TFASetting:                   NewTFASettingClient(cfg),
+		Task:                         NewTaskClient(cfg),
+		TaskHistory:                  NewTaskHistoryClient(cfg),
+		Template:                     NewTemplateClient(cfg),
+		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		User:                         NewUserClient(cfg),
+		UserHistory:                  NewUserHistoryClient(cfg),
+		UserSetting:                  NewUserSettingClient(cfg),
+		UserSettingHistory:           NewUserSettingHistoryClient(cfg),
+		Webauthn:                     NewWebauthnClient(cfg),
 	}, nil
 }
 
@@ -716,20 +740,21 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
-		c.Control, c.ControlHistory, c.ControlObjective, c.ControlObjectiveHistory,
+		c.Control, c.ControlHistory, c.ControlImplementation,
+		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
 		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
 		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
 		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding,
-		c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
+		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Risk, c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
 		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
 		c.UserSettingHistory, c.Webauthn,
@@ -743,20 +768,21 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
-		c.Control, c.ControlHistory, c.ControlObjective, c.ControlObjectiveHistory,
+		c.Control, c.ControlHistory, c.ControlImplementation,
+		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
 		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
 		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
 		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding,
-		c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
+		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Risk, c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
 		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
 		c.UserSettingHistory, c.Webauthn,
@@ -854,6 +880,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Control.mutate(ctx, m)
 	case *ControlHistoryMutation:
 		return c.ControlHistory.mutate(ctx, m)
+	case *ControlImplementationMutation:
+		return c.ControlImplementation.mutate(ctx, m)
+	case *ControlImplementationHistoryMutation:
+		return c.ControlImplementationHistory.mutate(ctx, m)
 	case *ControlObjectiveMutation:
 		return c.ControlObjective.mutate(ctx, m)
 	case *ControlObjectiveHistoryMutation:
@@ -910,6 +940,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.InternalPolicyHistory.mutate(ctx, m)
 	case *InviteMutation:
 		return c.Invite.mutate(ctx, m)
+	case *MappedControlMutation:
+		return c.MappedControl.mutate(ctx, m)
+	case *MappedControlHistoryMutation:
+		return c.MappedControlHistory.mutate(ctx, m)
 	case *NarrativeMutation:
 		return c.Narrative.mutate(ctx, m)
 	case *NarrativeHistoryMutation:
@@ -1251,25 +1285,6 @@ func (c *ActionPlanClient) GetX(ctx context.Context, id string) *ActionPlan {
 		panic(err)
 	}
 	return obj
-}
-
-// QueryStandard queries the standard edge of a ActionPlan.
-func (c *ActionPlanClient) QueryStandard(ap *ActionPlan) *StandardQuery {
-	query := (&StandardClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ap.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
-			sqlgraph.To(standard.Table, standard.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.StandardTable, actionplan.StandardPrimaryKey...),
-		)
-		schemaConfig := ap.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardActionPlans
-		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // QueryRisk queries the risk edge of a ActionPlan.
@@ -2018,38 +2033,95 @@ func (c *ControlClient) QueryViewers(co *Control) *GroupQuery {
 	return query
 }
 
-// QueryProcedures queries the procedures edge of a Control.
-func (c *ControlClient) QueryProcedures(co *Control) *ProcedureQuery {
-	query := (&ProcedureClient{config: c.config}).Query()
+// QueryStandard queries the standard edge of a Control.
+func (c *ControlClient) QueryStandard(co *Control) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, control.ProceduresTable, control.ProceduresPrimaryKey...),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, control.StandardTable, control.StandardColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ControlProcedures
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Control
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QuerySubcontrols queries the subcontrols edge of a Control.
-func (c *ControlClient) QuerySubcontrols(co *Control) *SubcontrolQuery {
-	query := (&SubcontrolClient{config: c.config}).Query()
+// QueryPrograms queries the programs edge of a Control.
+func (c *ControlClient) QueryPrograms(co *Control) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, control.SubcontrolsTable, control.SubcontrolsPrimaryKey...),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.ProgramsTable, control.ProgramsPrimaryKey...),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.ControlSubcontrols
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a Control.
+func (c *ControlClient) QueryEvidence(co *Control) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.EvidenceTable, control.EvidencePrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryImplementation queries the implementation edge of a Control.
+func (c *ControlClient) QueryImplementation(co *Control) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ImplementationTable, control.ImplementationColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedControls queries the mapped_controls edge of a Control.
+func (c *ControlClient) QueryMappedControls(co *Control) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.MappedControlsTable, control.MappedControlsColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.Control
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2064,30 +2136,49 @@ func (c *ControlClient) QueryControlObjectives(co *Control) *ControlObjectiveQue
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, control.ControlObjectivesTable, control.ControlObjectivesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.ControlObjectivesTable, control.ControlObjectivesPrimaryKey...),
 		)
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlControlObjectives
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryStandard queries the standard edge of a Control.
-func (c *ControlClient) QueryStandard(co *Control) *StandardQuery {
-	query := (&StandardClient{config: c.config}).Query()
+// QuerySubcontrols queries the subcontrols edge of a Control.
+func (c *ControlClient) QuerySubcontrols(co *Control) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(standard.Table, standard.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.StandardTable, control.StandardPrimaryKey...),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.SubcontrolsTable, control.SubcontrolsColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardControls
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Control.
+func (c *ControlClient) QueryTasks(co *Control) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.TasksTable, control.TasksPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ControlTasks
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2151,57 +2242,76 @@ func (c *ControlClient) QueryActionPlans(co *Control) *ActionPlanQuery {
 	return query
 }
 
-// QueryTasks queries the tasks edge of a Control.
-func (c *ControlClient) QueryTasks(co *Control) *TaskQuery {
-	query := (&TaskClient{config: c.config}).Query()
+// QueryProcedures queries the procedures edge of a Control.
+func (c *ControlClient) QueryProcedures(co *Control) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(task.Table, task.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, control.TasksTable, control.TasksPrimaryKey...),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.ProceduresTable, control.ProceduresPrimaryKey...),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.ControlTasks
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ControlProcedures
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryPrograms queries the programs edge of a Control.
-func (c *ControlClient) QueryPrograms(co *Control) *ProgramQuery {
-	query := (&ProgramClient{config: c.config}).Query()
+// QueryInternalPolicies queries the internal_policies edge of a Control.
+func (c *ControlClient) QueryInternalPolicies(co *Control) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.ProgramsTable, control.ProgramsPrimaryKey...),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.InternalPoliciesTable, control.InternalPoliciesColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramControls
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryEvidence queries the evidence edge of a Control.
-func (c *ControlClient) QueryEvidence(co *Control) *EvidenceQuery {
-	query := (&EvidenceClient{config: c.config}).Query()
+// QueryControlOwner queries the control_owner edge of a Control.
+func (c *ControlClient) QueryControlOwner(co *Control) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(evidence.Table, evidence.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.EvidenceTable, control.EvidencePrimaryKey...),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlOwnerTable, control.ControlOwnerColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceControls
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegate queries the delegate edge of a Control.
+func (c *ControlClient) QueryDelegate(co *Control) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.DelegateTable, control.DelegateColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Control
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2366,6 +2476,293 @@ func (c *ControlHistoryClient) mutate(ctx context.Context, m *ControlHistoryMuta
 		return (&ControlHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown ControlHistory mutation op: %q", m.Op())
+	}
+}
+
+// ControlImplementationClient is a client for the ControlImplementation schema.
+type ControlImplementationClient struct {
+	config
+}
+
+// NewControlImplementationClient returns a client for the ControlImplementation from the given config.
+func NewControlImplementationClient(c config) *ControlImplementationClient {
+	return &ControlImplementationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `controlimplementation.Hooks(f(g(h())))`.
+func (c *ControlImplementationClient) Use(hooks ...Hook) {
+	c.hooks.ControlImplementation = append(c.hooks.ControlImplementation, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `controlimplementation.Intercept(f(g(h())))`.
+func (c *ControlImplementationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ControlImplementation = append(c.inters.ControlImplementation, interceptors...)
+}
+
+// Create returns a builder for creating a ControlImplementation entity.
+func (c *ControlImplementationClient) Create() *ControlImplementationCreate {
+	mutation := newControlImplementationMutation(c.config, OpCreate)
+	return &ControlImplementationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ControlImplementation entities.
+func (c *ControlImplementationClient) CreateBulk(builders ...*ControlImplementationCreate) *ControlImplementationCreateBulk {
+	return &ControlImplementationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ControlImplementationClient) MapCreateBulk(slice any, setFunc func(*ControlImplementationCreate, int)) *ControlImplementationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ControlImplementationCreateBulk{err: fmt.Errorf("calling to ControlImplementationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ControlImplementationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ControlImplementationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ControlImplementation.
+func (c *ControlImplementationClient) Update() *ControlImplementationUpdate {
+	mutation := newControlImplementationMutation(c.config, OpUpdate)
+	return &ControlImplementationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ControlImplementationClient) UpdateOne(ci *ControlImplementation) *ControlImplementationUpdateOne {
+	mutation := newControlImplementationMutation(c.config, OpUpdateOne, withControlImplementation(ci))
+	return &ControlImplementationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ControlImplementationClient) UpdateOneID(id string) *ControlImplementationUpdateOne {
+	mutation := newControlImplementationMutation(c.config, OpUpdateOne, withControlImplementationID(id))
+	return &ControlImplementationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ControlImplementation.
+func (c *ControlImplementationClient) Delete() *ControlImplementationDelete {
+	mutation := newControlImplementationMutation(c.config, OpDelete)
+	return &ControlImplementationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ControlImplementationClient) DeleteOne(ci *ControlImplementation) *ControlImplementationDeleteOne {
+	return c.DeleteOneID(ci.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ControlImplementationClient) DeleteOneID(id string) *ControlImplementationDeleteOne {
+	builder := c.Delete().Where(controlimplementation.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ControlImplementationDeleteOne{builder}
+}
+
+// Query returns a query builder for ControlImplementation.
+func (c *ControlImplementationClient) Query() *ControlImplementationQuery {
+	return &ControlImplementationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeControlImplementation},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ControlImplementation entity by its id.
+func (c *ControlImplementationClient) Get(ctx context.Context, id string) (*ControlImplementation, error) {
+	return c.Query().Where(controlimplementation.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ControlImplementationClient) GetX(ctx context.Context, id string) *ControlImplementation {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryControl queries the control edge of a ControlImplementation.
+func (c *ControlImplementationClient) QueryControl(ci *ControlImplementation) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ci.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, controlimplementation.ControlTable, controlimplementation.ControlColumn),
+		)
+		schemaConfig := ci.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(ci.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ControlImplementationClient) Hooks() []Hook {
+	hooks := c.hooks.ControlImplementation
+	return append(hooks[:len(hooks):len(hooks)], controlimplementation.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ControlImplementationClient) Interceptors() []Interceptor {
+	inters := c.inters.ControlImplementation
+	return append(inters[:len(inters):len(inters)], controlimplementation.Interceptors[:]...)
+}
+
+func (c *ControlImplementationClient) mutate(ctx context.Context, m *ControlImplementationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ControlImplementationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ControlImplementationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ControlImplementationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ControlImplementationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ControlImplementation mutation op: %q", m.Op())
+	}
+}
+
+// ControlImplementationHistoryClient is a client for the ControlImplementationHistory schema.
+type ControlImplementationHistoryClient struct {
+	config
+}
+
+// NewControlImplementationHistoryClient returns a client for the ControlImplementationHistory from the given config.
+func NewControlImplementationHistoryClient(c config) *ControlImplementationHistoryClient {
+	return &ControlImplementationHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `controlimplementationhistory.Hooks(f(g(h())))`.
+func (c *ControlImplementationHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ControlImplementationHistory = append(c.hooks.ControlImplementationHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `controlimplementationhistory.Intercept(f(g(h())))`.
+func (c *ControlImplementationHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ControlImplementationHistory = append(c.inters.ControlImplementationHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ControlImplementationHistory entity.
+func (c *ControlImplementationHistoryClient) Create() *ControlImplementationHistoryCreate {
+	mutation := newControlImplementationHistoryMutation(c.config, OpCreate)
+	return &ControlImplementationHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ControlImplementationHistory entities.
+func (c *ControlImplementationHistoryClient) CreateBulk(builders ...*ControlImplementationHistoryCreate) *ControlImplementationHistoryCreateBulk {
+	return &ControlImplementationHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ControlImplementationHistoryClient) MapCreateBulk(slice any, setFunc func(*ControlImplementationHistoryCreate, int)) *ControlImplementationHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ControlImplementationHistoryCreateBulk{err: fmt.Errorf("calling to ControlImplementationHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ControlImplementationHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ControlImplementationHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ControlImplementationHistory.
+func (c *ControlImplementationHistoryClient) Update() *ControlImplementationHistoryUpdate {
+	mutation := newControlImplementationHistoryMutation(c.config, OpUpdate)
+	return &ControlImplementationHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ControlImplementationHistoryClient) UpdateOne(cih *ControlImplementationHistory) *ControlImplementationHistoryUpdateOne {
+	mutation := newControlImplementationHistoryMutation(c.config, OpUpdateOne, withControlImplementationHistory(cih))
+	return &ControlImplementationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ControlImplementationHistoryClient) UpdateOneID(id string) *ControlImplementationHistoryUpdateOne {
+	mutation := newControlImplementationHistoryMutation(c.config, OpUpdateOne, withControlImplementationHistoryID(id))
+	return &ControlImplementationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ControlImplementationHistory.
+func (c *ControlImplementationHistoryClient) Delete() *ControlImplementationHistoryDelete {
+	mutation := newControlImplementationHistoryMutation(c.config, OpDelete)
+	return &ControlImplementationHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ControlImplementationHistoryClient) DeleteOne(cih *ControlImplementationHistory) *ControlImplementationHistoryDeleteOne {
+	return c.DeleteOneID(cih.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ControlImplementationHistoryClient) DeleteOneID(id string) *ControlImplementationHistoryDeleteOne {
+	builder := c.Delete().Where(controlimplementationhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ControlImplementationHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ControlImplementationHistory.
+func (c *ControlImplementationHistoryClient) Query() *ControlImplementationHistoryQuery {
+	return &ControlImplementationHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeControlImplementationHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ControlImplementationHistory entity by its id.
+func (c *ControlImplementationHistoryClient) Get(ctx context.Context, id string) (*ControlImplementationHistory, error) {
+	return c.Query().Where(controlimplementationhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ControlImplementationHistoryClient) GetX(ctx context.Context, id string) *ControlImplementationHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ControlImplementationHistoryClient) Hooks() []Hook {
+	return c.hooks.ControlImplementationHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *ControlImplementationHistoryClient) Interceptors() []Interceptor {
+	return c.inters.ControlImplementationHistory
+}
+
+func (c *ControlImplementationHistoryClient) mutate(ctx context.Context, m *ControlImplementationHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ControlImplementationHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ControlImplementationHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ControlImplementationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ControlImplementationHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ControlImplementationHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -2553,19 +2950,38 @@ func (c *ControlObjectiveClient) QueryViewers(co *ControlObjective) *GroupQuery 
 	return query
 }
 
-// QueryInternalPolicies queries the internal_policies edge of a ControlObjective.
-func (c *ControlObjectiveClient) QueryInternalPolicies(co *ControlObjective) *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: c.config}).Query()
+// QueryPrograms queries the programs edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryPrograms(co *ControlObjective) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
-			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.InternalPoliciesTable, controlobjective.InternalPoliciesPrimaryKey...),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ProgramsTable, controlobjective.ProgramsPrimaryKey...),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControlObjectives
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryEvidence(co *ControlObjective) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.EvidenceTable, controlobjective.EvidencePrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2580,11 +2996,49 @@ func (c *ControlObjectiveClient) QueryControls(co *ControlObjective) *ControlQue
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.ControlsTable, controlobjective.ControlsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ControlsTable, controlobjective.ControlsPrimaryKey...),
 		)
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlObjectives
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a ControlObjective.
+func (c *ControlObjectiveClient) QuerySubcontrols(co *ControlObjective) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.SubcontrolsTable, controlobjective.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies queries the internal_policies edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryInternalPolicies(co *ControlObjective) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.InternalPoliciesTable, controlobjective.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2629,44 +3083,6 @@ func (c *ControlObjectiveClient) QueryRisks(co *ControlObjective) *RiskQuery {
 	return query
 }
 
-// QuerySubcontrols queries the subcontrols edge of a ControlObjective.
-func (c *ControlObjectiveClient) QuerySubcontrols(co *ControlObjective) *SubcontrolQuery {
-	query := (&SubcontrolClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := co.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
-			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.SubcontrolsTable, controlobjective.SubcontrolsColumn),
-		)
-		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
-		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryStandard queries the standard edge of a ControlObjective.
-func (c *ControlObjectiveClient) QueryStandard(co *ControlObjective) *StandardQuery {
-	query := (&StandardClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := co.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
-			sqlgraph.To(standard.Table, standard.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.StandardTable, controlobjective.StandardPrimaryKey...),
-		)
-		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardControlObjectives
-		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryNarratives queries the narratives edge of a ControlObjective.
 func (c *ControlObjectiveClient) QueryNarratives(co *ControlObjective) *NarrativeQuery {
 	query := (&NarrativeClient{config: c.config}).Query()
@@ -2675,11 +3091,11 @@ func (c *ControlObjectiveClient) QueryNarratives(co *ControlObjective) *Narrativ
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
 			sqlgraph.To(narrative.Table, narrative.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.NarrativesTable, controlobjective.NarrativesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.NarrativesTable, controlobjective.NarrativesColumn),
 		)
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives
+		step.Edge.Schema = schemaConfig.Narrative
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2699,44 +3115,6 @@ func (c *ControlObjectiveClient) QueryTasks(co *ControlObjective) *TaskQuery {
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
-		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPrograms queries the programs edge of a ControlObjective.
-func (c *ControlObjectiveClient) QueryPrograms(co *ControlObjective) *ProgramQuery {
-	query := (&ProgramClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := co.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ProgramsTable, controlobjective.ProgramsPrimaryKey...),
-		)
-		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramControlObjectives
-		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEvidence queries the evidence edge of a ControlObjective.
-func (c *ControlObjectiveClient) QueryEvidence(co *ControlObjective) *EvidenceQuery {
-	query := (&EvidenceClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := co.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
-			sqlgraph.To(evidence.Table, evidence.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.EvidenceTable, controlobjective.EvidencePrimaryKey...),
-		)
-		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7764,11 +8142,11 @@ func (c *InternalPolicyClient) QueryNarratives(ip *InternalPolicy) *NarrativeQue
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
 			sqlgraph.To(narrative.Table, narrative.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.NarrativesTable, internalpolicy.NarrativesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.NarrativesTable, internalpolicy.NarrativesColumn),
 		)
 		schemaConfig := ip.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
+		step.Edge.Schema = schemaConfig.Narrative
 		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -8147,6 +8525,312 @@ func (c *InviteClient) mutate(ctx context.Context, m *InviteMutation) (Value, er
 	}
 }
 
+// MappedControlClient is a client for the MappedControl schema.
+type MappedControlClient struct {
+	config
+}
+
+// NewMappedControlClient returns a client for the MappedControl from the given config.
+func NewMappedControlClient(c config) *MappedControlClient {
+	return &MappedControlClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `mappedcontrol.Hooks(f(g(h())))`.
+func (c *MappedControlClient) Use(hooks ...Hook) {
+	c.hooks.MappedControl = append(c.hooks.MappedControl, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `mappedcontrol.Intercept(f(g(h())))`.
+func (c *MappedControlClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MappedControl = append(c.inters.MappedControl, interceptors...)
+}
+
+// Create returns a builder for creating a MappedControl entity.
+func (c *MappedControlClient) Create() *MappedControlCreate {
+	mutation := newMappedControlMutation(c.config, OpCreate)
+	return &MappedControlCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MappedControl entities.
+func (c *MappedControlClient) CreateBulk(builders ...*MappedControlCreate) *MappedControlCreateBulk {
+	return &MappedControlCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MappedControlClient) MapCreateBulk(slice any, setFunc func(*MappedControlCreate, int)) *MappedControlCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MappedControlCreateBulk{err: fmt.Errorf("calling to MappedControlClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MappedControlCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MappedControlCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MappedControl.
+func (c *MappedControlClient) Update() *MappedControlUpdate {
+	mutation := newMappedControlMutation(c.config, OpUpdate)
+	return &MappedControlUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MappedControlClient) UpdateOne(mc *MappedControl) *MappedControlUpdateOne {
+	mutation := newMappedControlMutation(c.config, OpUpdateOne, withMappedControl(mc))
+	return &MappedControlUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MappedControlClient) UpdateOneID(id string) *MappedControlUpdateOne {
+	mutation := newMappedControlMutation(c.config, OpUpdateOne, withMappedControlID(id))
+	return &MappedControlUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MappedControl.
+func (c *MappedControlClient) Delete() *MappedControlDelete {
+	mutation := newMappedControlMutation(c.config, OpDelete)
+	return &MappedControlDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MappedControlClient) DeleteOne(mc *MappedControl) *MappedControlDeleteOne {
+	return c.DeleteOneID(mc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MappedControlClient) DeleteOneID(id string) *MappedControlDeleteOne {
+	builder := c.Delete().Where(mappedcontrol.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MappedControlDeleteOne{builder}
+}
+
+// Query returns a query builder for MappedControl.
+func (c *MappedControlClient) Query() *MappedControlQuery {
+	return &MappedControlQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMappedControl},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MappedControl entity by its id.
+func (c *MappedControlClient) Get(ctx context.Context, id string) (*MappedControl, error) {
+	return c.Query().Where(mappedcontrol.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MappedControlClient) GetX(ctx context.Context, id string) *MappedControl {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryControl queries the control edge of a MappedControl.
+func (c *MappedControlClient) QueryControl(mc *MappedControl) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, mappedcontrol.ControlTable, mappedcontrol.ControlColumn),
+		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.MappedControl
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedControl queries the mapped_control edge of a MappedControl.
+func (c *MappedControlClient) QueryMappedControl(mc *MappedControl) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, mappedcontrol.MappedControlTable, mappedcontrol.MappedControlColumn),
+		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.MappedControl
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MappedControlClient) Hooks() []Hook {
+	hooks := c.hooks.MappedControl
+	return append(hooks[:len(hooks):len(hooks)], mappedcontrol.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *MappedControlClient) Interceptors() []Interceptor {
+	inters := c.inters.MappedControl
+	return append(inters[:len(inters):len(inters)], mappedcontrol.Interceptors[:]...)
+}
+
+func (c *MappedControlClient) mutate(ctx context.Context, m *MappedControlMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MappedControlCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MappedControlUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MappedControlUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MappedControlDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown MappedControl mutation op: %q", m.Op())
+	}
+}
+
+// MappedControlHistoryClient is a client for the MappedControlHistory schema.
+type MappedControlHistoryClient struct {
+	config
+}
+
+// NewMappedControlHistoryClient returns a client for the MappedControlHistory from the given config.
+func NewMappedControlHistoryClient(c config) *MappedControlHistoryClient {
+	return &MappedControlHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `mappedcontrolhistory.Hooks(f(g(h())))`.
+func (c *MappedControlHistoryClient) Use(hooks ...Hook) {
+	c.hooks.MappedControlHistory = append(c.hooks.MappedControlHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `mappedcontrolhistory.Intercept(f(g(h())))`.
+func (c *MappedControlHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MappedControlHistory = append(c.inters.MappedControlHistory, interceptors...)
+}
+
+// Create returns a builder for creating a MappedControlHistory entity.
+func (c *MappedControlHistoryClient) Create() *MappedControlHistoryCreate {
+	mutation := newMappedControlHistoryMutation(c.config, OpCreate)
+	return &MappedControlHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MappedControlHistory entities.
+func (c *MappedControlHistoryClient) CreateBulk(builders ...*MappedControlHistoryCreate) *MappedControlHistoryCreateBulk {
+	return &MappedControlHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MappedControlHistoryClient) MapCreateBulk(slice any, setFunc func(*MappedControlHistoryCreate, int)) *MappedControlHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MappedControlHistoryCreateBulk{err: fmt.Errorf("calling to MappedControlHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MappedControlHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MappedControlHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MappedControlHistory.
+func (c *MappedControlHistoryClient) Update() *MappedControlHistoryUpdate {
+	mutation := newMappedControlHistoryMutation(c.config, OpUpdate)
+	return &MappedControlHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MappedControlHistoryClient) UpdateOne(mch *MappedControlHistory) *MappedControlHistoryUpdateOne {
+	mutation := newMappedControlHistoryMutation(c.config, OpUpdateOne, withMappedControlHistory(mch))
+	return &MappedControlHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MappedControlHistoryClient) UpdateOneID(id string) *MappedControlHistoryUpdateOne {
+	mutation := newMappedControlHistoryMutation(c.config, OpUpdateOne, withMappedControlHistoryID(id))
+	return &MappedControlHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MappedControlHistory.
+func (c *MappedControlHistoryClient) Delete() *MappedControlHistoryDelete {
+	mutation := newMappedControlHistoryMutation(c.config, OpDelete)
+	return &MappedControlHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MappedControlHistoryClient) DeleteOne(mch *MappedControlHistory) *MappedControlHistoryDeleteOne {
+	return c.DeleteOneID(mch.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MappedControlHistoryClient) DeleteOneID(id string) *MappedControlHistoryDeleteOne {
+	builder := c.Delete().Where(mappedcontrolhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MappedControlHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for MappedControlHistory.
+func (c *MappedControlHistoryClient) Query() *MappedControlHistoryQuery {
+	return &MappedControlHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMappedControlHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MappedControlHistory entity by its id.
+func (c *MappedControlHistoryClient) Get(ctx context.Context, id string) (*MappedControlHistory, error) {
+	return c.Query().Where(mappedcontrolhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MappedControlHistoryClient) GetX(ctx context.Context, id string) *MappedControlHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MappedControlHistoryClient) Hooks() []Hook {
+	return c.hooks.MappedControlHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *MappedControlHistoryClient) Interceptors() []Interceptor {
+	return c.inters.MappedControlHistory
+}
+
+func (c *MappedControlHistoryClient) mutate(ctx context.Context, m *MappedControlHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MappedControlHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MappedControlHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MappedControlHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MappedControlHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown MappedControlHistory mutation op: %q", m.Op())
+	}
+}
+
 // NarrativeClient is a client for the Narrative schema.
 type NarrativeClient struct {
 	config
@@ -8331,76 +9015,19 @@ func (c *NarrativeClient) QueryViewers(n *Narrative) *GroupQuery {
 	return query
 }
 
-// QueryInternalPolicy queries the internal_policy edge of a Narrative.
-func (c *NarrativeClient) QueryInternalPolicy(n *Narrative) *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := n.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(narrative.Table, narrative.FieldID, id),
-			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.InternalPolicyTable, narrative.InternalPolicyPrimaryKey...),
-		)
-		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
-		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryControl queries the control edge of a Narrative.
-func (c *NarrativeClient) QueryControl(n *Narrative) *ControlQuery {
+// QuerySatisfies queries the satisfies edge of a Narrative.
+func (c *NarrativeClient) QuerySatisfies(n *Narrative) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ControlTable, narrative.ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, narrative.SatisfiesTable, narrative.SatisfiesPrimaryKey...),
 		)
 		schemaConfig := n.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlNarratives
-		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryProcedure queries the procedure edge of a Narrative.
-func (c *NarrativeClient) QueryProcedure(n *Narrative) *ProcedureQuery {
-	query := (&ProcedureClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := n.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(narrative.Table, narrative.FieldID, id),
-			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProcedureTable, narrative.ProcedurePrimaryKey...),
-		)
-		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
-		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryControlObjective queries the control_objective edge of a Narrative.
-func (c *NarrativeClient) QueryControlObjective(n *Narrative) *ControlObjectiveQuery {
-	query := (&ControlObjectiveClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := n.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(narrative.Table, narrative.FieldID, id),
-			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ControlObjectiveTable, narrative.ControlObjectivePrimaryKey...),
-		)
-		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10529,6 +11156,25 @@ func (c *OrganizationClient) QueryEvidence(o *Organization) *EvidenceQuery {
 	return query
 }
 
+// QueryStandards queries the standards edge of a Organization.
+func (c *OrganizationClient) QueryStandards(o *Organization) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.StandardsTable, organization.StandardsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -11573,11 +12219,11 @@ func (c *ProcedureClient) QueryNarratives(pr *Procedure) *NarrativeQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(procedure.Table, procedure.FieldID, id),
 			sqlgraph.To(narrative.Table, narrative.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, procedure.NarrativesTable, procedure.NarrativesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, procedure.NarrativesTable, procedure.NarrativesColumn),
 		)
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
+		step.Edge.Schema = schemaConfig.Narrative
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12013,11 +12659,11 @@ func (c *ProgramClient) QuerySubcontrols(pr *Program) *SubcontrolQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, id),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, program.SubcontrolsTable, program.SubcontrolsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, program.SubcontrolsTable, program.SubcontrolsColumn),
 		)
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12208,25 +12854,6 @@ func (c *ProgramClient) QueryActionPlans(pr *Program) *ActionPlanQuery {
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryStandards queries the standards edge of a Program.
-func (c *ProgramClient) QueryStandards(pr *Program) *StandardQuery {
-	query := (&StandardClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(program.Table, program.FieldID, id),
-			sqlgraph.To(standard.Table, standard.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, program.StandardsTable, program.StandardsPrimaryKey...),
-		)
-		schemaConfig := pr.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardPrograms
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13287,19 +13914,19 @@ func (c *StandardClient) GetX(ctx context.Context, id string) *Standard {
 	return obj
 }
 
-// QueryControlObjectives queries the control_objectives edge of a Standard.
-func (c *StandardClient) QueryControlObjectives(s *Standard) *ControlObjectiveQuery {
-	query := (&ControlObjectiveClient{config: c.config}).Query()
+// QueryOwner queries the owner edge of a Standard.
+func (c *StandardClient) QueryOwner(s *Standard) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, id),
-			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ControlObjectivesTable, standard.ControlObjectivesPrimaryKey...),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, standard.OwnerTable, standard.OwnerColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.StandardControlObjectives
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Standard
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13314,68 +13941,11 @@ func (c *StandardClient) QueryControls(s *Standard) *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ControlsTable, standard.ControlsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, standard.ControlsTable, standard.ControlsColumn),
 		)
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.StandardControls
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryProcedures queries the procedures edge of a Standard.
-func (c *StandardClient) QueryProcedures(s *Standard) *ProcedureQuery {
-	query := (&ProcedureClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(standard.Table, standard.FieldID, id),
-			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, standard.ProceduresTable, standard.ProceduresColumn),
-		)
-		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryActionPlans queries the action_plans edge of a Standard.
-func (c *StandardClient) QueryActionPlans(s *Standard) *ActionPlanQuery {
-	query := (&ActionPlanClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(standard.Table, standard.FieldID, id),
-			sqlgraph.To(actionplan.Table, actionplan.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ActionPlansTable, standard.ActionPlansPrimaryKey...),
-		)
-		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.StandardActionPlans
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPrograms queries the programs edge of a Standard.
-func (c *StandardClient) QueryPrograms(s *Standard) *ProgramQuery {
-	query := (&ProgramClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(standard.Table, standard.FieldID, id),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ProgramsTable, standard.ProgramsPrimaryKey...),
-		)
-		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.StandardPrograms
+		step.Edge.Schema = schemaConfig.Control
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13524,7 +14094,8 @@ func (c *StandardHistoryClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *StandardHistoryClient) Interceptors() []Interceptor {
-	return c.inters.StandardHistory
+	inters := c.inters.StandardHistory
+	return append(inters[:len(inters):len(inters)], standardhistory.Interceptors[:]...)
 }
 
 func (c *StandardHistoryClient) mutate(ctx context.Context, m *StandardHistoryMutation) (Value, error) {
@@ -13669,19 +14240,76 @@ func (c *SubcontrolClient) QueryOwner(s *Subcontrol) *OrganizationQuery {
 	return query
 }
 
-// QueryControls queries the controls edge of a Subcontrol.
-func (c *SubcontrolClient) QueryControls(s *Subcontrol) *ControlQuery {
+// QueryControl queries the control edge of a Subcontrol.
+func (c *SubcontrolClient) QueryControl(s *Subcontrol) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ControlsTable, subcontrol.ControlsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, subcontrol.ControlTable, subcontrol.ControlColumn),
 		)
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedControls queries the mapped_controls edge of a Subcontrol.
+func (c *SubcontrolClient) QueryMappedControls(s *Subcontrol) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.MappedControlsTable, subcontrol.MappedControlsColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a Subcontrol.
+func (c *SubcontrolClient) QueryEvidence(s *Subcontrol) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlObjectives queries the control_objectives edge of a Subcontrol.
+func (c *SubcontrolClient) QueryControlObjectives(s *Subcontrol) *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ControlObjectivesTable, subcontrol.ControlObjectivesPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13707,38 +14335,133 @@ func (c *SubcontrolClient) QueryTasks(s *Subcontrol) *TaskQuery {
 	return query
 }
 
-// QueryPrograms queries the programs edge of a Subcontrol.
-func (c *SubcontrolClient) QueryPrograms(s *Subcontrol) *ProgramQuery {
-	query := (&ProgramClient{config: c.config}).Query()
+// QueryNarratives queries the narratives edge of a Subcontrol.
+func (c *SubcontrolClient) QueryNarratives(s *Subcontrol) *NarrativeQuery {
+	query := (&NarrativeClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ProgramsTable, subcontrol.ProgramsPrimaryKey...),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.NarrativesTable, subcontrol.NarrativesColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.Narrative
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryEvidence queries the evidence edge of a Subcontrol.
-func (c *SubcontrolClient) QueryEvidence(s *Subcontrol) *EvidenceQuery {
-	query := (&EvidenceClient{config: c.config}).Query()
+// QueryRisks queries the risks edge of a Subcontrol.
+func (c *SubcontrolClient) QueryRisks(s *Subcontrol) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(evidence.Table, evidence.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.RisksTable, subcontrol.RisksColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Subcontrol.
+func (c *SubcontrolClient) QueryActionPlans(s *Subcontrol) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.ActionPlansTable, subcontrol.ActionPlansColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedures queries the procedures edge of a Subcontrol.
+func (c *SubcontrolClient) QueryProcedures(s *Subcontrol) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.ProceduresTable, subcontrol.ProceduresColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies queries the internal_policies edge of a Subcontrol.
+func (c *SubcontrolClient) QueryInternalPolicies(s *Subcontrol) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.InternalPoliciesTable, subcontrol.InternalPoliciesColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlOwner queries the control_owner edge of a Subcontrol.
+func (c *SubcontrolClient) QueryControlOwner(s *Subcontrol) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ControlOwnerTable, subcontrol.ControlOwnerColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegate queries the delegate edge of a Subcontrol.
+func (c *SubcontrolClient) QueryDelegate(s *Subcontrol) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.DelegateTable, subcontrol.DelegateColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -16170,37 +16893,41 @@ func (c *WebauthnClient) mutate(ctx context.Context, m *WebauthnMutation) (Value
 type (
 	hooks struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
-		ControlHistory, ControlObjective, ControlObjectiveHistory, DocumentData,
-		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, EventHistory, Evidence, EvidenceHistory, File,
-		FileHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
-		GroupSetting, GroupSettingHistory, Hush, HushHistory, Integration,
-		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, Narrative,
-		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
-		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subscriber,
-		TFASetting, Task, TaskHistory, Template, TemplateHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn []ent.Hook
+		ControlHistory, ControlImplementation, ControlImplementationHistory,
+		ControlObjective, ControlObjectiveHistory, DocumentData, DocumentDataHistory,
+		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, MappedControl,
+		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
+		Onboarding, OrgMembership, OrgMembershipHistory, OrgSubscription,
+		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
+		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
+		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
-		ControlHistory, ControlObjective, ControlObjectiveHistory, DocumentData,
-		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, EventHistory, Evidence, EvidenceHistory, File,
-		FileHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
-		GroupSetting, GroupSettingHistory, Hush, HushHistory, Integration,
-		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, Narrative,
-		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
-		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subscriber,
-		TFASetting, Task, TaskHistory, Template, TemplateHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
+		ControlHistory, ControlImplementation, ControlImplementationHistory,
+		ControlObjective, ControlObjectiveHistory, DocumentData, DocumentDataHistory,
+		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, MappedControl,
+		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
+		Onboarding, OrgMembership, OrgMembershipHistory, OrgSubscription,
+		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
+		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
+		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn []ent.Interceptor
 	}
 )
 

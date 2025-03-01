@@ -48,7 +48,7 @@ mutation CreateControlWithSubcontrols($input: CreateControlWithSubcontrolsInput!
   createControlWithSubcontrols(input: $input) {
     control {
       id
-      name
+      refCode
       subcontrols {
         id
         refCode
