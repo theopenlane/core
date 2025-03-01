@@ -279,6 +279,54 @@ func (f ControlHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m gene
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ControlHistoryMutation", m)
 }
 
+// The ControlImplementationQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ControlImplementationQueryRuleFunc func(context.Context, *generated.ControlImplementationQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ControlImplementationQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlImplementationQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ControlImplementationQuery", q)
+}
+
+// The ControlImplementationMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ControlImplementationMutationRuleFunc func(context.Context, *generated.ControlImplementationMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ControlImplementationMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ControlImplementationMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ControlImplementationMutation", m)
+}
+
+// The ControlImplementationHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ControlImplementationHistoryQueryRuleFunc func(context.Context, *generated.ControlImplementationHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ControlImplementationHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlImplementationHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ControlImplementationHistoryQuery", q)
+}
+
+// The ControlImplementationHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ControlImplementationHistoryMutationRuleFunc func(context.Context, *generated.ControlImplementationHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ControlImplementationHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ControlImplementationHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ControlImplementationHistoryMutation", m)
+}
+
 // The ControlObjectiveQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ControlObjectiveQueryRuleFunc func(context.Context, *generated.ControlObjectiveQuery) error
@@ -949,6 +997,54 @@ func (f InviteMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mu
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.InviteMutation", m)
+}
+
+// The MappedControlQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type MappedControlQueryRuleFunc func(context.Context, *generated.MappedControlQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f MappedControlQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappedControlQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.MappedControlQuery", q)
+}
+
+// The MappedControlMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type MappedControlMutationRuleFunc func(context.Context, *generated.MappedControlMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f MappedControlMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.MappedControlMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.MappedControlMutation", m)
+}
+
+// The MappedControlHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type MappedControlHistoryQueryRuleFunc func(context.Context, *generated.MappedControlHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f MappedControlHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappedControlHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.MappedControlHistoryQuery", q)
+}
+
+// The MappedControlHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type MappedControlHistoryMutationRuleFunc func(context.Context, *generated.MappedControlHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f MappedControlHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.MappedControlHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.MappedControlHistoryMutation", m)
 }
 
 // The NarrativeQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -1912,6 +2008,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ControlHistoryQuery:
 		return q.Filter(), nil
+	case *generated.ControlImplementationQuery:
+		return q.Filter(), nil
+	case *generated.ControlImplementationHistoryQuery:
+		return q.Filter(), nil
 	case *generated.ControlObjectiveQuery:
 		return q.Filter(), nil
 	case *generated.ControlObjectiveHistoryQuery:
@@ -1967,6 +2067,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.InternalPolicyHistoryQuery:
 		return q.Filter(), nil
 	case *generated.InviteQuery:
+		return q.Filter(), nil
+	case *generated.MappedControlQuery:
+		return q.Filter(), nil
+	case *generated.MappedControlHistoryQuery:
 		return q.Filter(), nil
 	case *generated.NarrativeQuery:
 		return q.Filter(), nil
@@ -2065,6 +2169,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.ControlHistoryMutation:
 		return m.Filter(), nil
+	case *generated.ControlImplementationMutation:
+		return m.Filter(), nil
+	case *generated.ControlImplementationHistoryMutation:
+		return m.Filter(), nil
 	case *generated.ControlObjectiveMutation:
 		return m.Filter(), nil
 	case *generated.ControlObjectiveHistoryMutation:
@@ -2120,6 +2228,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.InternalPolicyHistoryMutation:
 		return m.Filter(), nil
 	case *generated.InviteMutation:
+		return m.Filter(), nil
+	case *generated.MappedControlMutation:
+		return m.Filter(), nil
+	case *generated.MappedControlHistoryMutation:
 		return m.Filter(), nil
 	case *generated.NarrativeMutation:
 		return m.Filter(), nil

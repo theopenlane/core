@@ -43,8 +43,6 @@ const (
 	FieldSource = "source"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
-	// EdgeStandard holds the string denoting the standard edge name in mutations.
-	EdgeStandard = "standard"
 	// EdgeRisk holds the string denoting the risk edge name in mutations.
 	EdgeRisk = "risk"
 	// EdgeControl holds the string denoting the control edge name in mutations.
@@ -55,11 +53,6 @@ const (
 	EdgeProgram = "program"
 	// Table holds the table name of the actionplan in the database.
 	Table = "action_plans"
-	// StandardTable is the table that holds the standard relation/edge. The primary key declared below.
-	StandardTable = "standard_action_plans"
-	// StandardInverseTable is the table name for the Standard entity.
-	// It exists in this package in order to avoid circular dependency with the "standard" package.
-	StandardInverseTable = "standards"
 	// RiskTable is the table that holds the risk relation/edge. The primary key declared below.
 	RiskTable = "risk_action_plans"
 	// RiskInverseTable is the table name for the Risk entity.
@@ -101,10 +94,13 @@ var Columns = []string{
 	FieldDetails,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "action_plans"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"subcontrol_action_plans",
+}
+
 var (
-	// StandardPrimaryKey and StandardColumn2 are the table columns denoting the
-	// primary key for the standard relation (M2M).
-	StandardPrimaryKey = []string{"standard_id", "action_plan_id"}
 	// RiskPrimaryKey and RiskColumn2 are the table columns denoting the
 	// primary key for the risk relation (M2M).
 	RiskPrimaryKey = []string{"risk_id", "action_plan_id"}
@@ -123,6 +119,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -217,20 +218,6 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
-// ByStandardCount orders the results by standard count.
-func ByStandardCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newStandardStep(), opts...)
-	}
-}
-
-// ByStandard orders the results by standard terms.
-func ByStandard(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newStandardStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByRiskCount orders the results by risk count.
 func ByRiskCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -285,13 +272,6 @@ func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
-}
-func newStandardStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(StandardInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, StandardTable, StandardPrimaryKey...),
-	)
 }
 func newRiskStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

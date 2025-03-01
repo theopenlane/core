@@ -24,7 +24,6 @@ func init() {
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "name of the narrative")
 	createCmd.Flags().StringP("description", "d", "", "description of the narrative")
-	createCmd.Flags().StringP("satisfies", "a", "", "which controls are satisfied by the narrative")
 	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the narrative")
 }
 
@@ -42,11 +41,6 @@ func createValidation() (input openlaneclient.CreateNarrativeInput, err error) {
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
-	}
-
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
 	}
 
 	return input, nil

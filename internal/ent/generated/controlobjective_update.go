@@ -22,9 +22,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -147,23 +147,23 @@ func (cou *ControlObjectiveUpdate) SetNillableName(s *string) *ControlObjectiveU
 	return cou
 }
 
-// SetDescription sets the "description" field.
-func (cou *ControlObjectiveUpdate) SetDescription(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetDescription(s)
+// SetDesiredOutcome sets the "desired_outcome" field.
+func (cou *ControlObjectiveUpdate) SetDesiredOutcome(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetDesiredOutcome(s)
 	return cou
 }
 
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableDescription(s *string) *ControlObjectiveUpdate {
+// SetNillableDesiredOutcome sets the "desired_outcome" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableDesiredOutcome(s *string) *ControlObjectiveUpdate {
 	if s != nil {
-		cou.SetDescription(*s)
+		cou.SetDesiredOutcome(*s)
 	}
 	return cou
 }
 
-// ClearDescription clears the value of the "description" field.
-func (cou *ControlObjectiveUpdate) ClearDescription() *ControlObjectiveUpdate {
-	cou.mutation.ClearDescription()
+// ClearDesiredOutcome clears the value of the "desired_outcome" field.
+func (cou *ControlObjectiveUpdate) ClearDesiredOutcome() *ControlObjectiveUpdate {
+	cou.mutation.ClearDesiredOutcome()
 	return cou
 }
 
@@ -184,6 +184,26 @@ func (cou *ControlObjectiveUpdate) SetNillableStatus(s *string) *ControlObjectiv
 // ClearStatus clears the value of the "status" field.
 func (cou *ControlObjectiveUpdate) ClearStatus() *ControlObjectiveUpdate {
 	cou.mutation.ClearStatus()
+	return cou
+}
+
+// SetSource sets the "source" field.
+func (cou *ControlObjectiveUpdate) SetSource(es enums.ControlSource) *ControlObjectiveUpdate {
+	cou.mutation.SetSource(es)
+	return cou
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableSource(es *enums.ControlSource) *ControlObjectiveUpdate {
+	if es != nil {
+		cou.SetSource(*es)
+	}
+	return cou
+}
+
+// ClearSource clears the value of the "source" field.
+func (cou *ControlObjectiveUpdate) ClearSource() *ControlObjectiveUpdate {
+	cou.mutation.ClearSource()
 	return cou
 }
 
@@ -227,135 +247,43 @@ func (cou *ControlObjectiveUpdate) ClearVersion() *ControlObjectiveUpdate {
 	return cou
 }
 
-// SetControlNumber sets the "control_number" field.
-func (cou *ControlObjectiveUpdate) SetControlNumber(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetControlNumber(s)
+// SetCategory sets the "category" field.
+func (cou *ControlObjectiveUpdate) SetCategory(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetCategory(s)
 	return cou
 }
 
-// SetNillableControlNumber sets the "control_number" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableControlNumber(s *string) *ControlObjectiveUpdate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableCategory(s *string) *ControlObjectiveUpdate {
 	if s != nil {
-		cou.SetControlNumber(*s)
+		cou.SetCategory(*s)
 	}
 	return cou
 }
 
-// ClearControlNumber clears the value of the "control_number" field.
-func (cou *ControlObjectiveUpdate) ClearControlNumber() *ControlObjectiveUpdate {
-	cou.mutation.ClearControlNumber()
+// ClearCategory clears the value of the "category" field.
+func (cou *ControlObjectiveUpdate) ClearCategory() *ControlObjectiveUpdate {
+	cou.mutation.ClearCategory()
 	return cou
 }
 
-// SetFamily sets the "family" field.
-func (cou *ControlObjectiveUpdate) SetFamily(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetFamily(s)
+// SetSubcategory sets the "subcategory" field.
+func (cou *ControlObjectiveUpdate) SetSubcategory(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetSubcategory(s)
 	return cou
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableFamily(s *string) *ControlObjectiveUpdate {
+// SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableSubcategory(s *string) *ControlObjectiveUpdate {
 	if s != nil {
-		cou.SetFamily(*s)
+		cou.SetSubcategory(*s)
 	}
 	return cou
 }
 
-// ClearFamily clears the value of the "family" field.
-func (cou *ControlObjectiveUpdate) ClearFamily() *ControlObjectiveUpdate {
-	cou.mutation.ClearFamily()
-	return cou
-}
-
-// SetClass sets the "class" field.
-func (cou *ControlObjectiveUpdate) SetClass(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetClass(s)
-	return cou
-}
-
-// SetNillableClass sets the "class" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableClass(s *string) *ControlObjectiveUpdate {
-	if s != nil {
-		cou.SetClass(*s)
-	}
-	return cou
-}
-
-// ClearClass clears the value of the "class" field.
-func (cou *ControlObjectiveUpdate) ClearClass() *ControlObjectiveUpdate {
-	cou.mutation.ClearClass()
-	return cou
-}
-
-// SetSource sets the "source" field.
-func (cou *ControlObjectiveUpdate) SetSource(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetSource(s)
-	return cou
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableSource(s *string) *ControlObjectiveUpdate {
-	if s != nil {
-		cou.SetSource(*s)
-	}
-	return cou
-}
-
-// ClearSource clears the value of the "source" field.
-func (cou *ControlObjectiveUpdate) ClearSource() *ControlObjectiveUpdate {
-	cou.mutation.ClearSource()
-	return cou
-}
-
-// SetMappedFrameworks sets the "mapped_frameworks" field.
-func (cou *ControlObjectiveUpdate) SetMappedFrameworks(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetMappedFrameworks(s)
-	return cou
-}
-
-// SetNillableMappedFrameworks sets the "mapped_frameworks" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableMappedFrameworks(s *string) *ControlObjectiveUpdate {
-	if s != nil {
-		cou.SetMappedFrameworks(*s)
-	}
-	return cou
-}
-
-// ClearMappedFrameworks clears the value of the "mapped_frameworks" field.
-func (cou *ControlObjectiveUpdate) ClearMappedFrameworks() *ControlObjectiveUpdate {
-	cou.mutation.ClearMappedFrameworks()
-	return cou
-}
-
-// SetDetails sets the "details" field.
-func (cou *ControlObjectiveUpdate) SetDetails(m map[string]interface{}) *ControlObjectiveUpdate {
-	cou.mutation.SetDetails(m)
-	return cou
-}
-
-// ClearDetails clears the value of the "details" field.
-func (cou *ControlObjectiveUpdate) ClearDetails() *ControlObjectiveUpdate {
-	cou.mutation.ClearDetails()
-	return cou
-}
-
-// SetExampleEvidence sets the "example_evidence" field.
-func (cou *ControlObjectiveUpdate) SetExampleEvidence(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetExampleEvidence(s)
-	return cou
-}
-
-// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableExampleEvidence(s *string) *ControlObjectiveUpdate {
-	if s != nil {
-		cou.SetExampleEvidence(*s)
-	}
-	return cou
-}
-
-// ClearExampleEvidence clears the value of the "example_evidence" field.
-func (cou *ControlObjectiveUpdate) ClearExampleEvidence() *ControlObjectiveUpdate {
-	cou.mutation.ClearExampleEvidence()
+// ClearSubcategory clears the value of the "subcategory" field.
+func (cou *ControlObjectiveUpdate) ClearSubcategory() *ControlObjectiveUpdate {
+	cou.mutation.ClearSubcategory()
 	return cou
 }
 
@@ -404,19 +332,34 @@ func (cou *ControlObjectiveUpdate) AddViewers(g ...*Group) *ControlObjectiveUpda
 	return cou.AddViewerIDs(ids...)
 }
 
-// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (cou *ControlObjectiveUpdate) AddInternalPolicyIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.AddInternalPolicyIDs(ids...)
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (cou *ControlObjectiveUpdate) AddProgramIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddProgramIDs(ids...)
 	return cou
 }
 
-// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (cou *ControlObjectiveUpdate) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+// AddPrograms adds the "programs" edges to the Program entity.
+func (cou *ControlObjectiveUpdate) AddPrograms(p ...*Program) *ControlObjectiveUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return cou.AddInternalPolicyIDs(ids...)
+	return cou.AddProgramIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (cou *ControlObjectiveUpdate) AddEvidenceIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddEvidenceIDs(ids...)
+	return cou
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (cou *ControlObjectiveUpdate) AddEvidence(e ...*Evidence) *ControlObjectiveUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cou.AddEvidenceIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -432,6 +375,36 @@ func (cou *ControlObjectiveUpdate) AddControls(c ...*Control) *ControlObjectiveU
 		ids[i] = c[i].ID
 	}
 	return cou.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (cou *ControlObjectiveUpdate) AddSubcontrolIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddSubcontrolIDs(ids...)
+	return cou
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (cou *ControlObjectiveUpdate) AddSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cou.AddSubcontrolIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (cou *ControlObjectiveUpdate) AddInternalPolicyIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddInternalPolicyIDs(ids...)
+	return cou
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (cou *ControlObjectiveUpdate) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return cou.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
@@ -464,36 +437,6 @@ func (cou *ControlObjectiveUpdate) AddRisks(r ...*Risk) *ControlObjectiveUpdate 
 	return cou.AddRiskIDs(ids...)
 }
 
-// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (cou *ControlObjectiveUpdate) AddSubcontrolIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.AddSubcontrolIDs(ids...)
-	return cou
-}
-
-// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (cou *ControlObjectiveUpdate) AddSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return cou.AddSubcontrolIDs(ids...)
-}
-
-// AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
-func (cou *ControlObjectiveUpdate) AddStandardIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.AddStandardIDs(ids...)
-	return cou
-}
-
-// AddStandard adds the "standard" edges to the Standard entity.
-func (cou *ControlObjectiveUpdate) AddStandard(s ...*Standard) *ControlObjectiveUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return cou.AddStandardIDs(ids...)
-}
-
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
 func (cou *ControlObjectiveUpdate) AddNarrativeIDs(ids ...string) *ControlObjectiveUpdate {
 	cou.mutation.AddNarrativeIDs(ids...)
@@ -522,36 +465,6 @@ func (cou *ControlObjectiveUpdate) AddTasks(t ...*Task) *ControlObjectiveUpdate 
 		ids[i] = t[i].ID
 	}
 	return cou.AddTaskIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (cou *ControlObjectiveUpdate) AddProgramIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.AddProgramIDs(ids...)
-	return cou
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (cou *ControlObjectiveUpdate) AddPrograms(p ...*Program) *ControlObjectiveUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cou.AddProgramIDs(ids...)
-}
-
-// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (cou *ControlObjectiveUpdate) AddEvidenceIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.AddEvidenceIDs(ids...)
-	return cou
-}
-
-// AddEvidence adds the "evidence" edges to the Evidence entity.
-func (cou *ControlObjectiveUpdate) AddEvidence(e ...*Evidence) *ControlObjectiveUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return cou.AddEvidenceIDs(ids...)
 }
 
 // Mutation returns the ControlObjectiveMutation object of the builder.
@@ -622,25 +535,46 @@ func (cou *ControlObjectiveUpdate) RemoveViewers(g ...*Group) *ControlObjectiveU
 	return cou.RemoveViewerIDs(ids...)
 }
 
-// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (cou *ControlObjectiveUpdate) ClearInternalPolicies() *ControlObjectiveUpdate {
-	cou.mutation.ClearInternalPolicies()
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (cou *ControlObjectiveUpdate) ClearPrograms() *ControlObjectiveUpdate {
+	cou.mutation.ClearPrograms()
 	return cou
 }
 
-// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (cou *ControlObjectiveUpdate) RemoveInternalPolicyIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.RemoveInternalPolicyIDs(ids...)
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveProgramIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveProgramIDs(ids...)
 	return cou
 }
 
-// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (cou *ControlObjectiveUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+// RemovePrograms removes "programs" edges to Program entities.
+func (cou *ControlObjectiveUpdate) RemovePrograms(p ...*Program) *ControlObjectiveUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return cou.RemoveInternalPolicyIDs(ids...)
+	return cou.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (cou *ControlObjectiveUpdate) ClearEvidence() *ControlObjectiveUpdate {
+	cou.mutation.ClearEvidence()
+	return cou
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveEvidenceIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveEvidenceIDs(ids...)
+	return cou
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (cou *ControlObjectiveUpdate) RemoveEvidence(e ...*Evidence) *ControlObjectiveUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return cou.RemoveEvidenceIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -662,6 +596,48 @@ func (cou *ControlObjectiveUpdate) RemoveControls(c ...*Control) *ControlObjecti
 		ids[i] = c[i].ID
 	}
 	return cou.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (cou *ControlObjectiveUpdate) ClearSubcontrols() *ControlObjectiveUpdate {
+	cou.mutation.ClearSubcontrols()
+	return cou
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveSubcontrolIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveSubcontrolIDs(ids...)
+	return cou
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (cou *ControlObjectiveUpdate) RemoveSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cou.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (cou *ControlObjectiveUpdate) ClearInternalPolicies() *ControlObjectiveUpdate {
+	cou.mutation.ClearInternalPolicies()
+	return cou
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveInternalPolicyIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveInternalPolicyIDs(ids...)
+	return cou
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (cou *ControlObjectiveUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return cou.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
@@ -706,48 +682,6 @@ func (cou *ControlObjectiveUpdate) RemoveRisks(r ...*Risk) *ControlObjectiveUpda
 	return cou.RemoveRiskIDs(ids...)
 }
 
-// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (cou *ControlObjectiveUpdate) ClearSubcontrols() *ControlObjectiveUpdate {
-	cou.mutation.ClearSubcontrols()
-	return cou
-}
-
-// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (cou *ControlObjectiveUpdate) RemoveSubcontrolIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.RemoveSubcontrolIDs(ids...)
-	return cou
-}
-
-// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (cou *ControlObjectiveUpdate) RemoveSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return cou.RemoveSubcontrolIDs(ids...)
-}
-
-// ClearStandard clears all "standard" edges to the Standard entity.
-func (cou *ControlObjectiveUpdate) ClearStandard() *ControlObjectiveUpdate {
-	cou.mutation.ClearStandard()
-	return cou
-}
-
-// RemoveStandardIDs removes the "standard" edge to Standard entities by IDs.
-func (cou *ControlObjectiveUpdate) RemoveStandardIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.RemoveStandardIDs(ids...)
-	return cou
-}
-
-// RemoveStandard removes "standard" edges to Standard entities.
-func (cou *ControlObjectiveUpdate) RemoveStandard(s ...*Standard) *ControlObjectiveUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return cou.RemoveStandardIDs(ids...)
-}
-
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
 func (cou *ControlObjectiveUpdate) ClearNarratives() *ControlObjectiveUpdate {
 	cou.mutation.ClearNarratives()
@@ -788,48 +722,6 @@ func (cou *ControlObjectiveUpdate) RemoveTasks(t ...*Task) *ControlObjectiveUpda
 		ids[i] = t[i].ID
 	}
 	return cou.RemoveTaskIDs(ids...)
-}
-
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (cou *ControlObjectiveUpdate) ClearPrograms() *ControlObjectiveUpdate {
-	cou.mutation.ClearPrograms()
-	return cou
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (cou *ControlObjectiveUpdate) RemoveProgramIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.RemoveProgramIDs(ids...)
-	return cou
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (cou *ControlObjectiveUpdate) RemovePrograms(p ...*Program) *ControlObjectiveUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cou.RemoveProgramIDs(ids...)
-}
-
-// ClearEvidence clears all "evidence" edges to the Evidence entity.
-func (cou *ControlObjectiveUpdate) ClearEvidence() *ControlObjectiveUpdate {
-	cou.mutation.ClearEvidence()
-	return cou
-}
-
-// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
-func (cou *ControlObjectiveUpdate) RemoveEvidenceIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.RemoveEvidenceIDs(ids...)
-	return cou
-}
-
-// RemoveEvidence removes "evidence" edges to Evidence entities.
-func (cou *ControlObjectiveUpdate) RemoveEvidence(e ...*Evidence) *ControlObjectiveUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return cou.RemoveEvidenceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -879,6 +771,11 @@ func (cou *ControlObjectiveUpdate) check() error {
 	if v, ok := cou.mutation.Name(); ok {
 		if err := controlobjective.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
+		}
+	}
+	if v, ok := cou.mutation.Source(); ok {
+		if err := controlobjective.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.source": %w`, err)}
 		}
 	}
 	return nil
@@ -946,17 +843,23 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := cou.mutation.Name(); ok {
 		_spec.SetField(controlobjective.FieldName, field.TypeString, value)
 	}
-	if value, ok := cou.mutation.Description(); ok {
-		_spec.SetField(controlobjective.FieldDescription, field.TypeString, value)
+	if value, ok := cou.mutation.DesiredOutcome(); ok {
+		_spec.SetField(controlobjective.FieldDesiredOutcome, field.TypeString, value)
 	}
-	if cou.mutation.DescriptionCleared() {
-		_spec.ClearField(controlobjective.FieldDescription, field.TypeString)
+	if cou.mutation.DesiredOutcomeCleared() {
+		_spec.ClearField(controlobjective.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := cou.mutation.Status(); ok {
 		_spec.SetField(controlobjective.FieldStatus, field.TypeString, value)
 	}
 	if cou.mutation.StatusCleared() {
 		_spec.ClearField(controlobjective.FieldStatus, field.TypeString)
+	}
+	if value, ok := cou.mutation.Source(); ok {
+		_spec.SetField(controlobjective.FieldSource, field.TypeEnum, value)
+	}
+	if cou.mutation.SourceCleared() {
+		_spec.ClearField(controlobjective.FieldSource, field.TypeEnum)
 	}
 	if value, ok := cou.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjective.FieldControlObjectiveType, field.TypeString, value)
@@ -970,47 +873,17 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if cou.mutation.VersionCleared() {
 		_spec.ClearField(controlobjective.FieldVersion, field.TypeString)
 	}
-	if value, ok := cou.mutation.ControlNumber(); ok {
-		_spec.SetField(controlobjective.FieldControlNumber, field.TypeString, value)
+	if value, ok := cou.mutation.Category(); ok {
+		_spec.SetField(controlobjective.FieldCategory, field.TypeString, value)
 	}
-	if cou.mutation.ControlNumberCleared() {
-		_spec.ClearField(controlobjective.FieldControlNumber, field.TypeString)
+	if cou.mutation.CategoryCleared() {
+		_spec.ClearField(controlobjective.FieldCategory, field.TypeString)
 	}
-	if value, ok := cou.mutation.Family(); ok {
-		_spec.SetField(controlobjective.FieldFamily, field.TypeString, value)
+	if value, ok := cou.mutation.Subcategory(); ok {
+		_spec.SetField(controlobjective.FieldSubcategory, field.TypeString, value)
 	}
-	if cou.mutation.FamilyCleared() {
-		_spec.ClearField(controlobjective.FieldFamily, field.TypeString)
-	}
-	if value, ok := cou.mutation.Class(); ok {
-		_spec.SetField(controlobjective.FieldClass, field.TypeString, value)
-	}
-	if cou.mutation.ClassCleared() {
-		_spec.ClearField(controlobjective.FieldClass, field.TypeString)
-	}
-	if value, ok := cou.mutation.Source(); ok {
-		_spec.SetField(controlobjective.FieldSource, field.TypeString, value)
-	}
-	if cou.mutation.SourceCleared() {
-		_spec.ClearField(controlobjective.FieldSource, field.TypeString)
-	}
-	if value, ok := cou.mutation.MappedFrameworks(); ok {
-		_spec.SetField(controlobjective.FieldMappedFrameworks, field.TypeString, value)
-	}
-	if cou.mutation.MappedFrameworksCleared() {
-		_spec.ClearField(controlobjective.FieldMappedFrameworks, field.TypeString)
-	}
-	if value, ok := cou.mutation.Details(); ok {
-		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
-	}
-	if cou.mutation.DetailsCleared() {
-		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
-	}
-	if value, ok := cou.mutation.ExampleEvidence(); ok {
-		_spec.SetField(controlobjective.FieldExampleEvidence, field.TypeString, value)
-	}
-	if cou.mutation.ExampleEvidenceCleared() {
-		_spec.ClearField(controlobjective.FieldExampleEvidence, field.TypeString)
+	if cou.mutation.SubcategoryCleared() {
+		_spec.ClearField(controlobjective.FieldSubcategory, field.TypeString)
 	}
 	if cou.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1156,6 +1029,198 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cou.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ProgramControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !cou.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ProgramControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ProgramControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cou.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !cou.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cou.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ControlsTable,
+			Columns: controlobjective.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedControlsIDs(); len(nodes) > 0 && !cou.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ControlsTable,
+			Columns: controlobjective.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ControlsTable,
+			Columns: controlobjective.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cou.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.SubcontrolsTable,
+			Columns: controlobjective.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.SubcontrolControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !cou.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.SubcontrolsTable,
+			Columns: controlobjective.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.SubcontrolControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.SubcontrolsTable,
+			Columns: controlobjective.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.SubcontrolControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if cou.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1199,54 +1264,6 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 			},
 		}
 		edge.Schema = cou.schemaConfig.InternalPolicyControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cou.mutation.ControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.ControlsTable,
-			Columns: []string{controlobjective.ControlsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.Control
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.RemovedControlsIDs(); len(nodes) > 0 && !cou.mutation.ControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.ControlsTable,
-			Columns: []string{controlobjective.ControlsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.Control
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.ControlsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.ControlsTable,
-			Columns: []string{controlobjective.ControlsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1348,128 +1365,32 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cou.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.SubcontrolsTable,
-			Columns: []string{controlobjective.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.Subcontrol
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !cou.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.SubcontrolsTable,
-			Columns: []string{controlobjective.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.SubcontrolsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.SubcontrolsTable,
-			Columns: []string{controlobjective.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cou.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.StandardTable,
-			Columns: controlobjective.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.StandardControlObjectives
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.RemovedStandardIDs(); len(nodes) > 0 && !cou.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.StandardTable,
-			Columns: controlobjective.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.StandardControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.StandardIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.StandardTable,
-			Columns: controlobjective.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.StandardControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if cou.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   controlobjective.NarrativesTable,
-			Columns: controlobjective.NarrativesPrimaryKey,
+			Columns: []string{controlobjective.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.ControlObjectiveNarratives
+		edge.Schema = cou.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cou.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !cou.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   controlobjective.NarrativesTable,
-			Columns: controlobjective.NarrativesPrimaryKey,
+			Columns: []string{controlobjective.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.ControlObjectiveNarratives
+		edge.Schema = cou.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1477,16 +1398,16 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if nodes := cou.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   controlobjective.NarrativesTable,
-			Columns: controlobjective.NarrativesPrimaryKey,
+			Columns: []string{controlobjective.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.ControlObjectiveNarratives
+		edge.Schema = cou.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1535,102 +1456,6 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 			},
 		}
 		edge.Schema = cou.schemaConfig.ControlObjectiveTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cou.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.ProgramsTable,
-			Columns: controlobjective.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.ProgramControlObjectives
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !cou.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.ProgramsTable,
-			Columns: controlobjective.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.ProgramControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.ProgramsTable,
-			Columns: controlobjective.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.ProgramControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cou.mutation.EvidenceCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.EvidenceTable,
-			Columns: controlobjective.EvidencePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !cou.mutation.EvidenceCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.EvidenceTable,
-			Columns: controlobjective.EvidencePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cou.mutation.EvidenceIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.EvidenceTable,
-			Columns: controlobjective.EvidencePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cou.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1764,23 +1589,23 @@ func (couo *ControlObjectiveUpdateOne) SetNillableName(s *string) *ControlObject
 	return couo
 }
 
-// SetDescription sets the "description" field.
-func (couo *ControlObjectiveUpdateOne) SetDescription(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetDescription(s)
+// SetDesiredOutcome sets the "desired_outcome" field.
+func (couo *ControlObjectiveUpdateOne) SetDesiredOutcome(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetDesiredOutcome(s)
 	return couo
 }
 
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableDescription(s *string) *ControlObjectiveUpdateOne {
+// SetNillableDesiredOutcome sets the "desired_outcome" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableDesiredOutcome(s *string) *ControlObjectiveUpdateOne {
 	if s != nil {
-		couo.SetDescription(*s)
+		couo.SetDesiredOutcome(*s)
 	}
 	return couo
 }
 
-// ClearDescription clears the value of the "description" field.
-func (couo *ControlObjectiveUpdateOne) ClearDescription() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearDescription()
+// ClearDesiredOutcome clears the value of the "desired_outcome" field.
+func (couo *ControlObjectiveUpdateOne) ClearDesiredOutcome() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearDesiredOutcome()
 	return couo
 }
 
@@ -1801,6 +1626,26 @@ func (couo *ControlObjectiveUpdateOne) SetNillableStatus(s *string) *ControlObje
 // ClearStatus clears the value of the "status" field.
 func (couo *ControlObjectiveUpdateOne) ClearStatus() *ControlObjectiveUpdateOne {
 	couo.mutation.ClearStatus()
+	return couo
+}
+
+// SetSource sets the "source" field.
+func (couo *ControlObjectiveUpdateOne) SetSource(es enums.ControlSource) *ControlObjectiveUpdateOne {
+	couo.mutation.SetSource(es)
+	return couo
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableSource(es *enums.ControlSource) *ControlObjectiveUpdateOne {
+	if es != nil {
+		couo.SetSource(*es)
+	}
+	return couo
+}
+
+// ClearSource clears the value of the "source" field.
+func (couo *ControlObjectiveUpdateOne) ClearSource() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearSource()
 	return couo
 }
 
@@ -1844,135 +1689,43 @@ func (couo *ControlObjectiveUpdateOne) ClearVersion() *ControlObjectiveUpdateOne
 	return couo
 }
 
-// SetControlNumber sets the "control_number" field.
-func (couo *ControlObjectiveUpdateOne) SetControlNumber(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetControlNumber(s)
+// SetCategory sets the "category" field.
+func (couo *ControlObjectiveUpdateOne) SetCategory(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetCategory(s)
 	return couo
 }
 
-// SetNillableControlNumber sets the "control_number" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableControlNumber(s *string) *ControlObjectiveUpdateOne {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableCategory(s *string) *ControlObjectiveUpdateOne {
 	if s != nil {
-		couo.SetControlNumber(*s)
+		couo.SetCategory(*s)
 	}
 	return couo
 }
 
-// ClearControlNumber clears the value of the "control_number" field.
-func (couo *ControlObjectiveUpdateOne) ClearControlNumber() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearControlNumber()
+// ClearCategory clears the value of the "category" field.
+func (couo *ControlObjectiveUpdateOne) ClearCategory() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearCategory()
 	return couo
 }
 
-// SetFamily sets the "family" field.
-func (couo *ControlObjectiveUpdateOne) SetFamily(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetFamily(s)
+// SetSubcategory sets the "subcategory" field.
+func (couo *ControlObjectiveUpdateOne) SetSubcategory(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetSubcategory(s)
 	return couo
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableFamily(s *string) *ControlObjectiveUpdateOne {
+// SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableSubcategory(s *string) *ControlObjectiveUpdateOne {
 	if s != nil {
-		couo.SetFamily(*s)
+		couo.SetSubcategory(*s)
 	}
 	return couo
 }
 
-// ClearFamily clears the value of the "family" field.
-func (couo *ControlObjectiveUpdateOne) ClearFamily() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearFamily()
-	return couo
-}
-
-// SetClass sets the "class" field.
-func (couo *ControlObjectiveUpdateOne) SetClass(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetClass(s)
-	return couo
-}
-
-// SetNillableClass sets the "class" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableClass(s *string) *ControlObjectiveUpdateOne {
-	if s != nil {
-		couo.SetClass(*s)
-	}
-	return couo
-}
-
-// ClearClass clears the value of the "class" field.
-func (couo *ControlObjectiveUpdateOne) ClearClass() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearClass()
-	return couo
-}
-
-// SetSource sets the "source" field.
-func (couo *ControlObjectiveUpdateOne) SetSource(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetSource(s)
-	return couo
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableSource(s *string) *ControlObjectiveUpdateOne {
-	if s != nil {
-		couo.SetSource(*s)
-	}
-	return couo
-}
-
-// ClearSource clears the value of the "source" field.
-func (couo *ControlObjectiveUpdateOne) ClearSource() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearSource()
-	return couo
-}
-
-// SetMappedFrameworks sets the "mapped_frameworks" field.
-func (couo *ControlObjectiveUpdateOne) SetMappedFrameworks(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetMappedFrameworks(s)
-	return couo
-}
-
-// SetNillableMappedFrameworks sets the "mapped_frameworks" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableMappedFrameworks(s *string) *ControlObjectiveUpdateOne {
-	if s != nil {
-		couo.SetMappedFrameworks(*s)
-	}
-	return couo
-}
-
-// ClearMappedFrameworks clears the value of the "mapped_frameworks" field.
-func (couo *ControlObjectiveUpdateOne) ClearMappedFrameworks() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearMappedFrameworks()
-	return couo
-}
-
-// SetDetails sets the "details" field.
-func (couo *ControlObjectiveUpdateOne) SetDetails(m map[string]interface{}) *ControlObjectiveUpdateOne {
-	couo.mutation.SetDetails(m)
-	return couo
-}
-
-// ClearDetails clears the value of the "details" field.
-func (couo *ControlObjectiveUpdateOne) ClearDetails() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearDetails()
-	return couo
-}
-
-// SetExampleEvidence sets the "example_evidence" field.
-func (couo *ControlObjectiveUpdateOne) SetExampleEvidence(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetExampleEvidence(s)
-	return couo
-}
-
-// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableExampleEvidence(s *string) *ControlObjectiveUpdateOne {
-	if s != nil {
-		couo.SetExampleEvidence(*s)
-	}
-	return couo
-}
-
-// ClearExampleEvidence clears the value of the "example_evidence" field.
-func (couo *ControlObjectiveUpdateOne) ClearExampleEvidence() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearExampleEvidence()
+// ClearSubcategory clears the value of the "subcategory" field.
+func (couo *ControlObjectiveUpdateOne) ClearSubcategory() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearSubcategory()
 	return couo
 }
 
@@ -2021,19 +1774,34 @@ func (couo *ControlObjectiveUpdateOne) AddViewers(g ...*Group) *ControlObjective
 	return couo.AddViewerIDs(ids...)
 }
 
-// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (couo *ControlObjectiveUpdateOne) AddInternalPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.AddInternalPolicyIDs(ids...)
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddProgramIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddProgramIDs(ids...)
 	return couo
 }
 
-// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (couo *ControlObjectiveUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+// AddPrograms adds the "programs" edges to the Program entity.
+func (couo *ControlObjectiveUpdateOne) AddPrograms(p ...*Program) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return couo.AddInternalPolicyIDs(ids...)
+	return couo.AddProgramIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddEvidenceIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddEvidenceIDs(ids...)
+	return couo
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (couo *ControlObjectiveUpdateOne) AddEvidence(e ...*Evidence) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return couo.AddEvidenceIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -2049,6 +1817,36 @@ func (couo *ControlObjectiveUpdateOne) AddControls(c ...*Control) *ControlObject
 		ids[i] = c[i].ID
 	}
 	return couo.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddSubcontrolIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddSubcontrolIDs(ids...)
+	return couo
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (couo *ControlObjectiveUpdateOne) AddSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return couo.AddSubcontrolIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddInternalPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddInternalPolicyIDs(ids...)
+	return couo
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (couo *ControlObjectiveUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return couo.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
@@ -2081,36 +1879,6 @@ func (couo *ControlObjectiveUpdateOne) AddRisks(r ...*Risk) *ControlObjectiveUpd
 	return couo.AddRiskIDs(ids...)
 }
 
-// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (couo *ControlObjectiveUpdateOne) AddSubcontrolIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.AddSubcontrolIDs(ids...)
-	return couo
-}
-
-// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (couo *ControlObjectiveUpdateOne) AddSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return couo.AddSubcontrolIDs(ids...)
-}
-
-// AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
-func (couo *ControlObjectiveUpdateOne) AddStandardIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.AddStandardIDs(ids...)
-	return couo
-}
-
-// AddStandard adds the "standard" edges to the Standard entity.
-func (couo *ControlObjectiveUpdateOne) AddStandard(s ...*Standard) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return couo.AddStandardIDs(ids...)
-}
-
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
 func (couo *ControlObjectiveUpdateOne) AddNarrativeIDs(ids ...string) *ControlObjectiveUpdateOne {
 	couo.mutation.AddNarrativeIDs(ids...)
@@ -2139,36 +1907,6 @@ func (couo *ControlObjectiveUpdateOne) AddTasks(t ...*Task) *ControlObjectiveUpd
 		ids[i] = t[i].ID
 	}
 	return couo.AddTaskIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (couo *ControlObjectiveUpdateOne) AddProgramIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.AddProgramIDs(ids...)
-	return couo
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (couo *ControlObjectiveUpdateOne) AddPrograms(p ...*Program) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return couo.AddProgramIDs(ids...)
-}
-
-// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (couo *ControlObjectiveUpdateOne) AddEvidenceIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.AddEvidenceIDs(ids...)
-	return couo
-}
-
-// AddEvidence adds the "evidence" edges to the Evidence entity.
-func (couo *ControlObjectiveUpdateOne) AddEvidence(e ...*Evidence) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return couo.AddEvidenceIDs(ids...)
 }
 
 // Mutation returns the ControlObjectiveMutation object of the builder.
@@ -2239,25 +1977,46 @@ func (couo *ControlObjectiveUpdateOne) RemoveViewers(g ...*Group) *ControlObject
 	return couo.RemoveViewerIDs(ids...)
 }
 
-// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (couo *ControlObjectiveUpdateOne) ClearInternalPolicies() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearInternalPolicies()
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (couo *ControlObjectiveUpdateOne) ClearPrograms() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearPrograms()
 	return couo
 }
 
-// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (couo *ControlObjectiveUpdateOne) RemoveInternalPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.RemoveInternalPolicyIDs(ids...)
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveProgramIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveProgramIDs(ids...)
 	return couo
 }
 
-// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (couo *ControlObjectiveUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+// RemovePrograms removes "programs" edges to Program entities.
+func (couo *ControlObjectiveUpdateOne) RemovePrograms(p ...*Program) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return couo.RemoveInternalPolicyIDs(ids...)
+	return couo.RemoveProgramIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (couo *ControlObjectiveUpdateOne) ClearEvidence() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearEvidence()
+	return couo
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveEvidenceIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveEvidenceIDs(ids...)
+	return couo
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (couo *ControlObjectiveUpdateOne) RemoveEvidence(e ...*Evidence) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return couo.RemoveEvidenceIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -2279,6 +2038,48 @@ func (couo *ControlObjectiveUpdateOne) RemoveControls(c ...*Control) *ControlObj
 		ids[i] = c[i].ID
 	}
 	return couo.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (couo *ControlObjectiveUpdateOne) ClearSubcontrols() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearSubcontrols()
+	return couo
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveSubcontrolIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveSubcontrolIDs(ids...)
+	return couo
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (couo *ControlObjectiveUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return couo.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (couo *ControlObjectiveUpdateOne) ClearInternalPolicies() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearInternalPolicies()
+	return couo
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveInternalPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveInternalPolicyIDs(ids...)
+	return couo
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (couo *ControlObjectiveUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return couo.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
@@ -2323,48 +2124,6 @@ func (couo *ControlObjectiveUpdateOne) RemoveRisks(r ...*Risk) *ControlObjective
 	return couo.RemoveRiskIDs(ids...)
 }
 
-// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (couo *ControlObjectiveUpdateOne) ClearSubcontrols() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearSubcontrols()
-	return couo
-}
-
-// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (couo *ControlObjectiveUpdateOne) RemoveSubcontrolIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.RemoveSubcontrolIDs(ids...)
-	return couo
-}
-
-// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (couo *ControlObjectiveUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return couo.RemoveSubcontrolIDs(ids...)
-}
-
-// ClearStandard clears all "standard" edges to the Standard entity.
-func (couo *ControlObjectiveUpdateOne) ClearStandard() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearStandard()
-	return couo
-}
-
-// RemoveStandardIDs removes the "standard" edge to Standard entities by IDs.
-func (couo *ControlObjectiveUpdateOne) RemoveStandardIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.RemoveStandardIDs(ids...)
-	return couo
-}
-
-// RemoveStandard removes "standard" edges to Standard entities.
-func (couo *ControlObjectiveUpdateOne) RemoveStandard(s ...*Standard) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return couo.RemoveStandardIDs(ids...)
-}
-
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
 func (couo *ControlObjectiveUpdateOne) ClearNarratives() *ControlObjectiveUpdateOne {
 	couo.mutation.ClearNarratives()
@@ -2405,48 +2164,6 @@ func (couo *ControlObjectiveUpdateOne) RemoveTasks(t ...*Task) *ControlObjective
 		ids[i] = t[i].ID
 	}
 	return couo.RemoveTaskIDs(ids...)
-}
-
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (couo *ControlObjectiveUpdateOne) ClearPrograms() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearPrograms()
-	return couo
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (couo *ControlObjectiveUpdateOne) RemoveProgramIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.RemoveProgramIDs(ids...)
-	return couo
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (couo *ControlObjectiveUpdateOne) RemovePrograms(p ...*Program) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return couo.RemoveProgramIDs(ids...)
-}
-
-// ClearEvidence clears all "evidence" edges to the Evidence entity.
-func (couo *ControlObjectiveUpdateOne) ClearEvidence() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearEvidence()
-	return couo
-}
-
-// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
-func (couo *ControlObjectiveUpdateOne) RemoveEvidenceIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.RemoveEvidenceIDs(ids...)
-	return couo
-}
-
-// RemoveEvidence removes "evidence" edges to Evidence entities.
-func (couo *ControlObjectiveUpdateOne) RemoveEvidence(e ...*Evidence) *ControlObjectiveUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return couo.RemoveEvidenceIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlObjectiveUpdate builder.
@@ -2509,6 +2226,11 @@ func (couo *ControlObjectiveUpdateOne) check() error {
 	if v, ok := couo.mutation.Name(); ok {
 		if err := controlobjective.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
+		}
+	}
+	if v, ok := couo.mutation.Source(); ok {
+		if err := controlobjective.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.source": %w`, err)}
 		}
 	}
 	return nil
@@ -2593,17 +2315,23 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if value, ok := couo.mutation.Name(); ok {
 		_spec.SetField(controlobjective.FieldName, field.TypeString, value)
 	}
-	if value, ok := couo.mutation.Description(); ok {
-		_spec.SetField(controlobjective.FieldDescription, field.TypeString, value)
+	if value, ok := couo.mutation.DesiredOutcome(); ok {
+		_spec.SetField(controlobjective.FieldDesiredOutcome, field.TypeString, value)
 	}
-	if couo.mutation.DescriptionCleared() {
-		_spec.ClearField(controlobjective.FieldDescription, field.TypeString)
+	if couo.mutation.DesiredOutcomeCleared() {
+		_spec.ClearField(controlobjective.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := couo.mutation.Status(); ok {
 		_spec.SetField(controlobjective.FieldStatus, field.TypeString, value)
 	}
 	if couo.mutation.StatusCleared() {
 		_spec.ClearField(controlobjective.FieldStatus, field.TypeString)
+	}
+	if value, ok := couo.mutation.Source(); ok {
+		_spec.SetField(controlobjective.FieldSource, field.TypeEnum, value)
+	}
+	if couo.mutation.SourceCleared() {
+		_spec.ClearField(controlobjective.FieldSource, field.TypeEnum)
 	}
 	if value, ok := couo.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjective.FieldControlObjectiveType, field.TypeString, value)
@@ -2617,47 +2345,17 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if couo.mutation.VersionCleared() {
 		_spec.ClearField(controlobjective.FieldVersion, field.TypeString)
 	}
-	if value, ok := couo.mutation.ControlNumber(); ok {
-		_spec.SetField(controlobjective.FieldControlNumber, field.TypeString, value)
+	if value, ok := couo.mutation.Category(); ok {
+		_spec.SetField(controlobjective.FieldCategory, field.TypeString, value)
 	}
-	if couo.mutation.ControlNumberCleared() {
-		_spec.ClearField(controlobjective.FieldControlNumber, field.TypeString)
+	if couo.mutation.CategoryCleared() {
+		_spec.ClearField(controlobjective.FieldCategory, field.TypeString)
 	}
-	if value, ok := couo.mutation.Family(); ok {
-		_spec.SetField(controlobjective.FieldFamily, field.TypeString, value)
+	if value, ok := couo.mutation.Subcategory(); ok {
+		_spec.SetField(controlobjective.FieldSubcategory, field.TypeString, value)
 	}
-	if couo.mutation.FamilyCleared() {
-		_spec.ClearField(controlobjective.FieldFamily, field.TypeString)
-	}
-	if value, ok := couo.mutation.Class(); ok {
-		_spec.SetField(controlobjective.FieldClass, field.TypeString, value)
-	}
-	if couo.mutation.ClassCleared() {
-		_spec.ClearField(controlobjective.FieldClass, field.TypeString)
-	}
-	if value, ok := couo.mutation.Source(); ok {
-		_spec.SetField(controlobjective.FieldSource, field.TypeString, value)
-	}
-	if couo.mutation.SourceCleared() {
-		_spec.ClearField(controlobjective.FieldSource, field.TypeString)
-	}
-	if value, ok := couo.mutation.MappedFrameworks(); ok {
-		_spec.SetField(controlobjective.FieldMappedFrameworks, field.TypeString, value)
-	}
-	if couo.mutation.MappedFrameworksCleared() {
-		_spec.ClearField(controlobjective.FieldMappedFrameworks, field.TypeString)
-	}
-	if value, ok := couo.mutation.Details(); ok {
-		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
-	}
-	if couo.mutation.DetailsCleared() {
-		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
-	}
-	if value, ok := couo.mutation.ExampleEvidence(); ok {
-		_spec.SetField(controlobjective.FieldExampleEvidence, field.TypeString, value)
-	}
-	if couo.mutation.ExampleEvidenceCleared() {
-		_spec.ClearField(controlobjective.FieldExampleEvidence, field.TypeString)
+	if couo.mutation.SubcategoryCleared() {
+		_spec.ClearField(controlobjective.FieldSubcategory, field.TypeString)
 	}
 	if couo.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2803,6 +2501,198 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if couo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ProgramControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !couo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ProgramControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ProgramControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !couo.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.EvidenceTable,
+			Columns: controlobjective.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ControlsTable,
+			Columns: controlobjective.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !couo.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ControlsTable,
+			Columns: controlobjective.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ControlsTable,
+			Columns: controlobjective.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.SubcontrolsTable,
+			Columns: controlobjective.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.SubcontrolControlObjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !couo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.SubcontrolsTable,
+			Columns: controlobjective.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.SubcontrolControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.SubcontrolsTable,
+			Columns: controlobjective.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.SubcontrolControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if couo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2846,54 +2736,6 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 			},
 		}
 		edge.Schema = couo.schemaConfig.InternalPolicyControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if couo.mutation.ControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.ControlsTable,
-			Columns: []string{controlobjective.ControlsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.Control
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !couo.mutation.ControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.ControlsTable,
-			Columns: []string{controlobjective.ControlsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.Control
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.ControlsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.ControlsTable,
-			Columns: []string{controlobjective.ControlsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2995,128 +2837,32 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if couo.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.SubcontrolsTable,
-			Columns: []string{controlobjective.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.Subcontrol
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !couo.mutation.SubcontrolsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.SubcontrolsTable,
-			Columns: []string{controlobjective.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   controlobjective.SubcontrolsTable,
-			Columns: []string{controlobjective.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if couo.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.StandardTable,
-			Columns: controlobjective.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.StandardControlObjectives
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.RemovedStandardIDs(); len(nodes) > 0 && !couo.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.StandardTable,
-			Columns: controlobjective.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.StandardControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.StandardIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.StandardTable,
-			Columns: controlobjective.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.StandardControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if couo.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   controlobjective.NarrativesTable,
-			Columns: controlobjective.NarrativesPrimaryKey,
+			Columns: []string{controlobjective.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.ControlObjectiveNarratives
+		edge.Schema = couo.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := couo.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !couo.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   controlobjective.NarrativesTable,
-			Columns: controlobjective.NarrativesPrimaryKey,
+			Columns: []string{controlobjective.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.ControlObjectiveNarratives
+		edge.Schema = couo.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3124,16 +2870,16 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	}
 	if nodes := couo.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   controlobjective.NarrativesTable,
-			Columns: controlobjective.NarrativesPrimaryKey,
+			Columns: []string{controlobjective.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.ControlObjectiveNarratives
+		edge.Schema = couo.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3182,102 +2928,6 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 			},
 		}
 		edge.Schema = couo.schemaConfig.ControlObjectiveTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if couo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.ProgramsTable,
-			Columns: controlobjective.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.ProgramControlObjectives
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !couo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.ProgramsTable,
-			Columns: controlobjective.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.ProgramControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.ProgramsTable,
-			Columns: controlobjective.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.ProgramControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if couo.mutation.EvidenceCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.EvidenceTable,
-			Columns: controlobjective.EvidencePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !couo.mutation.EvidenceCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.EvidenceTable,
-			Columns: controlobjective.EvidencePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := couo.mutation.EvidenceIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   controlobjective.EvidenceTable,
-			Columns: controlobjective.EvidencePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = couo.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

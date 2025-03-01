@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up mappedControl by ID
+    """
+     mappedControl(
+        """
+        ID of the mappedControl
+        """
+        id: ID!
+    ):  MappedControl!
+}
+
+extend type Mutation{
+    """
+    Create a new mappedControl
+    """
+    createMappedControl(
+        """
+        values of the mappedControl
+        """
+        input: CreateMappedControlInput!
+    ): MappedControlCreatePayload!
+    """
+    Create multiple new mappedControls
+    """
+    createBulkMappedControl(
+        """
+        values of the mappedControl
+        """
+        input: [CreateMappedControlInput!]
+    ): MappedControlBulkCreatePayload!
+    """
+    Create multiple new mappedControls via file upload
+    """
+    createBulkCSVMappedControl(
+        """
+        csv file containing values of the mappedControl
+        """
+        input: Upload!
+    ): MappedControlBulkCreatePayload!
+    """
+    Update an existing mappedControl
+    """
+    updateMappedControl(
+        """
+        ID of the mappedControl
+        """
+        id: ID!
+        """
+        New values for the mappedControl
+        """
+        input: UpdateMappedControlInput!
+    ): MappedControlUpdatePayload!
+    """
+    Delete an existing mappedControl
+    """
+    deleteMappedControl(
+        """
+        ID of the mappedControl
+        """
+        id: ID!
+    ): MappedControlDeletePayload!
+}
+
+"""
+Return response for createMappedControl mutation
+"""
+type MappedControlCreatePayload {
+    """
+    Created mappedControl
+    """
+    mappedControl: MappedControl!
+}
+
+"""
+Return response for updateMappedControl mutation
+"""
+type MappedControlUpdatePayload {
+    """
+    Updated mappedControl
+    """
+    mappedControl: MappedControl!
+}
+
+"""
+Return response for deleteMappedControl mutation
+"""
+type MappedControlDeletePayload {
+    """
+    Deleted mappedControl ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkMappedControl mutation
+"""
+type MappedControlBulkCreatePayload {
+    """
+    Created mappedControls
+    """
+    mappedControls: [MappedControl!]
+}

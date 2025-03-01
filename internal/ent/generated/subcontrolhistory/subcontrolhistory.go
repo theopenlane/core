@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -41,40 +42,38 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
+	// FieldRefCode holds the string denoting the ref_code field in the database.
+	FieldRefCode = "ref_code"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldSubcontrolType holds the string denoting the subcontrol_type field in the database.
-	FieldSubcontrolType = "subcontrol_type"
-	// FieldVersion holds the string denoting the version field in the database.
-	FieldVersion = "version"
-	// FieldSubcontrolNumber holds the string denoting the subcontrol_number field in the database.
-	FieldSubcontrolNumber = "subcontrol_number"
-	// FieldFamily holds the string denoting the family field in the database.
-	FieldFamily = "family"
-	// FieldClass holds the string denoting the class field in the database.
-	FieldClass = "class"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// FieldMappedFrameworks holds the string denoting the mapped_frameworks field in the database.
-	FieldMappedFrameworks = "mapped_frameworks"
-	// FieldImplementationEvidence holds the string denoting the implementation_evidence field in the database.
-	FieldImplementationEvidence = "implementation_evidence"
-	// FieldImplementationStatus holds the string denoting the implementation_status field in the database.
-	FieldImplementationStatus = "implementation_status"
-	// FieldImplementationDate holds the string denoting the implementation_date field in the database.
-	FieldImplementationDate = "implementation_date"
-	// FieldImplementationVerification holds the string denoting the implementation_verification field in the database.
-	FieldImplementationVerification = "implementation_verification"
-	// FieldImplementationVerificationDate holds the string denoting the implementation_verification_date field in the database.
-	FieldImplementationVerificationDate = "implementation_verification_date"
-	// FieldDetails holds the string denoting the details field in the database.
-	FieldDetails = "details"
+	// FieldControlType holds the string denoting the control_type field in the database.
+	FieldControlType = "control_type"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
+	// FieldCategoryID holds the string denoting the category_id field in the database.
+	FieldCategoryID = "category_id"
+	// FieldSubcategory holds the string denoting the subcategory field in the database.
+	FieldSubcategory = "subcategory"
+	// FieldMappedCategories holds the string denoting the mapped_categories field in the database.
+	FieldMappedCategories = "mapped_categories"
+	// FieldAssessmentObjectives holds the string denoting the assessment_objectives field in the database.
+	FieldAssessmentObjectives = "assessment_objectives"
+	// FieldAssessmentMethods holds the string denoting the assessment_methods field in the database.
+	FieldAssessmentMethods = "assessment_methods"
+	// FieldControlQuestions holds the string denoting the control_questions field in the database.
+	FieldControlQuestions = "control_questions"
+	// FieldImplementationGuidance holds the string denoting the implementation_guidance field in the database.
+	FieldImplementationGuidance = "implementation_guidance"
 	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
 	FieldExampleEvidence = "example_evidence"
+	// FieldReferences holds the string denoting the references field in the database.
+	FieldReferences = "references"
+	// FieldControlID holds the string denoting the control_id field in the database.
+	FieldControlID = "control_id"
 	// Table holds the table name of the subcontrolhistory in the database.
 	Table = "subcontrol_history"
 )
@@ -94,23 +93,22 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
-	FieldName,
+	FieldRefCode,
 	FieldDescription,
 	FieldStatus,
-	FieldSubcontrolType,
-	FieldVersion,
-	FieldSubcontrolNumber,
-	FieldFamily,
-	FieldClass,
 	FieldSource,
-	FieldMappedFrameworks,
-	FieldImplementationEvidence,
-	FieldImplementationStatus,
-	FieldImplementationDate,
-	FieldImplementationVerification,
-	FieldImplementationVerificationDate,
-	FieldDetails,
+	FieldControlType,
+	FieldCategory,
+	FieldCategoryID,
+	FieldSubcategory,
+	FieldMappedCategories,
+	FieldAssessmentObjectives,
+	FieldAssessmentMethods,
+	FieldControlQuestions,
+	FieldImplementationGuidance,
 	FieldExampleEvidence,
+	FieldReferences,
+	FieldControlID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -151,6 +149,26 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("subcontrolhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+// SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
+func SourceValidator(s enums.ControlSource) error {
+	switch s.String() {
+	case "FRAMEWORK", "TEMPLATE", "CUSTOM", "IMPORTED":
+		return nil
+	default:
+		return fmt.Errorf("subcontrolhistory: invalid enum value for source field: %q", s)
+	}
+}
+
+// ControlTypeValidator is a validator for the "control_type" field enum values. It is called by the builders before save.
+func ControlTypeValidator(ct enums.ControlType) error {
+	switch ct.String() {
+	case "PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT":
+		return nil
+	default:
+		return fmt.Errorf("subcontrolhistory: invalid enum value for control_type field: %q", ct)
 	}
 }
 
@@ -217,9 +235,9 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
+// ByRefCode orders the results by the ref_code field.
+func ByRefCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefCode, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.
@@ -232,69 +250,34 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// BySubcontrolType orders the results by the subcontrol_type field.
-func BySubcontrolType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSubcontrolType, opts...).ToFunc()
-}
-
-// ByVersion orders the results by the version field.
-func ByVersion(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVersion, opts...).ToFunc()
-}
-
-// BySubcontrolNumber orders the results by the subcontrol_number field.
-func BySubcontrolNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSubcontrolNumber, opts...).ToFunc()
-}
-
-// ByFamily orders the results by the family field.
-func ByFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFamily, opts...).ToFunc()
-}
-
-// ByClass orders the results by the class field.
-func ByClass(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldClass, opts...).ToFunc()
-}
-
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
-// ByMappedFrameworks orders the results by the mapped_frameworks field.
-func ByMappedFrameworks(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappedFrameworks, opts...).ToFunc()
+// ByControlType orders the results by the control_type field.
+func ByControlType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlType, opts...).ToFunc()
 }
 
-// ByImplementationEvidence orders the results by the implementation_evidence field.
-func ByImplementationEvidence(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationEvidence, opts...).ToFunc()
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
-// ByImplementationStatus orders the results by the implementation_status field.
-func ByImplementationStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationStatus, opts...).ToFunc()
+// ByCategoryID orders the results by the category_id field.
+func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryID, opts...).ToFunc()
 }
 
-// ByImplementationDate orders the results by the implementation_date field.
-func ByImplementationDate(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationDate, opts...).ToFunc()
+// BySubcategory orders the results by the subcategory field.
+func BySubcategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubcategory, opts...).ToFunc()
 }
 
-// ByImplementationVerification orders the results by the implementation_verification field.
-func ByImplementationVerification(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationVerification, opts...).ToFunc()
-}
-
-// ByImplementationVerificationDate orders the results by the implementation_verification_date field.
-func ByImplementationVerificationDate(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationVerificationDate, opts...).ToFunc()
-}
-
-// ByExampleEvidence orders the results by the example_evidence field.
-func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
+// ByControlID orders the results by the control_id field.
+func ByControlID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlID, opts...).ToFunc()
 }
 
 var (
@@ -302,4 +285,18 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.ControlSource must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlSource)(nil)
+	// enums.ControlSource must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlSource)(nil)
+)
+
+var (
+	// enums.ControlType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlType)(nil)
+	// enums.ControlType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlType)(nil)
 )

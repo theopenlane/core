@@ -61,7 +61,7 @@ type Procedure struct {
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
 	control_objective_procedures *string
-	standard_procedures          *string
+	subcontrol_procedures        *string
 	selectValues                 sql.SelectValues
 }
 
@@ -197,7 +197,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case procedure.ForeignKeys[0]: // control_objective_procedures
 			values[i] = new(sql.NullString)
-		case procedure.ForeignKeys[1]: // standard_procedures
+		case procedure.ForeignKeys[1]: // subcontrol_procedures
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -347,10 +347,10 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			}
 		case procedure.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field standard_procedures", values[i])
+				return fmt.Errorf("unexpected type %T for field subcontrol_procedures", values[i])
 			} else if value.Valid {
-				pr.standard_procedures = new(string)
-				*pr.standard_procedures = value.String
+				pr.subcontrol_procedures = new(string)
+				*pr.subcontrol_procedures = value.String
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])

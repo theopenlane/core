@@ -38,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -858,6 +859,21 @@ func (ou *OrganizationUpdate) AddEvidence(e ...*Evidence) *OrganizationUpdate {
 	return ou.AddEvidenceIDs(ids...)
 }
 
+// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
+func (ou *OrganizationUpdate) AddStandardIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddStandardIDs(ids...)
+	return ou
+}
+
+// AddStandards adds the "standards" edges to the Standard entity.
+func (ou *OrganizationUpdate) AddStandards(s ...*Standard) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.AddStandardIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1665,6 +1681,27 @@ func (ou *OrganizationUpdate) RemoveEvidence(e ...*Evidence) *OrganizationUpdate
 		ids[i] = e[i].ID
 	}
 	return ou.RemoveEvidenceIDs(ids...)
+}
+
+// ClearStandards clears all "standards" edges to the Standard entity.
+func (ou *OrganizationUpdate) ClearStandards() *OrganizationUpdate {
+	ou.mutation.ClearStandards()
+	return ou
+}
+
+// RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
+func (ou *OrganizationUpdate) RemoveStandardIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveStandardIDs(ids...)
+	return ou
+}
+
+// RemoveStandards removes "standards" edges to Standard entities.
+func (ou *OrganizationUpdate) RemoveStandards(s ...*Standard) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.RemoveStandardIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -3705,6 +3742,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.StandardsTable,
+			Columns: []string{organization.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !ou.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.StandardsTable,
+			Columns: []string{organization.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.StandardsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.StandardsTable,
+			Columns: []string{organization.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4574,6 +4659,21 @@ func (ouo *OrganizationUpdateOne) AddEvidence(e ...*Evidence) *OrganizationUpdat
 	return ouo.AddEvidenceIDs(ids...)
 }
 
+// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
+func (ouo *OrganizationUpdateOne) AddStandardIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddStandardIDs(ids...)
+	return ouo
+}
+
+// AddStandards adds the "standards" edges to the Standard entity.
+func (ouo *OrganizationUpdateOne) AddStandards(s ...*Standard) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.AddStandardIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -5381,6 +5481,27 @@ func (ouo *OrganizationUpdateOne) RemoveEvidence(e ...*Evidence) *OrganizationUp
 		ids[i] = e[i].ID
 	}
 	return ouo.RemoveEvidenceIDs(ids...)
+}
+
+// ClearStandards clears all "standards" edges to the Standard entity.
+func (ouo *OrganizationUpdateOne) ClearStandards() *OrganizationUpdateOne {
+	ouo.mutation.ClearStandards()
+	return ouo
+}
+
+// RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveStandardIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveStandardIDs(ids...)
+	return ouo
+}
+
+// RemoveStandards removes "standards" edges to Standard entities.
+func (ouo *OrganizationUpdateOne) RemoveStandards(s ...*Standard) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.RemoveStandardIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -7446,6 +7567,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.StandardsTable,
+			Columns: []string{organization.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !ouo.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.StandardsTable,
+			Columns: []string{organization.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.StandardsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.StandardsTable,
+			Columns: []string{organization.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

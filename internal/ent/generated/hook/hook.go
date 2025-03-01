@@ -93,6 +93,30 @@ func (f ControlHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (g
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlHistoryMutation", m)
 }
 
+// The ControlImplementationFunc type is an adapter to allow the use of ordinary
+// function as ControlImplementation mutator.
+type ControlImplementationFunc func(context.Context, *generated.ControlImplementationMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ControlImplementationFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ControlImplementationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlImplementationMutation", m)
+}
+
+// The ControlImplementationHistoryFunc type is an adapter to allow the use of ordinary
+// function as ControlImplementationHistory mutator.
+type ControlImplementationHistoryFunc func(context.Context, *generated.ControlImplementationHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ControlImplementationHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ControlImplementationHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlImplementationHistoryMutation", m)
+}
+
 // The ControlObjectiveFunc type is an adapter to allow the use of ordinary
 // function as ControlObjective mutator.
 type ControlObjectiveFunc func(context.Context, *generated.ControlObjectiveMutation) (generated.Value, error)
@@ -427,6 +451,30 @@ func (f InviteFunc) Mutate(ctx context.Context, m generated.Mutation) (generated
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.InviteMutation", m)
+}
+
+// The MappedControlFunc type is an adapter to allow the use of ordinary
+// function as MappedControl mutator.
+type MappedControlFunc func(context.Context, *generated.MappedControlMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MappedControlFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.MappedControlMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.MappedControlMutation", m)
+}
+
+// The MappedControlHistoryFunc type is an adapter to allow the use of ordinary
+// function as MappedControlHistory mutator.
+type MappedControlHistoryFunc func(context.Context, *generated.MappedControlHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MappedControlHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.MappedControlHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.MappedControlHistoryMutation", m)
 }
 
 // The NarrativeFunc type is an adapter to allow the use of ordinary

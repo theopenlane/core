@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/pkg/enums"
@@ -193,14 +192,14 @@ func (thu *TemplateHistoryUpdate) ClearDescription() *TemplateHistoryUpdate {
 }
 
 // SetJsonconfig sets the "jsonconfig" field.
-func (thu *TemplateHistoryUpdate) SetJsonconfig(co customtypes.JSONObject) *TemplateHistoryUpdate {
-	thu.mutation.SetJsonconfig(co)
+func (thu *TemplateHistoryUpdate) SetJsonconfig(m map[string]interface{}) *TemplateHistoryUpdate {
+	thu.mutation.SetJsonconfig(m)
 	return thu
 }
 
 // SetUischema sets the "uischema" field.
-func (thu *TemplateHistoryUpdate) SetUischema(co customtypes.JSONObject) *TemplateHistoryUpdate {
-	thu.mutation.SetUischema(co)
+func (thu *TemplateHistoryUpdate) SetUischema(m map[string]interface{}) *TemplateHistoryUpdate {
+	thu.mutation.SetUischema(m)
 	return thu
 }
 
@@ -533,14 +532,14 @@ func (thuo *TemplateHistoryUpdateOne) ClearDescription() *TemplateHistoryUpdateO
 }
 
 // SetJsonconfig sets the "jsonconfig" field.
-func (thuo *TemplateHistoryUpdateOne) SetJsonconfig(co customtypes.JSONObject) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetJsonconfig(co)
+func (thuo *TemplateHistoryUpdateOne) SetJsonconfig(m map[string]interface{}) *TemplateHistoryUpdateOne {
+	thuo.mutation.SetJsonconfig(m)
 	return thuo
 }
 
 // SetUischema sets the "uischema" field.
-func (thuo *TemplateHistoryUpdateOne) SetUischema(co customtypes.JSONObject) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetUischema(co)
+func (thuo *TemplateHistoryUpdateOne) SetUischema(m map[string]interface{}) *TemplateHistoryUpdateOne {
+	thuo.mutation.SetUischema(m)
 	return thuo
 }
 

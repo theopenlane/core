@@ -37,25 +37,17 @@ func (Narrative) Fields() []ent.Field {
 				entx.FieldSearchable(),
 			).
 			Comment("the description of the narrative"),
-		field.Text("satisfies").
+		field.Text("details").
 			Optional().
-			Comment("which controls are satisfied by the narrative"),
-		field.JSON("details", map[string]any{}).
-			Optional().
-			Comment("json data for the narrative document"),
+			Comment("text data for the narrative document"),
 	}
 }
 
 // Edges of the Narrative
 func (Narrative) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("internal_policy", InternalPolicy.Type).
-			Ref("narratives"),
-		edge.From("control", Control.Type).
-			Ref("narratives"),
-		edge.From("procedure", Procedure.Type).
-			Ref("narratives"),
-		edge.From("control_objective", ControlObjective.Type).
+		edge.From("satisfies", Control.Type).
+			Comment("which controls are satisfied by the narrative").
 			Ref("narratives"),
 		edge.From("programs", Program.Type).
 			Ref("narratives"),

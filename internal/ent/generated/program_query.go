@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -59,7 +58,6 @@ type ProgramQuery struct {
 	withEvidence               *EvidenceQuery
 	withNarratives             *NarrativeQuery
 	withActionPlans            *ActionPlanQuery
-	withStandards              *StandardQuery
 	withUsers                  *UserQuery
 	withMembers                *ProgramMembershipQuery
 	loadTotal                  []func(context.Context, []*Program) error
@@ -79,7 +77,6 @@ type ProgramQuery struct {
 	withNamedEvidence          map[string]*EvidenceQuery
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedActionPlans       map[string]*ActionPlanQuery
-	withNamedStandards         map[string]*StandardQuery
 	withNamedUsers             map[string]*UserQuery
 	withNamedMembers           map[string]*ProgramMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -257,11 +254,11 @@ func (pq *ProgramQuery) QuerySubcontrols() *SubcontrolQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, program.SubcontrolsTable, program.SubcontrolsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, program.SubcontrolsTable, program.SubcontrolsColumn),
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -512,31 +509,6 @@ func (pq *ProgramQuery) QueryActionPlans() *ActionPlanQuery {
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryStandards chains the current query on the "standards" edge.
-func (pq *ProgramQuery) QueryStandards() *StandardQuery {
-	query := (&StandardClient{config: pq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := pq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(program.Table, program.FieldID, selector),
-			sqlgraph.To(standard.Table, standard.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, program.StandardsTable, program.StandardsPrimaryKey...),
-		)
-		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardPrograms
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -801,7 +773,6 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 		withEvidence:          pq.withEvidence.Clone(),
 		withNarratives:        pq.withNarratives.Clone(),
 		withActionPlans:       pq.withActionPlans.Clone(),
-		withStandards:         pq.withStandards.Clone(),
 		withUsers:             pq.withUsers.Clone(),
 		withMembers:           pq.withMembers.Clone(),
 		// clone intermediate query.
@@ -987,17 +958,6 @@ func (pq *ProgramQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *Program
 	return pq
 }
 
-// WithStandards tells the query-builder to eager-load the nodes that are connected to
-// the "standards" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithStandards(opts ...func(*StandardQuery)) *ProgramQuery {
-	query := (&StandardClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	pq.withStandards = query
-	return pq
-}
-
 // WithUsers tells the query-builder to eager-load the nodes that are connected to
 // the "users" edge. The optional arguments are used to configure the query builder of the edge.
 func (pq *ProgramQuery) WithUsers(opts ...func(*UserQuery)) *ProgramQuery {
@@ -1104,7 +1064,7 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	var (
 		nodes       = []*Program{}
 		_spec       = pq.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [18]bool{
 			pq.withOwner != nil,
 			pq.withBlockedGroups != nil,
 			pq.withEditors != nil,
@@ -1121,7 +1081,6 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			pq.withEvidence != nil,
 			pq.withNarratives != nil,
 			pq.withActionPlans != nil,
-			pq.withStandards != nil,
 			pq.withUsers != nil,
 			pq.withMembers != nil,
 		}
@@ -1262,13 +1221,6 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
-	if query := pq.withStandards; query != nil {
-		if err := pq.loadStandards(ctx, query, nodes,
-			func(n *Program) { n.Edges.Standards = []*Standard{} },
-			func(n *Program, e *Standard) { n.Edges.Standards = append(n.Edges.Standards, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := pq.withUsers; query != nil {
 		if err := pq.loadUsers(ctx, query, nodes,
 			func(n *Program) { n.Edges.Users = []*User{} },
@@ -1385,13 +1337,6 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		if err := pq.loadActionPlans(ctx, query, nodes,
 			func(n *Program) { n.appendNamedActionPlans(name) },
 			func(n *Program, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range pq.withNamedStandards {
-		if err := pq.loadStandards(ctx, query, nodes,
-			func(n *Program) { n.appendNamedStandards(name) },
-			func(n *Program, e *Standard) { n.appendNamedStandards(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1695,64 +1640,33 @@ func (pq *ProgramQuery) loadControls(ctx context.Context, query *ControlQuery, n
 	return nil
 }
 func (pq *ProgramQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Program, init func(*Program), assign func(*Program, *Subcontrol)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Program)
-	nids := make(map[string]map[*Program]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Program)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
 		if init != nil {
-			init(node)
+			init(nodes[i])
 		}
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(program.SubcontrolsTable)
-		joinT.Schema(pq.schemaConfig.ProgramSubcontrols)
-		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(program.SubcontrolsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(program.SubcontrolsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(program.SubcontrolsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Program]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	query.withFKs = true
+	query.Where(predicate.Subcontrol(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(program.SubcontrolsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		fk := n.program_subcontrols
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "program_subcontrols" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "program_subcontrols" returned %v for node %v`, *fk, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -2345,68 +2259,6 @@ func (pq *ProgramQuery) loadActionPlans(ctx context.Context, query *ActionPlanQu
 	}
 	return nil
 }
-func (pq *ProgramQuery) loadStandards(ctx context.Context, query *StandardQuery, nodes []*Program, init func(*Program), assign func(*Program, *Standard)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Program)
-	nids := make(map[string]map[*Program]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(program.StandardsTable)
-		joinT.Schema(pq.schemaConfig.StandardPrograms)
-		s.Join(joinT).On(s.C(standard.FieldID), joinT.C(program.StandardsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(program.StandardsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(program.StandardsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Program]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Standard](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "standards" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (pq *ProgramQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*Program, init func(*Program), assign func(*Program, *User)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Program)
@@ -2809,20 +2661,6 @@ func (pq *ProgramQuery) WithNamedActionPlans(name string, opts ...func(*ActionPl
 		pq.withNamedActionPlans = make(map[string]*ActionPlanQuery)
 	}
 	pq.withNamedActionPlans[name] = query
-	return pq
-}
-
-// WithNamedStandards tells the query-builder to eager-load the nodes that are connected to the "standards"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithNamedStandards(name string, opts ...func(*StandardQuery)) *ProgramQuery {
-	query := (&StandardClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if pq.withNamedStandards == nil {
-		pq.withNamedStandards = make(map[string]*StandardQuery)
-	}
-	pq.withNamedStandards[name] = query
 	return pq
 }
 

@@ -1,28 +1,36 @@
+
+
 query GetAllControlHistories {
   controlHistories {
     edges {
       node {
-        class
-        controlNumber
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlQuestions
         controlType
         createdAt
         createdBy
         description
-        details
-        family
+        displayID
+        exampleEvidence
         historyTime
         id
-        mappedFrameworks
-        name
+        implementationGuidance
+        mappedCategories
         operation
+        ownerID
         ref
-        satisfies
+        refCode
+        references
         source
+        standardID
         status
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }
@@ -32,27 +40,33 @@ query GetControlHistories($where: ControlHistoryWhereInput) {
   controlHistories(where: $where) {
     edges {
       node {
-        class
-        controlNumber
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlQuestions
         controlType
         createdAt
         createdBy
         description
-        details
-        family
+        displayID
+        exampleEvidence
         historyTime
         id
-        mappedFrameworks
-        name
+        implementationGuidance
+        mappedCategories
         operation
+        ownerID
         ref
-        satisfies
+        refCode
+        references
         source
+        standardID
         status
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }

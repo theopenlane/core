@@ -87,28 +87,20 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_ControlObjective_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ControlObjective_description(ctx, field)
+			case "desiredOutcome":
+				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlObjective_status(ctx, field)
+			case "source":
+				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
 			case "version":
 				return ec.fieldContext_ControlObjective_version(ctx, field)
-			case "controlNumber":
-				return ec.fieldContext_ControlObjective_controlNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_ControlObjective_family(ctx, field)
-			case "class":
-				return ec.fieldContext_ControlObjective_class(ctx, field)
-			case "source":
-				return ec.fieldContext_ControlObjective_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
-			case "details":
-				return ec.fieldContext_ControlObjective_details(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
+			case "category":
+				return ec.fieldContext_ControlObjective_category(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_ControlObjective_subcategory(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -117,26 +109,24 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_ControlObjective_viewers(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
-			case "controls":
-				return ec.fieldContext_ControlObjective_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_ControlObjective_procedures(ctx, field)
-			case "risks":
-				return ec.fieldContext_ControlObjective_risks(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
-			case "standard":
-				return ec.fieldContext_ControlObjective_standard(ctx, field)
-			case "narratives":
-				return ec.fieldContext_ControlObjective_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_ControlObjective_evidence(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlObjective_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_ControlObjective_procedures(ctx, field)
+			case "risks":
+				return ec.fieldContext_ControlObjective_risks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_ControlObjective_narratives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -205,28 +195,20 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_ControlObjective_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ControlObjective_description(ctx, field)
+			case "desiredOutcome":
+				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlObjective_status(ctx, field)
+			case "source":
+				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
 			case "version":
 				return ec.fieldContext_ControlObjective_version(ctx, field)
-			case "controlNumber":
-				return ec.fieldContext_ControlObjective_controlNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_ControlObjective_family(ctx, field)
-			case "class":
-				return ec.fieldContext_ControlObjective_class(ctx, field)
-			case "source":
-				return ec.fieldContext_ControlObjective_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
-			case "details":
-				return ec.fieldContext_ControlObjective_details(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
+			case "category":
+				return ec.fieldContext_ControlObjective_category(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_ControlObjective_subcategory(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -235,26 +217,24 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_ControlObjective_viewers(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
-			case "controls":
-				return ec.fieldContext_ControlObjective_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_ControlObjective_procedures(ctx, field)
-			case "risks":
-				return ec.fieldContext_ControlObjective_risks(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
-			case "standard":
-				return ec.fieldContext_ControlObjective_standard(ctx, field)
-			case "narratives":
-				return ec.fieldContext_ControlObjective_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_ControlObjective_evidence(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlObjective_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_ControlObjective_procedures(ctx, field)
+			case "risks":
+				return ec.fieldContext_ControlObjective_risks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_ControlObjective_narratives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -367,28 +347,20 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_ControlObjective_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ControlObjective_description(ctx, field)
+			case "desiredOutcome":
+				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlObjective_status(ctx, field)
+			case "source":
+				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
 			case "version":
 				return ec.fieldContext_ControlObjective_version(ctx, field)
-			case "controlNumber":
-				return ec.fieldContext_ControlObjective_controlNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_ControlObjective_family(ctx, field)
-			case "class":
-				return ec.fieldContext_ControlObjective_class(ctx, field)
-			case "source":
-				return ec.fieldContext_ControlObjective_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
-			case "details":
-				return ec.fieldContext_ControlObjective_details(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
+			case "category":
+				return ec.fieldContext_ControlObjective_category(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_ControlObjective_subcategory(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -397,26 +369,24 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_ControlObjective_viewers(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
-			case "controls":
-				return ec.fieldContext_ControlObjective_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_ControlObjective_procedures(ctx, field)
-			case "risks":
-				return ec.fieldContext_ControlObjective_risks(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
-			case "standard":
-				return ec.fieldContext_ControlObjective_standard(ctx, field)
-			case "narratives":
-				return ec.fieldContext_ControlObjective_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_ControlObjective_evidence(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlObjective_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_ControlObjective_procedures(ctx, field)
+			case "risks":
+				return ec.fieldContext_ControlObjective_risks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_ControlObjective_narratives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
