@@ -17,7 +17,12 @@ func CheckForRequestedField(ctx context.Context, fieldName string) bool {
 	for _, f := range fields {
 		// fields are in the format of "parent.parent.fieldName", e.g. "organization.orgSubscription.subscriptionURL"
 		// so we check if the fieldName is in the string and not just equal to it
-		if strings.Contains(f, fieldName) {
+		if strings.Contains(strings.ToLower(f), strings.ToLower(fieldName)) {
+			return true
+		}
+
+		// see if it contains the plural version of the field name
+		if strings.Contains(strings.ToLower(f), strings.ToLower(fieldName)+"s") {
 			return true
 		}
 	}

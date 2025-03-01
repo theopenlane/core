@@ -10,7 +10,10 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -94,6 +97,20 @@ func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*model
 
 // Control is the resolver for the control field.
 func (r *queryResolver) Control(ctx context.Context, id string) (*generated.Control, error) {
+	query := withTransactionalMutation(ctx).Control.Query().Where(control.ID(id))
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeSubcontrol) {
+		query.WithNamedSubcontrols("subcontrols", func(q *generated.SubcontrolQuery) {
+			q.Where(subcontrol.ControlID(id))
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+			q.Limit(100)
+		})
+	}
+
 	res, err := withTransactionalMutation(ctx).Control.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
