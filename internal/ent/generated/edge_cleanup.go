@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -22,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -79,6 +81,27 @@ func ContactHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func ControlEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasControlWith(control.ID(id)))).Exist(ctx); err == nil && exists {
+		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasControlWith(control.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", controlimplementationCount).Msg("deleting controlimplementation")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).MappedControl.Query().Where((mappedcontrol.HasControlWith(control.ID(id)))).Exist(ctx); err == nil && exists {
+		if mappedcontrolCount, err := FromContext(ctx).MappedControl.Delete().Where(mappedcontrol.HasControlWith(control.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", mappedcontrolCount).Msg("deleting mappedcontrol")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasControlWith(control.ID(id)))).Exist(ctx); err == nil && exists {
+		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasControlWith(control.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", subcontrolCount).Msg("deleting subcontrol")
+			return err
+		}
+	}
 
 	return nil
 }

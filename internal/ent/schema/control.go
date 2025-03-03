@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -52,15 +53,19 @@ func (Control) Edges() []ent.Edge {
 
 		edge.To("implementation", ControlImplementation.Type).
 			Unique().
+			Annotations(entx.CascadeAnnotationField("Control")). // cascade delete the implementation when the control is deleted
 			Comment("the implementation of the control"),
 
 		edge.To("mapped_controls", MappedControl.Type).
 			Unique().
+			Annotations(entx.CascadeAnnotationField("Control")). // cascade delete the mapped control when the control is deleted
 			Comment("controls that are mapped to this control"),
 
 		// controls have control objectives and subcontrols
 		edge.To("control_objectives", ControlObjective.Type),
-		edge.To("subcontrols", Subcontrol.Type),
+
+		edge.To("subcontrols", Subcontrol.Type).
+			Annotations(entx.CascadeAnnotationField("Control")), // cascade delete the subcontrol when the control is deleted
 
 		// controls can have associated task, narratives, risks, and action plans
 		edge.To("tasks", Task.Type),

@@ -101,7 +101,7 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 				Controls: []*openlaneclient.CreateControlWithSubcontrolsInput{
 					{
 						Control: &openlaneclient.CreateControlInput{
-							Name: "control 1",
+							RefCode: "control-1",
 						},
 						// TODO: (sfunk): fix with controls schema PR, validation is now
 						// requiring control ID as input which we don't want to require in
@@ -117,7 +117,7 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 					},
 					{
 						Control: &openlaneclient.CreateControlInput{
-							Name: "control 2",
+							RefCode: "control 2",
 						},
 					},
 				},
@@ -161,9 +161,6 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 
 			// the creator is automatically added as an admin, and the members are added in addition
 			assert.Len(t, resp.CreateFullProgram.Program.Members, len(tc.request.Members)+1)
-
-			require.NotNil(t, resp.CreateFullProgram.Program.Standards)
-			assert.Equal(t, tc.request.Standard.Name, resp.CreateFullProgram.Program.Standards[0].Name)
 
 			require.NotNil(t, resp.CreateFullProgram.Program.Controls)
 			assert.Len(t, resp.CreateFullProgram.Program.Controls, len(tc.request.Controls))

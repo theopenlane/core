@@ -14,6 +14,7 @@ var controlFields = []ent.Field{
 		Annotations(
 			entx.FieldSearchable(),
 		).
+		NotEmpty().
 		Comment("the reference code for the control that is unique within the standard"),
 	field.Text("description").
 		Optional().
@@ -27,9 +28,11 @@ var controlFields = []ent.Field{
 	field.Enum("source").
 		GoType(enums.ControlSource("")).
 		Optional().
+		Default(enums.ControlSourceUserDefined.String()).
 		Comment("source of the control, e.g. framework, template, custom, etc."),
 	field.Enum("control_type").
 		GoType(enums.ControlType("")).
+		Default(enums.ControlTypePreventative.String()).
 		Optional().
 		Comment("type of the control e.g. preventive, detective, corrective, or deterrent."),
 	field.String("category").

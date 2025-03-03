@@ -335,6 +335,10 @@ func (cohc *ControlObjectiveHistoryCreate) defaults() {
 		v := controlobjectivehistory.DefaultTags
 		cohc.mutation.SetTags(v)
 	}
+	if _, ok := cohc.mutation.Source(); !ok {
+		v := controlobjectivehistory.DefaultSource
+		cohc.mutation.SetSource(v)
+	}
 	if _, ok := cohc.mutation.ID(); !ok {
 		v := controlobjectivehistory.DefaultID()
 		cohc.mutation.SetID(v)

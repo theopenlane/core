@@ -392,6 +392,14 @@ func (chc *ControlHistoryCreate) defaults() {
 		v := controlhistory.DefaultTags
 		chc.mutation.SetTags(v)
 	}
+	if _, ok := chc.mutation.Source(); !ok {
+		v := controlhistory.DefaultSource
+		chc.mutation.SetSource(v)
+	}
+	if _, ok := chc.mutation.ControlType(); !ok {
+		v := controlhistory.DefaultControlType
+		chc.mutation.SetControlType(v)
+	}
 	if _, ok := chc.mutation.ID(); !ok {
 		v := controlhistory.DefaultID()
 		chc.mutation.SetID(v)

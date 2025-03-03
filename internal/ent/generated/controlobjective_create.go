@@ -500,6 +500,10 @@ func (coc *ControlObjectiveCreate) defaults() error {
 		v := controlobjective.DefaultTags
 		coc.mutation.SetTags(v)
 	}
+	if _, ok := coc.mutation.Source(); !ok {
+		v := controlobjective.DefaultSource
+		coc.mutation.SetSource(v)
+	}
 	if _, ok := coc.mutation.ID(); !ok {
 		if controlobjective.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized controlobjective.DefaultID (forgotten import generated/runtime?)")

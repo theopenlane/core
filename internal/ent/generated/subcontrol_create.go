@@ -547,6 +547,14 @@ func (sc *SubcontrolCreate) defaults() error {
 		v := subcontrol.DefaultTags
 		sc.mutation.SetTags(v)
 	}
+	if _, ok := sc.mutation.Source(); !ok {
+		v := subcontrol.DefaultSource
+		sc.mutation.SetSource(v)
+	}
+	if _, ok := sc.mutation.ControlType(); !ok {
+		v := subcontrol.DefaultControlType
+		sc.mutation.SetControlType(v)
+	}
 	if _, ok := sc.mutation.ID(); !ok {
 		if subcontrol.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subcontrol.DefaultID (forgotten import generated/runtime?)")

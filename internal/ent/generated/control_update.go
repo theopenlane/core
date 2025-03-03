@@ -1067,6 +1067,11 @@ func (cu *ControlUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cu *ControlUpdate) check() error {
+	if v, ok := cu.mutation.RefCode(); ok {
+		if err := control.RefCodeValidator(v); err != nil {
+			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
+		}
+	}
 	if v, ok := cu.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
@@ -3095,6 +3100,11 @@ func (cuo *ControlUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cuo *ControlUpdateOne) check() error {
+	if v, ok := cuo.mutation.RefCode(); ok {
+		if err := control.RefCodeValidator(v); err != nil {
+			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
+		}
+	}
 	if v, ok := cuo.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}

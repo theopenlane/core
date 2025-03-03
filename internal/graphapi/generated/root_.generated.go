@@ -25939,7 +25939,7 @@ ControlControlSource is enum for the field source
 enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
-  CUSTOM
+  USER_DEFINED
   IMPORTED
 }
 """
@@ -26075,7 +26075,7 @@ ControlHistoryControlSource is enum for the field source
 enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
-  CUSTOM
+  USER_DEFINED
   IMPORTED
 }
 """
@@ -27120,7 +27120,7 @@ ControlObjectiveControlSource is enum for the field source
 enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
-  CUSTOM
+  USER_DEFINED
   IMPORTED
 }
 """
@@ -27215,7 +27215,7 @@ ControlObjectiveHistoryControlSource is enum for the field source
 enum ControlObjectiveHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
-  CUSTOM
+  USER_DEFINED
   IMPORTED
 }
 """
@@ -48568,7 +48568,7 @@ SubcontrolControlSource is enum for the field source
 enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
-  CUSTOM
+  USER_DEFINED
   IMPORTED
 }
 """
@@ -48704,7 +48704,7 @@ SubcontrolHistoryControlSource is enum for the field source
 enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
-  CUSTOM
+  USER_DEFINED
   IMPORTED
 }
 """

@@ -658,6 +658,14 @@ func (cc *ControlCreate) defaults() error {
 		v := control.DefaultTags
 		cc.mutation.SetTags(v)
 	}
+	if _, ok := cc.mutation.Source(); !ok {
+		v := control.DefaultSource
+		cc.mutation.SetSource(v)
+	}
+	if _, ok := cc.mutation.ControlType(); !ok {
+		v := control.DefaultControlType
+		cc.mutation.SetControlType(v)
+	}
 	if _, ok := cc.mutation.ID(); !ok {
 		if control.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized control.DefaultID (forgotten import generated/runtime?)")
@@ -685,6 +693,11 @@ func (cc *ControlCreate) check() error {
 	}
 	if _, ok := cc.mutation.RefCode(); !ok {
 		return &ValidationError{Name: "ref_code", err: errors.New(`generated: missing required field "Control.ref_code"`)}
+	}
+	if v, ok := cc.mutation.RefCode(); ok {
+		if err := control.RefCodeValidator(v); err != nil {
+			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
+		}
 	}
 	if v, ok := cc.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {

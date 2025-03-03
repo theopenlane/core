@@ -41,6 +41,7 @@ func (ControlObjective) Fields() []ent.Field {
 		field.Enum("source").
 			GoType(enums.ControlSource("")).
 			Optional().
+			Default(enums.ControlSourceUserDefined.String()).
 			Comment("source of the control, e.g. framework, template, custom, etc."),
 		field.String("control_objective_type").
 			Optional().

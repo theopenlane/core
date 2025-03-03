@@ -399,6 +399,10 @@ func init() {
 	controlDescOwnerID := controlMixinFields4[0].Descriptor()
 	// control.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	control.OwnerIDValidator = controlDescOwnerID.Validators[0].(func(string) error)
+	// controlDescRefCode is the schema descriptor for ref_code field.
+	controlDescRefCode := controlFields[0].Descriptor()
+	// control.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
+	control.RefCodeValidator = controlDescRefCode.Validators[0].(func(string) error)
 	// controlDescID is the schema descriptor for id field.
 	controlDescID := controlMixinFields2[0].Descriptor()
 	// control.DefaultID holds the default value on creation for the id field.

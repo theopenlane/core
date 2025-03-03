@@ -68,3 +68,6 @@ results.txt
 *.config.yaml
 .task
 .hermit
+
+# temp ignore for testing control setup
+startup/

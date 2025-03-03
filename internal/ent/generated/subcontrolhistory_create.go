@@ -384,6 +384,14 @@ func (shc *SubcontrolHistoryCreate) defaults() {
 		v := subcontrolhistory.DefaultTags
 		shc.mutation.SetTags(v)
 	}
+	if _, ok := shc.mutation.Source(); !ok {
+		v := subcontrolhistory.DefaultSource
+		shc.mutation.SetSource(v)
+	}
+	if _, ok := shc.mutation.ControlType(); !ok {
+		v := subcontrolhistory.DefaultControlType
+		shc.mutation.SetControlType(v)
+	}
 	if _, ok := shc.mutation.ID(); !ok {
 		v := subcontrolhistory.DefaultID()
 		shc.mutation.SetID(v)

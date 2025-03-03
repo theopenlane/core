@@ -203,8 +203,7 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 			request: openlaneclient.CreateNarrativeInput{
 				Name:        "Another Narrative",
 				Description: lo.ToPtr("A description of the Narrative"),
-				Satisfies:   lo.ToPtr("controls"),
-				Details:     map[string]interface{}{"stuff": "things"},
+				Details:     lo.ToPtr("Details of the Narrative"),
 				ProgramIDs:  []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
@@ -338,12 +337,6 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 				assert.Empty(t, resp.CreateNarrative.Narrative.Description)
 			}
 
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.CreateNarrative.Narrative.Satisfies)
-			} else {
-				assert.Empty(t, resp.CreateNarrative.Narrative.Satisfies)
-			}
-
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.CreateNarrative.Narrative.Details)
 			} else {
@@ -419,10 +412,9 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateNarrativeInput{
-				Satisfies: lo.ToPtr("Updated controls"),
-				Tags:      []string{"tag1", "tag2"},
-				Name:      lo.ToPtr("Updated Name"),
-				Details:   map[string]interface{}{"key": "value"},
+				Tags:    []string{"tag1", "tag2"},
+				Name:    lo.ToPtr("Updated Name"),
+				Details: lo.ToPtr("Updated Details"),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -463,10 +455,6 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.UpdateNarrative.Narrative.Description)
-			}
-
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.UpdateNarrative.Narrative.Satisfies)
 			}
 
 			if tc.request.Tags != nil {

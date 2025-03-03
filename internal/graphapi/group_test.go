@@ -726,7 +726,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 						ID:          &control.ID,
 						Permissions: enums.Editor,
 						DisplayID:   &control.DisplayID,
-						Name:        &control.Name,
+						Name:        &control.RefCode, // TODO: sfunk confirm this works ok
 					},
 				},
 			},

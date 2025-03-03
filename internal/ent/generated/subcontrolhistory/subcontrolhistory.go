@@ -152,15 +152,19 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultSource enums.ControlSource = "USER_DEFINED"
+
 // SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
 func SourceValidator(s enums.ControlSource) error {
 	switch s.String() {
-	case "FRAMEWORK", "TEMPLATE", "CUSTOM", "IMPORTED":
+	case "FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED":
 		return nil
 	default:
 		return fmt.Errorf("subcontrolhistory: invalid enum value for source field: %q", s)
 	}
 }
+
+const DefaultControlType enums.ControlType = "PREVENTATIVE"
 
 // ControlTypeValidator is a validator for the "control_type" field enum values. It is called by the builders before save.
 func ControlTypeValidator(ct enums.ControlType) error {

@@ -13,8 +13,8 @@ var (
 	ControlSourceFramework ControlSource = "FRAMEWORK"
 	// ControlSourceTemplate is used when the control comes from a template
 	ControlSourceTemplate ControlSource = "TEMPLATE"
-	// ControlSourceCustom is used when the control is manually created by a user
-	ControlSourceCustom ControlSource = "CUSTOM"
+	// ControlSourceUserDefined is used when the control is manually created by a user
+	ControlSourceUserDefined ControlSource = "USER_DEFINED"
 	// ControlSourceImport is used when the control is imported from another system
 	ControlSourceImport ControlSource = "IMPORTED"
 	// ControlSourceInvalid is used when the control source is invalid
@@ -22,9 +22,9 @@ var (
 )
 
 // Values returns a slice of strings that represents all the possible values of the ControlSource enum.
-// Possible default values are "FRAMEWORK", "TEMPLATE", "CUSTOM", and "IMPORTED".
+// Possible default values are "FRAMEWORK", "TEMPLATE", "USER_DEFINED", and "IMPORTED".
 func (ControlSource) Values() (kinds []string) {
-	for _, s := range []ControlSource{ControlSourceFramework, ControlSourceTemplate, ControlSourceCustom, ControlSourceImport} {
+	for _, s := range []ControlSource{ControlSourceFramework, ControlSourceTemplate, ControlSourceUserDefined, ControlSourceImport} {
 		kinds = append(kinds, string(s))
 	}
 
@@ -43,8 +43,8 @@ func ToControlSource(r string) *ControlSource {
 		return &ControlSourceFramework
 	case ControlSourceTemplate.String():
 		return &ControlSourceTemplate
-	case ControlSourceCustom.String():
-		return &ControlSourceCustom
+	case ControlSourceUserDefined.String():
+		return &ControlSourceUserDefined
 	case ControlSourceImport.String():
 		return &ControlSourceImport
 	default:
