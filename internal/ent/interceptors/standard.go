@@ -4,10 +4,12 @@ import (
 	"context"
 
 	"entgo.io/ent"
+
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/iam/auth"
 )
 
 // TraverseStandard  only returns public standards
