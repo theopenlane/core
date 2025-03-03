@@ -61,11 +61,11 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 		}
 
 		log.Debug().Msgf("Internal event: %v", meowevent)
-
-		_, err = h.HandleEvent(newCtx, &event)
-		if err != nil {
-			return h.InternalServerError(ctx, err)
-		}
+		//
+		//		_, err = h.HandleEvent(newCtx, &event)
+		//		if err != nil {
+		//			return h.InternalServerError(ctx, err)
+		//		}
 	}
 
 	return h.Success(ctx, nil)
