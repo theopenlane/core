@@ -456,6 +456,11 @@ func (ec *EvidenceCreate) check() error {
 	if _, ok := ec.mutation.CreationDate(); !ok {
 		return &ValidationError{Name: "creation_date", err: errors.New(`generated: missing required field "Evidence.creation_date"`)}
 	}
+	if v, ok := ec.mutation.URL(); ok {
+		if err := evidence.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
+		}
+	}
 	return nil
 }
 

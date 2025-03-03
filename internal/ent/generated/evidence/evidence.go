@@ -186,6 +186,8 @@ var (
 	DefaultRenewalDate time.Time
 	// DefaultIsAutomated holds the default value on creation for the "is_automated" field.
 	DefaultIsAutomated bool
+	// URLValidator is a validator for the "url" field. It is called by the builders before save.
+	URLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

@@ -546,6 +546,11 @@ func (eu *EvidenceUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Evidence.name": %w`, err)}
 		}
 	}
+	if v, ok := eu.mutation.URL(); ok {
+		if err := evidence.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1481,6 +1486,11 @@ func (euo *EvidenceUpdateOne) check() error {
 	if v, ok := euo.mutation.Name(); ok {
 		if err := evidence.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Evidence.name": %w`, err)}
+		}
+	}
+	if v, ok := euo.mutation.URL(); ok {
+		if err := evidence.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
 		}
 	}
 	return nil

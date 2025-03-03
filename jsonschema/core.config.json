@@ -575,31 +575,48 @@
     "objects.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates if the store is enabled"
         },
         "provider": {
-          "type": "string"
+          "type": "string",
+          "description": "Provider is the name of the provider, eg. disk, s3, will default to disk if nothing is set"
         },
         "accessKey": {
-          "type": "string"
+          "type": "string",
+          "description": "AccessKey is the access key for the storage provider"
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region is the region for the storage provider"
         },
         "secretKey": {
-          "type": "string"
+          "type": "string",
+          "description": "SecretKey is the secret key for the storage provider"
         },
         "credentialsJSON": {
-          "type": "string"
+          "type": "string",
+          "description": "CredentialsJSON is the credentials JSON for the storage provider"
         },
         "defaultBucket": {
-          "type": "string"
+          "type": "string",
+          "description": "DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default\nthis is the local path for disk storage or the bucket name for S3"
         },
         "localURL": {
-          "type": "string"
+          "type": "string",
+          "description": "LocalURL is the URL to use for the \"presigned\" URL for the file when using local storage\ne.g for local development, this can be http://localhost:17608/files/"
         },
         "keys": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "Keys is a list of keys to look for in the multipart form on the REST request\nif the keys are not found, the request upload will be skipped\nthis is not used when uploading files with gqlgen and the graphql handler"
+        },
+        "maxSizeMB": {
+          "type": "integer",
+          "description": "MaxUploadSizeMB is the maximum size of file uploads to accept in megabytes"
+        },
+        "maxMemoryMB": {
+          "type": "integer",
+          "description": "MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form"
         }
       },
       "additionalProperties": false,
