@@ -323,7 +323,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "cannot be null",
+			expectedErr: "validator failed for field",
 		},
 	}
 
