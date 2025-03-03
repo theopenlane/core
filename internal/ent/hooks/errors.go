@@ -54,6 +54,8 @@ var (
 	ErrEmailDomainNotAllowed = errors.New("email domain not allowed in organization")
 	// ErrUserNotFound is returned when a user is not found in the system
 	ErrUserNotFound = errors.New("user not found")
+	// ErrPersonalOrgNoSubscription is returned when the org is a personal org and we don't want to create a subscription in stripe
+	ErrPersonalOrgNoSubscription = errors.New("detected personal organization, do not create stripe subscription")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

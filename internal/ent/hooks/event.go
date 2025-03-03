@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 	"time"
@@ -198,7 +199,11 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 	}
 
 	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
-	if err != nil {
+	if errors.Is(err, ErrPersonalOrgNoSubscription) {
+		log.Warn().Msg("Personal org detected, skipping customer creation")
+
+		return nil
+	} else if err != nil {
 		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
 
 		return err
@@ -227,7 +232,11 @@ func handleOrganizationSettingsCreate(event soiree.Event) error {
 	}
 
 	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
-	if err != nil {
+	if errors.Is(err, ErrPersonalOrgNoSubscription) {
+		log.Debug().Msg("Personal org detected, skipping customer creation")
+
+		return nil
+	} else if err != nil {
 		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
 
 		return err
@@ -317,6 +326,12 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		log.Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgsettingID)
 
 		return nil, err
+	}
+
+	if org.PersonalOrg {
+		log.Debug().Str("organization_id", org.ID).Msg("organization is a personal org")
+
+		return nil, ErrPersonalOrgNoSubscription
 	}
 
 	if len(org.Edges.OrgSubscriptions) > 1 {
