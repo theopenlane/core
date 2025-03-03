@@ -105,11 +105,13 @@ const (
 	// ProceduresInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProceduresInverseTable = "procedures"
-	// NarrativesTable is the table that holds the narratives relation/edge. The primary key declared below.
-	NarrativesTable = "internal_policy_narratives"
+	// NarrativesTable is the table that holds the narratives relation/edge.
+	NarrativesTable = "narratives"
 	// NarrativesInverseTable is the table name for the Narrative entity.
 	// It exists in this package in order to avoid circular dependency with the "narrative" package.
 	NarrativesInverseTable = "narratives"
+	// NarrativesColumn is the table column denoting the narratives relation/edge.
+	NarrativesColumn = "internal_policy_narratives"
 	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
 	TasksTable = "internal_policy_tasks"
 	// TasksInverseTable is the table name for the Task entity.
@@ -145,6 +147,13 @@ var Columns = []string{
 	FieldDetails,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"control_internal_policies",
+	"subcontrol_internal_policies",
+}
+
 var (
 	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the blocked_groups relation (M2M).
@@ -158,9 +167,6 @@ var (
 	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
 	// primary key for the procedures relation (M2M).
 	ProceduresPrimaryKey = []string{"internal_policy_id", "procedure_id"}
-	// NarrativesPrimaryKey and NarrativesColumn2 are the table columns denoting the
-	// primary key for the narratives relation (M2M).
-	NarrativesPrimaryKey = []string{"internal_policy_id", "narrative_id"}
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"internal_policy_id", "task_id"}
@@ -173,6 +179,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -460,7 +471,7 @@ func newNarrativesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NarrativesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, NarrativesTable, NarrativesPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
 	)
 }
 func newTasksStep() *sqlgraph.Step {

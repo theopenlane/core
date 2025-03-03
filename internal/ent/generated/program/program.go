@@ -84,8 +84,6 @@ const (
 	EdgeNarratives = "narratives"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
-	// EdgeStandards holds the string denoting the standards edge name in mutations.
-	EdgeStandards = "standards"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
@@ -119,11 +117,13 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
-	SubcontrolsTable = "program_subcontrols"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
+	SubcontrolsTable = "subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
+	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
+	SubcontrolsColumn = "program_subcontrols"
 	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
 	ControlObjectivesTable = "program_control_objectives"
 	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
@@ -176,11 +176,6 @@ const (
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
-	// StandardsTable is the table that holds the standards relation/edge. The primary key declared below.
-	StandardsTable = "standard_programs"
-	// StandardsInverseTable is the table name for the Standard entity.
-	// It exists in this package in order to avoid circular dependency with the "standard" package.
-	StandardsInverseTable = "standards"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
 	UsersTable = "program_memberships"
 	// UsersInverseTable is the table name for the User entity.
@@ -230,9 +225,6 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"program_id", "control_id"}
-	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
-	// primary key for the subcontrols relation (M2M).
-	SubcontrolsPrimaryKey = []string{"program_id", "subcontrol_id"}
 	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
 	// primary key for the control_objectives relation (M2M).
 	ControlObjectivesPrimaryKey = []string{"program_id", "control_objective_id"}
@@ -260,9 +252,6 @@ var (
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"program_id", "action_plan_id"}
-	// StandardsPrimaryKey and StandardsColumn2 are the table columns denoting the
-	// primary key for the standards relation (M2M).
-	StandardsPrimaryKey = []string{"standard_id", "program_id"}
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"user_id", "program_id"}
@@ -628,20 +617,6 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByStandardsCount orders the results by standards count.
-func ByStandardsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newStandardsStep(), opts...)
-	}
-}
-
-// ByStandards orders the results by standards terms.
-func ByStandards(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newStandardsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByUsersCount orders the results by users count.
 func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -708,7 +683,7 @@ func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
 	)
 }
 func newControlObjectivesStep() *sqlgraph.Step {
@@ -779,13 +754,6 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ActionPlansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
-	)
-}
-func newStandardsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(StandardsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, StandardsTable, StandardsPrimaryKey...),
 	)
 }
 func newUsersStep() *sqlgraph.Step {

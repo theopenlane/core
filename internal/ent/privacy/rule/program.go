@@ -24,10 +24,7 @@ const (
 // which allows them to create objects associated with the parent
 func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
-		pIDs, err := getParentIDFromEntMutation[T](m, parentType)
-		if err != nil {
-			return privacy.Denyf("unable to get parent id from mutation, %s", err.Error())
-		}
+		pIDs := getParentIDFromEntMutation[T](m, parentType)
 
 		if len(pIDs) == 0 {
 			return privacy.Skipf("no parent set on request, skipping")
@@ -87,28 +84,38 @@ type ProgramParentMutation interface {
 }
 
 // getProgramIDFromEntMutation returns the program ids from the mutation
-func getProgramIDFromEntMutation[T ProgramParentMutation](m generated.Mutation) ([]string, error) {
-	return m.(T).ProgramsIDs(), nil
+func getProgramIDFromEntMutation[T ProgramParentMutation](m generated.Mutation) []string {
+	return m.(T).ProgramsIDs()
 }
 
 // ControlParentMutation is an interface that defines the method to get the control ids from the mutation
 type ControlParentMutation interface {
-	ControlsIDs() []string
+	ControlID() (string, bool)
 }
 
 // getProgramIDFromEntMutation returns the program ids from the mutation
-func getControlIDFromEntMutation[T ControlParentMutation](m generated.Mutation) ([]string, error) {
-	return m.(T).ControlsIDs(), nil
+func getControlIDFromEntMutation[T ControlParentMutation](m generated.Mutation) string {
+	id, ok := m.(T).ControlID()
+	if !ok {
+		return ""
+	}
+
+	return id
 }
 
 // getParentIDFromEntMutation returns the parent ids from the mutation
-func getParentIDFromEntMutation[T ent.Mutation](m generated.Mutation, parentType string) ([]string, error) {
+func getParentIDFromEntMutation[T ent.Mutation](m generated.Mutation, parentType string) []string {
 	switch parentType {
 	case ProgramParent:
 		return getProgramIDFromEntMutation[ProgramParentMutation](m)
 	case ControlParent:
-		return getControlIDFromEntMutation[ControlParentMutation](m)
+		id := getControlIDFromEntMutation[ControlParentMutation](m)
+		if id != "" {
+			return []string{id}
+		}
+
+		return []string{}
 	}
 
-	return []string{}, nil
+	return []string{}
 }

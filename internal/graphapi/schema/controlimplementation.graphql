@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up controlImplementation by ID
+    """
+     controlImplementation(
+        """
+        ID of the controlImplementation
+        """
+        id: ID!
+    ):  ControlImplementation!
+}
+
+extend type Mutation{
+    """
+    Create a new controlImplementation
+    """
+    createControlImplementation(
+        """
+        values of the controlImplementation
+        """
+        input: CreateControlImplementationInput!
+    ): ControlImplementationCreatePayload!
+    """
+    Create multiple new controlImplementations
+    """
+    createBulkControlImplementation(
+        """
+        values of the controlImplementation
+        """
+        input: [CreateControlImplementationInput!]
+    ): ControlImplementationBulkCreatePayload!
+    """
+    Create multiple new controlImplementations via file upload
+    """
+    createBulkCSVControlImplementation(
+        """
+        csv file containing values of the controlImplementation
+        """
+        input: Upload!
+    ): ControlImplementationBulkCreatePayload!
+    """
+    Update an existing controlImplementation
+    """
+    updateControlImplementation(
+        """
+        ID of the controlImplementation
+        """
+        id: ID!
+        """
+        New values for the controlImplementation
+        """
+        input: UpdateControlImplementationInput!
+    ): ControlImplementationUpdatePayload!
+    """
+    Delete an existing controlImplementation
+    """
+    deleteControlImplementation(
+        """
+        ID of the controlImplementation
+        """
+        id: ID!
+    ): ControlImplementationDeletePayload!
+}
+
+"""
+Return response for createControlImplementation mutation
+"""
+type ControlImplementationCreatePayload {
+    """
+    Created controlImplementation
+    """
+    controlImplementation: ControlImplementation!
+}
+
+"""
+Return response for updateControlImplementation mutation
+"""
+type ControlImplementationUpdatePayload {
+    """
+    Updated controlImplementation
+    """
+    controlImplementation: ControlImplementation!
+}
+
+"""
+Return response for deleteControlImplementation mutation
+"""
+type ControlImplementationDeletePayload {
+    """
+    Deleted controlImplementation ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkControlImplementation mutation
+"""
+type ControlImplementationBulkCreatePayload {
+    """
+    Created controlImplementations
+    """
+    controlImplementations: [ControlImplementation!]
+}

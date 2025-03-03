@@ -25,15 +25,10 @@ func init() {
 
 	// command line flags for the update command
 	updateCmd.Flags().StringP("name", "n", "", "name of the control objective")
-	updateCmd.Flags().StringP("description", "d", "", "description of the control objective")
 	updateCmd.Flags().StringP("status", "s", "", "status of the control objective")
 	updateCmd.Flags().StringP("type", "t", "", "type of the control objective")
 	updateCmd.Flags().StringP("version", "v", "", "version of the control objective")
-	updateCmd.Flags().StringP("control-number", "c", "", "number of the control objective")
-	updateCmd.Flags().StringP("family", "f", "", "family of the control objective")
-	updateCmd.Flags().StringP("class", "l", "", "class associated with the control objective")
-	updateCmd.Flags().StringP("source", "o", "", "source of the control objective")
-	updateCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks")
+
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the control objective")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the control objective")
 	updateCmd.Flags().StringSliceP("add-editors", "e", []string{}, "group ID(s) given editor access to the control objective")
@@ -64,11 +59,6 @@ func updateValidation() (id string, input openlaneclient.UpdateControlObjectiveI
 		input.RemoveProgramIDs = removePrograms
 	}
 
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
-	}
-
 	status := cmd.Config.String("status")
 	if status != "" {
 		input.Status = &status
@@ -82,31 +72,6 @@ func updateValidation() (id string, input openlaneclient.UpdateControlObjectiveI
 	version := cmd.Config.String("version")
 	if version != "" {
 		input.Version = &version
-	}
-
-	controlNumber := cmd.Config.String("control-number")
-	if controlNumber != "" {
-		input.ControlNumber = &controlNumber
-	}
-
-	family := cmd.Config.String("family")
-	if family != "" {
-		input.Family = &family
-	}
-
-	class := cmd.Config.String("class")
-	if class != "" {
-		input.Class = &class
-	}
-
-	source := cmd.Config.String("source")
-	if source != "" {
-		input.Source = &source
-	}
-
-	mappedFrameworks := cmd.Config.String("mapped-frameworks")
-	if mappedFrameworks != "" {
-		input.MappedFrameworks = &mappedFrameworks
 	}
 
 	viewerGroupIDs := cmd.Config.Strings("add-viewers")

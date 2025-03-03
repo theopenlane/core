@@ -43,9 +43,9 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipUser bool
 					return nil, err
 				}
 
-				subject := "user"
+				subject := auth.UserSubjectType
 				if a.AuthenticationType == auth.APITokenAuthentication {
-					subject = "service"
+					subject = auth.ServiceSubjectType
 				}
 
 				// add user permissions to the object as the parent on creation

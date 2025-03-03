@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/entdb"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
@@ -107,8 +108,12 @@ func (suite *HookTestSuite) seedUser() *generated.User {
 	t := suite.T()
 
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
-	user, err := suite.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
+	newUser, err := suite.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
 	require.NoError(t, err)
 
-	return user
+	// get user and their org memberships
+	newUser, err = suite.client.User.Query().Where(user.ID(newUser.ID)).WithOrgMemberships().Only(ctx)
+	require.NoError(t, err)
+
+	return newUser
 }

@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -253,21 +252,6 @@ func (apu *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
 	return apu
 }
 
-// AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
-func (apu *ActionPlanUpdate) AddStandardIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.AddStandardIDs(ids...)
-	return apu
-}
-
-// AddStandard adds the "standard" edges to the Standard entity.
-func (apu *ActionPlanUpdate) AddStandard(s ...*Standard) *ActionPlanUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return apu.AddStandardIDs(ids...)
-}
-
 // AddRiskIDs adds the "risk" edge to the Risk entity by IDs.
 func (apu *ActionPlanUpdate) AddRiskIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.AddRiskIDs(ids...)
@@ -331,27 +315,6 @@ func (apu *ActionPlanUpdate) AddProgram(p ...*Program) *ActionPlanUpdate {
 // Mutation returns the ActionPlanMutation object of the builder.
 func (apu *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return apu.mutation
-}
-
-// ClearStandard clears all "standard" edges to the Standard entity.
-func (apu *ActionPlanUpdate) ClearStandard() *ActionPlanUpdate {
-	apu.mutation.ClearStandard()
-	return apu
-}
-
-// RemoveStandardIDs removes the "standard" edge to Standard entities by IDs.
-func (apu *ActionPlanUpdate) RemoveStandardIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.RemoveStandardIDs(ids...)
-	return apu
-}
-
-// RemoveStandard removes "standard" edges to Standard entities.
-func (apu *ActionPlanUpdate) RemoveStandard(s ...*Standard) *ActionPlanUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return apu.RemoveStandardIDs(ids...)
 }
 
 // ClearRisk clears all "risk" edges to the Risk entity.
@@ -574,54 +537,6 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if apu.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
-	}
-	if apu.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.StandardTable,
-			Columns: actionplan.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apu.schemaConfig.StandardActionPlans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apu.mutation.RemovedStandardIDs(); len(nodes) > 0 && !apu.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.StandardTable,
-			Columns: actionplan.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apu.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apu.mutation.StandardIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.StandardTable,
-			Columns: actionplan.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apu.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if apu.mutation.RiskCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1055,21 +970,6 @@ func (apuo *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
-func (apuo *ActionPlanUpdateOne) AddStandardIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.AddStandardIDs(ids...)
-	return apuo
-}
-
-// AddStandard adds the "standard" edges to the Standard entity.
-func (apuo *ActionPlanUpdateOne) AddStandard(s ...*Standard) *ActionPlanUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return apuo.AddStandardIDs(ids...)
-}
-
 // AddRiskIDs adds the "risk" edge to the Risk entity by IDs.
 func (apuo *ActionPlanUpdateOne) AddRiskIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.AddRiskIDs(ids...)
@@ -1133,27 +1033,6 @@ func (apuo *ActionPlanUpdateOne) AddProgram(p ...*Program) *ActionPlanUpdateOne 
 // Mutation returns the ActionPlanMutation object of the builder.
 func (apuo *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return apuo.mutation
-}
-
-// ClearStandard clears all "standard" edges to the Standard entity.
-func (apuo *ActionPlanUpdateOne) ClearStandard() *ActionPlanUpdateOne {
-	apuo.mutation.ClearStandard()
-	return apuo
-}
-
-// RemoveStandardIDs removes the "standard" edge to Standard entities by IDs.
-func (apuo *ActionPlanUpdateOne) RemoveStandardIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.RemoveStandardIDs(ids...)
-	return apuo
-}
-
-// RemoveStandard removes "standard" edges to Standard entities.
-func (apuo *ActionPlanUpdateOne) RemoveStandard(s ...*Standard) *ActionPlanUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return apuo.RemoveStandardIDs(ids...)
 }
 
 // ClearRisk clears all "risk" edges to the Risk entity.
@@ -1406,54 +1285,6 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	}
 	if apuo.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
-	}
-	if apuo.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.StandardTable,
-			Columns: actionplan.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apuo.schemaConfig.StandardActionPlans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apuo.mutation.RemovedStandardIDs(); len(nodes) > 0 && !apuo.mutation.StandardCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.StandardTable,
-			Columns: actionplan.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apuo.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apuo.mutation.StandardIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.StandardTable,
-			Columns: actionplan.StandardPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apuo.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if apuo.mutation.RiskCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -10,11 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
@@ -115,9 +112,51 @@ func (sc *StandardCreate) SetTags(s []string) *StandardCreate {
 	return sc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (sc *StandardCreate) SetOwnerID(s string) *StandardCreate {
+	sc.mutation.SetOwnerID(s)
+	return sc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableOwnerID(s *string) *StandardCreate {
+	if s != nil {
+		sc.SetOwnerID(*s)
+	}
+	return sc
+}
+
 // SetName sets the "name" field.
 func (sc *StandardCreate) SetName(s string) *StandardCreate {
 	sc.mutation.SetName(s)
+	return sc
+}
+
+// SetShortName sets the "short_name" field.
+func (sc *StandardCreate) SetShortName(s string) *StandardCreate {
+	sc.mutation.SetShortName(s)
+	return sc
+}
+
+// SetNillableShortName sets the "short_name" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableShortName(s *string) *StandardCreate {
+	if s != nil {
+		sc.SetShortName(*s)
+	}
+	return sc
+}
+
+// SetFramework sets the "framework" field.
+func (sc *StandardCreate) SetFramework(s string) *StandardCreate {
+	sc.mutation.SetFramework(s)
+	return sc
+}
+
+// SetNillableFramework sets the "framework" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableFramework(s *string) *StandardCreate {
+	if s != nil {
+		sc.SetFramework(*s)
+	}
 	return sc
 }
 
@@ -135,16 +174,36 @@ func (sc *StandardCreate) SetNillableDescription(s *string) *StandardCreate {
 	return sc
 }
 
-// SetFamily sets the "family" field.
-func (sc *StandardCreate) SetFamily(s string) *StandardCreate {
-	sc.mutation.SetFamily(s)
+// SetGoverningBody sets the "governing_body" field.
+func (sc *StandardCreate) SetGoverningBody(s string) *StandardCreate {
+	sc.mutation.SetGoverningBody(s)
 	return sc
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableFamily(s *string) *StandardCreate {
+// SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableGoverningBody(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetFamily(*s)
+		sc.SetGoverningBody(*s)
+	}
+	return sc
+}
+
+// SetDomains sets the "domains" field.
+func (sc *StandardCreate) SetDomains(s []string) *StandardCreate {
+	sc.mutation.SetDomains(s)
+	return sc
+}
+
+// SetLink sets the "link" field.
+func (sc *StandardCreate) SetLink(s string) *StandardCreate {
+	sc.mutation.SetLink(s)
+	return sc
+}
+
+// SetNillableLink sets the "link" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableLink(s *string) *StandardCreate {
+	if s != nil {
+		sc.SetLink(*s)
 	}
 	return sc
 }
@@ -159,6 +218,48 @@ func (sc *StandardCreate) SetStatus(s string) *StandardCreate {
 func (sc *StandardCreate) SetNillableStatus(s *string) *StandardCreate {
 	if s != nil {
 		sc.SetStatus(*s)
+	}
+	return sc
+}
+
+// SetIsPublic sets the "is_public" field.
+func (sc *StandardCreate) SetIsPublic(b bool) *StandardCreate {
+	sc.mutation.SetIsPublic(b)
+	return sc
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableIsPublic(b *bool) *StandardCreate {
+	if b != nil {
+		sc.SetIsPublic(*b)
+	}
+	return sc
+}
+
+// SetFreeToUse sets the "free_to_use" field.
+func (sc *StandardCreate) SetFreeToUse(b bool) *StandardCreate {
+	sc.mutation.SetFreeToUse(b)
+	return sc
+}
+
+// SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableFreeToUse(b *bool) *StandardCreate {
+	if b != nil {
+		sc.SetFreeToUse(*b)
+	}
+	return sc
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (sc *StandardCreate) SetSystemOwned(b bool) *StandardCreate {
+	sc.mutation.SetSystemOwned(b)
+	return sc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableSystemOwned(b *bool) *StandardCreate {
+	if b != nil {
+		sc.SetSystemOwned(*b)
 	}
 	return sc
 }
@@ -191,51 +292,17 @@ func (sc *StandardCreate) SetNillableVersion(s *string) *StandardCreate {
 	return sc
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (sc *StandardCreate) SetPurposeAndScope(s string) *StandardCreate {
-	sc.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (sc *StandardCreate) SetRevision(s string) *StandardCreate {
+	sc.mutation.SetRevision(s)
 	return sc
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (sc *StandardCreate) SetNillablePurposeAndScope(s *string) *StandardCreate {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableRevision(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetPurposeAndScope(*s)
+		sc.SetRevision(*s)
 	}
-	return sc
-}
-
-// SetBackground sets the "background" field.
-func (sc *StandardCreate) SetBackground(s string) *StandardCreate {
-	sc.mutation.SetBackground(s)
-	return sc
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableBackground(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetBackground(*s)
-	}
-	return sc
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (sc *StandardCreate) SetSatisfies(s string) *StandardCreate {
-	sc.mutation.SetSatisfies(s)
-	return sc
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableSatisfies(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetSatisfies(*s)
-	}
-	return sc
-}
-
-// SetDetails sets the "details" field.
-func (sc *StandardCreate) SetDetails(m map[string]interface{}) *StandardCreate {
-	sc.mutation.SetDetails(m)
 	return sc
 }
 
@@ -253,19 +320,9 @@ func (sc *StandardCreate) SetNillableID(s *string) *StandardCreate {
 	return sc
 }
 
-// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (sc *StandardCreate) AddControlObjectiveIDs(ids ...string) *StandardCreate {
-	sc.mutation.AddControlObjectiveIDs(ids...)
-	return sc
-}
-
-// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (sc *StandardCreate) AddControlObjectives(c ...*ControlObjective) *StandardCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return sc.AddControlObjectiveIDs(ids...)
+// SetOwner sets the "owner" edge to the Organization entity.
+func (sc *StandardCreate) SetOwner(o *Organization) *StandardCreate {
+	return sc.SetOwnerID(o.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -281,51 +338,6 @@ func (sc *StandardCreate) AddControls(c ...*Control) *StandardCreate {
 		ids[i] = c[i].ID
 	}
 	return sc.AddControlIDs(ids...)
-}
-
-// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (sc *StandardCreate) AddProcedureIDs(ids ...string) *StandardCreate {
-	sc.mutation.AddProcedureIDs(ids...)
-	return sc
-}
-
-// AddProcedures adds the "procedures" edges to the Procedure entity.
-func (sc *StandardCreate) AddProcedures(p ...*Procedure) *StandardCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return sc.AddProcedureIDs(ids...)
-}
-
-// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (sc *StandardCreate) AddActionPlanIDs(ids ...string) *StandardCreate {
-	sc.mutation.AddActionPlanIDs(ids...)
-	return sc
-}
-
-// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (sc *StandardCreate) AddActionPlans(a ...*ActionPlan) *StandardCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return sc.AddActionPlanIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (sc *StandardCreate) AddProgramIDs(ids ...string) *StandardCreate {
-	sc.mutation.AddProgramIDs(ids...)
-	return sc
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (sc *StandardCreate) AddPrograms(p ...*Program) *StandardCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return sc.AddProgramIDs(ids...)
 }
 
 // Mutation returns the StandardMutation object of the builder.
@@ -382,6 +394,18 @@ func (sc *StandardCreate) defaults() error {
 	if _, ok := sc.mutation.Tags(); !ok {
 		v := standard.DefaultTags
 		sc.mutation.SetTags(v)
+	}
+	if _, ok := sc.mutation.IsPublic(); !ok {
+		v := standard.DefaultIsPublic
+		sc.mutation.SetIsPublic(v)
+	}
+	if _, ok := sc.mutation.FreeToUse(); !ok {
+		v := standard.DefaultFreeToUse
+		sc.mutation.SetFreeToUse(v)
+	}
+	if _, ok := sc.mutation.SystemOwned(); !ok {
+		v := standard.DefaultSystemOwned
+		sc.mutation.SetSystemOwned(v)
 	}
 	if _, ok := sc.mutation.ID(); !ok {
 		if standard.DefaultID == nil {
@@ -471,17 +495,45 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if value, ok := sc.mutation.ShortName(); ok {
+		_spec.SetField(standard.FieldShortName, field.TypeString, value)
+		_node.ShortName = value
+	}
+	if value, ok := sc.mutation.Framework(); ok {
+		_spec.SetField(standard.FieldFramework, field.TypeString, value)
+		_node.Framework = value
+	}
 	if value, ok := sc.mutation.Description(); ok {
 		_spec.SetField(standard.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := sc.mutation.Family(); ok {
-		_spec.SetField(standard.FieldFamily, field.TypeString, value)
-		_node.Family = value
+	if value, ok := sc.mutation.GoverningBody(); ok {
+		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
+		_node.GoverningBody = value
+	}
+	if value, ok := sc.mutation.Domains(); ok {
+		_spec.SetField(standard.FieldDomains, field.TypeJSON, value)
+		_node.Domains = value
+	}
+	if value, ok := sc.mutation.Link(); ok {
+		_spec.SetField(standard.FieldLink, field.TypeString, value)
+		_node.Link = value
 	}
 	if value, ok := sc.mutation.Status(); ok {
 		_spec.SetField(standard.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := sc.mutation.IsPublic(); ok {
+		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
+		_node.IsPublic = value
+	}
+	if value, ok := sc.mutation.FreeToUse(); ok {
+		_spec.SetField(standard.FieldFreeToUse, field.TypeBool, value)
+		_node.FreeToUse = value
+	}
+	if value, ok := sc.mutation.SystemOwned(); ok {
+		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
 	}
 	if value, ok := sc.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
@@ -491,102 +543,40 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := sc.mutation.PurposeAndScope(); ok {
-		_spec.SetField(standard.FieldPurposeAndScope, field.TypeString, value)
-		_node.PurposeAndScope = value
+	if value, ok := sc.mutation.Revision(); ok {
+		_spec.SetField(standard.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
-	if value, ok := sc.mutation.Background(); ok {
-		_spec.SetField(standard.FieldBackground, field.TypeString, value)
-		_node.Background = value
-	}
-	if value, ok := sc.mutation.Satisfies(); ok {
-		_spec.SetField(standard.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
-	}
-	if value, ok := sc.mutation.Details(); ok {
-		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
-	}
-	if nodes := sc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ControlObjectivesTable,
-			Columns: standard.ControlObjectivesPrimaryKey,
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   standard.OwnerTable,
+			Columns: []string{standard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.StandardControlObjectives
+		edge.Schema = sc.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := sc.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   standard.ControlsTable,
-			Columns: standard.ControlsPrimaryKey,
+			Columns: []string{standard.ControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.StandardControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.ProceduresIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   standard.ProceduresTable,
-			Columns: []string{standard.ProceduresColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = sc.schemaConfig.Procedure
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.ActionPlansIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ActionPlansTable,
-			Columns: standard.ActionPlansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = sc.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ProgramsTable,
-			Columns: standard.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = sc.schemaConfig.StandardPrograms
+		edge.Schema = sc.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
