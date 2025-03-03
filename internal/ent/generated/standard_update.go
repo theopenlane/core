@@ -12,12 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -127,6 +124,26 @@ func (su *StandardUpdate) ClearTags() *StandardUpdate {
 	return su
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (su *StandardUpdate) SetOwnerID(s string) *StandardUpdate {
+	su.mutation.SetOwnerID(s)
+	return su
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableOwnerID(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetOwnerID(*s)
+	}
+	return su
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (su *StandardUpdate) ClearOwnerID() *StandardUpdate {
+	su.mutation.ClearOwnerID()
+	return su
+}
+
 // SetName sets the "name" field.
 func (su *StandardUpdate) SetName(s string) *StandardUpdate {
 	su.mutation.SetName(s)
@@ -138,6 +155,46 @@ func (su *StandardUpdate) SetNillableName(s *string) *StandardUpdate {
 	if s != nil {
 		su.SetName(*s)
 	}
+	return su
+}
+
+// SetShortName sets the "short_name" field.
+func (su *StandardUpdate) SetShortName(s string) *StandardUpdate {
+	su.mutation.SetShortName(s)
+	return su
+}
+
+// SetNillableShortName sets the "short_name" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableShortName(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetShortName(*s)
+	}
+	return su
+}
+
+// ClearShortName clears the value of the "short_name" field.
+func (su *StandardUpdate) ClearShortName() *StandardUpdate {
+	su.mutation.ClearShortName()
+	return su
+}
+
+// SetFramework sets the "framework" field.
+func (su *StandardUpdate) SetFramework(s string) *StandardUpdate {
+	su.mutation.SetFramework(s)
+	return su
+}
+
+// SetNillableFramework sets the "framework" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableFramework(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetFramework(*s)
+	}
+	return su
+}
+
+// ClearFramework clears the value of the "framework" field.
+func (su *StandardUpdate) ClearFramework() *StandardUpdate {
+	su.mutation.ClearFramework()
 	return su
 }
 
@@ -161,23 +218,61 @@ func (su *StandardUpdate) ClearDescription() *StandardUpdate {
 	return su
 }
 
-// SetFamily sets the "family" field.
-func (su *StandardUpdate) SetFamily(s string) *StandardUpdate {
-	su.mutation.SetFamily(s)
+// SetGoverningBody sets the "governing_body" field.
+func (su *StandardUpdate) SetGoverningBody(s string) *StandardUpdate {
+	su.mutation.SetGoverningBody(s)
 	return su
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableFamily(s *string) *StandardUpdate {
+// SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableGoverningBody(s *string) *StandardUpdate {
 	if s != nil {
-		su.SetFamily(*s)
+		su.SetGoverningBody(*s)
 	}
 	return su
 }
 
-// ClearFamily clears the value of the "family" field.
-func (su *StandardUpdate) ClearFamily() *StandardUpdate {
-	su.mutation.ClearFamily()
+// ClearGoverningBody clears the value of the "governing_body" field.
+func (su *StandardUpdate) ClearGoverningBody() *StandardUpdate {
+	su.mutation.ClearGoverningBody()
+	return su
+}
+
+// SetDomains sets the "domains" field.
+func (su *StandardUpdate) SetDomains(s []string) *StandardUpdate {
+	su.mutation.SetDomains(s)
+	return su
+}
+
+// AppendDomains appends s to the "domains" field.
+func (su *StandardUpdate) AppendDomains(s []string) *StandardUpdate {
+	su.mutation.AppendDomains(s)
+	return su
+}
+
+// ClearDomains clears the value of the "domains" field.
+func (su *StandardUpdate) ClearDomains() *StandardUpdate {
+	su.mutation.ClearDomains()
+	return su
+}
+
+// SetLink sets the "link" field.
+func (su *StandardUpdate) SetLink(s string) *StandardUpdate {
+	su.mutation.SetLink(s)
+	return su
+}
+
+// SetNillableLink sets the "link" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableLink(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetLink(*s)
+	}
+	return su
+}
+
+// ClearLink clears the value of the "link" field.
+func (su *StandardUpdate) ClearLink() *StandardUpdate {
+	su.mutation.ClearLink()
 	return su
 }
 
@@ -198,6 +293,66 @@ func (su *StandardUpdate) SetNillableStatus(s *string) *StandardUpdate {
 // ClearStatus clears the value of the "status" field.
 func (su *StandardUpdate) ClearStatus() *StandardUpdate {
 	su.mutation.ClearStatus()
+	return su
+}
+
+// SetIsPublic sets the "is_public" field.
+func (su *StandardUpdate) SetIsPublic(b bool) *StandardUpdate {
+	su.mutation.SetIsPublic(b)
+	return su
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableIsPublic(b *bool) *StandardUpdate {
+	if b != nil {
+		su.SetIsPublic(*b)
+	}
+	return su
+}
+
+// ClearIsPublic clears the value of the "is_public" field.
+func (su *StandardUpdate) ClearIsPublic() *StandardUpdate {
+	su.mutation.ClearIsPublic()
+	return su
+}
+
+// SetFreeToUse sets the "free_to_use" field.
+func (su *StandardUpdate) SetFreeToUse(b bool) *StandardUpdate {
+	su.mutation.SetFreeToUse(b)
+	return su
+}
+
+// SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableFreeToUse(b *bool) *StandardUpdate {
+	if b != nil {
+		su.SetFreeToUse(*b)
+	}
+	return su
+}
+
+// ClearFreeToUse clears the value of the "free_to_use" field.
+func (su *StandardUpdate) ClearFreeToUse() *StandardUpdate {
+	su.mutation.ClearFreeToUse()
+	return su
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (su *StandardUpdate) SetSystemOwned(b bool) *StandardUpdate {
+	su.mutation.SetSystemOwned(b)
+	return su
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableSystemOwned(b *bool) *StandardUpdate {
+	if b != nil {
+		su.SetSystemOwned(*b)
+	}
+	return su
+}
+
+// ClearSystemOwned clears the value of the "system_owned" field.
+func (su *StandardUpdate) ClearSystemOwned() *StandardUpdate {
+	su.mutation.ClearSystemOwned()
 	return su
 }
 
@@ -241,91 +396,29 @@ func (su *StandardUpdate) ClearVersion() *StandardUpdate {
 	return su
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (su *StandardUpdate) SetPurposeAndScope(s string) *StandardUpdate {
-	su.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (su *StandardUpdate) SetRevision(s string) *StandardUpdate {
+	su.mutation.SetRevision(s)
 	return su
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (su *StandardUpdate) SetNillablePurposeAndScope(s *string) *StandardUpdate {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableRevision(s *string) *StandardUpdate {
 	if s != nil {
-		su.SetPurposeAndScope(*s)
+		su.SetRevision(*s)
 	}
 	return su
 }
 
-// ClearPurposeAndScope clears the value of the "purpose_and_scope" field.
-func (su *StandardUpdate) ClearPurposeAndScope() *StandardUpdate {
-	su.mutation.ClearPurposeAndScope()
+// ClearRevision clears the value of the "revision" field.
+func (su *StandardUpdate) ClearRevision() *StandardUpdate {
+	su.mutation.ClearRevision()
 	return su
 }
 
-// SetBackground sets the "background" field.
-func (su *StandardUpdate) SetBackground(s string) *StandardUpdate {
-	su.mutation.SetBackground(s)
-	return su
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableBackground(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetBackground(*s)
-	}
-	return su
-}
-
-// ClearBackground clears the value of the "background" field.
-func (su *StandardUpdate) ClearBackground() *StandardUpdate {
-	su.mutation.ClearBackground()
-	return su
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (su *StandardUpdate) SetSatisfies(s string) *StandardUpdate {
-	su.mutation.SetSatisfies(s)
-	return su
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableSatisfies(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetSatisfies(*s)
-	}
-	return su
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (su *StandardUpdate) ClearSatisfies() *StandardUpdate {
-	su.mutation.ClearSatisfies()
-	return su
-}
-
-// SetDetails sets the "details" field.
-func (su *StandardUpdate) SetDetails(m map[string]interface{}) *StandardUpdate {
-	su.mutation.SetDetails(m)
-	return su
-}
-
-// ClearDetails clears the value of the "details" field.
-func (su *StandardUpdate) ClearDetails() *StandardUpdate {
-	su.mutation.ClearDetails()
-	return su
-}
-
-// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (su *StandardUpdate) AddControlObjectiveIDs(ids ...string) *StandardUpdate {
-	su.mutation.AddControlObjectiveIDs(ids...)
-	return su
-}
-
-// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (su *StandardUpdate) AddControlObjectives(c ...*ControlObjective) *StandardUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return su.AddControlObjectiveIDs(ids...)
+// SetOwner sets the "owner" edge to the Organization entity.
+func (su *StandardUpdate) SetOwner(o *Organization) *StandardUpdate {
+	return su.SetOwnerID(o.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -343,75 +436,15 @@ func (su *StandardUpdate) AddControls(c ...*Control) *StandardUpdate {
 	return su.AddControlIDs(ids...)
 }
 
-// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (su *StandardUpdate) AddProcedureIDs(ids ...string) *StandardUpdate {
-	su.mutation.AddProcedureIDs(ids...)
-	return su
-}
-
-// AddProcedures adds the "procedures" edges to the Procedure entity.
-func (su *StandardUpdate) AddProcedures(p ...*Procedure) *StandardUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return su.AddProcedureIDs(ids...)
-}
-
-// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (su *StandardUpdate) AddActionPlanIDs(ids ...string) *StandardUpdate {
-	su.mutation.AddActionPlanIDs(ids...)
-	return su
-}
-
-// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (su *StandardUpdate) AddActionPlans(a ...*ActionPlan) *StandardUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return su.AddActionPlanIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (su *StandardUpdate) AddProgramIDs(ids ...string) *StandardUpdate {
-	su.mutation.AddProgramIDs(ids...)
-	return su
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (su *StandardUpdate) AddPrograms(p ...*Program) *StandardUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return su.AddProgramIDs(ids...)
-}
-
 // Mutation returns the StandardMutation object of the builder.
 func (su *StandardUpdate) Mutation() *StandardMutation {
 	return su.mutation
 }
 
-// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (su *StandardUpdate) ClearControlObjectives() *StandardUpdate {
-	su.mutation.ClearControlObjectives()
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (su *StandardUpdate) ClearOwner() *StandardUpdate {
+	su.mutation.ClearOwner()
 	return su
-}
-
-// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (su *StandardUpdate) RemoveControlObjectiveIDs(ids ...string) *StandardUpdate {
-	su.mutation.RemoveControlObjectiveIDs(ids...)
-	return su
-}
-
-// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (su *StandardUpdate) RemoveControlObjectives(c ...*ControlObjective) *StandardUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return su.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -433,69 +466,6 @@ func (su *StandardUpdate) RemoveControls(c ...*Control) *StandardUpdate {
 		ids[i] = c[i].ID
 	}
 	return su.RemoveControlIDs(ids...)
-}
-
-// ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (su *StandardUpdate) ClearProcedures() *StandardUpdate {
-	su.mutation.ClearProcedures()
-	return su
-}
-
-// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (su *StandardUpdate) RemoveProcedureIDs(ids ...string) *StandardUpdate {
-	su.mutation.RemoveProcedureIDs(ids...)
-	return su
-}
-
-// RemoveProcedures removes "procedures" edges to Procedure entities.
-func (su *StandardUpdate) RemoveProcedures(p ...*Procedure) *StandardUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return su.RemoveProcedureIDs(ids...)
-}
-
-// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (su *StandardUpdate) ClearActionPlans() *StandardUpdate {
-	su.mutation.ClearActionPlans()
-	return su
-}
-
-// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (su *StandardUpdate) RemoveActionPlanIDs(ids ...string) *StandardUpdate {
-	su.mutation.RemoveActionPlanIDs(ids...)
-	return su
-}
-
-// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (su *StandardUpdate) RemoveActionPlans(a ...*ActionPlan) *StandardUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return su.RemoveActionPlanIDs(ids...)
-}
-
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (su *StandardUpdate) ClearPrograms() *StandardUpdate {
-	su.mutation.ClearPrograms()
-	return su
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (su *StandardUpdate) RemoveProgramIDs(ids ...string) *StandardUpdate {
-	su.mutation.RemoveProgramIDs(ids...)
-	return su
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (su *StandardUpdate) RemovePrograms(p ...*Program) *StandardUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return su.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -542,6 +512,11 @@ func (su *StandardUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (su *StandardUpdate) check() error {
+	if v, ok := su.mutation.OwnerID(); ok {
+		if err := standard.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Standard.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := su.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
@@ -612,23 +587,70 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
+	if value, ok := su.mutation.ShortName(); ok {
+		_spec.SetField(standard.FieldShortName, field.TypeString, value)
+	}
+	if su.mutation.ShortNameCleared() {
+		_spec.ClearField(standard.FieldShortName, field.TypeString)
+	}
+	if value, ok := su.mutation.Framework(); ok {
+		_spec.SetField(standard.FieldFramework, field.TypeString, value)
+	}
+	if su.mutation.FrameworkCleared() {
+		_spec.ClearField(standard.FieldFramework, field.TypeString)
+	}
 	if value, ok := su.mutation.Description(); ok {
 		_spec.SetField(standard.FieldDescription, field.TypeString, value)
 	}
 	if su.mutation.DescriptionCleared() {
 		_spec.ClearField(standard.FieldDescription, field.TypeString)
 	}
-	if value, ok := su.mutation.Family(); ok {
-		_spec.SetField(standard.FieldFamily, field.TypeString, value)
+	if value, ok := su.mutation.GoverningBody(); ok {
+		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
 	}
-	if su.mutation.FamilyCleared() {
-		_spec.ClearField(standard.FieldFamily, field.TypeString)
+	if su.mutation.GoverningBodyCleared() {
+		_spec.ClearField(standard.FieldGoverningBody, field.TypeString)
+	}
+	if value, ok := su.mutation.Domains(); ok {
+		_spec.SetField(standard.FieldDomains, field.TypeJSON, value)
+	}
+	if value, ok := su.mutation.AppendedDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, standard.FieldDomains, value)
+		})
+	}
+	if su.mutation.DomainsCleared() {
+		_spec.ClearField(standard.FieldDomains, field.TypeJSON)
+	}
+	if value, ok := su.mutation.Link(); ok {
+		_spec.SetField(standard.FieldLink, field.TypeString, value)
+	}
+	if su.mutation.LinkCleared() {
+		_spec.ClearField(standard.FieldLink, field.TypeString)
 	}
 	if value, ok := su.mutation.Status(); ok {
 		_spec.SetField(standard.FieldStatus, field.TypeString, value)
 	}
 	if su.mutation.StatusCleared() {
 		_spec.ClearField(standard.FieldStatus, field.TypeString)
+	}
+	if value, ok := su.mutation.IsPublic(); ok {
+		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
+	}
+	if su.mutation.IsPublicCleared() {
+		_spec.ClearField(standard.FieldIsPublic, field.TypeBool)
+	}
+	if value, ok := su.mutation.FreeToUse(); ok {
+		_spec.SetField(standard.FieldFreeToUse, field.TypeBool, value)
+	}
+	if su.mutation.FreeToUseCleared() {
+		_spec.ClearField(standard.FieldFreeToUse, field.TypeBool)
+	}
+	if value, ok := su.mutation.SystemOwned(); ok {
+		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
+	}
+	if su.mutation.SystemOwnedCleared() {
+		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := su.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
@@ -642,73 +664,38 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.VersionCleared() {
 		_spec.ClearField(standard.FieldVersion, field.TypeString)
 	}
-	if value, ok := su.mutation.PurposeAndScope(); ok {
-		_spec.SetField(standard.FieldPurposeAndScope, field.TypeString, value)
+	if value, ok := su.mutation.Revision(); ok {
+		_spec.SetField(standard.FieldRevision, field.TypeString, value)
 	}
-	if su.mutation.PurposeAndScopeCleared() {
-		_spec.ClearField(standard.FieldPurposeAndScope, field.TypeString)
+	if su.mutation.RevisionCleared() {
+		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
-	if value, ok := su.mutation.Background(); ok {
-		_spec.SetField(standard.FieldBackground, field.TypeString, value)
-	}
-	if su.mutation.BackgroundCleared() {
-		_spec.ClearField(standard.FieldBackground, field.TypeString)
-	}
-	if value, ok := su.mutation.Satisfies(); ok {
-		_spec.SetField(standard.FieldSatisfies, field.TypeString, value)
-	}
-	if su.mutation.SatisfiesCleared() {
-		_spec.ClearField(standard.FieldSatisfies, field.TypeString)
-	}
-	if value, ok := su.mutation.Details(); ok {
-		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
-	}
-	if su.mutation.DetailsCleared() {
-		_spec.ClearField(standard.FieldDetails, field.TypeJSON)
-	}
-	if su.mutation.ControlObjectivesCleared() {
+	if su.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ControlObjectivesTable,
-			Columns: standard.ControlObjectivesPrimaryKey,
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   standard.OwnerTable,
+			Columns: []string{standard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.StandardControlObjectives
+		edge.Schema = su.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !su.mutation.ControlObjectivesCleared() {
+	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ControlObjectivesTable,
-			Columns: standard.ControlObjectivesPrimaryKey,
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   standard.OwnerTable,
+			Columns: []string{standard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.StandardControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ControlObjectivesTable,
-			Columns: standard.ControlObjectivesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.StandardControlObjectives
+		edge.Schema = su.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -716,30 +703,30 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   standard.ControlsTable,
-			Columns: standard.ControlsPrimaryKey,
+			Columns: []string{standard.ControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.StandardControls
+		edge.Schema = su.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := su.mutation.RemovedControlsIDs(); len(nodes) > 0 && !su.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   standard.ControlsTable,
-			Columns: standard.ControlsPrimaryKey,
+			Columns: []string{standard.ControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.StandardControls
+		edge.Schema = su.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -747,160 +734,16 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := su.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   standard.ControlsTable,
-			Columns: standard.ControlsPrimaryKey,
+			Columns: []string{standard.ControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.StandardControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if su.mutation.ProceduresCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   standard.ProceduresTable,
-			Columns: []string{standard.ProceduresColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.Procedure
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !su.mutation.ProceduresCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   standard.ProceduresTable,
-			Columns: []string{standard.ProceduresColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.Procedure
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.ProceduresIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   standard.ProceduresTable,
-			Columns: []string{standard.ProceduresColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.Procedure
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if su.mutation.ActionPlansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ActionPlansTable,
-			Columns: standard.ActionPlansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.StandardActionPlans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !su.mutation.ActionPlansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ActionPlansTable,
-			Columns: standard.ActionPlansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.ActionPlansIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ActionPlansTable,
-			Columns: standard.ActionPlansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if su.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ProgramsTable,
-			Columns: standard.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.StandardPrograms
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !su.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ProgramsTable,
-			Columns: standard.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.StandardPrograms
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ProgramsTable,
-			Columns: standard.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.StandardPrograms
+		edge.Schema = su.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1020,6 +863,26 @@ func (suo *StandardUpdateOne) ClearTags() *StandardUpdateOne {
 	return suo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (suo *StandardUpdateOne) SetOwnerID(s string) *StandardUpdateOne {
+	suo.mutation.SetOwnerID(s)
+	return suo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableOwnerID(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetOwnerID(*s)
+	}
+	return suo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (suo *StandardUpdateOne) ClearOwnerID() *StandardUpdateOne {
+	suo.mutation.ClearOwnerID()
+	return suo
+}
+
 // SetName sets the "name" field.
 func (suo *StandardUpdateOne) SetName(s string) *StandardUpdateOne {
 	suo.mutation.SetName(s)
@@ -1031,6 +894,46 @@ func (suo *StandardUpdateOne) SetNillableName(s *string) *StandardUpdateOne {
 	if s != nil {
 		suo.SetName(*s)
 	}
+	return suo
+}
+
+// SetShortName sets the "short_name" field.
+func (suo *StandardUpdateOne) SetShortName(s string) *StandardUpdateOne {
+	suo.mutation.SetShortName(s)
+	return suo
+}
+
+// SetNillableShortName sets the "short_name" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableShortName(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetShortName(*s)
+	}
+	return suo
+}
+
+// ClearShortName clears the value of the "short_name" field.
+func (suo *StandardUpdateOne) ClearShortName() *StandardUpdateOne {
+	suo.mutation.ClearShortName()
+	return suo
+}
+
+// SetFramework sets the "framework" field.
+func (suo *StandardUpdateOne) SetFramework(s string) *StandardUpdateOne {
+	suo.mutation.SetFramework(s)
+	return suo
+}
+
+// SetNillableFramework sets the "framework" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableFramework(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetFramework(*s)
+	}
+	return suo
+}
+
+// ClearFramework clears the value of the "framework" field.
+func (suo *StandardUpdateOne) ClearFramework() *StandardUpdateOne {
+	suo.mutation.ClearFramework()
 	return suo
 }
 
@@ -1054,23 +957,61 @@ func (suo *StandardUpdateOne) ClearDescription() *StandardUpdateOne {
 	return suo
 }
 
-// SetFamily sets the "family" field.
-func (suo *StandardUpdateOne) SetFamily(s string) *StandardUpdateOne {
-	suo.mutation.SetFamily(s)
+// SetGoverningBody sets the "governing_body" field.
+func (suo *StandardUpdateOne) SetGoverningBody(s string) *StandardUpdateOne {
+	suo.mutation.SetGoverningBody(s)
 	return suo
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableFamily(s *string) *StandardUpdateOne {
+// SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableGoverningBody(s *string) *StandardUpdateOne {
 	if s != nil {
-		suo.SetFamily(*s)
+		suo.SetGoverningBody(*s)
 	}
 	return suo
 }
 
-// ClearFamily clears the value of the "family" field.
-func (suo *StandardUpdateOne) ClearFamily() *StandardUpdateOne {
-	suo.mutation.ClearFamily()
+// ClearGoverningBody clears the value of the "governing_body" field.
+func (suo *StandardUpdateOne) ClearGoverningBody() *StandardUpdateOne {
+	suo.mutation.ClearGoverningBody()
+	return suo
+}
+
+// SetDomains sets the "domains" field.
+func (suo *StandardUpdateOne) SetDomains(s []string) *StandardUpdateOne {
+	suo.mutation.SetDomains(s)
+	return suo
+}
+
+// AppendDomains appends s to the "domains" field.
+func (suo *StandardUpdateOne) AppendDomains(s []string) *StandardUpdateOne {
+	suo.mutation.AppendDomains(s)
+	return suo
+}
+
+// ClearDomains clears the value of the "domains" field.
+func (suo *StandardUpdateOne) ClearDomains() *StandardUpdateOne {
+	suo.mutation.ClearDomains()
+	return suo
+}
+
+// SetLink sets the "link" field.
+func (suo *StandardUpdateOne) SetLink(s string) *StandardUpdateOne {
+	suo.mutation.SetLink(s)
+	return suo
+}
+
+// SetNillableLink sets the "link" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableLink(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetLink(*s)
+	}
+	return suo
+}
+
+// ClearLink clears the value of the "link" field.
+func (suo *StandardUpdateOne) ClearLink() *StandardUpdateOne {
+	suo.mutation.ClearLink()
 	return suo
 }
 
@@ -1091,6 +1032,66 @@ func (suo *StandardUpdateOne) SetNillableStatus(s *string) *StandardUpdateOne {
 // ClearStatus clears the value of the "status" field.
 func (suo *StandardUpdateOne) ClearStatus() *StandardUpdateOne {
 	suo.mutation.ClearStatus()
+	return suo
+}
+
+// SetIsPublic sets the "is_public" field.
+func (suo *StandardUpdateOne) SetIsPublic(b bool) *StandardUpdateOne {
+	suo.mutation.SetIsPublic(b)
+	return suo
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableIsPublic(b *bool) *StandardUpdateOne {
+	if b != nil {
+		suo.SetIsPublic(*b)
+	}
+	return suo
+}
+
+// ClearIsPublic clears the value of the "is_public" field.
+func (suo *StandardUpdateOne) ClearIsPublic() *StandardUpdateOne {
+	suo.mutation.ClearIsPublic()
+	return suo
+}
+
+// SetFreeToUse sets the "free_to_use" field.
+func (suo *StandardUpdateOne) SetFreeToUse(b bool) *StandardUpdateOne {
+	suo.mutation.SetFreeToUse(b)
+	return suo
+}
+
+// SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableFreeToUse(b *bool) *StandardUpdateOne {
+	if b != nil {
+		suo.SetFreeToUse(*b)
+	}
+	return suo
+}
+
+// ClearFreeToUse clears the value of the "free_to_use" field.
+func (suo *StandardUpdateOne) ClearFreeToUse() *StandardUpdateOne {
+	suo.mutation.ClearFreeToUse()
+	return suo
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (suo *StandardUpdateOne) SetSystemOwned(b bool) *StandardUpdateOne {
+	suo.mutation.SetSystemOwned(b)
+	return suo
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableSystemOwned(b *bool) *StandardUpdateOne {
+	if b != nil {
+		suo.SetSystemOwned(*b)
+	}
+	return suo
+}
+
+// ClearSystemOwned clears the value of the "system_owned" field.
+func (suo *StandardUpdateOne) ClearSystemOwned() *StandardUpdateOne {
+	suo.mutation.ClearSystemOwned()
 	return suo
 }
 
@@ -1134,91 +1135,29 @@ func (suo *StandardUpdateOne) ClearVersion() *StandardUpdateOne {
 	return suo
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (suo *StandardUpdateOne) SetPurposeAndScope(s string) *StandardUpdateOne {
-	suo.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (suo *StandardUpdateOne) SetRevision(s string) *StandardUpdateOne {
+	suo.mutation.SetRevision(s)
 	return suo
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillablePurposeAndScope(s *string) *StandardUpdateOne {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableRevision(s *string) *StandardUpdateOne {
 	if s != nil {
-		suo.SetPurposeAndScope(*s)
+		suo.SetRevision(*s)
 	}
 	return suo
 }
 
-// ClearPurposeAndScope clears the value of the "purpose_and_scope" field.
-func (suo *StandardUpdateOne) ClearPurposeAndScope() *StandardUpdateOne {
-	suo.mutation.ClearPurposeAndScope()
+// ClearRevision clears the value of the "revision" field.
+func (suo *StandardUpdateOne) ClearRevision() *StandardUpdateOne {
+	suo.mutation.ClearRevision()
 	return suo
 }
 
-// SetBackground sets the "background" field.
-func (suo *StandardUpdateOne) SetBackground(s string) *StandardUpdateOne {
-	suo.mutation.SetBackground(s)
-	return suo
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableBackground(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetBackground(*s)
-	}
-	return suo
-}
-
-// ClearBackground clears the value of the "background" field.
-func (suo *StandardUpdateOne) ClearBackground() *StandardUpdateOne {
-	suo.mutation.ClearBackground()
-	return suo
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (suo *StandardUpdateOne) SetSatisfies(s string) *StandardUpdateOne {
-	suo.mutation.SetSatisfies(s)
-	return suo
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableSatisfies(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetSatisfies(*s)
-	}
-	return suo
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (suo *StandardUpdateOne) ClearSatisfies() *StandardUpdateOne {
-	suo.mutation.ClearSatisfies()
-	return suo
-}
-
-// SetDetails sets the "details" field.
-func (suo *StandardUpdateOne) SetDetails(m map[string]interface{}) *StandardUpdateOne {
-	suo.mutation.SetDetails(m)
-	return suo
-}
-
-// ClearDetails clears the value of the "details" field.
-func (suo *StandardUpdateOne) ClearDetails() *StandardUpdateOne {
-	suo.mutation.ClearDetails()
-	return suo
-}
-
-// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (suo *StandardUpdateOne) AddControlObjectiveIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.AddControlObjectiveIDs(ids...)
-	return suo
-}
-
-// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (suo *StandardUpdateOne) AddControlObjectives(c ...*ControlObjective) *StandardUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return suo.AddControlObjectiveIDs(ids...)
+// SetOwner sets the "owner" edge to the Organization entity.
+func (suo *StandardUpdateOne) SetOwner(o *Organization) *StandardUpdateOne {
+	return suo.SetOwnerID(o.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -1236,75 +1175,15 @@ func (suo *StandardUpdateOne) AddControls(c ...*Control) *StandardUpdateOne {
 	return suo.AddControlIDs(ids...)
 }
 
-// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (suo *StandardUpdateOne) AddProcedureIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.AddProcedureIDs(ids...)
-	return suo
-}
-
-// AddProcedures adds the "procedures" edges to the Procedure entity.
-func (suo *StandardUpdateOne) AddProcedures(p ...*Procedure) *StandardUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return suo.AddProcedureIDs(ids...)
-}
-
-// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (suo *StandardUpdateOne) AddActionPlanIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.AddActionPlanIDs(ids...)
-	return suo
-}
-
-// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (suo *StandardUpdateOne) AddActionPlans(a ...*ActionPlan) *StandardUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return suo.AddActionPlanIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (suo *StandardUpdateOne) AddProgramIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.AddProgramIDs(ids...)
-	return suo
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (suo *StandardUpdateOne) AddPrograms(p ...*Program) *StandardUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return suo.AddProgramIDs(ids...)
-}
-
 // Mutation returns the StandardMutation object of the builder.
 func (suo *StandardUpdateOne) Mutation() *StandardMutation {
 	return suo.mutation
 }
 
-// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (suo *StandardUpdateOne) ClearControlObjectives() *StandardUpdateOne {
-	suo.mutation.ClearControlObjectives()
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (suo *StandardUpdateOne) ClearOwner() *StandardUpdateOne {
+	suo.mutation.ClearOwner()
 	return suo
-}
-
-// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (suo *StandardUpdateOne) RemoveControlObjectiveIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.RemoveControlObjectiveIDs(ids...)
-	return suo
-}
-
-// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (suo *StandardUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *StandardUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return suo.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -1326,69 +1205,6 @@ func (suo *StandardUpdateOne) RemoveControls(c ...*Control) *StandardUpdateOne {
 		ids[i] = c[i].ID
 	}
 	return suo.RemoveControlIDs(ids...)
-}
-
-// ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (suo *StandardUpdateOne) ClearProcedures() *StandardUpdateOne {
-	suo.mutation.ClearProcedures()
-	return suo
-}
-
-// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (suo *StandardUpdateOne) RemoveProcedureIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.RemoveProcedureIDs(ids...)
-	return suo
-}
-
-// RemoveProcedures removes "procedures" edges to Procedure entities.
-func (suo *StandardUpdateOne) RemoveProcedures(p ...*Procedure) *StandardUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return suo.RemoveProcedureIDs(ids...)
-}
-
-// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (suo *StandardUpdateOne) ClearActionPlans() *StandardUpdateOne {
-	suo.mutation.ClearActionPlans()
-	return suo
-}
-
-// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (suo *StandardUpdateOne) RemoveActionPlanIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.RemoveActionPlanIDs(ids...)
-	return suo
-}
-
-// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (suo *StandardUpdateOne) RemoveActionPlans(a ...*ActionPlan) *StandardUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return suo.RemoveActionPlanIDs(ids...)
-}
-
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (suo *StandardUpdateOne) ClearPrograms() *StandardUpdateOne {
-	suo.mutation.ClearPrograms()
-	return suo
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (suo *StandardUpdateOne) RemoveProgramIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.RemoveProgramIDs(ids...)
-	return suo
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (suo *StandardUpdateOne) RemovePrograms(p ...*Program) *StandardUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return suo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
@@ -1448,6 +1264,11 @@ func (suo *StandardUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (suo *StandardUpdateOne) check() error {
+	if v, ok := suo.mutation.OwnerID(); ok {
+		if err := standard.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Standard.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := suo.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
@@ -1535,23 +1356,70 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if value, ok := suo.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
+	if value, ok := suo.mutation.ShortName(); ok {
+		_spec.SetField(standard.FieldShortName, field.TypeString, value)
+	}
+	if suo.mutation.ShortNameCleared() {
+		_spec.ClearField(standard.FieldShortName, field.TypeString)
+	}
+	if value, ok := suo.mutation.Framework(); ok {
+		_spec.SetField(standard.FieldFramework, field.TypeString, value)
+	}
+	if suo.mutation.FrameworkCleared() {
+		_spec.ClearField(standard.FieldFramework, field.TypeString)
+	}
 	if value, ok := suo.mutation.Description(); ok {
 		_spec.SetField(standard.FieldDescription, field.TypeString, value)
 	}
 	if suo.mutation.DescriptionCleared() {
 		_spec.ClearField(standard.FieldDescription, field.TypeString)
 	}
-	if value, ok := suo.mutation.Family(); ok {
-		_spec.SetField(standard.FieldFamily, field.TypeString, value)
+	if value, ok := suo.mutation.GoverningBody(); ok {
+		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
 	}
-	if suo.mutation.FamilyCleared() {
-		_spec.ClearField(standard.FieldFamily, field.TypeString)
+	if suo.mutation.GoverningBodyCleared() {
+		_spec.ClearField(standard.FieldGoverningBody, field.TypeString)
+	}
+	if value, ok := suo.mutation.Domains(); ok {
+		_spec.SetField(standard.FieldDomains, field.TypeJSON, value)
+	}
+	if value, ok := suo.mutation.AppendedDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, standard.FieldDomains, value)
+		})
+	}
+	if suo.mutation.DomainsCleared() {
+		_spec.ClearField(standard.FieldDomains, field.TypeJSON)
+	}
+	if value, ok := suo.mutation.Link(); ok {
+		_spec.SetField(standard.FieldLink, field.TypeString, value)
+	}
+	if suo.mutation.LinkCleared() {
+		_spec.ClearField(standard.FieldLink, field.TypeString)
 	}
 	if value, ok := suo.mutation.Status(); ok {
 		_spec.SetField(standard.FieldStatus, field.TypeString, value)
 	}
 	if suo.mutation.StatusCleared() {
 		_spec.ClearField(standard.FieldStatus, field.TypeString)
+	}
+	if value, ok := suo.mutation.IsPublic(); ok {
+		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
+	}
+	if suo.mutation.IsPublicCleared() {
+		_spec.ClearField(standard.FieldIsPublic, field.TypeBool)
+	}
+	if value, ok := suo.mutation.FreeToUse(); ok {
+		_spec.SetField(standard.FieldFreeToUse, field.TypeBool, value)
+	}
+	if suo.mutation.FreeToUseCleared() {
+		_spec.ClearField(standard.FieldFreeToUse, field.TypeBool)
+	}
+	if value, ok := suo.mutation.SystemOwned(); ok {
+		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
+	}
+	if suo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := suo.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
@@ -1565,73 +1433,38 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.VersionCleared() {
 		_spec.ClearField(standard.FieldVersion, field.TypeString)
 	}
-	if value, ok := suo.mutation.PurposeAndScope(); ok {
-		_spec.SetField(standard.FieldPurposeAndScope, field.TypeString, value)
+	if value, ok := suo.mutation.Revision(); ok {
+		_spec.SetField(standard.FieldRevision, field.TypeString, value)
 	}
-	if suo.mutation.PurposeAndScopeCleared() {
-		_spec.ClearField(standard.FieldPurposeAndScope, field.TypeString)
+	if suo.mutation.RevisionCleared() {
+		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
-	if value, ok := suo.mutation.Background(); ok {
-		_spec.SetField(standard.FieldBackground, field.TypeString, value)
-	}
-	if suo.mutation.BackgroundCleared() {
-		_spec.ClearField(standard.FieldBackground, field.TypeString)
-	}
-	if value, ok := suo.mutation.Satisfies(); ok {
-		_spec.SetField(standard.FieldSatisfies, field.TypeString, value)
-	}
-	if suo.mutation.SatisfiesCleared() {
-		_spec.ClearField(standard.FieldSatisfies, field.TypeString)
-	}
-	if value, ok := suo.mutation.Details(); ok {
-		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
-	}
-	if suo.mutation.DetailsCleared() {
-		_spec.ClearField(standard.FieldDetails, field.TypeJSON)
-	}
-	if suo.mutation.ControlObjectivesCleared() {
+	if suo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ControlObjectivesTable,
-			Columns: standard.ControlObjectivesPrimaryKey,
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   standard.OwnerTable,
+			Columns: []string{standard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.StandardControlObjectives
+		edge.Schema = suo.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !suo.mutation.ControlObjectivesCleared() {
+	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ControlObjectivesTable,
-			Columns: standard.ControlObjectivesPrimaryKey,
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   standard.OwnerTable,
+			Columns: []string{standard.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.StandardControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ControlObjectivesTable,
-			Columns: standard.ControlObjectivesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.StandardControlObjectives
+		edge.Schema = suo.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1639,30 +1472,30 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	}
 	if suo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   standard.ControlsTable,
-			Columns: standard.ControlsPrimaryKey,
+			Columns: []string{standard.ControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.StandardControls
+		edge.Schema = suo.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := suo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !suo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   standard.ControlsTable,
-			Columns: standard.ControlsPrimaryKey,
+			Columns: []string{standard.ControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.StandardControls
+		edge.Schema = suo.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1670,160 +1503,16 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	}
 	if nodes := suo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   standard.ControlsTable,
-			Columns: standard.ControlsPrimaryKey,
+			Columns: []string{standard.ControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.StandardControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if suo.mutation.ProceduresCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   standard.ProceduresTable,
-			Columns: []string{standard.ProceduresColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.Procedure
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !suo.mutation.ProceduresCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   standard.ProceduresTable,
-			Columns: []string{standard.ProceduresColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.Procedure
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.ProceduresIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   standard.ProceduresTable,
-			Columns: []string{standard.ProceduresColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.Procedure
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if suo.mutation.ActionPlansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ActionPlansTable,
-			Columns: standard.ActionPlansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.StandardActionPlans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !suo.mutation.ActionPlansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ActionPlansTable,
-			Columns: standard.ActionPlansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.ActionPlansIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ActionPlansTable,
-			Columns: standard.ActionPlansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.StandardActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if suo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ProgramsTable,
-			Columns: standard.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.StandardPrograms
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !suo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ProgramsTable,
-			Columns: standard.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.StandardPrograms
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   standard.ProgramsTable,
-			Columns: standard.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.StandardPrograms
+		edge.Schema = suo.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

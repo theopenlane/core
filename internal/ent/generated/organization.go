@@ -140,13 +140,15 @@ type OrganizationEdges struct {
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// Standards holds the value of the standards edge.
+	Standards []*Standard `json:"standards,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [41]bool
+	loadedTypes [42]bool
 	// totalCount holds the count of the edges above.
-	totalCount [41]map[string]int
+	totalCount [42]map[string]int
 
 	namedControlCreators          map[string][]*Group
 	namedControlObjectiveCreators map[string][]*Group
@@ -185,6 +187,7 @@ type OrganizationEdges struct {
 	namedControls                 map[string][]*Control
 	namedSubcontrols              map[string][]*Subcontrol
 	namedEvidence                 map[string][]*Evidence
+	namedStandards                map[string][]*Standard
 	namedMembers                  map[string][]*OrgMembership
 }
 
@@ -554,10 +557,19 @@ func (e OrganizationEdges) EvidenceOrErr() ([]*Evidence, error) {
 	return nil, &NotLoadedError{edge: "evidence"}
 }
 
+// StandardsOrErr returns the Standards value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) StandardsOrErr() ([]*Standard, error) {
+	if e.loadedTypes[40] {
+		return e.Standards, nil
+	}
+	return nil, &NotLoadedError{edge: "standards"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[40] {
+	if e.loadedTypes[41] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -909,6 +921,11 @@ func (o *Organization) QuerySubcontrols() *SubcontrolQuery {
 // QueryEvidence queries the "evidence" edge of the Organization entity.
 func (o *Organization) QueryEvidence() *EvidenceQuery {
 	return NewOrganizationClient(o.config).QueryEvidence(o)
+}
+
+// QueryStandards queries the "standards" edge of the Organization entity.
+func (o *Organization) QueryStandards() *StandardQuery {
+	return NewOrganizationClient(o.config).QueryStandards(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -1881,6 +1898,30 @@ func (o *Organization) appendNamedEvidence(name string, edges ...*Evidence) {
 		o.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
 		o.Edges.namedEvidence[name] = append(o.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedStandards returns the Standards named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedStandards(name string) ([]*Standard, error) {
+	if o.Edges.namedStandards == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedStandards[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedStandards(name string, edges ...*Standard) {
+	if o.Edges.namedStandards == nil {
+		o.Edges.namedStandards = make(map[string][]*Standard)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedStandards[name] = []*Standard{}
+	} else {
+		o.Edges.namedStandards[name] = append(o.Edges.namedStandards[name], edges...)
 	}
 }
 

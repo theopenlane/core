@@ -13,13 +13,19 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -27,22 +33,35 @@ import (
 // SubcontrolQuery is the builder for querying Subcontrol entities.
 type SubcontrolQuery struct {
 	config
-	ctx               *QueryContext
-	order             []subcontrol.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Subcontrol
-	withOwner         *OrganizationQuery
-	withControls      *ControlQuery
-	withTasks         *TaskQuery
-	withPrograms      *ProgramQuery
-	withEvidence      *EvidenceQuery
-	withFKs           bool
-	loadTotal         []func(context.Context, []*Subcontrol) error
-	modifiers         []func(*sql.Selector)
-	withNamedControls map[string]*ControlQuery
-	withNamedTasks    map[string]*TaskQuery
-	withNamedPrograms map[string]*ProgramQuery
-	withNamedEvidence map[string]*EvidenceQuery
+	ctx                        *QueryContext
+	order                      []subcontrol.OrderOption
+	inters                     []Interceptor
+	predicates                 []predicate.Subcontrol
+	withOwner                  *OrganizationQuery
+	withControl                *ControlQuery
+	withMappedControls         *ControlQuery
+	withEvidence               *EvidenceQuery
+	withControlObjectives      *ControlObjectiveQuery
+	withTasks                  *TaskQuery
+	withNarratives             *NarrativeQuery
+	withRisks                  *RiskQuery
+	withActionPlans            *ActionPlanQuery
+	withProcedures             *ProcedureQuery
+	withInternalPolicies       *InternalPolicyQuery
+	withControlOwner           *UserQuery
+	withDelegate               *UserQuery
+	withFKs                    bool
+	loadTotal                  []func(context.Context, []*Subcontrol) error
+	modifiers                  []func(*sql.Selector)
+	withNamedMappedControls    map[string]*ControlQuery
+	withNamedEvidence          map[string]*EvidenceQuery
+	withNamedControlObjectives map[string]*ControlObjectiveQuery
+	withNamedTasks             map[string]*TaskQuery
+	withNamedNarratives        map[string]*NarrativeQuery
+	withNamedRisks             map[string]*RiskQuery
+	withNamedActionPlans       map[string]*ActionPlanQuery
+	withNamedProcedures        map[string]*ProcedureQuery
+	withNamedInternalPolicies  map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -104,8 +123,8 @@ func (sq *SubcontrolQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
-// QueryControls chains the current query on the "controls" edge.
-func (sq *SubcontrolQuery) QueryControls() *ControlQuery {
+// QueryControl chains the current query on the "control" edge.
+func (sq *SubcontrolQuery) QueryControl() *ControlQuery {
 	query := (&ControlClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
@@ -118,11 +137,86 @@ func (sq *SubcontrolQuery) QueryControls() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ControlsTable, subcontrol.ControlsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, subcontrol.ControlTable, subcontrol.ControlColumn),
 		)
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMappedControls chains the current query on the "mapped_controls" edge.
+func (sq *SubcontrolQuery) QueryMappedControls() *ControlQuery {
+	query := (&ControlClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.MappedControlsTable, subcontrol.MappedControlsColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidence chains the current query on the "evidence" edge.
+func (sq *SubcontrolQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlObjectives chains the current query on the "control_objectives" edge.
+func (sq *SubcontrolQuery) QueryControlObjectives() *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ControlObjectivesTable, subcontrol.ControlObjectivesPrimaryKey...),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -154,9 +248,9 @@ func (sq *SubcontrolQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
-// QueryPrograms chains the current query on the "programs" edge.
-func (sq *SubcontrolQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: sq.config}).Query()
+// QueryNarratives chains the current query on the "narratives" edge.
+func (sq *SubcontrolQuery) QueryNarratives() *NarrativeQuery {
+	query := (&NarrativeClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -167,21 +261,21 @@ func (sq *SubcontrolQuery) QueryPrograms() *ProgramQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ProgramsTable, subcontrol.ProgramsPrimaryKey...),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.NarrativesTable, subcontrol.NarrativesColumn),
 		)
 		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.Narrative
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
-// QueryEvidence chains the current query on the "evidence" edge.
-func (sq *SubcontrolQuery) QueryEvidence() *EvidenceQuery {
-	query := (&EvidenceClient{config: sq.config}).Query()
+// QueryRisks chains the current query on the "risks" edge.
+func (sq *SubcontrolQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -192,12 +286,137 @@ func (sq *SubcontrolQuery) QueryEvidence() *EvidenceQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
-			sqlgraph.To(evidence.Table, evidence.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.RisksTable, subcontrol.RisksColumn),
 		)
 		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionPlans chains the current query on the "action_plans" edge.
+func (sq *SubcontrolQuery) QueryActionPlans() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.ActionPlansTable, subcontrol.ActionPlansColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProcedures chains the current query on the "procedures" edge.
+func (sq *SubcontrolQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.ProceduresTable, subcontrol.ProceduresColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (sq *SubcontrolQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.InternalPoliciesTable, subcontrol.InternalPoliciesColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlOwner chains the current query on the "control_owner" edge.
+func (sq *SubcontrolQuery) QueryControlOwner() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ControlOwnerTable, subcontrol.ControlOwnerColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegate chains the current query on the "delegate" edge.
+func (sq *SubcontrolQuery) QueryDelegate() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.DelegateTable, subcontrol.DelegateColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -391,16 +610,24 @@ func (sq *SubcontrolQuery) Clone() *SubcontrolQuery {
 		return nil
 	}
 	return &SubcontrolQuery{
-		config:       sq.config,
-		ctx:          sq.ctx.Clone(),
-		order:        append([]subcontrol.OrderOption{}, sq.order...),
-		inters:       append([]Interceptor{}, sq.inters...),
-		predicates:   append([]predicate.Subcontrol{}, sq.predicates...),
-		withOwner:    sq.withOwner.Clone(),
-		withControls: sq.withControls.Clone(),
-		withTasks:    sq.withTasks.Clone(),
-		withPrograms: sq.withPrograms.Clone(),
-		withEvidence: sq.withEvidence.Clone(),
+		config:                sq.config,
+		ctx:                   sq.ctx.Clone(),
+		order:                 append([]subcontrol.OrderOption{}, sq.order...),
+		inters:                append([]Interceptor{}, sq.inters...),
+		predicates:            append([]predicate.Subcontrol{}, sq.predicates...),
+		withOwner:             sq.withOwner.Clone(),
+		withControl:           sq.withControl.Clone(),
+		withMappedControls:    sq.withMappedControls.Clone(),
+		withEvidence:          sq.withEvidence.Clone(),
+		withControlObjectives: sq.withControlObjectives.Clone(),
+		withTasks:             sq.withTasks.Clone(),
+		withNarratives:        sq.withNarratives.Clone(),
+		withRisks:             sq.withRisks.Clone(),
+		withActionPlans:       sq.withActionPlans.Clone(),
+		withProcedures:        sq.withProcedures.Clone(),
+		withInternalPolicies:  sq.withInternalPolicies.Clone(),
+		withControlOwner:      sq.withControlOwner.Clone(),
+		withDelegate:          sq.withDelegate.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
@@ -419,14 +646,47 @@ func (sq *SubcontrolQuery) WithOwner(opts ...func(*OrganizationQuery)) *Subcontr
 	return sq
 }
 
-// WithControls tells the query-builder to eager-load the nodes that are connected to
-// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubcontrolQuery) WithControls(opts ...func(*ControlQuery)) *SubcontrolQuery {
+// WithControl tells the query-builder to eager-load the nodes that are connected to
+// the "control" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithControl(opts ...func(*ControlQuery)) *SubcontrolQuery {
 	query := (&ControlClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withControls = query
+	sq.withControl = query
+	return sq
+}
+
+// WithMappedControls tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithMappedControls(opts ...func(*ControlQuery)) *SubcontrolQuery {
+	query := (&ControlClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withMappedControls = query
+	return sq
+}
+
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithEvidence(opts ...func(*EvidenceQuery)) *SubcontrolQuery {
+	query := (&EvidenceClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withEvidence = query
+	return sq
+}
+
+// WithControlObjectives tells the query-builder to eager-load the nodes that are connected to
+// the "control_objectives" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithControlObjectives(opts ...func(*ControlObjectiveQuery)) *SubcontrolQuery {
+	query := (&ControlObjectiveClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withControlObjectives = query
 	return sq
 }
 
@@ -441,25 +701,80 @@ func (sq *SubcontrolQuery) WithTasks(opts ...func(*TaskQuery)) *SubcontrolQuery 
 	return sq
 }
 
-// WithPrograms tells the query-builder to eager-load the nodes that are connected to
-// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubcontrolQuery) WithPrograms(opts ...func(*ProgramQuery)) *SubcontrolQuery {
-	query := (&ProgramClient{config: sq.config}).Query()
+// WithNarratives tells the query-builder to eager-load the nodes that are connected to
+// the "narratives" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNarratives(opts ...func(*NarrativeQuery)) *SubcontrolQuery {
+	query := (&NarrativeClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withPrograms = query
+	sq.withNarratives = query
 	return sq
 }
 
-// WithEvidence tells the query-builder to eager-load the nodes that are connected to
-// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubcontrolQuery) WithEvidence(opts ...func(*EvidenceQuery)) *SubcontrolQuery {
-	query := (&EvidenceClient{config: sq.config}).Query()
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithRisks(opts ...func(*RiskQuery)) *SubcontrolQuery {
+	query := (&RiskClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withEvidence = query
+	sq.withRisks = query
+	return sq
+}
+
+// WithActionPlans tells the query-builder to eager-load the nodes that are connected to
+// the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *SubcontrolQuery {
+	query := (&ActionPlanClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withActionPlans = query
+	return sq
+}
+
+// WithProcedures tells the query-builder to eager-load the nodes that are connected to
+// the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithProcedures(opts ...func(*ProcedureQuery)) *SubcontrolQuery {
+	query := (&ProcedureClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withProcedures = query
+	return sq
+}
+
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *SubcontrolQuery {
+	query := (&InternalPolicyClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withInternalPolicies = query
+	return sq
+}
+
+// WithControlOwner tells the query-builder to eager-load the nodes that are connected to
+// the "control_owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithControlOwner(opts ...func(*UserQuery)) *SubcontrolQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withControlOwner = query
+	return sq
+}
+
+// WithDelegate tells the query-builder to eager-load the nodes that are connected to
+// the "delegate" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithDelegate(opts ...func(*UserQuery)) *SubcontrolQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withDelegate = query
 	return sq
 }
 
@@ -548,14 +863,25 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [13]bool{
 			sq.withOwner != nil,
-			sq.withControls != nil,
-			sq.withTasks != nil,
-			sq.withPrograms != nil,
+			sq.withControl != nil,
+			sq.withMappedControls != nil,
 			sq.withEvidence != nil,
+			sq.withControlObjectives != nil,
+			sq.withTasks != nil,
+			sq.withNarratives != nil,
+			sq.withRisks != nil,
+			sq.withActionPlans != nil,
+			sq.withProcedures != nil,
+			sq.withInternalPolicies != nil,
+			sq.withControlOwner != nil,
+			sq.withDelegate != nil,
 		}
 	)
+	if sq.withControlOwner != nil || sq.withDelegate != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, subcontrol.ForeignKeys...)
 	}
@@ -588,24 +914,16 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
-	if query := sq.withControls; query != nil {
-		if err := sq.loadControls(ctx, query, nodes,
-			func(n *Subcontrol) { n.Edges.Controls = []*Control{} },
-			func(n *Subcontrol, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+	if query := sq.withControl; query != nil {
+		if err := sq.loadControl(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *Control) { n.Edges.Control = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withTasks; query != nil {
-		if err := sq.loadTasks(ctx, query, nodes,
-			func(n *Subcontrol) { n.Edges.Tasks = []*Task{} },
-			func(n *Subcontrol, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := sq.withPrograms; query != nil {
-		if err := sq.loadPrograms(ctx, query, nodes,
-			func(n *Subcontrol) { n.Edges.Programs = []*Program{} },
-			func(n *Subcontrol, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+	if query := sq.withMappedControls; query != nil {
+		if err := sq.loadMappedControls(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.MappedControls = []*Control{} },
+			func(n *Subcontrol, e *Control) { n.Edges.MappedControls = append(n.Edges.MappedControls, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -616,10 +934,87 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedControls {
-		if err := sq.loadControls(ctx, query, nodes,
-			func(n *Subcontrol) { n.appendNamedControls(name) },
-			func(n *Subcontrol, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+	if query := sq.withControlObjectives; query != nil {
+		if err := sq.loadControlObjectives(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.ControlObjectives = []*ControlObjective{} },
+			func(n *Subcontrol, e *ControlObjective) {
+				n.Edges.ControlObjectives = append(n.Edges.ControlObjectives, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withTasks; query != nil {
+		if err := sq.loadTasks(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Tasks = []*Task{} },
+			func(n *Subcontrol, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withNarratives; query != nil {
+		if err := sq.loadNarratives(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Narratives = []*Narrative{} },
+			func(n *Subcontrol, e *Narrative) { n.Edges.Narratives = append(n.Edges.Narratives, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withRisks; query != nil {
+		if err := sq.loadRisks(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Risks = []*Risk{} },
+			func(n *Subcontrol, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withActionPlans; query != nil {
+		if err := sq.loadActionPlans(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.ActionPlans = []*ActionPlan{} },
+			func(n *Subcontrol, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withProcedures; query != nil {
+		if err := sq.loadProcedures(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Procedures = []*Procedure{} },
+			func(n *Subcontrol, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withInternalPolicies; query != nil {
+		if err := sq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Subcontrol, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withControlOwner; query != nil {
+		if err := sq.loadControlOwner(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *User) { n.Edges.ControlOwner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withDelegate; query != nil {
+		if err := sq.loadDelegate(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *User) { n.Edges.Delegate = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedMappedControls {
+		if err := sq.loadMappedControls(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedMappedControls(name) },
+			func(n *Subcontrol, e *Control) { n.appendNamedMappedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedEvidence {
+		if err := sq.loadEvidence(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedEvidence(name) },
+			func(n *Subcontrol, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedControlObjectives {
+		if err := sq.loadControlObjectives(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedControlObjectives(name) },
+			func(n *Subcontrol, e *ControlObjective) { n.appendNamedControlObjectives(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -630,17 +1025,38 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedPrograms {
-		if err := sq.loadPrograms(ctx, query, nodes,
-			func(n *Subcontrol) { n.appendNamedPrograms(name) },
-			func(n *Subcontrol, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+	for name, query := range sq.withNamedNarratives {
+		if err := sq.loadNarratives(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedNarratives(name) },
+			func(n *Subcontrol, e *Narrative) { n.appendNamedNarratives(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedEvidence {
-		if err := sq.loadEvidence(ctx, query, nodes,
-			func(n *Subcontrol) { n.appendNamedEvidence(name) },
-			func(n *Subcontrol, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+	for name, query := range sq.withNamedRisks {
+		if err := sq.loadRisks(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedRisks(name) },
+			func(n *Subcontrol, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedActionPlans {
+		if err := sq.loadActionPlans(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedActionPlans(name) },
+			func(n *Subcontrol, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedProcedures {
+		if err := sq.loadProcedures(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedProcedures(name) },
+			func(n *Subcontrol, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedInternalPolicies {
+		if err := sq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedInternalPolicies(name) },
+			func(n *Subcontrol, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -681,7 +1097,67 @@ func (sq *SubcontrolQuery) loadOwner(ctx context.Context, query *OrganizationQue
 	}
 	return nil
 }
-func (sq *SubcontrolQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Control)) error {
+func (sq *SubcontrolQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Control)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		fk := nodes[i].ControlID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(control.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "control_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadMappedControls(ctx context.Context, query *ControlQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Control)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Control(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.MappedControlsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.subcontrol_mapped_controls
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_mapped_controls" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_mapped_controls" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Evidence)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Subcontrol)
 	nids := make(map[string]map[*Subcontrol]struct{})
@@ -693,12 +1169,12 @@ func (sq *SubcontrolQuery) loadControls(ctx context.Context, query *ControlQuery
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(subcontrol.ControlsTable)
-		joinT.Schema(sq.schemaConfig.ControlSubcontrols)
-		s.Join(joinT).On(s.C(control.FieldID), joinT.C(subcontrol.ControlsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(subcontrol.ControlsPrimaryKey[1]), edgeIDs...))
+		joinT := sql.Table(subcontrol.EvidenceTable)
+		joinT.Schema(sq.schemaConfig.EvidenceSubcontrols)
+		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(subcontrol.EvidencePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(subcontrol.EvidencePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(subcontrol.ControlsPrimaryKey[1]))
+		s.Select(joinT.C(subcontrol.EvidencePrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -728,14 +1204,76 @@ func (sq *SubcontrolQuery) loadControls(ctx context.Context, query *ControlQuery
 			}
 		})
 	})
-	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
+	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadControlObjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *ControlObjective)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.ControlObjectivesTable)
+		joinT.Schema(sq.schemaConfig.SubcontrolControlObjectives)
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(subcontrol.ControlObjectivesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(subcontrol.ControlObjectivesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.ControlObjectivesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ControlObjective](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "control_objectives" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -805,126 +1343,221 @@ func (sq *SubcontrolQuery) loadTasks(ctx context.Context, query *TaskQuery, node
 	}
 	return nil
 }
-func (sq *SubcontrolQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Program)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Subcontrol)
-	nids := make(map[string]map[*Subcontrol]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
+func (sq *SubcontrolQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Narrative)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
 		if init != nil {
-			init(node)
+			init(nodes[i])
 		}
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(subcontrol.ProgramsTable)
-		joinT.Schema(sq.schemaConfig.ProgramSubcontrols)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(subcontrol.ProgramsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(subcontrol.ProgramsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(subcontrol.ProgramsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	query.withFKs = true
+	query.Where(predicate.Narrative(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.NarrativesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
+		fk := n.subcontrol_narratives
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_narratives" is nil for node %v`, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_narratives" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Risk)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Risk(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.RisksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.subcontrol_risks
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_risks" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_risks" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *ActionPlan)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ActionPlan(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.ActionPlansColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.subcontrol_action_plans
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_action_plans" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_action_plans" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Procedure)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Procedure(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.ProceduresColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.subcontrol_procedures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_procedures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_procedures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *InternalPolicy)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.InternalPolicy(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.InternalPoliciesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.subcontrol_internal_policies
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_internal_policies" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_internal_policies" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadControlOwner(ctx context.Context, query *UserQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		if nodes[i].subcontrol_control_owner == nil {
+			continue
+		}
+		fk := *nodes[i].subcontrol_control_owner
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "subcontrol_control_owner" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
 }
-func (sq *SubcontrolQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Evidence)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Subcontrol)
-	nids := make(map[string]map[*Subcontrol]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
+func (sq *SubcontrolQuery) loadDelegate(ctx context.Context, query *UserQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		if nodes[i].subcontrol_delegate == nil {
+			continue
 		}
+		fk := *nodes[i].subcontrol_delegate
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(subcontrol.EvidenceTable)
-		joinT.Schema(sq.schemaConfig.EvidenceSubcontrols)
-		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(subcontrol.EvidencePrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(subcontrol.EvidencePrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(subcontrol.EvidencePrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
+	if len(ids) == 0 {
+		return nil
 	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Evidence](ctx, query, qr, query.inters)
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "evidence" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "subcontrol_delegate" returned %v`, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -962,6 +1595,9 @@ func (sq *SubcontrolQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if sq.withOwner != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldOwnerID)
+		}
+		if sq.withControl != nil {
+			_spec.Node.AddColumnOnce(subcontrol.FieldControlID)
 		}
 	}
 	if ps := sq.predicates; len(ps) > 0 {
@@ -1031,17 +1667,45 @@ func (sq *SubcontrolQuery) Modify(modifiers ...func(s *sql.Selector)) *Subcontro
 	return sq.Select()
 }
 
-// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
+// WithNamedMappedControls tells the query-builder to eager-load the nodes that are connected to the "mapped_controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubcontrolQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *SubcontrolQuery {
+func (sq *SubcontrolQuery) WithNamedMappedControls(name string, opts ...func(*ControlQuery)) *SubcontrolQuery {
 	query := (&ControlClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedControls == nil {
-		sq.withNamedControls = make(map[string]*ControlQuery)
+	if sq.withNamedMappedControls == nil {
+		sq.withNamedMappedControls = make(map[string]*ControlQuery)
 	}
-	sq.withNamedControls[name] = query
+	sq.withNamedMappedControls[name] = query
+	return sq
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *SubcontrolQuery {
+	query := (&EvidenceClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedEvidence == nil {
+		sq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	sq.withNamedEvidence[name] = query
+	return sq
+}
+
+// WithNamedControlObjectives tells the query-builder to eager-load the nodes that are connected to the "control_objectives"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedControlObjectives(name string, opts ...func(*ControlObjectiveQuery)) *SubcontrolQuery {
+	query := (&ControlObjectiveClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedControlObjectives == nil {
+		sq.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery)
+	}
+	sq.withNamedControlObjectives[name] = query
 	return sq
 }
 
@@ -1059,31 +1723,73 @@ func (sq *SubcontrolQuery) WithNamedTasks(name string, opts ...func(*TaskQuery))
 	return sq
 }
 
-// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// WithNamedNarratives tells the query-builder to eager-load the nodes that are connected to the "narratives"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubcontrolQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *SubcontrolQuery {
-	query := (&ProgramClient{config: sq.config}).Query()
+func (sq *SubcontrolQuery) WithNamedNarratives(name string, opts ...func(*NarrativeQuery)) *SubcontrolQuery {
+	query := (&NarrativeClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedPrograms == nil {
-		sq.withNamedPrograms = make(map[string]*ProgramQuery)
+	if sq.withNamedNarratives == nil {
+		sq.withNamedNarratives = make(map[string]*NarrativeQuery)
 	}
-	sq.withNamedPrograms[name] = query
+	sq.withNamedNarratives[name] = query
 	return sq
 }
 
-// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubcontrolQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *SubcontrolQuery {
-	query := (&EvidenceClient{config: sq.config}).Query()
+func (sq *SubcontrolQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *SubcontrolQuery {
+	query := (&RiskClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedEvidence == nil {
-		sq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	if sq.withNamedRisks == nil {
+		sq.withNamedRisks = make(map[string]*RiskQuery)
 	}
-	sq.withNamedEvidence[name] = query
+	sq.withNamedRisks[name] = query
+	return sq
+}
+
+// WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *SubcontrolQuery {
+	query := (&ActionPlanClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedActionPlans == nil {
+		sq.withNamedActionPlans = make(map[string]*ActionPlanQuery)
+	}
+	sq.withNamedActionPlans[name] = query
+	return sq
+}
+
+// WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *SubcontrolQuery {
+	query := (&ProcedureClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedProcedures == nil {
+		sq.withNamedProcedures = make(map[string]*ProcedureQuery)
+	}
+	sq.withNamedProcedures[name] = query
+	return sq
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *SubcontrolQuery {
+	query := (&InternalPolicyClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedInternalPolicies == nil {
+		sq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	sq.withNamedInternalPolicies[name] = query
 	return sq
 }
 

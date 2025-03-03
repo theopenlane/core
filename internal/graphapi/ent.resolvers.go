@@ -144,6 +144,38 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 	return res, err
 }
 
+// ControlImplementations is the resolver for the controlImplementations field.
+func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationWhereInput) (*generated.ControlImplementationConnection, error) {
+	res, err := withTransactionalMutation(ctx).ControlImplementation.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlImplementationFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementation"})
+	}
+
+	return res, err
+}
+
+// ControlImplementationHistories is the resolver for the controlImplementationHistories field.
+func (r *queryResolver) ControlImplementationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationHistoryWhereInput) (*generated.ControlImplementationHistoryConnection, error) {
+	res, err := withTransactionalMutation(ctx).ControlImplementationHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlImplementationHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementationhistory"})
+	}
+
+	return res, err
+}
+
 // ControlObjectives is the resolver for the controlObjectives field.
 func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveWhereInput) (*generated.ControlObjectiveConnection, error) {
 	res, err := withTransactionalMutation(ctx).ControlObjective.Query().Paginate(
@@ -581,6 +613,38 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 		generated.WithInviteFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+	}
+
+	return res, err
+}
+
+// MappedControls is the resolver for the mappedControls field.
+func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlWhereInput) (*generated.MappedControlConnection, error) {
+	res, err := withTransactionalMutation(ctx).MappedControl.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithMappedControlFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
+	}
+
+	return res, err
+}
+
+// MappedControlHistories is the resolver for the mappedControlHistories field.
+func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlHistoryWhereInput) (*generated.MappedControlHistoryConnection, error) {
+	res, err := withTransactionalMutation(ctx).MappedControlHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithMappedControlHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrolhistory"})
 	}
 
 	return res, err

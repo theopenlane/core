@@ -1,0 +1,49 @@
+
+
+query GetAllControlImplementationHistories {
+  controlImplementationHistories {
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        details
+        historyTime
+        id
+        implementationDate
+        operation
+        ref
+        status
+        tags
+        updatedAt
+        updatedBy
+        verificationDate
+        verified
+      }
+    }
+  }
+}
+
+query GetControlImplementationHistories($where: ControlImplementationHistoryWhereInput) {
+  controlImplementationHistories(where: $where) {
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        details
+        historyTime
+        id
+        implementationDate
+        operation
+        ref
+        status
+        tags
+        updatedAt
+        updatedBy
+        verificationDate
+        verified
+      }
+    }
+  }
+}

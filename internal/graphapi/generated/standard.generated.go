@@ -81,36 +81,40 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
+			case "shortName":
+				return ec.fieldContext_Standard_shortName(ctx, field)
+			case "framework":
+				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
-			case "family":
-				return ec.fieldContext_Standard_family(ctx, field)
+			case "governingBody":
+				return ec.fieldContext_Standard_governingBody(ctx, field)
+			case "domains":
+				return ec.fieldContext_Standard_domains(ctx, field)
+			case "link":
+				return ec.fieldContext_Standard_link(ctx, field)
 			case "status":
 				return ec.fieldContext_Standard_status(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Standard_isPublic(ctx, field)
+			case "freeToUse":
+				return ec.fieldContext_Standard_freeToUse(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "standardType":
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Standard_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Standard_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Standard_satisfies(ctx, field)
-			case "details":
-				return ec.fieldContext_Standard_details(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Standard_controlObjectives(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
+			case "owner":
+				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Standard_procedures(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Standard_actionPlans(ctx, field)
-			case "programs":
-				return ec.fieldContext_Standard_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -173,36 +177,40 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
+			case "shortName":
+				return ec.fieldContext_Standard_shortName(ctx, field)
+			case "framework":
+				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
-			case "family":
-				return ec.fieldContext_Standard_family(ctx, field)
+			case "governingBody":
+				return ec.fieldContext_Standard_governingBody(ctx, field)
+			case "domains":
+				return ec.fieldContext_Standard_domains(ctx, field)
+			case "link":
+				return ec.fieldContext_Standard_link(ctx, field)
 			case "status":
 				return ec.fieldContext_Standard_status(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Standard_isPublic(ctx, field)
+			case "freeToUse":
+				return ec.fieldContext_Standard_freeToUse(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "standardType":
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Standard_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Standard_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Standard_satisfies(ctx, field)
-			case "details":
-				return ec.fieldContext_Standard_details(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Standard_controlObjectives(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
+			case "owner":
+				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Standard_procedures(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Standard_actionPlans(ctx, field)
-			case "programs":
-				return ec.fieldContext_Standard_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -309,36 +317,40 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
+			case "shortName":
+				return ec.fieldContext_Standard_shortName(ctx, field)
+			case "framework":
+				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
-			case "family":
-				return ec.fieldContext_Standard_family(ctx, field)
+			case "governingBody":
+				return ec.fieldContext_Standard_governingBody(ctx, field)
+			case "domains":
+				return ec.fieldContext_Standard_domains(ctx, field)
+			case "link":
+				return ec.fieldContext_Standard_link(ctx, field)
 			case "status":
 				return ec.fieldContext_Standard_status(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Standard_isPublic(ctx, field)
+			case "freeToUse":
+				return ec.fieldContext_Standard_freeToUse(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "standardType":
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Standard_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Standard_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Standard_satisfies(ctx, field)
-			case "details":
-				return ec.fieldContext_Standard_details(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Standard_controlObjectives(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
+			case "owner":
+				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Standard_procedures(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Standard_actionPlans(ctx, field)
-			case "programs":
-				return ec.fieldContext_Standard_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
