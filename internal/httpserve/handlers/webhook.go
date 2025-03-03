@@ -15,11 +15,17 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
+)
+
+const (
+	stripeSignatureHeaderKey = "Stripe-Signature"
 )
 
 // WebhookReceiverHandler handles incoming stripe webhook events
@@ -27,66 +33,42 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 	req := ctx.Request()
 	res := ctx.Response()
 
-	const MaxBodyBytes = int64(65536)
-	req.Body = http.MaxBytesReader(res.Writer, req.Body, MaxBodyBytes)
-
-	payload, err := io.ReadAll(req.Body)
+	payload, err := io.ReadAll(http.MaxBytesReader(res.Writer, req.Body, int64(65536))) // nolint:mnd
 	if err != nil {
-		return ctx.String(http.StatusServiceUnavailable, fmt.Errorf("problem with request. Error: %w", err).Error())
+		return h.InternalServerError(ctx, err)
 	}
 
-	event, err := webhook.ConstructEvent(payload, req.Header.Get("Stripe-Signature"), h.Entitlements.Config.StripeWebhookSecret)
+	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), h.Entitlements.Config.StripeWebhookSecret)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, fmt.Errorf("error verifying webhook signature. Error: %w", err).Error())
+		return ctx.String(http.StatusConflict, fmt.Errorf("error verifying webhook signature. Error: %w", err).Error())
 	}
 
-	exists, err := h.checkForEventID(req.Context(), event.ID)
+	if !supportedEventTypes[string(event.Type)] {
+		return h.BadRequest(ctx, ErrUnsupportedEventType)
+	}
+
+	newCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
+
+	exists, err := h.checkForEventID(newCtx, event.ID)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
 	if !exists {
-		_, err := h.Entitlements.HandleEvent(req.Context(), &event)
-		if err != nil {
-			return h.InternalServerError(ctx, err)
-		}
-
-		meow := "meow"
-
-		input := ent.CreateEventInput{
-			EventID:   event.ID,
-			EventType: &meow,
-			// TODO unmarshall event data into internal event
-		}
-
-		meowevent, err := h.createEvent(req.Context(), input)
+		meowevent, err := h.createEvent(newCtx, ent.CreateEventInput{EventID: event.ID})
 		if err != nil {
 			return h.InternalServerError(ctx, err)
 		}
 
 		log.Debug().Msgf("Internal event: %v", meowevent)
+
+		_, err = h.HandleEvent(newCtx, &event)
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
 	}
 
-	out := WebhookResponse{
-		Message: "Received!",
-	}
-
-	return h.Success(ctx, out)
-}
-
-// WebhookRequest is the request object for the webhook handler
-type WebhookRequest struct {
-	// TODO determine if there's any request data actually need or needs to be validated given the signature verification that's already occurring
-}
-
-// WebhookResponse is the response object for the webhook handler
-type WebhookResponse struct {
-	Message string
-}
-
-// Validate validates the webhook request
-func (r *WebhookRequest) Validate() error {
-	return nil
+	return h.Success(ctx, nil)
 }
 
 // unmarshalEventData is used to unmarshal event data from a stripe.Event object into a specific type T
@@ -129,24 +111,17 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) (orgCust *enti
 	return orgCust, nil
 }
 
-// InvalidateAPITokens invalidates all API tokens for an organization
-func InvalidateAPITokens(c context.Context, orgID string) error {
-	if err := transaction.FromContext(c).APIToken.Update().Where(apitoken.OwnerID(orgID)).
-		SetIsActive(false).
-		SetExpiresAt(time.Now().Add(-24 * time.Hour)).
-		SetRevokedAt(time.Now()).
-		SetRevokedReason("subscription paused or deleted").
-		SetRevokedBy("entitlements_engine").
-		Exec(c); err != nil {
-		return err
-	}
-
-	return nil
+var supportedEventTypes = map[string]bool{
+	"customer.subscription.updated":        true,
+	"customer.subscription.deleted":        true,
+	"customer.subscription.paused":         true,
+	"customer.subscription.trial_will_end": true,
+	"payment_method.attached":              true,
 }
 
-// InvalidatePATokens invalidates all personal access tokens for an organization
-func InvalidatePATokens(c context.Context, orgID string) error {
-	if err := transaction.FromContext(c).PersonalAccessToken.Update().Where(personalaccesstoken.OwnerID(orgID)).
+// InvalidateAPITokens invalidates all API tokens for an organization
+func (h *Handler) invalidateAPITokens(c context.Context, orgID string) error {
+	if err := transaction.FromContext(c).APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
 		SetExpiresAt(time.Now().Add(-24 * time.Hour)).
 		SetRevokedAt(time.Now()).
@@ -166,13 +141,11 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return orgCust, err
 	}
 
-	if err := transaction.FromContext(ctx).APIToken.Update().Where(apitoken.OwnerID(orgSubs.ID)).
-		SetIsActive(false).
-		SetExpiresAt(time.Now().Add(-24 * time.Hour)).
-		SetRevokedAt(time.Now()).
-		SetRevokedReason("subscription paused or deleted").
-		SetRevokedBy("entitlements_engine").
-		Exec(ctx); err != nil {
+	if err := h.invalidateAPITokens(ctx, orgSubs.OwnerID); err != nil {
+		return orgCust, err
+	}
+
+	if err := h.DBClient.PersonalAccessToken.Update().RemoveOrganizationIDs(orgSubs.OwnerID).Where(personalaccesstoken.HasOrganizationsWith(organization.ID(orgSubs.OwnerID))).Exec(ctx); err != nil {
 		return orgCust, err
 	}
 
@@ -191,18 +164,21 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 
 // handlePaymentIntent handles payment intent events
 func (h *Handler) handlePaymentMethodAdded(ctx context.Context, stripeCust *stripe.PaymentMethod) (orgCust *entitlements.OrganizationCustomer, err error) {
+	if err := transaction.FromContext(ctx).OrgSubscription.Update().Where(orgsubscription.StripeCustomerID(stripeCust.Customer.ID)).
+		SetPaymentMethodAdded(true).
+		Exec(ctx); err != nil {
+		return orgCust, err
+	}
 
 	return orgCust, nil
 }
 
 // handlePaymentIntent handles payment intent events
 func (h *Handler) trialWillEnd(c context.Context, stripeCust *stripe.Subscription) (orgCust *entitlements.OrganizationCustomer, err error) {
-	_, err = h.Entitlements.GetCustomerByStripeID(c, stripeCust.ID)
+	_, err = SyncOrgSubscriptionWithStripe(c, stripeCust, nil)
 	if err != nil {
 		return orgCust, err
 	}
-
-	// TODO implement payment intent logic; for now just confirm the lookup flow is successful and print the event
 
 	return orgCust, nil
 }

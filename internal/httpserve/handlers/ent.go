@@ -523,7 +523,7 @@ func (h *Handler) createEvent(ctx context.Context, input ent.CreateEventInput) (
 
 // checkForEventID checks if the event ID exists in the database
 func (h *Handler) checkForEventID(ctx context.Context, id string) (bool, error) {
-	exists, err := transaction.FromContext(ctx).Event.Query().Where(event.EventID(id)).Exist(ctx)
+	exists, err := h.DBClient.Event.Query().Where(event.EventID(id)).Exist(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error checking for event ID")
 		return false, err

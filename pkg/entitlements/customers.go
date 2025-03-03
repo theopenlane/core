@@ -199,26 +199,23 @@ func (sc *StripeClient) MapStripeCustomer(c *stripe.Customer) *OrganizationCusto
 	for k, v := range c.Metadata {
 		if k == "organization_id" {
 			orgID = v
-			break
+			continue
 		}
 
 		if k == "organization_settings_id" {
 			orgSettingsID = v
-			break
+			continue
 		}
 
 		if k == "organization_subscription_id" {
 			orgSubscriptionID = v
-			break
+			continue
 		}
 	}
-
-	// if c.Subscriptions.Data[0].ID
 
 	return &OrganizationCustomer{
 		StripeCustomerID:           c.ID,
 		OrganizationID:             orgID,
-		OrganizationName:           c.Metadata["organization_name"],
 		OrganizationSettingsID:     orgSettingsID,
 		OrganizationSubscriptionID: orgSubscriptionID,
 	}
