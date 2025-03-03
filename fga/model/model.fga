@@ -346,7 +346,7 @@ type evidence
 type standard
   relations
     #  user:* is used for system-owned public standards that are available to all users
-    define can_view: [user:*] or viewer or parent_viewer
+    define can_view: [user:*, service:*] or viewer or parent_viewer
     define can_edit: editor or parent_editor
     define can_delete: editor or parent_editor
     define parent_viewer: member from parent

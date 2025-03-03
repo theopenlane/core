@@ -512,11 +512,6 @@ func (su *StandardUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (su *StandardUpdate) check() error {
-	if v, ok := su.mutation.OwnerID(); ok {
-		if err := standard.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Standard.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := su.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
@@ -1264,11 +1259,6 @@ func (suo *StandardUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (suo *StandardUpdateOne) check() error {
-	if v, ok := suo.mutation.OwnerID(); ok {
-		if err := standard.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Standard.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := suo.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}

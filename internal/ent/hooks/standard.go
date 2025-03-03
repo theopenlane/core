@@ -1,0 +1,249 @@
+package hooks
+
+import (
+	"context"
+
+	"entgo.io/ent"
+
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+)
+
+// HookStandard adds tuples for publicly available standards
+func HookStandard() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return retVal, err
+			}
+
+			addTuple, deleteTuple, err := AddOrDeleteStandardTuple(ctx, m)
+			if err != nil {
+				return retVal, err
+			}
+
+			writes := []fgax.TupleKey{}
+			deletes := []fgax.TupleKey{}
+			if addTuple || deleteTuple {
+				// get the IDs that were updated
+				ids, err := m.IDs(ctx)
+				if err != nil {
+					return retVal, err
+				}
+
+				for _, id := range ids {
+					tuple := fgax.TupleRequest{
+						ObjectID:   id,
+						ObjectType: generated.TypeStandard,
+						SubjectID:  "*",
+						Relation:   fgax.CanView,
+					}
+
+					userTuple := tuple
+					userTuple.SubjectType = auth.UserSubjectType
+
+					serviceTuple := tuple
+					serviceTuple.SubjectType = auth.ServiceSubjectType
+
+					if addTuple {
+						writes = append(writes, []fgax.TupleKey{fgax.GetTupleKey(userTuple),
+							fgax.GetTupleKey(serviceTuple)}..., // create user:* and service:* tuples)
+						)
+					} else {
+						deletes = append(deletes, []fgax.TupleKey{fgax.GetTupleKey(userTuple),
+							fgax.GetTupleKey(serviceTuple)}..., // delete user:* and service:* tuples)
+						)
+					}
+				}
+			}
+
+			if len(writes) > 0 || len(deletes) > 0 {
+				if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
+					return retVal, err
+				}
+			}
+
+			return retVal, nil
+		})
+	},
+		hook.HasOp(
+			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne),
+	)
+}
+
+// AddOrDeleteStandardTuple determines whether to add or delete a standard tuple based on the mutation operation and field values.
+//
+// Parameters:
+// - ctx: The context for the operation.
+// - m: The StandardMutation containing the mutation details.
+//
+// Returns:
+// - add: A boolean indicating whether to add the tuple.
+// - delete: A boolean indicating whether to delete the tuple.
+// - err: An error if any occurred during the operation.
+//
+// The function handles the following mutation operations:
+// - OpCreate: Adds the tuple if both systemOwned and isPublic are true.
+// - OpDelete, OpDeleteOne: Deletes the tuple.
+// - OpUpdateOne: Deletes the tuple if it's a soft delete or if systemOwned or isPublic fields have changed. Adds the tuple if both fields are true.
+// - OpUpdate: Deletes the tuple if systemOwned or isPublic fields have been cleared. Adds the tuple if both fields are true.
+func AddOrDeleteStandardTuple(ctx context.Context, m *generated.StandardMutation) (add, delete bool, err error) {
+	var (
+		oldPublic          bool
+		oldSystemOwned     bool
+		publicCleared      bool
+		systemOwnedCleared bool
+	)
+	switch m.Op() {
+	case ent.OpCreate:
+
+		systemOwned, ok := m.SystemOwned()
+		if !ok {
+			return
+		}
+
+		isPublic, ok := m.IsPublic()
+		if !ok {
+			return
+		}
+
+		if systemOwned && isPublic {
+			return true, false, nil
+		}
+
+		return
+	case ent.OpDelete, ent.OpDeleteOne:
+		return false, true, nil // on delete, delete the tuples
+	case ent.OpUpdateOne:
+		// if its a soft delete, delete the tuples
+		if entx.CheckIsSoftDelete(ctx) {
+			return false, true, nil
+		}
+		// check if the systemOwned or isPublic fields have changed
+		systemOwned, systemOwnedOK := m.SystemOwned()
+
+		systemOwnedCleared = m.SystemOwnedCleared()
+		if !systemOwnedCleared {
+			oldSystemOwned, err = m.OldSystemOwned(ctx)
+			if err != nil {
+				return
+			}
+		}
+
+		public, publicOK := m.IsPublic()
+		publicCleared = m.IsPublicCleared()
+		if !publicCleared {
+			oldPublic, err = m.OldIsPublic(ctx)
+			if err != nil {
+				return
+			}
+		}
+
+		// if either were cleared, delete the tuples
+		if systemOwnedCleared || publicCleared {
+			delete = true
+		}
+
+		// delete logic if the systemOwned or isPublic fields have changed from true to false
+		if !systemOwned && systemOwnedOK && oldSystemOwned || !public && publicOK && oldPublic {
+			delete = true
+		}
+
+		// add logic when both are set
+		// no need to check ok because it will only be true if ok is also true
+		if public && systemOwned {
+			add = true
+		}
+
+		// if public was set but not system owned, but old system owned was OK
+		if public && oldSystemOwned && !systemOwnedOK {
+			add = true
+		}
+
+		// reverse for system owned
+		if systemOwned && oldPublic && !publicOK {
+			add = true
+		}
+
+		// // if one has changed, lets see if we need to add the tuples because
+		// // the other was already true
+		// if systemOwned || public {
+		// 	id, ok := m.ID()
+		// 	if !ok || id == "" {
+		// 		return
+		// 	}
+
+		// 	// check if the systemOwned or isPublic fields have changed
+		// 	var standard *generated.Standard
+		// 	standard, err = m.Client().Standard.Get(ctx, id)
+		// 	if err != nil {
+		// 		return
+		// 	}
+
+		// 	if standard.SystemOwned && standard.IsPublic {
+		// 		return true, false, nil
+		// 	}
+		// }
+
+		return
+	case ent.OpUpdate:
+		shouldDelete := false
+		// check if the systemOwned or isPublic fields have changed
+		systemOwned, systemOwnedOK := m.SystemOwned()
+
+		systemOwnedCleared = m.SystemOwnedCleared()
+		if systemOwnedCleared {
+			systemOwned = false
+
+			// if we took an action to clear the systemOwned field, we should delete the tuples
+			shouldDelete = true
+		}
+
+		public, publicOK := m.IsPublic()
+		publicCleared = m.IsPublicCleared()
+		if publicCleared {
+			public = false
+
+			// if we took an action to clear the public field, we should delete the tuples
+			shouldDelete = true
+		}
+
+		// if these are both true, add the tuple, and conditionally delete the tuple
+		if systemOwned && public {
+			return true, shouldDelete, nil
+		}
+
+		// if either of these we set in the mutation, we should delete the tuples
+		if (!systemOwned && systemOwnedOK) || (!public && publicOK) {
+			return false, true, nil
+		}
+
+		// see if we need to add the tuples because one of the two fields was set
+		if systemOwned || public {
+			var updatedIDs []string
+			updatedIDs, err = m.IDs(ctx)
+			if err != nil || len(updatedIDs) == 0 {
+				return
+			}
+
+			// check if the systemOwned or isPublic fields have changed
+			for _, id := range updatedIDs {
+				var standard *generated.Standard
+				standard, err = m.Client().Standard.Get(ctx, id)
+				if err != nil {
+					return
+				}
+
+				if standard.SystemOwned && standard.IsPublic {
+					return true, false, nil
+				}
+			}
+		}
+	}
+
+	return
+}

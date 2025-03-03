@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
-// TraverseStandard  only returns public standards
+// TraverseStandard only returns public standards and standards owned by the organization
 func TraverseStandard() ent.Interceptor {
 	return intercept.TraverseStandard(func(ctx context.Context, q *generated.StandardQuery) error {
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)

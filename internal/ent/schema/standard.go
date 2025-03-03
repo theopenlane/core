@@ -98,7 +98,10 @@ func (Standard) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("standards"),
+		NewOrgOwnedMixin(ObjectOwnedMixin{
+			Ref:        "standards",
+			AllowEmpty: true, // allow empty org_id
+		}),
 	}
 }
 
