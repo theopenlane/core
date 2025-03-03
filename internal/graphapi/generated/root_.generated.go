@@ -37693,7 +37693,7 @@ type MappedControl implements Node {
   """
   tags: [String!]
   """
-  the id of the control that
+  the id of the control being mapped
   """
   controlID: ID!
   """
@@ -37760,7 +37760,7 @@ type MappedControlHistory implements Node {
   """
   tags: [String!]
   """
-  the id of the control that
+  the id of the control being mapped
   """
   controlID: String!
   """

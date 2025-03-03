@@ -21,7 +21,7 @@ type MappedControl struct {
 func (MappedControl) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("control_id").
-			Comment("the id of the control that ").
+			Comment("the id of the control being mapped").
 			Unique().
 			Immutable().
 			NotEmpty(),

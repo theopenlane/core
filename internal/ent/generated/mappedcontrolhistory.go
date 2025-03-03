@@ -39,7 +39,7 @@ type MappedControlHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control that
+	// the id of the control being mapped
 	ControlID string `json:"control_id,omitempty"`
 	// the id of the control that is mapped to
 	MappedControlID string `json:"mapped_control_id,omitempty"`

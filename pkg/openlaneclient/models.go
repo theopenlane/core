@@ -10999,7 +10999,7 @@ type MappedControl struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control that
+	// the id of the control being mapped
 	ControlID string `json:"controlID"`
 	// the id of the control that is mapped to
 	MappedControlID string `json:"mappedControlID"`
@@ -11063,7 +11063,7 @@ type MappedControlHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control that
+	// the id of the control being mapped
 	ControlID string `json:"controlID"`
 	// the id of the control that is mapped to
 	MappedControlID string `json:"mappedControlID"`
