@@ -26576,6 +26576,52 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetUpdatedBy() *s
 	return t.UpdatedBy
 }
 
+type GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions struct {
+	Active                   bool     "json:\"active\" graphql:\"active\""
+	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
+	ID                       string   "json:\"id\" graphql:\"id\""
+	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
+	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
+	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
+}
+
+func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetActive() bool {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.Active
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetFeatures() []string {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.Features
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetID() string {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.ID
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetProductTier() *string {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.ProductTier
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeCustomerID() *string {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.StripeCustomerID
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.StripeSubscriptionStatus
+}
+
 type GetAllOrganizations_Organizations_Edges_Node_ControlCreators struct {
 	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string "json:\"displayName\" graphql:\"displayName\""
@@ -26844,6 +26890,7 @@ type GetAllOrganizations_Organizations_Edges_Node struct {
 	Members                  []*GetAllOrganizations_Organizations_Edges_Node_Members                  "json:\"members,omitempty\" graphql:\"members\""
 	Name                     string                                                                   "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*GetAllOrganizations_Organizations_Edges_Node_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
+	OrgSubscriptions         []*GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
 	Parent                   *GetAllOrganizations_Organizations_Edges_Node_Parent                     "json:\"parent,omitempty\" graphql:\"parent\""
 	PersonalOrg              *bool                                                                    "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
 	ProcedureCreators        []*GetAllOrganizations_Organizations_Edges_Node_ProcedureCreators        "json:\"procedureCreators,omitempty\" graphql:\"procedureCreators\""
@@ -26920,6 +26967,12 @@ func (t *GetAllOrganizations_Organizations_Edges_Node) GetNarrativeCreators() []
 		t = &GetAllOrganizations_Organizations_Edges_Node{}
 	}
 	return t.NarrativeCreators
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node) GetOrgSubscriptions() []*GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node{}
+	}
+	return t.OrgSubscriptions
 }
 func (t *GetAllOrganizations_Organizations_Edges_Node) GetParent() *GetAllOrganizations_Organizations_Edges_Node_Parent {
 	if t == nil {
@@ -27222,6 +27275,52 @@ func (t *GetOrganizationByID_Organization_Setting) GetUpdatedBy() *string {
 	return t.UpdatedBy
 }
 
+type GetOrganizationByID_Organization_OrgSubscriptions struct {
+	Active                   bool     "json:\"active\" graphql:\"active\""
+	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
+	ID                       string   "json:\"id\" graphql:\"id\""
+	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
+	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
+	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
+}
+
+func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetActive() bool {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
+	}
+	return t.Active
+}
+func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetFeatures() []string {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
+	}
+	return t.Features
+}
+func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetID() string {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
+	}
+	return t.ID
+}
+func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetProductTier() *string {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
+	}
+	return t.ProductTier
+}
+func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetStripeCustomerID() *string {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
+	}
+	return t.StripeCustomerID
+}
+func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
+	}
+	return t.StripeSubscriptionStatus
+}
+
 type GetOrganizationByID_Organization_ControlCreators struct {
 	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string "json:\"displayName\" graphql:\"displayName\""
@@ -27493,6 +27592,7 @@ type GetOrganizationByID_Organization struct {
 	Members                  []*GetOrganizationByID_Organization_Members                  "json:\"members,omitempty\" graphql:\"members\""
 	Name                     string                                                       "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*GetOrganizationByID_Organization_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
+	OrgSubscriptions         []*GetOrganizationByID_Organization_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
 	Parent                   *GetOrganizationByID_Organization_Parent                     "json:\"parent,omitempty\" graphql:\"parent\""
 	PersonalOrg              *bool                                                        "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
 	ProcedureCreators        []*GetOrganizationByID_Organization_ProcedureCreators        "json:\"procedureCreators,omitempty\" graphql:\"procedureCreators\""
@@ -27588,6 +27688,12 @@ func (t *GetOrganizationByID_Organization) GetNarrativeCreators() []*GetOrganiza
 		t = &GetOrganizationByID_Organization{}
 	}
 	return t.NarrativeCreators
+}
+func (t *GetOrganizationByID_Organization) GetOrgSubscriptions() []*GetOrganizationByID_Organization_OrgSubscriptions {
+	if t == nil {
+		t = &GetOrganizationByID_Organization{}
+	}
+	return t.OrgSubscriptions
 }
 func (t *GetOrganizationByID_Organization) GetParent() *GetOrganizationByID_Organization_Parent {
 	if t == nil {
@@ -27874,6 +27980,52 @@ func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetUpdatedBy() *stri
 	return t.UpdatedBy
 }
 
+type GetOrganizations_Organizations_Edges_Node_OrgSubscriptions struct {
+	Active                   bool     "json:\"active\" graphql:\"active\""
+	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
+	ID                       string   "json:\"id\" graphql:\"id\""
+	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
+	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
+	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
+}
+
+func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetActive() bool {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.Active
+}
+func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetFeatures() []string {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.Features
+}
+func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetID() string {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.ID
+}
+func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetProductTier() *string {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.ProductTier
+}
+func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeCustomerID() *string {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.StripeCustomerID
+}
+func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
+	}
+	return t.StripeSubscriptionStatus
+}
+
 type GetOrganizations_Organizations_Edges_Node_ControlCreators struct {
 	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string "json:\"displayName\" graphql:\"displayName\""
@@ -28142,6 +28294,7 @@ type GetOrganizations_Organizations_Edges_Node struct {
 	Members                  []*GetOrganizations_Organizations_Edges_Node_Members                  "json:\"members,omitempty\" graphql:\"members\""
 	Name                     string                                                                "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*GetOrganizations_Organizations_Edges_Node_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
+	OrgSubscriptions         []*GetOrganizations_Organizations_Edges_Node_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
 	Parent                   *GetOrganizations_Organizations_Edges_Node_Parent                     "json:\"parent,omitempty\" graphql:\"parent\""
 	PersonalOrg              *bool                                                                 "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
 	ProcedureCreators        []*GetOrganizations_Organizations_Edges_Node_ProcedureCreators        "json:\"procedureCreators,omitempty\" graphql:\"procedureCreators\""
@@ -28218,6 +28371,12 @@ func (t *GetOrganizations_Organizations_Edges_Node) GetNarrativeCreators() []*Ge
 		t = &GetOrganizations_Organizations_Edges_Node{}
 	}
 	return t.NarrativeCreators
+}
+func (t *GetOrganizations_Organizations_Edges_Node) GetOrgSubscriptions() []*GetOrganizations_Organizations_Edges_Node_OrgSubscriptions {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node{}
+	}
+	return t.OrgSubscriptions
 }
 func (t *GetOrganizations_Organizations_Edges_Node) GetParent() *GetOrganizations_Organizations_Edges_Node_Parent {
 	if t == nil {
@@ -28432,6 +28591,52 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetUpdatedB
 		t = &UpdateOrganization_UpdateOrganization_Organization_Setting{}
 	}
 	return t.UpdatedBy
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions struct {
+	Active                   bool     "json:\"active\" graphql:\"active\""
+	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
+	ID                       string   "json:\"id\" graphql:\"id\""
+	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
+	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
+	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetActive() bool {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
+	}
+	return t.Active
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetFeatures() []string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
+	}
+	return t.Features
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetID() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
+	}
+	return t.ID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetProductTier() *string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
+	}
+	return t.ProductTier
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetStripeCustomerID() *string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
+	}
+	return t.StripeCustomerID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
+	}
+	return t.StripeSubscriptionStatus
 }
 
 type UpdateOrganization_UpdateOrganization_Organization_ControlCreators struct {
@@ -28703,6 +28908,7 @@ type UpdateOrganization_UpdateOrganization_Organization struct {
 	Members                  []*UpdateOrganization_UpdateOrganization_Organization_Members                  "json:\"members,omitempty\" graphql:\"members\""
 	Name                     string                                                                         "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
+	OrgSubscriptions         []*UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
 	PersonalOrg              *bool                                                                          "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
 	ProcedureCreators        []*UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators        "json:\"procedureCreators,omitempty\" graphql:\"procedureCreators\""
 	ProgramCreators          []*UpdateOrganization_UpdateOrganization_Organization_ProgramCreators          "json:\"programCreators,omitempty\" graphql:\"programCreators\""
@@ -28783,6 +28989,12 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetNarrativeCreator
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
 	}
 	return t.NarrativeCreators
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization) GetOrgSubscriptions() []*UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization{}
+	}
+	return t.OrgSubscriptions
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetPersonalOrg() *bool {
 	if t == nil {
@@ -61882,6 +62094,14 @@ const GetAllOrganizationsDocument = `query GetAllOrganizations {
 					geoLocation
 					tags
 				}
+				orgSubscriptions {
+					stripeCustomerID
+					stripeSubscriptionStatus
+					active
+					productTier
+					features
+					id
+				}
 				controlCreators {
 					id
 					displayID
@@ -62001,6 +62221,14 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 			taxIdentifier
 			geoLocation
 			tags
+		}
+		orgSubscriptions {
+			stripeCustomerID
+			stripeSubscriptionStatus
+			active
+			productTier
+			features
+			id
 		}
 		controlCreators {
 			id
@@ -62124,6 +62352,14 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 					geoLocation
 					tags
 				}
+				orgSubscriptions {
+					stripeCustomerID
+					stripeSubscriptionStatus
+					active
+					productTier
+					features
+					id
+				}
 				controlCreators {
 					id
 					displayID
@@ -62231,6 +62467,14 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 				taxIdentifier
 				geoLocation
 				tags
+			}
+			orgSubscriptions {
+				stripeCustomerID
+				stripeSubscriptionStatus
+				active
+				productTier
+				features
+				id
 			}
 			controlCreators {
 				id

@@ -141,6 +141,14 @@ query GetAllOrganizations {
           geoLocation
           tags
         }
+        orgSubscriptions {
+          stripeCustomerID
+          stripeSubscriptionStatus
+          active
+          productTier
+          features
+          id
+        }
         controlCreators {
           id
           displayID
@@ -244,6 +252,14 @@ query GetOrganizationByID($organizationId: ID!) {
       taxIdentifier
       geoLocation
       tags
+    }
+    orgSubscriptions {
+      stripeCustomerID
+      stripeSubscriptionStatus
+      active
+      productTier
+      features
+      id
     }
     controlCreators {
       id
@@ -349,6 +365,14 @@ query GetOrganizations($where: OrganizationWhereInput) {
           geoLocation
           tags
         }
+        orgSubscriptions {
+          stripeCustomerID
+          stripeSubscriptionStatus
+          active
+          productTier
+          features
+          id
+        }
         controlCreators {
           id
           displayID
@@ -442,6 +466,14 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         taxIdentifier
         geoLocation
         tags
+      }
+      orgSubscriptions {
+        stripeCustomerID
+        stripeSubscriptionStatus
+        active
+        productTier
+        features
+        id
       }
       controlCreators {
         id

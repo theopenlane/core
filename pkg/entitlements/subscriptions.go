@@ -117,6 +117,29 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 	return mappedsubscription, nil
 }
 
+// CreatePersonalOrgFreeTierSubs creates a subscription with the configured $0 price used for personal organizations only
+func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(customerID string) (*Subscription, error) {
+	params := &stripe.SubscriptionParams{
+		Customer: stripe.String(customerID),
+		Items: []*stripe.SubscriptionItemsParams{
+			{
+				Price: &sc.Config.PersonalOrgSubscriptionPriceID,
+			},
+		},
+		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
+	}
+
+	subs, err := sc.CreateSubscription(params)
+	if err != nil {
+		log.Err(err).Msg("Failed to create trial subscription")
+		return nil, err
+	}
+
+	mappedsubscription := sc.mapStripeSubscription(subs)
+
+	return mappedsubscription, nil
+}
+
 // CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
 func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
 	params := &stripe.BillingPortalSessionParams{

@@ -328,10 +328,9 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		return nil, err
 	}
 
+	personalOrg := false
 	if org.PersonalOrg {
-		log.Debug().Str("organization_id", org.ID).Msg("organization is a personal org")
-
-		return nil, ErrPersonalOrgNoSubscription
+		personalOrg = true
 	}
 
 	if len(org.Edges.OrgSubscriptions) > 1 {
@@ -350,6 +349,7 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		OrganizationName:       org.Name,
 		StripeCustomerID:       stripeCustomerID,
 		OrganizationSettingsID: orgSetting.ID,
+		PersonalOrg:            personalOrg,
 		ContactInfo: entitlements.ContactInfo{
 			Email:      orgSetting.BillingEmail,
 			Phone:      orgSetting.BillingPhone,

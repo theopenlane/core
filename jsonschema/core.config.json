@@ -324,6 +324,9 @@
         "trialSubscriptionPriceID": {
           "type": "string"
         },
+        "personalOrgSubscriptionPriceID": {
+          "type": "string"
+        },
         "stripeWebhookURL": {
           "type": "string"
         },

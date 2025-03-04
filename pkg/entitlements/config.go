@@ -11,6 +11,8 @@ type Config struct {
 	StripeWebhookSecret string `json:"stripeWebhookSecret" koanf:"stripeWebhookSecret" default:""`
 	// TrialSubscriptionPriceID is the price ID for the trial subscription
 	TrialSubscriptionPriceID string `json:"trialSubscriptionPriceID" koanf:"trialSubscriptionPriceID" default:"price_1QKLyeBvxky1R7SvaZYGWyQb"`
+	// PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription
+	PersonalOrgSubscriptionPriceID string `json:"personalOrgSubscriptionPriceID" koanf:"personalOrgSubscriptionPriceID" default:"price_1QycPyBvxky1R7Svz0gOWnNh"`
 	// StripeWebhookURL is the URL for the stripe webhook
 	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.openlane.com/v1/stripe/webhook"`
 	// StripeBillingPortalSuccessURL
@@ -65,6 +67,13 @@ func WithStripeWebhookURL(stripeWebhookURL string) ConfigOpts {
 func WithStripeBillingPortalSuccessURL(stripeBillingPortalSuccessURL string) ConfigOpts {
 	return func(c *Config) {
 		c.StripeBillingPortalSuccessURL = stripeBillingPortalSuccessURL
+	}
+}
+
+// WithPersonalOrgSubscriptionPriceID sets the personal org subscription price ID
+func WithPersonalOrgSubscriptionPriceID(personalOrgSubscriptionPriceID string) ConfigOpts {
+	return func(c *Config) {
+		c.PersonalOrgSubscriptionPriceID = personalOrgSubscriptionPriceID
 	}
 }
 

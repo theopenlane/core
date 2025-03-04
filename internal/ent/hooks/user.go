@@ -124,12 +124,17 @@ func HookUser() ent.Hook {
 				}
 
 				// when a user is created, we create a personal user org
-				setting, err := createPersonalOrg(ctx, m.Client(), userCreated)
+				setting, org, err := createPersonalOrg(ctx, m.Client(), userCreated)
 				if err != nil {
 					return nil, err
 				}
 
 				userCreated.Edges.Setting = setting
+
+				// update the personal org setting with the user's email
+				if err := updatePersonalOrgSetting(ctx, m.Client(), userCreated, org); err != nil {
+					return nil, err
+				}
 			}
 
 			return userCreated, err
@@ -240,7 +245,7 @@ func personalOrgDescription(user *generated.User) *string {
 }
 
 // createPersonalOrg creates an org for a user with a unique random name
-func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *generated.User) (*generated.UserSetting, error) {
+func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *generated.User) (*generated.UserSetting, *generated.Organization, error) {
 	// this prevents a privacy check that would be required for regular orgs, but not a personal org
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -255,7 +260,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 
 		log.Error().Err(err).Msg("unable to create personal org")
 
-		return nil, err
+		return nil, nil, err
 	}
 
 	// Create Role as owner for user in the personal org
@@ -270,11 +275,35 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 		Save(ctx); err != nil {
 		log.Error().Err(err).Msg("unable to add user as owner to organization")
 
-		return nil, err
+		return nil, nil, err
+	}
+
+	setting, err := setDefaultOrg(ctx, dbClient, user, org)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	// set default org
-	return setDefaultOrg(ctx, dbClient, user, org)
+	return setting, org, nil
+}
+
+func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) error {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	setting, err := org.Setting(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get org settings")
+
+		return err
+	}
+
+	if err := dbClient.OrganizationSetting.UpdateOneID(setting.ID).SetBillingEmail(user.Email).Exec(ctx); err != nil {
+		log.Error().Err(err).Msg("unable to update org settings")
+
+		return err
+	}
+
+	return nil
 }
 
 func setDefaultOrg(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) (*generated.UserSetting, error) {
