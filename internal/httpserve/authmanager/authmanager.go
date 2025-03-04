@@ -145,6 +145,19 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 	newTarget, err := a.authCheck(ctx, user, targetOrgID)
 	if err != nil {
 		if targetOrgID != "" {
+			active, err := a.checkActiveSubscription(ctx, targetOrgID)
+			if err != nil {
+				log.Error().Err(err).Msg("failed to find orgsubscription for organization")
+
+				return nil, err
+			}
+
+			if !active {
+				log.Error().Err(err).Msg("organization subscription is not active")
+
+				return nil, err
+			}
+
 			log.Error().Err(err).Msg("user attempting to switch into an org they cannot access, returning error")
 
 			return nil, err
@@ -253,11 +266,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 
 		return orgID, ErrSubscriptionNotActive
 	}
-
 	// ensure user is already a member of the destination organization
-	req := fgax.AccessCheck{
-		SubjectID:   au.SubjectID,
-		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
 		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 	}

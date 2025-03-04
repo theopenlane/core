@@ -716,9 +716,9 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "event_id", Type: field.TypeString, Nullable: true},
+		{Name: "event_id", Type: field.TypeString, Unique: true},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
-		{Name: "event_type", Type: field.TypeString},
+		{Name: "event_type", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
@@ -738,10 +738,15 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "event_id", Type: field.TypeString, Nullable: true},
+		{Name: "event_id", Type: field.TypeString},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
-		{Name: "event_type", Type: field.TypeString},
+		{Name: "event_type", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "additional_processing_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "additional_processing_details", Type: field.TypeString, Nullable: true},
+		{Name: "processed_by", Type: field.TypeString, Nullable: true},
+		{Name: "processed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// EventHistoryTable holds the schema information for the "event_history" table.
 	EventHistoryTable = &schema.Table{

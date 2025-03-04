@@ -18,11 +18,34 @@ type Event struct {
 func (Event) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("event_id").
-			Optional(),
+			Comment("the unique identifier of the event as it relates to the source or outside system").
+			Unique().
+			Immutable(),
 		field.String("correlation_id").
+			Comment("an identifier to correleate the event to another object or source, if needed").
 			Optional(),
-		field.String("event_type"),
-		field.JSON("metadata", map[string]any{}).Optional(),
+		field.String("event_type").
+			Optional().
+			Comment("the type of event"),
+		field.JSON("metadata", map[string]any{}).
+			Comment("event metadata").
+			Optional(),
+		field.String("source").
+			Comment("the source of the event").
+			Optional(),
+		field.Bool("additional_processing_required").
+			Default(false).
+			Comment("indicates if additional processing is required for the event").
+			Optional(),
+		field.String("additional_processing_details").
+			Comment("details about the additional processing required").
+			Optional(),
+		field.String("processed_by").
+			Comment("the listener ID who processed the event").
+			Optional(),
+		field.Time("processed_at").
+			Comment("the time the event was processed").
+			Optional(),
 	}
 }
 

@@ -100,14 +100,6 @@ func (ec *EventCreate) SetEventID(s string) *EventCreate {
 	return ec
 }
 
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (ec *EventCreate) SetNillableEventID(s *string) *EventCreate {
-	if s != nil {
-		ec.SetEventID(*s)
-	}
-	return ec
-}
-
 // SetCorrelationID sets the "correlation_id" field.
 func (ec *EventCreate) SetCorrelationID(s string) *EventCreate {
 	ec.mutation.SetCorrelationID(s)
@@ -128,9 +120,87 @@ func (ec *EventCreate) SetEventType(s string) *EventCreate {
 	return ec
 }
 
+// SetNillableEventType sets the "event_type" field if the given value is not nil.
+func (ec *EventCreate) SetNillableEventType(s *string) *EventCreate {
+	if s != nil {
+		ec.SetEventType(*s)
+	}
+	return ec
+}
+
 // SetMetadata sets the "metadata" field.
 func (ec *EventCreate) SetMetadata(m map[string]interface{}) *EventCreate {
 	ec.mutation.SetMetadata(m)
+	return ec
+}
+
+// SetSource sets the "source" field.
+func (ec *EventCreate) SetSource(s string) *EventCreate {
+	ec.mutation.SetSource(s)
+	return ec
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (ec *EventCreate) SetNillableSource(s *string) *EventCreate {
+	if s != nil {
+		ec.SetSource(*s)
+	}
+	return ec
+}
+
+// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
+func (ec *EventCreate) SetAdditionalProcessingRequired(b bool) *EventCreate {
+	ec.mutation.SetAdditionalProcessingRequired(b)
+	return ec
+}
+
+// SetNillableAdditionalProcessingRequired sets the "additional_processing_required" field if the given value is not nil.
+func (ec *EventCreate) SetNillableAdditionalProcessingRequired(b *bool) *EventCreate {
+	if b != nil {
+		ec.SetAdditionalProcessingRequired(*b)
+	}
+	return ec
+}
+
+// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
+func (ec *EventCreate) SetAdditionalProcessingDetails(s string) *EventCreate {
+	ec.mutation.SetAdditionalProcessingDetails(s)
+	return ec
+}
+
+// SetNillableAdditionalProcessingDetails sets the "additional_processing_details" field if the given value is not nil.
+func (ec *EventCreate) SetNillableAdditionalProcessingDetails(s *string) *EventCreate {
+	if s != nil {
+		ec.SetAdditionalProcessingDetails(*s)
+	}
+	return ec
+}
+
+// SetProcessedBy sets the "processed_by" field.
+func (ec *EventCreate) SetProcessedBy(s string) *EventCreate {
+	ec.mutation.SetProcessedBy(s)
+	return ec
+}
+
+// SetNillableProcessedBy sets the "processed_by" field if the given value is not nil.
+func (ec *EventCreate) SetNillableProcessedBy(s *string) *EventCreate {
+	if s != nil {
+		ec.SetProcessedBy(*s)
+	}
+	return ec
+}
+
+// SetProcessedAt sets the "processed_at" field.
+func (ec *EventCreate) SetProcessedAt(t time.Time) *EventCreate {
+	ec.mutation.SetProcessedAt(t)
+	return ec
+}
+
+// SetNillableProcessedAt sets the "processed_at" field if the given value is not nil.
+func (ec *EventCreate) SetNillableProcessedAt(t *time.Time) *EventCreate {
+	if t != nil {
+		ec.SetProcessedAt(*t)
+	}
 	return ec
 }
 
@@ -383,6 +453,10 @@ func (ec *EventCreate) defaults() error {
 		v := event.DefaultTags
 		ec.mutation.SetTags(v)
 	}
+	if _, ok := ec.mutation.AdditionalProcessingRequired(); !ok {
+		v := event.DefaultAdditionalProcessingRequired
+		ec.mutation.SetAdditionalProcessingRequired(v)
+	}
 	if _, ok := ec.mutation.ID(); !ok {
 		if event.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized event.DefaultID (forgotten import generated/runtime?)")
@@ -395,8 +469,8 @@ func (ec *EventCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ec *EventCreate) check() error {
-	if _, ok := ec.mutation.EventType(); !ok {
-		return &ValidationError{Name: "event_type", err: errors.New(`generated: missing required field "Event.event_type"`)}
+	if _, ok := ec.mutation.EventID(); !ok {
+		return &ValidationError{Name: "event_id", err: errors.New(`generated: missing required field "Event.event_id"`)}
 	}
 	return nil
 }
@@ -469,6 +543,26 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.Metadata(); ok {
 		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := ec.mutation.Source(); ok {
+		_spec.SetField(event.FieldSource, field.TypeString, value)
+		_node.Source = value
+	}
+	if value, ok := ec.mutation.AdditionalProcessingRequired(); ok {
+		_spec.SetField(event.FieldAdditionalProcessingRequired, field.TypeBool, value)
+		_node.AdditionalProcessingRequired = value
+	}
+	if value, ok := ec.mutation.AdditionalProcessingDetails(); ok {
+		_spec.SetField(event.FieldAdditionalProcessingDetails, field.TypeString, value)
+		_node.AdditionalProcessingDetails = value
+	}
+	if value, ok := ec.mutation.ProcessedBy(); ok {
+		_spec.SetField(event.FieldProcessedBy, field.TypeString, value)
+		_node.ProcessedBy = value
+	}
+	if value, ok := ec.mutation.ProcessedAt(); ok {
+		_spec.SetField(event.FieldProcessedAt, field.TypeTime, value)
+		_node.ProcessedAt = value
 	}
 	if nodes := ec.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
