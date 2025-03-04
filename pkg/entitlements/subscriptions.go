@@ -135,9 +135,8 @@ func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(customerID string) (*Subsc
 		return nil, err
 	}
 
-	mappedsubscription := sc.mapStripeSubscription(subs)
 
-	return mappedsubscription, nil
+	return sc.mapStripeSubscription(subs), nil
 }
 
 // CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
