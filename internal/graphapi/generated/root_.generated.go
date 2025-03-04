@@ -1601,7 +1601,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVInvite              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrganization        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationSetting func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVPersonalAccessToken func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProcedure           func(childComplexity int, input graphql.Upload) int
@@ -1630,7 +1629,6 @@ type ComplexityRoot struct {
 		CreateBulkInvite                 func(childComplexity int, input []*generated.CreateInviteInput) int
 		CreateBulkNarrative              func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkOrgMembership          func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
-		CreateBulkOrganization           func(childComplexity int, input []*generated.CreateOrganizationInput) int
 		CreateBulkOrganizationSetting    func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
 		CreateBulkPersonalAccessToken    func(childComplexity int, input []*generated.CreatePersonalAccessTokenInput) int
 		CreateBulkProcedure              func(childComplexity int, input []*generated.CreateProcedureInput) int
@@ -10523,18 +10521,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkCSVOrgMembership(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVOrganization":
-		if e.complexity.Mutation.CreateBulkCSVOrganization == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVOrganization_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVOrganization(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVOrganizationSetting":
 		if e.complexity.Mutation.CreateBulkCSVOrganizationSetting == nil {
 			break
@@ -10870,18 +10856,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateBulkOrgMembership(childComplexity, args["input"].([]*generated.CreateOrgMembershipInput)), true
-
-	case "Mutation.createBulkOrganization":
-		if e.complexity.Mutation.CreateBulkOrganization == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkOrganization_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkOrganization(childComplexity, args["input"].([]*generated.CreateOrganizationInput)), true
 
 	case "Mutation.createBulkOrganizationSetting":
 		if e.complexity.Mutation.CreateBulkOrganizationSetting == nil {
@@ -54226,24 +54200,6 @@ extend type Mutation{
         input: CreateOrganizationInput!
         avatarFile: Upload
     ): OrganizationCreatePayload!
-    """
-    Create multiple new organizations
-    """
-    createBulkOrganization(
-        """
-        values of the organization
-        """
-        input: [CreateOrganizationInput!]
-    ): OrganizationBulkCreatePayload!
-    """
-    Create multiple new organizations via file upload
-    """
-    createBulkCSVOrganization(
-        """
-        csv file containing values of the organization
-        """
-        input: Upload!
-    ): OrganizationBulkCreatePayload!
     """
     Update an existing organization
     """
