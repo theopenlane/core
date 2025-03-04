@@ -9,6 +9,8 @@ query AdminSearch($query: String!) {
           ownerID
           name
           scopes
+          revokedReason
+          revokedBy
         }
       }
       ... on ActionPlanSearchResult {
@@ -219,6 +221,7 @@ query AdminSearch($query: String!) {
           stripeProductTierID
           stripeSubscriptionStatus
           stripeCustomerID
+          daysUntilDue
           features
           featureLookupKeys
         }
@@ -256,6 +259,8 @@ query AdminSearch($query: String!) {
           tags
           name
           scopes
+          revokedReason
+          revokedBy
         }
       }
       ... on ProcedureSearchResult {

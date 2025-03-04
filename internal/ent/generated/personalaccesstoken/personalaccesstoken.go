@@ -43,6 +43,14 @@ const (
 	FieldScopes = "scopes"
 	// FieldLastUsedAt holds the string denoting the last_used_at field in the database.
 	FieldLastUsedAt = "last_used_at"
+	// FieldIsActive holds the string denoting the is_active field in the database.
+	FieldIsActive = "is_active"
+	// FieldRevokedReason holds the string denoting the revoked_reason field in the database.
+	FieldRevokedReason = "revoked_reason"
+	// FieldRevokedBy holds the string denoting the revoked_by field in the database.
+	FieldRevokedBy = "revoked_by"
+	// FieldRevokedAt holds the string denoting the revoked_at field in the database.
+	FieldRevokedAt = "revoked_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeOrganizations holds the string denoting the organizations edge name in mutations.
@@ -87,6 +95,10 @@ var Columns = []string{
 	FieldDescription,
 	FieldScopes,
 	FieldLastUsedAt,
+	FieldIsActive,
+	FieldRevokedReason,
+	FieldRevokedBy,
+	FieldRevokedAt,
 }
 
 var (
@@ -129,6 +141,8 @@ var (
 	NameValidator func(string) error
 	// DefaultToken holds the default value on creation for the "token" field.
 	DefaultToken func() string
+	// DefaultIsActive holds the default value on creation for the "is_active" field.
+	DefaultIsActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -199,6 +213,26 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByLastUsedAt orders the results by the last_used_at field.
 func ByLastUsedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastUsedAt, opts...).ToFunc()
+}
+
+// ByIsActive orders the results by the is_active field.
+func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsActive, opts...).ToFunc()
+}
+
+// ByRevokedReason orders the results by the revoked_reason field.
+func ByRevokedReason(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevokedReason, opts...).ToFunc()
+}
+
+// ByRevokedBy orders the results by the revoked_by field.
+func ByRevokedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevokedBy, opts...).ToFunc()
+}
+
+// ByRevokedAt orders the results by the revoked_at field.
+func ByRevokedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevokedAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

@@ -193,6 +193,62 @@ func (atc *APITokenCreate) SetNillableLastUsedAt(t *time.Time) *APITokenCreate {
 	return atc
 }
 
+// SetIsActive sets the "is_active" field.
+func (atc *APITokenCreate) SetIsActive(b bool) *APITokenCreate {
+	atc.mutation.SetIsActive(b)
+	return atc
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableIsActive(b *bool) *APITokenCreate {
+	if b != nil {
+		atc.SetIsActive(*b)
+	}
+	return atc
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (atc *APITokenCreate) SetRevokedReason(s string) *APITokenCreate {
+	atc.mutation.SetRevokedReason(s)
+	return atc
+}
+
+// SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableRevokedReason(s *string) *APITokenCreate {
+	if s != nil {
+		atc.SetRevokedReason(*s)
+	}
+	return atc
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (atc *APITokenCreate) SetRevokedBy(s string) *APITokenCreate {
+	atc.mutation.SetRevokedBy(s)
+	return atc
+}
+
+// SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableRevokedBy(s *string) *APITokenCreate {
+	if s != nil {
+		atc.SetRevokedBy(*s)
+	}
+	return atc
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (atc *APITokenCreate) SetRevokedAt(t time.Time) *APITokenCreate {
+	atc.mutation.SetRevokedAt(t)
+	return atc
+}
+
+// SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableRevokedAt(t *time.Time) *APITokenCreate {
+	if t != nil {
+		atc.SetRevokedAt(*t)
+	}
+	return atc
+}
+
 // SetID sets the "id" field.
 func (atc *APITokenCreate) SetID(s string) *APITokenCreate {
 	atc.mutation.SetID(s)
@@ -273,6 +329,10 @@ func (atc *APITokenCreate) defaults() error {
 		}
 		v := apitoken.DefaultToken()
 		atc.mutation.SetToken(v)
+	}
+	if _, ok := atc.mutation.IsActive(); !ok {
+		v := apitoken.DefaultIsActive
+		atc.mutation.SetIsActive(v)
 	}
 	if _, ok := atc.mutation.ID(); !ok {
 		if apitoken.DefaultID == nil {
@@ -389,6 +449,22 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 	if value, ok := atc.mutation.LastUsedAt(); ok {
 		_spec.SetField(apitoken.FieldLastUsedAt, field.TypeTime, value)
 		_node.LastUsedAt = &value
+	}
+	if value, ok := atc.mutation.IsActive(); ok {
+		_spec.SetField(apitoken.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
+	}
+	if value, ok := atc.mutation.RevokedReason(); ok {
+		_spec.SetField(apitoken.FieldRevokedReason, field.TypeString, value)
+		_node.RevokedReason = &value
+	}
+	if value, ok := atc.mutation.RevokedBy(); ok {
+		_spec.SetField(apitoken.FieldRevokedBy, field.TypeString, value)
+		_node.RevokedBy = &value
+	}
+	if value, ok := atc.mutation.RevokedAt(); ok {
+		_spec.SetField(apitoken.FieldRevokedAt, field.TypeTime, value)
+		_node.RevokedAt = &value
 	}
 	if nodes := atc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

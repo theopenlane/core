@@ -98,20 +98,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "APIToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			apitoken.FieldCreatedAt:   {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
-			apitoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
-			apitoken.FieldCreatedBy:   {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
-			apitoken.FieldUpdatedBy:   {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
-			apitoken.FieldDeletedAt:   {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
-			apitoken.FieldDeletedBy:   {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
-			apitoken.FieldTags:        {Type: field.TypeJSON, Column: apitoken.FieldTags},
-			apitoken.FieldOwnerID:     {Type: field.TypeString, Column: apitoken.FieldOwnerID},
-			apitoken.FieldName:        {Type: field.TypeString, Column: apitoken.FieldName},
-			apitoken.FieldToken:       {Type: field.TypeString, Column: apitoken.FieldToken},
-			apitoken.FieldExpiresAt:   {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
-			apitoken.FieldDescription: {Type: field.TypeString, Column: apitoken.FieldDescription},
-			apitoken.FieldScopes:      {Type: field.TypeJSON, Column: apitoken.FieldScopes},
-			apitoken.FieldLastUsedAt:  {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
+			apitoken.FieldCreatedAt:     {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
+			apitoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
+			apitoken.FieldCreatedBy:     {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
+			apitoken.FieldUpdatedBy:     {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
+			apitoken.FieldDeletedAt:     {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
+			apitoken.FieldDeletedBy:     {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
+			apitoken.FieldTags:          {Type: field.TypeJSON, Column: apitoken.FieldTags},
+			apitoken.FieldOwnerID:       {Type: field.TypeString, Column: apitoken.FieldOwnerID},
+			apitoken.FieldName:          {Type: field.TypeString, Column: apitoken.FieldName},
+			apitoken.FieldToken:         {Type: field.TypeString, Column: apitoken.FieldToken},
+			apitoken.FieldExpiresAt:     {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
+			apitoken.FieldDescription:   {Type: field.TypeString, Column: apitoken.FieldDescription},
+			apitoken.FieldScopes:        {Type: field.TypeJSON, Column: apitoken.FieldScopes},
+			apitoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
+			apitoken.FieldIsActive:      {Type: field.TypeBool, Column: apitoken.FieldIsActive},
+			apitoken.FieldRevokedReason: {Type: field.TypeString, Column: apitoken.FieldRevokedReason},
+			apitoken.FieldRevokedBy:     {Type: field.TypeString, Column: apitoken.FieldRevokedBy},
+			apitoken.FieldRevokedAt:     {Type: field.TypeTime, Column: apitoken.FieldRevokedAt},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -1281,6 +1285,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldActive:                   {Type: field.TypeBool, Column: orgsubscription.FieldActive},
 			orgsubscription.FieldStripeCustomerID:         {Type: field.TypeString, Column: orgsubscription.FieldStripeCustomerID},
 			orgsubscription.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscription.FieldExpiresAt},
+			orgsubscription.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscription.FieldTrialExpiresAt},
+			orgsubscription.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscription.FieldDaysUntilDue},
+			orgsubscription.FieldPaymentMethodAdded:       {Type: field.TypeBool, Column: orgsubscription.FieldPaymentMethodAdded},
 			orgsubscription.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscription.FieldFeatures},
 			orgsubscription.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscription.FieldFeatureLookupKeys},
 		},
@@ -1315,6 +1322,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldActive:                   {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldActive},
 			orgsubscriptionhistory.FieldStripeCustomerID:         {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeCustomerID},
 			orgsubscriptionhistory.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldExpiresAt},
+			orgsubscriptionhistory.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldTrialExpiresAt},
+			orgsubscriptionhistory.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDaysUntilDue},
+			orgsubscriptionhistory.FieldPaymentMethodAdded:       {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldPaymentMethodAdded},
 			orgsubscriptionhistory.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatures},
 			orgsubscriptionhistory.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatureLookupKeys},
 		},
@@ -1478,20 +1488,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "PersonalAccessToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			personalaccesstoken.FieldCreatedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
-			personalaccesstoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
-			personalaccesstoken.FieldCreatedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
-			personalaccesstoken.FieldUpdatedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
-			personalaccesstoken.FieldDeletedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
-			personalaccesstoken.FieldDeletedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
-			personalaccesstoken.FieldTags:        {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
-			personalaccesstoken.FieldOwnerID:     {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
-			personalaccesstoken.FieldName:        {Type: field.TypeString, Column: personalaccesstoken.FieldName},
-			personalaccesstoken.FieldToken:       {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
-			personalaccesstoken.FieldExpiresAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
-			personalaccesstoken.FieldDescription: {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
-			personalaccesstoken.FieldScopes:      {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
-			personalaccesstoken.FieldLastUsedAt:  {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
+			personalaccesstoken.FieldCreatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
+			personalaccesstoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
+			personalaccesstoken.FieldCreatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
+			personalaccesstoken.FieldUpdatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
+			personalaccesstoken.FieldDeletedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
+			personalaccesstoken.FieldDeletedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
+			personalaccesstoken.FieldTags:          {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
+			personalaccesstoken.FieldOwnerID:       {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
+			personalaccesstoken.FieldName:          {Type: field.TypeString, Column: personalaccesstoken.FieldName},
+			personalaccesstoken.FieldToken:         {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
+			personalaccesstoken.FieldExpiresAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
+			personalaccesstoken.FieldDescription:   {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
+			personalaccesstoken.FieldScopes:        {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
+			personalaccesstoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
+			personalaccesstoken.FieldIsActive:      {Type: field.TypeBool, Column: personalaccesstoken.FieldIsActive},
+			personalaccesstoken.FieldRevokedReason: {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedReason},
+			personalaccesstoken.FieldRevokedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedBy},
+			personalaccesstoken.FieldRevokedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldRevokedAt},
 		},
 	}
 	graph.Nodes[50] = &sqlgraph.Node{
@@ -3957,6 +3971,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+		},
+		"OrgSubscription",
+		"Event",
+	)
+	graph.MustAddE(
 		"control_creators",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5717,6 +5743,26 @@ func (f *APITokenFilter) WhereScopes(p entql.BytesP) {
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
 func (f *APITokenFilter) WhereLastUsedAt(p entql.TimeP) {
 	f.Where(p.Field(apitoken.FieldLastUsedAt))
+}
+
+// WhereIsActive applies the entql bool predicate on the is_active field.
+func (f *APITokenFilter) WhereIsActive(p entql.BoolP) {
+	f.Where(p.Field(apitoken.FieldIsActive))
+}
+
+// WhereRevokedReason applies the entql string predicate on the revoked_reason field.
+func (f *APITokenFilter) WhereRevokedReason(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldRevokedReason))
+}
+
+// WhereRevokedBy applies the entql string predicate on the revoked_by field.
+func (f *APITokenFilter) WhereRevokedBy(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldRevokedBy))
+}
+
+// WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
+func (f *APITokenFilter) WhereRevokedAt(p entql.TimeP) {
+	f.Where(p.Field(apitoken.FieldRevokedAt))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -12530,6 +12576,21 @@ func (f *OrgSubscriptionFilter) WhereExpiresAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscription.FieldExpiresAt))
 }
 
+// WhereTrialExpiresAt applies the entql time.Time predicate on the trial_expires_at field.
+func (f *OrgSubscriptionFilter) WhereTrialExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(orgsubscription.FieldTrialExpiresAt))
+}
+
+// WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
+func (f *OrgSubscriptionFilter) WhereDaysUntilDue(p entql.StringP) {
+	f.Where(p.Field(orgsubscription.FieldDaysUntilDue))
+}
+
+// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
+func (f *OrgSubscriptionFilter) WherePaymentMethodAdded(p entql.BoolP) {
+	f.Where(p.Field(orgsubscription.FieldPaymentMethodAdded))
+}
+
 // WhereFeatures applies the entql json.RawMessage predicate on the features field.
 func (f *OrgSubscriptionFilter) WhereFeatures(p entql.BytesP) {
 	f.Where(p.Field(orgsubscription.FieldFeatures))
@@ -12548,6 +12609,20 @@ func (f *OrgSubscriptionFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *OrgSubscriptionFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvents applies a predicate to check if query has an edge events.
+func (f *OrgSubscriptionFilter) WhereHasEvents() {
+	f.Where(entql.HasEdge("events"))
+}
+
+// WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
+func (f *OrgSubscriptionFilter) WhereHasEventsWith(preds ...predicate.Event) {
+	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -12687,6 +12762,21 @@ func (f *OrgSubscriptionHistoryFilter) WhereStripeCustomerID(p entql.StringP) {
 // WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
 func (f *OrgSubscriptionHistoryFilter) WhereExpiresAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldExpiresAt))
+}
+
+// WhereTrialExpiresAt applies the entql time.Time predicate on the trial_expires_at field.
+func (f *OrgSubscriptionHistoryFilter) WhereTrialExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldTrialExpiresAt))
+}
+
+// WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
+func (f *OrgSubscriptionHistoryFilter) WhereDaysUntilDue(p entql.StringP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldDaysUntilDue))
+}
+
+// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
+func (f *OrgSubscriptionHistoryFilter) WherePaymentMethodAdded(p entql.BoolP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldPaymentMethodAdded))
 }
 
 // WhereFeatures applies the entql json.RawMessage predicate on the features field.
@@ -14038,6 +14128,26 @@ func (f *PersonalAccessTokenFilter) WhereScopes(p entql.BytesP) {
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
 func (f *PersonalAccessTokenFilter) WhereLastUsedAt(p entql.TimeP) {
 	f.Where(p.Field(personalaccesstoken.FieldLastUsedAt))
+}
+
+// WhereIsActive applies the entql bool predicate on the is_active field.
+func (f *PersonalAccessTokenFilter) WhereIsActive(p entql.BoolP) {
+	f.Where(p.Field(personalaccesstoken.FieldIsActive))
+}
+
+// WhereRevokedReason applies the entql string predicate on the revoked_reason field.
+func (f *PersonalAccessTokenFilter) WhereRevokedReason(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldRevokedReason))
+}
+
+// WhereRevokedBy applies the entql string predicate on the revoked_by field.
+func (f *PersonalAccessTokenFilter) WhereRevokedBy(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldRevokedBy))
+}
+
+// WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
+func (f *PersonalAccessTokenFilter) WhereRevokedAt(p entql.TimeP) {
+	f.Where(p.Field(personalaccesstoken.FieldRevokedAt))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

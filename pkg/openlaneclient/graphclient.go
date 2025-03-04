@@ -1389,12 +1389,14 @@ func (t *GetActionPlanHistories_ActionPlanHistories) GetEdges() []*GetActionPlan
 }
 
 type AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	Name          string   "json:\"name\" graphql:\"name\""
+	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetDeletedBy() *string {
@@ -1420,6 +1422,18 @@ func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetOwnerI
 		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
 	}
 	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetRevokedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.RevokedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetRevokedReason() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.RevokedReason
 }
 func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetScopes() []string {
 	if t == nil {
@@ -2636,6 +2650,7 @@ func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult) GetNarratives() []
 }
 
 type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions struct {
+	DaysUntilDue             *string       "json:\"daysUntilDue,omitempty\" graphql:\"daysUntilDue\""
 	DeletedBy                *string       "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
@@ -2650,6 +2665,12 @@ type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions 
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDaysUntilDue() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+	}
+	return t.DaysUntilDue
+}
 func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
@@ -2891,11 +2912,13 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult) GetOrgan
 }
 
 type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	Name          string   "json:\"name\" graphql:\"name\""
+	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetDeletedBy() *string {
@@ -2915,6 +2938,18 @@ func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalA
 		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
 	}
 	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetRevokedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.RevokedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetRevokedReason() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.RevokedReason
 }
 func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetScopes() []string {
 	if t == nil {
@@ -54601,6 +54636,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					name
 					scopes
+					revokedReason
+					revokedBy
 				}
 			}
 			... on ActionPlanSearchResult {
@@ -54811,6 +54848,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					stripeProductTierID
 					stripeSubscriptionStatus
 					stripeCustomerID
+					daysUntilDue
 					features
 					featureLookupKeys
 				}
@@ -54848,6 +54886,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					name
 					scopes
+					revokedReason
+					revokedBy
 				}
 			}
 			... on ProcedureSearchResult {

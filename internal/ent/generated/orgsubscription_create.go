@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/pkg/models"
@@ -238,6 +239,48 @@ func (osc *OrgSubscriptionCreate) SetNillableExpiresAt(t *time.Time) *OrgSubscri
 	return osc
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (osc *OrgSubscriptionCreate) SetTrialExpiresAt(t time.Time) *OrgSubscriptionCreate {
+	osc.mutation.SetTrialExpiresAt(t)
+	return osc
+}
+
+// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionCreate {
+	if t != nil {
+		osc.SetTrialExpiresAt(*t)
+	}
+	return osc
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (osc *OrgSubscriptionCreate) SetDaysUntilDue(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetDaysUntilDue(s)
+	return osc
+}
+
+// SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableDaysUntilDue(s *string) *OrgSubscriptionCreate {
+	if s != nil {
+		osc.SetDaysUntilDue(*s)
+	}
+	return osc
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (osc *OrgSubscriptionCreate) SetPaymentMethodAdded(b bool) *OrgSubscriptionCreate {
+	osc.mutation.SetPaymentMethodAdded(b)
+	return osc
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionCreate {
+	if b != nil {
+		osc.SetPaymentMethodAdded(*b)
+	}
+	return osc
+}
+
 // SetFeatures sets the "features" field.
 func (osc *OrgSubscriptionCreate) SetFeatures(s []string) *OrgSubscriptionCreate {
 	osc.mutation.SetFeatures(s)
@@ -267,6 +310,21 @@ func (osc *OrgSubscriptionCreate) SetNillableID(s *string) *OrgSubscriptionCreat
 // SetOwner sets the "owner" edge to the Organization entity.
 func (osc *OrgSubscriptionCreate) SetOwner(o *Organization) *OrgSubscriptionCreate {
 	return osc.SetOwnerID(o.ID)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (osc *OrgSubscriptionCreate) AddEventIDs(ids ...string) *OrgSubscriptionCreate {
+	osc.mutation.AddEventIDs(ids...)
+	return osc
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (osc *OrgSubscriptionCreate) AddEvents(e ...*Event) *OrgSubscriptionCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osc.AddEventIDs(ids...)
 }
 
 // Mutation returns the OrgSubscriptionMutation object of the builder.
@@ -444,6 +502,18 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 		_spec.SetField(orgsubscription.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
 	}
+	if value, ok := osc.mutation.TrialExpiresAt(); ok {
+		_spec.SetField(orgsubscription.FieldTrialExpiresAt, field.TypeTime, value)
+		_node.TrialExpiresAt = &value
+	}
+	if value, ok := osc.mutation.DaysUntilDue(); ok {
+		_spec.SetField(orgsubscription.FieldDaysUntilDue, field.TypeString, value)
+		_node.DaysUntilDue = &value
+	}
+	if value, ok := osc.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
+		_node.PaymentMethodAdded = &value
+	}
 	if value, ok := osc.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 		_node.Features = value
@@ -468,6 +538,23 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

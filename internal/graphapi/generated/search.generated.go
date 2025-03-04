@@ -97,6 +97,14 @@ func (ec *executionContext) fieldContext_APITokenSearchResult_apiTokens(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_APIToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_APIToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_APIToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_APIToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -1478,12 +1486,20 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_stripeCustomerID(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
+			case "trialExpiresAt":
+				return ec.fieldContext_OrgSubscription_trialExpiresAt(ctx, field)
+			case "daysUntilDue":
+				return ec.fieldContext_OrgSubscription_daysUntilDue(ctx, field)
+			case "paymentMethodAdded":
+				return ec.fieldContext_OrgSubscription_paymentMethodAdded(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
 			case "featureLookupKeys":
 				return ec.fieldContext_OrgSubscription_featureLookupKeys(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
+			case "events":
+				return ec.fieldContext_OrgSubscription_events(ctx, field)
 			case "subscriptionURL":
 				return ec.fieldContext_OrgSubscription_subscriptionURL(ctx, field)
 			}
@@ -1797,6 +1813,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenSearchResult_persona
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_PersonalAccessToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_PersonalAccessToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_PersonalAccessToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_PersonalAccessToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":

@@ -9501,6 +9501,25 @@ func (c *OrgSubscriptionClient) QueryOwner(os *OrgSubscription) *OrganizationQue
 	return query
 }
 
+// QueryEvents queries the events edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryEvents(os *OrgSubscription) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.EventsTable, orgsubscription.EventsColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrgSubscriptionClient) Hooks() []Hook {
 	hooks := c.hooks.OrgSubscription

@@ -187,6 +187,62 @@ func (patc *PersonalAccessTokenCreate) SetNillableLastUsedAt(t *time.Time) *Pers
 	return patc
 }
 
+// SetIsActive sets the "is_active" field.
+func (patc *PersonalAccessTokenCreate) SetIsActive(b bool) *PersonalAccessTokenCreate {
+	patc.mutation.SetIsActive(b)
+	return patc
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableIsActive(b *bool) *PersonalAccessTokenCreate {
+	if b != nil {
+		patc.SetIsActive(*b)
+	}
+	return patc
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (patc *PersonalAccessTokenCreate) SetRevokedReason(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetRevokedReason(s)
+	return patc
+}
+
+// SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableRevokedReason(s *string) *PersonalAccessTokenCreate {
+	if s != nil {
+		patc.SetRevokedReason(*s)
+	}
+	return patc
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (patc *PersonalAccessTokenCreate) SetRevokedBy(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetRevokedBy(s)
+	return patc
+}
+
+// SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableRevokedBy(s *string) *PersonalAccessTokenCreate {
+	if s != nil {
+		patc.SetRevokedBy(*s)
+	}
+	return patc
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (patc *PersonalAccessTokenCreate) SetRevokedAt(t time.Time) *PersonalAccessTokenCreate {
+	patc.mutation.SetRevokedAt(t)
+	return patc
+}
+
+// SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableRevokedAt(t *time.Time) *PersonalAccessTokenCreate {
+	if t != nil {
+		patc.SetRevokedAt(*t)
+	}
+	return patc
+}
+
 // SetID sets the "id" field.
 func (patc *PersonalAccessTokenCreate) SetID(s string) *PersonalAccessTokenCreate {
 	patc.mutation.SetID(s)
@@ -297,6 +353,10 @@ func (patc *PersonalAccessTokenCreate) defaults() error {
 		}
 		v := personalaccesstoken.DefaultToken()
 		patc.mutation.SetToken(v)
+	}
+	if _, ok := patc.mutation.IsActive(); !ok {
+		v := personalaccesstoken.DefaultIsActive
+		patc.mutation.SetIsActive(v)
 	}
 	if _, ok := patc.mutation.ID(); !ok {
 		if personalaccesstoken.DefaultID == nil {
@@ -414,6 +474,22 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 	if value, ok := patc.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)
 		_node.LastUsedAt = &value
+	}
+	if value, ok := patc.mutation.IsActive(); ok {
+		_spec.SetField(personalaccesstoken.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
+	}
+	if value, ok := patc.mutation.RevokedReason(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedReason, field.TypeString, value)
+		_node.RevokedReason = &value
+	}
+	if value, ok := patc.mutation.RevokedBy(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedBy, field.TypeString, value)
+		_node.RevokedBy = &value
+	}
+	if value, ok := patc.mutation.RevokedAt(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedAt, field.TypeTime, value)
+		_node.RevokedAt = &value
 	}
 	if nodes := patc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

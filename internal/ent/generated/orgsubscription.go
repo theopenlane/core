@@ -52,6 +52,12 @@ type OrgSubscription struct {
 	StripeCustomerID string `json:"stripe_customer_id,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
+	// the time the trial is set to expire
+	TrialExpiresAt *time.Time `json:"trial_expires_at,omitempty"`
+	// number of days until there is a due payment
+	DaysUntilDue *string `json:"days_until_due,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded *bool `json:"payment_method_added,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -68,11 +74,15 @@ type OrgSubscription struct {
 type OrgSubscriptionEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Events holds the value of the events edge.
+	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
+
+	namedEvents map[string][]*Event
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -86,6 +96,15 @@ func (e OrgSubscriptionEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// EventsOrErr returns the Events value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrgSubscriptionEdges) EventsOrErr() ([]*Event, error) {
+	if e.loadedTypes[1] {
+		return e.Events, nil
+	}
+	return nil, &NotLoadedError{edge: "events"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -93,11 +112,11 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case orgsubscription.FieldTags, orgsubscription.FieldProductPrice, orgsubscription.FieldFeatures, orgsubscription.FieldFeatureLookupKeys:
 			values[i] = new([]byte)
-		case orgsubscription.FieldActive:
+		case orgsubscription.FieldActive, orgsubscription.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
-		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
+		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID, orgsubscription.FieldDaysUntilDue:
 			values[i] = new(sql.NullString)
-		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt:
+		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt, orgsubscription.FieldTrialExpiresAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -221,6 +240,27 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 				os.ExpiresAt = new(time.Time)
 				*os.ExpiresAt = value.Time
 			}
+		case orgsubscription.FieldTrialExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field trial_expires_at", values[i])
+			} else if value.Valid {
+				os.TrialExpiresAt = new(time.Time)
+				*os.TrialExpiresAt = value.Time
+			}
+		case orgsubscription.FieldDaysUntilDue:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field days_until_due", values[i])
+			} else if value.Valid {
+				os.DaysUntilDue = new(string)
+				*os.DaysUntilDue = value.String
+			}
+		case orgsubscription.FieldPaymentMethodAdded:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
+			} else if value.Valid {
+				os.PaymentMethodAdded = new(bool)
+				*os.PaymentMethodAdded = value.Bool
+			}
 		case orgsubscription.FieldFeatures:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field features", values[i])
@@ -253,6 +293,11 @@ func (os *OrgSubscription) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the OrgSubscription entity.
 func (os *OrgSubscription) QueryOwner() *OrganizationQuery {
 	return NewOrgSubscriptionClient(os.config).QueryOwner(os)
+}
+
+// QueryEvents queries the "events" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryEvents() *EventQuery {
+	return NewOrgSubscriptionClient(os.config).QueryEvents(os)
 }
 
 // Update returns a builder for updating this OrgSubscription.
@@ -328,6 +373,21 @@ func (os *OrgSubscription) String() string {
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
+	if v := os.TrialExpiresAt; v != nil {
+		builder.WriteString("trial_expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := os.DaysUntilDue; v != nil {
+		builder.WriteString("days_until_due=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := os.PaymentMethodAdded; v != nil {
+		builder.WriteString("payment_method_added=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
 	builder.WriteString("features=")
 	builder.WriteString(fmt.Sprintf("%v", os.Features))
 	builder.WriteString(", ")
@@ -335,6 +395,30 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString(fmt.Sprintf("%v", os.FeatureLookupKeys))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedEvents returns the Events named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (os *OrgSubscription) NamedEvents(name string) ([]*Event, error) {
+	if os.Edges.namedEvents == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := os.Edges.namedEvents[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (os *OrgSubscription) appendNamedEvents(name string, edges ...*Event) {
+	if os.Edges.namedEvents == nil {
+		os.Edges.namedEvents = make(map[string][]*Event)
+	}
+	if len(edges) == 0 {
+		os.Edges.namedEvents[name] = []*Event{}
+	} else {
+		os.Edges.namedEvents[name] = append(os.Edges.namedEvents[name], edges...)
+	}
 }
 
 // OrgSubscriptions is a parsable slice of OrgSubscription.

@@ -137,6 +137,21 @@ func ExpiresAt(v time.Time) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldEQ(FieldExpiresAt, v))
 }
 
+// TrialExpiresAt applies equality check predicate on the "trial_expires_at" field. It's identical to TrialExpiresAtEQ.
+func TrialExpiresAt(v time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldEQ(FieldTrialExpiresAt, v))
+}
+
+// DaysUntilDue applies equality check predicate on the "days_until_due" field. It's identical to DaysUntilDueEQ.
+func DaysUntilDue(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldEQ(FieldDaysUntilDue, v))
+}
+
+// PaymentMethodAdded applies equality check predicate on the "payment_method_added" field. It's identical to PaymentMethodAddedEQ.
+func PaymentMethodAdded(v bool) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldEQ(FieldCreatedAt, v))
@@ -1042,6 +1057,151 @@ func ExpiresAtNotNil() predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldNotNull(FieldExpiresAt))
 }
 
+// TrialExpiresAtEQ applies the EQ predicate on the "trial_expires_at" field.
+func TrialExpiresAtEQ(v time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldEQ(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtNEQ applies the NEQ predicate on the "trial_expires_at" field.
+func TrialExpiresAtNEQ(v time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNEQ(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtIn applies the In predicate on the "trial_expires_at" field.
+func TrialExpiresAtIn(vs ...time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldIn(FieldTrialExpiresAt, vs...))
+}
+
+// TrialExpiresAtNotIn applies the NotIn predicate on the "trial_expires_at" field.
+func TrialExpiresAtNotIn(vs ...time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNotIn(FieldTrialExpiresAt, vs...))
+}
+
+// TrialExpiresAtGT applies the GT predicate on the "trial_expires_at" field.
+func TrialExpiresAtGT(v time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldGT(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtGTE applies the GTE predicate on the "trial_expires_at" field.
+func TrialExpiresAtGTE(v time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldGTE(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtLT applies the LT predicate on the "trial_expires_at" field.
+func TrialExpiresAtLT(v time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldLT(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtLTE applies the LTE predicate on the "trial_expires_at" field.
+func TrialExpiresAtLTE(v time.Time) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldLTE(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtIsNil applies the IsNil predicate on the "trial_expires_at" field.
+func TrialExpiresAtIsNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldIsNull(FieldTrialExpiresAt))
+}
+
+// TrialExpiresAtNotNil applies the NotNil predicate on the "trial_expires_at" field.
+func TrialExpiresAtNotNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNotNull(FieldTrialExpiresAt))
+}
+
+// DaysUntilDueEQ applies the EQ predicate on the "days_until_due" field.
+func DaysUntilDueEQ(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldEQ(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueNEQ applies the NEQ predicate on the "days_until_due" field.
+func DaysUntilDueNEQ(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNEQ(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueIn applies the In predicate on the "days_until_due" field.
+func DaysUntilDueIn(vs ...string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldIn(FieldDaysUntilDue, vs...))
+}
+
+// DaysUntilDueNotIn applies the NotIn predicate on the "days_until_due" field.
+func DaysUntilDueNotIn(vs ...string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNotIn(FieldDaysUntilDue, vs...))
+}
+
+// DaysUntilDueGT applies the GT predicate on the "days_until_due" field.
+func DaysUntilDueGT(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldGT(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueGTE applies the GTE predicate on the "days_until_due" field.
+func DaysUntilDueGTE(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldGTE(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueLT applies the LT predicate on the "days_until_due" field.
+func DaysUntilDueLT(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldLT(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueLTE applies the LTE predicate on the "days_until_due" field.
+func DaysUntilDueLTE(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldLTE(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueContains applies the Contains predicate on the "days_until_due" field.
+func DaysUntilDueContains(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldContains(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueHasPrefix applies the HasPrefix predicate on the "days_until_due" field.
+func DaysUntilDueHasPrefix(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldHasPrefix(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueHasSuffix applies the HasSuffix predicate on the "days_until_due" field.
+func DaysUntilDueHasSuffix(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldHasSuffix(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueIsNil applies the IsNil predicate on the "days_until_due" field.
+func DaysUntilDueIsNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldIsNull(FieldDaysUntilDue))
+}
+
+// DaysUntilDueNotNil applies the NotNil predicate on the "days_until_due" field.
+func DaysUntilDueNotNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNotNull(FieldDaysUntilDue))
+}
+
+// DaysUntilDueEqualFold applies the EqualFold predicate on the "days_until_due" field.
+func DaysUntilDueEqualFold(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldEqualFold(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueContainsFold applies the ContainsFold predicate on the "days_until_due" field.
+func DaysUntilDueContainsFold(v string) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldContainsFold(FieldDaysUntilDue, v))
+}
+
+// PaymentMethodAddedEQ applies the EQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedEQ(v bool) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
+// PaymentMethodAddedNEQ applies the NEQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedNEQ(v bool) predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNEQ(FieldPaymentMethodAdded, v))
+}
+
+// PaymentMethodAddedIsNil applies the IsNil predicate on the "payment_method_added" field.
+func PaymentMethodAddedIsNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldIsNull(FieldPaymentMethodAdded))
+}
+
+// PaymentMethodAddedNotNil applies the NotNil predicate on the "payment_method_added" field.
+func PaymentMethodAddedNotNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNotNull(FieldPaymentMethodAdded))
+}
+
 // FeaturesIsNil applies the IsNil predicate on the "features" field.
 func FeaturesIsNil() predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldIsNull(FieldFeatures))
@@ -1083,6 +1243,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.OrgSubscription {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrgSubscription
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvents applies the HasEdge predicate on the "events" edge.
+func HasEvents() predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEventsWith applies the HasEdge predicate on the "events" edge with a given conditions (other predicates).
+func HasEventsWith(preds ...predicate.Event) predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := newEventsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

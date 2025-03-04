@@ -145,6 +145,21 @@ func ExpiresAt(v time.Time) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldExpiresAt, v))
 }
 
+// TrialExpiresAt applies equality check predicate on the "trial_expires_at" field. It's identical to TrialExpiresAtEQ.
+func TrialExpiresAt(v time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldTrialExpiresAt, v))
+}
+
+// DaysUntilDue applies equality check predicate on the "days_until_due" field. It's identical to DaysUntilDueEQ.
+func DaysUntilDue(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldDaysUntilDue, v))
+}
+
+// PaymentMethodAdded applies equality check predicate on the "payment_method_added" field. It's identical to PaymentMethodAddedEQ.
+func PaymentMethodAdded(v bool) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1183,6 +1198,151 @@ func ExpiresAtIsNil() predicate.OrgSubscriptionHistory {
 // ExpiresAtNotNil applies the NotNil predicate on the "expires_at" field.
 func ExpiresAtNotNil() predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldExpiresAt))
+}
+
+// TrialExpiresAtEQ applies the EQ predicate on the "trial_expires_at" field.
+func TrialExpiresAtEQ(v time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtNEQ applies the NEQ predicate on the "trial_expires_at" field.
+func TrialExpiresAtNEQ(v time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNEQ(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtIn applies the In predicate on the "trial_expires_at" field.
+func TrialExpiresAtIn(vs ...time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIn(FieldTrialExpiresAt, vs...))
+}
+
+// TrialExpiresAtNotIn applies the NotIn predicate on the "trial_expires_at" field.
+func TrialExpiresAtNotIn(vs ...time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotIn(FieldTrialExpiresAt, vs...))
+}
+
+// TrialExpiresAtGT applies the GT predicate on the "trial_expires_at" field.
+func TrialExpiresAtGT(v time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldGT(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtGTE applies the GTE predicate on the "trial_expires_at" field.
+func TrialExpiresAtGTE(v time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldGTE(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtLT applies the LT predicate on the "trial_expires_at" field.
+func TrialExpiresAtLT(v time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldLT(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtLTE applies the LTE predicate on the "trial_expires_at" field.
+func TrialExpiresAtLTE(v time.Time) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldLTE(FieldTrialExpiresAt, v))
+}
+
+// TrialExpiresAtIsNil applies the IsNil predicate on the "trial_expires_at" field.
+func TrialExpiresAtIsNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldTrialExpiresAt))
+}
+
+// TrialExpiresAtNotNil applies the NotNil predicate on the "trial_expires_at" field.
+func TrialExpiresAtNotNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldTrialExpiresAt))
+}
+
+// DaysUntilDueEQ applies the EQ predicate on the "days_until_due" field.
+func DaysUntilDueEQ(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueNEQ applies the NEQ predicate on the "days_until_due" field.
+func DaysUntilDueNEQ(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNEQ(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueIn applies the In predicate on the "days_until_due" field.
+func DaysUntilDueIn(vs ...string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIn(FieldDaysUntilDue, vs...))
+}
+
+// DaysUntilDueNotIn applies the NotIn predicate on the "days_until_due" field.
+func DaysUntilDueNotIn(vs ...string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotIn(FieldDaysUntilDue, vs...))
+}
+
+// DaysUntilDueGT applies the GT predicate on the "days_until_due" field.
+func DaysUntilDueGT(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldGT(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueGTE applies the GTE predicate on the "days_until_due" field.
+func DaysUntilDueGTE(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldGTE(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueLT applies the LT predicate on the "days_until_due" field.
+func DaysUntilDueLT(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldLT(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueLTE applies the LTE predicate on the "days_until_due" field.
+func DaysUntilDueLTE(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldLTE(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueContains applies the Contains predicate on the "days_until_due" field.
+func DaysUntilDueContains(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldContains(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueHasPrefix applies the HasPrefix predicate on the "days_until_due" field.
+func DaysUntilDueHasPrefix(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldHasPrefix(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueHasSuffix applies the HasSuffix predicate on the "days_until_due" field.
+func DaysUntilDueHasSuffix(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldHasSuffix(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueIsNil applies the IsNil predicate on the "days_until_due" field.
+func DaysUntilDueIsNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldDaysUntilDue))
+}
+
+// DaysUntilDueNotNil applies the NotNil predicate on the "days_until_due" field.
+func DaysUntilDueNotNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldDaysUntilDue))
+}
+
+// DaysUntilDueEqualFold applies the EqualFold predicate on the "days_until_due" field.
+func DaysUntilDueEqualFold(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldEqualFold(FieldDaysUntilDue, v))
+}
+
+// DaysUntilDueContainsFold applies the ContainsFold predicate on the "days_until_due" field.
+func DaysUntilDueContainsFold(v string) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldDaysUntilDue, v))
+}
+
+// PaymentMethodAddedEQ applies the EQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedEQ(v bool) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
+// PaymentMethodAddedNEQ applies the NEQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedNEQ(v bool) predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNEQ(FieldPaymentMethodAdded, v))
+}
+
+// PaymentMethodAddedIsNil applies the IsNil predicate on the "payment_method_added" field.
+func PaymentMethodAddedIsNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldPaymentMethodAdded))
+}
+
+// PaymentMethodAddedNotNil applies the NotNil predicate on the "payment_method_added" field.
+func PaymentMethodAddedNotNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldPaymentMethodAdded))
 }
 
 // FeaturesIsNil applies the IsNil predicate on the "features" field.

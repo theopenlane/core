@@ -244,6 +244,58 @@ type APITokenWhereInput struct {
 	LastUsedAtIsNil  bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil bool        `json:"lastUsedAtNotNil,omitempty"`
 
+	// "is_active" field predicates.
+	IsActive       *bool `json:"isActive,omitempty"`
+	IsActiveNEQ    *bool `json:"isActiveNEQ,omitempty"`
+	IsActiveIsNil  bool  `json:"isActiveIsNil,omitempty"`
+	IsActiveNotNil bool  `json:"isActiveNotNil,omitempty"`
+
+	// "revoked_reason" field predicates.
+	RevokedReason             *string  `json:"revokedReason,omitempty"`
+	RevokedReasonNEQ          *string  `json:"revokedReasonNEQ,omitempty"`
+	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
+	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
+	RevokedReasonGT           *string  `json:"revokedReasonGT,omitempty"`
+	RevokedReasonGTE          *string  `json:"revokedReasonGTE,omitempty"`
+	RevokedReasonLT           *string  `json:"revokedReasonLT,omitempty"`
+	RevokedReasonLTE          *string  `json:"revokedReasonLTE,omitempty"`
+	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
+	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
+	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
+	RevokedReasonIsNil        bool     `json:"revokedReasonIsNil,omitempty"`
+	RevokedReasonNotNil       bool     `json:"revokedReasonNotNil,omitempty"`
+	RevokedReasonEqualFold    *string  `json:"revokedReasonEqualFold,omitempty"`
+	RevokedReasonContainsFold *string  `json:"revokedReasonContainsFold,omitempty"`
+
+	// "revoked_by" field predicates.
+	RevokedBy             *string  `json:"revokedBy,omitempty"`
+	RevokedByNEQ          *string  `json:"revokedByNEQ,omitempty"`
+	RevokedByIn           []string `json:"revokedByIn,omitempty"`
+	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
+	RevokedByGT           *string  `json:"revokedByGT,omitempty"`
+	RevokedByGTE          *string  `json:"revokedByGTE,omitempty"`
+	RevokedByLT           *string  `json:"revokedByLT,omitempty"`
+	RevokedByLTE          *string  `json:"revokedByLTE,omitempty"`
+	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
+	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
+	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
+	RevokedByIsNil        bool     `json:"revokedByIsNil,omitempty"`
+	RevokedByNotNil       bool     `json:"revokedByNotNil,omitempty"`
+	RevokedByEqualFold    *string  `json:"revokedByEqualFold,omitempty"`
+	RevokedByContainsFold *string  `json:"revokedByContainsFold,omitempty"`
+
+	// "revoked_at" field predicates.
+	RevokedAt       *time.Time  `json:"revokedAt,omitempty"`
+	RevokedAtNEQ    *time.Time  `json:"revokedAtNEQ,omitempty"`
+	RevokedAtIn     []time.Time `json:"revokedAtIn,omitempty"`
+	RevokedAtNotIn  []time.Time `json:"revokedAtNotIn,omitempty"`
+	RevokedAtGT     *time.Time  `json:"revokedAtGT,omitempty"`
+	RevokedAtGTE    *time.Time  `json:"revokedAtGTE,omitempty"`
+	RevokedAtLT     *time.Time  `json:"revokedAtLT,omitempty"`
+	RevokedAtLTE    *time.Time  `json:"revokedAtLTE,omitempty"`
+	RevokedAtIsNil  bool        `json:"revokedAtIsNil,omitempty"`
+	RevokedAtNotNil bool        `json:"revokedAtNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -718,6 +770,138 @@ func (i *APITokenWhereInput) P() (predicate.APIToken, error) {
 	}
 	if i.LastUsedAtNotNil {
 		predicates = append(predicates, apitoken.LastUsedAtNotNil())
+	}
+	if i.IsActive != nil {
+		predicates = append(predicates, apitoken.IsActiveEQ(*i.IsActive))
+	}
+	if i.IsActiveNEQ != nil {
+		predicates = append(predicates, apitoken.IsActiveNEQ(*i.IsActiveNEQ))
+	}
+	if i.IsActiveIsNil {
+		predicates = append(predicates, apitoken.IsActiveIsNil())
+	}
+	if i.IsActiveNotNil {
+		predicates = append(predicates, apitoken.IsActiveNotNil())
+	}
+	if i.RevokedReason != nil {
+		predicates = append(predicates, apitoken.RevokedReasonEQ(*i.RevokedReason))
+	}
+	if i.RevokedReasonNEQ != nil {
+		predicates = append(predicates, apitoken.RevokedReasonNEQ(*i.RevokedReasonNEQ))
+	}
+	if len(i.RevokedReasonIn) > 0 {
+		predicates = append(predicates, apitoken.RevokedReasonIn(i.RevokedReasonIn...))
+	}
+	if len(i.RevokedReasonNotIn) > 0 {
+		predicates = append(predicates, apitoken.RevokedReasonNotIn(i.RevokedReasonNotIn...))
+	}
+	if i.RevokedReasonGT != nil {
+		predicates = append(predicates, apitoken.RevokedReasonGT(*i.RevokedReasonGT))
+	}
+	if i.RevokedReasonGTE != nil {
+		predicates = append(predicates, apitoken.RevokedReasonGTE(*i.RevokedReasonGTE))
+	}
+	if i.RevokedReasonLT != nil {
+		predicates = append(predicates, apitoken.RevokedReasonLT(*i.RevokedReasonLT))
+	}
+	if i.RevokedReasonLTE != nil {
+		predicates = append(predicates, apitoken.RevokedReasonLTE(*i.RevokedReasonLTE))
+	}
+	if i.RevokedReasonContains != nil {
+		predicates = append(predicates, apitoken.RevokedReasonContains(*i.RevokedReasonContains))
+	}
+	if i.RevokedReasonHasPrefix != nil {
+		predicates = append(predicates, apitoken.RevokedReasonHasPrefix(*i.RevokedReasonHasPrefix))
+	}
+	if i.RevokedReasonHasSuffix != nil {
+		predicates = append(predicates, apitoken.RevokedReasonHasSuffix(*i.RevokedReasonHasSuffix))
+	}
+	if i.RevokedReasonIsNil {
+		predicates = append(predicates, apitoken.RevokedReasonIsNil())
+	}
+	if i.RevokedReasonNotNil {
+		predicates = append(predicates, apitoken.RevokedReasonNotNil())
+	}
+	if i.RevokedReasonEqualFold != nil {
+		predicates = append(predicates, apitoken.RevokedReasonEqualFold(*i.RevokedReasonEqualFold))
+	}
+	if i.RevokedReasonContainsFold != nil {
+		predicates = append(predicates, apitoken.RevokedReasonContainsFold(*i.RevokedReasonContainsFold))
+	}
+	if i.RevokedBy != nil {
+		predicates = append(predicates, apitoken.RevokedByEQ(*i.RevokedBy))
+	}
+	if i.RevokedByNEQ != nil {
+		predicates = append(predicates, apitoken.RevokedByNEQ(*i.RevokedByNEQ))
+	}
+	if len(i.RevokedByIn) > 0 {
+		predicates = append(predicates, apitoken.RevokedByIn(i.RevokedByIn...))
+	}
+	if len(i.RevokedByNotIn) > 0 {
+		predicates = append(predicates, apitoken.RevokedByNotIn(i.RevokedByNotIn...))
+	}
+	if i.RevokedByGT != nil {
+		predicates = append(predicates, apitoken.RevokedByGT(*i.RevokedByGT))
+	}
+	if i.RevokedByGTE != nil {
+		predicates = append(predicates, apitoken.RevokedByGTE(*i.RevokedByGTE))
+	}
+	if i.RevokedByLT != nil {
+		predicates = append(predicates, apitoken.RevokedByLT(*i.RevokedByLT))
+	}
+	if i.RevokedByLTE != nil {
+		predicates = append(predicates, apitoken.RevokedByLTE(*i.RevokedByLTE))
+	}
+	if i.RevokedByContains != nil {
+		predicates = append(predicates, apitoken.RevokedByContains(*i.RevokedByContains))
+	}
+	if i.RevokedByHasPrefix != nil {
+		predicates = append(predicates, apitoken.RevokedByHasPrefix(*i.RevokedByHasPrefix))
+	}
+	if i.RevokedByHasSuffix != nil {
+		predicates = append(predicates, apitoken.RevokedByHasSuffix(*i.RevokedByHasSuffix))
+	}
+	if i.RevokedByIsNil {
+		predicates = append(predicates, apitoken.RevokedByIsNil())
+	}
+	if i.RevokedByNotNil {
+		predicates = append(predicates, apitoken.RevokedByNotNil())
+	}
+	if i.RevokedByEqualFold != nil {
+		predicates = append(predicates, apitoken.RevokedByEqualFold(*i.RevokedByEqualFold))
+	}
+	if i.RevokedByContainsFold != nil {
+		predicates = append(predicates, apitoken.RevokedByContainsFold(*i.RevokedByContainsFold))
+	}
+	if i.RevokedAt != nil {
+		predicates = append(predicates, apitoken.RevokedAtEQ(*i.RevokedAt))
+	}
+	if i.RevokedAtNEQ != nil {
+		predicates = append(predicates, apitoken.RevokedAtNEQ(*i.RevokedAtNEQ))
+	}
+	if len(i.RevokedAtIn) > 0 {
+		predicates = append(predicates, apitoken.RevokedAtIn(i.RevokedAtIn...))
+	}
+	if len(i.RevokedAtNotIn) > 0 {
+		predicates = append(predicates, apitoken.RevokedAtNotIn(i.RevokedAtNotIn...))
+	}
+	if i.RevokedAtGT != nil {
+		predicates = append(predicates, apitoken.RevokedAtGT(*i.RevokedAtGT))
+	}
+	if i.RevokedAtGTE != nil {
+		predicates = append(predicates, apitoken.RevokedAtGTE(*i.RevokedAtGTE))
+	}
+	if i.RevokedAtLT != nil {
+		predicates = append(predicates, apitoken.RevokedAtLT(*i.RevokedAtLT))
+	}
+	if i.RevokedAtLTE != nil {
+		predicates = append(predicates, apitoken.RevokedAtLTE(*i.RevokedAtLTE))
+	}
+	if i.RevokedAtIsNil {
+		predicates = append(predicates, apitoken.RevokedAtIsNil())
+	}
+	if i.RevokedAtNotNil {
+		predicates = append(predicates, apitoken.RevokedAtNotNil())
 	}
 
 	if i.HasOwner != nil {
@@ -36862,9 +37046,48 @@ type OrgSubscriptionWhereInput struct {
 	ExpiresAtIsNil  bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
 
+	// "trial_expires_at" field predicates.
+	TrialExpiresAt       *time.Time  `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNEQ    *time.Time  `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGT     *time.Time  `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGTE    *time.Time  `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLT     *time.Time  `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLTE    *time.Time  `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil bool        `json:"trialExpiresAtNotNil,omitempty"`
+
+	// "days_until_due" field predicates.
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNEQ          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGT           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGTE          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLT           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLTE          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        bool     `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+
+	// "payment_method_added" field predicates.
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNEQ    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  bool  `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil bool  `json:"paymentMethodAddedNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "events" edge predicates.
+	HasEvents     *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -37499,6 +37722,93 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 	if i.ExpiresAtNotNil {
 		predicates = append(predicates, orgsubscription.ExpiresAtNotNil())
 	}
+	if i.TrialExpiresAt != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtEQ(*i.TrialExpiresAt))
+	}
+	if i.TrialExpiresAtNEQ != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtNEQ(*i.TrialExpiresAtNEQ))
+	}
+	if len(i.TrialExpiresAtIn) > 0 {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtIn(i.TrialExpiresAtIn...))
+	}
+	if len(i.TrialExpiresAtNotIn) > 0 {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtNotIn(i.TrialExpiresAtNotIn...))
+	}
+	if i.TrialExpiresAtGT != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtGT(*i.TrialExpiresAtGT))
+	}
+	if i.TrialExpiresAtGTE != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtGTE(*i.TrialExpiresAtGTE))
+	}
+	if i.TrialExpiresAtLT != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtLT(*i.TrialExpiresAtLT))
+	}
+	if i.TrialExpiresAtLTE != nil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtLTE(*i.TrialExpiresAtLTE))
+	}
+	if i.TrialExpiresAtIsNil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtIsNil())
+	}
+	if i.TrialExpiresAtNotNil {
+		predicates = append(predicates, orgsubscription.TrialExpiresAtNotNil())
+	}
+	if i.DaysUntilDue != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueEQ(*i.DaysUntilDue))
+	}
+	if i.DaysUntilDueNEQ != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueNEQ(*i.DaysUntilDueNEQ))
+	}
+	if len(i.DaysUntilDueIn) > 0 {
+		predicates = append(predicates, orgsubscription.DaysUntilDueIn(i.DaysUntilDueIn...))
+	}
+	if len(i.DaysUntilDueNotIn) > 0 {
+		predicates = append(predicates, orgsubscription.DaysUntilDueNotIn(i.DaysUntilDueNotIn...))
+	}
+	if i.DaysUntilDueGT != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueGT(*i.DaysUntilDueGT))
+	}
+	if i.DaysUntilDueGTE != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueGTE(*i.DaysUntilDueGTE))
+	}
+	if i.DaysUntilDueLT != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueLT(*i.DaysUntilDueLT))
+	}
+	if i.DaysUntilDueLTE != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueLTE(*i.DaysUntilDueLTE))
+	}
+	if i.DaysUntilDueContains != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueContains(*i.DaysUntilDueContains))
+	}
+	if i.DaysUntilDueHasPrefix != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueHasPrefix(*i.DaysUntilDueHasPrefix))
+	}
+	if i.DaysUntilDueHasSuffix != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueHasSuffix(*i.DaysUntilDueHasSuffix))
+	}
+	if i.DaysUntilDueIsNil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueIsNil())
+	}
+	if i.DaysUntilDueNotNil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueNotNil())
+	}
+	if i.DaysUntilDueEqualFold != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueEqualFold(*i.DaysUntilDueEqualFold))
+	}
+	if i.DaysUntilDueContainsFold != nil {
+		predicates = append(predicates, orgsubscription.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
+	}
+	if i.PaymentMethodAdded != nil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedEQ(*i.PaymentMethodAdded))
+	}
+	if i.PaymentMethodAddedNEQ != nil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedNEQ(*i.PaymentMethodAddedNEQ))
+	}
+	if i.PaymentMethodAddedIsNil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedIsNil())
+	}
+	if i.PaymentMethodAddedNotNil {
+		predicates = append(predicates, orgsubscription.PaymentMethodAddedNotNil())
+	}
 
 	if i.HasOwner != nil {
 		p := orgsubscription.HasOwner()
@@ -37517,6 +37827,24 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, orgsubscription.HasOwnerWith(with...))
+	}
+	if i.HasEvents != nil {
+		p := orgsubscription.HasEvents()
+		if !*i.HasEvents {
+			p = orgsubscription.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEventsWith) > 0 {
+		with := make([]predicate.Event, 0, len(i.HasEventsWith))
+		for _, w := range i.HasEventsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEventsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, orgsubscription.HasEventsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -37784,6 +38112,41 @@ type OrgSubscriptionHistoryWhereInput struct {
 	ExpiresAtLTE    *time.Time  `json:"expiresAtLTE,omitempty"`
 	ExpiresAtIsNil  bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
+
+	// "trial_expires_at" field predicates.
+	TrialExpiresAt       *time.Time  `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNEQ    *time.Time  `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGT     *time.Time  `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGTE    *time.Time  `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLT     *time.Time  `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLTE    *time.Time  `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil bool        `json:"trialExpiresAtNotNil,omitempty"`
+
+	// "days_until_due" field predicates.
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNEQ          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGT           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGTE          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLT           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLTE          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        bool     `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+
+	// "payment_method_added" field predicates.
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNEQ    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  bool  `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil bool  `json:"paymentMethodAddedNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -38498,6 +38861,93 @@ func (i *OrgSubscriptionHistoryWhereInput) P() (predicate.OrgSubscriptionHistory
 	}
 	if i.ExpiresAtNotNil {
 		predicates = append(predicates, orgsubscriptionhistory.ExpiresAtNotNil())
+	}
+	if i.TrialExpiresAt != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtEQ(*i.TrialExpiresAt))
+	}
+	if i.TrialExpiresAtNEQ != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtNEQ(*i.TrialExpiresAtNEQ))
+	}
+	if len(i.TrialExpiresAtIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtIn(i.TrialExpiresAtIn...))
+	}
+	if len(i.TrialExpiresAtNotIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtNotIn(i.TrialExpiresAtNotIn...))
+	}
+	if i.TrialExpiresAtGT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtGT(*i.TrialExpiresAtGT))
+	}
+	if i.TrialExpiresAtGTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtGTE(*i.TrialExpiresAtGTE))
+	}
+	if i.TrialExpiresAtLT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtLT(*i.TrialExpiresAtLT))
+	}
+	if i.TrialExpiresAtLTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtLTE(*i.TrialExpiresAtLTE))
+	}
+	if i.TrialExpiresAtIsNil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtIsNil())
+	}
+	if i.TrialExpiresAtNotNil {
+		predicates = append(predicates, orgsubscriptionhistory.TrialExpiresAtNotNil())
+	}
+	if i.DaysUntilDue != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueEQ(*i.DaysUntilDue))
+	}
+	if i.DaysUntilDueNEQ != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueNEQ(*i.DaysUntilDueNEQ))
+	}
+	if len(i.DaysUntilDueIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueIn(i.DaysUntilDueIn...))
+	}
+	if len(i.DaysUntilDueNotIn) > 0 {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueNotIn(i.DaysUntilDueNotIn...))
+	}
+	if i.DaysUntilDueGT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueGT(*i.DaysUntilDueGT))
+	}
+	if i.DaysUntilDueGTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueGTE(*i.DaysUntilDueGTE))
+	}
+	if i.DaysUntilDueLT != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueLT(*i.DaysUntilDueLT))
+	}
+	if i.DaysUntilDueLTE != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueLTE(*i.DaysUntilDueLTE))
+	}
+	if i.DaysUntilDueContains != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueContains(*i.DaysUntilDueContains))
+	}
+	if i.DaysUntilDueHasPrefix != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueHasPrefix(*i.DaysUntilDueHasPrefix))
+	}
+	if i.DaysUntilDueHasSuffix != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueHasSuffix(*i.DaysUntilDueHasSuffix))
+	}
+	if i.DaysUntilDueIsNil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueIsNil())
+	}
+	if i.DaysUntilDueNotNil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueNotNil())
+	}
+	if i.DaysUntilDueEqualFold != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueEqualFold(*i.DaysUntilDueEqualFold))
+	}
+	if i.DaysUntilDueContainsFold != nil {
+		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
+	}
+	if i.PaymentMethodAdded != nil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedEQ(*i.PaymentMethodAdded))
+	}
+	if i.PaymentMethodAddedNEQ != nil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedNEQ(*i.PaymentMethodAddedNEQ))
+	}
+	if i.PaymentMethodAddedIsNil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedIsNil())
+	}
+	if i.PaymentMethodAddedNotNil {
+		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedNotNil())
 	}
 
 	switch len(predicates) {
@@ -42897,6 +43347,58 @@ type PersonalAccessTokenWhereInput struct {
 	LastUsedAtIsNil  bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil bool        `json:"lastUsedAtNotNil,omitempty"`
 
+	// "is_active" field predicates.
+	IsActive       *bool `json:"isActive,omitempty"`
+	IsActiveNEQ    *bool `json:"isActiveNEQ,omitempty"`
+	IsActiveIsNil  bool  `json:"isActiveIsNil,omitempty"`
+	IsActiveNotNil bool  `json:"isActiveNotNil,omitempty"`
+
+	// "revoked_reason" field predicates.
+	RevokedReason             *string  `json:"revokedReason,omitempty"`
+	RevokedReasonNEQ          *string  `json:"revokedReasonNEQ,omitempty"`
+	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
+	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
+	RevokedReasonGT           *string  `json:"revokedReasonGT,omitempty"`
+	RevokedReasonGTE          *string  `json:"revokedReasonGTE,omitempty"`
+	RevokedReasonLT           *string  `json:"revokedReasonLT,omitempty"`
+	RevokedReasonLTE          *string  `json:"revokedReasonLTE,omitempty"`
+	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
+	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
+	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
+	RevokedReasonIsNil        bool     `json:"revokedReasonIsNil,omitempty"`
+	RevokedReasonNotNil       bool     `json:"revokedReasonNotNil,omitempty"`
+	RevokedReasonEqualFold    *string  `json:"revokedReasonEqualFold,omitempty"`
+	RevokedReasonContainsFold *string  `json:"revokedReasonContainsFold,omitempty"`
+
+	// "revoked_by" field predicates.
+	RevokedBy             *string  `json:"revokedBy,omitempty"`
+	RevokedByNEQ          *string  `json:"revokedByNEQ,omitempty"`
+	RevokedByIn           []string `json:"revokedByIn,omitempty"`
+	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
+	RevokedByGT           *string  `json:"revokedByGT,omitempty"`
+	RevokedByGTE          *string  `json:"revokedByGTE,omitempty"`
+	RevokedByLT           *string  `json:"revokedByLT,omitempty"`
+	RevokedByLTE          *string  `json:"revokedByLTE,omitempty"`
+	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
+	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
+	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
+	RevokedByIsNil        bool     `json:"revokedByIsNil,omitempty"`
+	RevokedByNotNil       bool     `json:"revokedByNotNil,omitempty"`
+	RevokedByEqualFold    *string  `json:"revokedByEqualFold,omitempty"`
+	RevokedByContainsFold *string  `json:"revokedByContainsFold,omitempty"`
+
+	// "revoked_at" field predicates.
+	RevokedAt       *time.Time  `json:"revokedAt,omitempty"`
+	RevokedAtNEQ    *time.Time  `json:"revokedAtNEQ,omitempty"`
+	RevokedAtIn     []time.Time `json:"revokedAtIn,omitempty"`
+	RevokedAtNotIn  []time.Time `json:"revokedAtNotIn,omitempty"`
+	RevokedAtGT     *time.Time  `json:"revokedAtGT,omitempty"`
+	RevokedAtGTE    *time.Time  `json:"revokedAtGTE,omitempty"`
+	RevokedAtLT     *time.Time  `json:"revokedAtLT,omitempty"`
+	RevokedAtLTE    *time.Time  `json:"revokedAtLTE,omitempty"`
+	RevokedAtIsNil  bool        `json:"revokedAtIsNil,omitempty"`
+	RevokedAtNotNil bool        `json:"revokedAtNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
 	HasOwnerWith []*UserWhereInput `json:"hasOwnerWith,omitempty"`
@@ -43334,6 +43836,138 @@ func (i *PersonalAccessTokenWhereInput) P() (predicate.PersonalAccessToken, erro
 	}
 	if i.LastUsedAtNotNil {
 		predicates = append(predicates, personalaccesstoken.LastUsedAtNotNil())
+	}
+	if i.IsActive != nil {
+		predicates = append(predicates, personalaccesstoken.IsActiveEQ(*i.IsActive))
+	}
+	if i.IsActiveNEQ != nil {
+		predicates = append(predicates, personalaccesstoken.IsActiveNEQ(*i.IsActiveNEQ))
+	}
+	if i.IsActiveIsNil {
+		predicates = append(predicates, personalaccesstoken.IsActiveIsNil())
+	}
+	if i.IsActiveNotNil {
+		predicates = append(predicates, personalaccesstoken.IsActiveNotNil())
+	}
+	if i.RevokedReason != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonEQ(*i.RevokedReason))
+	}
+	if i.RevokedReasonNEQ != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonNEQ(*i.RevokedReasonNEQ))
+	}
+	if len(i.RevokedReasonIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonIn(i.RevokedReasonIn...))
+	}
+	if len(i.RevokedReasonNotIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonNotIn(i.RevokedReasonNotIn...))
+	}
+	if i.RevokedReasonGT != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonGT(*i.RevokedReasonGT))
+	}
+	if i.RevokedReasonGTE != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonGTE(*i.RevokedReasonGTE))
+	}
+	if i.RevokedReasonLT != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonLT(*i.RevokedReasonLT))
+	}
+	if i.RevokedReasonLTE != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonLTE(*i.RevokedReasonLTE))
+	}
+	if i.RevokedReasonContains != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonContains(*i.RevokedReasonContains))
+	}
+	if i.RevokedReasonHasPrefix != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonHasPrefix(*i.RevokedReasonHasPrefix))
+	}
+	if i.RevokedReasonHasSuffix != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonHasSuffix(*i.RevokedReasonHasSuffix))
+	}
+	if i.RevokedReasonIsNil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonIsNil())
+	}
+	if i.RevokedReasonNotNil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonNotNil())
+	}
+	if i.RevokedReasonEqualFold != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonEqualFold(*i.RevokedReasonEqualFold))
+	}
+	if i.RevokedReasonContainsFold != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedReasonContainsFold(*i.RevokedReasonContainsFold))
+	}
+	if i.RevokedBy != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByEQ(*i.RevokedBy))
+	}
+	if i.RevokedByNEQ != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByNEQ(*i.RevokedByNEQ))
+	}
+	if len(i.RevokedByIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.RevokedByIn(i.RevokedByIn...))
+	}
+	if len(i.RevokedByNotIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.RevokedByNotIn(i.RevokedByNotIn...))
+	}
+	if i.RevokedByGT != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByGT(*i.RevokedByGT))
+	}
+	if i.RevokedByGTE != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByGTE(*i.RevokedByGTE))
+	}
+	if i.RevokedByLT != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByLT(*i.RevokedByLT))
+	}
+	if i.RevokedByLTE != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByLTE(*i.RevokedByLTE))
+	}
+	if i.RevokedByContains != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByContains(*i.RevokedByContains))
+	}
+	if i.RevokedByHasPrefix != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByHasPrefix(*i.RevokedByHasPrefix))
+	}
+	if i.RevokedByHasSuffix != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByHasSuffix(*i.RevokedByHasSuffix))
+	}
+	if i.RevokedByIsNil {
+		predicates = append(predicates, personalaccesstoken.RevokedByIsNil())
+	}
+	if i.RevokedByNotNil {
+		predicates = append(predicates, personalaccesstoken.RevokedByNotNil())
+	}
+	if i.RevokedByEqualFold != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByEqualFold(*i.RevokedByEqualFold))
+	}
+	if i.RevokedByContainsFold != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedByContainsFold(*i.RevokedByContainsFold))
+	}
+	if i.RevokedAt != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtEQ(*i.RevokedAt))
+	}
+	if i.RevokedAtNEQ != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtNEQ(*i.RevokedAtNEQ))
+	}
+	if len(i.RevokedAtIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.RevokedAtIn(i.RevokedAtIn...))
+	}
+	if len(i.RevokedAtNotIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.RevokedAtNotIn(i.RevokedAtNotIn...))
+	}
+	if i.RevokedAtGT != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtGT(*i.RevokedAtGT))
+	}
+	if i.RevokedAtGTE != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtGTE(*i.RevokedAtGTE))
+	}
+	if i.RevokedAtLT != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtLT(*i.RevokedAtLT))
+	}
+	if i.RevokedAtLTE != nil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtLTE(*i.RevokedAtLTE))
+	}
+	if i.RevokedAtIsNil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtIsNil())
+	}
+	if i.RevokedAtNotNil {
+		predicates = append(predicates, personalaccesstoken.RevokedAtNotNil())
 	}
 
 	if i.HasOwner != nil {

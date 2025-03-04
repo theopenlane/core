@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -11,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -21,13 +23,15 @@ import (
 // OrgSubscriptionQuery is the builder for querying OrgSubscription entities.
 type OrgSubscriptionQuery struct {
 	config
-	ctx        *QueryContext
-	order      []orgsubscription.OrderOption
-	inters     []Interceptor
-	predicates []predicate.OrgSubscription
-	withOwner  *OrganizationQuery
-	loadTotal  []func(context.Context, []*OrgSubscription) error
-	modifiers  []func(*sql.Selector)
+	ctx             *QueryContext
+	order           []orgsubscription.OrderOption
+	inters          []Interceptor
+	predicates      []predicate.OrgSubscription
+	withOwner       *OrganizationQuery
+	withEvents      *EventQuery
+	loadTotal       []func(context.Context, []*OrgSubscription) error
+	modifiers       []func(*sql.Selector)
+	withNamedEvents map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -83,6 +87,31 @@ func (osq *OrgSubscriptionQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := osq.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvents chains the current query on the "events" edge.
+func (osq *OrgSubscriptionQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.EventsTable, orgsubscription.EventsColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -282,6 +311,7 @@ func (osq *OrgSubscriptionQuery) Clone() *OrgSubscriptionQuery {
 		inters:     append([]Interceptor{}, osq.inters...),
 		predicates: append([]predicate.OrgSubscription{}, osq.predicates...),
 		withOwner:  osq.withOwner.Clone(),
+		withEvents: osq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       osq.sql.Clone(),
 		path:      osq.path,
@@ -297,6 +327,17 @@ func (osq *OrgSubscriptionQuery) WithOwner(opts ...func(*OrganizationQuery)) *Or
 		opt(query)
 	}
 	osq.withOwner = query
+	return osq
+}
+
+// WithEvents tells the query-builder to eager-load the nodes that are connected to
+// the "events" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithEvents(opts ...func(*EventQuery)) *OrgSubscriptionQuery {
+	query := (&EventClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withEvents = query
 	return osq
 }
 
@@ -378,8 +419,9 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*OrgSubscription{}
 		_spec       = osq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			osq.withOwner != nil,
+			osq.withEvents != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -408,6 +450,20 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if query := osq.withOwner; query != nil {
 		if err := osq.loadOwner(ctx, query, nodes, nil,
 			func(n *OrgSubscription, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withEvents; query != nil {
+		if err := osq.loadEvents(ctx, query, nodes,
+			func(n *OrgSubscription) { n.Edges.Events = []*Event{} },
+			func(n *OrgSubscription, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range osq.withNamedEvents {
+		if err := osq.loadEvents(ctx, query, nodes,
+			func(n *OrgSubscription) { n.appendNamedEvents(name) },
+			func(n *OrgSubscription, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -445,6 +501,37 @@ func (osq *OrgSubscriptionQuery) loadOwner(ctx context.Context, query *Organizat
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (osq *OrgSubscriptionQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *Event)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*OrgSubscription)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Event(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(orgsubscription.EventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.org_subscription_events
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "org_subscription_events" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "org_subscription_events" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -548,6 +635,20 @@ func (osq *OrgSubscriptionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (osq *OrgSubscriptionQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgSubscriptionSelect {
 	osq.modifiers = append(osq.modifiers, modifiers...)
 	return osq.Select()
+}
+
+// WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *OrgSubscriptionQuery {
+	query := (&EventClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if osq.withNamedEvents == nil {
+		osq.withNamedEvents = make(map[string]*EventQuery)
+	}
+	osq.withNamedEvents[name] = query
+	return osq
 }
 
 // OrgSubscriptionGroupBy is the group-by builder for OrgSubscription entities.

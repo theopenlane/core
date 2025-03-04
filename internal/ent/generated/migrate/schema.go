@@ -25,6 +25,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "is_active", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
+		{Name: "revoked_by", Type: field.TypeString, Nullable: true},
+		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// APITokensTable holds the schema information for the "api_tokens" table.
@@ -35,7 +39,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "api_tokens_organizations_api_tokens",
-				Columns:    []*schema.Column{APITokensColumns[14]},
+				Columns:    []*schema.Column{APITokensColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -641,12 +645,21 @@ var (
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "org_subscription_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "events_org_subscriptions_events",
+				Columns:    []*schema.Column{EventsColumns[10]},
+				RefColumns: []*schema.Column{OrgSubscriptionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// EventHistoryColumns holds the columns for the "event_history" table.
 	EventHistoryColumns = []*schema.Column{
@@ -1627,6 +1640,9 @@ var (
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
+		{Name: "payment_method_added", Type: field.TypeBool, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
 		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -1639,7 +1655,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[18]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1667,6 +1683,9 @@ var (
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
+		{Name: "payment_method_added", Type: field.TypeBool, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
 		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 	}
@@ -1896,6 +1915,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "is_active", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
+		{Name: "revoked_by", Type: field.TypeString, Nullable: true},
+		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// PersonalAccessTokensTable holds the schema information for the "personal_access_tokens" table.
@@ -1906,7 +1929,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "personal_access_tokens_users_personal_access_tokens",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[14]},
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[18]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -5167,6 +5190,7 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
+	EventsTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}

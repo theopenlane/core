@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
 	emixin "github.com/theopenlane/entx/mixin"
@@ -47,6 +48,18 @@ func (OrgSubscription) Fields() []ent.Field {
 			Comment("the time the subscription is set to expire; only populated if subscription is cancelled").
 			Nillable().
 			Optional(),
+		field.Time("trial_expires_at").
+			Comment("the time the trial is set to expire").
+			Nillable().
+			Optional(),
+		field.String("days_until_due").
+			Comment("number of days until there is a due payment").
+			Nillable().
+			Optional(),
+		field.Bool("payment_method_added").
+			Comment("whether or not a payment method has been added to the account").
+			Nillable().
+			Optional(),
 		field.JSON("features", []string{}).
 			Comment("the features associated with the subscription").
 			Optional(),
@@ -81,5 +94,12 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 func (OrgSubscription) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorSubscriptionURL(),
+	}
+}
+
+// Edges of the OrgSubscription
+func (OrgSubscription) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("events", Event.Type),
 	}
 }

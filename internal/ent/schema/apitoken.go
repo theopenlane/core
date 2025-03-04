@@ -61,6 +61,22 @@ func (APIToken) Fields() []ent.Field {
 		field.Time("last_used_at").
 			Optional().
 			Nillable(),
+		field.Bool("is_active").
+			Default(true).
+			Comment("whether the token is active").
+			Optional(),
+		field.String("revoked_reason").
+			Comment("the reason the token was revoked").
+			Optional().
+			Nillable(),
+		field.String("revoked_by").
+			Comment("the user who revoked the token").
+			Optional().
+			Nillable(),
+		field.Time("revoked_at").
+			Comment("when the token was revoked").
+			Optional().
+			Nillable(),
 	}
 }
 
