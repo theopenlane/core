@@ -85,9 +85,10 @@ func (Subcontrol) Mixin() []ent.Mixin {
 		emixin.TagMixin{},
 		// subcontrols can inherit permissions from the parent control
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"control_id"},
-			WithOrganizationOwner: true,
-			Ref:                   "subcontrols",
+			FieldNames:               []string{"control_id"},
+			WithOrganizationOwner:    true,
+			AllowEmptyForSystemAdmin: true, // allow organization owner to be empty
+			Ref:                      "subcontrols",
 		}),
 	}
 }

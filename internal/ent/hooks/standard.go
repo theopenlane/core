@@ -33,7 +33,7 @@ func HookStandardPublicAccess() ent.Hook {
 			deletes := []fgax.TupleKey{}
 
 			// get the IDs that were updated
-			ids, err := m.IDs(ctx)
+			ids, err := GetObjectIDsFromMutation(ctx, m, retVal)
 			if err != nil {
 				return retVal, err
 			}

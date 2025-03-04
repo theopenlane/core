@@ -210,6 +210,23 @@ func removeTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 	return removeTuples, nil
 }
 
+// GetObjectIDsFromMutation gets the object ids from the mutation, if it is a create it will use the ent.Value
+// to get the id, requiring the mutation be executed first
+// For updates, it will use the `IDs()` function to get the IDs by querying the database and
+// returning the entity ids that match the mutation's predicate.
+func GetObjectIDsFromMutation(ctx context.Context, m GenericMutation, v ent.Value) ([]string, error) {
+	if m.Op().Is(ent.OpCreate) {
+		id, err := GetObjectIDFromEntValue(v)
+		if err != nil {
+			return nil, err
+		}
+
+		return []string{id}, nil
+	}
+
+	return m.IDs(ctx)
+}
+
 // GetObjectIDFromEntValue extracts the object id from a generic ent value return type
 // this function should be called after the mutation has been successful
 func GetObjectIDFromEntValue(m ent.Value) (string, error) {
@@ -260,6 +277,15 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 // if it is not set, it will return an empty string
 // this function does not ensure that the mutation was successful, it only extracts the id
 func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, parentField string) ([]string, error) {
+	if ok := m.FieldCleared(parentField); ok && m.Op().Is(ent.OpUpdateOne) {
+		v, err := m.OldField(ctx, parentField)
+		if err != nil {
+			return nil, err
+		}
+
+		return []string{v.(string)}, nil
+	}
+
 	// check if the edges were set on the mutation
 	edges := m.RemovedEdges()
 	for _, e := range edges {

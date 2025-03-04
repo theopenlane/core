@@ -24,6 +24,11 @@ type search
   relations
     define admin: [user]
 
+# system admin roles are used to define the highest level of access in the system
+type system
+  relations
+    define system_admin: [user, service]
+
 # organization is the highest object access
 # objects can inherit access from the organization
 # or define their own specific access

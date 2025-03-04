@@ -3137,17 +3137,22 @@ func init() {
 	}
 	standardMixinHooks0 := standardMixin[0].Hooks()
 	standardMixinHooks1 := standardMixin[1].Hooks()
+	standardMixinHooks4 := standardMixin[4].Hooks()
 	standardHooks := schema.Standard{}.Hooks()
 
 	standard.Hooks[1] = standardMixinHooks0[0]
 
 	standard.Hooks[2] = standardMixinHooks1[0]
 
-	standard.Hooks[3] = standardHooks[0]
+	standard.Hooks[3] = standardMixinHooks4[0]
+
+	standard.Hooks[4] = standardHooks[0]
 	standardMixinInters1 := standardMixin[1].Interceptors()
+	standardMixinInters4 := standardMixin[4].Interceptors()
 	standardInters := schema.Standard{}.Interceptors()
 	standard.Interceptors[0] = standardMixinInters1[0]
-	standard.Interceptors[1] = standardInters[0]
+	standard.Interceptors[1] = standardMixinInters4[0]
+	standard.Interceptors[2] = standardInters[0]
 	standardMixinFields0 := standardMixin[0].Fields()
 	_ = standardMixinFields0
 	standardMixinFields2 := standardMixin[2].Fields()

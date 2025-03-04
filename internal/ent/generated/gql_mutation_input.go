@@ -6441,6 +6441,9 @@ type CreateStandardInput struct {
 	Domains       []string
 	Link          *string
 	Status        *string
+	IsPublic      *bool
+	FreeToUse     *bool
+	SystemOwned   *bool
 	StandardType  *string
 	Version       *string
 	Revision      *string
@@ -6474,6 +6477,15 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.IsPublic; v != nil {
+		m.SetIsPublic(*v)
+	}
+	if v := i.FreeToUse; v != nil {
+		m.SetFreeToUse(*v)
+	}
+	if v := i.SystemOwned; v != nil {
+		m.SetSystemOwned(*v)
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
@@ -6519,6 +6531,12 @@ type UpdateStandardInput struct {
 	Link               *string
 	ClearStatus        bool
 	Status             *string
+	ClearIsPublic      bool
+	IsPublic           *bool
+	ClearFreeToUse     bool
+	FreeToUse          *bool
+	ClearSystemOwned   bool
+	SystemOwned        *bool
 	ClearStandardType  bool
 	StandardType       *string
 	ClearVersion       bool
@@ -6590,6 +6608,24 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearIsPublic {
+		m.ClearIsPublic()
+	}
+	if v := i.IsPublic; v != nil {
+		m.SetIsPublic(*v)
+	}
+	if i.ClearFreeToUse {
+		m.ClearFreeToUse()
+	}
+	if v := i.FreeToUse; v != nil {
+		m.SetFreeToUse(*v)
+	}
+	if i.ClearSystemOwned {
+		m.ClearSystemOwned()
+	}
+	if v := i.SystemOwned; v != nil {
+		m.SetSystemOwned(*v)
 	}
 	if i.ClearStandardType {
 		m.ClearStandardType()

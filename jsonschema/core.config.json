@@ -187,6 +187,10 @@
         "enableGraphExtensions": {
           "type": "boolean",
           "description": "EnableGraphExtensions enables the graph extensions for the graph resolvers"
+        },
+        "complexityLimit": {
+          "type": "integer",
+          "description": "ComplexityLimit sets the maximum complexity allowed for a query"
         }
       },
       "additionalProperties": false,

@@ -19,7 +19,7 @@ import (
 func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 	t := suite.T()
 
-	user := suite.seedUser()
+	user := suite.seedSystemAdmin()
 	ctx, err := auth.NewTestContextWithValidUser(user.ID)
 	require.NoError(t, err)
 

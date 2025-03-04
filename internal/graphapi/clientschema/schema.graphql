@@ -5620,6 +5620,18 @@ input CreateStandardInput {
 	"""
 	status: String
 	"""
+	indicates if the standard should be made available to all users, only for public standards
+	"""
+	isPublic: Boolean
+	"""
+	indicates if the standard is freely distributable under a trial license, only for public standards
+	"""
+	freeToUse: Boolean
+	"""
+	indicates if the standard is owned by the the openlane system
+	"""
+	systemOwned: Boolean
+	"""
 	type of the standard - security, privacy, etc.
 	"""
 	standardType: String
@@ -16404,24 +16416,6 @@ type Mutation {
 		"""
 		input: CreateStandardInput!
 	): StandardCreatePayload!
-	"""
-	Create multiple new standards
-	"""
-	createBulkStandard(
-		"""
-		values of the standard
-		"""
-		input: [CreateStandardInput!]
-	): StandardBulkCreatePayload!
-	"""
-	Create multiple new standards via file upload
-	"""
-	createBulkCSVStandard(
-		"""
-		csv file containing values of the standard
-		"""
-		input: Upload!
-	): StandardBulkCreatePayload!
 	"""
 	Update an existing standard
 	"""
@@ -27948,6 +27942,20 @@ input StandardHistoryWhereInput {
 	statusEqualFold: String
 	statusContainsFold: String
 	"""
+	is_public field predicates
+	"""
+	isPublic: Boolean
+	isPublicNEQ: Boolean
+	isPublicIsNil: Boolean
+	isPublicNotNil: Boolean
+	"""
+	free_to_use field predicates
+	"""
+	freeToUse: Boolean
+	freeToUseNEQ: Boolean
+	freeToUseIsNil: Boolean
+	freeToUseNotNil: Boolean
+	"""
 	system_owned field predicates
 	"""
 	systemOwned: Boolean
@@ -28277,6 +28285,20 @@ input StandardWhereInput {
 	statusNotNil: Boolean
 	statusEqualFold: String
 	statusContainsFold: String
+	"""
+	is_public field predicates
+	"""
+	isPublic: Boolean
+	isPublicNEQ: Boolean
+	isPublicIsNil: Boolean
+	isPublicNotNil: Boolean
+	"""
+	free_to_use field predicates
+	"""
+	freeToUse: Boolean
+	freeToUseNEQ: Boolean
+	freeToUseIsNil: Boolean
+	freeToUseNotNil: Boolean
 	"""
 	system_owned field predicates
 	"""
@@ -33143,6 +33165,21 @@ input UpdateStandardInput {
 	"""
 	status: String
 	clearStatus: Boolean
+	"""
+	indicates if the standard should be made available to all users, only for public standards
+	"""
+	isPublic: Boolean
+	clearIsPublic: Boolean
+	"""
+	indicates if the standard is freely distributable under a trial license, only for public standards
+	"""
+	freeToUse: Boolean
+	clearFreeToUse: Boolean
+	"""
+	indicates if the standard is owned by the the openlane system
+	"""
+	systemOwned: Boolean
+	clearSystemOwned: Boolean
 	"""
 	type of the standard - security, privacy, etc.
 	"""

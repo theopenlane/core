@@ -101,9 +101,10 @@ func (ControlObjective) Mixin() []ent.Mixin {
 		// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 		// it will also create program parent tuples for the control objective when a program is associated to the control objectives
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"program_id", "control_id", "subcontrol_id"},
-			WithOrganizationOwner: true,
-			Ref:                   "control_objectives",
+			FieldNames:               []string{"program_id", "control_id", "subcontrol_id"},
+			WithOrganizationOwner:    true,
+			AllowEmptyForSystemAdmin: true, // allow empty organization owner for system owned
+			Ref:                      "control_objectives",
 		}),
 		// add groups permissions with viewer, editor, and blocked groups
 		NewGroupPermissionsMixin(true),

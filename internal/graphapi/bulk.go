@@ -522,25 +522,6 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	}, nil
 }
 
-// bulkCreateStandard uses the CreateBulk function to create multiple Standard entities
-func (r *mutationResolver) bulkCreateStandard(ctx context.Context, input []*generated.CreateStandardInput) (*model.StandardBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.StandardCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Standard.Create().SetInput(*data)
-	}
-
-	res, err := c.Standard.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
-	}
-
-	// return response
-	return &model.StandardBulkCreatePayload{
-		Standards: res,
-	}, nil
-}
-
 // bulkCreateSubcontrol uses the CreateBulk function to create multiple Subcontrol entities
 func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

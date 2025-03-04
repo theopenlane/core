@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Standard defines the standard schema.
@@ -58,20 +59,14 @@ func (Standard) Fields() []ent.Field {
 		field.Bool("is_public").
 			Optional().
 			Default(false).
-			// don't expose these fields in the mutation input
-			Annotations(entgql.Skip(^entgql.SkipType)).
 			Comment("indicates if the standard should be made available to all users, only for public standards"),
 		field.Bool("free_to_use").
 			Optional().
 			Default(false).
-			// don't expose these fields in the mutation input
-			Annotations(entgql.Skip(^entgql.SkipType)).
 			Comment("indicates if the standard is freely distributable under a trial license, only for public standards"),
 		field.Bool("system_owned").
 			Optional().
 			Default(false).
-			// don't expose these fields in the mutation input
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Comment("indicates if the standard is owned by the the openlane system"),
 		field.String("standard_type").
 			Optional().
@@ -100,8 +95,8 @@ func (Standard) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		NewOrgOwnedMixin(ObjectOwnedMixin{
-			Ref:        "standards",
-			AllowEmpty: true, // allow empty org_id
+			Ref:                      "standards",
+			AllowEmptyForSystemAdmin: true, // allow empty org_id
 		}),
 	}
 }
@@ -133,11 +128,13 @@ func (Standard) Annotations() []schema.Annotation {
 func (Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
+			privacy.AlwaysAllowRule(), // access is filtered by the traversal interceptor
 		),
 		policy.WithMutationRules(
-			// policy.CheckCreateAccess(),
-			privacy.AlwaysAllowRule(),
+			rule.SystemOwnedStandards(), // checks for the system owned field
+			privacy.AlwaysDenyRule(),    // deny all other mutations for now
+			// policy.CheckCreateAccess(), // TODO (sfunk): fix create access for org owned standards
+			// privacy.AlwaysAllowRule(),
 		),
 	)
 }

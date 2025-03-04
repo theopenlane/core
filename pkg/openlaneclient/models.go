@@ -4248,6 +4248,12 @@ type CreateStandardInput struct {
 	Link *string `json:"link,omitempty"`
 	// status of the standard - active, deprecated, etc.
 	Status *string `json:"status,omitempty"`
+	// indicates if the standard should be made available to all users, only for public standards
+	IsPublic *bool `json:"isPublic,omitempty"`
+	// indicates if the standard is freely distributable under a trial license, only for public standards
+	FreeToUse *bool `json:"freeToUse,omitempty"`
+	// indicates if the standard is owned by the the openlane system
+	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// type of the standard - security, privacy, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
@@ -17815,6 +17821,16 @@ type StandardHistoryWhereInput struct {
 	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
 	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	// is_public field predicates
+	IsPublic       *bool `json:"isPublic,omitempty"`
+	IsPublicNeq    *bool `json:"isPublicNEQ,omitempty"`
+	IsPublicIsNil  *bool `json:"isPublicIsNil,omitempty"`
+	IsPublicNotNil *bool `json:"isPublicNotNil,omitempty"`
+	// free_to_use field predicates
+	FreeToUse       *bool `json:"freeToUse,omitempty"`
+	FreeToUseNeq    *bool `json:"freeToUseNEQ,omitempty"`
+	FreeToUseIsNil  *bool `json:"freeToUseIsNil,omitempty"`
+	FreeToUseNotNil *bool `json:"freeToUseNotNil,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -18106,6 +18122,16 @@ type StandardWhereInput struct {
 	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
 	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	// is_public field predicates
+	IsPublic       *bool `json:"isPublic,omitempty"`
+	IsPublicNeq    *bool `json:"isPublicNEQ,omitempty"`
+	IsPublicIsNil  *bool `json:"isPublicIsNil,omitempty"`
+	IsPublicNotNil *bool `json:"isPublicNotNil,omitempty"`
+	// free_to_use field predicates
+	FreeToUse       *bool `json:"freeToUse,omitempty"`
+	FreeToUseNeq    *bool `json:"freeToUseNEQ,omitempty"`
+	FreeToUseIsNil  *bool `json:"freeToUseIsNil,omitempty"`
+	FreeToUseNotNil *bool `json:"freeToUseNotNil,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -21837,6 +21863,15 @@ type UpdateStandardInput struct {
 	// status of the standard - active, deprecated, etc.
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	// indicates if the standard should be made available to all users, only for public standards
+	IsPublic      *bool `json:"isPublic,omitempty"`
+	ClearIsPublic *bool `json:"clearIsPublic,omitempty"`
+	// indicates if the standard is freely distributable under a trial license, only for public standards
+	FreeToUse      *bool `json:"freeToUse,omitempty"`
+	ClearFreeToUse *bool `json:"clearFreeToUse,omitempty"`
+	// indicates if the standard is owned by the the openlane system
+	SystemOwned      *bool `json:"systemOwned,omitempty"`
+	ClearSystemOwned *bool `json:"clearSystemOwned,omitempty"`
 	// type of the standard - security, privacy, etc.
 	StandardType      *string `json:"standardType,omitempty"`
 	ClearStandardType *bool   `json:"clearStandardType,omitempty"`

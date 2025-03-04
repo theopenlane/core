@@ -6,11 +6,12 @@ package graphapi
 
 import (
 	"context"
+	"errors"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/graphutils"
@@ -20,37 +21,25 @@ import (
 // CreateStandard is the resolver for the createStandard field.
 func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*model.StandardCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	// TODO: sfunk - make sure we can still create system-owned standards
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+
+		return nil, rout.NewMissingRequiredFieldError("organization_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
 	if err != nil {
+		// special case for standards which are system owned
+		if errors.Is(err, privacy.Deny) {
+			return nil, rout.ErrPermissionDenied
+		}
+
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
 	}
 
 	return &model.StandardCreatePayload{
 		Standard: res,
 	}, nil
-}
-
-// CreateBulkStandard is the resolver for the createBulkStandard field.
-func (r *mutationResolver) CreateBulkStandard(ctx context.Context, input []*generated.CreateStandardInput) (*model.StandardBulkCreatePayload, error) {
-	return r.bulkCreateStandard(ctx, input)
-}
-
-// CreateBulkCSVStandard is the resolver for the createBulkCSVStandard field.
-func (r *mutationResolver) CreateBulkCSVStandard(ctx context.Context, input graphql.Upload) (*model.StandardBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateStandardInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	return r.bulkCreateStandard(ctx, data)
 }
 
 // UpdateStandard is the resolver for the updateStandard field.
@@ -63,6 +52,7 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.ErrPermissionDenied
 	}
 

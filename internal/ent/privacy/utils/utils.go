@@ -53,6 +53,11 @@ func AuthzClient(ctx context.Context, m generated.Mutation) *fgax.Client {
 		return client
 	}
 
+	// if we don't have a client, return early with nil
+	if m == nil {
+		return nil
+	}
+
 	mut, ok := m.(MutationClient)
 	if ok && mut.Client() != nil {
 		return &mut.Client().Authz

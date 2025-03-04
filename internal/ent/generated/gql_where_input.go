@@ -54082,6 +54082,18 @@ type StandardWhereInput struct {
 	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 
+	// "is_public" field predicates.
+	IsPublic       *bool `json:"isPublic,omitempty"`
+	IsPublicNEQ    *bool `json:"isPublicNEQ,omitempty"`
+	IsPublicIsNil  bool  `json:"isPublicIsNil,omitempty"`
+	IsPublicNotNil bool  `json:"isPublicNotNil,omitempty"`
+
+	// "free_to_use" field predicates.
+	FreeToUse       *bool `json:"freeToUse,omitempty"`
+	FreeToUseNEQ    *bool `json:"freeToUseNEQ,omitempty"`
+	FreeToUseIsNil  bool  `json:"freeToUseIsNil,omitempty"`
+	FreeToUseNotNil bool  `json:"freeToUseNotNil,omitempty"`
+
 	// "system_owned" field predicates.
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -54828,6 +54840,30 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	if i.StatusContainsFold != nil {
 		predicates = append(predicates, standard.StatusContainsFold(*i.StatusContainsFold))
 	}
+	if i.IsPublic != nil {
+		predicates = append(predicates, standard.IsPublicEQ(*i.IsPublic))
+	}
+	if i.IsPublicNEQ != nil {
+		predicates = append(predicates, standard.IsPublicNEQ(*i.IsPublicNEQ))
+	}
+	if i.IsPublicIsNil {
+		predicates = append(predicates, standard.IsPublicIsNil())
+	}
+	if i.IsPublicNotNil {
+		predicates = append(predicates, standard.IsPublicNotNil())
+	}
+	if i.FreeToUse != nil {
+		predicates = append(predicates, standard.FreeToUseEQ(*i.FreeToUse))
+	}
+	if i.FreeToUseNEQ != nil {
+		predicates = append(predicates, standard.FreeToUseNEQ(*i.FreeToUseNEQ))
+	}
+	if i.FreeToUseIsNil {
+		predicates = append(predicates, standard.FreeToUseIsNil())
+	}
+	if i.FreeToUseNotNil {
+		predicates = append(predicates, standard.FreeToUseNotNil())
+	}
 	if i.SystemOwned != nil {
 		predicates = append(predicates, standard.SystemOwnedEQ(*i.SystemOwned))
 	}
@@ -55294,6 +55330,18 @@ type StandardHistoryWhereInput struct {
 	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
 	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+
+	// "is_public" field predicates.
+	IsPublic       *bool `json:"isPublic,omitempty"`
+	IsPublicNEQ    *bool `json:"isPublicNEQ,omitempty"`
+	IsPublicIsNil  bool  `json:"isPublicIsNil,omitempty"`
+	IsPublicNotNil bool  `json:"isPublicNotNil,omitempty"`
+
+	// "free_to_use" field predicates.
+	FreeToUse       *bool `json:"freeToUse,omitempty"`
+	FreeToUseNEQ    *bool `json:"freeToUseNEQ,omitempty"`
+	FreeToUseIsNil  bool  `json:"freeToUseIsNil,omitempty"`
+	FreeToUseNotNil bool  `json:"freeToUseNotNil,omitempty"`
 
 	// "system_owned" field predicates.
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
@@ -56113,6 +56161,30 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	}
 	if i.StatusContainsFold != nil {
 		predicates = append(predicates, standardhistory.StatusContainsFold(*i.StatusContainsFold))
+	}
+	if i.IsPublic != nil {
+		predicates = append(predicates, standardhistory.IsPublicEQ(*i.IsPublic))
+	}
+	if i.IsPublicNEQ != nil {
+		predicates = append(predicates, standardhistory.IsPublicNEQ(*i.IsPublicNEQ))
+	}
+	if i.IsPublicIsNil {
+		predicates = append(predicates, standardhistory.IsPublicIsNil())
+	}
+	if i.IsPublicNotNil {
+		predicates = append(predicates, standardhistory.IsPublicNotNil())
+	}
+	if i.FreeToUse != nil {
+		predicates = append(predicates, standardhistory.FreeToUseEQ(*i.FreeToUse))
+	}
+	if i.FreeToUseNEQ != nil {
+		predicates = append(predicates, standardhistory.FreeToUseNEQ(*i.FreeToUseNEQ))
+	}
+	if i.FreeToUseIsNil {
+		predicates = append(predicates, standardhistory.FreeToUseIsNil())
+	}
+	if i.FreeToUseNotNil {
+		predicates = append(predicates, standardhistory.FreeToUseNotNil())
 	}
 	if i.SystemOwned != nil {
 		predicates = append(predicates, standardhistory.SystemOwnedEQ(*i.SystemOwned))

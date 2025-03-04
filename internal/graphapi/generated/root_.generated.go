@@ -1768,7 +1768,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVProgram               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgramMembership     func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVRisk                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVStandard              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubcontrol            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubscriber            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTask                  func(childComplexity int, input graphql.Upload) int
@@ -1799,7 +1798,6 @@ type ComplexityRoot struct {
 		CreateBulkProgram                  func(childComplexity int, input []*generated.CreateProgramInput) int
 		CreateBulkProgramMembership        func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
 		CreateBulkRisk                     func(childComplexity int, input []*generated.CreateRiskInput) int
-		CreateBulkStandard                 func(childComplexity int, input []*generated.CreateStandardInput) int
 		CreateBulkSubcontrol               func(childComplexity int, input []*generated.CreateSubcontrolInput) int
 		CreateBulkSubscriber               func(childComplexity int, input []*generated.CreateSubscriberInput) int
 		CreateBulkTask                     func(childComplexity int, input []*generated.CreateTaskInput) int
@@ -11461,18 +11459,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVStandard":
-		if e.complexity.Mutation.CreateBulkCSVStandard == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVStandard_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVStandard(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVSubcontrol":
 		if e.complexity.Mutation.CreateBulkCSVSubcontrol == nil {
 			break
@@ -11832,18 +11818,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateBulkRisk(childComplexity, args["input"].([]*generated.CreateRiskInput)), true
-
-	case "Mutation.createBulkStandard":
-		if e.complexity.Mutation.CreateBulkStandard == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkStandard_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkStandard(childComplexity, args["input"].([]*generated.CreateStandardInput)), true
 
 	case "Mutation.createBulkSubcontrol":
 		if e.complexity.Mutation.CreateBulkSubcontrol == nil {
@@ -29487,6 +29461,18 @@ input CreateStandardInput {
   status of the standard - active, deprecated, etc.
   """
   status: String
+  """
+  indicates if the standard should be made available to all users, only for public standards
+  """
+  isPublic: Boolean
+  """
+  indicates if the standard is freely distributable under a trial license, only for public standards
+  """
+  freeToUse: Boolean
+  """
+  indicates if the standard is owned by the the openlane system
+  """
+  systemOwned: Boolean
   """
   type of the standard - security, privacy, etc.
   """
@@ -48052,6 +48038,20 @@ input StandardHistoryWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
+  is_public field predicates
+  """
+  isPublic: Boolean
+  isPublicNEQ: Boolean
+  isPublicIsNil: Boolean
+  isPublicNotNil: Boolean
+  """
+  free_to_use field predicates
+  """
+  freeToUse: Boolean
+  freeToUseNEQ: Boolean
+  freeToUseIsNil: Boolean
+  freeToUseNotNil: Boolean
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -48369,6 +48369,20 @@ input StandardWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  is_public field predicates
+  """
+  isPublic: Boolean
+  isPublicNEQ: Boolean
+  isPublicIsNil: Boolean
+  isPublicNotNil: Boolean
+  """
+  free_to_use field predicates
+  """
+  freeToUse: Boolean
+  freeToUseNEQ: Boolean
+  freeToUseIsNil: Boolean
+  freeToUseNotNil: Boolean
   """
   system_owned field predicates
   """
@@ -53042,6 +53056,21 @@ input UpdateStandardInput {
   """
   status: String
   clearStatus: Boolean
+  """
+  indicates if the standard should be made available to all users, only for public standards
+  """
+  isPublic: Boolean
+  clearIsPublic: Boolean
+  """
+  indicates if the standard is freely distributable under a trial license, only for public standards
+  """
+  freeToUse: Boolean
+  clearFreeToUse: Boolean
+  """
+  indicates if the standard is owned by the the openlane system
+  """
+  systemOwned: Boolean
+  clearSystemOwned: Boolean
   """
   type of the standard - security, privacy, etc.
   """
@@ -58059,24 +58088,6 @@ extend type Mutation{
         """
         input: CreateStandardInput!
     ): StandardCreatePayload!
-    """
-    Create multiple new standards
-    """
-    createBulkStandard(
-        """
-        values of the standard
-        """
-        input: [CreateStandardInput!]
-    ): StandardBulkCreatePayload!
-    """
-    Create multiple new standards via file upload
-    """
-    createBulkCSVStandard(
-        """
-        csv file containing values of the standard
-        """
-        input: Upload!
-    ): StandardBulkCreatePayload!
     """
     Update an existing standard
     """
