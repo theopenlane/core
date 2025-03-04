@@ -283,7 +283,6 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 		return nil, nil, err
 	}
 
-	// set default org
 	return setting, org, nil
 }
 
