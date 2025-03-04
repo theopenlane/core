@@ -3,7 +3,6 @@ package hooks
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"reflect"
 	"time"
@@ -199,11 +198,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 	}
 
 	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
-	if errors.Is(err, ErrPersonalOrgNoSubscription) {
-		log.Warn().Msg("Personal org detected, skipping customer creation")
-
-		return nil
-	} else if err != nil {
+	if err != nil {
 		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
 
 		return err
@@ -232,11 +227,7 @@ func handleOrganizationSettingsCreate(event soiree.Event) error {
 	}
 
 	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
-	if errors.Is(err, ErrPersonalOrgNoSubscription) {
-		log.Debug().Msg("Personal org detected, skipping customer creation")
-
-		return nil
-	} else if err != nil {
+	if err != nil {
 		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
 
 		return err
