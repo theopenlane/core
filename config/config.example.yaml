@@ -194,6 +194,7 @@ sessions:
     signingKey: my-signing-secret
 subscription:
     enabled: false
+    personalOrgSubscriptionPriceID: price_1QycPyBvxky1R7Svz0gOWnNh
     privateStripeKey: ""
     publicStripeKey: ""
     stripeBillingPortalSuccessURL: https://console.openlane.com/billing

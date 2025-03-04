@@ -13,6 +13,7 @@ type OrganizationCustomer struct {
 	OrganizationSettingsID string `json:"organization_settings_id"`
 	StripeCustomerID       string `json:"stripe_customer_id"`
 	OrganizationName       string `json:"organization_name"`
+	PersonalOrg            bool   `json:"personal_org"`
 	Features               []string
 	FeatureNames           []string
 	Subscription

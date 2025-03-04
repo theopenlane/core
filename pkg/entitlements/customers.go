@@ -88,6 +88,23 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 		log.Debug().Str("customer_id", customer.ID).Msg("customer created")
 
+		if o.PersonalOrg {
+			psubs, err := sc.CreatePersonalOrgFreeTierSubs(customer.ID)
+			if err != nil {
+				return nil, err
+			}
+
+			o.StripeCustomerID = customer.ID
+			o.Subscription = *psubs
+
+			newOrg, err := sc.retrieveFeatureLists(o)
+			if err != nil {
+				return nil, err
+			}
+
+			return newOrg, nil
+		}
+
 		subs, err := sc.CreateTrialSubscription(customer.ID)
 		if err != nil {
 			return nil, err
@@ -98,40 +115,12 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		o.StripeCustomerID = customer.ID
 		o.Subscription = *subs
 
-		// get features and retry up to 5 times	if we don't have any
-		// there is a delay between creating the customer and the features being available
-		var feats, featNames []string
-
-		const maxRetries = 5
-
-		for i := range maxRetries {
-			feats, featNames, err = sc.retrieveActiveEntitlements(customer.ID)
-			if err != nil {
-				return nil, err
-			}
-
-			// if we have features, break out of the loop
-			if len(feats) > 0 {
-				log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customer.ID).Msg("features found for customer")
-
-				break
-			}
-
-			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customer.ID).Msg("no features found for customer, retrying")
-
-			time.Sleep(time.Duration(i+1) * time.Second) // backoff retry
+		newOrg, err := sc.retrieveFeatureLists(o)
+		if err != nil {
+			return nil, err
 		}
 
-		if len(feats) == 0 {
-			log.Warn().Str("customer_id", customer.ID).Msg("no features found for customer")
-		}
-
-		log.Debug().Str("organization_id", o.OrganizationID).Strs("features", feats).Str("customer_id", customer.ID).Msg("found features for customer")
-
-		o.Features = feats
-		o.FeatureNames = featNames
-
-		return o, nil
+		return newOrg, nil
 	case 1:
 		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
 		o.StripeCustomerID = customers[0].ID
@@ -159,6 +148,43 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 		return nil, ErrFoundMultipleCustomers
 	}
+}
+
+func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*OrganizationCustomer, error) {
+	var feats, featNames []string
+
+	const maxRetries = 5
+
+	for i := range maxRetries {
+		var err error
+
+		feats, featNames, err = sc.retrieveActiveEntitlements(o.StripeCustomerID)
+		if err != nil {
+			return nil, err
+		}
+
+		// if we have features, break out of the loop
+		if len(feats) > 0 {
+			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", o.StripeCustomerID).Msg("features found for customer")
+
+			break
+		}
+
+		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", o.StripeCustomerID).Msg("no features found for customer, retrying")
+
+		time.Sleep(time.Duration(i+1) * time.Second) // backoff retry
+	}
+
+	if len(feats) == 0 {
+		log.Warn().Str("customer_id", o.StripeCustomerID).Msg("no features found for customer")
+	}
+
+	log.Debug().Str("organization_id", o.OrganizationID).Strs("features", feats).Str("customer_id", o.StripeCustomerID).Msg("found features for customer")
+
+	o.Features = feats
+	o.FeatureNames = featNames
+
+	return o, nil
 }
 
 // GetCustomerByStripeID gets a customer by ID

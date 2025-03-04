@@ -319,6 +319,8 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		return nil, err
 	}
 
+	personalOrg := org.PersonalOrg
+
 	if len(org.Edges.OrgSubscriptions) > 1 {
 		log.Warn().Str("organization_id", org.ID).Msg("organization has multiple subscriptions")
 
@@ -335,6 +337,7 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		OrganizationName:       org.Name,
 		StripeCustomerID:       stripeCustomerID,
 		OrganizationSettingsID: orgSetting.ID,
+		PersonalOrg:            personalOrg,
 		ContactInfo: entitlements.ContactInfo{
 			Email:      orgSetting.BillingEmail,
 			Phone:      orgSetting.BillingPhone,
