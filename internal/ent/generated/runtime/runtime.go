@@ -3137,10 +3137,13 @@ func init() {
 	}
 	standardMixinHooks0 := standardMixin[0].Hooks()
 	standardMixinHooks1 := standardMixin[1].Hooks()
+	standardHooks := schema.Standard{}.Hooks()
 
 	standard.Hooks[1] = standardMixinHooks0[0]
 
 	standard.Hooks[2] = standardMixinHooks1[0]
+
+	standard.Hooks[3] = standardHooks[0]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardInters := schema.Standard{}.Interceptors()
 	standard.Interceptors[0] = standardMixinInters1[0]

@@ -10,6 +10,7 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -102,6 +103,13 @@ func (Standard) Mixin() []ent.Mixin {
 			Ref:        "standards",
 			AllowEmpty: true, // allow empty org_id
 		}),
+	}
+}
+
+// Hooks of the Standard
+func (Standard) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookStandardPublicAccess(),
 	}
 }
 

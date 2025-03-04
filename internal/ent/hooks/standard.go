@@ -8,12 +8,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
 
-// HookStandard adds tuples for publicly available standards
-func HookStandard() ent.Hook {
+// HookStandardPublicAccess adds tuples for publicly available standards
+func HookStandardPublicAccess() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
@@ -26,38 +25,26 @@ func HookStandard() ent.Hook {
 				return retVal, err
 			}
 
+			if !addTuple && !deleteTuple {
+				return retVal, nil
+			}
+
 			writes := []fgax.TupleKey{}
 			deletes := []fgax.TupleKey{}
-			if addTuple || deleteTuple {
-				// get the IDs that were updated
-				ids, err := m.IDs(ctx)
-				if err != nil {
-					return retVal, err
+
+			// get the IDs that were updated
+			ids, err := m.IDs(ctx)
+			if err != nil {
+				return retVal, err
+			}
+
+			for _, id := range ids {
+				if addTuple {
+					writes = append(writes, fgax.CreateWildcardViewerTuple(id, generated.TypeStandard)...)
 				}
 
-				for _, id := range ids {
-					tuple := fgax.TupleRequest{
-						ObjectID:   id,
-						ObjectType: generated.TypeStandard,
-						SubjectID:  "*",
-						Relation:   fgax.CanView,
-					}
-
-					userTuple := tuple
-					userTuple.SubjectType = auth.UserSubjectType
-
-					serviceTuple := tuple
-					serviceTuple.SubjectType = auth.ServiceSubjectType
-
-					if addTuple {
-						writes = append(writes, []fgax.TupleKey{fgax.GetTupleKey(userTuple),
-							fgax.GetTupleKey(serviceTuple)}..., // create user:* and service:* tuples)
-						)
-					} else {
-						deletes = append(deletes, []fgax.TupleKey{fgax.GetTupleKey(userTuple),
-							fgax.GetTupleKey(serviceTuple)}..., // delete user:* and service:* tuples)
-						)
-					}
+				if deleteTuple {
+					deletes = append(deletes, fgax.CreateWildcardViewerTuple(id, generated.TypeStandard)...)
 				}
 			}
 
@@ -168,26 +155,6 @@ func AddOrDeleteStandardTuple(ctx context.Context, m *generated.StandardMutation
 		if systemOwned && oldPublic && !publicOK {
 			add = true
 		}
-
-		// // if one has changed, lets see if we need to add the tuples because
-		// // the other was already true
-		// if systemOwned || public {
-		// 	id, ok := m.ID()
-		// 	if !ok || id == "" {
-		// 		return
-		// 	}
-
-		// 	// check if the systemOwned or isPublic fields have changed
-		// 	var standard *generated.Standard
-		// 	standard, err = m.Client().Standard.Get(ctx, id)
-		// 	if err != nil {
-		// 		return
-		// 	}
-
-		// 	if standard.SystemOwned && standard.IsPublic {
-		// 		return true, false, nil
-		// 	}
-		// }
 
 		return
 	case ent.OpUpdate:
