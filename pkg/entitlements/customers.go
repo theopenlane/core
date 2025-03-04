@@ -157,6 +157,7 @@ func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*Organiza
 
 	for i := range maxRetries {
 		var err error
+
 		feats, featNames, err = sc.retrieveActiveEntitlements(o.StripeCustomerID)
 		if err != nil {
 			return nil, err
