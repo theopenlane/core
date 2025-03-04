@@ -542,16 +542,16 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 	}
 	if nodes := osc.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osc.schemaConfig.Event
+		edge.Schema = osc.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -33,6 +33,16 @@ const (
 	FieldEventType = "event_type"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
+	// FieldAdditionalProcessingRequired holds the string denoting the additional_processing_required field in the database.
+	FieldAdditionalProcessingRequired = "additional_processing_required"
+	// FieldAdditionalProcessingDetails holds the string denoting the additional_processing_details field in the database.
+	FieldAdditionalProcessingDetails = "additional_processing_details"
+	// FieldProcessedBy holds the string denoting the processed_by field in the database.
+	FieldProcessedBy = "processed_by"
+	// FieldProcessedAt holds the string denoting the processed_at field in the database.
+	FieldProcessedAt = "processed_at"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
@@ -55,6 +65,8 @@ const (
 	EdgeSubscriber = "subscriber"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
+	// EdgeOrgsubscription holds the string denoting the orgsubscription edge name in mutations.
+	EdgeOrgsubscription = "orgsubscription"
 	// Table holds the table name of the event in the database.
 	Table = "events"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -112,6 +124,11 @@ const (
 	// FileInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FileInverseTable = "files"
+	// OrgsubscriptionTable is the table that holds the orgsubscription relation/edge. The primary key declared below.
+	OrgsubscriptionTable = "org_subscription_events"
+	// OrgsubscriptionInverseTable is the table name for the OrgSubscription entity.
+	// It exists in this package in order to avoid circular dependency with the "orgsubscription" package.
+	OrgsubscriptionInverseTable = "org_subscriptions"
 )
 
 // Columns holds all SQL columns for event fields.
@@ -126,12 +143,11 @@ var Columns = []string{
 	FieldCorrelationID,
 	FieldEventType,
 	FieldMetadata,
-}
-
-// ForeignKeys holds the SQL foreign-keys that are owned by the "events"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"org_subscription_events",
+	FieldSource,
+	FieldAdditionalProcessingRequired,
+	FieldAdditionalProcessingDetails,
+	FieldProcessedBy,
+	FieldProcessedAt,
 }
 
 var (
@@ -168,17 +184,15 @@ var (
 	// FilePrimaryKey and FileColumn2 are the table columns denoting the
 	// primary key for the file relation (M2M).
 	FilePrimaryKey = []string{"file_id", "event_id"}
+	// OrgsubscriptionPrimaryKey and OrgsubscriptionColumn2 are the table columns denoting the
+	// primary key for the orgsubscription relation (M2M).
+	OrgsubscriptionPrimaryKey = []string{"org_subscription_id", "event_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -200,6 +214,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultAdditionalProcessingRequired holds the default value on creation for the "additional_processing_required" field.
+	DefaultAdditionalProcessingRequired bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -245,6 +261,31 @@ func ByCorrelationID(opts ...sql.OrderTermOption) OrderOption {
 // ByEventType orders the results by the event_type field.
 func ByEventType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEventType, opts...).ToFunc()
+}
+
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByAdditionalProcessingRequired orders the results by the additional_processing_required field.
+func ByAdditionalProcessingRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAdditionalProcessingRequired, opts...).ToFunc()
+}
+
+// ByAdditionalProcessingDetails orders the results by the additional_processing_details field.
+func ByAdditionalProcessingDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAdditionalProcessingDetails, opts...).ToFunc()
+}
+
+// ByProcessedBy orders the results by the processed_by field.
+func ByProcessedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcessedBy, opts...).ToFunc()
+}
+
+// ByProcessedAt orders the results by the processed_at field.
+func ByProcessedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcessedAt, opts...).ToFunc()
 }
 
 // ByUserCount orders the results by user count.
@@ -400,6 +441,20 @@ func ByFile(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByOrgsubscriptionCount orders the results by orgsubscription count.
+func ByOrgsubscriptionCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrgsubscriptionStep(), opts...)
+	}
+}
+
+// ByOrgsubscription orders the results by orgsubscription terms.
+func ByOrgsubscription(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgsubscriptionStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -475,5 +530,12 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, FileTable, FilePrimaryKey...),
+	)
+}
+func newOrgsubscriptionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgsubscriptionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OrgsubscriptionTable, OrgsubscriptionPrimaryKey...),
 	)
 }

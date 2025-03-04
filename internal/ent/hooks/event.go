@@ -11,6 +11,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
+	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -242,20 +243,34 @@ func handleOrganizationSettingsCreate(event soiree.Event) error {
 			return err
 		}
 
-		if err := createInternalOrgSubscription(event.Context(), customer, client); err != nil {
+		orgSubs, err := createInternalOrgSubscription(event.Context(), customer, client)
+		if err != nil {
 			log.Err(err).Msg("Failed to create internal org subscription")
 
 			return err
 		}
 
-		return nil
+		if orgSubs != nil {
+			_, err := entMgr.UpdateSubscription(customer.Subscription.ID, &stripe.SubscriptionParams{
+				Metadata: map[string]string{
+					"organization_subscription_id": orgSubs.ID,
+				},
+			})
+			if err != nil {
+				log.Err(err).Msg("Failed to update subscription metadata")
+
+				return err
+			}
+
+			return nil
+		}
 	}
 
 	return nil
 }
 
 // createInternalOrgSubscription creates an internal org subscription
-func createInternalOrgSubscription(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) error {
+func createInternalOrgSubscription(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) (orgSubs *entgen.OrgSubscription, err error) {
 	productName := ""
 	productPrice := models.Price{}
 
@@ -295,12 +310,12 @@ func createInternalOrgSubscription(ctx context.Context, customer *entitlements.O
 		Save(ctx)
 	if err != nil {
 		log.Err(err).Msg("Failed to create internal org subscription")
-		return err
+		return nil, err
 	}
 
 	log.Info().Str("subscription", sub.ID).Msg("created internal org subscription")
 
-	return nil
+	return sub, nil
 }
 
 // fetchOrganizationIDbyOrgSettingID fetches the organization ID by the organization setting ID
