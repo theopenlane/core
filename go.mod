@@ -53,7 +53,7 @@ require (
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.13
-	github.com/prometheus/client_golang v1.21.0
+	github.com/prometheus/client_golang v1.21.1
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.1
 	github.com/riverqueue/river v0.18.0
@@ -73,7 +73,7 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.4.5
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.8.4
-	github.com/theopenlane/newman v0.1.2
+	github.com/theopenlane/newman v0.1.3
 	github.com/theopenlane/riverboat v0.0.9
 	github.com/theopenlane/utils v0.4.3
 	github.com/vektah/gqlparser/v2 v2.5.23
@@ -516,7 +516,7 @@ require (
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/pterm/pterm v0.12.80
-	github.com/resend/resend-go/v2 v2.13.0 // indirect
+	github.com/resend/resend-go/v2 v2.15.0 // indirect
 	github.com/riverqueue/river/riverdriver v0.18.0 // indirect
 	github.com/riverqueue/river/rivershared v0.18.0 // indirect
 	github.com/riverqueue/river/rivertype v0.18.0 // indirect
