@@ -187,8 +187,6 @@ type OpenlaneGraphClient interface {
 	GetAllNoteHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllNoteHistories, error)
 	GetNoteHistories(ctx context.Context, where *NoteHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetNoteHistories, error)
 	CreateOnboarding(ctx context.Context, input CreateOnboardingInput, interceptors ...clientv2.RequestInterceptor) (*CreateOnboarding, error)
-	CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOrganization, error)
-	CreateBulkOrganization(ctx context.Context, input []*CreateOrganizationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOrganization, error)
 	CreateOrganization(ctx context.Context, input CreateOrganizationInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateOrganization, error)
 	CreateOrganizationWithMembers(ctx context.Context, organizationInput CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error)
 	DeleteOrganization(ctx context.Context, deleteOrganizationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteOrganization, error)
@@ -25841,120 +25839,6 @@ func (t *CreateOnboarding_CreateOnboarding) GetOnboarding() *CreateOnboarding_Cr
 		t = &CreateOnboarding_CreateOnboarding{}
 	}
 	return &t.Onboarding
-}
-
-type CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations struct {
-	Description *string  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
-	ID          string   "json:\"id\" graphql:\"id\""
-	Name        string   "json:\"name\" graphql:\"name\""
-	PersonalOrg *bool    "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations) GetDisplayName() string {
-	if t == nil {
-		t = &CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations{}
-	}
-	return t.DisplayName
-}
-func (t *CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations) GetPersonalOrg() *bool {
-	if t == nil {
-		t = &CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations{}
-	}
-	return t.PersonalOrg
-}
-func (t *CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations{}
-	}
-	return t.Tags
-}
-
-type CreateBulkCSVOrganization_CreateBulkCSVOrganization struct {
-	Organizations []*CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
-}
-
-func (t *CreateBulkCSVOrganization_CreateBulkCSVOrganization) GetOrganizations() []*CreateBulkCSVOrganization_CreateBulkCSVOrganization_Organizations {
-	if t == nil {
-		t = &CreateBulkCSVOrganization_CreateBulkCSVOrganization{}
-	}
-	return t.Organizations
-}
-
-type CreateBulkOrganization_CreateBulkOrganization_Organizations struct {
-	Description *string  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
-	ID          string   "json:\"id\" graphql:\"id\""
-	Name        string   "json:\"name\" graphql:\"name\""
-	PersonalOrg *bool    "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *CreateBulkOrganization_CreateBulkOrganization_Organizations) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkOrganization_CreateBulkOrganization_Organizations{}
-	}
-	return t.Description
-}
-func (t *CreateBulkOrganization_CreateBulkOrganization_Organizations) GetDisplayName() string {
-	if t == nil {
-		t = &CreateBulkOrganization_CreateBulkOrganization_Organizations{}
-	}
-	return t.DisplayName
-}
-func (t *CreateBulkOrganization_CreateBulkOrganization_Organizations) GetID() string {
-	if t == nil {
-		t = &CreateBulkOrganization_CreateBulkOrganization_Organizations{}
-	}
-	return t.ID
-}
-func (t *CreateBulkOrganization_CreateBulkOrganization_Organizations) GetName() string {
-	if t == nil {
-		t = &CreateBulkOrganization_CreateBulkOrganization_Organizations{}
-	}
-	return t.Name
-}
-func (t *CreateBulkOrganization_CreateBulkOrganization_Organizations) GetPersonalOrg() *bool {
-	if t == nil {
-		t = &CreateBulkOrganization_CreateBulkOrganization_Organizations{}
-	}
-	return t.PersonalOrg
-}
-func (t *CreateBulkOrganization_CreateBulkOrganization_Organizations) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkOrganization_CreateBulkOrganization_Organizations{}
-	}
-	return t.Tags
-}
-
-type CreateBulkOrganization_CreateBulkOrganization struct {
-	Organizations []*CreateBulkOrganization_CreateBulkOrganization_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
-}
-
-func (t *CreateBulkOrganization_CreateBulkOrganization) GetOrganizations() []*CreateBulkOrganization_CreateBulkOrganization_Organizations {
-	if t == nil {
-		t = &CreateBulkOrganization_CreateBulkOrganization{}
-	}
-	return t.Organizations
 }
 
 type CreateOrganization_CreateOrganization_Organization_AvatarFile struct {
@@ -52458,28 +52342,6 @@ func (t *CreateOnboarding) GetCreateOnboarding() *CreateOnboarding_CreateOnboard
 	return &t.CreateOnboarding
 }
 
-type CreateBulkCSVOrganization struct {
-	CreateBulkCSVOrganization CreateBulkCSVOrganization_CreateBulkCSVOrganization "json:\"createBulkCSVOrganization\" graphql:\"createBulkCSVOrganization\""
-}
-
-func (t *CreateBulkCSVOrganization) GetCreateBulkCSVOrganization() *CreateBulkCSVOrganization_CreateBulkCSVOrganization {
-	if t == nil {
-		t = &CreateBulkCSVOrganization{}
-	}
-	return &t.CreateBulkCSVOrganization
-}
-
-type CreateBulkOrganization struct {
-	CreateBulkOrganization CreateBulkOrganization_CreateBulkOrganization "json:\"createBulkOrganization\" graphql:\"createBulkOrganization\""
-}
-
-func (t *CreateBulkOrganization) GetCreateBulkOrganization() *CreateBulkOrganization_CreateBulkOrganization {
-	if t == nil {
-		t = &CreateBulkOrganization{}
-	}
-	return &t.CreateBulkOrganization
-}
-
 type CreateOrganization struct {
 	CreateOrganization CreateOrganization_CreateOrganization "json:\"createOrganization\" graphql:\"createOrganization\""
 }
@@ -61824,68 +61686,6 @@ func (c *Client) CreateOnboarding(ctx context.Context, input CreateOnboardingInp
 	return &res, nil
 }
 
-const CreateBulkCSVOrganizationDocument = `mutation CreateBulkCSVOrganization ($input: Upload!) {
-	createBulkCSVOrganization(input: $input) {
-		organizations {
-			id
-			name
-			displayName
-			description
-			personalOrg
-			tags
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOrganization, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVOrganization
-	if err := c.Client.Post(ctx, "CreateBulkCSVOrganization", CreateBulkCSVOrganizationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkOrganizationDocument = `mutation CreateBulkOrganization ($input: [CreateOrganizationInput!]) {
-	createBulkOrganization(input: $input) {
-		organizations {
-			id
-			name
-			displayName
-			description
-			personalOrg
-			tags
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkOrganization(ctx context.Context, input []*CreateOrganizationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOrganization, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkOrganization
-	if err := c.Client.Post(ctx, "CreateBulkOrganization", CreateBulkOrganizationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateOrganizationDocument = `mutation CreateOrganization ($input: CreateOrganizationInput!, $avatarFile: Upload) {
 	createOrganization(input: $input, avatarFile: $avatarFile) {
 		organization {
@@ -69120,8 +68920,6 @@ var DocumentOperationNames = map[string]string{
 	GetAllNoteHistoriesDocument:                "GetAllNoteHistories",
 	GetNoteHistoriesDocument:                   "GetNoteHistories",
 	CreateOnboardingDocument:                   "CreateOnboarding",
-	CreateBulkCSVOrganizationDocument:          "CreateBulkCSVOrganization",
-	CreateBulkOrganizationDocument:             "CreateBulkOrganization",
 	CreateOrganizationDocument:                 "CreateOrganization",
 	CreateOrganizationWithMembersDocument:      "CreateOrganizationWithMembers",
 	DeleteOrganizationDocument:                 "DeleteOrganization",

@@ -719,20 +719,6 @@ func (ec *executionContext) _OrganizationUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNOrganizationBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationBulkCreatePayload) graphql.Marshaler {
-	return ec._OrganizationBulkCreatePayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNOrganizationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationBulkCreatePayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._OrganizationBulkCreatePayload(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNOrganizationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationCreatePayload) graphql.Marshaler {
 	return ec._OrganizationCreatePayload(ctx, sel, &v)
 }

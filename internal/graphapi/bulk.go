@@ -332,25 +332,6 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 	}, nil
 }
 
-// bulkCreateOrganization uses the CreateBulk function to create multiple Organization entities
-func (r *mutationResolver) bulkCreateOrganization(ctx context.Context, input []*generated.CreateOrganizationInput) (*model.OrganizationBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.OrganizationCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Organization.Create().SetInput(*data)
-	}
-
-	res, err := c.Organization.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
-	}
-
-	// return response
-	return &model.OrganizationBulkCreatePayload{
-		Organizations: res,
-	}, nil
-}
-
 // bulkCreateOrganizationSetting uses the CreateBulk function to create multiple OrganizationSetting entities
 func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

@@ -41,23 +41,6 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 	}, nil
 }
 
-// CreateBulkOrganization is the resolver for the createBulkOrganization field.
-func (r *mutationResolver) CreateBulkOrganization(ctx context.Context, input []*generated.CreateOrganizationInput) (*model.OrganizationBulkCreatePayload, error) {
-	return r.bulkCreateOrganization(ctx, input)
-}
-
-// CreateBulkCSVOrganization is the resolver for the createBulkCSVOrganization field.
-func (r *mutationResolver) CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload) (*model.OrganizationBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateOrganizationInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	return r.bulkCreateOrganization(ctx, data)
-}
-
 // UpdateOrganization is the resolver for the updateOrganization field.
 func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Get(ctx, id)

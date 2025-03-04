@@ -1,29 +1,3 @@
-mutation CreateBulkCSVOrganization($input: Upload!) {
-  createBulkCSVOrganization(input: $input) {
-    organizations {
-      id
-      name
-      displayName
-      description
-      personalOrg
-      tags
-    }
-  }
-}
-
-mutation CreateBulkOrganization($input: [CreateOrganizationInput!]) {
-  createBulkOrganization(input: $input) {
-    organizations {
-      id
-      name
-      displayName
-      description
-      personalOrg
-      tags
-    }
-  }
-}
-
 mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Upload) {
   createOrganization(input: $input, avatarFile: $avatarFile) {
     organization {

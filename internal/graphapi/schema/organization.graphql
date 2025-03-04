@@ -22,24 +22,6 @@ extend type Mutation{
         avatarFile: Upload
     ): OrganizationCreatePayload!
     """
-    Create multiple new organizations
-    """
-    createBulkOrganization(
-        """
-        values of the organization
-        """
-        input: [CreateOrganizationInput!]
-    ): OrganizationBulkCreatePayload!
-    """
-    Create multiple new organizations via file upload
-    """
-    createBulkCSVOrganization(
-        """
-        csv file containing values of the organization
-        """
-        input: Upload!
-    ): OrganizationBulkCreatePayload!
-    """
     Update an existing organization
     """
     updateOrganization(
