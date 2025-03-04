@@ -31,7 +31,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			// get the fields that were queried and check for the presignedURL field
 			fields := graphutils.CheckForRequestedField(ctx, "presignedURL")
 
-			// if the SubscriptionURL field wasn't queried, return the result as is
+			// if the presignedURL field wasn't queried, return the result as is
 			if !fields {
 				return v, nil
 			}

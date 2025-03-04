@@ -641,25 +641,21 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "event_id", Type: field.TypeString, Nullable: true},
+		{Name: "event_id", Type: field.TypeString, Unique: true},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
-		{Name: "event_type", Type: field.TypeString},
+		{Name: "event_type", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "org_subscription_events", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "additional_processing_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "additional_processing_details", Type: field.TypeString, Nullable: true},
+		{Name: "processed_by", Type: field.TypeString, Nullable: true},
+		{Name: "processed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "events_org_subscriptions_events",
-				Columns:    []*schema.Column{EventsColumns[10]},
-				RefColumns: []*schema.Column{OrgSubscriptionsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
 	}
 	// EventHistoryColumns holds the columns for the "event_history" table.
 	EventHistoryColumns = []*schema.Column{
@@ -672,10 +668,15 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "event_id", Type: field.TypeString, Nullable: true},
+		{Name: "event_id", Type: field.TypeString},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
-		{Name: "event_type", Type: field.TypeString},
+		{Name: "event_type", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "additional_processing_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "additional_processing_details", Type: field.TypeString, Nullable: true},
+		{Name: "processed_by", Type: field.TypeString, Nullable: true},
+		{Name: "processed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// EventHistoryTable holds the schema information for the "event_history" table.
 	EventHistoryTable = &schema.Table{
@@ -3968,6 +3969,31 @@ var (
 			},
 		},
 	}
+	// OrgSubscriptionEventsColumns holds the columns for the "org_subscription_events" table.
+	OrgSubscriptionEventsColumns = []*schema.Column{
+		{Name: "org_subscription_id", Type: field.TypeString},
+		{Name: "event_id", Type: field.TypeString},
+	}
+	// OrgSubscriptionEventsTable holds the schema information for the "org_subscription_events" table.
+	OrgSubscriptionEventsTable = &schema.Table{
+		Name:       "org_subscription_events",
+		Columns:    OrgSubscriptionEventsColumns,
+		PrimaryKey: []*schema.Column{OrgSubscriptionEventsColumns[0], OrgSubscriptionEventsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_subscription_events_org_subscription_id",
+				Columns:    []*schema.Column{OrgSubscriptionEventsColumns[0]},
+				RefColumns: []*schema.Column{OrgSubscriptionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "org_subscription_events_event_id",
+				Columns:    []*schema.Column{OrgSubscriptionEventsColumns[1]},
+				RefColumns: []*schema.Column{EventsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// OrganizationPersonalAccessTokensColumns holds the columns for the "organization_personal_access_tokens" table.
 	OrganizationPersonalAccessTokensColumns = []*schema.Column{
 		{Name: "organization_id", Type: field.TypeString},
@@ -5110,6 +5136,7 @@ var (
 		NarrativeEditorsTable,
 		NarrativeViewersTable,
 		OrgMembershipEventsTable,
+		OrgSubscriptionEventsTable,
 		OrganizationPersonalAccessTokensTable,
 		OrganizationFilesTable,
 		OrganizationEventsTable,
@@ -5190,7 +5217,6 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
-	EventsTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
@@ -5405,6 +5431,8 @@ func init() {
 	NarrativeViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	OrgMembershipEventsTable.ForeignKeys[0].RefTable = OrgMembershipsTable
 	OrgMembershipEventsTable.ForeignKeys[1].RefTable = EventsTable
+	OrgSubscriptionEventsTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
+	OrgSubscriptionEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[1].RefTable = PersonalAccessTokensTable
 	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable

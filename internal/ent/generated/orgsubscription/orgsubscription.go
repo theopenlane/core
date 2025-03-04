@@ -70,13 +70,11 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// EventsTable is the table that holds the events relation/edge.
-	EventsTable = "events"
+	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
+	EventsTable = "org_subscription_events"
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
-	// EventsColumn is the table column denoting the events relation/edge.
-	EventsColumn = "org_subscription_events"
 )
 
 // Columns holds all SQL columns for orgsubscription fields.
@@ -104,6 +102,12 @@ var Columns = []string{
 	FieldFeatures,
 	FieldFeatureLookupKeys,
 }
+
+var (
+	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
+	// primary key for the events relation (M2M).
+	EventsPrimaryKey = []string{"org_subscription_id", "event_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -263,6 +267,6 @@ func newEventsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 	)
 }

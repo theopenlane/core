@@ -1,42 +1,78 @@
 mutation CreateAPIToken($input: CreateAPITokenInput!) {
   createAPIToken(input: $input) {
     apiToken {
-      id
-      token
-      scopes
-      owner {
-        id
-      }
       createdAt
-      updatedAt
       createdBy
-      updatedBy
-      name
-      expiresAt
       description
+      expiresAt
+      id
+      isActive
       lastUsedAt
+      name
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      scopes
+      tags
+      token
+      updatedAt
+      updatedBy
     }
   }
 }
 
-mutation UpdateAPIToken($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
-  updateAPIToken(id: $updateAPITokenId, input: $input) {
-    apiToken {
-      id
-      token
-      scopes
-      owner {
-        id
-      }
+mutation CreateBulkAPIToken($input: [CreateAPITokenInput!]) {
+  createBulkAPIToken(input: $input) {
+    apiTokens {
       createdAt
-      updatedAt
       createdBy
-      updatedBy
-      name
-      expiresAt
       description
+      expiresAt
+      id
+      isActive
       lastUsedAt
+      name
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      scopes
+      tags
+      token
+      updatedAt
+      updatedBy
     }
+  }
+}
+
+mutation CreateBulkCSVAPIToken($input: Upload!) {
+  createBulkCSVAPIToken(input: $input) {
+    apiTokens {
+      createdAt
+      createdBy
+      description
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      name
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      scopes
+      tags
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteAPIToken($deleteAPITokenId: ID!) {
+  deleteAPIToken(id: $deleteAPITokenId) {
+    deletedID
   }
 }
 
@@ -44,20 +80,23 @@ query GetAllAPITokens {
   apiTokens {
     edges {
       node {
-        id
-        token
-        scopes
-        owner {
-          id
-        }
         createdAt
-        updatedAt
         createdBy
-        updatedBy
-        name
-        expiresAt
         description
+        expiresAt
+        id
+        isActive
         lastUsedAt
+        name
+        ownerID
+        revokedAt
+        revokedBy
+        revokedReason
+        scopes
+        tags
+        token
+        updatedAt
+        updatedBy
       }
     }
   }
@@ -65,25 +104,75 @@ query GetAllAPITokens {
 
 query GetAPITokenByID($apiTokenId: ID!) {
   apiToken(id: $apiTokenId) {
+    createdAt
+    createdBy
+    description
+    expiresAt
     id
-    token
-    scopes
+    isActive
+    lastUsedAt
+    name
     owner {
       id
+      displayName
     }
-    createdAt
+    revokedAt
+    revokedBy
+    revokedReason
+    scopes
+    tags
+    token
     updatedAt
-    createdBy
     updatedBy
-    name
-    expiresAt
-    description
-    lastUsedAt
   }
 }
 
-mutation DeleteAPIToken($deleteAPITokenId: ID!) {
-  deleteAPIToken(id: $deleteAPITokenId) {
-    deletedID
+query GetAPITokens($where: APITokenWhereInput) {
+  apiTokens(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        expiresAt
+        id
+        isActive
+        lastUsedAt
+        name
+        ownerID
+        revokedAt
+        revokedBy
+        revokedReason
+        scopes
+        tags
+        token
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateAPIToken($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
+  updateAPIToken(id: $updateAPITokenId, input: $input) {
+    apiToken {
+      createdAt
+      createdBy
+      description
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      name
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      scopes
+      tags
+      token
+      updatedAt
+      updatedBy
+    }
   }
 }

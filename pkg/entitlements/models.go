@@ -9,13 +9,16 @@ import (
 
 // OrganizationCustomer is a struct which holds both internal organization infos and external stripe infos
 type OrganizationCustomer struct {
-	OrganizationID         string `json:"organization_id"`
-	OrganizationSettingsID string `json:"organization_settings_id"`
-	StripeCustomerID       string `json:"stripe_customer_id"`
-	OrganizationName       string `json:"organization_name"`
-	PersonalOrg            bool   `json:"personal_org"`
-	Features               []string
-	FeatureNames           []string
+	OrganizationID             string `json:"organization_id"`
+	OrganizationSettingsID     string `json:"organization_settings_id"`
+	StripeCustomerID           string `json:"stripe_customer_id"`
+	OrganizationName           string `json:"organization_name"`
+	PersonalOrg                bool   `json:"personal_org"`
+	OrganizationSubscriptionID string `json:"organization_subscription_id"`
+	StripeSubscriptionID       string `json:"stripe_subscription_id"`
+	PaymentMethodAdded         bool   `json:"payment_method_added"`
+	Features                   []string
+	FeatureNames               []string
 	Subscription
 	ContactInfo
 }
@@ -46,9 +49,10 @@ func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 			Country:    o.Country,
 		},
 		Metadata: map[string]string{
-			"organization_id":          o.OrganizationID,
-			"organization_settings_id": o.OrganizationSettingsID,
-			"organization_name":        o.OrganizationName,
+			"organization_id":              o.OrganizationID,
+			"organization_settings_id":     o.OrganizationSettingsID,
+			"organization_name":            o.OrganizationName,
+			"organization_subscription_id": o.OrganizationSubscriptionID,
 		},
 	}
 }
@@ -75,6 +79,7 @@ type Customer struct {
 	Phone          string `json:"phone" yaml:"phone"`
 	Address        string `json:"address" yaml:"address"`
 	Plans          []Plan `json:"plans" yaml:"plans"`
+	Metadata       map[string]string
 	StripeParams   *stripe.CustomerParams
 	StripeCustomer []stripe.Customer
 }
@@ -113,6 +118,15 @@ type Subscription struct {
 	StripeCustomerID   string
 	OrganizationID     string
 	DaysUntilDue       int64
+	Metadata           map[string]string
+}
+
+// BillingPortalSession holds the billing portal session information
+type BillingPortalSession struct {
+	ManageSubscription string `json:"manage_subscription"`
+	PaymentMethods     string `json:"payment_methods"`
+	Cancellation       string `json:"cancellation"`
+	HomePage           string `json:"home_page"`
 }
 
 // Product holds what we'd more commply call a "tier"
