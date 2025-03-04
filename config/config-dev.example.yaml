@@ -1,11 +1,19 @@
 # server settings
 server:
   debug: true
+  pretty: true
   dev: true
+  graphPool:
+    maxCapacity: 100
+    maxWorkers: 10
+  enableGraphExtensions: true
+  cacheControl:
+    enabled: false
   cors:
     allowOrigins:
       - http://localhost:3001
       - http://localhost:5500
+      - https://studio.apollographql.com
   # tls settings
   tls:
     enabled: false
@@ -59,12 +67,23 @@ auth:
       requestOrigins:
         - "http://localhost:3001"
 
+# totp settings
+totp:
+    codeLength: 6
+    enabled: true
+    issuer: "theopenlane.io"
+    recoveryCodeCount: 16
+    recoveryCodeLength: 8
+    redis: true
+    secret: "4af7d1842cef4aa7b098cb68361002df"
+
 # authz settings
 authz:
   enabled: true
   storeName: openlane
   hostUrl: http://localhost:8080
-  createNewModel: false
+  # set to true in dev so the model is updated when changes happen; the container needs to be restarted to see the changes
+  createNewModel: true
   credentials:
     apiToken: "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
 
