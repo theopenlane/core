@@ -319,11 +319,7 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		return nil, err
 	}
 
-	personalOrg := false
-	if org.PersonalOrg {
-		personalOrg = true
-	}
-
+	personalOrg := org.PersonalOrg
 	if len(org.Edges.OrgSubscriptions) > 1 {
 		log.Warn().Str("organization_id", org.ID).Msg("organization has multiple subscriptions")
 
