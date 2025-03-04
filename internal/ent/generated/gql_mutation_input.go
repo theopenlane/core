@@ -1911,20 +1911,26 @@ func (c *EntityTypeUpdateOne) SetInput(i UpdateEntityTypeInput) *EntityTypeUpdat
 
 // CreateEventInput represents a mutation input for creating events.
 type CreateEventInput struct {
-	Tags                   []string
-	EventID                *string
-	CorrelationID          *string
-	EventType              string
-	Metadata               map[string]interface{}
-	UserIDs                []string
-	GroupIDs               []string
-	IntegrationIDs         []string
-	OrganizationIDs        []string
-	InviteIDs              []string
-	PersonalAccessTokenIDs []string
-	HushIDs                []string
-	SubscriberIDs          []string
-	FileIDs                []string
+	Tags                         []string
+	EventID                      string
+	CorrelationID                *string
+	EventType                    *string
+	Metadata                     map[string]interface{}
+	Source                       *string
+	AdditionalProcessingRequired *bool
+	AdditionalProcessingDetails  *string
+	ProcessedBy                  *string
+	ProcessedAt                  *time.Time
+	UserIDs                      []string
+	GroupIDs                     []string
+	IntegrationIDs               []string
+	OrganizationIDs              []string
+	InviteIDs                    []string
+	PersonalAccessTokenIDs       []string
+	HushIDs                      []string
+	SubscriberIDs                []string
+	FileIDs                      []string
+	OrgsubscriptionIDs           []string
 }
 
 // Mutate applies the CreateEventInput on the EventMutation builder.
@@ -1932,15 +1938,30 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	if v := i.EventID; v != nil {
-		m.SetEventID(*v)
-	}
+	m.SetEventID(i.EventID)
 	if v := i.CorrelationID; v != nil {
 		m.SetCorrelationID(*v)
 	}
-	m.SetEventType(i.EventType)
+	if v := i.EventType; v != nil {
+		m.SetEventType(*v)
+	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.AdditionalProcessingRequired; v != nil {
+		m.SetAdditionalProcessingRequired(*v)
+	}
+	if v := i.AdditionalProcessingDetails; v != nil {
+		m.SetAdditionalProcessingDetails(*v)
+	}
+	if v := i.ProcessedBy; v != nil {
+		m.SetProcessedBy(*v)
+	}
+	if v := i.ProcessedAt; v != nil {
+		m.SetProcessedAt(*v)
 	}
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
@@ -1969,6 +1990,9 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.OrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateEventInput on the EventCreate builder.
@@ -1979,43 +2003,55 @@ func (c *EventCreate) SetInput(i CreateEventInput) *EventCreate {
 
 // UpdateEventInput represents a mutation input for updating events.
 type UpdateEventInput struct {
-	ClearTags                    bool
-	Tags                         []string
-	AppendTags                   []string
-	ClearEventID                 bool
-	EventID                      *string
-	ClearCorrelationID           bool
-	CorrelationID                *string
-	EventType                    *string
-	ClearMetadata                bool
-	Metadata                     map[string]interface{}
-	ClearUser                    bool
-	AddUserIDs                   []string
-	RemoveUserIDs                []string
-	ClearGroup                   bool
-	AddGroupIDs                  []string
-	RemoveGroupIDs               []string
-	ClearIntegration             bool
-	AddIntegrationIDs            []string
-	RemoveIntegrationIDs         []string
-	ClearOrganization            bool
-	AddOrganizationIDs           []string
-	RemoveOrganizationIDs        []string
-	ClearInvite                  bool
-	AddInviteIDs                 []string
-	RemoveInviteIDs              []string
-	ClearPersonalAccessToken     bool
-	AddPersonalAccessTokenIDs    []string
-	RemovePersonalAccessTokenIDs []string
-	ClearHush                    bool
-	AddHushIDs                   []string
-	RemoveHushIDs                []string
-	ClearSubscriber              bool
-	AddSubscriberIDs             []string
-	RemoveSubscriberIDs          []string
-	ClearFile                    bool
-	AddFileIDs                   []string
-	RemoveFileIDs                []string
+	ClearTags                         bool
+	Tags                              []string
+	AppendTags                        []string
+	ClearCorrelationID                bool
+	CorrelationID                     *string
+	ClearEventType                    bool
+	EventType                         *string
+	ClearMetadata                     bool
+	Metadata                          map[string]interface{}
+	ClearSource                       bool
+	Source                            *string
+	ClearAdditionalProcessingRequired bool
+	AdditionalProcessingRequired      *bool
+	ClearAdditionalProcessingDetails  bool
+	AdditionalProcessingDetails       *string
+	ClearProcessedBy                  bool
+	ProcessedBy                       *string
+	ClearProcessedAt                  bool
+	ProcessedAt                       *time.Time
+	ClearUser                         bool
+	AddUserIDs                        []string
+	RemoveUserIDs                     []string
+	ClearGroup                        bool
+	AddGroupIDs                       []string
+	RemoveGroupIDs                    []string
+	ClearIntegration                  bool
+	AddIntegrationIDs                 []string
+	RemoveIntegrationIDs              []string
+	ClearOrganization                 bool
+	AddOrganizationIDs                []string
+	RemoveOrganizationIDs             []string
+	ClearInvite                       bool
+	AddInviteIDs                      []string
+	RemoveInviteIDs                   []string
+	ClearPersonalAccessToken          bool
+	AddPersonalAccessTokenIDs         []string
+	RemovePersonalAccessTokenIDs      []string
+	ClearHush                         bool
+	AddHushIDs                        []string
+	RemoveHushIDs                     []string
+	ClearSubscriber                   bool
+	AddSubscriberIDs                  []string
+	RemoveSubscriberIDs               []string
+	ClearFile                         bool
+	AddFileIDs                        []string
+	RemoveFileIDs                     []string
+	ClearOrgsubscription              bool
+	AddOrgsubscriptionIDs             []string
+	RemoveOrgsubscriptionIDs          []string
 }
 
 // Mutate applies the UpdateEventInput on the EventMutation builder.
@@ -2029,17 +2065,14 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if i.ClearEventID {
-		m.ClearEventID()
-	}
-	if v := i.EventID; v != nil {
-		m.SetEventID(*v)
-	}
 	if i.ClearCorrelationID {
 		m.ClearCorrelationID()
 	}
 	if v := i.CorrelationID; v != nil {
 		m.SetCorrelationID(*v)
+	}
+	if i.ClearEventType {
+		m.ClearEventType()
 	}
 	if v := i.EventType; v != nil {
 		m.SetEventType(*v)
@@ -2049,6 +2082,36 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearAdditionalProcessingRequired {
+		m.ClearAdditionalProcessingRequired()
+	}
+	if v := i.AdditionalProcessingRequired; v != nil {
+		m.SetAdditionalProcessingRequired(*v)
+	}
+	if i.ClearAdditionalProcessingDetails {
+		m.ClearAdditionalProcessingDetails()
+	}
+	if v := i.AdditionalProcessingDetails; v != nil {
+		m.SetAdditionalProcessingDetails(*v)
+	}
+	if i.ClearProcessedBy {
+		m.ClearProcessedBy()
+	}
+	if v := i.ProcessedBy; v != nil {
+		m.SetProcessedBy(*v)
+	}
+	if i.ClearProcessedAt {
+		m.ClearProcessedAt()
+	}
+	if v := i.ProcessedAt; v != nil {
+		m.SetProcessedAt(*v)
 	}
 	if i.ClearUser {
 		m.ClearUser()
@@ -2130,6 +2193,15 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearOrgsubscription {
+		m.ClearOrgsubscription()
+	}
+	if v := i.AddOrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
+	}
+	if v := i.RemoveOrgsubscriptionIDs; len(v) > 0 {
+		m.RemoveOrgsubscriptionIDs(v...)
 	}
 }
 

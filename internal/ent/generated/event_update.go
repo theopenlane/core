@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -93,26 +94,6 @@ func (eu *EventUpdate) ClearTags() *EventUpdate {
 	return eu
 }
 
-// SetEventID sets the "event_id" field.
-func (eu *EventUpdate) SetEventID(s string) *EventUpdate {
-	eu.mutation.SetEventID(s)
-	return eu
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (eu *EventUpdate) SetNillableEventID(s *string) *EventUpdate {
-	if s != nil {
-		eu.SetEventID(*s)
-	}
-	return eu
-}
-
-// ClearEventID clears the value of the "event_id" field.
-func (eu *EventUpdate) ClearEventID() *EventUpdate {
-	eu.mutation.ClearEventID()
-	return eu
-}
-
 // SetCorrelationID sets the "correlation_id" field.
 func (eu *EventUpdate) SetCorrelationID(s string) *EventUpdate {
 	eu.mutation.SetCorrelationID(s)
@@ -147,6 +128,12 @@ func (eu *EventUpdate) SetNillableEventType(s *string) *EventUpdate {
 	return eu
 }
 
+// ClearEventType clears the value of the "event_type" field.
+func (eu *EventUpdate) ClearEventType() *EventUpdate {
+	eu.mutation.ClearEventType()
+	return eu
+}
+
 // SetMetadata sets the "metadata" field.
 func (eu *EventUpdate) SetMetadata(m map[string]interface{}) *EventUpdate {
 	eu.mutation.SetMetadata(m)
@@ -156,6 +143,106 @@ func (eu *EventUpdate) SetMetadata(m map[string]interface{}) *EventUpdate {
 // ClearMetadata clears the value of the "metadata" field.
 func (eu *EventUpdate) ClearMetadata() *EventUpdate {
 	eu.mutation.ClearMetadata()
+	return eu
+}
+
+// SetSource sets the "source" field.
+func (eu *EventUpdate) SetSource(s string) *EventUpdate {
+	eu.mutation.SetSource(s)
+	return eu
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableSource(s *string) *EventUpdate {
+	if s != nil {
+		eu.SetSource(*s)
+	}
+	return eu
+}
+
+// ClearSource clears the value of the "source" field.
+func (eu *EventUpdate) ClearSource() *EventUpdate {
+	eu.mutation.ClearSource()
+	return eu
+}
+
+// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
+func (eu *EventUpdate) SetAdditionalProcessingRequired(b bool) *EventUpdate {
+	eu.mutation.SetAdditionalProcessingRequired(b)
+	return eu
+}
+
+// SetNillableAdditionalProcessingRequired sets the "additional_processing_required" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableAdditionalProcessingRequired(b *bool) *EventUpdate {
+	if b != nil {
+		eu.SetAdditionalProcessingRequired(*b)
+	}
+	return eu
+}
+
+// ClearAdditionalProcessingRequired clears the value of the "additional_processing_required" field.
+func (eu *EventUpdate) ClearAdditionalProcessingRequired() *EventUpdate {
+	eu.mutation.ClearAdditionalProcessingRequired()
+	return eu
+}
+
+// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
+func (eu *EventUpdate) SetAdditionalProcessingDetails(s string) *EventUpdate {
+	eu.mutation.SetAdditionalProcessingDetails(s)
+	return eu
+}
+
+// SetNillableAdditionalProcessingDetails sets the "additional_processing_details" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableAdditionalProcessingDetails(s *string) *EventUpdate {
+	if s != nil {
+		eu.SetAdditionalProcessingDetails(*s)
+	}
+	return eu
+}
+
+// ClearAdditionalProcessingDetails clears the value of the "additional_processing_details" field.
+func (eu *EventUpdate) ClearAdditionalProcessingDetails() *EventUpdate {
+	eu.mutation.ClearAdditionalProcessingDetails()
+	return eu
+}
+
+// SetProcessedBy sets the "processed_by" field.
+func (eu *EventUpdate) SetProcessedBy(s string) *EventUpdate {
+	eu.mutation.SetProcessedBy(s)
+	return eu
+}
+
+// SetNillableProcessedBy sets the "processed_by" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableProcessedBy(s *string) *EventUpdate {
+	if s != nil {
+		eu.SetProcessedBy(*s)
+	}
+	return eu
+}
+
+// ClearProcessedBy clears the value of the "processed_by" field.
+func (eu *EventUpdate) ClearProcessedBy() *EventUpdate {
+	eu.mutation.ClearProcessedBy()
+	return eu
+}
+
+// SetProcessedAt sets the "processed_at" field.
+func (eu *EventUpdate) SetProcessedAt(t time.Time) *EventUpdate {
+	eu.mutation.SetProcessedAt(t)
+	return eu
+}
+
+// SetNillableProcessedAt sets the "processed_at" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableProcessedAt(t *time.Time) *EventUpdate {
+	if t != nil {
+		eu.SetProcessedAt(*t)
+	}
+	return eu
+}
+
+// ClearProcessedAt clears the value of the "processed_at" field.
+func (eu *EventUpdate) ClearProcessedAt() *EventUpdate {
+	eu.mutation.ClearProcessedAt()
 	return eu
 }
 
@@ -322,6 +409,21 @@ func (eu *EventUpdate) AddFile(f ...*File) *EventUpdate {
 		ids[i] = f[i].ID
 	}
 	return eu.AddFileIDs(ids...)
+}
+
+// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by IDs.
+func (eu *EventUpdate) AddOrgsubscriptionIDs(ids ...string) *EventUpdate {
+	eu.mutation.AddOrgsubscriptionIDs(ids...)
+	return eu
+}
+
+// AddOrgsubscription adds the "orgsubscription" edges to the OrgSubscription entity.
+func (eu *EventUpdate) AddOrgsubscription(o ...*OrgSubscription) *EventUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return eu.AddOrgsubscriptionIDs(ids...)
 }
 
 // Mutation returns the EventMutation object of the builder.
@@ -560,6 +662,27 @@ func (eu *EventUpdate) RemoveFile(f ...*File) *EventUpdate {
 	return eu.RemoveFileIDs(ids...)
 }
 
+// ClearOrgsubscription clears all "orgsubscription" edges to the OrgSubscription entity.
+func (eu *EventUpdate) ClearOrgsubscription() *EventUpdate {
+	eu.mutation.ClearOrgsubscription()
+	return eu
+}
+
+// RemoveOrgsubscriptionIDs removes the "orgsubscription" edge to OrgSubscription entities by IDs.
+func (eu *EventUpdate) RemoveOrgsubscriptionIDs(ids ...string) *EventUpdate {
+	eu.mutation.RemoveOrgsubscriptionIDs(ids...)
+	return eu
+}
+
+// RemoveOrgsubscription removes "orgsubscription" edges to OrgSubscription entities.
+func (eu *EventUpdate) RemoveOrgsubscription(o ...*OrgSubscription) *EventUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return eu.RemoveOrgsubscriptionIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (eu *EventUpdate) Save(ctx context.Context) (int, error) {
 	if err := eu.defaults(); err != nil {
@@ -646,12 +769,6 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if eu.mutation.TagsCleared() {
 		_spec.ClearField(event.FieldTags, field.TypeJSON)
 	}
-	if value, ok := eu.mutation.EventID(); ok {
-		_spec.SetField(event.FieldEventID, field.TypeString, value)
-	}
-	if eu.mutation.EventIDCleared() {
-		_spec.ClearField(event.FieldEventID, field.TypeString)
-	}
 	if value, ok := eu.mutation.CorrelationID(); ok {
 		_spec.SetField(event.FieldCorrelationID, field.TypeString, value)
 	}
@@ -661,11 +778,44 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := eu.mutation.EventType(); ok {
 		_spec.SetField(event.FieldEventType, field.TypeString, value)
 	}
+	if eu.mutation.EventTypeCleared() {
+		_spec.ClearField(event.FieldEventType, field.TypeString)
+	}
 	if value, ok := eu.mutation.Metadata(); ok {
 		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
 	}
 	if eu.mutation.MetadataCleared() {
 		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := eu.mutation.Source(); ok {
+		_spec.SetField(event.FieldSource, field.TypeString, value)
+	}
+	if eu.mutation.SourceCleared() {
+		_spec.ClearField(event.FieldSource, field.TypeString)
+	}
+	if value, ok := eu.mutation.AdditionalProcessingRequired(); ok {
+		_spec.SetField(event.FieldAdditionalProcessingRequired, field.TypeBool, value)
+	}
+	if eu.mutation.AdditionalProcessingRequiredCleared() {
+		_spec.ClearField(event.FieldAdditionalProcessingRequired, field.TypeBool)
+	}
+	if value, ok := eu.mutation.AdditionalProcessingDetails(); ok {
+		_spec.SetField(event.FieldAdditionalProcessingDetails, field.TypeString, value)
+	}
+	if eu.mutation.AdditionalProcessingDetailsCleared() {
+		_spec.ClearField(event.FieldAdditionalProcessingDetails, field.TypeString)
+	}
+	if value, ok := eu.mutation.ProcessedBy(); ok {
+		_spec.SetField(event.FieldProcessedBy, field.TypeString, value)
+	}
+	if eu.mutation.ProcessedByCleared() {
+		_spec.ClearField(event.FieldProcessedBy, field.TypeString)
+	}
+	if value, ok := eu.mutation.ProcessedAt(); ok {
+		_spec.SetField(event.FieldProcessedAt, field.TypeTime, value)
+	}
+	if eu.mutation.ProcessedAtCleared() {
+		_spec.ClearField(event.FieldProcessedAt, field.TypeTime)
 	}
 	if eu.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1195,6 +1345,54 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if eu.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.OrgSubscriptionEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.RemovedOrgsubscriptionIDs(); len(nodes) > 0 && !eu.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.OrgsubscriptionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = eu.schemaConfig.Event
 	ctx = internal.NewSchemaConfigContext(ctx, eu.schemaConfig)
 	_spec.AddModifiers(eu.modifiers...)
@@ -1269,26 +1467,6 @@ func (euo *EventUpdateOne) ClearTags() *EventUpdateOne {
 	return euo
 }
 
-// SetEventID sets the "event_id" field.
-func (euo *EventUpdateOne) SetEventID(s string) *EventUpdateOne {
-	euo.mutation.SetEventID(s)
-	return euo
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (euo *EventUpdateOne) SetNillableEventID(s *string) *EventUpdateOne {
-	if s != nil {
-		euo.SetEventID(*s)
-	}
-	return euo
-}
-
-// ClearEventID clears the value of the "event_id" field.
-func (euo *EventUpdateOne) ClearEventID() *EventUpdateOne {
-	euo.mutation.ClearEventID()
-	return euo
-}
-
 // SetCorrelationID sets the "correlation_id" field.
 func (euo *EventUpdateOne) SetCorrelationID(s string) *EventUpdateOne {
 	euo.mutation.SetCorrelationID(s)
@@ -1323,6 +1501,12 @@ func (euo *EventUpdateOne) SetNillableEventType(s *string) *EventUpdateOne {
 	return euo
 }
 
+// ClearEventType clears the value of the "event_type" field.
+func (euo *EventUpdateOne) ClearEventType() *EventUpdateOne {
+	euo.mutation.ClearEventType()
+	return euo
+}
+
 // SetMetadata sets the "metadata" field.
 func (euo *EventUpdateOne) SetMetadata(m map[string]interface{}) *EventUpdateOne {
 	euo.mutation.SetMetadata(m)
@@ -1332,6 +1516,106 @@ func (euo *EventUpdateOne) SetMetadata(m map[string]interface{}) *EventUpdateOne
 // ClearMetadata clears the value of the "metadata" field.
 func (euo *EventUpdateOne) ClearMetadata() *EventUpdateOne {
 	euo.mutation.ClearMetadata()
+	return euo
+}
+
+// SetSource sets the "source" field.
+func (euo *EventUpdateOne) SetSource(s string) *EventUpdateOne {
+	euo.mutation.SetSource(s)
+	return euo
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableSource(s *string) *EventUpdateOne {
+	if s != nil {
+		euo.SetSource(*s)
+	}
+	return euo
+}
+
+// ClearSource clears the value of the "source" field.
+func (euo *EventUpdateOne) ClearSource() *EventUpdateOne {
+	euo.mutation.ClearSource()
+	return euo
+}
+
+// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
+func (euo *EventUpdateOne) SetAdditionalProcessingRequired(b bool) *EventUpdateOne {
+	euo.mutation.SetAdditionalProcessingRequired(b)
+	return euo
+}
+
+// SetNillableAdditionalProcessingRequired sets the "additional_processing_required" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableAdditionalProcessingRequired(b *bool) *EventUpdateOne {
+	if b != nil {
+		euo.SetAdditionalProcessingRequired(*b)
+	}
+	return euo
+}
+
+// ClearAdditionalProcessingRequired clears the value of the "additional_processing_required" field.
+func (euo *EventUpdateOne) ClearAdditionalProcessingRequired() *EventUpdateOne {
+	euo.mutation.ClearAdditionalProcessingRequired()
+	return euo
+}
+
+// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
+func (euo *EventUpdateOne) SetAdditionalProcessingDetails(s string) *EventUpdateOne {
+	euo.mutation.SetAdditionalProcessingDetails(s)
+	return euo
+}
+
+// SetNillableAdditionalProcessingDetails sets the "additional_processing_details" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableAdditionalProcessingDetails(s *string) *EventUpdateOne {
+	if s != nil {
+		euo.SetAdditionalProcessingDetails(*s)
+	}
+	return euo
+}
+
+// ClearAdditionalProcessingDetails clears the value of the "additional_processing_details" field.
+func (euo *EventUpdateOne) ClearAdditionalProcessingDetails() *EventUpdateOne {
+	euo.mutation.ClearAdditionalProcessingDetails()
+	return euo
+}
+
+// SetProcessedBy sets the "processed_by" field.
+func (euo *EventUpdateOne) SetProcessedBy(s string) *EventUpdateOne {
+	euo.mutation.SetProcessedBy(s)
+	return euo
+}
+
+// SetNillableProcessedBy sets the "processed_by" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableProcessedBy(s *string) *EventUpdateOne {
+	if s != nil {
+		euo.SetProcessedBy(*s)
+	}
+	return euo
+}
+
+// ClearProcessedBy clears the value of the "processed_by" field.
+func (euo *EventUpdateOne) ClearProcessedBy() *EventUpdateOne {
+	euo.mutation.ClearProcessedBy()
+	return euo
+}
+
+// SetProcessedAt sets the "processed_at" field.
+func (euo *EventUpdateOne) SetProcessedAt(t time.Time) *EventUpdateOne {
+	euo.mutation.SetProcessedAt(t)
+	return euo
+}
+
+// SetNillableProcessedAt sets the "processed_at" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableProcessedAt(t *time.Time) *EventUpdateOne {
+	if t != nil {
+		euo.SetProcessedAt(*t)
+	}
+	return euo
+}
+
+// ClearProcessedAt clears the value of the "processed_at" field.
+func (euo *EventUpdateOne) ClearProcessedAt() *EventUpdateOne {
+	euo.mutation.ClearProcessedAt()
 	return euo
 }
 
@@ -1498,6 +1782,21 @@ func (euo *EventUpdateOne) AddFile(f ...*File) *EventUpdateOne {
 		ids[i] = f[i].ID
 	}
 	return euo.AddFileIDs(ids...)
+}
+
+// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by IDs.
+func (euo *EventUpdateOne) AddOrgsubscriptionIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.AddOrgsubscriptionIDs(ids...)
+	return euo
+}
+
+// AddOrgsubscription adds the "orgsubscription" edges to the OrgSubscription entity.
+func (euo *EventUpdateOne) AddOrgsubscription(o ...*OrgSubscription) *EventUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return euo.AddOrgsubscriptionIDs(ids...)
 }
 
 // Mutation returns the EventMutation object of the builder.
@@ -1736,6 +2035,27 @@ func (euo *EventUpdateOne) RemoveFile(f ...*File) *EventUpdateOne {
 	return euo.RemoveFileIDs(ids...)
 }
 
+// ClearOrgsubscription clears all "orgsubscription" edges to the OrgSubscription entity.
+func (euo *EventUpdateOne) ClearOrgsubscription() *EventUpdateOne {
+	euo.mutation.ClearOrgsubscription()
+	return euo
+}
+
+// RemoveOrgsubscriptionIDs removes the "orgsubscription" edge to OrgSubscription entities by IDs.
+func (euo *EventUpdateOne) RemoveOrgsubscriptionIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.RemoveOrgsubscriptionIDs(ids...)
+	return euo
+}
+
+// RemoveOrgsubscription removes "orgsubscription" edges to OrgSubscription entities.
+func (euo *EventUpdateOne) RemoveOrgsubscription(o ...*OrgSubscription) *EventUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return euo.RemoveOrgsubscriptionIDs(ids...)
+}
+
 // Where appends a list predicates to the EventUpdate builder.
 func (euo *EventUpdateOne) Where(ps ...predicate.Event) *EventUpdateOne {
 	euo.mutation.Where(ps...)
@@ -1852,12 +2172,6 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 	if euo.mutation.TagsCleared() {
 		_spec.ClearField(event.FieldTags, field.TypeJSON)
 	}
-	if value, ok := euo.mutation.EventID(); ok {
-		_spec.SetField(event.FieldEventID, field.TypeString, value)
-	}
-	if euo.mutation.EventIDCleared() {
-		_spec.ClearField(event.FieldEventID, field.TypeString)
-	}
 	if value, ok := euo.mutation.CorrelationID(); ok {
 		_spec.SetField(event.FieldCorrelationID, field.TypeString, value)
 	}
@@ -1867,11 +2181,44 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 	if value, ok := euo.mutation.EventType(); ok {
 		_spec.SetField(event.FieldEventType, field.TypeString, value)
 	}
+	if euo.mutation.EventTypeCleared() {
+		_spec.ClearField(event.FieldEventType, field.TypeString)
+	}
 	if value, ok := euo.mutation.Metadata(); ok {
 		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
 	}
 	if euo.mutation.MetadataCleared() {
 		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := euo.mutation.Source(); ok {
+		_spec.SetField(event.FieldSource, field.TypeString, value)
+	}
+	if euo.mutation.SourceCleared() {
+		_spec.ClearField(event.FieldSource, field.TypeString)
+	}
+	if value, ok := euo.mutation.AdditionalProcessingRequired(); ok {
+		_spec.SetField(event.FieldAdditionalProcessingRequired, field.TypeBool, value)
+	}
+	if euo.mutation.AdditionalProcessingRequiredCleared() {
+		_spec.ClearField(event.FieldAdditionalProcessingRequired, field.TypeBool)
+	}
+	if value, ok := euo.mutation.AdditionalProcessingDetails(); ok {
+		_spec.SetField(event.FieldAdditionalProcessingDetails, field.TypeString, value)
+	}
+	if euo.mutation.AdditionalProcessingDetailsCleared() {
+		_spec.ClearField(event.FieldAdditionalProcessingDetails, field.TypeString)
+	}
+	if value, ok := euo.mutation.ProcessedBy(); ok {
+		_spec.SetField(event.FieldProcessedBy, field.TypeString, value)
+	}
+	if euo.mutation.ProcessedByCleared() {
+		_spec.ClearField(event.FieldProcessedBy, field.TypeString)
+	}
+	if value, ok := euo.mutation.ProcessedAt(); ok {
+		_spec.SetField(event.FieldProcessedAt, field.TypeTime, value)
+	}
+	if euo.mutation.ProcessedAtCleared() {
+		_spec.ClearField(event.FieldProcessedAt, field.TypeTime)
 	}
 	if euo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2396,6 +2743,54 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 			},
 		}
 		edge.Schema = euo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.OrgSubscriptionEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.RemovedOrgsubscriptionIDs(); len(nodes) > 0 && !euo.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.OrgsubscriptionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

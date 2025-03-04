@@ -15621,8 +15621,6 @@ type EventWhereInput struct {
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
-	EventIDIsNil        bool     `json:"eventIDIsNil,omitempty"`
-	EventIDNotNil       bool     `json:"eventIDNotNil,omitempty"`
 	EventIDEqualFold    *string  `json:"eventIDEqualFold,omitempty"`
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 
@@ -15655,8 +15653,79 @@ type EventWhereInput struct {
 	EventTypeContains     *string  `json:"eventTypeContains,omitempty"`
 	EventTypeHasPrefix    *string  `json:"eventTypeHasPrefix,omitempty"`
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
+	EventTypeIsNil        bool     `json:"eventTypeIsNil,omitempty"`
+	EventTypeNotNil       bool     `json:"eventTypeNotNil,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
+
+	// "source" field predicates.
+	Source             *string  `json:"source,omitempty"`
+	SourceNEQ          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGT           *string  `json:"sourceGT,omitempty"`
+	SourceGTE          *string  `json:"sourceGTE,omitempty"`
+	SourceLT           *string  `json:"sourceLT,omitempty"`
+	SourceLTE          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        bool     `json:"sourceIsNil,omitempty"`
+	SourceNotNil       bool     `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+
+	// "additional_processing_required" field predicates.
+	AdditionalProcessingRequired       *bool `json:"additionalProcessingRequired,omitempty"`
+	AdditionalProcessingRequiredNEQ    *bool `json:"additionalProcessingRequiredNEQ,omitempty"`
+	AdditionalProcessingRequiredIsNil  bool  `json:"additionalProcessingRequiredIsNil,omitempty"`
+	AdditionalProcessingRequiredNotNil bool  `json:"additionalProcessingRequiredNotNil,omitempty"`
+
+	// "additional_processing_details" field predicates.
+	AdditionalProcessingDetails             *string  `json:"additionalProcessingDetails,omitempty"`
+	AdditionalProcessingDetailsNEQ          *string  `json:"additionalProcessingDetailsNEQ,omitempty"`
+	AdditionalProcessingDetailsIn           []string `json:"additionalProcessingDetailsIn,omitempty"`
+	AdditionalProcessingDetailsNotIn        []string `json:"additionalProcessingDetailsNotIn,omitempty"`
+	AdditionalProcessingDetailsGT           *string  `json:"additionalProcessingDetailsGT,omitempty"`
+	AdditionalProcessingDetailsGTE          *string  `json:"additionalProcessingDetailsGTE,omitempty"`
+	AdditionalProcessingDetailsLT           *string  `json:"additionalProcessingDetailsLT,omitempty"`
+	AdditionalProcessingDetailsLTE          *string  `json:"additionalProcessingDetailsLTE,omitempty"`
+	AdditionalProcessingDetailsContains     *string  `json:"additionalProcessingDetailsContains,omitempty"`
+	AdditionalProcessingDetailsHasPrefix    *string  `json:"additionalProcessingDetailsHasPrefix,omitempty"`
+	AdditionalProcessingDetailsHasSuffix    *string  `json:"additionalProcessingDetailsHasSuffix,omitempty"`
+	AdditionalProcessingDetailsIsNil        bool     `json:"additionalProcessingDetailsIsNil,omitempty"`
+	AdditionalProcessingDetailsNotNil       bool     `json:"additionalProcessingDetailsNotNil,omitempty"`
+	AdditionalProcessingDetailsEqualFold    *string  `json:"additionalProcessingDetailsEqualFold,omitempty"`
+	AdditionalProcessingDetailsContainsFold *string  `json:"additionalProcessingDetailsContainsFold,omitempty"`
+
+	// "processed_by" field predicates.
+	ProcessedBy             *string  `json:"processedBy,omitempty"`
+	ProcessedByNEQ          *string  `json:"processedByNEQ,omitempty"`
+	ProcessedByIn           []string `json:"processedByIn,omitempty"`
+	ProcessedByNotIn        []string `json:"processedByNotIn,omitempty"`
+	ProcessedByGT           *string  `json:"processedByGT,omitempty"`
+	ProcessedByGTE          *string  `json:"processedByGTE,omitempty"`
+	ProcessedByLT           *string  `json:"processedByLT,omitempty"`
+	ProcessedByLTE          *string  `json:"processedByLTE,omitempty"`
+	ProcessedByContains     *string  `json:"processedByContains,omitempty"`
+	ProcessedByHasPrefix    *string  `json:"processedByHasPrefix,omitempty"`
+	ProcessedByHasSuffix    *string  `json:"processedByHasSuffix,omitempty"`
+	ProcessedByIsNil        bool     `json:"processedByIsNil,omitempty"`
+	ProcessedByNotNil       bool     `json:"processedByNotNil,omitempty"`
+	ProcessedByEqualFold    *string  `json:"processedByEqualFold,omitempty"`
+	ProcessedByContainsFold *string  `json:"processedByContainsFold,omitempty"`
+
+	// "processed_at" field predicates.
+	ProcessedAt       *time.Time  `json:"processedAt,omitempty"`
+	ProcessedAtNEQ    *time.Time  `json:"processedAtNEQ,omitempty"`
+	ProcessedAtIn     []time.Time `json:"processedAtIn,omitempty"`
+	ProcessedAtNotIn  []time.Time `json:"processedAtNotIn,omitempty"`
+	ProcessedAtGT     *time.Time  `json:"processedAtGT,omitempty"`
+	ProcessedAtGTE    *time.Time  `json:"processedAtGTE,omitempty"`
+	ProcessedAtLT     *time.Time  `json:"processedAtLT,omitempty"`
+	ProcessedAtLTE    *time.Time  `json:"processedAtLTE,omitempty"`
+	ProcessedAtIsNil  bool        `json:"processedAtIsNil,omitempty"`
+	ProcessedAtNotNil bool        `json:"processedAtNotNil,omitempty"`
 
 	// "user" edge predicates.
 	HasUser     *bool             `json:"hasUser,omitempty"`
@@ -15701,6 +15770,10 @@ type EventWhereInput struct {
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+
+	// "orgsubscription" edge predicates.
+	HasOrgsubscription     *bool                        `json:"hasOrgsubscription,omitempty"`
+	HasOrgsubscriptionWith []*OrgSubscriptionWhereInput `json:"hasOrgsubscriptionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -15987,12 +16060,6 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	if i.EventIDHasSuffix != nil {
 		predicates = append(predicates, event.EventIDHasSuffix(*i.EventIDHasSuffix))
 	}
-	if i.EventIDIsNil {
-		predicates = append(predicates, event.EventIDIsNil())
-	}
-	if i.EventIDNotNil {
-		predicates = append(predicates, event.EventIDNotNil())
-	}
 	if i.EventIDEqualFold != nil {
 		predicates = append(predicates, event.EventIDEqualFold(*i.EventIDEqualFold))
 	}
@@ -16077,11 +16144,194 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	if i.EventTypeHasSuffix != nil {
 		predicates = append(predicates, event.EventTypeHasSuffix(*i.EventTypeHasSuffix))
 	}
+	if i.EventTypeIsNil {
+		predicates = append(predicates, event.EventTypeIsNil())
+	}
+	if i.EventTypeNotNil {
+		predicates = append(predicates, event.EventTypeNotNil())
+	}
 	if i.EventTypeEqualFold != nil {
 		predicates = append(predicates, event.EventTypeEqualFold(*i.EventTypeEqualFold))
 	}
 	if i.EventTypeContainsFold != nil {
 		predicates = append(predicates, event.EventTypeContainsFold(*i.EventTypeContainsFold))
+	}
+	if i.Source != nil {
+		predicates = append(predicates, event.SourceEQ(*i.Source))
+	}
+	if i.SourceNEQ != nil {
+		predicates = append(predicates, event.SourceNEQ(*i.SourceNEQ))
+	}
+	if len(i.SourceIn) > 0 {
+		predicates = append(predicates, event.SourceIn(i.SourceIn...))
+	}
+	if len(i.SourceNotIn) > 0 {
+		predicates = append(predicates, event.SourceNotIn(i.SourceNotIn...))
+	}
+	if i.SourceGT != nil {
+		predicates = append(predicates, event.SourceGT(*i.SourceGT))
+	}
+	if i.SourceGTE != nil {
+		predicates = append(predicates, event.SourceGTE(*i.SourceGTE))
+	}
+	if i.SourceLT != nil {
+		predicates = append(predicates, event.SourceLT(*i.SourceLT))
+	}
+	if i.SourceLTE != nil {
+		predicates = append(predicates, event.SourceLTE(*i.SourceLTE))
+	}
+	if i.SourceContains != nil {
+		predicates = append(predicates, event.SourceContains(*i.SourceContains))
+	}
+	if i.SourceHasPrefix != nil {
+		predicates = append(predicates, event.SourceHasPrefix(*i.SourceHasPrefix))
+	}
+	if i.SourceHasSuffix != nil {
+		predicates = append(predicates, event.SourceHasSuffix(*i.SourceHasSuffix))
+	}
+	if i.SourceIsNil {
+		predicates = append(predicates, event.SourceIsNil())
+	}
+	if i.SourceNotNil {
+		predicates = append(predicates, event.SourceNotNil())
+	}
+	if i.SourceEqualFold != nil {
+		predicates = append(predicates, event.SourceEqualFold(*i.SourceEqualFold))
+	}
+	if i.SourceContainsFold != nil {
+		predicates = append(predicates, event.SourceContainsFold(*i.SourceContainsFold))
+	}
+	if i.AdditionalProcessingRequired != nil {
+		predicates = append(predicates, event.AdditionalProcessingRequiredEQ(*i.AdditionalProcessingRequired))
+	}
+	if i.AdditionalProcessingRequiredNEQ != nil {
+		predicates = append(predicates, event.AdditionalProcessingRequiredNEQ(*i.AdditionalProcessingRequiredNEQ))
+	}
+	if i.AdditionalProcessingRequiredIsNil {
+		predicates = append(predicates, event.AdditionalProcessingRequiredIsNil())
+	}
+	if i.AdditionalProcessingRequiredNotNil {
+		predicates = append(predicates, event.AdditionalProcessingRequiredNotNil())
+	}
+	if i.AdditionalProcessingDetails != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsEQ(*i.AdditionalProcessingDetails))
+	}
+	if i.AdditionalProcessingDetailsNEQ != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsNEQ(*i.AdditionalProcessingDetailsNEQ))
+	}
+	if len(i.AdditionalProcessingDetailsIn) > 0 {
+		predicates = append(predicates, event.AdditionalProcessingDetailsIn(i.AdditionalProcessingDetailsIn...))
+	}
+	if len(i.AdditionalProcessingDetailsNotIn) > 0 {
+		predicates = append(predicates, event.AdditionalProcessingDetailsNotIn(i.AdditionalProcessingDetailsNotIn...))
+	}
+	if i.AdditionalProcessingDetailsGT != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsGT(*i.AdditionalProcessingDetailsGT))
+	}
+	if i.AdditionalProcessingDetailsGTE != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsGTE(*i.AdditionalProcessingDetailsGTE))
+	}
+	if i.AdditionalProcessingDetailsLT != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsLT(*i.AdditionalProcessingDetailsLT))
+	}
+	if i.AdditionalProcessingDetailsLTE != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsLTE(*i.AdditionalProcessingDetailsLTE))
+	}
+	if i.AdditionalProcessingDetailsContains != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsContains(*i.AdditionalProcessingDetailsContains))
+	}
+	if i.AdditionalProcessingDetailsHasPrefix != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsHasPrefix(*i.AdditionalProcessingDetailsHasPrefix))
+	}
+	if i.AdditionalProcessingDetailsHasSuffix != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsHasSuffix(*i.AdditionalProcessingDetailsHasSuffix))
+	}
+	if i.AdditionalProcessingDetailsIsNil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsIsNil())
+	}
+	if i.AdditionalProcessingDetailsNotNil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsNotNil())
+	}
+	if i.AdditionalProcessingDetailsEqualFold != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsEqualFold(*i.AdditionalProcessingDetailsEqualFold))
+	}
+	if i.AdditionalProcessingDetailsContainsFold != nil {
+		predicates = append(predicates, event.AdditionalProcessingDetailsContainsFold(*i.AdditionalProcessingDetailsContainsFold))
+	}
+	if i.ProcessedBy != nil {
+		predicates = append(predicates, event.ProcessedByEQ(*i.ProcessedBy))
+	}
+	if i.ProcessedByNEQ != nil {
+		predicates = append(predicates, event.ProcessedByNEQ(*i.ProcessedByNEQ))
+	}
+	if len(i.ProcessedByIn) > 0 {
+		predicates = append(predicates, event.ProcessedByIn(i.ProcessedByIn...))
+	}
+	if len(i.ProcessedByNotIn) > 0 {
+		predicates = append(predicates, event.ProcessedByNotIn(i.ProcessedByNotIn...))
+	}
+	if i.ProcessedByGT != nil {
+		predicates = append(predicates, event.ProcessedByGT(*i.ProcessedByGT))
+	}
+	if i.ProcessedByGTE != nil {
+		predicates = append(predicates, event.ProcessedByGTE(*i.ProcessedByGTE))
+	}
+	if i.ProcessedByLT != nil {
+		predicates = append(predicates, event.ProcessedByLT(*i.ProcessedByLT))
+	}
+	if i.ProcessedByLTE != nil {
+		predicates = append(predicates, event.ProcessedByLTE(*i.ProcessedByLTE))
+	}
+	if i.ProcessedByContains != nil {
+		predicates = append(predicates, event.ProcessedByContains(*i.ProcessedByContains))
+	}
+	if i.ProcessedByHasPrefix != nil {
+		predicates = append(predicates, event.ProcessedByHasPrefix(*i.ProcessedByHasPrefix))
+	}
+	if i.ProcessedByHasSuffix != nil {
+		predicates = append(predicates, event.ProcessedByHasSuffix(*i.ProcessedByHasSuffix))
+	}
+	if i.ProcessedByIsNil {
+		predicates = append(predicates, event.ProcessedByIsNil())
+	}
+	if i.ProcessedByNotNil {
+		predicates = append(predicates, event.ProcessedByNotNil())
+	}
+	if i.ProcessedByEqualFold != nil {
+		predicates = append(predicates, event.ProcessedByEqualFold(*i.ProcessedByEqualFold))
+	}
+	if i.ProcessedByContainsFold != nil {
+		predicates = append(predicates, event.ProcessedByContainsFold(*i.ProcessedByContainsFold))
+	}
+	if i.ProcessedAt != nil {
+		predicates = append(predicates, event.ProcessedAtEQ(*i.ProcessedAt))
+	}
+	if i.ProcessedAtNEQ != nil {
+		predicates = append(predicates, event.ProcessedAtNEQ(*i.ProcessedAtNEQ))
+	}
+	if len(i.ProcessedAtIn) > 0 {
+		predicates = append(predicates, event.ProcessedAtIn(i.ProcessedAtIn...))
+	}
+	if len(i.ProcessedAtNotIn) > 0 {
+		predicates = append(predicates, event.ProcessedAtNotIn(i.ProcessedAtNotIn...))
+	}
+	if i.ProcessedAtGT != nil {
+		predicates = append(predicates, event.ProcessedAtGT(*i.ProcessedAtGT))
+	}
+	if i.ProcessedAtGTE != nil {
+		predicates = append(predicates, event.ProcessedAtGTE(*i.ProcessedAtGTE))
+	}
+	if i.ProcessedAtLT != nil {
+		predicates = append(predicates, event.ProcessedAtLT(*i.ProcessedAtLT))
+	}
+	if i.ProcessedAtLTE != nil {
+		predicates = append(predicates, event.ProcessedAtLTE(*i.ProcessedAtLTE))
+	}
+	if i.ProcessedAtIsNil {
+		predicates = append(predicates, event.ProcessedAtIsNil())
+	}
+	if i.ProcessedAtNotNil {
+		predicates = append(predicates, event.ProcessedAtNotNil())
 	}
 
 	if i.HasUser != nil {
@@ -16282,6 +16532,24 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 		}
 		predicates = append(predicates, event.HasFileWith(with...))
 	}
+	if i.HasOrgsubscription != nil {
+		p := event.HasOrgsubscription()
+		if !*i.HasOrgsubscription {
+			p = event.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrgsubscriptionWith) > 0 {
+		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgsubscriptionWith))
+		for _, w := range i.HasOrgsubscriptionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrgsubscriptionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, event.HasOrgsubscriptionWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyEventWhereInput
@@ -16414,8 +16682,6 @@ type EventHistoryWhereInput struct {
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
-	EventIDIsNil        bool     `json:"eventIDIsNil,omitempty"`
-	EventIDNotNil       bool     `json:"eventIDNotNil,omitempty"`
 	EventIDEqualFold    *string  `json:"eventIDEqualFold,omitempty"`
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 
@@ -16448,8 +16714,79 @@ type EventHistoryWhereInput struct {
 	EventTypeContains     *string  `json:"eventTypeContains,omitempty"`
 	EventTypeHasPrefix    *string  `json:"eventTypeHasPrefix,omitempty"`
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
+	EventTypeIsNil        bool     `json:"eventTypeIsNil,omitempty"`
+	EventTypeNotNil       bool     `json:"eventTypeNotNil,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
+
+	// "source" field predicates.
+	Source             *string  `json:"source,omitempty"`
+	SourceNEQ          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGT           *string  `json:"sourceGT,omitempty"`
+	SourceGTE          *string  `json:"sourceGTE,omitempty"`
+	SourceLT           *string  `json:"sourceLT,omitempty"`
+	SourceLTE          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        bool     `json:"sourceIsNil,omitempty"`
+	SourceNotNil       bool     `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+
+	// "additional_processing_required" field predicates.
+	AdditionalProcessingRequired       *bool `json:"additionalProcessingRequired,omitempty"`
+	AdditionalProcessingRequiredNEQ    *bool `json:"additionalProcessingRequiredNEQ,omitempty"`
+	AdditionalProcessingRequiredIsNil  bool  `json:"additionalProcessingRequiredIsNil,omitempty"`
+	AdditionalProcessingRequiredNotNil bool  `json:"additionalProcessingRequiredNotNil,omitempty"`
+
+	// "additional_processing_details" field predicates.
+	AdditionalProcessingDetails             *string  `json:"additionalProcessingDetails,omitempty"`
+	AdditionalProcessingDetailsNEQ          *string  `json:"additionalProcessingDetailsNEQ,omitempty"`
+	AdditionalProcessingDetailsIn           []string `json:"additionalProcessingDetailsIn,omitempty"`
+	AdditionalProcessingDetailsNotIn        []string `json:"additionalProcessingDetailsNotIn,omitempty"`
+	AdditionalProcessingDetailsGT           *string  `json:"additionalProcessingDetailsGT,omitempty"`
+	AdditionalProcessingDetailsGTE          *string  `json:"additionalProcessingDetailsGTE,omitempty"`
+	AdditionalProcessingDetailsLT           *string  `json:"additionalProcessingDetailsLT,omitempty"`
+	AdditionalProcessingDetailsLTE          *string  `json:"additionalProcessingDetailsLTE,omitempty"`
+	AdditionalProcessingDetailsContains     *string  `json:"additionalProcessingDetailsContains,omitempty"`
+	AdditionalProcessingDetailsHasPrefix    *string  `json:"additionalProcessingDetailsHasPrefix,omitempty"`
+	AdditionalProcessingDetailsHasSuffix    *string  `json:"additionalProcessingDetailsHasSuffix,omitempty"`
+	AdditionalProcessingDetailsIsNil        bool     `json:"additionalProcessingDetailsIsNil,omitempty"`
+	AdditionalProcessingDetailsNotNil       bool     `json:"additionalProcessingDetailsNotNil,omitempty"`
+	AdditionalProcessingDetailsEqualFold    *string  `json:"additionalProcessingDetailsEqualFold,omitempty"`
+	AdditionalProcessingDetailsContainsFold *string  `json:"additionalProcessingDetailsContainsFold,omitempty"`
+
+	// "processed_by" field predicates.
+	ProcessedBy             *string  `json:"processedBy,omitempty"`
+	ProcessedByNEQ          *string  `json:"processedByNEQ,omitempty"`
+	ProcessedByIn           []string `json:"processedByIn,omitempty"`
+	ProcessedByNotIn        []string `json:"processedByNotIn,omitempty"`
+	ProcessedByGT           *string  `json:"processedByGT,omitempty"`
+	ProcessedByGTE          *string  `json:"processedByGTE,omitempty"`
+	ProcessedByLT           *string  `json:"processedByLT,omitempty"`
+	ProcessedByLTE          *string  `json:"processedByLTE,omitempty"`
+	ProcessedByContains     *string  `json:"processedByContains,omitempty"`
+	ProcessedByHasPrefix    *string  `json:"processedByHasPrefix,omitempty"`
+	ProcessedByHasSuffix    *string  `json:"processedByHasSuffix,omitempty"`
+	ProcessedByIsNil        bool     `json:"processedByIsNil,omitempty"`
+	ProcessedByNotNil       bool     `json:"processedByNotNil,omitempty"`
+	ProcessedByEqualFold    *string  `json:"processedByEqualFold,omitempty"`
+	ProcessedByContainsFold *string  `json:"processedByContainsFold,omitempty"`
+
+	// "processed_at" field predicates.
+	ProcessedAt       *time.Time  `json:"processedAt,omitempty"`
+	ProcessedAtNEQ    *time.Time  `json:"processedAtNEQ,omitempty"`
+	ProcessedAtIn     []time.Time `json:"processedAtIn,omitempty"`
+	ProcessedAtNotIn  []time.Time `json:"processedAtNotIn,omitempty"`
+	ProcessedAtGT     *time.Time  `json:"processedAtGT,omitempty"`
+	ProcessedAtGTE    *time.Time  `json:"processedAtGTE,omitempty"`
+	ProcessedAtLT     *time.Time  `json:"processedAtLT,omitempty"`
+	ProcessedAtLTE    *time.Time  `json:"processedAtLTE,omitempty"`
+	ProcessedAtIsNil  bool        `json:"processedAtIsNil,omitempty"`
+	ProcessedAtNotNil bool        `json:"processedAtNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -16817,12 +17154,6 @@ func (i *EventHistoryWhereInput) P() (predicate.EventHistory, error) {
 	if i.EventIDHasSuffix != nil {
 		predicates = append(predicates, eventhistory.EventIDHasSuffix(*i.EventIDHasSuffix))
 	}
-	if i.EventIDIsNil {
-		predicates = append(predicates, eventhistory.EventIDIsNil())
-	}
-	if i.EventIDNotNil {
-		predicates = append(predicates, eventhistory.EventIDNotNil())
-	}
 	if i.EventIDEqualFold != nil {
 		predicates = append(predicates, eventhistory.EventIDEqualFold(*i.EventIDEqualFold))
 	}
@@ -16907,11 +17238,194 @@ func (i *EventHistoryWhereInput) P() (predicate.EventHistory, error) {
 	if i.EventTypeHasSuffix != nil {
 		predicates = append(predicates, eventhistory.EventTypeHasSuffix(*i.EventTypeHasSuffix))
 	}
+	if i.EventTypeIsNil {
+		predicates = append(predicates, eventhistory.EventTypeIsNil())
+	}
+	if i.EventTypeNotNil {
+		predicates = append(predicates, eventhistory.EventTypeNotNil())
+	}
 	if i.EventTypeEqualFold != nil {
 		predicates = append(predicates, eventhistory.EventTypeEqualFold(*i.EventTypeEqualFold))
 	}
 	if i.EventTypeContainsFold != nil {
 		predicates = append(predicates, eventhistory.EventTypeContainsFold(*i.EventTypeContainsFold))
+	}
+	if i.Source != nil {
+		predicates = append(predicates, eventhistory.SourceEQ(*i.Source))
+	}
+	if i.SourceNEQ != nil {
+		predicates = append(predicates, eventhistory.SourceNEQ(*i.SourceNEQ))
+	}
+	if len(i.SourceIn) > 0 {
+		predicates = append(predicates, eventhistory.SourceIn(i.SourceIn...))
+	}
+	if len(i.SourceNotIn) > 0 {
+		predicates = append(predicates, eventhistory.SourceNotIn(i.SourceNotIn...))
+	}
+	if i.SourceGT != nil {
+		predicates = append(predicates, eventhistory.SourceGT(*i.SourceGT))
+	}
+	if i.SourceGTE != nil {
+		predicates = append(predicates, eventhistory.SourceGTE(*i.SourceGTE))
+	}
+	if i.SourceLT != nil {
+		predicates = append(predicates, eventhistory.SourceLT(*i.SourceLT))
+	}
+	if i.SourceLTE != nil {
+		predicates = append(predicates, eventhistory.SourceLTE(*i.SourceLTE))
+	}
+	if i.SourceContains != nil {
+		predicates = append(predicates, eventhistory.SourceContains(*i.SourceContains))
+	}
+	if i.SourceHasPrefix != nil {
+		predicates = append(predicates, eventhistory.SourceHasPrefix(*i.SourceHasPrefix))
+	}
+	if i.SourceHasSuffix != nil {
+		predicates = append(predicates, eventhistory.SourceHasSuffix(*i.SourceHasSuffix))
+	}
+	if i.SourceIsNil {
+		predicates = append(predicates, eventhistory.SourceIsNil())
+	}
+	if i.SourceNotNil {
+		predicates = append(predicates, eventhistory.SourceNotNil())
+	}
+	if i.SourceEqualFold != nil {
+		predicates = append(predicates, eventhistory.SourceEqualFold(*i.SourceEqualFold))
+	}
+	if i.SourceContainsFold != nil {
+		predicates = append(predicates, eventhistory.SourceContainsFold(*i.SourceContainsFold))
+	}
+	if i.AdditionalProcessingRequired != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingRequiredEQ(*i.AdditionalProcessingRequired))
+	}
+	if i.AdditionalProcessingRequiredNEQ != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingRequiredNEQ(*i.AdditionalProcessingRequiredNEQ))
+	}
+	if i.AdditionalProcessingRequiredIsNil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingRequiredIsNil())
+	}
+	if i.AdditionalProcessingRequiredNotNil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingRequiredNotNil())
+	}
+	if i.AdditionalProcessingDetails != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsEQ(*i.AdditionalProcessingDetails))
+	}
+	if i.AdditionalProcessingDetailsNEQ != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsNEQ(*i.AdditionalProcessingDetailsNEQ))
+	}
+	if len(i.AdditionalProcessingDetailsIn) > 0 {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsIn(i.AdditionalProcessingDetailsIn...))
+	}
+	if len(i.AdditionalProcessingDetailsNotIn) > 0 {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsNotIn(i.AdditionalProcessingDetailsNotIn...))
+	}
+	if i.AdditionalProcessingDetailsGT != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsGT(*i.AdditionalProcessingDetailsGT))
+	}
+	if i.AdditionalProcessingDetailsGTE != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsGTE(*i.AdditionalProcessingDetailsGTE))
+	}
+	if i.AdditionalProcessingDetailsLT != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsLT(*i.AdditionalProcessingDetailsLT))
+	}
+	if i.AdditionalProcessingDetailsLTE != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsLTE(*i.AdditionalProcessingDetailsLTE))
+	}
+	if i.AdditionalProcessingDetailsContains != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsContains(*i.AdditionalProcessingDetailsContains))
+	}
+	if i.AdditionalProcessingDetailsHasPrefix != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsHasPrefix(*i.AdditionalProcessingDetailsHasPrefix))
+	}
+	if i.AdditionalProcessingDetailsHasSuffix != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsHasSuffix(*i.AdditionalProcessingDetailsHasSuffix))
+	}
+	if i.AdditionalProcessingDetailsIsNil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsIsNil())
+	}
+	if i.AdditionalProcessingDetailsNotNil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsNotNil())
+	}
+	if i.AdditionalProcessingDetailsEqualFold != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsEqualFold(*i.AdditionalProcessingDetailsEqualFold))
+	}
+	if i.AdditionalProcessingDetailsContainsFold != nil {
+		predicates = append(predicates, eventhistory.AdditionalProcessingDetailsContainsFold(*i.AdditionalProcessingDetailsContainsFold))
+	}
+	if i.ProcessedBy != nil {
+		predicates = append(predicates, eventhistory.ProcessedByEQ(*i.ProcessedBy))
+	}
+	if i.ProcessedByNEQ != nil {
+		predicates = append(predicates, eventhistory.ProcessedByNEQ(*i.ProcessedByNEQ))
+	}
+	if len(i.ProcessedByIn) > 0 {
+		predicates = append(predicates, eventhistory.ProcessedByIn(i.ProcessedByIn...))
+	}
+	if len(i.ProcessedByNotIn) > 0 {
+		predicates = append(predicates, eventhistory.ProcessedByNotIn(i.ProcessedByNotIn...))
+	}
+	if i.ProcessedByGT != nil {
+		predicates = append(predicates, eventhistory.ProcessedByGT(*i.ProcessedByGT))
+	}
+	if i.ProcessedByGTE != nil {
+		predicates = append(predicates, eventhistory.ProcessedByGTE(*i.ProcessedByGTE))
+	}
+	if i.ProcessedByLT != nil {
+		predicates = append(predicates, eventhistory.ProcessedByLT(*i.ProcessedByLT))
+	}
+	if i.ProcessedByLTE != nil {
+		predicates = append(predicates, eventhistory.ProcessedByLTE(*i.ProcessedByLTE))
+	}
+	if i.ProcessedByContains != nil {
+		predicates = append(predicates, eventhistory.ProcessedByContains(*i.ProcessedByContains))
+	}
+	if i.ProcessedByHasPrefix != nil {
+		predicates = append(predicates, eventhistory.ProcessedByHasPrefix(*i.ProcessedByHasPrefix))
+	}
+	if i.ProcessedByHasSuffix != nil {
+		predicates = append(predicates, eventhistory.ProcessedByHasSuffix(*i.ProcessedByHasSuffix))
+	}
+	if i.ProcessedByIsNil {
+		predicates = append(predicates, eventhistory.ProcessedByIsNil())
+	}
+	if i.ProcessedByNotNil {
+		predicates = append(predicates, eventhistory.ProcessedByNotNil())
+	}
+	if i.ProcessedByEqualFold != nil {
+		predicates = append(predicates, eventhistory.ProcessedByEqualFold(*i.ProcessedByEqualFold))
+	}
+	if i.ProcessedByContainsFold != nil {
+		predicates = append(predicates, eventhistory.ProcessedByContainsFold(*i.ProcessedByContainsFold))
+	}
+	if i.ProcessedAt != nil {
+		predicates = append(predicates, eventhistory.ProcessedAtEQ(*i.ProcessedAt))
+	}
+	if i.ProcessedAtNEQ != nil {
+		predicates = append(predicates, eventhistory.ProcessedAtNEQ(*i.ProcessedAtNEQ))
+	}
+	if len(i.ProcessedAtIn) > 0 {
+		predicates = append(predicates, eventhistory.ProcessedAtIn(i.ProcessedAtIn...))
+	}
+	if len(i.ProcessedAtNotIn) > 0 {
+		predicates = append(predicates, eventhistory.ProcessedAtNotIn(i.ProcessedAtNotIn...))
+	}
+	if i.ProcessedAtGT != nil {
+		predicates = append(predicates, eventhistory.ProcessedAtGT(*i.ProcessedAtGT))
+	}
+	if i.ProcessedAtGTE != nil {
+		predicates = append(predicates, eventhistory.ProcessedAtGTE(*i.ProcessedAtGTE))
+	}
+	if i.ProcessedAtLT != nil {
+		predicates = append(predicates, eventhistory.ProcessedAtLT(*i.ProcessedAtLT))
+	}
+	if i.ProcessedAtLTE != nil {
+		predicates = append(predicates, eventhistory.ProcessedAtLTE(*i.ProcessedAtLTE))
+	}
+	if i.ProcessedAtIsNil {
+		predicates = append(predicates, eventhistory.ProcessedAtIsNil())
+	}
+	if i.ProcessedAtNotNil {
+		predicates = append(predicates, eventhistory.ProcessedAtNotNil())
 	}
 
 	switch len(predicates) {

@@ -82,26 +82,6 @@ func (ehu *EventHistoryUpdate) ClearTags() *EventHistoryUpdate {
 	return ehu
 }
 
-// SetEventID sets the "event_id" field.
-func (ehu *EventHistoryUpdate) SetEventID(s string) *EventHistoryUpdate {
-	ehu.mutation.SetEventID(s)
-	return ehu
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (ehu *EventHistoryUpdate) SetNillableEventID(s *string) *EventHistoryUpdate {
-	if s != nil {
-		ehu.SetEventID(*s)
-	}
-	return ehu
-}
-
-// ClearEventID clears the value of the "event_id" field.
-func (ehu *EventHistoryUpdate) ClearEventID() *EventHistoryUpdate {
-	ehu.mutation.ClearEventID()
-	return ehu
-}
-
 // SetCorrelationID sets the "correlation_id" field.
 func (ehu *EventHistoryUpdate) SetCorrelationID(s string) *EventHistoryUpdate {
 	ehu.mutation.SetCorrelationID(s)
@@ -136,6 +116,12 @@ func (ehu *EventHistoryUpdate) SetNillableEventType(s *string) *EventHistoryUpda
 	return ehu
 }
 
+// ClearEventType clears the value of the "event_type" field.
+func (ehu *EventHistoryUpdate) ClearEventType() *EventHistoryUpdate {
+	ehu.mutation.ClearEventType()
+	return ehu
+}
+
 // SetMetadata sets the "metadata" field.
 func (ehu *EventHistoryUpdate) SetMetadata(m map[string]interface{}) *EventHistoryUpdate {
 	ehu.mutation.SetMetadata(m)
@@ -145,6 +131,106 @@ func (ehu *EventHistoryUpdate) SetMetadata(m map[string]interface{}) *EventHisto
 // ClearMetadata clears the value of the "metadata" field.
 func (ehu *EventHistoryUpdate) ClearMetadata() *EventHistoryUpdate {
 	ehu.mutation.ClearMetadata()
+	return ehu
+}
+
+// SetSource sets the "source" field.
+func (ehu *EventHistoryUpdate) SetSource(s string) *EventHistoryUpdate {
+	ehu.mutation.SetSource(s)
+	return ehu
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (ehu *EventHistoryUpdate) SetNillableSource(s *string) *EventHistoryUpdate {
+	if s != nil {
+		ehu.SetSource(*s)
+	}
+	return ehu
+}
+
+// ClearSource clears the value of the "source" field.
+func (ehu *EventHistoryUpdate) ClearSource() *EventHistoryUpdate {
+	ehu.mutation.ClearSource()
+	return ehu
+}
+
+// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
+func (ehu *EventHistoryUpdate) SetAdditionalProcessingRequired(b bool) *EventHistoryUpdate {
+	ehu.mutation.SetAdditionalProcessingRequired(b)
+	return ehu
+}
+
+// SetNillableAdditionalProcessingRequired sets the "additional_processing_required" field if the given value is not nil.
+func (ehu *EventHistoryUpdate) SetNillableAdditionalProcessingRequired(b *bool) *EventHistoryUpdate {
+	if b != nil {
+		ehu.SetAdditionalProcessingRequired(*b)
+	}
+	return ehu
+}
+
+// ClearAdditionalProcessingRequired clears the value of the "additional_processing_required" field.
+func (ehu *EventHistoryUpdate) ClearAdditionalProcessingRequired() *EventHistoryUpdate {
+	ehu.mutation.ClearAdditionalProcessingRequired()
+	return ehu
+}
+
+// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
+func (ehu *EventHistoryUpdate) SetAdditionalProcessingDetails(s string) *EventHistoryUpdate {
+	ehu.mutation.SetAdditionalProcessingDetails(s)
+	return ehu
+}
+
+// SetNillableAdditionalProcessingDetails sets the "additional_processing_details" field if the given value is not nil.
+func (ehu *EventHistoryUpdate) SetNillableAdditionalProcessingDetails(s *string) *EventHistoryUpdate {
+	if s != nil {
+		ehu.SetAdditionalProcessingDetails(*s)
+	}
+	return ehu
+}
+
+// ClearAdditionalProcessingDetails clears the value of the "additional_processing_details" field.
+func (ehu *EventHistoryUpdate) ClearAdditionalProcessingDetails() *EventHistoryUpdate {
+	ehu.mutation.ClearAdditionalProcessingDetails()
+	return ehu
+}
+
+// SetProcessedBy sets the "processed_by" field.
+func (ehu *EventHistoryUpdate) SetProcessedBy(s string) *EventHistoryUpdate {
+	ehu.mutation.SetProcessedBy(s)
+	return ehu
+}
+
+// SetNillableProcessedBy sets the "processed_by" field if the given value is not nil.
+func (ehu *EventHistoryUpdate) SetNillableProcessedBy(s *string) *EventHistoryUpdate {
+	if s != nil {
+		ehu.SetProcessedBy(*s)
+	}
+	return ehu
+}
+
+// ClearProcessedBy clears the value of the "processed_by" field.
+func (ehu *EventHistoryUpdate) ClearProcessedBy() *EventHistoryUpdate {
+	ehu.mutation.ClearProcessedBy()
+	return ehu
+}
+
+// SetProcessedAt sets the "processed_at" field.
+func (ehu *EventHistoryUpdate) SetProcessedAt(t time.Time) *EventHistoryUpdate {
+	ehu.mutation.SetProcessedAt(t)
+	return ehu
+}
+
+// SetNillableProcessedAt sets the "processed_at" field if the given value is not nil.
+func (ehu *EventHistoryUpdate) SetNillableProcessedAt(t *time.Time) *EventHistoryUpdate {
+	if t != nil {
+		ehu.SetProcessedAt(*t)
+	}
+	return ehu
+}
+
+// ClearProcessedAt clears the value of the "processed_at" field.
+func (ehu *EventHistoryUpdate) ClearProcessedAt() *EventHistoryUpdate {
+	ehu.mutation.ClearProcessedAt()
 	return ehu
 }
 
@@ -236,12 +322,6 @@ func (ehu *EventHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ehu.mutation.TagsCleared() {
 		_spec.ClearField(eventhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ehu.mutation.EventID(); ok {
-		_spec.SetField(eventhistory.FieldEventID, field.TypeString, value)
-	}
-	if ehu.mutation.EventIDCleared() {
-		_spec.ClearField(eventhistory.FieldEventID, field.TypeString)
-	}
 	if value, ok := ehu.mutation.CorrelationID(); ok {
 		_spec.SetField(eventhistory.FieldCorrelationID, field.TypeString, value)
 	}
@@ -251,11 +331,44 @@ func (ehu *EventHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ehu.mutation.EventType(); ok {
 		_spec.SetField(eventhistory.FieldEventType, field.TypeString, value)
 	}
+	if ehu.mutation.EventTypeCleared() {
+		_spec.ClearField(eventhistory.FieldEventType, field.TypeString)
+	}
 	if value, ok := ehu.mutation.Metadata(); ok {
 		_spec.SetField(eventhistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if ehu.mutation.MetadataCleared() {
 		_spec.ClearField(eventhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := ehu.mutation.Source(); ok {
+		_spec.SetField(eventhistory.FieldSource, field.TypeString, value)
+	}
+	if ehu.mutation.SourceCleared() {
+		_spec.ClearField(eventhistory.FieldSource, field.TypeString)
+	}
+	if value, ok := ehu.mutation.AdditionalProcessingRequired(); ok {
+		_spec.SetField(eventhistory.FieldAdditionalProcessingRequired, field.TypeBool, value)
+	}
+	if ehu.mutation.AdditionalProcessingRequiredCleared() {
+		_spec.ClearField(eventhistory.FieldAdditionalProcessingRequired, field.TypeBool)
+	}
+	if value, ok := ehu.mutation.AdditionalProcessingDetails(); ok {
+		_spec.SetField(eventhistory.FieldAdditionalProcessingDetails, field.TypeString, value)
+	}
+	if ehu.mutation.AdditionalProcessingDetailsCleared() {
+		_spec.ClearField(eventhistory.FieldAdditionalProcessingDetails, field.TypeString)
+	}
+	if value, ok := ehu.mutation.ProcessedBy(); ok {
+		_spec.SetField(eventhistory.FieldProcessedBy, field.TypeString, value)
+	}
+	if ehu.mutation.ProcessedByCleared() {
+		_spec.ClearField(eventhistory.FieldProcessedBy, field.TypeString)
+	}
+	if value, ok := ehu.mutation.ProcessedAt(); ok {
+		_spec.SetField(eventhistory.FieldProcessedAt, field.TypeTime, value)
+	}
+	if ehu.mutation.ProcessedAtCleared() {
+		_spec.ClearField(eventhistory.FieldProcessedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = ehu.schemaConfig.EventHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehu.schemaConfig)
@@ -331,26 +444,6 @@ func (ehuo *EventHistoryUpdateOne) ClearTags() *EventHistoryUpdateOne {
 	return ehuo
 }
 
-// SetEventID sets the "event_id" field.
-func (ehuo *EventHistoryUpdateOne) SetEventID(s string) *EventHistoryUpdateOne {
-	ehuo.mutation.SetEventID(s)
-	return ehuo
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (ehuo *EventHistoryUpdateOne) SetNillableEventID(s *string) *EventHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetEventID(*s)
-	}
-	return ehuo
-}
-
-// ClearEventID clears the value of the "event_id" field.
-func (ehuo *EventHistoryUpdateOne) ClearEventID() *EventHistoryUpdateOne {
-	ehuo.mutation.ClearEventID()
-	return ehuo
-}
-
 // SetCorrelationID sets the "correlation_id" field.
 func (ehuo *EventHistoryUpdateOne) SetCorrelationID(s string) *EventHistoryUpdateOne {
 	ehuo.mutation.SetCorrelationID(s)
@@ -385,6 +478,12 @@ func (ehuo *EventHistoryUpdateOne) SetNillableEventType(s *string) *EventHistory
 	return ehuo
 }
 
+// ClearEventType clears the value of the "event_type" field.
+func (ehuo *EventHistoryUpdateOne) ClearEventType() *EventHistoryUpdateOne {
+	ehuo.mutation.ClearEventType()
+	return ehuo
+}
+
 // SetMetadata sets the "metadata" field.
 func (ehuo *EventHistoryUpdateOne) SetMetadata(m map[string]interface{}) *EventHistoryUpdateOne {
 	ehuo.mutation.SetMetadata(m)
@@ -394,6 +493,106 @@ func (ehuo *EventHistoryUpdateOne) SetMetadata(m map[string]interface{}) *EventH
 // ClearMetadata clears the value of the "metadata" field.
 func (ehuo *EventHistoryUpdateOne) ClearMetadata() *EventHistoryUpdateOne {
 	ehuo.mutation.ClearMetadata()
+	return ehuo
+}
+
+// SetSource sets the "source" field.
+func (ehuo *EventHistoryUpdateOne) SetSource(s string) *EventHistoryUpdateOne {
+	ehuo.mutation.SetSource(s)
+	return ehuo
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (ehuo *EventHistoryUpdateOne) SetNillableSource(s *string) *EventHistoryUpdateOne {
+	if s != nil {
+		ehuo.SetSource(*s)
+	}
+	return ehuo
+}
+
+// ClearSource clears the value of the "source" field.
+func (ehuo *EventHistoryUpdateOne) ClearSource() *EventHistoryUpdateOne {
+	ehuo.mutation.ClearSource()
+	return ehuo
+}
+
+// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
+func (ehuo *EventHistoryUpdateOne) SetAdditionalProcessingRequired(b bool) *EventHistoryUpdateOne {
+	ehuo.mutation.SetAdditionalProcessingRequired(b)
+	return ehuo
+}
+
+// SetNillableAdditionalProcessingRequired sets the "additional_processing_required" field if the given value is not nil.
+func (ehuo *EventHistoryUpdateOne) SetNillableAdditionalProcessingRequired(b *bool) *EventHistoryUpdateOne {
+	if b != nil {
+		ehuo.SetAdditionalProcessingRequired(*b)
+	}
+	return ehuo
+}
+
+// ClearAdditionalProcessingRequired clears the value of the "additional_processing_required" field.
+func (ehuo *EventHistoryUpdateOne) ClearAdditionalProcessingRequired() *EventHistoryUpdateOne {
+	ehuo.mutation.ClearAdditionalProcessingRequired()
+	return ehuo
+}
+
+// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
+func (ehuo *EventHistoryUpdateOne) SetAdditionalProcessingDetails(s string) *EventHistoryUpdateOne {
+	ehuo.mutation.SetAdditionalProcessingDetails(s)
+	return ehuo
+}
+
+// SetNillableAdditionalProcessingDetails sets the "additional_processing_details" field if the given value is not nil.
+func (ehuo *EventHistoryUpdateOne) SetNillableAdditionalProcessingDetails(s *string) *EventHistoryUpdateOne {
+	if s != nil {
+		ehuo.SetAdditionalProcessingDetails(*s)
+	}
+	return ehuo
+}
+
+// ClearAdditionalProcessingDetails clears the value of the "additional_processing_details" field.
+func (ehuo *EventHistoryUpdateOne) ClearAdditionalProcessingDetails() *EventHistoryUpdateOne {
+	ehuo.mutation.ClearAdditionalProcessingDetails()
+	return ehuo
+}
+
+// SetProcessedBy sets the "processed_by" field.
+func (ehuo *EventHistoryUpdateOne) SetProcessedBy(s string) *EventHistoryUpdateOne {
+	ehuo.mutation.SetProcessedBy(s)
+	return ehuo
+}
+
+// SetNillableProcessedBy sets the "processed_by" field if the given value is not nil.
+func (ehuo *EventHistoryUpdateOne) SetNillableProcessedBy(s *string) *EventHistoryUpdateOne {
+	if s != nil {
+		ehuo.SetProcessedBy(*s)
+	}
+	return ehuo
+}
+
+// ClearProcessedBy clears the value of the "processed_by" field.
+func (ehuo *EventHistoryUpdateOne) ClearProcessedBy() *EventHistoryUpdateOne {
+	ehuo.mutation.ClearProcessedBy()
+	return ehuo
+}
+
+// SetProcessedAt sets the "processed_at" field.
+func (ehuo *EventHistoryUpdateOne) SetProcessedAt(t time.Time) *EventHistoryUpdateOne {
+	ehuo.mutation.SetProcessedAt(t)
+	return ehuo
+}
+
+// SetNillableProcessedAt sets the "processed_at" field if the given value is not nil.
+func (ehuo *EventHistoryUpdateOne) SetNillableProcessedAt(t *time.Time) *EventHistoryUpdateOne {
+	if t != nil {
+		ehuo.SetProcessedAt(*t)
+	}
+	return ehuo
+}
+
+// ClearProcessedAt clears the value of the "processed_at" field.
+func (ehuo *EventHistoryUpdateOne) ClearProcessedAt() *EventHistoryUpdateOne {
+	ehuo.mutation.ClearProcessedAt()
 	return ehuo
 }
 
@@ -515,12 +714,6 @@ func (ehuo *EventHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EventHis
 	if ehuo.mutation.TagsCleared() {
 		_spec.ClearField(eventhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ehuo.mutation.EventID(); ok {
-		_spec.SetField(eventhistory.FieldEventID, field.TypeString, value)
-	}
-	if ehuo.mutation.EventIDCleared() {
-		_spec.ClearField(eventhistory.FieldEventID, field.TypeString)
-	}
 	if value, ok := ehuo.mutation.CorrelationID(); ok {
 		_spec.SetField(eventhistory.FieldCorrelationID, field.TypeString, value)
 	}
@@ -530,11 +723,44 @@ func (ehuo *EventHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EventHis
 	if value, ok := ehuo.mutation.EventType(); ok {
 		_spec.SetField(eventhistory.FieldEventType, field.TypeString, value)
 	}
+	if ehuo.mutation.EventTypeCleared() {
+		_spec.ClearField(eventhistory.FieldEventType, field.TypeString)
+	}
 	if value, ok := ehuo.mutation.Metadata(); ok {
 		_spec.SetField(eventhistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if ehuo.mutation.MetadataCleared() {
 		_spec.ClearField(eventhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := ehuo.mutation.Source(); ok {
+		_spec.SetField(eventhistory.FieldSource, field.TypeString, value)
+	}
+	if ehuo.mutation.SourceCleared() {
+		_spec.ClearField(eventhistory.FieldSource, field.TypeString)
+	}
+	if value, ok := ehuo.mutation.AdditionalProcessingRequired(); ok {
+		_spec.SetField(eventhistory.FieldAdditionalProcessingRequired, field.TypeBool, value)
+	}
+	if ehuo.mutation.AdditionalProcessingRequiredCleared() {
+		_spec.ClearField(eventhistory.FieldAdditionalProcessingRequired, field.TypeBool)
+	}
+	if value, ok := ehuo.mutation.AdditionalProcessingDetails(); ok {
+		_spec.SetField(eventhistory.FieldAdditionalProcessingDetails, field.TypeString, value)
+	}
+	if ehuo.mutation.AdditionalProcessingDetailsCleared() {
+		_spec.ClearField(eventhistory.FieldAdditionalProcessingDetails, field.TypeString)
+	}
+	if value, ok := ehuo.mutation.ProcessedBy(); ok {
+		_spec.SetField(eventhistory.FieldProcessedBy, field.TypeString, value)
+	}
+	if ehuo.mutation.ProcessedByCleared() {
+		_spec.ClearField(eventhistory.FieldProcessedBy, field.TypeString)
+	}
+	if value, ok := ehuo.mutation.ProcessedAt(); ok {
+		_spec.SetField(eventhistory.FieldProcessedAt, field.TypeTime, value)
+	}
+	if ehuo.mutation.ProcessedAtCleared() {
+		_spec.ClearField(eventhistory.FieldProcessedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = ehuo.schemaConfig.EventHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehuo.schemaConfig)

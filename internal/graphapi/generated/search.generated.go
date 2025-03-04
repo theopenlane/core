@@ -866,6 +866,16 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
+			case "source":
+				return ec.fieldContext_Event_source(ctx, field)
+			case "additionalProcessingRequired":
+				return ec.fieldContext_Event_additionalProcessingRequired(ctx, field)
+			case "additionalProcessingDetails":
+				return ec.fieldContext_Event_additionalProcessingDetails(ctx, field)
+			case "processedBy":
+				return ec.fieldContext_Event_processedBy(ctx, field)
+			case "processedAt":
+				return ec.fieldContext_Event_processedAt(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -888,6 +898,8 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_subscriber(ctx, field)
 			case "file":
 				return ec.fieldContext_Event_file(ctx, field)
+			case "orgsubscription":
+				return ec.fieldContext_Event_orgsubscription(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},
@@ -1636,6 +1648,10 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_events(ctx, field)
 			case "subscriptionURL":
 				return ec.fieldContext_OrgSubscription_subscriptionURL(ctx, field)
+			case "managePaymentMethods":
+				return ec.fieldContext_OrgSubscription_managePaymentMethods(ctx, field)
+			case "cancellation":
+				return ec.fieldContext_OrgSubscription_cancellation(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgSubscription", field.Name)
 		},

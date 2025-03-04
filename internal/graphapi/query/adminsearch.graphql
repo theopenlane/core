@@ -129,6 +129,9 @@ query AdminSearch($query: String!) {
           correlationID
           eventType
           metadata
+          source
+          additionalProcessingDetails
+          processedBy
         }
       }
       ... on EvidenceSearchResult {
