@@ -55,22 +55,26 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	APIToken struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		ExpiresAt   func(childComplexity int) int
-		ID          func(childComplexity int) int
-		LastUsedAt  func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Scopes      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Token       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		ExpiresAt     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IsActive      func(childComplexity int) int
+		LastUsedAt    func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		RevokedAt     func(childComplexity int) int
+		RevokedBy     func(childComplexity int) int
+		RevokedReason func(childComplexity int) int
+		Scopes        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Token         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	APITokenBulkCreatePayload struct {
@@ -1982,14 +1986,17 @@ type ComplexityRoot struct {
 		Active                   func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
+		DaysUntilDue             func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
+		Events                   func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
 		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
 		StripeCustomerID         func(childComplexity int) int
@@ -1998,6 +2005,7 @@ type ComplexityRoot struct {
 		StripeSubscriptionStatus func(childComplexity int) int
 		SubscriptionURL          func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		TrialExpiresAt           func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 	}
@@ -2017,6 +2025,7 @@ type ComplexityRoot struct {
 		Active                   func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
+		DaysUntilDue             func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
@@ -2026,6 +2035,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
 		Ref                      func(childComplexity int) int
@@ -2034,6 +2044,7 @@ type ComplexityRoot struct {
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		TrialExpiresAt           func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 	}
@@ -2282,10 +2293,14 @@ type ComplexityRoot struct {
 		Events        func(childComplexity int) int
 		ExpiresAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
+		IsActive      func(childComplexity int) int
 		LastUsedAt    func(childComplexity int) int
 		Name          func(childComplexity int) int
 		Organizations func(childComplexity int) int
 		Owner         func(childComplexity int) int
+		RevokedAt     func(childComplexity int) int
+		RevokedBy     func(childComplexity int) int
+		RevokedReason func(childComplexity int) int
 		Scopes        func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Token         func(childComplexity int) int
@@ -3607,6 +3622,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.APIToken.ID(childComplexity), true
 
+	case "APIToken.isActive":
+		if e.complexity.APIToken.IsActive == nil {
+			break
+		}
+
+		return e.complexity.APIToken.IsActive(childComplexity), true
+
 	case "APIToken.lastUsedAt":
 		if e.complexity.APIToken.LastUsedAt == nil {
 			break
@@ -3634,6 +3656,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.APIToken.OwnerID(childComplexity), true
+
+	case "APIToken.revokedAt":
+		if e.complexity.APIToken.RevokedAt == nil {
+			break
+		}
+
+		return e.complexity.APIToken.RevokedAt(childComplexity), true
+
+	case "APIToken.revokedBy":
+		if e.complexity.APIToken.RevokedBy == nil {
+			break
+		}
+
+		return e.complexity.APIToken.RevokedBy(childComplexity), true
+
+	case "APIToken.revokedReason":
+		if e.complexity.APIToken.RevokedReason == nil {
+			break
+		}
+
+		return e.complexity.APIToken.RevokedReason(childComplexity), true
 
 	case "APIToken.scopes":
 		if e.complexity.APIToken.Scopes == nil {
@@ -13293,6 +13336,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.CreatedBy(childComplexity), true
 
+	case "OrgSubscription.daysUntilDue":
+		if e.complexity.OrgSubscription.DaysUntilDue == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.DaysUntilDue(childComplexity), true
+
 	case "OrgSubscription.deletedAt":
 		if e.complexity.OrgSubscription.DeletedAt == nil {
 			break
@@ -13306,6 +13356,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscription.DeletedBy(childComplexity), true
+
+	case "OrgSubscription.events":
+		if e.complexity.OrgSubscription.Events == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.Events(childComplexity), true
 
 	case "OrgSubscription.expiresAt":
 		if e.complexity.OrgSubscription.ExpiresAt == nil {
@@ -13348,6 +13405,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscription.OwnerID(childComplexity), true
+
+	case "OrgSubscription.paymentMethodAdded":
+		if e.complexity.OrgSubscription.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.PaymentMethodAdded(childComplexity), true
 
 	case "OrgSubscription.productPrice":
 		if e.complexity.OrgSubscription.ProductPrice == nil {
@@ -13404,6 +13468,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscription.Tags(childComplexity), true
+
+	case "OrgSubscription.trialExpiresAt":
+		if e.complexity.OrgSubscription.TrialExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.TrialExpiresAt(childComplexity), true
 
 	case "OrgSubscription.updatedAt":
 		if e.complexity.OrgSubscription.UpdatedAt == nil {
@@ -13475,6 +13546,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscriptionHistory.CreatedBy(childComplexity), true
 
+	case "OrgSubscriptionHistory.daysUntilDue":
+		if e.complexity.OrgSubscriptionHistory.DaysUntilDue == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.DaysUntilDue(childComplexity), true
+
 	case "OrgSubscriptionHistory.deletedAt":
 		if e.complexity.OrgSubscriptionHistory.DeletedAt == nil {
 			break
@@ -13538,6 +13616,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscriptionHistory.OwnerID(childComplexity), true
 
+	case "OrgSubscriptionHistory.paymentMethodAdded":
+		if e.complexity.OrgSubscriptionHistory.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.PaymentMethodAdded(childComplexity), true
+
 	case "OrgSubscriptionHistory.productPrice":
 		if e.complexity.OrgSubscriptionHistory.ProductPrice == nil {
 			break
@@ -13593,6 +13678,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscriptionHistory.Tags(childComplexity), true
+
+	case "OrgSubscriptionHistory.trialExpiresAt":
+		if e.complexity.OrgSubscriptionHistory.TrialExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.TrialExpiresAt(childComplexity), true
 
 	case "OrgSubscriptionHistory.updatedAt":
 		if e.complexity.OrgSubscriptionHistory.UpdatedAt == nil {
@@ -14768,6 +14860,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonalAccessToken.ID(childComplexity), true
 
+	case "PersonalAccessToken.isActive":
+		if e.complexity.PersonalAccessToken.IsActive == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.IsActive(childComplexity), true
+
 	case "PersonalAccessToken.lastUsedAt":
 		if e.complexity.PersonalAccessToken.LastUsedAt == nil {
 			break
@@ -14795,6 +14894,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonalAccessToken.Owner(childComplexity), true
+
+	case "PersonalAccessToken.revokedAt":
+		if e.complexity.PersonalAccessToken.RevokedAt == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.RevokedAt(childComplexity), true
+
+	case "PersonalAccessToken.revokedBy":
+		if e.complexity.PersonalAccessToken.RevokedBy == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.RevokedBy(childComplexity), true
+
+	case "PersonalAccessToken.revokedReason":
+		if e.complexity.PersonalAccessToken.RevokedReason == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.RevokedReason(childComplexity), true
 
 	case "PersonalAccessToken.scopes":
 		if e.complexity.PersonalAccessToken.Scopes == nil {
@@ -22926,6 +23046,22 @@ type APIToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   owner: Organization
 }
 """
@@ -23132,6 +23268,62 @@ input APITokenWhereInput {
   lastUsedAtLTE: Time
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  isActiveIsNil: Boolean
+  isActiveNotNil: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonGT: String
+  revokedReasonGTE: String
+  revokedReasonLT: String
+  revokedReasonLTE: String
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByGT: String
+  revokedByGTE: String
+  revokedByLT: String
+  revokedByLTE: String
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtNEQ: Time
+  revokedAtIn: [Time!]
+  revokedAtNotIn: [Time!]
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -26639,6 +26831,22 @@ input CreateAPITokenInput {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   ownerID: ID
 }
 """
@@ -27540,6 +27748,22 @@ input CreatePersonalAccessTokenInput {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   ownerID: ID!
   organizationIDs: [ID!]
   eventIDs: [ID!]
@@ -37716,6 +37940,18 @@ type OrgSubscription implements Node {
   """
   expiresAt: Time
   """
+  the time the trial is set to expire
+  """
+  trialExpiresAt: Time
+  """
+  number of days until there is a due payment
+  """
+  daysUntilDue: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean
+  """
   the features associated with the subscription
   """
   features: [String!]
@@ -37724,6 +37960,7 @@ type OrgSubscription implements Node {
   """
   featureLookupKeys: [String!]
   owner: Organization
+  events: [Event!]
 }
 """
 A connection to a list of items.
@@ -37806,6 +38043,18 @@ type OrgSubscriptionHistory implements Node {
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
   expiresAt: Time
+  """
+  the time the trial is set to expire
+  """
+  trialExpiresAt: Time
+  """
+  number of days until there is a due payment
+  """
+  daysUntilDue: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -38129,6 +38378,44 @@ input OrgSubscriptionHistoryWhereInput {
   expiresAtLTE: Time
   expiresAtIsNil: Boolean
   expiresAtNotNil: Boolean
+  """
+  trial_expires_at field predicates
+  """
+  trialExpiresAt: Time
+  trialExpiresAtNEQ: Time
+  trialExpiresAtIn: [Time!]
+  trialExpiresAtNotIn: [Time!]
+  trialExpiresAtGT: Time
+  trialExpiresAtGTE: Time
+  trialExpiresAtLT: Time
+  trialExpiresAtLTE: Time
+  trialExpiresAtIsNil: Boolean
+  trialExpiresAtNotNil: Boolean
+  """
+  days_until_due field predicates
+  """
+  daysUntilDue: String
+  daysUntilDueNEQ: String
+  daysUntilDueIn: [String!]
+  daysUntilDueNotIn: [String!]
+  daysUntilDueGT: String
+  daysUntilDueGTE: String
+  daysUntilDueLT: String
+  daysUntilDueLTE: String
+  daysUntilDueContains: String
+  daysUntilDueHasPrefix: String
+  daysUntilDueHasSuffix: String
+  daysUntilDueIsNil: Boolean
+  daysUntilDueNotNil: Boolean
+  daysUntilDueEqualFold: String
+  daysUntilDueContainsFold: String
+  """
+  payment_method_added field predicates
+  """
+  paymentMethodAdded: Boolean
+  paymentMethodAddedNEQ: Boolean
+  paymentMethodAddedIsNil: Boolean
+  paymentMethodAddedNotNil: Boolean
 }
 """
 OrgSubscriptionWhereInput is used for filtering OrgSubscription objects.
@@ -38371,10 +38658,53 @@ input OrgSubscriptionWhereInput {
   expiresAtIsNil: Boolean
   expiresAtNotNil: Boolean
   """
+  trial_expires_at field predicates
+  """
+  trialExpiresAt: Time
+  trialExpiresAtNEQ: Time
+  trialExpiresAtIn: [Time!]
+  trialExpiresAtNotIn: [Time!]
+  trialExpiresAtGT: Time
+  trialExpiresAtGTE: Time
+  trialExpiresAtLT: Time
+  trialExpiresAtLTE: Time
+  trialExpiresAtIsNil: Boolean
+  trialExpiresAtNotNil: Boolean
+  """
+  days_until_due field predicates
+  """
+  daysUntilDue: String
+  daysUntilDueNEQ: String
+  daysUntilDueIn: [String!]
+  daysUntilDueNotIn: [String!]
+  daysUntilDueGT: String
+  daysUntilDueGTE: String
+  daysUntilDueLT: String
+  daysUntilDueLTE: String
+  daysUntilDueContains: String
+  daysUntilDueHasPrefix: String
+  daysUntilDueHasSuffix: String
+  daysUntilDueIsNil: Boolean
+  daysUntilDueNotNil: Boolean
+  daysUntilDueEqualFold: String
+  daysUntilDueContainsFold: String
+  """
+  payment_method_added field predicates
+  """
+  paymentMethodAdded: Boolean
+  paymentMethodAddedNEQ: Boolean
+  paymentMethodAddedIsNil: Boolean
+  paymentMethodAddedNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  events edge predicates
+  """
+  hasEvents: Boolean
+  hasEventsWith: [EventWhereInput!]
 }
 type Organization implements Node {
   id: ID!
@@ -40054,6 +40384,22 @@ type PersonalAccessToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
   owner: User!
   """
   the organization(s) the token is associated with
@@ -40247,6 +40593,62 @@ input PersonalAccessTokenWhereInput {
   lastUsedAtLTE: Time
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  isActiveIsNil: Boolean
+  isActiveNotNil: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonGT: String
+  revokedReasonGTE: String
+  revokedReasonLT: String
+  revokedReasonLTE: String
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByGT: String
+  revokedByGTE: String
+  revokedByLT: String
+  revokedByLTE: String
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtNEQ: Time
+  revokedAtIn: [Time!]
+  revokedAtNotIn: [Time!]
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -49117,6 +49519,26 @@ input UpdateAPITokenInput {
   clearScopes: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  clearIsActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  clearRevokedBy: Boolean
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -50398,6 +50820,26 @@ input UpdatePersonalAccessTokenInput {
   clearScopes: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  clearIsActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  clearRevokedBy: Boolean
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganizations: Boolean

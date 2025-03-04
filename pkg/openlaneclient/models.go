@@ -36,10 +36,18 @@ type APIToken struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string       `json:"description,omitempty"`
-	Scopes      []string      `json:"scopes,omitempty"`
-	LastUsedAt  *time.Time    `json:"lastUsedAt,omitempty"`
-	Owner       *Organization `json:"owner,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Scopes      []string   `json:"scopes,omitempty"`
+	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time    `json:"revokedAt,omitempty"`
+	Owner     *Organization `json:"owner,omitempty"`
 }
 
 func (APIToken) IsNode() {}
@@ -242,6 +250,54 @@ type APITokenWhereInput struct {
 	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
 	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// is_active field predicates
+	IsActive       *bool `json:"isActive,omitempty"`
+	IsActiveNeq    *bool `json:"isActiveNEQ,omitempty"`
+	IsActiveIsNil  *bool `json:"isActiveIsNil,omitempty"`
+	IsActiveNotNil *bool `json:"isActiveNotNil,omitempty"`
+	// revoked_reason field predicates
+	RevokedReason             *string  `json:"revokedReason,omitempty"`
+	RevokedReasonNeq          *string  `json:"revokedReasonNEQ,omitempty"`
+	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
+	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
+	RevokedReasonGt           *string  `json:"revokedReasonGT,omitempty"`
+	RevokedReasonGte          *string  `json:"revokedReasonGTE,omitempty"`
+	RevokedReasonLt           *string  `json:"revokedReasonLT,omitempty"`
+	RevokedReasonLte          *string  `json:"revokedReasonLTE,omitempty"`
+	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
+	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
+	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
+	RevokedReasonIsNil        *bool    `json:"revokedReasonIsNil,omitempty"`
+	RevokedReasonNotNil       *bool    `json:"revokedReasonNotNil,omitempty"`
+	RevokedReasonEqualFold    *string  `json:"revokedReasonEqualFold,omitempty"`
+	RevokedReasonContainsFold *string  `json:"revokedReasonContainsFold,omitempty"`
+	// revoked_by field predicates
+	RevokedBy             *string  `json:"revokedBy,omitempty"`
+	RevokedByNeq          *string  `json:"revokedByNEQ,omitempty"`
+	RevokedByIn           []string `json:"revokedByIn,omitempty"`
+	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
+	RevokedByGt           *string  `json:"revokedByGT,omitempty"`
+	RevokedByGte          *string  `json:"revokedByGTE,omitempty"`
+	RevokedByLt           *string  `json:"revokedByLT,omitempty"`
+	RevokedByLte          *string  `json:"revokedByLTE,omitempty"`
+	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
+	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
+	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
+	RevokedByIsNil        *bool    `json:"revokedByIsNil,omitempty"`
+	RevokedByNotNil       *bool    `json:"revokedByNotNil,omitempty"`
+	RevokedByEqualFold    *string  `json:"revokedByEqualFold,omitempty"`
+	RevokedByContainsFold *string  `json:"revokedByContainsFold,omitempty"`
+	// revoked_at field predicates
+	RevokedAt       *time.Time   `json:"revokedAt,omitempty"`
+	RevokedAtNeq    *time.Time   `json:"revokedAtNEQ,omitempty"`
+	RevokedAtIn     []*time.Time `json:"revokedAtIn,omitempty"`
+	RevokedAtNotIn  []*time.Time `json:"revokedAtNotIn,omitempty"`
+	RevokedAtGt     *time.Time   `json:"revokedAtGT,omitempty"`
+	RevokedAtGte    *time.Time   `json:"revokedAtGTE,omitempty"`
+	RevokedAtLt     *time.Time   `json:"revokedAtLT,omitempty"`
+	RevokedAtLte    *time.Time   `json:"revokedAtLTE,omitempty"`
+	RevokedAtIsNil  *bool        `json:"revokedAtIsNil,omitempty"`
+	RevokedAtNotNil *bool        `json:"revokedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -3188,7 +3244,15 @@ type CreateAPITokenInput struct {
 	Description *string    `json:"description,omitempty"`
 	Scopes      []string   `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
-	OwnerID     *string    `json:"ownerID,omitempty"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time `json:"revokedAt,omitempty"`
+	OwnerID   *string    `json:"ownerID,omitempty"`
 }
 
 // CreateActionPlanInput is used for create ActionPlan object.
@@ -3801,9 +3865,17 @@ type CreatePersonalAccessTokenInput struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description     *string    `json:"description,omitempty"`
-	Scopes          []string   `json:"scopes,omitempty"`
-	LastUsedAt      *time.Time `json:"lastUsedAt,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Scopes      []string   `json:"scopes,omitempty"`
+	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt       *time.Time `json:"revokedAt,omitempty"`
 	OwnerID         string     `json:"ownerID"`
 	OrganizationIDs []string   `json:"organizationIDs,omitempty"`
 	EventIDs        []string   `json:"eventIDs,omitempty"`
@@ -12144,11 +12216,18 @@ type OrgSubscription struct {
 	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+	// the time the trial is set to expire
+	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
+	// number of days until there is a due payment
+	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
 	FeatureLookupKeys []string      `json:"featureLookupKeys,omitempty"`
 	Owner             *Organization `json:"owner,omitempty"`
+	Events            []*Event      `json:"events,omitempty"`
 	SubscriptionURL   *string       `json:"subscriptionURL,omitempty"`
 }
 
@@ -12203,6 +12282,12 @@ type OrgSubscriptionHistory struct {
 	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+	// the time the trial is set to expire
+	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
+	// number of days until there is a due payment
+	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -12467,6 +12552,38 @@ type OrgSubscriptionHistoryWhereInput struct {
 	ExpiresAtLte    *time.Time   `json:"expiresAtLTE,omitempty"`
 	ExpiresAtIsNil  *bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil *bool        `json:"expiresAtNotNil,omitempty"`
+	// trial_expires_at field predicates
+	TrialExpiresAt       *time.Time   `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNeq    *time.Time   `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []*time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []*time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGt     *time.Time   `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGte    *time.Time   `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLt     *time.Time   `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLte    *time.Time   `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  *bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil *bool        `json:"trialExpiresAtNotNil,omitempty"`
+	// days_until_due field predicates
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNeq          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGt           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGte          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLt           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLte          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        *bool    `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       *bool    `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+	// payment_method_added field predicates
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNeq    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  *bool `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil *bool `json:"paymentMethodAddedNotNil,omitempty"`
 }
 
 type OrgSubscriptionSearchResult struct {
@@ -12683,9 +12800,44 @@ type OrgSubscriptionWhereInput struct {
 	ExpiresAtLte    *time.Time   `json:"expiresAtLTE,omitempty"`
 	ExpiresAtIsNil  *bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil *bool        `json:"expiresAtNotNil,omitempty"`
+	// trial_expires_at field predicates
+	TrialExpiresAt       *time.Time   `json:"trialExpiresAt,omitempty"`
+	TrialExpiresAtNeq    *time.Time   `json:"trialExpiresAtNEQ,omitempty"`
+	TrialExpiresAtIn     []*time.Time `json:"trialExpiresAtIn,omitempty"`
+	TrialExpiresAtNotIn  []*time.Time `json:"trialExpiresAtNotIn,omitempty"`
+	TrialExpiresAtGt     *time.Time   `json:"trialExpiresAtGT,omitempty"`
+	TrialExpiresAtGte    *time.Time   `json:"trialExpiresAtGTE,omitempty"`
+	TrialExpiresAtLt     *time.Time   `json:"trialExpiresAtLT,omitempty"`
+	TrialExpiresAtLte    *time.Time   `json:"trialExpiresAtLTE,omitempty"`
+	TrialExpiresAtIsNil  *bool        `json:"trialExpiresAtIsNil,omitempty"`
+	TrialExpiresAtNotNil *bool        `json:"trialExpiresAtNotNil,omitempty"`
+	// days_until_due field predicates
+	DaysUntilDue             *string  `json:"daysUntilDue,omitempty"`
+	DaysUntilDueNeq          *string  `json:"daysUntilDueNEQ,omitempty"`
+	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
+	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
+	DaysUntilDueGt           *string  `json:"daysUntilDueGT,omitempty"`
+	DaysUntilDueGte          *string  `json:"daysUntilDueGTE,omitempty"`
+	DaysUntilDueLt           *string  `json:"daysUntilDueLT,omitempty"`
+	DaysUntilDueLte          *string  `json:"daysUntilDueLTE,omitempty"`
+	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
+	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
+	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
+	DaysUntilDueIsNil        *bool    `json:"daysUntilDueIsNil,omitempty"`
+	DaysUntilDueNotNil       *bool    `json:"daysUntilDueNotNil,omitempty"`
+	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
+	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+	// payment_method_added field predicates
+	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNeq    *bool `json:"paymentMethodAddedNEQ,omitempty"`
+	PaymentMethodAddedIsNil  *bool `json:"paymentMethodAddedIsNil,omitempty"`
+	PaymentMethodAddedNotNil *bool `json:"paymentMethodAddedNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// events edge predicates
+	HasEvents     *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 }
 
 type Organization struct {
@@ -13979,7 +14131,15 @@ type PersonalAccessToken struct {
 	Description *string    `json:"description,omitempty"`
 	Scopes      []string   `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
-	Owner       *User      `json:"owner"`
+	// whether the token is active
+	IsActive *bool `json:"isActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason *string `json:"revokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy *string `json:"revokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt *time.Time `json:"revokedAt,omitempty"`
+	Owner     *User      `json:"owner"`
 	// the organization(s) the token is associated with
 	Organizations []*Organization `json:"organizations,omitempty"`
 	Events        []*Event        `json:"events,omitempty"`
@@ -14169,6 +14329,54 @@ type PersonalAccessTokenWhereInput struct {
 	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
 	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// is_active field predicates
+	IsActive       *bool `json:"isActive,omitempty"`
+	IsActiveNeq    *bool `json:"isActiveNEQ,omitempty"`
+	IsActiveIsNil  *bool `json:"isActiveIsNil,omitempty"`
+	IsActiveNotNil *bool `json:"isActiveNotNil,omitempty"`
+	// revoked_reason field predicates
+	RevokedReason             *string  `json:"revokedReason,omitempty"`
+	RevokedReasonNeq          *string  `json:"revokedReasonNEQ,omitempty"`
+	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
+	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
+	RevokedReasonGt           *string  `json:"revokedReasonGT,omitempty"`
+	RevokedReasonGte          *string  `json:"revokedReasonGTE,omitempty"`
+	RevokedReasonLt           *string  `json:"revokedReasonLT,omitempty"`
+	RevokedReasonLte          *string  `json:"revokedReasonLTE,omitempty"`
+	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
+	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
+	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
+	RevokedReasonIsNil        *bool    `json:"revokedReasonIsNil,omitempty"`
+	RevokedReasonNotNil       *bool    `json:"revokedReasonNotNil,omitempty"`
+	RevokedReasonEqualFold    *string  `json:"revokedReasonEqualFold,omitempty"`
+	RevokedReasonContainsFold *string  `json:"revokedReasonContainsFold,omitempty"`
+	// revoked_by field predicates
+	RevokedBy             *string  `json:"revokedBy,omitempty"`
+	RevokedByNeq          *string  `json:"revokedByNEQ,omitempty"`
+	RevokedByIn           []string `json:"revokedByIn,omitempty"`
+	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
+	RevokedByGt           *string  `json:"revokedByGT,omitempty"`
+	RevokedByGte          *string  `json:"revokedByGTE,omitempty"`
+	RevokedByLt           *string  `json:"revokedByLT,omitempty"`
+	RevokedByLte          *string  `json:"revokedByLTE,omitempty"`
+	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
+	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
+	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
+	RevokedByIsNil        *bool    `json:"revokedByIsNil,omitempty"`
+	RevokedByNotNil       *bool    `json:"revokedByNotNil,omitempty"`
+	RevokedByEqualFold    *string  `json:"revokedByEqualFold,omitempty"`
+	RevokedByContainsFold *string  `json:"revokedByContainsFold,omitempty"`
+	// revoked_at field predicates
+	RevokedAt       *time.Time   `json:"revokedAt,omitempty"`
+	RevokedAtNeq    *time.Time   `json:"revokedAtNEQ,omitempty"`
+	RevokedAtIn     []*time.Time `json:"revokedAtIn,omitempty"`
+	RevokedAtNotIn  []*time.Time `json:"revokedAtNotIn,omitempty"`
+	RevokedAtGt     *time.Time   `json:"revokedAtGT,omitempty"`
+	RevokedAtGte    *time.Time   `json:"revokedAtGTE,omitempty"`
+	RevokedAtLt     *time.Time   `json:"revokedAtLT,omitempty"`
+	RevokedAtLte    *time.Time   `json:"revokedAtLTE,omitempty"`
+	RevokedAtIsNil  *bool        `json:"revokedAtIsNil,omitempty"`
+	RevokedAtNotNil *bool        `json:"revokedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
 	HasOwnerWith []*UserWhereInput `json:"hasOwnerWith,omitempty"`
@@ -19923,8 +20131,20 @@ type UpdateAPITokenInput struct {
 	ClearScopes      *bool      `json:"clearScopes,omitempty"`
 	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
 	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
-	OwnerID          *string    `json:"ownerID,omitempty"`
-	ClearOwner       *bool      `json:"clearOwner,omitempty"`
+	// whether the token is active
+	IsActive      *bool `json:"isActive,omitempty"`
+	ClearIsActive *bool `json:"clearIsActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason      *string `json:"revokedReason,omitempty"`
+	ClearRevokedReason *bool   `json:"clearRevokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy      *string `json:"revokedBy,omitempty"`
+	ClearRevokedBy *bool   `json:"clearRevokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt      *time.Time `json:"revokedAt,omitempty"`
+	ClearRevokedAt *bool      `json:"clearRevokedAt,omitempty"`
+	OwnerID        *string    `json:"ownerID,omitempty"`
+	ClearOwner     *bool      `json:"clearOwner,omitempty"`
 }
 
 // UpdateActionPlanInput is used for update ActionPlan object.
@@ -20924,13 +21144,25 @@ type UpdatePersonalAccessTokenInput struct {
 	// the name associated with the token
 	Name *string `json:"name,omitempty"`
 	// a description of the token's purpose
-	Description           *string    `json:"description,omitempty"`
-	ClearDescription      *bool      `json:"clearDescription,omitempty"`
-	Scopes                []string   `json:"scopes,omitempty"`
-	AppendScopes          []string   `json:"appendScopes,omitempty"`
-	ClearScopes           *bool      `json:"clearScopes,omitempty"`
-	LastUsedAt            *time.Time `json:"lastUsedAt,omitempty"`
-	ClearLastUsedAt       *bool      `json:"clearLastUsedAt,omitempty"`
+	Description      *string    `json:"description,omitempty"`
+	ClearDescription *bool      `json:"clearDescription,omitempty"`
+	Scopes           []string   `json:"scopes,omitempty"`
+	AppendScopes     []string   `json:"appendScopes,omitempty"`
+	ClearScopes      *bool      `json:"clearScopes,omitempty"`
+	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
+	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
+	// whether the token is active
+	IsActive      *bool `json:"isActive,omitempty"`
+	ClearIsActive *bool `json:"clearIsActive,omitempty"`
+	// the reason the token was revoked
+	RevokedReason      *string `json:"revokedReason,omitempty"`
+	ClearRevokedReason *bool   `json:"clearRevokedReason,omitempty"`
+	// the user who revoked the token
+	RevokedBy      *string `json:"revokedBy,omitempty"`
+	ClearRevokedBy *bool   `json:"clearRevokedBy,omitempty"`
+	// when the token was revoked
+	RevokedAt             *time.Time `json:"revokedAt,omitempty"`
+	ClearRevokedAt        *bool      `json:"clearRevokedAt,omitempty"`
 	AddOrganizationIDs    []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganizations    *bool      `json:"clearOrganizations,omitempty"`

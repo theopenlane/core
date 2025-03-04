@@ -32,6 +32,22 @@ type APIToken implements Node {
 	description: String
 	scopes: [String!]
 	lastUsedAt: Time
+	"""
+	whether the token is active
+	"""
+	isActive: Boolean
+	"""
+	the reason the token was revoked
+	"""
+	revokedReason: String
+	"""
+	the user who revoked the token
+	"""
+	revokedBy: String
+	"""
+	when the token was revoked
+	"""
+	revokedAt: Time
 	owner: Organization
 }
 """
@@ -277,6 +293,62 @@ input APITokenWhereInput {
 	lastUsedAtLTE: Time
 	lastUsedAtIsNil: Boolean
 	lastUsedAtNotNil: Boolean
+	"""
+	is_active field predicates
+	"""
+	isActive: Boolean
+	isActiveNEQ: Boolean
+	isActiveIsNil: Boolean
+	isActiveNotNil: Boolean
+	"""
+	revoked_reason field predicates
+	"""
+	revokedReason: String
+	revokedReasonNEQ: String
+	revokedReasonIn: [String!]
+	revokedReasonNotIn: [String!]
+	revokedReasonGT: String
+	revokedReasonGTE: String
+	revokedReasonLT: String
+	revokedReasonLTE: String
+	revokedReasonContains: String
+	revokedReasonHasPrefix: String
+	revokedReasonHasSuffix: String
+	revokedReasonIsNil: Boolean
+	revokedReasonNotNil: Boolean
+	revokedReasonEqualFold: String
+	revokedReasonContainsFold: String
+	"""
+	revoked_by field predicates
+	"""
+	revokedBy: String
+	revokedByNEQ: String
+	revokedByIn: [String!]
+	revokedByNotIn: [String!]
+	revokedByGT: String
+	revokedByGTE: String
+	revokedByLT: String
+	revokedByLTE: String
+	revokedByContains: String
+	revokedByHasPrefix: String
+	revokedByHasSuffix: String
+	revokedByIsNil: Boolean
+	revokedByNotNil: Boolean
+	revokedByEqualFold: String
+	revokedByContainsFold: String
+	"""
+	revoked_at field predicates
+	"""
+	revokedAt: Time
+	revokedAtNEQ: Time
+	revokedAtIn: [Time!]
+	revokedAtNotIn: [Time!]
+	revokedAtGT: Time
+	revokedAtGTE: Time
+	revokedAtLT: Time
+	revokedAtLTE: Time
+	revokedAtIsNil: Boolean
+	revokedAtNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -3987,6 +4059,22 @@ input CreateAPITokenInput {
 	description: String
 	scopes: [String!]
 	lastUsedAt: Time
+	"""
+	whether the token is active
+	"""
+	isActive: Boolean
+	"""
+	the reason the token was revoked
+	"""
+	revokedReason: String
+	"""
+	the user who revoked the token
+	"""
+	revokedBy: String
+	"""
+	when the token was revoked
+	"""
+	revokedAt: Time
 	ownerID: ID
 }
 """
@@ -4908,6 +4996,22 @@ input CreatePersonalAccessTokenInput {
 	description: String
 	scopes: [String!]
 	lastUsedAt: Time
+	"""
+	whether the token is active
+	"""
+	isActive: Boolean
+	"""
+	the reason the token was revoked
+	"""
+	revokedReason: String
+	"""
+	the user who revoked the token
+	"""
+	revokedBy: String
+	"""
+	when the token was revoked
+	"""
+	revokedAt: Time
 	ownerID: ID!
 	organizationIDs: [ID!]
 	eventIDs: [ID!]
@@ -17407,6 +17511,18 @@ type OrgSubscription implements Node {
 	"""
 	expiresAt: Time
 	"""
+	the time the trial is set to expire
+	"""
+	trialExpiresAt: Time
+	"""
+	number of days until there is a due payment
+	"""
+	daysUntilDue: String
+	"""
+	whether or not a payment method has been added to the account
+	"""
+	paymentMethodAdded: Boolean
+	"""
 	the features associated with the subscription
 	"""
 	features: [String!]
@@ -17415,6 +17531,7 @@ type OrgSubscription implements Node {
 	"""
 	featureLookupKeys: [String!]
 	owner: Organization
+	events: [Event!]
 	subscriptionURL: String
 }
 """
@@ -17498,6 +17615,18 @@ type OrgSubscriptionHistory implements Node {
 	the time the subscription is set to expire; only populated if subscription is cancelled
 	"""
 	expiresAt: Time
+	"""
+	the time the trial is set to expire
+	"""
+	trialExpiresAt: Time
+	"""
+	number of days until there is a due payment
+	"""
+	daysUntilDue: String
+	"""
+	whether or not a payment method has been added to the account
+	"""
+	paymentMethodAdded: Boolean
 	"""
 	the features associated with the subscription
 	"""
@@ -17821,6 +17950,44 @@ input OrgSubscriptionHistoryWhereInput {
 	expiresAtLTE: Time
 	expiresAtIsNil: Boolean
 	expiresAtNotNil: Boolean
+	"""
+	trial_expires_at field predicates
+	"""
+	trialExpiresAt: Time
+	trialExpiresAtNEQ: Time
+	trialExpiresAtIn: [Time!]
+	trialExpiresAtNotIn: [Time!]
+	trialExpiresAtGT: Time
+	trialExpiresAtGTE: Time
+	trialExpiresAtLT: Time
+	trialExpiresAtLTE: Time
+	trialExpiresAtIsNil: Boolean
+	trialExpiresAtNotNil: Boolean
+	"""
+	days_until_due field predicates
+	"""
+	daysUntilDue: String
+	daysUntilDueNEQ: String
+	daysUntilDueIn: [String!]
+	daysUntilDueNotIn: [String!]
+	daysUntilDueGT: String
+	daysUntilDueGTE: String
+	daysUntilDueLT: String
+	daysUntilDueLTE: String
+	daysUntilDueContains: String
+	daysUntilDueHasPrefix: String
+	daysUntilDueHasSuffix: String
+	daysUntilDueIsNil: Boolean
+	daysUntilDueNotNil: Boolean
+	daysUntilDueEqualFold: String
+	daysUntilDueContainsFold: String
+	"""
+	payment_method_added field predicates
+	"""
+	paymentMethodAdded: Boolean
+	paymentMethodAddedNEQ: Boolean
+	paymentMethodAddedIsNil: Boolean
+	paymentMethodAddedNotNil: Boolean
 }
 type OrgSubscriptionSearchResult {
 	orgSubscriptions: [OrgSubscription!]
@@ -18066,10 +18233,53 @@ input OrgSubscriptionWhereInput {
 	expiresAtIsNil: Boolean
 	expiresAtNotNil: Boolean
 	"""
+	trial_expires_at field predicates
+	"""
+	trialExpiresAt: Time
+	trialExpiresAtNEQ: Time
+	trialExpiresAtIn: [Time!]
+	trialExpiresAtNotIn: [Time!]
+	trialExpiresAtGT: Time
+	trialExpiresAtGTE: Time
+	trialExpiresAtLT: Time
+	trialExpiresAtLTE: Time
+	trialExpiresAtIsNil: Boolean
+	trialExpiresAtNotNil: Boolean
+	"""
+	days_until_due field predicates
+	"""
+	daysUntilDue: String
+	daysUntilDueNEQ: String
+	daysUntilDueIn: [String!]
+	daysUntilDueNotIn: [String!]
+	daysUntilDueGT: String
+	daysUntilDueGTE: String
+	daysUntilDueLT: String
+	daysUntilDueLTE: String
+	daysUntilDueContains: String
+	daysUntilDueHasPrefix: String
+	daysUntilDueHasSuffix: String
+	daysUntilDueIsNil: Boolean
+	daysUntilDueNotNil: Boolean
+	daysUntilDueEqualFold: String
+	daysUntilDueContainsFold: String
+	"""
+	payment_method_added field predicates
+	"""
+	paymentMethodAdded: Boolean
+	paymentMethodAddedNEQ: Boolean
+	paymentMethodAddedIsNil: Boolean
+	paymentMethodAddedNotNil: Boolean
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	events edge predicates
+	"""
+	hasEvents: Boolean
+	hasEventsWith: [EventWhereInput!]
 }
 type Organization implements Node {
 	id: ID!
@@ -19836,6 +20046,22 @@ type PersonalAccessToken implements Node {
 	description: String
 	scopes: [String!]
 	lastUsedAt: Time
+	"""
+	whether the token is active
+	"""
+	isActive: Boolean
+	"""
+	the reason the token was revoked
+	"""
+	revokedReason: String
+	"""
+	the user who revoked the token
+	"""
+	revokedBy: String
+	"""
+	when the token was revoked
+	"""
+	revokedAt: Time
 	owner: User!
 	"""
 	the organization(s) the token is associated with
@@ -20068,6 +20294,62 @@ input PersonalAccessTokenWhereInput {
 	lastUsedAtLTE: Time
 	lastUsedAtIsNil: Boolean
 	lastUsedAtNotNil: Boolean
+	"""
+	is_active field predicates
+	"""
+	isActive: Boolean
+	isActiveNEQ: Boolean
+	isActiveIsNil: Boolean
+	isActiveNotNil: Boolean
+	"""
+	revoked_reason field predicates
+	"""
+	revokedReason: String
+	revokedReasonNEQ: String
+	revokedReasonIn: [String!]
+	revokedReasonNotIn: [String!]
+	revokedReasonGT: String
+	revokedReasonGTE: String
+	revokedReasonLT: String
+	revokedReasonLTE: String
+	revokedReasonContains: String
+	revokedReasonHasPrefix: String
+	revokedReasonHasSuffix: String
+	revokedReasonIsNil: Boolean
+	revokedReasonNotNil: Boolean
+	revokedReasonEqualFold: String
+	revokedReasonContainsFold: String
+	"""
+	revoked_by field predicates
+	"""
+	revokedBy: String
+	revokedByNEQ: String
+	revokedByIn: [String!]
+	revokedByNotIn: [String!]
+	revokedByGT: String
+	revokedByGTE: String
+	revokedByLT: String
+	revokedByLTE: String
+	revokedByContains: String
+	revokedByHasPrefix: String
+	revokedByHasSuffix: String
+	revokedByIsNil: Boolean
+	revokedByNotNil: Boolean
+	revokedByEqualFold: String
+	revokedByContainsFold: String
+	"""
+	revoked_at field predicates
+	"""
+	revokedAt: Time
+	revokedAtNEQ: Time
+	revokedAtIn: [Time!]
+	revokedAtNotIn: [Time!]
+	revokedAtGT: Time
+	revokedAtGTE: Time
+	revokedAtLT: Time
+	revokedAtLTE: Time
+	revokedAtIsNil: Boolean
+	revokedAtNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -30230,6 +30512,26 @@ input UpdateAPITokenInput {
 	clearScopes: Boolean
 	lastUsedAt: Time
 	clearLastUsedAt: Boolean
+	"""
+	whether the token is active
+	"""
+	isActive: Boolean
+	clearIsActive: Boolean
+	"""
+	the reason the token was revoked
+	"""
+	revokedReason: String
+	clearRevokedReason: Boolean
+	"""
+	the user who revoked the token
+	"""
+	revokedBy: String
+	clearRevokedBy: Boolean
+	"""
+	when the token was revoked
+	"""
+	revokedAt: Time
+	clearRevokedAt: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 }
@@ -31523,6 +31825,26 @@ input UpdatePersonalAccessTokenInput {
 	clearScopes: Boolean
 	lastUsedAt: Time
 	clearLastUsedAt: Boolean
+	"""
+	whether the token is active
+	"""
+	isActive: Boolean
+	clearIsActive: Boolean
+	"""
+	the reason the token was revoked
+	"""
+	revokedReason: String
+	clearRevokedReason: Boolean
+	"""
+	the user who revoked the token
+	"""
+	revokedBy: String
+	clearRevokedBy: Boolean
+	"""
+	when the token was revoked
+	"""
+	revokedAt: Time
+	clearRevokedAt: Boolean
 	addOrganizationIDs: [ID!]
 	removeOrganizationIDs: [ID!]
 	clearOrganizations: Boolean

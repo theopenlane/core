@@ -231,6 +231,86 @@ func (patu *PersonalAccessTokenUpdate) ClearLastUsedAt() *PersonalAccessTokenUpd
 	return patu
 }
 
+// SetIsActive sets the "is_active" field.
+func (patu *PersonalAccessTokenUpdate) SetIsActive(b bool) *PersonalAccessTokenUpdate {
+	patu.mutation.SetIsActive(b)
+	return patu
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableIsActive(b *bool) *PersonalAccessTokenUpdate {
+	if b != nil {
+		patu.SetIsActive(*b)
+	}
+	return patu
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (patu *PersonalAccessTokenUpdate) ClearIsActive() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearIsActive()
+	return patu
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (patu *PersonalAccessTokenUpdate) SetRevokedReason(s string) *PersonalAccessTokenUpdate {
+	patu.mutation.SetRevokedReason(s)
+	return patu
+}
+
+// SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableRevokedReason(s *string) *PersonalAccessTokenUpdate {
+	if s != nil {
+		patu.SetRevokedReason(*s)
+	}
+	return patu
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (patu *PersonalAccessTokenUpdate) ClearRevokedReason() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearRevokedReason()
+	return patu
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (patu *PersonalAccessTokenUpdate) SetRevokedBy(s string) *PersonalAccessTokenUpdate {
+	patu.mutation.SetRevokedBy(s)
+	return patu
+}
+
+// SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableRevokedBy(s *string) *PersonalAccessTokenUpdate {
+	if s != nil {
+		patu.SetRevokedBy(*s)
+	}
+	return patu
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (patu *PersonalAccessTokenUpdate) ClearRevokedBy() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearRevokedBy()
+	return patu
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (patu *PersonalAccessTokenUpdate) SetRevokedAt(t time.Time) *PersonalAccessTokenUpdate {
+	patu.mutation.SetRevokedAt(t)
+	return patu
+}
+
+// SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableRevokedAt(t *time.Time) *PersonalAccessTokenUpdate {
+	if t != nil {
+		patu.SetRevokedAt(*t)
+	}
+	return patu
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (patu *PersonalAccessTokenUpdate) ClearRevokedAt() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearRevokedAt()
+	return patu
+}
+
 // SetOwner sets the "owner" edge to the User entity.
 func (patu *PersonalAccessTokenUpdate) SetOwner(u *User) *PersonalAccessTokenUpdate {
 	return patu.SetOwnerID(u.ID)
@@ -464,6 +544,30 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if patu.mutation.LastUsedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := patu.mutation.IsActive(); ok {
+		_spec.SetField(personalaccesstoken.FieldIsActive, field.TypeBool, value)
+	}
+	if patu.mutation.IsActiveCleared() {
+		_spec.ClearField(personalaccesstoken.FieldIsActive, field.TypeBool)
+	}
+	if value, ok := patu.mutation.RevokedReason(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedReason, field.TypeString, value)
+	}
+	if patu.mutation.RevokedReasonCleared() {
+		_spec.ClearField(personalaccesstoken.FieldRevokedReason, field.TypeString)
+	}
+	if value, ok := patu.mutation.RevokedBy(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedBy, field.TypeString, value)
+	}
+	if patu.mutation.RevokedByCleared() {
+		_spec.ClearField(personalaccesstoken.FieldRevokedBy, field.TypeString)
+	}
+	if value, ok := patu.mutation.RevokedAt(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedAt, field.TypeTime, value)
+	}
+	if patu.mutation.RevokedAtCleared() {
+		_spec.ClearField(personalaccesstoken.FieldRevokedAt, field.TypeTime)
 	}
 	if patu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -812,6 +916,86 @@ func (patuo *PersonalAccessTokenUpdateOne) ClearLastUsedAt() *PersonalAccessToke
 	return patuo
 }
 
+// SetIsActive sets the "is_active" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetIsActive(b bool) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetIsActive(b)
+	return patuo
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableIsActive(b *bool) *PersonalAccessTokenUpdateOne {
+	if b != nil {
+		patuo.SetIsActive(*b)
+	}
+	return patuo
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearIsActive() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearIsActive()
+	return patuo
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetRevokedReason(s string) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetRevokedReason(s)
+	return patuo
+}
+
+// SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableRevokedReason(s *string) *PersonalAccessTokenUpdateOne {
+	if s != nil {
+		patuo.SetRevokedReason(*s)
+	}
+	return patuo
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearRevokedReason() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearRevokedReason()
+	return patuo
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetRevokedBy(s string) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetRevokedBy(s)
+	return patuo
+}
+
+// SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableRevokedBy(s *string) *PersonalAccessTokenUpdateOne {
+	if s != nil {
+		patuo.SetRevokedBy(*s)
+	}
+	return patuo
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearRevokedBy() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearRevokedBy()
+	return patuo
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetRevokedAt(t time.Time) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetRevokedAt(t)
+	return patuo
+}
+
+// SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableRevokedAt(t *time.Time) *PersonalAccessTokenUpdateOne {
+	if t != nil {
+		patuo.SetRevokedAt(*t)
+	}
+	return patuo
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearRevokedAt() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearRevokedAt()
+	return patuo
+}
+
 // SetOwner sets the "owner" edge to the User entity.
 func (patuo *PersonalAccessTokenUpdateOne) SetOwner(u *User) *PersonalAccessTokenUpdateOne {
 	return patuo.SetOwnerID(u.ID)
@@ -1075,6 +1259,30 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if patuo.mutation.LastUsedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := patuo.mutation.IsActive(); ok {
+		_spec.SetField(personalaccesstoken.FieldIsActive, field.TypeBool, value)
+	}
+	if patuo.mutation.IsActiveCleared() {
+		_spec.ClearField(personalaccesstoken.FieldIsActive, field.TypeBool)
+	}
+	if value, ok := patuo.mutation.RevokedReason(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedReason, field.TypeString, value)
+	}
+	if patuo.mutation.RevokedReasonCleared() {
+		_spec.ClearField(personalaccesstoken.FieldRevokedReason, field.TypeString)
+	}
+	if value, ok := patuo.mutation.RevokedBy(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedBy, field.TypeString, value)
+	}
+	if patuo.mutation.RevokedByCleared() {
+		_spec.ClearField(personalaccesstoken.FieldRevokedBy, field.TypeString)
+	}
+	if value, ok := patuo.mutation.RevokedAt(); ok {
+		_spec.SetField(personalaccesstoken.FieldRevokedAt, field.TypeTime, value)
+	}
+	if patuo.mutation.RevokedAtCleared() {
+		_spec.ClearField(personalaccesstoken.FieldRevokedAt, field.TypeTime)
 	}
 	if patuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

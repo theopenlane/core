@@ -1624,6 +1624,18 @@ func (os *OrgSubscription) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
+func (os *OrgSubscription) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = os.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = os.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = os.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) ControlCreators(ctx context.Context) (result []*Group, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedControlCreators(graphql.GetFieldContext(ctx).Field.Alias)

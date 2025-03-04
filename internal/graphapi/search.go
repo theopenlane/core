@@ -79,6 +79,8 @@ func adminSearchAPITokens(ctx context.Context, query string) ([]*generated.APITo
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(scopes)::text LIKE $6", likeQuery)) // search by Scopes
 			},
+			apitoken.RevokedReasonContainsFold(query), // search by RevokedReason
+			apitoken.RevokedByContainsFold(query),     // search by RevokedBy
 		),
 	).All(ctx)
 }
@@ -638,13 +640,14 @@ func adminSearchOrgSubscriptions(ctx context.Context, query string) ([]*generate
 			orgsubscription.StripeProductTierIDContainsFold(query),      // search by StripeProductTierID
 			orgsubscription.StripeSubscriptionStatusContainsFold(query), // search by StripeSubscriptionStatus
 			orgsubscription.StripeCustomerIDContainsFold(query),         // search by StripeCustomerID
+			orgsubscription.DaysUntilDueContainsFold(query),             // search by DaysUntilDue
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(features)::text LIKE $11", likeQuery)) // search by Features
+				s.Where(sql.ExprP("(features)::text LIKE $12", likeQuery)) // search by Features
 			},
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(featurelookupkeys)::text LIKE $12", likeQuery)) // search by FeatureLookupKeys
+				s.Where(sql.ExprP("(featurelookupkeys)::text LIKE $13", likeQuery)) // search by FeatureLookupKeys
 			},
 		),
 	).All(ctx)
@@ -755,6 +758,8 @@ func adminSearchPersonalAccessTokens(ctx context.Context, query string) ([]*gene
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(scopes)::text LIKE $5", likeQuery)) // search by Scopes
 			},
+			personalaccesstoken.RevokedReasonContainsFold(query), // search by RevokedReason
+			personalaccesstoken.RevokedByContainsFold(query),     // search by RevokedBy
 		),
 	).All(ctx)
 }

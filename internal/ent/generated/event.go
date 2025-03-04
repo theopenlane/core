@@ -38,8 +38,9 @@ type Event struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EventQuery when eager-loading is set.
-	Edges        EventEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                   EventEdges `json:"edges"`
+	org_subscription_events *string
+	selectValues            sql.SelectValues
 }
 
 // EventEdges holds the relations/edges for other nodes in the graph.
@@ -195,6 +196,8 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case event.FieldCreatedAt, event.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case event.ForeignKeys[0]: // org_subscription_events
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -273,6 +276,13 @@ func (e *Event) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &e.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
+			}
+		case event.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field org_subscription_events", values[i])
+			} else if value.Valid {
+				e.org_subscription_events = new(string)
+				*e.org_subscription_events = value.String
 			}
 		default:
 			e.selectValues.Set(columns[i], values[i])

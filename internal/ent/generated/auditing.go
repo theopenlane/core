@@ -1406,6 +1406,15 @@ func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change
 	if !reflect.DeepEqual(osh.ExpiresAt, new.ExpiresAt) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldExpiresAt, osh.ExpiresAt, new.ExpiresAt))
 	}
+	if !reflect.DeepEqual(osh.TrialExpiresAt, new.TrialExpiresAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldTrialExpiresAt, osh.TrialExpiresAt, new.TrialExpiresAt))
+	}
+	if !reflect.DeepEqual(osh.DaysUntilDue, new.DaysUntilDue) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDaysUntilDue, osh.DaysUntilDue, new.DaysUntilDue))
+	}
+	if !reflect.DeepEqual(osh.PaymentMethodAdded, new.PaymentMethodAdded) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldPaymentMethodAdded, osh.PaymentMethodAdded, new.PaymentMethodAdded))
+	}
 	if !reflect.DeepEqual(osh.Features, new.Features) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, osh.Features, new.Features))
 	}

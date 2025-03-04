@@ -127,6 +127,26 @@ func LastUsedAt(v time.Time) predicate.APIToken {
 	return predicate.APIToken(sql.FieldEQ(FieldLastUsedAt, v))
 }
 
+// IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
+func IsActive(v bool) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldIsActive, v))
+}
+
+// RevokedReason applies equality check predicate on the "revoked_reason" field. It's identical to RevokedReasonEQ.
+func RevokedReason(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldRevokedReason, v))
+}
+
+// RevokedBy applies equality check predicate on the "revoked_by" field. It's identical to RevokedByEQ.
+func RevokedBy(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldRevokedBy, v))
+}
+
+// RevokedAt applies equality check predicate on the "revoked_at" field. It's identical to RevokedAtEQ.
+func RevokedAt(v time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldRevokedAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.APIToken {
 	return predicate.APIToken(sql.FieldEQ(FieldCreatedAt, v))
@@ -900,6 +920,226 @@ func LastUsedAtIsNil() predicate.APIToken {
 // LastUsedAtNotNil applies the NotNil predicate on the "last_used_at" field.
 func LastUsedAtNotNil() predicate.APIToken {
 	return predicate.APIToken(sql.FieldNotNull(FieldLastUsedAt))
+}
+
+// IsActiveEQ applies the EQ predicate on the "is_active" field.
+func IsActiveEQ(v bool) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldIsActive, v))
+}
+
+// IsActiveNEQ applies the NEQ predicate on the "is_active" field.
+func IsActiveNEQ(v bool) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNEQ(FieldIsActive, v))
+}
+
+// IsActiveIsNil applies the IsNil predicate on the "is_active" field.
+func IsActiveIsNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldIsNull(FieldIsActive))
+}
+
+// IsActiveNotNil applies the NotNil predicate on the "is_active" field.
+func IsActiveNotNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotNull(FieldIsActive))
+}
+
+// RevokedReasonEQ applies the EQ predicate on the "revoked_reason" field.
+func RevokedReasonEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldRevokedReason, v))
+}
+
+// RevokedReasonNEQ applies the NEQ predicate on the "revoked_reason" field.
+func RevokedReasonNEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNEQ(FieldRevokedReason, v))
+}
+
+// RevokedReasonIn applies the In predicate on the "revoked_reason" field.
+func RevokedReasonIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldIn(FieldRevokedReason, vs...))
+}
+
+// RevokedReasonNotIn applies the NotIn predicate on the "revoked_reason" field.
+func RevokedReasonNotIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotIn(FieldRevokedReason, vs...))
+}
+
+// RevokedReasonGT applies the GT predicate on the "revoked_reason" field.
+func RevokedReasonGT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGT(FieldRevokedReason, v))
+}
+
+// RevokedReasonGTE applies the GTE predicate on the "revoked_reason" field.
+func RevokedReasonGTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGTE(FieldRevokedReason, v))
+}
+
+// RevokedReasonLT applies the LT predicate on the "revoked_reason" field.
+func RevokedReasonLT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLT(FieldRevokedReason, v))
+}
+
+// RevokedReasonLTE applies the LTE predicate on the "revoked_reason" field.
+func RevokedReasonLTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLTE(FieldRevokedReason, v))
+}
+
+// RevokedReasonContains applies the Contains predicate on the "revoked_reason" field.
+func RevokedReasonContains(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContains(FieldRevokedReason, v))
+}
+
+// RevokedReasonHasPrefix applies the HasPrefix predicate on the "revoked_reason" field.
+func RevokedReasonHasPrefix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasPrefix(FieldRevokedReason, v))
+}
+
+// RevokedReasonHasSuffix applies the HasSuffix predicate on the "revoked_reason" field.
+func RevokedReasonHasSuffix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasSuffix(FieldRevokedReason, v))
+}
+
+// RevokedReasonIsNil applies the IsNil predicate on the "revoked_reason" field.
+func RevokedReasonIsNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldIsNull(FieldRevokedReason))
+}
+
+// RevokedReasonNotNil applies the NotNil predicate on the "revoked_reason" field.
+func RevokedReasonNotNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotNull(FieldRevokedReason))
+}
+
+// RevokedReasonEqualFold applies the EqualFold predicate on the "revoked_reason" field.
+func RevokedReasonEqualFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEqualFold(FieldRevokedReason, v))
+}
+
+// RevokedReasonContainsFold applies the ContainsFold predicate on the "revoked_reason" field.
+func RevokedReasonContainsFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContainsFold(FieldRevokedReason, v))
+}
+
+// RevokedByEQ applies the EQ predicate on the "revoked_by" field.
+func RevokedByEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldRevokedBy, v))
+}
+
+// RevokedByNEQ applies the NEQ predicate on the "revoked_by" field.
+func RevokedByNEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNEQ(FieldRevokedBy, v))
+}
+
+// RevokedByIn applies the In predicate on the "revoked_by" field.
+func RevokedByIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldIn(FieldRevokedBy, vs...))
+}
+
+// RevokedByNotIn applies the NotIn predicate on the "revoked_by" field.
+func RevokedByNotIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotIn(FieldRevokedBy, vs...))
+}
+
+// RevokedByGT applies the GT predicate on the "revoked_by" field.
+func RevokedByGT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGT(FieldRevokedBy, v))
+}
+
+// RevokedByGTE applies the GTE predicate on the "revoked_by" field.
+func RevokedByGTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGTE(FieldRevokedBy, v))
+}
+
+// RevokedByLT applies the LT predicate on the "revoked_by" field.
+func RevokedByLT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLT(FieldRevokedBy, v))
+}
+
+// RevokedByLTE applies the LTE predicate on the "revoked_by" field.
+func RevokedByLTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLTE(FieldRevokedBy, v))
+}
+
+// RevokedByContains applies the Contains predicate on the "revoked_by" field.
+func RevokedByContains(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContains(FieldRevokedBy, v))
+}
+
+// RevokedByHasPrefix applies the HasPrefix predicate on the "revoked_by" field.
+func RevokedByHasPrefix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasPrefix(FieldRevokedBy, v))
+}
+
+// RevokedByHasSuffix applies the HasSuffix predicate on the "revoked_by" field.
+func RevokedByHasSuffix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasSuffix(FieldRevokedBy, v))
+}
+
+// RevokedByIsNil applies the IsNil predicate on the "revoked_by" field.
+func RevokedByIsNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldIsNull(FieldRevokedBy))
+}
+
+// RevokedByNotNil applies the NotNil predicate on the "revoked_by" field.
+func RevokedByNotNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotNull(FieldRevokedBy))
+}
+
+// RevokedByEqualFold applies the EqualFold predicate on the "revoked_by" field.
+func RevokedByEqualFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEqualFold(FieldRevokedBy, v))
+}
+
+// RevokedByContainsFold applies the ContainsFold predicate on the "revoked_by" field.
+func RevokedByContainsFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContainsFold(FieldRevokedBy, v))
+}
+
+// RevokedAtEQ applies the EQ predicate on the "revoked_at" field.
+func RevokedAtEQ(v time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldRevokedAt, v))
+}
+
+// RevokedAtNEQ applies the NEQ predicate on the "revoked_at" field.
+func RevokedAtNEQ(v time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNEQ(FieldRevokedAt, v))
+}
+
+// RevokedAtIn applies the In predicate on the "revoked_at" field.
+func RevokedAtIn(vs ...time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldIn(FieldRevokedAt, vs...))
+}
+
+// RevokedAtNotIn applies the NotIn predicate on the "revoked_at" field.
+func RevokedAtNotIn(vs ...time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotIn(FieldRevokedAt, vs...))
+}
+
+// RevokedAtGT applies the GT predicate on the "revoked_at" field.
+func RevokedAtGT(v time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGT(FieldRevokedAt, v))
+}
+
+// RevokedAtGTE applies the GTE predicate on the "revoked_at" field.
+func RevokedAtGTE(v time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGTE(FieldRevokedAt, v))
+}
+
+// RevokedAtLT applies the LT predicate on the "revoked_at" field.
+func RevokedAtLT(v time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLT(FieldRevokedAt, v))
+}
+
+// RevokedAtLTE applies the LTE predicate on the "revoked_at" field.
+func RevokedAtLTE(v time.Time) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLTE(FieldRevokedAt, v))
+}
+
+// RevokedAtIsNil applies the IsNil predicate on the "revoked_at" field.
+func RevokedAtIsNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldIsNull(FieldRevokedAt))
+}
+
+// RevokedAtNotNil applies the NotNil predicate on the "revoked_at" field.
+func RevokedAtNotNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotNull(FieldRevokedAt))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

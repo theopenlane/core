@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -298,6 +299,66 @@ func (osu *OrgSubscriptionUpdate) ClearExpiresAt() *OrgSubscriptionUpdate {
 	return osu
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (osu *OrgSubscriptionUpdate) SetTrialExpiresAt(t time.Time) *OrgSubscriptionUpdate {
+	osu.mutation.SetTrialExpiresAt(t)
+	return osu
+}
+
+// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
+func (osu *OrgSubscriptionUpdate) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionUpdate {
+	if t != nil {
+		osu.SetTrialExpiresAt(*t)
+	}
+	return osu
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (osu *OrgSubscriptionUpdate) ClearTrialExpiresAt() *OrgSubscriptionUpdate {
+	osu.mutation.ClearTrialExpiresAt()
+	return osu
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (osu *OrgSubscriptionUpdate) SetDaysUntilDue(s string) *OrgSubscriptionUpdate {
+	osu.mutation.SetDaysUntilDue(s)
+	return osu
+}
+
+// SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
+func (osu *OrgSubscriptionUpdate) SetNillableDaysUntilDue(s *string) *OrgSubscriptionUpdate {
+	if s != nil {
+		osu.SetDaysUntilDue(*s)
+	}
+	return osu
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (osu *OrgSubscriptionUpdate) ClearDaysUntilDue() *OrgSubscriptionUpdate {
+	osu.mutation.ClearDaysUntilDue()
+	return osu
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (osu *OrgSubscriptionUpdate) SetPaymentMethodAdded(b bool) *OrgSubscriptionUpdate {
+	osu.mutation.SetPaymentMethodAdded(b)
+	return osu
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (osu *OrgSubscriptionUpdate) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionUpdate {
+	if b != nil {
+		osu.SetPaymentMethodAdded(*b)
+	}
+	return osu
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (osu *OrgSubscriptionUpdate) ClearPaymentMethodAdded() *OrgSubscriptionUpdate {
+	osu.mutation.ClearPaymentMethodAdded()
+	return osu
+}
+
 // SetFeatures sets the "features" field.
 func (osu *OrgSubscriptionUpdate) SetFeatures(s []string) *OrgSubscriptionUpdate {
 	osu.mutation.SetFeatures(s)
@@ -339,6 +400,21 @@ func (osu *OrgSubscriptionUpdate) SetOwner(o *Organization) *OrgSubscriptionUpda
 	return osu.SetOwnerID(o.ID)
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (osu *OrgSubscriptionUpdate) AddEventIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.AddEventIDs(ids...)
+	return osu
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (osu *OrgSubscriptionUpdate) AddEvents(e ...*Event) *OrgSubscriptionUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osu.AddEventIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 	return osu.mutation
@@ -348,6 +424,27 @@ func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 func (osu *OrgSubscriptionUpdate) ClearOwner() *OrgSubscriptionUpdate {
 	osu.mutation.ClearOwner()
 	return osu
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (osu *OrgSubscriptionUpdate) ClearEvents() *OrgSubscriptionUpdate {
+	osu.mutation.ClearEvents()
+	return osu
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (osu *OrgSubscriptionUpdate) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.RemoveEventIDs(ids...)
+	return osu
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (osu *OrgSubscriptionUpdate) RemoveEvents(e ...*Event) *OrgSubscriptionUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osu.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -506,6 +603,24 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	if osu.mutation.ExpiresAtCleared() {
 		_spec.ClearField(orgsubscription.FieldExpiresAt, field.TypeTime)
 	}
+	if value, ok := osu.mutation.TrialExpiresAt(); ok {
+		_spec.SetField(orgsubscription.FieldTrialExpiresAt, field.TypeTime, value)
+	}
+	if osu.mutation.TrialExpiresAtCleared() {
+		_spec.ClearField(orgsubscription.FieldTrialExpiresAt, field.TypeTime)
+	}
+	if value, ok := osu.mutation.DaysUntilDue(); ok {
+		_spec.SetField(orgsubscription.FieldDaysUntilDue, field.TypeString, value)
+	}
+	if osu.mutation.DaysUntilDueCleared() {
+		_spec.ClearField(orgsubscription.FieldDaysUntilDue, field.TypeString)
+	}
+	if value, ok := osu.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if osu.mutation.PaymentMethodAddedCleared() {
+		_spec.ClearField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool)
+	}
 	if value, ok := osu.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 	}
@@ -554,6 +669,54 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.Event
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -847,6 +1010,66 @@ func (osuo *OrgSubscriptionUpdateOne) ClearExpiresAt() *OrgSubscriptionUpdateOne
 	return osuo
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (osuo *OrgSubscriptionUpdateOne) SetTrialExpiresAt(t time.Time) *OrgSubscriptionUpdateOne {
+	osuo.mutation.SetTrialExpiresAt(t)
+	return osuo
+}
+
+// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
+func (osuo *OrgSubscriptionUpdateOne) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionUpdateOne {
+	if t != nil {
+		osuo.SetTrialExpiresAt(*t)
+	}
+	return osuo
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (osuo *OrgSubscriptionUpdateOne) ClearTrialExpiresAt() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearTrialExpiresAt()
+	return osuo
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (osuo *OrgSubscriptionUpdateOne) SetDaysUntilDue(s string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.SetDaysUntilDue(s)
+	return osuo
+}
+
+// SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
+func (osuo *OrgSubscriptionUpdateOne) SetNillableDaysUntilDue(s *string) *OrgSubscriptionUpdateOne {
+	if s != nil {
+		osuo.SetDaysUntilDue(*s)
+	}
+	return osuo
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (osuo *OrgSubscriptionUpdateOne) ClearDaysUntilDue() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearDaysUntilDue()
+	return osuo
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (osuo *OrgSubscriptionUpdateOne) SetPaymentMethodAdded(b bool) *OrgSubscriptionUpdateOne {
+	osuo.mutation.SetPaymentMethodAdded(b)
+	return osuo
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (osuo *OrgSubscriptionUpdateOne) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionUpdateOne {
+	if b != nil {
+		osuo.SetPaymentMethodAdded(*b)
+	}
+	return osuo
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (osuo *OrgSubscriptionUpdateOne) ClearPaymentMethodAdded() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearPaymentMethodAdded()
+	return osuo
+}
+
 // SetFeatures sets the "features" field.
 func (osuo *OrgSubscriptionUpdateOne) SetFeatures(s []string) *OrgSubscriptionUpdateOne {
 	osuo.mutation.SetFeatures(s)
@@ -888,6 +1111,21 @@ func (osuo *OrgSubscriptionUpdateOne) SetOwner(o *Organization) *OrgSubscription
 	return osuo.SetOwnerID(o.ID)
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (osuo *OrgSubscriptionUpdateOne) AddEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.AddEventIDs(ids...)
+	return osuo
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (osuo *OrgSubscriptionUpdateOne) AddEvents(e ...*Event) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osuo.AddEventIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 	return osuo.mutation
@@ -897,6 +1135,27 @@ func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 func (osuo *OrgSubscriptionUpdateOne) ClearOwner() *OrgSubscriptionUpdateOne {
 	osuo.mutation.ClearOwner()
 	return osuo
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (osuo *OrgSubscriptionUpdateOne) ClearEvents() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearEvents()
+	return osuo
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (osuo *OrgSubscriptionUpdateOne) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.RemoveEventIDs(ids...)
+	return osuo
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (osuo *OrgSubscriptionUpdateOne) RemoveEvents(e ...*Event) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return osuo.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgSubscriptionUpdate builder.
@@ -1085,6 +1344,24 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	if osuo.mutation.ExpiresAtCleared() {
 		_spec.ClearField(orgsubscription.FieldExpiresAt, field.TypeTime)
 	}
+	if value, ok := osuo.mutation.TrialExpiresAt(); ok {
+		_spec.SetField(orgsubscription.FieldTrialExpiresAt, field.TypeTime, value)
+	}
+	if osuo.mutation.TrialExpiresAtCleared() {
+		_spec.ClearField(orgsubscription.FieldTrialExpiresAt, field.TypeTime)
+	}
+	if value, ok := osuo.mutation.DaysUntilDue(); ok {
+		_spec.SetField(orgsubscription.FieldDaysUntilDue, field.TypeString, value)
+	}
+	if osuo.mutation.DaysUntilDueCleared() {
+		_spec.ClearField(orgsubscription.FieldDaysUntilDue, field.TypeString)
+	}
+	if value, ok := osuo.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if osuo.mutation.PaymentMethodAddedCleared() {
+		_spec.ClearField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool)
+	}
 	if value, ok := osuo.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 	}
@@ -1133,6 +1410,54 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.Event
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.EventsTable,
+			Columns: []string{orgsubscription.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

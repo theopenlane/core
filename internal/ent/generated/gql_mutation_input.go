@@ -12,13 +12,17 @@ import (
 
 // CreateAPITokenInput represents a mutation input for creating apitokens.
 type CreateAPITokenInput struct {
-	Tags        []string
-	Name        string
-	ExpiresAt   *time.Time
-	Description *string
-	Scopes      []string
-	LastUsedAt  *time.Time
-	OwnerID     *string
+	Tags          []string
+	Name          string
+	ExpiresAt     *time.Time
+	Description   *string
+	Scopes        []string
+	LastUsedAt    *time.Time
+	IsActive      *bool
+	RevokedReason *string
+	RevokedBy     *string
+	RevokedAt     *time.Time
+	OwnerID       *string
 }
 
 // Mutate applies the CreateAPITokenInput on the APITokenMutation builder.
@@ -39,6 +43,18 @@ func (i *CreateAPITokenInput) Mutate(m *APITokenMutation) {
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
 	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -52,19 +68,27 @@ func (c *APITokenCreate) SetInput(i CreateAPITokenInput) *APITokenCreate {
 
 // UpdateAPITokenInput represents a mutation input for updating apitokens.
 type UpdateAPITokenInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	Name             *string
-	ClearDescription bool
-	Description      *string
-	ClearScopes      bool
-	Scopes           []string
-	AppendScopes     []string
-	ClearLastUsedAt  bool
-	LastUsedAt       *time.Time
-	ClearOwner       bool
-	OwnerID          *string
+	ClearTags          bool
+	Tags               []string
+	AppendTags         []string
+	Name               *string
+	ClearDescription   bool
+	Description        *string
+	ClearScopes        bool
+	Scopes             []string
+	AppendScopes       []string
+	ClearLastUsedAt    bool
+	LastUsedAt         *time.Time
+	ClearIsActive      bool
+	IsActive           *bool
+	ClearRevokedReason bool
+	RevokedReason      *string
+	ClearRevokedBy     bool
+	RevokedBy          *string
+	ClearRevokedAt     bool
+	RevokedAt          *time.Time
+	ClearOwner         bool
+	OwnerID            *string
 }
 
 // Mutate applies the UpdateAPITokenInput on the APITokenMutation builder.
@@ -101,6 +125,30 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
+	}
+	if i.ClearIsActive {
+		m.ClearIsActive()
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearRevokedReason {
+		m.ClearRevokedReason()
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if i.ClearRevokedBy {
+		m.ClearRevokedBy()
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if i.ClearRevokedAt {
+		m.ClearRevokedAt()
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5100,6 +5148,10 @@ type CreatePersonalAccessTokenInput struct {
 	Description     *string
 	Scopes          []string
 	LastUsedAt      *time.Time
+	IsActive        *bool
+	RevokedReason   *string
+	RevokedBy       *string
+	RevokedAt       *time.Time
 	OwnerID         string
 	OrganizationIDs []string
 	EventIDs        []string
@@ -5122,6 +5174,18 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
 	}
 	m.SetOwnerID(i.OwnerID)
 	if v := i.OrganizationIDs; len(v) > 0 {
@@ -5151,6 +5215,14 @@ type UpdatePersonalAccessTokenInput struct {
 	AppendScopes          []string
 	ClearLastUsedAt       bool
 	LastUsedAt            *time.Time
+	ClearIsActive         bool
+	IsActive              *bool
+	ClearRevokedReason    bool
+	RevokedReason         *string
+	ClearRevokedBy        bool
+	RevokedBy             *string
+	ClearRevokedAt        bool
+	RevokedAt             *time.Time
 	ClearOrganizations    bool
 	AddOrganizationIDs    []string
 	RemoveOrganizationIDs []string
@@ -5193,6 +5265,30 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
+	}
+	if i.ClearIsActive {
+		m.ClearIsActive()
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearRevokedReason {
+		m.ClearRevokedReason()
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if i.ClearRevokedBy {
+		m.ClearRevokedBy()
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if i.ClearRevokedAt {
+		m.ClearRevokedAt()
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
 	}
 	if i.ClearOrganizations {
 		m.ClearOrganizations()

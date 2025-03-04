@@ -47,6 +47,7 @@ type EventQuery struct {
 	withGroupmembership          *GroupMembershipQuery
 	withSubscriber               *SubscriberQuery
 	withFile                     *FileQuery
+	withFKs                      bool
 	loadTotal                    []func(context.Context, []*Event) error
 	modifiers                    []func(*sql.Selector)
 	withNamedUser                map[string]*UserQuery
@@ -779,6 +780,7 @@ func (eq *EventQuery) prepareQuery(ctx context.Context) error {
 func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event, error) {
 	var (
 		nodes       = []*Event{}
+		withFKs     = eq.withFKs
 		_spec       = eq.querySpec()
 		loadedTypes = [11]bool{
 			eq.withUser != nil,
@@ -794,6 +796,9 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 			eq.withFile != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, event.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Event).scanValues(nil, columns)
 	}

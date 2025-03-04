@@ -93,6 +93,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_PersonalAccessToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_PersonalAccessToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_PersonalAccessToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_PersonalAccessToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":
@@ -173,6 +181,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_PersonalAccessToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_PersonalAccessToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_PersonalAccessToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_PersonalAccessToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":
@@ -297,6 +313,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_PersonalAccessToken_isActive(ctx, field)
+			case "revokedReason":
+				return ec.fieldContext_PersonalAccessToken_revokedReason(ctx, field)
+			case "revokedBy":
+				return ec.fieldContext_PersonalAccessToken_revokedBy(ctx, field)
+			case "revokedAt":
+				return ec.fieldContext_PersonalAccessToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":

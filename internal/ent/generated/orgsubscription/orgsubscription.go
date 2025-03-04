@@ -47,12 +47,20 @@ const (
 	FieldStripeCustomerID = "stripe_customer_id"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
 	FieldExpiresAt = "expires_at"
+	// FieldTrialExpiresAt holds the string denoting the trial_expires_at field in the database.
+	FieldTrialExpiresAt = "trial_expires_at"
+	// FieldDaysUntilDue holds the string denoting the days_until_due field in the database.
+	FieldDaysUntilDue = "days_until_due"
+	// FieldPaymentMethodAdded holds the string denoting the payment_method_added field in the database.
+	FieldPaymentMethodAdded = "payment_method_added"
 	// FieldFeatures holds the string denoting the features field in the database.
 	FieldFeatures = "features"
 	// FieldFeatureLookupKeys holds the string denoting the feature_lookup_keys field in the database.
 	FieldFeatureLookupKeys = "feature_lookup_keys"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeEvents holds the string denoting the events edge name in mutations.
+	EdgeEvents = "events"
 	// Table holds the table name of the orgsubscription in the database.
 	Table = "org_subscriptions"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -62,6 +70,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// EventsTable is the table that holds the events relation/edge.
+	EventsTable = "events"
+	// EventsInverseTable is the table name for the Event entity.
+	// It exists in this package in order to avoid circular dependency with the "event" package.
+	EventsInverseTable = "events"
+	// EventsColumn is the table column denoting the events relation/edge.
+	EventsColumn = "org_subscription_events"
 )
 
 // Columns holds all SQL columns for orgsubscription fields.
@@ -83,6 +98,9 @@ var Columns = []string{
 	FieldActive,
 	FieldStripeCustomerID,
 	FieldExpiresAt,
+	FieldTrialExpiresAt,
+	FieldDaysUntilDue,
+	FieldPaymentMethodAdded,
 	FieldFeatures,
 	FieldFeatureLookupKeys,
 }
@@ -199,10 +217,39 @@ func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpiresAt, opts...).ToFunc()
 }
 
+// ByTrialExpiresAt orders the results by the trial_expires_at field.
+func ByTrialExpiresAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrialExpiresAt, opts...).ToFunc()
+}
+
+// ByDaysUntilDue orders the results by the days_until_due field.
+func ByDaysUntilDue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDaysUntilDue, opts...).ToFunc()
+}
+
+// ByPaymentMethodAdded orders the results by the payment_method_added field.
+func ByPaymentMethodAdded(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPaymentMethodAdded, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEventsCount orders the results by events count.
+func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEventsStep(), opts...)
+	}
+}
+
+// ByEvents orders the results by events terms.
+func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -210,5 +257,12 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
 	)
 }

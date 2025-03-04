@@ -178,30 +178,34 @@ const (
 // APITokenMutation represents an operation that mutates the APIToken nodes in the graph.
 type APITokenMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	created_at    *time.Time
-	updated_at    *time.Time
-	created_by    *string
-	updated_by    *string
-	deleted_at    *time.Time
-	deleted_by    *string
-	tags          *[]string
-	appendtags    []string
-	name          *string
-	token         *string
-	expires_at    *time.Time
-	description   *string
-	scopes        *[]string
-	appendscopes  []string
-	last_used_at  *time.Time
-	clearedFields map[string]struct{}
-	owner         *string
-	clearedowner  bool
-	done          bool
-	oldValue      func(context.Context) (*APIToken, error)
-	predicates    []predicate.APIToken
+	op             Op
+	typ            string
+	id             *string
+	created_at     *time.Time
+	updated_at     *time.Time
+	created_by     *string
+	updated_by     *string
+	deleted_at     *time.Time
+	deleted_by     *string
+	tags           *[]string
+	appendtags     []string
+	name           *string
+	token          *string
+	expires_at     *time.Time
+	description    *string
+	scopes         *[]string
+	appendscopes   []string
+	last_used_at   *time.Time
+	is_active      *bool
+	revoked_reason *string
+	revoked_by     *string
+	revoked_at     *time.Time
+	clearedFields  map[string]struct{}
+	owner          *string
+	clearedowner   bool
+	done           bool
+	oldValue       func(context.Context) (*APIToken, error)
+	predicates     []predicate.APIToken
 }
 
 var _ ent.Mutation = (*APITokenMutation)(nil)
@@ -1000,6 +1004,202 @@ func (m *APITokenMutation) ResetLastUsedAt() {
 	delete(m.clearedFields, apitoken.FieldLastUsedAt)
 }
 
+// SetIsActive sets the "is_active" field.
+func (m *APITokenMutation) SetIsActive(b bool) {
+	m.is_active = &b
+}
+
+// IsActive returns the value of the "is_active" field in the mutation.
+func (m *APITokenMutation) IsActive() (r bool, exists bool) {
+	v := m.is_active
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsActive returns the old "is_active" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldIsActive(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsActive requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsActive: %w", err)
+	}
+	return oldValue.IsActive, nil
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (m *APITokenMutation) ClearIsActive() {
+	m.is_active = nil
+	m.clearedFields[apitoken.FieldIsActive] = struct{}{}
+}
+
+// IsActiveCleared returns if the "is_active" field was cleared in this mutation.
+func (m *APITokenMutation) IsActiveCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldIsActive]
+	return ok
+}
+
+// ResetIsActive resets all changes to the "is_active" field.
+func (m *APITokenMutation) ResetIsActive() {
+	m.is_active = nil
+	delete(m.clearedFields, apitoken.FieldIsActive)
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (m *APITokenMutation) SetRevokedReason(s string) {
+	m.revoked_reason = &s
+}
+
+// RevokedReason returns the value of the "revoked_reason" field in the mutation.
+func (m *APITokenMutation) RevokedReason() (r string, exists bool) {
+	v := m.revoked_reason
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedReason returns the old "revoked_reason" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldRevokedReason(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedReason is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedReason requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedReason: %w", err)
+	}
+	return oldValue.RevokedReason, nil
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (m *APITokenMutation) ClearRevokedReason() {
+	m.revoked_reason = nil
+	m.clearedFields[apitoken.FieldRevokedReason] = struct{}{}
+}
+
+// RevokedReasonCleared returns if the "revoked_reason" field was cleared in this mutation.
+func (m *APITokenMutation) RevokedReasonCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldRevokedReason]
+	return ok
+}
+
+// ResetRevokedReason resets all changes to the "revoked_reason" field.
+func (m *APITokenMutation) ResetRevokedReason() {
+	m.revoked_reason = nil
+	delete(m.clearedFields, apitoken.FieldRevokedReason)
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (m *APITokenMutation) SetRevokedBy(s string) {
+	m.revoked_by = &s
+}
+
+// RevokedBy returns the value of the "revoked_by" field in the mutation.
+func (m *APITokenMutation) RevokedBy() (r string, exists bool) {
+	v := m.revoked_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedBy returns the old "revoked_by" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldRevokedBy(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedBy: %w", err)
+	}
+	return oldValue.RevokedBy, nil
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (m *APITokenMutation) ClearRevokedBy() {
+	m.revoked_by = nil
+	m.clearedFields[apitoken.FieldRevokedBy] = struct{}{}
+}
+
+// RevokedByCleared returns if the "revoked_by" field was cleared in this mutation.
+func (m *APITokenMutation) RevokedByCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldRevokedBy]
+	return ok
+}
+
+// ResetRevokedBy resets all changes to the "revoked_by" field.
+func (m *APITokenMutation) ResetRevokedBy() {
+	m.revoked_by = nil
+	delete(m.clearedFields, apitoken.FieldRevokedBy)
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (m *APITokenMutation) SetRevokedAt(t time.Time) {
+	m.revoked_at = &t
+}
+
+// RevokedAt returns the value of the "revoked_at" field in the mutation.
+func (m *APITokenMutation) RevokedAt() (r time.Time, exists bool) {
+	v := m.revoked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedAt returns the old "revoked_at" field's value of the APIToken entity.
+// If the APIToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APITokenMutation) OldRevokedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedAt: %w", err)
+	}
+	return oldValue.RevokedAt, nil
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (m *APITokenMutation) ClearRevokedAt() {
+	m.revoked_at = nil
+	m.clearedFields[apitoken.FieldRevokedAt] = struct{}{}
+}
+
+// RevokedAtCleared returns if the "revoked_at" field was cleared in this mutation.
+func (m *APITokenMutation) RevokedAtCleared() bool {
+	_, ok := m.clearedFields[apitoken.FieldRevokedAt]
+	return ok
+}
+
+// ResetRevokedAt resets all changes to the "revoked_at" field.
+func (m *APITokenMutation) ResetRevokedAt() {
+	m.revoked_at = nil
+	delete(m.clearedFields, apitoken.FieldRevokedAt)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *APITokenMutation) ClearOwner() {
 	m.clearedowner = true
@@ -1061,7 +1261,7 @@ func (m *APITokenMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *APITokenMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, apitoken.FieldCreatedAt)
 	}
@@ -1104,6 +1304,18 @@ func (m *APITokenMutation) Fields() []string {
 	if m.last_used_at != nil {
 		fields = append(fields, apitoken.FieldLastUsedAt)
 	}
+	if m.is_active != nil {
+		fields = append(fields, apitoken.FieldIsActive)
+	}
+	if m.revoked_reason != nil {
+		fields = append(fields, apitoken.FieldRevokedReason)
+	}
+	if m.revoked_by != nil {
+		fields = append(fields, apitoken.FieldRevokedBy)
+	}
+	if m.revoked_at != nil {
+		fields = append(fields, apitoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -1140,6 +1352,14 @@ func (m *APITokenMutation) Field(name string) (ent.Value, bool) {
 		return m.Scopes()
 	case apitoken.FieldLastUsedAt:
 		return m.LastUsedAt()
+	case apitoken.FieldIsActive:
+		return m.IsActive()
+	case apitoken.FieldRevokedReason:
+		return m.RevokedReason()
+	case apitoken.FieldRevokedBy:
+		return m.RevokedBy()
+	case apitoken.FieldRevokedAt:
+		return m.RevokedAt()
 	}
 	return nil, false
 }
@@ -1177,6 +1397,14 @@ func (m *APITokenMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldScopes(ctx)
 	case apitoken.FieldLastUsedAt:
 		return m.OldLastUsedAt(ctx)
+	case apitoken.FieldIsActive:
+		return m.OldIsActive(ctx)
+	case apitoken.FieldRevokedReason:
+		return m.OldRevokedReason(ctx)
+	case apitoken.FieldRevokedBy:
+		return m.OldRevokedBy(ctx)
+	case apitoken.FieldRevokedAt:
+		return m.OldRevokedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown APIToken field %s", name)
 }
@@ -1284,6 +1512,34 @@ func (m *APITokenMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLastUsedAt(v)
 		return nil
+	case apitoken.FieldIsActive:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsActive(v)
+		return nil
+	case apitoken.FieldRevokedReason:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedReason(v)
+		return nil
+	case apitoken.FieldRevokedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedBy(v)
+		return nil
+	case apitoken.FieldRevokedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown APIToken field %s", name)
 }
@@ -1350,6 +1606,18 @@ func (m *APITokenMutation) ClearedFields() []string {
 	if m.FieldCleared(apitoken.FieldLastUsedAt) {
 		fields = append(fields, apitoken.FieldLastUsedAt)
 	}
+	if m.FieldCleared(apitoken.FieldIsActive) {
+		fields = append(fields, apitoken.FieldIsActive)
+	}
+	if m.FieldCleared(apitoken.FieldRevokedReason) {
+		fields = append(fields, apitoken.FieldRevokedReason)
+	}
+	if m.FieldCleared(apitoken.FieldRevokedBy) {
+		fields = append(fields, apitoken.FieldRevokedBy)
+	}
+	if m.FieldCleared(apitoken.FieldRevokedAt) {
+		fields = append(fields, apitoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -1400,6 +1668,18 @@ func (m *APITokenMutation) ClearField(name string) error {
 	case apitoken.FieldLastUsedAt:
 		m.ClearLastUsedAt()
 		return nil
+	case apitoken.FieldIsActive:
+		m.ClearIsActive()
+		return nil
+	case apitoken.FieldRevokedReason:
+		m.ClearRevokedReason()
+		return nil
+	case apitoken.FieldRevokedBy:
+		m.ClearRevokedBy()
+		return nil
+	case apitoken.FieldRevokedAt:
+		m.ClearRevokedAt()
+		return nil
 	}
 	return fmt.Errorf("unknown APIToken nullable field %s", name)
 }
@@ -1449,6 +1729,18 @@ func (m *APITokenMutation) ResetField(name string) error {
 		return nil
 	case apitoken.FieldLastUsedAt:
 		m.ResetLastUsedAt()
+		return nil
+	case apitoken.FieldIsActive:
+		m.ResetIsActive()
+		return nil
+	case apitoken.FieldRevokedReason:
+		m.ResetRevokedReason()
+		return nil
+	case apitoken.FieldRevokedBy:
+		m.ResetRevokedBy()
+		return nil
+	case apitoken.FieldRevokedAt:
+		m.ResetRevokedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown APIToken field %s", name)
@@ -66964,6 +67256,9 @@ type OrgSubscriptionMutation struct {
 	active                     *bool
 	stripe_customer_id         *string
 	expires_at                 *time.Time
+	trial_expires_at           *time.Time
+	days_until_due             *string
+	payment_method_added       *bool
 	features                   *[]string
 	appendfeatures             []string
 	feature_lookup_keys        *[]string
@@ -66971,6 +67266,9 @@ type OrgSubscriptionMutation struct {
 	clearedFields              map[string]struct{}
 	owner                      *string
 	clearedowner               bool
+	events                     map[string]struct{}
+	removedevents              map[string]struct{}
+	clearedevents              bool
 	done                       bool
 	oldValue                   func(context.Context) (*OrgSubscription, error)
 	predicates                 []predicate.OrgSubscription
@@ -67867,6 +68165,153 @@ func (m *OrgSubscriptionMutation) ResetExpiresAt() {
 	delete(m.clearedFields, orgsubscription.FieldExpiresAt)
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (m *OrgSubscriptionMutation) SetTrialExpiresAt(t time.Time) {
+	m.trial_expires_at = &t
+}
+
+// TrialExpiresAt returns the value of the "trial_expires_at" field in the mutation.
+func (m *OrgSubscriptionMutation) TrialExpiresAt() (r time.Time, exists bool) {
+	v := m.trial_expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTrialExpiresAt returns the old "trial_expires_at" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldTrialExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTrialExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTrialExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTrialExpiresAt: %w", err)
+	}
+	return oldValue.TrialExpiresAt, nil
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (m *OrgSubscriptionMutation) ClearTrialExpiresAt() {
+	m.trial_expires_at = nil
+	m.clearedFields[orgsubscription.FieldTrialExpiresAt] = struct{}{}
+}
+
+// TrialExpiresAtCleared returns if the "trial_expires_at" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) TrialExpiresAtCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldTrialExpiresAt]
+	return ok
+}
+
+// ResetTrialExpiresAt resets all changes to the "trial_expires_at" field.
+func (m *OrgSubscriptionMutation) ResetTrialExpiresAt() {
+	m.trial_expires_at = nil
+	delete(m.clearedFields, orgsubscription.FieldTrialExpiresAt)
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (m *OrgSubscriptionMutation) SetDaysUntilDue(s string) {
+	m.days_until_due = &s
+}
+
+// DaysUntilDue returns the value of the "days_until_due" field in the mutation.
+func (m *OrgSubscriptionMutation) DaysUntilDue() (r string, exists bool) {
+	v := m.days_until_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDaysUntilDue returns the old "days_until_due" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldDaysUntilDue(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDaysUntilDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDaysUntilDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDaysUntilDue: %w", err)
+	}
+	return oldValue.DaysUntilDue, nil
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (m *OrgSubscriptionMutation) ClearDaysUntilDue() {
+	m.days_until_due = nil
+	m.clearedFields[orgsubscription.FieldDaysUntilDue] = struct{}{}
+}
+
+// DaysUntilDueCleared returns if the "days_until_due" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) DaysUntilDueCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldDaysUntilDue]
+	return ok
+}
+
+// ResetDaysUntilDue resets all changes to the "days_until_due" field.
+func (m *OrgSubscriptionMutation) ResetDaysUntilDue() {
+	m.days_until_due = nil
+	delete(m.clearedFields, orgsubscription.FieldDaysUntilDue)
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (m *OrgSubscriptionMutation) SetPaymentMethodAdded(b bool) {
+	m.payment_method_added = &b
+}
+
+// PaymentMethodAdded returns the value of the "payment_method_added" field in the mutation.
+func (m *OrgSubscriptionMutation) PaymentMethodAdded() (r bool, exists bool) {
+	v := m.payment_method_added
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPaymentMethodAdded returns the old "payment_method_added" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldPaymentMethodAdded(ctx context.Context) (v *bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPaymentMethodAdded is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPaymentMethodAdded requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPaymentMethodAdded: %w", err)
+	}
+	return oldValue.PaymentMethodAdded, nil
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (m *OrgSubscriptionMutation) ClearPaymentMethodAdded() {
+	m.payment_method_added = nil
+	m.clearedFields[orgsubscription.FieldPaymentMethodAdded] = struct{}{}
+}
+
+// PaymentMethodAddedCleared returns if the "payment_method_added" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) PaymentMethodAddedCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldPaymentMethodAdded]
+	return ok
+}
+
+// ResetPaymentMethodAdded resets all changes to the "payment_method_added" field.
+func (m *OrgSubscriptionMutation) ResetPaymentMethodAdded() {
+	m.payment_method_added = nil
+	delete(m.clearedFields, orgsubscription.FieldPaymentMethodAdded)
+}
+
 // SetFeatures sets the "features" field.
 func (m *OrgSubscriptionMutation) SetFeatures(s []string) {
 	m.features = &s
@@ -68024,6 +68469,60 @@ func (m *OrgSubscriptionMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *OrgSubscriptionMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *OrgSubscriptionMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *OrgSubscriptionMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *OrgSubscriptionMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *OrgSubscriptionMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *OrgSubscriptionMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *OrgSubscriptionMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
 // Where appends a list predicates to the OrgSubscriptionMutation builder.
 func (m *OrgSubscriptionMutation) Where(ps ...predicate.OrgSubscription) {
 	m.predicates = append(m.predicates, ps...)
@@ -68058,7 +68557,7 @@ func (m *OrgSubscriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, orgsubscription.FieldCreatedAt)
 	}
@@ -68107,6 +68606,15 @@ func (m *OrgSubscriptionMutation) Fields() []string {
 	if m.expires_at != nil {
 		fields = append(fields, orgsubscription.FieldExpiresAt)
 	}
+	if m.trial_expires_at != nil {
+		fields = append(fields, orgsubscription.FieldTrialExpiresAt)
+	}
+	if m.days_until_due != nil {
+		fields = append(fields, orgsubscription.FieldDaysUntilDue)
+	}
+	if m.payment_method_added != nil {
+		fields = append(fields, orgsubscription.FieldPaymentMethodAdded)
+	}
 	if m.features != nil {
 		fields = append(fields, orgsubscription.FieldFeatures)
 	}
@@ -68153,6 +68661,12 @@ func (m *OrgSubscriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.StripeCustomerID()
 	case orgsubscription.FieldExpiresAt:
 		return m.ExpiresAt()
+	case orgsubscription.FieldTrialExpiresAt:
+		return m.TrialExpiresAt()
+	case orgsubscription.FieldDaysUntilDue:
+		return m.DaysUntilDue()
+	case orgsubscription.FieldPaymentMethodAdded:
+		return m.PaymentMethodAdded()
 	case orgsubscription.FieldFeatures:
 		return m.Features()
 	case orgsubscription.FieldFeatureLookupKeys:
@@ -68198,6 +68712,12 @@ func (m *OrgSubscriptionMutation) OldField(ctx context.Context, name string) (en
 		return m.OldStripeCustomerID(ctx)
 	case orgsubscription.FieldExpiresAt:
 		return m.OldExpiresAt(ctx)
+	case orgsubscription.FieldTrialExpiresAt:
+		return m.OldTrialExpiresAt(ctx)
+	case orgsubscription.FieldDaysUntilDue:
+		return m.OldDaysUntilDue(ctx)
+	case orgsubscription.FieldPaymentMethodAdded:
+		return m.OldPaymentMethodAdded(ctx)
 	case orgsubscription.FieldFeatures:
 		return m.OldFeatures(ctx)
 	case orgsubscription.FieldFeatureLookupKeys:
@@ -68323,6 +68843,27 @@ func (m *OrgSubscriptionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExpiresAt(v)
 		return nil
+	case orgsubscription.FieldTrialExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTrialExpiresAt(v)
+		return nil
+	case orgsubscription.FieldDaysUntilDue:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDaysUntilDue(v)
+		return nil
+	case orgsubscription.FieldPaymentMethodAdded:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPaymentMethodAdded(v)
+		return nil
 	case orgsubscription.FieldFeatures:
 		v, ok := value.([]string)
 		if !ok {
@@ -68412,6 +68953,15 @@ func (m *OrgSubscriptionMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscription.FieldExpiresAt) {
 		fields = append(fields, orgsubscription.FieldExpiresAt)
 	}
+	if m.FieldCleared(orgsubscription.FieldTrialExpiresAt) {
+		fields = append(fields, orgsubscription.FieldTrialExpiresAt)
+	}
+	if m.FieldCleared(orgsubscription.FieldDaysUntilDue) {
+		fields = append(fields, orgsubscription.FieldDaysUntilDue)
+	}
+	if m.FieldCleared(orgsubscription.FieldPaymentMethodAdded) {
+		fields = append(fields, orgsubscription.FieldPaymentMethodAdded)
+	}
 	if m.FieldCleared(orgsubscription.FieldFeatures) {
 		fields = append(fields, orgsubscription.FieldFeatures)
 	}
@@ -68477,6 +69027,15 @@ func (m *OrgSubscriptionMutation) ClearField(name string) error {
 	case orgsubscription.FieldExpiresAt:
 		m.ClearExpiresAt()
 		return nil
+	case orgsubscription.FieldTrialExpiresAt:
+		m.ClearTrialExpiresAt()
+		return nil
+	case orgsubscription.FieldDaysUntilDue:
+		m.ClearDaysUntilDue()
+		return nil
+	case orgsubscription.FieldPaymentMethodAdded:
+		m.ClearPaymentMethodAdded()
+		return nil
 	case orgsubscription.FieldFeatures:
 		m.ClearFeatures()
 		return nil
@@ -68539,6 +69098,15 @@ func (m *OrgSubscriptionMutation) ResetField(name string) error {
 	case orgsubscription.FieldExpiresAt:
 		m.ResetExpiresAt()
 		return nil
+	case orgsubscription.FieldTrialExpiresAt:
+		m.ResetTrialExpiresAt()
+		return nil
+	case orgsubscription.FieldDaysUntilDue:
+		m.ResetDaysUntilDue()
+		return nil
+	case orgsubscription.FieldPaymentMethodAdded:
+		m.ResetPaymentMethodAdded()
+		return nil
 	case orgsubscription.FieldFeatures:
 		m.ResetFeatures()
 		return nil
@@ -68551,9 +69119,12 @@ func (m *OrgSubscriptionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrgSubscriptionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.owner != nil {
 		edges = append(edges, orgsubscription.EdgeOwner)
+	}
+	if m.events != nil {
+		edges = append(edges, orgsubscription.EdgeEvents)
 	}
 	return edges
 }
@@ -68566,27 +69137,47 @@ func (m *OrgSubscriptionMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
+	case orgsubscription.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrgSubscriptionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.removedevents != nil {
+		edges = append(edges, orgsubscription.EdgeEvents)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *OrgSubscriptionMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case orgsubscription.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrgSubscriptionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedowner {
 		edges = append(edges, orgsubscription.EdgeOwner)
+	}
+	if m.clearedevents {
+		edges = append(edges, orgsubscription.EdgeEvents)
 	}
 	return edges
 }
@@ -68597,6 +69188,8 @@ func (m *OrgSubscriptionMutation) EdgeCleared(name string) bool {
 	switch name {
 	case orgsubscription.EdgeOwner:
 		return m.clearedowner
+	case orgsubscription.EdgeEvents:
+		return m.clearedevents
 	}
 	return false
 }
@@ -68618,6 +69211,9 @@ func (m *OrgSubscriptionMutation) ResetEdge(name string) error {
 	switch name {
 	case orgsubscription.EdgeOwner:
 		m.ResetOwner()
+		return nil
+	case orgsubscription.EdgeEvents:
+		m.ResetEvents()
 		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscription edge %s", name)
@@ -68649,6 +69245,9 @@ type OrgSubscriptionHistoryMutation struct {
 	active                     *bool
 	stripe_customer_id         *string
 	expires_at                 *time.Time
+	trial_expires_at           *time.Time
+	days_until_due             *string
+	payment_method_added       *bool
 	features                   *[]string
 	appendfeatures             []string
 	feature_lookup_keys        *[]string
@@ -69671,6 +70270,153 @@ func (m *OrgSubscriptionHistoryMutation) ResetExpiresAt() {
 	delete(m.clearedFields, orgsubscriptionhistory.FieldExpiresAt)
 }
 
+// SetTrialExpiresAt sets the "trial_expires_at" field.
+func (m *OrgSubscriptionHistoryMutation) SetTrialExpiresAt(t time.Time) {
+	m.trial_expires_at = &t
+}
+
+// TrialExpiresAt returns the value of the "trial_expires_at" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) TrialExpiresAt() (r time.Time, exists bool) {
+	v := m.trial_expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTrialExpiresAt returns the old "trial_expires_at" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldTrialExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTrialExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTrialExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTrialExpiresAt: %w", err)
+	}
+	return oldValue.TrialExpiresAt, nil
+}
+
+// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
+func (m *OrgSubscriptionHistoryMutation) ClearTrialExpiresAt() {
+	m.trial_expires_at = nil
+	m.clearedFields[orgsubscriptionhistory.FieldTrialExpiresAt] = struct{}{}
+}
+
+// TrialExpiresAtCleared returns if the "trial_expires_at" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) TrialExpiresAtCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldTrialExpiresAt]
+	return ok
+}
+
+// ResetTrialExpiresAt resets all changes to the "trial_expires_at" field.
+func (m *OrgSubscriptionHistoryMutation) ResetTrialExpiresAt() {
+	m.trial_expires_at = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldTrialExpiresAt)
+}
+
+// SetDaysUntilDue sets the "days_until_due" field.
+func (m *OrgSubscriptionHistoryMutation) SetDaysUntilDue(s string) {
+	m.days_until_due = &s
+}
+
+// DaysUntilDue returns the value of the "days_until_due" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) DaysUntilDue() (r string, exists bool) {
+	v := m.days_until_due
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDaysUntilDue returns the old "days_until_due" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldDaysUntilDue(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDaysUntilDue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDaysUntilDue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDaysUntilDue: %w", err)
+	}
+	return oldValue.DaysUntilDue, nil
+}
+
+// ClearDaysUntilDue clears the value of the "days_until_due" field.
+func (m *OrgSubscriptionHistoryMutation) ClearDaysUntilDue() {
+	m.days_until_due = nil
+	m.clearedFields[orgsubscriptionhistory.FieldDaysUntilDue] = struct{}{}
+}
+
+// DaysUntilDueCleared returns if the "days_until_due" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) DaysUntilDueCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldDaysUntilDue]
+	return ok
+}
+
+// ResetDaysUntilDue resets all changes to the "days_until_due" field.
+func (m *OrgSubscriptionHistoryMutation) ResetDaysUntilDue() {
+	m.days_until_due = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldDaysUntilDue)
+}
+
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (m *OrgSubscriptionHistoryMutation) SetPaymentMethodAdded(b bool) {
+	m.payment_method_added = &b
+}
+
+// PaymentMethodAdded returns the value of the "payment_method_added" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) PaymentMethodAdded() (r bool, exists bool) {
+	v := m.payment_method_added
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPaymentMethodAdded returns the old "payment_method_added" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldPaymentMethodAdded(ctx context.Context) (v *bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPaymentMethodAdded is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPaymentMethodAdded requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPaymentMethodAdded: %w", err)
+	}
+	return oldValue.PaymentMethodAdded, nil
+}
+
+// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
+func (m *OrgSubscriptionHistoryMutation) ClearPaymentMethodAdded() {
+	m.payment_method_added = nil
+	m.clearedFields[orgsubscriptionhistory.FieldPaymentMethodAdded] = struct{}{}
+}
+
+// PaymentMethodAddedCleared returns if the "payment_method_added" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) PaymentMethodAddedCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldPaymentMethodAdded]
+	return ok
+}
+
+// ResetPaymentMethodAdded resets all changes to the "payment_method_added" field.
+func (m *OrgSubscriptionHistoryMutation) ResetPaymentMethodAdded() {
+	m.payment_method_added = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldPaymentMethodAdded)
+}
+
 // SetFeatures sets the "features" field.
 func (m *OrgSubscriptionHistoryMutation) SetFeatures(s []string) {
 	m.features = &s
@@ -69835,7 +70581,7 @@ func (m *OrgSubscriptionHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 24)
 	if m.history_time != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldHistoryTime)
 	}
@@ -69893,6 +70639,15 @@ func (m *OrgSubscriptionHistoryMutation) Fields() []string {
 	if m.expires_at != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldExpiresAt)
 	}
+	if m.trial_expires_at != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldTrialExpiresAt)
+	}
+	if m.days_until_due != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldDaysUntilDue)
+	}
+	if m.payment_method_added != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldPaymentMethodAdded)
+	}
 	if m.features != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldFeatures)
 	}
@@ -69945,6 +70700,12 @@ func (m *OrgSubscriptionHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.StripeCustomerID()
 	case orgsubscriptionhistory.FieldExpiresAt:
 		return m.ExpiresAt()
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		return m.TrialExpiresAt()
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		return m.DaysUntilDue()
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		return m.PaymentMethodAdded()
 	case orgsubscriptionhistory.FieldFeatures:
 		return m.Features()
 	case orgsubscriptionhistory.FieldFeatureLookupKeys:
@@ -69996,6 +70757,12 @@ func (m *OrgSubscriptionHistoryMutation) OldField(ctx context.Context, name stri
 		return m.OldStripeCustomerID(ctx)
 	case orgsubscriptionhistory.FieldExpiresAt:
 		return m.OldExpiresAt(ctx)
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		return m.OldTrialExpiresAt(ctx)
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		return m.OldDaysUntilDue(ctx)
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		return m.OldPaymentMethodAdded(ctx)
 	case orgsubscriptionhistory.FieldFeatures:
 		return m.OldFeatures(ctx)
 	case orgsubscriptionhistory.FieldFeatureLookupKeys:
@@ -70142,6 +70909,27 @@ func (m *OrgSubscriptionHistoryMutation) SetField(name string, value ent.Value) 
 		}
 		m.SetExpiresAt(v)
 		return nil
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTrialExpiresAt(v)
+		return nil
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDaysUntilDue(v)
+		return nil
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPaymentMethodAdded(v)
+		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		v, ok := value.([]string)
 		if !ok {
@@ -70234,6 +71022,15 @@ func (m *OrgSubscriptionHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscriptionhistory.FieldExpiresAt) {
 		fields = append(fields, orgsubscriptionhistory.FieldExpiresAt)
 	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldTrialExpiresAt) {
+		fields = append(fields, orgsubscriptionhistory.FieldTrialExpiresAt)
+	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldDaysUntilDue) {
+		fields = append(fields, orgsubscriptionhistory.FieldDaysUntilDue)
+	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldPaymentMethodAdded) {
+		fields = append(fields, orgsubscriptionhistory.FieldPaymentMethodAdded)
+	}
 	if m.FieldCleared(orgsubscriptionhistory.FieldFeatures) {
 		fields = append(fields, orgsubscriptionhistory.FieldFeatures)
 	}
@@ -70301,6 +71098,15 @@ func (m *OrgSubscriptionHistoryMutation) ClearField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldExpiresAt:
 		m.ClearExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		m.ClearTrialExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		m.ClearDaysUntilDue()
+		return nil
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		m.ClearPaymentMethodAdded()
 		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		m.ClearFeatures()
@@ -70372,6 +71178,15 @@ func (m *OrgSubscriptionHistoryMutation) ResetField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldExpiresAt:
 		m.ResetExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldTrialExpiresAt:
+		m.ResetTrialExpiresAt()
+		return nil
+	case orgsubscriptionhistory.FieldDaysUntilDue:
+		m.ResetDaysUntilDue()
+		return nil
+	case orgsubscriptionhistory.FieldPaymentMethodAdded:
+		m.ResetPaymentMethodAdded()
 		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		m.ResetFeatures()
@@ -81263,6 +82078,10 @@ type PersonalAccessTokenMutation struct {
 	scopes               *[]string
 	appendscopes         []string
 	last_used_at         *time.Time
+	is_active            *bool
+	revoked_reason       *string
+	revoked_by           *string
+	revoked_at           *time.Time
 	clearedFields        map[string]struct{}
 	owner                *string
 	clearedowner         bool
@@ -82060,6 +82879,202 @@ func (m *PersonalAccessTokenMutation) ResetLastUsedAt() {
 	delete(m.clearedFields, personalaccesstoken.FieldLastUsedAt)
 }
 
+// SetIsActive sets the "is_active" field.
+func (m *PersonalAccessTokenMutation) SetIsActive(b bool) {
+	m.is_active = &b
+}
+
+// IsActive returns the value of the "is_active" field in the mutation.
+func (m *PersonalAccessTokenMutation) IsActive() (r bool, exists bool) {
+	v := m.is_active
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsActive returns the old "is_active" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldIsActive(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsActive requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsActive: %w", err)
+	}
+	return oldValue.IsActive, nil
+}
+
+// ClearIsActive clears the value of the "is_active" field.
+func (m *PersonalAccessTokenMutation) ClearIsActive() {
+	m.is_active = nil
+	m.clearedFields[personalaccesstoken.FieldIsActive] = struct{}{}
+}
+
+// IsActiveCleared returns if the "is_active" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) IsActiveCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldIsActive]
+	return ok
+}
+
+// ResetIsActive resets all changes to the "is_active" field.
+func (m *PersonalAccessTokenMutation) ResetIsActive() {
+	m.is_active = nil
+	delete(m.clearedFields, personalaccesstoken.FieldIsActive)
+}
+
+// SetRevokedReason sets the "revoked_reason" field.
+func (m *PersonalAccessTokenMutation) SetRevokedReason(s string) {
+	m.revoked_reason = &s
+}
+
+// RevokedReason returns the value of the "revoked_reason" field in the mutation.
+func (m *PersonalAccessTokenMutation) RevokedReason() (r string, exists bool) {
+	v := m.revoked_reason
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedReason returns the old "revoked_reason" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldRevokedReason(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedReason is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedReason requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedReason: %w", err)
+	}
+	return oldValue.RevokedReason, nil
+}
+
+// ClearRevokedReason clears the value of the "revoked_reason" field.
+func (m *PersonalAccessTokenMutation) ClearRevokedReason() {
+	m.revoked_reason = nil
+	m.clearedFields[personalaccesstoken.FieldRevokedReason] = struct{}{}
+}
+
+// RevokedReasonCleared returns if the "revoked_reason" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) RevokedReasonCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldRevokedReason]
+	return ok
+}
+
+// ResetRevokedReason resets all changes to the "revoked_reason" field.
+func (m *PersonalAccessTokenMutation) ResetRevokedReason() {
+	m.revoked_reason = nil
+	delete(m.clearedFields, personalaccesstoken.FieldRevokedReason)
+}
+
+// SetRevokedBy sets the "revoked_by" field.
+func (m *PersonalAccessTokenMutation) SetRevokedBy(s string) {
+	m.revoked_by = &s
+}
+
+// RevokedBy returns the value of the "revoked_by" field in the mutation.
+func (m *PersonalAccessTokenMutation) RevokedBy() (r string, exists bool) {
+	v := m.revoked_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedBy returns the old "revoked_by" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldRevokedBy(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedBy: %w", err)
+	}
+	return oldValue.RevokedBy, nil
+}
+
+// ClearRevokedBy clears the value of the "revoked_by" field.
+func (m *PersonalAccessTokenMutation) ClearRevokedBy() {
+	m.revoked_by = nil
+	m.clearedFields[personalaccesstoken.FieldRevokedBy] = struct{}{}
+}
+
+// RevokedByCleared returns if the "revoked_by" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) RevokedByCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldRevokedBy]
+	return ok
+}
+
+// ResetRevokedBy resets all changes to the "revoked_by" field.
+func (m *PersonalAccessTokenMutation) ResetRevokedBy() {
+	m.revoked_by = nil
+	delete(m.clearedFields, personalaccesstoken.FieldRevokedBy)
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (m *PersonalAccessTokenMutation) SetRevokedAt(t time.Time) {
+	m.revoked_at = &t
+}
+
+// RevokedAt returns the value of the "revoked_at" field in the mutation.
+func (m *PersonalAccessTokenMutation) RevokedAt() (r time.Time, exists bool) {
+	v := m.revoked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedAt returns the old "revoked_at" field's value of the PersonalAccessToken entity.
+// If the PersonalAccessToken object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalAccessTokenMutation) OldRevokedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedAt: %w", err)
+	}
+	return oldValue.RevokedAt, nil
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (m *PersonalAccessTokenMutation) ClearRevokedAt() {
+	m.revoked_at = nil
+	m.clearedFields[personalaccesstoken.FieldRevokedAt] = struct{}{}
+}
+
+// RevokedAtCleared returns if the "revoked_at" field was cleared in this mutation.
+func (m *PersonalAccessTokenMutation) RevokedAtCleared() bool {
+	_, ok := m.clearedFields[personalaccesstoken.FieldRevokedAt]
+	return ok
+}
+
+// ResetRevokedAt resets all changes to the "revoked_at" field.
+func (m *PersonalAccessTokenMutation) ResetRevokedAt() {
+	m.revoked_at = nil
+	delete(m.clearedFields, personalaccesstoken.FieldRevokedAt)
+}
+
 // ClearOwner clears the "owner" edge to the User entity.
 func (m *PersonalAccessTokenMutation) ClearOwner() {
 	m.clearedowner = true
@@ -82229,7 +83244,7 @@ func (m *PersonalAccessTokenMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonalAccessTokenMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, personalaccesstoken.FieldCreatedAt)
 	}
@@ -82272,6 +83287,18 @@ func (m *PersonalAccessTokenMutation) Fields() []string {
 	if m.last_used_at != nil {
 		fields = append(fields, personalaccesstoken.FieldLastUsedAt)
 	}
+	if m.is_active != nil {
+		fields = append(fields, personalaccesstoken.FieldIsActive)
+	}
+	if m.revoked_reason != nil {
+		fields = append(fields, personalaccesstoken.FieldRevokedReason)
+	}
+	if m.revoked_by != nil {
+		fields = append(fields, personalaccesstoken.FieldRevokedBy)
+	}
+	if m.revoked_at != nil {
+		fields = append(fields, personalaccesstoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -82308,6 +83335,14 @@ func (m *PersonalAccessTokenMutation) Field(name string) (ent.Value, bool) {
 		return m.Scopes()
 	case personalaccesstoken.FieldLastUsedAt:
 		return m.LastUsedAt()
+	case personalaccesstoken.FieldIsActive:
+		return m.IsActive()
+	case personalaccesstoken.FieldRevokedReason:
+		return m.RevokedReason()
+	case personalaccesstoken.FieldRevokedBy:
+		return m.RevokedBy()
+	case personalaccesstoken.FieldRevokedAt:
+		return m.RevokedAt()
 	}
 	return nil, false
 }
@@ -82345,6 +83380,14 @@ func (m *PersonalAccessTokenMutation) OldField(ctx context.Context, name string)
 		return m.OldScopes(ctx)
 	case personalaccesstoken.FieldLastUsedAt:
 		return m.OldLastUsedAt(ctx)
+	case personalaccesstoken.FieldIsActive:
+		return m.OldIsActive(ctx)
+	case personalaccesstoken.FieldRevokedReason:
+		return m.OldRevokedReason(ctx)
+	case personalaccesstoken.FieldRevokedBy:
+		return m.OldRevokedBy(ctx)
+	case personalaccesstoken.FieldRevokedAt:
+		return m.OldRevokedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown PersonalAccessToken field %s", name)
 }
@@ -82452,6 +83495,34 @@ func (m *PersonalAccessTokenMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetLastUsedAt(v)
 		return nil
+	case personalaccesstoken.FieldIsActive:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsActive(v)
+		return nil
+	case personalaccesstoken.FieldRevokedReason:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedReason(v)
+		return nil
+	case personalaccesstoken.FieldRevokedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedBy(v)
+		return nil
+	case personalaccesstoken.FieldRevokedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken field %s", name)
 }
@@ -82515,6 +83586,18 @@ func (m *PersonalAccessTokenMutation) ClearedFields() []string {
 	if m.FieldCleared(personalaccesstoken.FieldLastUsedAt) {
 		fields = append(fields, personalaccesstoken.FieldLastUsedAt)
 	}
+	if m.FieldCleared(personalaccesstoken.FieldIsActive) {
+		fields = append(fields, personalaccesstoken.FieldIsActive)
+	}
+	if m.FieldCleared(personalaccesstoken.FieldRevokedReason) {
+		fields = append(fields, personalaccesstoken.FieldRevokedReason)
+	}
+	if m.FieldCleared(personalaccesstoken.FieldRevokedBy) {
+		fields = append(fields, personalaccesstoken.FieldRevokedBy)
+	}
+	if m.FieldCleared(personalaccesstoken.FieldRevokedAt) {
+		fields = append(fields, personalaccesstoken.FieldRevokedAt)
+	}
 	return fields
 }
 
@@ -82561,6 +83644,18 @@ func (m *PersonalAccessTokenMutation) ClearField(name string) error {
 		return nil
 	case personalaccesstoken.FieldLastUsedAt:
 		m.ClearLastUsedAt()
+		return nil
+	case personalaccesstoken.FieldIsActive:
+		m.ClearIsActive()
+		return nil
+	case personalaccesstoken.FieldRevokedReason:
+		m.ClearRevokedReason()
+		return nil
+	case personalaccesstoken.FieldRevokedBy:
+		m.ClearRevokedBy()
+		return nil
+	case personalaccesstoken.FieldRevokedAt:
+		m.ClearRevokedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken nullable field %s", name)
@@ -82611,6 +83706,18 @@ func (m *PersonalAccessTokenMutation) ResetField(name string) error {
 		return nil
 	case personalaccesstoken.FieldLastUsedAt:
 		m.ResetLastUsedAt()
+		return nil
+	case personalaccesstoken.FieldIsActive:
+		m.ResetIsActive()
+		return nil
+	case personalaccesstoken.FieldRevokedReason:
+		m.ResetRevokedReason()
+		return nil
+	case personalaccesstoken.FieldRevokedBy:
+		m.ResetRevokedBy()
+		return nil
+	case personalaccesstoken.FieldRevokedAt:
+		m.ResetRevokedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken field %s", name)

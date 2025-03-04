@@ -155,6 +155,10 @@ func init() {
 	apitokenDescToken := apitokenFields[1].Descriptor()
 	// apitoken.DefaultToken holds the default value on creation for the token field.
 	apitoken.DefaultToken = apitokenDescToken.Default.(func() string)
+	// apitokenDescIsActive is the schema descriptor for is_active field.
+	apitokenDescIsActive := apitokenFields[6].Descriptor()
+	// apitoken.DefaultIsActive holds the default value on creation for the is_active field.
+	apitoken.DefaultIsActive = apitokenDescIsActive.Default.(bool)
 	// apitokenDescID is the schema descriptor for id field.
 	apitokenDescID := apitokenMixinFields2[0].Descriptor()
 	// apitoken.DefaultID holds the default value on creation for the id field.
@@ -2583,6 +2587,10 @@ func init() {
 	personalaccesstokenDescToken := personalaccesstokenFields[1].Descriptor()
 	// personalaccesstoken.DefaultToken holds the default value on creation for the token field.
 	personalaccesstoken.DefaultToken = personalaccesstokenDescToken.Default.(func() string)
+	// personalaccesstokenDescIsActive is the schema descriptor for is_active field.
+	personalaccesstokenDescIsActive := personalaccesstokenFields[6].Descriptor()
+	// personalaccesstoken.DefaultIsActive holds the default value on creation for the is_active field.
+	personalaccesstoken.DefaultIsActive = personalaccesstokenDescIsActive.Default.(bool)
 	// personalaccesstokenDescID is the schema descriptor for id field.
 	personalaccesstokenDescID := personalaccesstokenMixinFields2[0].Descriptor()
 	// personalaccesstoken.DefaultID holds the default value on creation for the id field.
