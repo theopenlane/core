@@ -135,7 +135,6 @@ func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(customerID string) (*Subsc
 		return nil, err
 	}
 
-
 	return sc.mapStripeSubscription(subs), nil
 }
 
