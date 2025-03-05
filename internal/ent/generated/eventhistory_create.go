@@ -123,6 +123,14 @@ func (ehc *EventHistoryCreate) SetEventID(s string) *EventHistoryCreate {
 	return ehc
 }
 
+// SetNillableEventID sets the "event_id" field if the given value is not nil.
+func (ehc *EventHistoryCreate) SetNillableEventID(s *string) *EventHistoryCreate {
+	if s != nil {
+		ehc.SetEventID(*s)
+	}
+	return ehc
+}
+
 // SetCorrelationID sets the "correlation_id" field.
 func (ehc *EventHistoryCreate) SetCorrelationID(s string) *EventHistoryCreate {
 	ehc.mutation.SetCorrelationID(s)
@@ -143,87 +151,9 @@ func (ehc *EventHistoryCreate) SetEventType(s string) *EventHistoryCreate {
 	return ehc
 }
 
-// SetNillableEventType sets the "event_type" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableEventType(s *string) *EventHistoryCreate {
-	if s != nil {
-		ehc.SetEventType(*s)
-	}
-	return ehc
-}
-
 // SetMetadata sets the "metadata" field.
 func (ehc *EventHistoryCreate) SetMetadata(m map[string]interface{}) *EventHistoryCreate {
 	ehc.mutation.SetMetadata(m)
-	return ehc
-}
-
-// SetSource sets the "source" field.
-func (ehc *EventHistoryCreate) SetSource(s string) *EventHistoryCreate {
-	ehc.mutation.SetSource(s)
-	return ehc
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableSource(s *string) *EventHistoryCreate {
-	if s != nil {
-		ehc.SetSource(*s)
-	}
-	return ehc
-}
-
-// SetAdditionalProcessingRequired sets the "additional_processing_required" field.
-func (ehc *EventHistoryCreate) SetAdditionalProcessingRequired(b bool) *EventHistoryCreate {
-	ehc.mutation.SetAdditionalProcessingRequired(b)
-	return ehc
-}
-
-// SetNillableAdditionalProcessingRequired sets the "additional_processing_required" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableAdditionalProcessingRequired(b *bool) *EventHistoryCreate {
-	if b != nil {
-		ehc.SetAdditionalProcessingRequired(*b)
-	}
-	return ehc
-}
-
-// SetAdditionalProcessingDetails sets the "additional_processing_details" field.
-func (ehc *EventHistoryCreate) SetAdditionalProcessingDetails(s string) *EventHistoryCreate {
-	ehc.mutation.SetAdditionalProcessingDetails(s)
-	return ehc
-}
-
-// SetNillableAdditionalProcessingDetails sets the "additional_processing_details" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableAdditionalProcessingDetails(s *string) *EventHistoryCreate {
-	if s != nil {
-		ehc.SetAdditionalProcessingDetails(*s)
-	}
-	return ehc
-}
-
-// SetProcessedBy sets the "processed_by" field.
-func (ehc *EventHistoryCreate) SetProcessedBy(s string) *EventHistoryCreate {
-	ehc.mutation.SetProcessedBy(s)
-	return ehc
-}
-
-// SetNillableProcessedBy sets the "processed_by" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableProcessedBy(s *string) *EventHistoryCreate {
-	if s != nil {
-		ehc.SetProcessedBy(*s)
-	}
-	return ehc
-}
-
-// SetProcessedAt sets the "processed_at" field.
-func (ehc *EventHistoryCreate) SetProcessedAt(t time.Time) *EventHistoryCreate {
-	ehc.mutation.SetProcessedAt(t)
-	return ehc
-}
-
-// SetNillableProcessedAt sets the "processed_at" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableProcessedAt(t *time.Time) *EventHistoryCreate {
-	if t != nil {
-		ehc.SetProcessedAt(*t)
-	}
 	return ehc
 }
 
@@ -292,10 +222,6 @@ func (ehc *EventHistoryCreate) defaults() {
 		v := eventhistory.DefaultTags
 		ehc.mutation.SetTags(v)
 	}
-	if _, ok := ehc.mutation.AdditionalProcessingRequired(); !ok {
-		v := eventhistory.DefaultAdditionalProcessingRequired
-		ehc.mutation.SetAdditionalProcessingRequired(v)
-	}
 	if _, ok := ehc.mutation.ID(); !ok {
 		v := eventhistory.DefaultID()
 		ehc.mutation.SetID(v)
@@ -315,8 +241,8 @@ func (ehc *EventHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "EventHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := ehc.mutation.EventID(); !ok {
-		return &ValidationError{Name: "event_id", err: errors.New(`generated: missing required field "EventHistory.event_id"`)}
+	if _, ok := ehc.mutation.EventType(); !ok {
+		return &ValidationError{Name: "event_type", err: errors.New(`generated: missing required field "EventHistory.event_type"`)}
 	}
 	return nil
 }
@@ -401,26 +327,6 @@ func (ehc *EventHistoryCreate) createSpec() (*EventHistory, *sqlgraph.CreateSpec
 	if value, ok := ehc.mutation.Metadata(); ok {
 		_spec.SetField(eventhistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
-	}
-	if value, ok := ehc.mutation.Source(); ok {
-		_spec.SetField(eventhistory.FieldSource, field.TypeString, value)
-		_node.Source = value
-	}
-	if value, ok := ehc.mutation.AdditionalProcessingRequired(); ok {
-		_spec.SetField(eventhistory.FieldAdditionalProcessingRequired, field.TypeBool, value)
-		_node.AdditionalProcessingRequired = value
-	}
-	if value, ok := ehc.mutation.AdditionalProcessingDetails(); ok {
-		_spec.SetField(eventhistory.FieldAdditionalProcessingDetails, field.TypeString, value)
-		_node.AdditionalProcessingDetails = value
-	}
-	if value, ok := ehc.mutation.ProcessedBy(); ok {
-		_spec.SetField(eventhistory.FieldProcessedBy, field.TypeString, value)
-		_node.ProcessedBy = value
-	}
-	if value, ok := ehc.mutation.ProcessedAt(); ok {
-		_spec.SetField(eventhistory.FieldProcessedAt, field.TypeTime, value)
-		_node.ProcessedAt = value
 	}
 	return _node, _spec
 }

@@ -35,24 +35,14 @@ type EventHistory struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the unique identifier of the event as it relates to the source or outside system
+	// EventID holds the value of the "event_id" field.
 	EventID string `json:"event_id,omitempty"`
-	// an identifier to correleate the event to another object or source, if needed
+	// CorrelationID holds the value of the "correlation_id" field.
 	CorrelationID string `json:"correlation_id,omitempty"`
-	// the type of event
+	// EventType holds the value of the "event_type" field.
 	EventType string `json:"event_type,omitempty"`
-	// event metadata
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// the source of the event
-	Source string `json:"source,omitempty"`
-	// indicates if additional processing is required for the event
-	AdditionalProcessingRequired bool `json:"additional_processing_required,omitempty"`
-	// details about the additional processing required
-	AdditionalProcessingDetails string `json:"additional_processing_details,omitempty"`
-	// the listener ID who processed the event
-	ProcessedBy string `json:"processed_by,omitempty"`
-	// the time the event was processed
-	ProcessedAt  time.Time `json:"processed_at,omitempty"`
+	// Metadata holds the value of the "metadata" field.
+	Metadata     map[string]interface{} `json:"metadata,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -65,11 +55,9 @@ func (*EventHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case eventhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case eventhistory.FieldAdditionalProcessingRequired:
-			values[i] = new(sql.NullBool)
-		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldCreatedBy, eventhistory.FieldUpdatedBy, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType, eventhistory.FieldSource, eventhistory.FieldAdditionalProcessingDetails, eventhistory.FieldProcessedBy:
+		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldCreatedBy, eventhistory.FieldUpdatedBy, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType:
 			values[i] = new(sql.NullString)
-		case eventhistory.FieldHistoryTime, eventhistory.FieldCreatedAt, eventhistory.FieldUpdatedAt, eventhistory.FieldProcessedAt:
+		case eventhistory.FieldHistoryTime, eventhistory.FieldCreatedAt, eventhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -168,36 +156,6 @@ func (eh *EventHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
-		case eventhistory.FieldSource:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field source", values[i])
-			} else if value.Valid {
-				eh.Source = value.String
-			}
-		case eventhistory.FieldAdditionalProcessingRequired:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field additional_processing_required", values[i])
-			} else if value.Valid {
-				eh.AdditionalProcessingRequired = value.Bool
-			}
-		case eventhistory.FieldAdditionalProcessingDetails:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field additional_processing_details", values[i])
-			} else if value.Valid {
-				eh.AdditionalProcessingDetails = value.String
-			}
-		case eventhistory.FieldProcessedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field processed_by", values[i])
-			} else if value.Valid {
-				eh.ProcessedBy = value.String
-			}
-		case eventhistory.FieldProcessedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field processed_at", values[i])
-			} else if value.Valid {
-				eh.ProcessedAt = value.Time
-			}
 		default:
 			eh.selectValues.Set(columns[i], values[i])
 		}
@@ -269,21 +227,6 @@ func (eh *EventHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", eh.Metadata))
-	builder.WriteString(", ")
-	builder.WriteString("source=")
-	builder.WriteString(eh.Source)
-	builder.WriteString(", ")
-	builder.WriteString("additional_processing_required=")
-	builder.WriteString(fmt.Sprintf("%v", eh.AdditionalProcessingRequired))
-	builder.WriteString(", ")
-	builder.WriteString("additional_processing_details=")
-	builder.WriteString(eh.AdditionalProcessingDetails)
-	builder.WriteString(", ")
-	builder.WriteString("processed_by=")
-	builder.WriteString(eh.ProcessedBy)
-	builder.WriteString(", ")
-	builder.WriteString("processed_at=")
-	builder.WriteString(eh.ProcessedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
