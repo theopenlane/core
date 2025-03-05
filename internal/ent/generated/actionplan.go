@@ -48,14 +48,13 @@ type ActionPlan struct {
 	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
-	Edges        ActionPlanEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                   ActionPlanEdges `json:"edges"`
+	subcontrol_action_plans *string
+	selectValues            sql.SelectValues
 }
 
 // ActionPlanEdges holds the relations/edges for other nodes in the graph.
 type ActionPlanEdges struct {
-	// Standard holds the value of the standard edge.
-	Standard []*Standard `json:"standard,omitempty"`
 	// Risk holds the value of the risk edge.
 	Risk []*Risk `json:"risk,omitempty"`
 	// Control holds the value of the control edge.
@@ -66,30 +65,20 @@ type ActionPlanEdges struct {
 	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [4]map[string]int
 
-	namedStandard map[string][]*Standard
-	namedRisk     map[string][]*Risk
-	namedControl  map[string][]*Control
-	namedUser     map[string][]*User
-	namedProgram  map[string][]*Program
-}
-
-// StandardOrErr returns the Standard value or an error if the edge
-// was not loaded in eager-loading.
-func (e ActionPlanEdges) StandardOrErr() ([]*Standard, error) {
-	if e.loadedTypes[0] {
-		return e.Standard, nil
-	}
-	return nil, &NotLoadedError{edge: "standard"}
+	namedRisk    map[string][]*Risk
+	namedControl map[string][]*Control
+	namedUser    map[string][]*User
+	namedProgram map[string][]*Program
 }
 
 // RiskOrErr returns the Risk value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[0] {
 		return e.Risk, nil
 	}
 	return nil, &NotLoadedError{edge: "risk"}
@@ -98,7 +87,7 @@ func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[1] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -107,7 +96,7 @@ func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -116,7 +105,7 @@ func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -133,6 +122,8 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
+		case actionplan.ForeignKeys[0]: // subcontrol_action_plans
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -242,6 +233,13 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case actionplan.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_action_plans", values[i])
+			} else if value.Valid {
+				ap.subcontrol_action_plans = new(string)
+				*ap.subcontrol_action_plans = value.String
+			}
 		default:
 			ap.selectValues.Set(columns[i], values[i])
 		}
@@ -253,11 +251,6 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (ap *ActionPlan) Value(name string) (ent.Value, error) {
 	return ap.selectValues.Get(name)
-}
-
-// QueryStandard queries the "standard" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryStandard() *StandardQuery {
-	return NewActionPlanClient(ap.config).QueryStandard(ap)
 }
 
 // QueryRisk queries the "risk" edge of the ActionPlan entity.
@@ -346,30 +339,6 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString(fmt.Sprintf("%v", ap.Details))
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedStandard returns the Standard named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedStandard(name string) ([]*Standard, error) {
-	if ap.Edges.namedStandard == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := ap.Edges.namedStandard[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (ap *ActionPlan) appendNamedStandard(name string, edges ...*Standard) {
-	if ap.Edges.namedStandard == nil {
-		ap.Edges.namedStandard = make(map[string][]*Standard)
-	}
-	if len(edges) == 0 {
-		ap.Edges.namedStandard[name] = []*Standard{}
-	} else {
-		ap.Edges.namedStandard[name] = append(ap.Edges.namedStandard[name], edges...)
-	}
 }
 
 // NamedRisk returns the Risk named value or an error if the edge was not

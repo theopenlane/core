@@ -127,6 +127,8 @@ const (
 	EdgeSubcontrols = "subcontrols"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
+	// EdgeStandards holds the string denoting the standards edge name in mutations.
+	EdgeStandards = "standards"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -395,6 +397,13 @@ const (
 	EvidenceInverseTable = "evidences"
 	// EvidenceColumn is the table column denoting the evidence relation/edge.
 	EvidenceColumn = "owner_id"
+	// StandardsTable is the table that holds the standards relation/edge.
+	StandardsTable = "standards"
+	// StandardsInverseTable is the table name for the Standard entity.
+	// It exists in this package in order to avoid circular dependency with the "standard" package.
+	StandardsInverseTable = "standards"
+	// StandardsColumn is the table column denoting the standards relation/edge.
+	StandardsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1112,6 +1121,20 @@ func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByStandardsCount orders the results by standards count.
+func ByStandardsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newStandardsStep(), opts...)
+	}
+}
+
+// ByStandards orders the results by standards terms.
+func ByStandards(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStandardsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1403,6 +1426,13 @@ func newEvidenceStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EvidenceInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EvidenceTable, EvidenceColumn),
+	)
+}
+func newStandardsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StandardsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, StandardsTable, StandardsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

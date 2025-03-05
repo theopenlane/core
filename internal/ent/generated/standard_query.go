@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -12,12 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -26,22 +24,15 @@ import (
 // StandardQuery is the builder for querying Standard entities.
 type StandardQuery struct {
 	config
-	ctx                        *QueryContext
-	order                      []standard.OrderOption
-	inters                     []Interceptor
-	predicates                 []predicate.Standard
-	withControlObjectives      *ControlObjectiveQuery
-	withControls               *ControlQuery
-	withProcedures             *ProcedureQuery
-	withActionPlans            *ActionPlanQuery
-	withPrograms               *ProgramQuery
-	loadTotal                  []func(context.Context, []*Standard) error
-	modifiers                  []func(*sql.Selector)
-	withNamedControlObjectives map[string]*ControlObjectiveQuery
-	withNamedControls          map[string]*ControlQuery
-	withNamedProcedures        map[string]*ProcedureQuery
-	withNamedActionPlans       map[string]*ActionPlanQuery
-	withNamedPrograms          map[string]*ProgramQuery
+	ctx               *QueryContext
+	order             []standard.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Standard
+	withOwner         *OrganizationQuery
+	withControls      *ControlQuery
+	loadTotal         []func(context.Context, []*Standard) error
+	modifiers         []func(*sql.Selector)
+	withNamedControls map[string]*ControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -78,9 +69,9 @@ func (sq *StandardQuery) Order(o ...standard.OrderOption) *StandardQuery {
 	return sq
 }
 
-// QueryControlObjectives chains the current query on the "control_objectives" edge.
-func (sq *StandardQuery) QueryControlObjectives() *ControlObjectiveQuery {
-	query := (&ControlObjectiveClient{config: sq.config}).Query()
+// QueryOwner chains the current query on the "owner" edge.
+func (sq *StandardQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -91,12 +82,12 @@ func (sq *StandardQuery) QueryControlObjectives() *ControlObjectiveQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ControlObjectivesTable, standard.ControlObjectivesPrimaryKey...),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, standard.OwnerTable, standard.OwnerColumn),
 		)
 		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.StandardControlObjectives
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -117,86 +108,11 @@ func (sq *StandardQuery) QueryControls() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ControlsTable, standard.ControlsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, standard.ControlsTable, standard.ControlsColumn),
 		)
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.StandardControls
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryProcedures chains the current query on the "procedures" edge.
-func (sq *StandardQuery) QueryProcedures() *ProcedureQuery {
-	query := (&ProcedureClient{config: sq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := sq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, standard.ProceduresTable, standard.ProceduresColumn),
-		)
-		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryActionPlans chains the current query on the "action_plans" edge.
-func (sq *StandardQuery) QueryActionPlans() *ActionPlanQuery {
-	query := (&ActionPlanClient{config: sq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := sq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(actionplan.Table, actionplan.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ActionPlansTable, standard.ActionPlansPrimaryKey...),
-		)
-		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.StandardActionPlans
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryPrograms chains the current query on the "programs" edge.
-func (sq *StandardQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: sq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := sq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, standard.ProgramsTable, standard.ProgramsPrimaryKey...),
-		)
-		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.StandardPrograms
+		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -390,16 +306,13 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 		return nil
 	}
 	return &StandardQuery{
-		config:                sq.config,
-		ctx:                   sq.ctx.Clone(),
-		order:                 append([]standard.OrderOption{}, sq.order...),
-		inters:                append([]Interceptor{}, sq.inters...),
-		predicates:            append([]predicate.Standard{}, sq.predicates...),
-		withControlObjectives: sq.withControlObjectives.Clone(),
-		withControls:          sq.withControls.Clone(),
-		withProcedures:        sq.withProcedures.Clone(),
-		withActionPlans:       sq.withActionPlans.Clone(),
-		withPrograms:          sq.withPrograms.Clone(),
+		config:       sq.config,
+		ctx:          sq.ctx.Clone(),
+		order:        append([]standard.OrderOption{}, sq.order...),
+		inters:       append([]Interceptor{}, sq.inters...),
+		predicates:   append([]predicate.Standard{}, sq.predicates...),
+		withOwner:    sq.withOwner.Clone(),
+		withControls: sq.withControls.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
@@ -407,14 +320,14 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 	}
 }
 
-// WithControlObjectives tells the query-builder to eager-load the nodes that are connected to
-// the "control_objectives" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithControlObjectives(opts ...func(*ControlObjectiveQuery)) *StandardQuery {
-	query := (&ControlObjectiveClient{config: sq.config}).Query()
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithOwner(opts ...func(*OrganizationQuery)) *StandardQuery {
+	query := (&OrganizationClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withControlObjectives = query
+	sq.withOwner = query
 	return sq
 }
 
@@ -426,39 +339,6 @@ func (sq *StandardQuery) WithControls(opts ...func(*ControlQuery)) *StandardQuer
 		opt(query)
 	}
 	sq.withControls = query
-	return sq
-}
-
-// WithProcedures tells the query-builder to eager-load the nodes that are connected to
-// the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithProcedures(opts ...func(*ProcedureQuery)) *StandardQuery {
-	query := (&ProcedureClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	sq.withProcedures = query
-	return sq
-}
-
-// WithActionPlans tells the query-builder to eager-load the nodes that are connected to
-// the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *StandardQuery {
-	query := (&ActionPlanClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	sq.withActionPlans = query
-	return sq
-}
-
-// WithPrograms tells the query-builder to eager-load the nodes that are connected to
-// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithPrograms(opts ...func(*ProgramQuery)) *StandardQuery {
-	query := (&ProgramClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	sq.withPrograms = query
 	return sq
 }
 
@@ -533,6 +413,12 @@ func (sq *StandardQuery) prepareQuery(ctx context.Context) error {
 		}
 		sq.sql = prev
 	}
+	if standard.Policy == nil {
+		return errors.New("generated: uninitialized standard.Policy (forgotten import generated/runtime?)")
+	}
+	if err := standard.Policy.EvalQuery(ctx, sq); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -540,12 +426,9 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	var (
 		nodes       = []*Standard{}
 		_spec       = sq.querySpec()
-		loadedTypes = [5]bool{
-			sq.withControlObjectives != nil,
+		loadedTypes = [2]bool{
+			sq.withOwner != nil,
 			sq.withControls != nil,
-			sq.withProcedures != nil,
-			sq.withActionPlans != nil,
-			sq.withPrograms != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -571,12 +454,9 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withControlObjectives; query != nil {
-		if err := sq.loadControlObjectives(ctx, query, nodes,
-			func(n *Standard) { n.Edges.ControlObjectives = []*ControlObjective{} },
-			func(n *Standard, e *ControlObjective) {
-				n.Edges.ControlObjectives = append(n.Edges.ControlObjectives, e)
-			}); err != nil {
+	if query := sq.withOwner; query != nil {
+		if err := sq.loadOwner(ctx, query, nodes, nil,
+			func(n *Standard, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -587,59 +467,10 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 			return nil, err
 		}
 	}
-	if query := sq.withProcedures; query != nil {
-		if err := sq.loadProcedures(ctx, query, nodes,
-			func(n *Standard) { n.Edges.Procedures = []*Procedure{} },
-			func(n *Standard, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := sq.withActionPlans; query != nil {
-		if err := sq.loadActionPlans(ctx, query, nodes,
-			func(n *Standard) { n.Edges.ActionPlans = []*ActionPlan{} },
-			func(n *Standard, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := sq.withPrograms; query != nil {
-		if err := sq.loadPrograms(ctx, query, nodes,
-			func(n *Standard) { n.Edges.Programs = []*Program{} },
-			func(n *Standard, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range sq.withNamedControlObjectives {
-		if err := sq.loadControlObjectives(ctx, query, nodes,
-			func(n *Standard) { n.appendNamedControlObjectives(name) },
-			func(n *Standard, e *ControlObjective) { n.appendNamedControlObjectives(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range sq.withNamedControls {
 		if err := sq.loadControls(ctx, query, nodes,
 			func(n *Standard) { n.appendNamedControls(name) },
 			func(n *Standard, e *Control) { n.appendNamedControls(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range sq.withNamedProcedures {
-		if err := sq.loadProcedures(ctx, query, nodes,
-			func(n *Standard) { n.appendNamedProcedures(name) },
-			func(n *Standard, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range sq.withNamedActionPlans {
-		if err := sq.loadActionPlans(ctx, query, nodes,
-			func(n *Standard) { n.appendNamedActionPlans(name) },
-			func(n *Standard, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range sq.withNamedPrograms {
-		if err := sq.loadPrograms(ctx, query, nodes,
-			func(n *Standard) { n.appendNamedPrograms(name) },
-			func(n *Standard, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -651,131 +482,36 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	return nodes, nil
 }
 
-func (sq *StandardQuery) loadControlObjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *ControlObjective)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Standard)
-	nids := make(map[string]map[*Standard]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
+func (sq *StandardQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Standard)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
 		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(standard.ControlObjectivesTable)
-		joinT.Schema(sq.schemaConfig.StandardControlObjectives)
-		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(standard.ControlObjectivesPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(standard.ControlObjectivesPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(standard.ControlObjectivesPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
+	if len(ids) == 0 {
+		return nil
 	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Standard]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*ControlObjective](ctx, query, qr, query.inters)
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "control_objectives" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
 }
 func (sq *StandardQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Control)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Standard)
-	nids := make(map[string]map[*Standard]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(standard.ControlsTable)
-		joinT.Schema(sq.schemaConfig.StandardControls)
-		s.Join(joinT).On(s.C(control.FieldID), joinT.C(standard.ControlsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(standard.ControlsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(standard.ControlsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Standard]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (sq *StandardQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Procedure)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Standard)
 	for i := range nodes {
@@ -786,147 +522,23 @@ func (sq *StandardQuery) loadProcedures(ctx context.Context, query *ProcedureQue
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.Procedure(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(standard.ProceduresColumn), fks...))
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(control.FieldStandardID)
+	}
+	query.Where(predicate.Control(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(standard.ControlsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.standard_procedures
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "standard_procedures" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.StandardID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "standard_procedures" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "standard_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
-	}
-	return nil
-}
-func (sq *StandardQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *ActionPlan)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Standard)
-	nids := make(map[string]map[*Standard]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(standard.ActionPlansTable)
-		joinT.Schema(sq.schemaConfig.StandardActionPlans)
-		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(standard.ActionPlansPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(standard.ActionPlansPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(standard.ActionPlansPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Standard]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*ActionPlan](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "action_plans" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (sq *StandardQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Program)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Standard)
-	nids := make(map[string]map[*Standard]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(standard.ProgramsTable)
-		joinT.Schema(sq.schemaConfig.StandardPrograms)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(standard.ProgramsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(standard.ProgramsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(standard.ProgramsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Standard]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
 	}
 	return nil
 }
@@ -960,6 +572,9 @@ func (sq *StandardQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != standard.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if sq.withOwner != nil {
+			_spec.Node.AddColumnOnce(standard.FieldOwnerID)
 		}
 	}
 	if ps := sq.predicates; len(ps) > 0 {
@@ -1029,20 +644,6 @@ func (sq *StandardQuery) Modify(modifiers ...func(s *sql.Selector)) *StandardSel
 	return sq.Select()
 }
 
-// WithNamedControlObjectives tells the query-builder to eager-load the nodes that are connected to the "control_objectives"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithNamedControlObjectives(name string, opts ...func(*ControlObjectiveQuery)) *StandardQuery {
-	query := (&ControlObjectiveClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if sq.withNamedControlObjectives == nil {
-		sq.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery)
-	}
-	sq.withNamedControlObjectives[name] = query
-	return sq
-}
-
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (sq *StandardQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *StandardQuery {
@@ -1054,48 +655,6 @@ func (sq *StandardQuery) WithNamedControls(name string, opts ...func(*ControlQue
 		sq.withNamedControls = make(map[string]*ControlQuery)
 	}
 	sq.withNamedControls[name] = query
-	return sq
-}
-
-// WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *StandardQuery {
-	query := (&ProcedureClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if sq.withNamedProcedures == nil {
-		sq.withNamedProcedures = make(map[string]*ProcedureQuery)
-	}
-	sq.withNamedProcedures[name] = query
-	return sq
-}
-
-// WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *StandardQuery {
-	query := (&ActionPlanClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if sq.withNamedActionPlans == nil {
-		sq.withNamedActionPlans = make(map[string]*ActionPlanQuery)
-	}
-	sq.withNamedActionPlans[name] = query
-	return sq
-}
-
-// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *StandardQuery {
-	query := (&ProgramClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if sq.withNamedPrograms == nil {
-		sq.withNamedPrograms = make(map[string]*ProgramQuery)
-	}
-	sq.withNamedPrograms[name] = query
 	return sq
 }
 

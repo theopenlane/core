@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
@@ -32,26 +33,36 @@ type Standard struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// the long name of the standard body
 	Name string `json:"name,omitempty"`
+	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
+	ShortName string `json:"short_name,omitempty"`
+	// unique identifier of the standard with version
+	Framework string `json:"framework,omitempty"`
 	// description of the standard
 	Description string `json:"description,omitempty"`
-	// family of the standard, e.g. 800-53, 800-171, 27001, etc.
-	Family string `json:"family,omitempty"`
+	// governing body of the standard, e.g. AICPA, etc.
+	GoverningBody string `json:"governing_body,omitempty"`
+	// domains the standard covers, e.g. availability, confidentiality, etc.
+	Domains []string `json:"domains,omitempty"`
+	// link to the official standard documentation
+	Link string `json:"link,omitempty"`
 	// status of the standard - active, deprecated, etc.
 	Status string `json:"status,omitempty"`
+	// indicates if the standard should be made available to all users, only for public standards
+	IsPublic bool `json:"is_public,omitempty"`
+	// indicates if the standard is freely distributable under a trial license, only for public standards
+	FreeToUse bool `json:"free_to_use,omitempty"`
+	// indicates if the standard is owned by the the openlane system
+	SystemOwned bool `json:"system_owned,omitempty"`
 	// type of the standard - security, privacy, etc.
 	StandardType string `json:"standard_type,omitempty"`
 	// version of the standard
 	Version string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background of the standard
-	Background string `json:"background,omitempty"`
-	// which controls are satisfied by the standard
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data with details of the standard
-	Details map[string]interface{} `json:"details,omitempty"`
+	// internal revision of the standard
+	Revision string `json:"revision,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the StandardQuery when eager-loading is set.
 	Edges        StandardEdges `json:"edges"`
@@ -60,36 +71,28 @@ type Standard struct {
 
 // StandardEdges holds the relations/edges for other nodes in the graph.
 type StandardEdges struct {
-	// ControlObjectives holds the value of the control_objectives edge.
-	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
-	// Procedures holds the value of the procedures edge.
-	Procedures []*Procedure `json:"procedures,omitempty"`
-	// ActionPlans holds the value of the action_plans edge.
-	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
-	// Programs holds the value of the programs edge.
-	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [2]map[string]int
 
-	namedControlObjectives map[string][]*ControlObjective
-	namedControls          map[string][]*Control
-	namedProcedures        map[string][]*Procedure
-	namedActionPlans       map[string][]*ActionPlan
-	namedPrograms          map[string][]*Program
+	namedControls map[string][]*Control
 }
 
-// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
-// was not loaded in eager-loading.
-func (e StandardEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[0] {
-		return e.ControlObjectives, nil
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e StandardEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
 	}
-	return nil, &NotLoadedError{edge: "control_objectives"}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
@@ -101,41 +104,16 @@ func (e StandardEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
-// ProceduresOrErr returns the Procedures value or an error if the edge
-// was not loaded in eager-loading.
-func (e StandardEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[2] {
-		return e.Procedures, nil
-	}
-	return nil, &NotLoadedError{edge: "procedures"}
-}
-
-// ActionPlansOrErr returns the ActionPlans value or an error if the edge
-// was not loaded in eager-loading.
-func (e StandardEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[3] {
-		return e.ActionPlans, nil
-	}
-	return nil, &NotLoadedError{edge: "action_plans"}
-}
-
-// ProgramsOrErr returns the Programs value or an error if the edge
-// was not loaded in eager-loading.
-func (e StandardEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[4] {
-		return e.Programs, nil
-	}
-	return nil, &NotLoadedError{edge: "programs"}
-}
-
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Standard) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case standard.FieldTags, standard.FieldDetails:
+		case standard.FieldTags, standard.FieldDomains:
 			values[i] = new([]byte)
-		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldName, standard.FieldDescription, standard.FieldFamily, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldPurposeAndScope, standard.FieldBackground, standard.FieldSatisfies:
+		case standard.FieldIsPublic, standard.FieldFreeToUse, standard.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldOwnerID, standard.FieldName, standard.FieldShortName, standard.FieldFramework, standard.FieldDescription, standard.FieldGoverningBody, standard.FieldLink, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldRevision:
 			values[i] = new(sql.NullString)
 		case standard.FieldCreatedAt, standard.FieldUpdatedAt, standard.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -204,11 +182,29 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case standard.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				s.OwnerID = value.String
+			}
 		case standard.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				s.Name = value.String
+			}
+		case standard.FieldShortName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field short_name", values[i])
+			} else if value.Valid {
+				s.ShortName = value.String
+			}
+		case standard.FieldFramework:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field framework", values[i])
+			} else if value.Valid {
+				s.Framework = value.String
 			}
 		case standard.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -216,17 +212,49 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Description = value.String
 			}
-		case standard.FieldFamily:
+		case standard.FieldGoverningBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field family", values[i])
+				return fmt.Errorf("unexpected type %T for field governing_body", values[i])
 			} else if value.Valid {
-				s.Family = value.String
+				s.GoverningBody = value.String
+			}
+		case standard.FieldDomains:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field domains", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.Domains); err != nil {
+					return fmt.Errorf("unmarshal field domains: %w", err)
+				}
+			}
+		case standard.FieldLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field link", values[i])
+			} else if value.Valid {
+				s.Link = value.String
 			}
 		case standard.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				s.Status = value.String
+			}
+		case standard.FieldIsPublic:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_public", values[i])
+			} else if value.Valid {
+				s.IsPublic = value.Bool
+			}
+		case standard.FieldFreeToUse:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field free_to_use", values[i])
+			} else if value.Valid {
+				s.FreeToUse = value.Bool
+			}
+		case standard.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				s.SystemOwned = value.Bool
 			}
 		case standard.FieldStandardType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -240,31 +268,11 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Version = value.String
 			}
-		case standard.FieldPurposeAndScope:
+		case standard.FieldRevision:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field purpose_and_scope", values[i])
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				s.PurposeAndScope = value.String
-			}
-		case standard.FieldBackground:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field background", values[i])
-			} else if value.Valid {
-				s.Background = value.String
-			}
-		case standard.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				s.Satisfies = value.String
-			}
-		case standard.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+				s.Revision = value.String
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -279,29 +287,14 @@ func (s *Standard) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
-// QueryControlObjectives queries the "control_objectives" edge of the Standard entity.
-func (s *Standard) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewStandardClient(s.config).QueryControlObjectives(s)
+// QueryOwner queries the "owner" edge of the Standard entity.
+func (s *Standard) QueryOwner() *OrganizationQuery {
+	return NewStandardClient(s.config).QueryOwner(s)
 }
 
 // QueryControls queries the "controls" edge of the Standard entity.
 func (s *Standard) QueryControls() *ControlQuery {
 	return NewStandardClient(s.config).QueryControls(s)
-}
-
-// QueryProcedures queries the "procedures" edge of the Standard entity.
-func (s *Standard) QueryProcedures() *ProcedureQuery {
-	return NewStandardClient(s.config).QueryProcedures(s)
-}
-
-// QueryActionPlans queries the "action_plans" edge of the Standard entity.
-func (s *Standard) QueryActionPlans() *ActionPlanQuery {
-	return NewStandardClient(s.config).QueryActionPlans(s)
-}
-
-// QueryPrograms queries the "programs" edge of the Standard entity.
-func (s *Standard) QueryPrograms() *ProgramQuery {
-	return NewStandardClient(s.config).QueryPrograms(s)
 }
 
 // Update returns a builder for updating this Standard.
@@ -348,17 +341,41 @@ func (s *Standard) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", s.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(s.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(s.Name)
+	builder.WriteString(", ")
+	builder.WriteString("short_name=")
+	builder.WriteString(s.ShortName)
+	builder.WriteString(", ")
+	builder.WriteString("framework=")
+	builder.WriteString(s.Framework)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(s.Description)
 	builder.WriteString(", ")
-	builder.WriteString("family=")
-	builder.WriteString(s.Family)
+	builder.WriteString("governing_body=")
+	builder.WriteString(s.GoverningBody)
+	builder.WriteString(", ")
+	builder.WriteString("domains=")
+	builder.WriteString(fmt.Sprintf("%v", s.Domains))
+	builder.WriteString(", ")
+	builder.WriteString("link=")
+	builder.WriteString(s.Link)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(s.Status)
+	builder.WriteString(", ")
+	builder.WriteString("is_public=")
+	builder.WriteString(fmt.Sprintf("%v", s.IsPublic))
+	builder.WriteString(", ")
+	builder.WriteString("free_to_use=")
+	builder.WriteString(fmt.Sprintf("%v", s.FreeToUse))
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", s.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("standard_type=")
 	builder.WriteString(s.StandardType)
@@ -366,43 +383,10 @@ func (s *Standard) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(s.Version)
 	builder.WriteString(", ")
-	builder.WriteString("purpose_and_scope=")
-	builder.WriteString(s.PurposeAndScope)
-	builder.WriteString(", ")
-	builder.WriteString("background=")
-	builder.WriteString(s.Background)
-	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(s.Satisfies)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", s.Details))
+	builder.WriteString("revision=")
+	builder.WriteString(s.Revision)
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (s *Standard) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if s.Edges.namedControlObjectives == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := s.Edges.namedControlObjectives[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (s *Standard) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if s.Edges.namedControlObjectives == nil {
-		s.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
-	}
-	if len(edges) == 0 {
-		s.Edges.namedControlObjectives[name] = []*ControlObjective{}
-	} else {
-		s.Edges.namedControlObjectives[name] = append(s.Edges.namedControlObjectives[name], edges...)
-	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
@@ -426,78 +410,6 @@ func (s *Standard) appendNamedControls(name string, edges ...*Control) {
 		s.Edges.namedControls[name] = []*Control{}
 	} else {
 		s.Edges.namedControls[name] = append(s.Edges.namedControls[name], edges...)
-	}
-}
-
-// NamedProcedures returns the Procedures named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (s *Standard) NamedProcedures(name string) ([]*Procedure, error) {
-	if s.Edges.namedProcedures == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := s.Edges.namedProcedures[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (s *Standard) appendNamedProcedures(name string, edges ...*Procedure) {
-	if s.Edges.namedProcedures == nil {
-		s.Edges.namedProcedures = make(map[string][]*Procedure)
-	}
-	if len(edges) == 0 {
-		s.Edges.namedProcedures[name] = []*Procedure{}
-	} else {
-		s.Edges.namedProcedures[name] = append(s.Edges.namedProcedures[name], edges...)
-	}
-}
-
-// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (s *Standard) NamedActionPlans(name string) ([]*ActionPlan, error) {
-	if s.Edges.namedActionPlans == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := s.Edges.namedActionPlans[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (s *Standard) appendNamedActionPlans(name string, edges ...*ActionPlan) {
-	if s.Edges.namedActionPlans == nil {
-		s.Edges.namedActionPlans = make(map[string][]*ActionPlan)
-	}
-	if len(edges) == 0 {
-		s.Edges.namedActionPlans[name] = []*ActionPlan{}
-	} else {
-		s.Edges.namedActionPlans[name] = append(s.Edges.namedActionPlans[name], edges...)
-	}
-}
-
-// NamedPrograms returns the Programs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (s *Standard) NamedPrograms(name string) ([]*Program, error) {
-	if s.Edges.namedPrograms == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := s.Edges.namedPrograms[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (s *Standard) appendNamedPrograms(name string, edges ...*Program) {
-	if s.Edges.namedPrograms == nil {
-		s.Edges.namedPrograms = make(map[string][]*Program)
-	}
-	if len(edges) == 0 {
-		s.Edges.namedPrograms[name] = []*Program{}
-	} else {
-		s.Edges.namedPrograms[name] = append(s.Edges.namedPrograms[name], edges...)
 	}
 }
 

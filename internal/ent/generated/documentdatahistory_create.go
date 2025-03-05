@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -167,8 +166,8 @@ func (ddhc *DocumentDataHistoryCreate) SetTemplateID(s string) *DocumentDataHist
 }
 
 // SetData sets the "data" field.
-func (ddhc *DocumentDataHistoryCreate) SetData(co customtypes.JSONObject) *DocumentDataHistoryCreate {
-	ddhc.mutation.SetData(co)
+func (ddhc *DocumentDataHistoryCreate) SetData(m map[string]interface{}) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetData(m)
 	return ddhc
 }
 

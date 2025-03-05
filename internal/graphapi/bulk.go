@@ -85,6 +85,25 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 	}, nil
 }
 
+// bulkCreateControlImplementation uses the CreateBulk function to create multiple ControlImplementation entities
+func (r *mutationResolver) bulkCreateControlImplementation(ctx context.Context, input []*generated.CreateControlImplementationInput) (*model.ControlImplementationBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ControlImplementationCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ControlImplementation.Create().SetInput(*data)
+	}
+
+	res, err := c.ControlImplementation.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlimplementation"})
+	}
+
+	// return response
+	return &model.ControlImplementationBulkCreatePayload{
+		ControlImplementations: res,
+	}, nil
+}
+
 // bulkCreateControlObjective uses the CreateBulk function to create multiple ControlObjective entities
 func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*model.ControlObjectiveBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -313,6 +332,25 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	}, nil
 }
 
+// bulkCreateMappedControl uses the CreateBulk function to create multiple MappedControl entities
+func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []*generated.CreateMappedControlInput) (*model.MappedControlBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.MappedControlCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.MappedControl.Create().SetInput(*data)
+	}
+
+	res, err := c.MappedControl.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+	}
+
+	// return response
+	return &model.MappedControlBulkCreatePayload{
+		MappedControls: res,
+	}, nil
+}
+
 // bulkCreateNarrative uses the CreateBulk function to create multiple Narrative entities
 func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*model.NarrativeBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -462,25 +500,6 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	// return response
 	return &model.RiskBulkCreatePayload{
 		Risks: res,
-	}, nil
-}
-
-// bulkCreateStandard uses the CreateBulk function to create multiple Standard entities
-func (r *mutationResolver) bulkCreateStandard(ctx context.Context, input []*generated.CreateStandardInput) (*model.StandardBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.StandardCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Standard.Create().SetInput(*data)
-	}
-
-	res, err := c.Standard.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
-	}
-
-	// return response
-	return &model.StandardBulkCreatePayload{
-		Standards: res,
 	}, nil
 }
 

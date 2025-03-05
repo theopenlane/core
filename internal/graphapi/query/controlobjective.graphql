@@ -2,20 +2,18 @@
 mutation CreateBulkCSVControlObjective($input: Upload!) {
   createBulkCSVControlObjective(input: $input) {
     controlObjectives {
-      class
-      controlNumber
+      category
       controlObjectiveType
       createdAt
       createdBy
-      description
-      details
+      desiredOutcome
       displayID
-      family
       id
-      mappedFrameworks
       name
+      ownerID
       source
       status
+      subcategory
       tags
       updatedAt
       updatedBy
@@ -27,20 +25,18 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
 mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
   createBulkControlObjective(input: $input) {
     controlObjectives {
-      class
-      controlNumber
+      category
       controlObjectiveType
       createdAt
       createdBy
-      description
-      details
+      desiredOutcome
       displayID
-      family
       id
-      mappedFrameworks
       name
+      ownerID
       source
       status
+      subcategory
       tags
       updatedAt
       updatedBy
@@ -52,27 +48,32 @@ mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
 mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
   createControlObjective(input: $input) {
     controlObjective {
-      class
-      controlNumber
+      category
       controlObjectiveType
       createdAt
       createdBy
-      description
-      details
+      desiredOutcome
       displayID
-      family
       id
-      mappedFrameworks
       name
+      ownerID
       source
       status
+      subcategory
       tags
       updatedAt
       updatedBy
       version
-      programs {
+      controls {
         id
-        name
+        displayID
+        refCode
+        description
+      }
+      programs {
+          id
+          displayID
+          name
       }
       editors {
         id
@@ -82,7 +83,7 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
         id
         name
       }
-      blockedGroups {
+      blockedGroups{
         id
         name
       }
@@ -100,27 +101,32 @@ query GetAllControlObjectives {
   controlObjectives {
     edges {
       node {
-        class
-        controlNumber
+        category
         controlObjectiveType
         createdAt
         createdBy
-        description
-        details
+        desiredOutcome
         displayID
-        family
         id
-        mappedFrameworks
         name
+        ownerID
         source
         status
+        subcategory
         tags
         updatedAt
         updatedBy
         version
-        programs {
+        controls {
           id
-          name
+          displayID
+          refCode
+          description
+        }
+        programs {
+            id
+            displayID
+            name
         }
         editors {
           id
@@ -130,7 +136,7 @@ query GetAllControlObjectives {
           id
           name
         }
-        blockedGroups {
+        blockedGroups{
           id
           name
         }
@@ -140,40 +146,45 @@ query GetAllControlObjectives {
 }
 query GetControlObjectiveByID($controlObjectiveId: ID!) {
   controlObjective(id: $controlObjectiveId) {
-    class
-    controlNumber
+    category
     controlObjectiveType
     createdAt
     createdBy
-    description
-    details
+    desiredOutcome
     displayID
-    family
     id
-    mappedFrameworks
     name
+    ownerID
     source
     status
+    subcategory
     tags
     updatedAt
     updatedBy
     version
-    programs {
-      id
-      name
-    }
-    editors {
-      id
-      name
-    }
-    viewers {
-      id
-      name
-    }
-    blockedGroups {
-      id
-      name
-    }
+    controls {
+        id
+        displayID
+        refCode
+        description
+      }
+      programs {
+          id
+          displayID
+          name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
   }
 }
 
@@ -181,26 +192,31 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
   controlObjectives(where: $where) {
     edges {
       node {
-        class
-        controlNumber
+        category
         controlObjectiveType
         createdAt
         createdBy
-        description
-        details
+        desiredOutcome
         displayID
-        family
         id
-        mappedFrameworks
         name
+        ownerID
         source
         status
+        subcategory
         tags
         updatedAt
         updatedBy
         version
+        controls {
+          id
+          displayID
+          refCode
+          description
+        }
         programs {
           id
+          displayID
           name
         }
         editors {
@@ -211,7 +227,7 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
           id
           name
         }
-        blockedGroups {
+        blockedGroups{
           id
           name
         }
@@ -219,30 +235,36 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
     }
   }
 }
+
 mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
   updateControlObjective(id: $updateControlObjectiveId, input: $input) {
     controlObjective {
-      class
-      controlNumber
+      category
       controlObjectiveType
       createdAt
       createdBy
-      description
-      details
+      desiredOutcome
       displayID
-      family
       id
-      mappedFrameworks
       name
+      ownerID
       source
       status
+      subcategory
       tags
       updatedAt
       updatedBy
       version
-      programs {
+      controls {
         id
-        name
+        displayID
+        refCode
+        description
+      }
+      programs {
+          id
+          displayID
+          name
       }
       editors {
         id
@@ -252,7 +274,7 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
         id
         name
       }
-      blockedGroups {
+      blockedGroups{
         id
         name
       }

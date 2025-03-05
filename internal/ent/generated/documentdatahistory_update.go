@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -138,8 +137,8 @@ func (ddhu *DocumentDataHistoryUpdate) SetNillableTemplateID(s *string) *Documen
 }
 
 // SetData sets the "data" field.
-func (ddhu *DocumentDataHistoryUpdate) SetData(co customtypes.JSONObject) *DocumentDataHistoryUpdate {
-	ddhu.mutation.SetData(co)
+func (ddhu *DocumentDataHistoryUpdate) SetData(m map[string]interface{}) *DocumentDataHistoryUpdate {
+	ddhu.mutation.SetData(m)
 	return ddhu
 }
 
@@ -381,8 +380,8 @@ func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableTemplateID(s *string) *Doc
 }
 
 // SetData sets the "data" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetData(co customtypes.JSONObject) *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.SetData(co)
+func (ddhuo *DocumentDataHistoryUpdateOne) SetData(m map[string]interface{}) *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.SetData(m)
 	return ddhuo
 }
 

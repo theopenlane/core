@@ -3,6 +3,7 @@ version: "3"
 env:
   DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
   SECOND_USER_EMAIL: "funk@example.com"
+  ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
   DEFAULT_ORG_NAME: "meowmeow"
 
 tasks:
@@ -39,8 +40,6 @@ tasks:
   org:create:
     desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables
     aliases: [createorg]
-    vars:
-      ORG_NAME: meowmeow
     cmds:
       - go run main.go org create -n {{ .ORG_NAME | default .DEFAULT_ORG_NAME }} -d "my meow org"
 
@@ -104,6 +103,21 @@ tasks:
       - task: pat:create
       - task: orgsub:get
 
+  user:all:admin:
+    desc: a task to register, verify, and login a new user as as system admin
+    cmds:
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+      - task: createorg
+        vars:
+          ORG_NAME: admin-org
+      - task: token:create
+      - task: pat:create
+      - task: :fga:add:admin
 
   user:all:another:
     desc: a task to register, verify, and login another user
@@ -121,6 +135,13 @@ tasks:
       - task: login
         vars:
           EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+
+  login:admin:
+    desc: a task to login as the system admin
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
 
   login:google:
     desc: a task to login with google oauth

@@ -1,5 +1,14 @@
 version: '3'
 
+vars:
+  # defaults to the dev token, to override pass `task <task_name> FGA_API_TOKEN=your_token`
+  FGA_API_TOKEN: '{{ .FGA_API_TOKEN | default "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg" }}'
+  SYSTEM_OBJECT: "system:openlane_core"
+  SYSTEM_ADMIN_RELATION: "system_admin"
+  STORE_ID:
+    sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[].id'
+
+
 tasks:
   create:
     desc: creates a new fga store with the testdata model
@@ -10,3 +19,13 @@ tasks:
     desc: runs the fga model tests
     cmds:
       - fga model test --tests tests/tests.yaml
+
+  add:admin:
+    desc: Add a user to the system:openlane admin group, if no USER_ID is provided, the logged in user will be used
+    vars:
+      LOGGED_IN_USER:
+        sh: openlane user get -z json | jq -r '.self.id'
+      USER_ID: '{{ .USER_ID | default .LOGGED_IN_USER }}'
+    cmds:
+      - fga tuple write --store-id={{ .STORE_ID }} user:{{ .USER_ID }} {{ .SYSTEM_ADMIN_RELATION }} {{ .SYSTEM_OBJECT }} --api-token={{ .FGA_API_TOKEN }}
+

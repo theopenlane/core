@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -22,17 +23,17 @@ func init() {
 	command.AddCommand(createCmd)
 
 	// command line flags for the create command
-	createCmd.Flags().StringP("name", "n", "", "name of the control")
+	createCmd.Flags().StringP("ref-code", "r", "", "the unique reference code of the control")
 	createCmd.Flags().StringP("description", "d", "", "description of the control")
-	createCmd.Flags().StringP("status", "s", "", "status of the control")
-	createCmd.Flags().StringP("type", "t", "", "type of the control")
-	createCmd.Flags().StringP("version", "v", "", "version of the control")
-	createCmd.Flags().StringP("number", "u", "", "number of the control")
-	createCmd.Flags().StringP("family", "f", "", "family of the control")
-	createCmd.Flags().StringP("class", "l", "", "class of the control")
-	createCmd.Flags().StringP("source", "o", "", "source of the control")
-	createCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks with the control")
-	createCmd.Flags().StringP("satisfies", "a", "", "control objectives satisfied by the control")
+	createCmd.Flags().StringP("source", "s", "", "source of the control, e.g. framework, template, custom, etc.")
+	createCmd.Flags().StringP("category", "a", "", "category of the control")
+	createCmd.Flags().StringP("category-id", "i", "", "category id of the control")
+	createCmd.Flags().StringP("subcategory", "b", "", "subcategory of the control")
+	createCmd.Flags().StringP("status", "t", "", "status of the control")
+	createCmd.Flags().StringP("control-type", "y", "", "type of the control e.g. preventive, detective, corrective, or deterrent")
+	createCmd.Flags().StringSliceP("mapped-categories", "m", []string{}, "mapped categories of the control to other standards")
+	createCmd.Flags().StringP("framework-id", "f", "", "framework of the control")
+
 	createCmd.Flags().StringSliceP("editors", "e", []string{}, "group ID(s) given editor access to the control")
 	createCmd.Flags().StringSliceP("viewers", "w", []string{}, "group ID(s) given viewer access to the control")
 	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the control")
@@ -42,16 +43,34 @@ func init() {
 func createValidation() (input openlaneclient.CreateControlInput, err error) {
 	// validation of required fields for the create command
 	// output the input struct with the required fields and optional fields based on the command line flags
-	input.Name = cmd.Config.String("name")
-	if input.Name == "" {
+	input.RefCode = cmd.Config.String("ref-code")
+	if input.RefCode == "" {
 		return input, cmd.NewRequiredFieldMissingError("name")
 	}
-
-	input.ProgramIDs = cmd.Config.Strings("programs")
 
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
+	}
+
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	category := cmd.Config.String("category")
+	if category != "" {
+		input.Category = &category
+	}
+
+	categoryID := cmd.Config.String("category-id")
+	if categoryID != "" {
+		input.CategoryID = &categoryID
+	}
+
+	subcategory := cmd.Config.String("subcategory")
+	if subcategory != "" {
+		input.Subcategory = &subcategory
 	}
 
 	status := cmd.Config.String("status")
@@ -59,44 +78,24 @@ func createValidation() (input openlaneclient.CreateControlInput, err error) {
 		input.Status = &status
 	}
 
-	controlType := cmd.Config.String("type")
+	controlType := cmd.Config.String("control-type")
 	if controlType != "" {
-		input.ControlType = &controlType
+		input.ControlType = enums.ToControlType(controlType)
 	}
 
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
+	mappedCategories := cmd.Config.Strings("mapped-categories")
+	if len(mappedCategories) > 0 {
+		input.MappedCategories = mappedCategories
 	}
 
-	number := cmd.Config.String("number")
-	if number != "" {
-		input.ControlNumber = &number
+	frameworkID := cmd.Config.String("framework-id")
+	if frameworkID != "" {
+		input.StandardID = &frameworkID
 	}
 
-	family := cmd.Config.String("family")
-	if family != "" {
-		input.Family = &family
-	}
-
-	class := cmd.Config.String("class")
-	if class != "" {
-		input.Class = &class
-	}
-
-	source := cmd.Config.String("source")
-	if source != "" {
-		input.Source = &source
-	}
-
-	frameworks := cmd.Config.String("mapped-frameworks")
-	if frameworks != "" {
-		input.MappedFrameworks = &frameworks
-	}
-
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
+	programs := cmd.Config.Strings("programs")
+	if len(programs) > 0 {
+		input.ProgramIDs = programs
 	}
 
 	editors := cmd.Config.Strings("editors")

@@ -95,29 +95,24 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 					Name: "mitb program",
 				},
 				Members: members,
-				Standard: &openlaneclient.CreateStandardInput{
-					Name: "mitb standard",
-				},
 				Controls: []*openlaneclient.CreateControlWithSubcontrolsInput{
 					{
 						Control: &openlaneclient.CreateControlInput{
-							Name: "control 1",
+							RefCode: "control-1",
 						},
-						// TODO: (sfunk): fix with controls schema PR, validation is now
-						// requiring control ID as input which we don't want to require in
-						// this mutation
-						// Subcontrols: []*openlaneclient.CreateSubcontrolInput{
-						// 	{
-						// 		Name: "sc-1",
-						// 	},
-						// 	{
-						// 		Name: "sc-2",
-						// 	},
-						// },
+
+						Subcontrols: []*openlaneclient.CreateSubcontrolInput{
+							{
+								RefCode: "sc-1",
+							},
+							{
+								RefCode: "sc-2",
+							},
+						},
 					},
 					{
 						Control: &openlaneclient.CreateControlInput{
-							Name: "control 2",
+							RefCode: "control 2",
 						},
 					},
 				},
@@ -162,14 +157,11 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 			// the creator is automatically added as an admin, and the members are added in addition
 			assert.Len(t, resp.CreateFullProgram.Program.Members, len(tc.request.Members)+1)
 
-			require.NotNil(t, resp.CreateFullProgram.Program.Standards)
-			assert.Equal(t, tc.request.Standard.Name, resp.CreateFullProgram.Program.Standards[0].Name)
-
 			require.NotNil(t, resp.CreateFullProgram.Program.Controls)
 			assert.Len(t, resp.CreateFullProgram.Program.Controls, len(tc.request.Controls))
 
-			// assert.NotNil(t, resp.CreateFullProgram.Program.Controls[0].Subcontrols)
-			// assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls[0].Subcontrols))
+			assert.NotNil(t, resp.CreateFullProgram.Program.Controls[0].Subcontrols)
+			assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls[0].Subcontrols))
 
 			require.NotNil(t, resp.CreateFullProgram.Program.Risks)
 			assert.Len(t, resp.CreateFullProgram.Program.Risks, len(tc.request.Risks))

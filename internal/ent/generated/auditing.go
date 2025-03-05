@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
@@ -28,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
@@ -239,44 +241,53 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(controlhistory.FieldOwnerID, ch.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ch.Name, new.Name) {
-		changes = append(changes, NewChange(controlhistory.FieldName, ch.Name, new.Name))
-	}
 	if !reflect.DeepEqual(ch.Description, new.Description) {
 		changes = append(changes, NewChange(controlhistory.FieldDescription, ch.Description, new.Description))
 	}
 	if !reflect.DeepEqual(ch.Status, new.Status) {
 		changes = append(changes, NewChange(controlhistory.FieldStatus, ch.Status, new.Status))
 	}
-	if !reflect.DeepEqual(ch.ControlType, new.ControlType) {
-		changes = append(changes, NewChange(controlhistory.FieldControlType, ch.ControlType, new.ControlType))
-	}
-	if !reflect.DeepEqual(ch.Version, new.Version) {
-		changes = append(changes, NewChange(controlhistory.FieldVersion, ch.Version, new.Version))
-	}
-	if !reflect.DeepEqual(ch.ControlNumber, new.ControlNumber) {
-		changes = append(changes, NewChange(controlhistory.FieldControlNumber, ch.ControlNumber, new.ControlNumber))
-	}
-	if !reflect.DeepEqual(ch.Family, new.Family) {
-		changes = append(changes, NewChange(controlhistory.FieldFamily, ch.Family, new.Family))
-	}
-	if !reflect.DeepEqual(ch.Class, new.Class) {
-		changes = append(changes, NewChange(controlhistory.FieldClass, ch.Class, new.Class))
-	}
 	if !reflect.DeepEqual(ch.Source, new.Source) {
 		changes = append(changes, NewChange(controlhistory.FieldSource, ch.Source, new.Source))
 	}
-	if !reflect.DeepEqual(ch.Satisfies, new.Satisfies) {
-		changes = append(changes, NewChange(controlhistory.FieldSatisfies, ch.Satisfies, new.Satisfies))
+	if !reflect.DeepEqual(ch.ControlType, new.ControlType) {
+		changes = append(changes, NewChange(controlhistory.FieldControlType, ch.ControlType, new.ControlType))
 	}
-	if !reflect.DeepEqual(ch.MappedFrameworks, new.MappedFrameworks) {
-		changes = append(changes, NewChange(controlhistory.FieldMappedFrameworks, ch.MappedFrameworks, new.MappedFrameworks))
+	if !reflect.DeepEqual(ch.Category, new.Category) {
+		changes = append(changes, NewChange(controlhistory.FieldCategory, ch.Category, new.Category))
 	}
-	if !reflect.DeepEqual(ch.Details, new.Details) {
-		changes = append(changes, NewChange(controlhistory.FieldDetails, ch.Details, new.Details))
+	if !reflect.DeepEqual(ch.CategoryID, new.CategoryID) {
+		changes = append(changes, NewChange(controlhistory.FieldCategoryID, ch.CategoryID, new.CategoryID))
+	}
+	if !reflect.DeepEqual(ch.Subcategory, new.Subcategory) {
+		changes = append(changes, NewChange(controlhistory.FieldSubcategory, ch.Subcategory, new.Subcategory))
+	}
+	if !reflect.DeepEqual(ch.MappedCategories, new.MappedCategories) {
+		changes = append(changes, NewChange(controlhistory.FieldMappedCategories, ch.MappedCategories, new.MappedCategories))
+	}
+	if !reflect.DeepEqual(ch.AssessmentObjectives, new.AssessmentObjectives) {
+		changes = append(changes, NewChange(controlhistory.FieldAssessmentObjectives, ch.AssessmentObjectives, new.AssessmentObjectives))
+	}
+	if !reflect.DeepEqual(ch.AssessmentMethods, new.AssessmentMethods) {
+		changes = append(changes, NewChange(controlhistory.FieldAssessmentMethods, ch.AssessmentMethods, new.AssessmentMethods))
+	}
+	if !reflect.DeepEqual(ch.ControlQuestions, new.ControlQuestions) {
+		changes = append(changes, NewChange(controlhistory.FieldControlQuestions, ch.ControlQuestions, new.ControlQuestions))
+	}
+	if !reflect.DeepEqual(ch.ImplementationGuidance, new.ImplementationGuidance) {
+		changes = append(changes, NewChange(controlhistory.FieldImplementationGuidance, ch.ImplementationGuidance, new.ImplementationGuidance))
 	}
 	if !reflect.DeepEqual(ch.ExampleEvidence, new.ExampleEvidence) {
 		changes = append(changes, NewChange(controlhistory.FieldExampleEvidence, ch.ExampleEvidence, new.ExampleEvidence))
+	}
+	if !reflect.DeepEqual(ch.References, new.References) {
+		changes = append(changes, NewChange(controlhistory.FieldReferences, ch.References, new.References))
+	}
+	if !reflect.DeepEqual(ch.RefCode, new.RefCode) {
+		changes = append(changes, NewChange(controlhistory.FieldRefCode, ch.RefCode, new.RefCode))
+	}
+	if !reflect.DeepEqual(ch.StandardID, new.StandardID) {
+		changes = append(changes, NewChange(controlhistory.FieldStandardID, ch.StandardID, new.StandardID))
 	}
 	return changes
 }
@@ -301,6 +312,72 @@ func (ch *ControlHistory) Diff(history *ControlHistory) (*HistoryDiff[ControlHis
 			Old:     history,
 			New:     ch,
 			Changes: history.changes(ch),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (cih *ControlImplementationHistory) changes(new *ControlImplementationHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(cih.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldCreatedAt, cih.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(cih.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldUpdatedAt, cih.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(cih.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldCreatedBy, cih.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(cih.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldDeletedAt, cih.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(cih.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldDeletedBy, cih.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(cih.Tags, new.Tags) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldTags, cih.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(cih.ControlID, new.ControlID) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldControlID, cih.ControlID, new.ControlID))
+	}
+	if !reflect.DeepEqual(cih.Status, new.Status) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldStatus, cih.Status, new.Status))
+	}
+	if !reflect.DeepEqual(cih.ImplementationDate, new.ImplementationDate) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldImplementationDate, cih.ImplementationDate, new.ImplementationDate))
+	}
+	if !reflect.DeepEqual(cih.Verified, new.Verified) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldVerified, cih.Verified, new.Verified))
+	}
+	if !reflect.DeepEqual(cih.VerificationDate, new.VerificationDate) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldVerificationDate, cih.VerificationDate, new.VerificationDate))
+	}
+	if !reflect.DeepEqual(cih.Details, new.Details) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldDetails, cih.Details, new.Details))
+	}
+	return changes
+}
+
+func (cih *ControlImplementationHistory) Diff(history *ControlImplementationHistory) (*HistoryDiff[ControlImplementationHistory], error) {
+	if cih.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	cihUnix, historyUnix := cih.HistoryTime.Unix(), history.HistoryTime.Unix()
+	cihOlder := cihUnix < historyUnix || (cihUnix == historyUnix && cih.ID < history.ID)
+	historyOlder := cihUnix > historyUnix || (cihUnix == historyUnix && cih.ID > history.ID)
+
+	if cihOlder {
+		return &HistoryDiff[ControlImplementationHistory]{
+			Old:     cih,
+			New:     history,
+			Changes: cih.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ControlImplementationHistory]{
+			Old:     history,
+			New:     cih,
+			Changes: history.changes(cih),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -335,11 +412,14 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 	if !reflect.DeepEqual(coh.Name, new.Name) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldName, coh.Name, new.Name))
 	}
-	if !reflect.DeepEqual(coh.Description, new.Description) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldDescription, coh.Description, new.Description))
+	if !reflect.DeepEqual(coh.DesiredOutcome, new.DesiredOutcome) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDesiredOutcome, coh.DesiredOutcome, new.DesiredOutcome))
 	}
 	if !reflect.DeepEqual(coh.Status, new.Status) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldStatus, coh.Status, new.Status))
+	}
+	if !reflect.DeepEqual(coh.Source, new.Source) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldSource, coh.Source, new.Source))
 	}
 	if !reflect.DeepEqual(coh.ControlObjectiveType, new.ControlObjectiveType) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldControlObjectiveType, coh.ControlObjectiveType, new.ControlObjectiveType))
@@ -347,26 +427,11 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 	if !reflect.DeepEqual(coh.Version, new.Version) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldVersion, coh.Version, new.Version))
 	}
-	if !reflect.DeepEqual(coh.ControlNumber, new.ControlNumber) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldControlNumber, coh.ControlNumber, new.ControlNumber))
+	if !reflect.DeepEqual(coh.Category, new.Category) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldCategory, coh.Category, new.Category))
 	}
-	if !reflect.DeepEqual(coh.Family, new.Family) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldFamily, coh.Family, new.Family))
-	}
-	if !reflect.DeepEqual(coh.Class, new.Class) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldClass, coh.Class, new.Class))
-	}
-	if !reflect.DeepEqual(coh.Source, new.Source) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldSource, coh.Source, new.Source))
-	}
-	if !reflect.DeepEqual(coh.MappedFrameworks, new.MappedFrameworks) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldMappedFrameworks, coh.MappedFrameworks, new.MappedFrameworks))
-	}
-	if !reflect.DeepEqual(coh.Details, new.Details) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldDetails, coh.Details, new.Details))
-	}
-	if !reflect.DeepEqual(coh.ExampleEvidence, new.ExampleEvidence) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldExampleEvidence, coh.ExampleEvidence, new.ExampleEvidence))
+	if !reflect.DeepEqual(coh.Subcategory, new.Subcategory) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldSubcategory, coh.Subcategory, new.Subcategory))
 	}
 	return changes
 }
@@ -1185,6 +1250,66 @@ func (iph *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*History
 	return nil, IdenticalHistoryError
 }
 
+func (mch *MappedControlHistory) changes(new *MappedControlHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(mch.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldCreatedAt, mch.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(mch.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldUpdatedAt, mch.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(mch.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldCreatedBy, mch.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(mch.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldDeletedAt, mch.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(mch.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldDeletedBy, mch.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(mch.Tags, new.Tags) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldTags, mch.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(mch.ControlID, new.ControlID) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldControlID, mch.ControlID, new.ControlID))
+	}
+	if !reflect.DeepEqual(mch.MappedControlID, new.MappedControlID) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldMappedControlID, mch.MappedControlID, new.MappedControlID))
+	}
+	if !reflect.DeepEqual(mch.MappingType, new.MappingType) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldMappingType, mch.MappingType, new.MappingType))
+	}
+	if !reflect.DeepEqual(mch.Relation, new.Relation) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldRelation, mch.Relation, new.Relation))
+	}
+	return changes
+}
+
+func (mch *MappedControlHistory) Diff(history *MappedControlHistory) (*HistoryDiff[MappedControlHistory], error) {
+	if mch.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	mchUnix, historyUnix := mch.HistoryTime.Unix(), history.HistoryTime.Unix()
+	mchOlder := mchUnix < historyUnix || (mchUnix == historyUnix && mch.ID < history.ID)
+	historyOlder := mchUnix > historyUnix || (mchUnix == historyUnix && mch.ID > history.ID)
+
+	if mchOlder {
+		return &HistoryDiff[MappedControlHistory]{
+			Old:     mch,
+			New:     history,
+			Changes: mch.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[MappedControlHistory]{
+			Old:     history,
+			New:     mch,
+			Changes: history.changes(mch),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(nh.CreatedAt, new.CreatedAt) {
@@ -1216,9 +1341,6 @@ func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 	}
 	if !reflect.DeepEqual(nh.Description, new.Description) {
 		changes = append(changes, NewChange(narrativehistory.FieldDescription, nh.Description, new.Description))
-	}
-	if !reflect.DeepEqual(nh.Satisfies, new.Satisfies) {
-		changes = append(changes, NewChange(narrativehistory.FieldSatisfies, nh.Satisfies, new.Satisfies))
 	}
 	if !reflect.DeepEqual(nh.Details, new.Details) {
 		changes = append(changes, NewChange(narrativehistory.FieldDetails, nh.Details, new.Details))
@@ -1922,17 +2044,41 @@ func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(sh.Tags, new.Tags) {
 		changes = append(changes, NewChange(standardhistory.FieldTags, sh.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(standardhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(sh.Name, new.Name) {
 		changes = append(changes, NewChange(standardhistory.FieldName, sh.Name, new.Name))
+	}
+	if !reflect.DeepEqual(sh.ShortName, new.ShortName) {
+		changes = append(changes, NewChange(standardhistory.FieldShortName, sh.ShortName, new.ShortName))
+	}
+	if !reflect.DeepEqual(sh.Framework, new.Framework) {
+		changes = append(changes, NewChange(standardhistory.FieldFramework, sh.Framework, new.Framework))
 	}
 	if !reflect.DeepEqual(sh.Description, new.Description) {
 		changes = append(changes, NewChange(standardhistory.FieldDescription, sh.Description, new.Description))
 	}
-	if !reflect.DeepEqual(sh.Family, new.Family) {
-		changes = append(changes, NewChange(standardhistory.FieldFamily, sh.Family, new.Family))
+	if !reflect.DeepEqual(sh.GoverningBody, new.GoverningBody) {
+		changes = append(changes, NewChange(standardhistory.FieldGoverningBody, sh.GoverningBody, new.GoverningBody))
+	}
+	if !reflect.DeepEqual(sh.Domains, new.Domains) {
+		changes = append(changes, NewChange(standardhistory.FieldDomains, sh.Domains, new.Domains))
+	}
+	if !reflect.DeepEqual(sh.Link, new.Link) {
+		changes = append(changes, NewChange(standardhistory.FieldLink, sh.Link, new.Link))
 	}
 	if !reflect.DeepEqual(sh.Status, new.Status) {
 		changes = append(changes, NewChange(standardhistory.FieldStatus, sh.Status, new.Status))
+	}
+	if !reflect.DeepEqual(sh.IsPublic, new.IsPublic) {
+		changes = append(changes, NewChange(standardhistory.FieldIsPublic, sh.IsPublic, new.IsPublic))
+	}
+	if !reflect.DeepEqual(sh.FreeToUse, new.FreeToUse) {
+		changes = append(changes, NewChange(standardhistory.FieldFreeToUse, sh.FreeToUse, new.FreeToUse))
+	}
+	if !reflect.DeepEqual(sh.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(standardhistory.FieldSystemOwned, sh.SystemOwned, new.SystemOwned))
 	}
 	if !reflect.DeepEqual(sh.StandardType, new.StandardType) {
 		changes = append(changes, NewChange(standardhistory.FieldStandardType, sh.StandardType, new.StandardType))
@@ -1940,17 +2086,8 @@ func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(sh.Version, new.Version) {
 		changes = append(changes, NewChange(standardhistory.FieldVersion, sh.Version, new.Version))
 	}
-	if !reflect.DeepEqual(sh.PurposeAndScope, new.PurposeAndScope) {
-		changes = append(changes, NewChange(standardhistory.FieldPurposeAndScope, sh.PurposeAndScope, new.PurposeAndScope))
-	}
-	if !reflect.DeepEqual(sh.Background, new.Background) {
-		changes = append(changes, NewChange(standardhistory.FieldBackground, sh.Background, new.Background))
-	}
-	if !reflect.DeepEqual(sh.Satisfies, new.Satisfies) {
-		changes = append(changes, NewChange(standardhistory.FieldSatisfies, sh.Satisfies, new.Satisfies))
-	}
-	if !reflect.DeepEqual(sh.Details, new.Details) {
-		changes = append(changes, NewChange(standardhistory.FieldDetails, sh.Details, new.Details))
+	if !reflect.DeepEqual(sh.Revision, new.Revision) {
+		changes = append(changes, NewChange(standardhistory.FieldRevision, sh.Revision, new.Revision))
 	}
 	return changes
 }
@@ -2006,56 +2143,53 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(sh.Name, new.Name) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldName, sh.Name, new.Name))
-	}
 	if !reflect.DeepEqual(sh.Description, new.Description) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, sh.Description, new.Description))
 	}
 	if !reflect.DeepEqual(sh.Status, new.Status) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldStatus, sh.Status, new.Status))
 	}
-	if !reflect.DeepEqual(sh.SubcontrolType, new.SubcontrolType) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolType, sh.SubcontrolType, new.SubcontrolType))
-	}
-	if !reflect.DeepEqual(sh.Version, new.Version) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldVersion, sh.Version, new.Version))
-	}
-	if !reflect.DeepEqual(sh.SubcontrolNumber, new.SubcontrolNumber) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolNumber, sh.SubcontrolNumber, new.SubcontrolNumber))
-	}
-	if !reflect.DeepEqual(sh.Family, new.Family) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldFamily, sh.Family, new.Family))
-	}
-	if !reflect.DeepEqual(sh.Class, new.Class) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldClass, sh.Class, new.Class))
-	}
 	if !reflect.DeepEqual(sh.Source, new.Source) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldSource, sh.Source, new.Source))
 	}
-	if !reflect.DeepEqual(sh.MappedFrameworks, new.MappedFrameworks) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldMappedFrameworks, sh.MappedFrameworks, new.MappedFrameworks))
+	if !reflect.DeepEqual(sh.ControlType, new.ControlType) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlType, sh.ControlType, new.ControlType))
 	}
-	if !reflect.DeepEqual(sh.ImplementationEvidence, new.ImplementationEvidence) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationEvidence, sh.ImplementationEvidence, new.ImplementationEvidence))
+	if !reflect.DeepEqual(sh.Category, new.Category) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldCategory, sh.Category, new.Category))
 	}
-	if !reflect.DeepEqual(sh.ImplementationStatus, new.ImplementationStatus) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationStatus, sh.ImplementationStatus, new.ImplementationStatus))
+	if !reflect.DeepEqual(sh.CategoryID, new.CategoryID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldCategoryID, sh.CategoryID, new.CategoryID))
 	}
-	if !reflect.DeepEqual(sh.ImplementationDate, new.ImplementationDate) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationDate, sh.ImplementationDate, new.ImplementationDate))
+	if !reflect.DeepEqual(sh.Subcategory, new.Subcategory) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSubcategory, sh.Subcategory, new.Subcategory))
 	}
-	if !reflect.DeepEqual(sh.ImplementationVerification, new.ImplementationVerification) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationVerification, sh.ImplementationVerification, new.ImplementationVerification))
+	if !reflect.DeepEqual(sh.MappedCategories, new.MappedCategories) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldMappedCategories, sh.MappedCategories, new.MappedCategories))
 	}
-	if !reflect.DeepEqual(sh.ImplementationVerificationDate, new.ImplementationVerificationDate) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationVerificationDate, sh.ImplementationVerificationDate, new.ImplementationVerificationDate))
+	if !reflect.DeepEqual(sh.AssessmentObjectives, new.AssessmentObjectives) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldAssessmentObjectives, sh.AssessmentObjectives, new.AssessmentObjectives))
 	}
-	if !reflect.DeepEqual(sh.Details, new.Details) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldDetails, sh.Details, new.Details))
+	if !reflect.DeepEqual(sh.AssessmentMethods, new.AssessmentMethods) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldAssessmentMethods, sh.AssessmentMethods, new.AssessmentMethods))
+	}
+	if !reflect.DeepEqual(sh.ControlQuestions, new.ControlQuestions) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlQuestions, sh.ControlQuestions, new.ControlQuestions))
+	}
+	if !reflect.DeepEqual(sh.ImplementationGuidance, new.ImplementationGuidance) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationGuidance, sh.ImplementationGuidance, new.ImplementationGuidance))
 	}
 	if !reflect.DeepEqual(sh.ExampleEvidence, new.ExampleEvidence) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldExampleEvidence, sh.ExampleEvidence, new.ExampleEvidence))
+	}
+	if !reflect.DeepEqual(sh.References, new.References) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldReferences, sh.References, new.References))
+	}
+	if !reflect.DeepEqual(sh.RefCode, new.RefCode) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldRefCode, sh.RefCode, new.RefCode))
+	}
+	if !reflect.DeepEqual(sh.ControlID, new.ControlID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlID, sh.ControlID, new.ControlID))
 	}
 	return changes
 }
@@ -2446,6 +2580,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditControlImplementationHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditControlObjectiveHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -2519,6 +2659,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records = append(records, record...)
 
 	record, err = auditInternalPolicyHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditMappedControlHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
@@ -2657,6 +2803,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 		records = append(records, record...)
 	}
 
+	if tableName == "" || tableName == strings.TrimSuffix("ControlImplementationHistory", "History") {
+		record, err = auditControlImplementationHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
 	if tableName == "" || tableName == strings.TrimSuffix("ControlObjectiveHistory", "History") {
 		record, err = auditControlObjectiveHistory(ctx, c.config)
 		if err != nil {
@@ -2767,6 +2922,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("InternalPolicyHistory", "History") {
 		record, err = auditInternalPolicyHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("MappedControlHistory", "History") {
+		record, err = auditMappedControlHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -3099,6 +3263,59 @@ func auditControlHistory(ctx context.Context, config config) ([][]string, error)
 			default:
 				if i == 0 {
 					record.Changes = (&ControlHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type controlimplementationhistoryref struct {
+	Ref string
+}
+
+func auditControlImplementationHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []controlimplementationhistoryref
+	client := NewControlImplementationHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(controlimplementationhistory.ByRef()).
+		Select(controlimplementationhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(controlimplementationhistory.Ref(currRef.Ref)).
+			Order(controlimplementationhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "ControlImplementationHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&ControlImplementationHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&ControlImplementationHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&ControlImplementationHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}
@@ -3788,6 +4005,59 @@ func auditInternalPolicyHistory(ctx context.Context, config config) ([][]string,
 			default:
 				if i == 0 {
 					record.Changes = (&InternalPolicyHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type mappedcontrolhistoryref struct {
+	Ref string
+}
+
+func auditMappedControlHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []mappedcontrolhistoryref
+	client := NewMappedControlHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(mappedcontrolhistory.ByRef()).
+		Select(mappedcontrolhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(mappedcontrolhistory.Ref(currRef.Ref)).
+			Order(mappedcontrolhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "MappedControlHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&MappedControlHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&MappedControlHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&MappedControlHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

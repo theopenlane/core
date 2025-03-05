@@ -10,7 +10,6 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -27,11 +26,8 @@ func (DocumentData) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("template_id").
 			Comment("the template id of the document"),
-		field.JSON("data", customtypes.JSONObject{}).
-			Comment("the json data of the document").
-			Annotations(
-				entgql.Type("JSON"),
-			),
+		field.JSON("data", map[string]any{}).
+			Comment("the json data of the document"),
 	}
 }
 

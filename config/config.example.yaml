@@ -148,6 +148,7 @@ server:
         enabled: true
         etagHeaders: null
         noCacheHeaders: null
+    complexityLimit: 100
     cors:
         allowOrigins: null
         cookieInsecure: false

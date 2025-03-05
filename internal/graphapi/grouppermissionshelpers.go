@@ -15,6 +15,7 @@ import (
 type EntObject struct {
 	ID        string `json:"id,omitempty"`
 	Name      string `json:"name,omitempty"`
+	RefCode   string `json:"ref_code,omitempty"`
 	DisplayID string `json:"display_id,omitempty"`
 }
 
@@ -26,12 +27,17 @@ func getGroupPermissions[T any](obj []T, objectType string, permission enums.Per
 			return nil
 		}
 
+		name := eo.Name
+		if name == "" {
+			name = eo.RefCode
+		}
+
 		perms = append(perms, &model.GroupPermissions{
 			ObjectType:  objectType,
 			ID:          &eo.ID,
 			Permissions: permission,
 			DisplayID:   &eo.DisplayID,
-			Name:        &eo.Name,
+			Name:        &name,
 		})
 	}
 

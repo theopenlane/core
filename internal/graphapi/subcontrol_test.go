@@ -3,13 +3,13 @@ package graphapi_test
 import (
 	"context"
 	"testing"
-	"time"
 
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -75,7 +75,7 @@ func (suite *GraphTestSuite) TestQuerySubcontrol() {
 				// create the control first
 				control, err := suite.client.api.CreateControl(testUser1.UserCtx,
 					openlaneclient.CreateControlInput{
-						Name:       "SC-1",
+						RefCode:    "SC-1",
 						ProgramIDs: []string{program.ID},
 					})
 
@@ -84,8 +84,8 @@ func (suite *GraphTestSuite) TestQuerySubcontrol() {
 
 				resp, err := suite.client.api.CreateSubcontrol(testUser1.UserCtx,
 					openlaneclient.CreateSubcontrolInput{
-						Name:       "SC-1",
-						ControlIDs: []string{control.CreateControl.Control.ID},
+						RefCode:   "SC-1",
+						ControlID: control.CreateControl.Control.ID,
 					})
 
 				require.NoError(t, err)
@@ -110,10 +110,9 @@ func (suite *GraphTestSuite) TestQuerySubcontrol() {
 			require.NotEmpty(t, resp.Subcontrol)
 
 			assert.Equal(t, tc.queryID, resp.Subcontrol.ID)
-			assert.NotEmpty(t, resp.Subcontrol.Name)
+			assert.NotEmpty(t, resp.Subcontrol.RefCode)
 
-			require.Len(t, resp.Subcontrol.Controls, 1)
-			assert.NotEmpty(t, resp.Subcontrol.Controls[0].ID)
+			assert.NotEmpty(t, resp.Subcontrol.ControlID)
 		})
 	}
 }
@@ -196,10 +195,20 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		expectedErr         string
 	}{
 		{
+			name: "missing required ref code",
+			request: openlaneclient.CreateSubcontrolInput{
+				Description: lo.ToPtr("A description of the Subcontrol"),
+				ControlID:   control1.ID,
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "value is less than the required length",
+		},
+		{
 			name: "happy path, minimal input",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name:       "SC-1",
-				ControlIDs: []string{control1.ID},
+				RefCode:   "SC-1",
+				ControlID: control1.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -207,23 +216,52 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		{
 			name: "happy path, all input",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name:                           "Another Subcontrol",
-				Description:                    lo.ToPtr("A description of the Subcontrol"),
-				Status:                         lo.ToPtr("mitigated"),
-				SubcontrolType:                 lo.ToPtr("operational"),
-				Version:                        lo.ToPtr("1.0.0"),
-				SubcontrolNumber:               lo.ToPtr("1.1"),
-				Family:                         lo.ToPtr("AC"),
-				Class:                          lo.ToPtr("AC-1"),
-				Source:                         lo.ToPtr("NIST framework"),
-				MappedFrameworks:               lo.ToPtr("NIST"),
-				ImplementationEvidence:         lo.ToPtr("Evidence of implementation"),
-				ImplementationStatus:           lo.ToPtr("Implemented"),
-				ImplementationDate:             lo.ToPtr(time.Now().AddDate(0, 0, -1)),
-				ImplementationVerification:     lo.ToPtr("Verification of implementation"),
-				ImplementationVerificationDate: lo.ToPtr(time.Now().AddDate(0, 0, -1)),
-				Details:                        map[string]interface{}{"stuff": "things"},
-				ControlIDs:                     []string{control1.ID, control2.ID}, // multiple controls
+				RefCode:     "Another Subcontrol",
+				Description: lo.ToPtr("A description of the Subcontrol"),
+				Status:      lo.ToPtr("mitigated"),
+				Tags:        []string{"tag1", "tag2"},
+				Source:      &enums.ControlSourceFramework,
+				ControlType: &enums.ControlTypeDetective,
+				Category:    lo.ToPtr("Availability"),
+				Subcategory: lo.ToPtr("Availability-1"),
+				MappedCategories: []string{
+					"Category1",
+					"Category2",
+				},
+				ControlQuestions: []string{
+					"Question 1",
+					"Question 2",
+				},
+				AssessmentObjectives: []*models.AssessmentObjective{
+					{
+						Class:     "Class 1",
+						ID:        "ID-1",
+						Objective: "Objective 1",
+					},
+				},
+				AssessmentMethods: []*models.AssessmentMethod{
+					{
+						Type:   "Examine",
+						ID:     "ID-2",
+						Method: "Method 1",
+					},
+				},
+				ImplementationGuidance: []*models.ImplementationGuidance{
+					{
+						ReferenceID: "cc-1",
+						Guidance: []string{
+							"Step 1",
+							"Step 2",
+						},
+					},
+				},
+				ControlID: control2.ID,
+				ExampleEvidence: []*models.ExampleEvidence{
+					{
+						DocumentationType: "Policy",
+						Description:       "Create a policy",
+					},
+				},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -231,9 +269,9 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		{
 			name: "happy path, using pat",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name:       "Subcontrol",
-				ControlIDs: []string{control1.ID},
-				OwnerID:    &testUser1.OrganizationID,
+				RefCode:   "Subcontrol",
+				ControlID: control1.ID,
+				OwnerID:   &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -241,8 +279,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		{
 			name: "using pat, missing owner ID",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name:       "SC-1",
-				ControlIDs: []string{control1.ID},
+				RefCode:   "SC-1",
+				ControlID: control1.ID,
 			},
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
@@ -251,8 +289,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		{
 			name: "user not authorized, not enough permissions",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name:       "SC-1",
-				ControlIDs: []string{control1.ID},
+				RefCode:   "SC-1",
+				ControlID: control1.ID,
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -261,8 +299,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		{
 			name: "user authorized, they have access to the parent control via the program",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name:       "SC-1",
-				ControlIDs: []string{control1.ID},
+				RefCode:   "SC-1",
+				ControlID: control1.ID,
 			},
 			createParentControl: true, // create the parent control first
 			client:              suite.client.api,
@@ -271,8 +309,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		{
 			name: "user not authorized to one of the controls",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name:       "SC-1",
-				ControlIDs: []string{control1.ID, control2.ID},
+				RefCode:   "SC-1",
+				ControlID: control2.ID,
 			},
 			client:      suite.client.api,
 			ctx:         adminUser.UserCtx,
@@ -281,20 +319,11 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 		{
 			name: "missing required control ID",
 			request: openlaneclient.CreateSubcontrolInput{
-				Name: "SC-1",
+				RefCode: "SC-1",
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "cannot be null",
-		},
-		{
-			name: "missing required name",
-			request: openlaneclient.CreateSubcontrolInput{
-				ControlIDs: []string{control1.ID},
-			},
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "value is less than the required length",
+			expectedErr: "validator failed for field",
 		},
 	}
 
@@ -304,14 +333,14 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 				// create the control first
 				control, err := suite.client.api.CreateControl(testUser1.UserCtx,
 					openlaneclient.CreateControlInput{
-						Name:       "SC",
+						RefCode:    "SC",
 						ProgramIDs: []string{program.ID},
 					})
 
 				require.NoError(t, err)
 				require.NotNil(t, control)
 
-				tc.request.ControlIDs = []string{control.CreateControl.Control.ID}
+				tc.request.ControlID = control.CreateControl.Control.ID
 			}
 
 			resp, err := tc.client.CreateSubcontrol(tc.ctx, tc.request)
@@ -328,22 +357,17 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 
 			// check required fields
 			require.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.ID)
-			assert.Equal(t, tc.request.Name, resp.CreateSubcontrol.Subcontrol.Name)
+			assert.Equal(t, tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode)
 
 			assert.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.DisplayID)
 			assert.Contains(t, resp.CreateSubcontrol.Subcontrol.DisplayID, "SCL-")
 
-			// ensure the control is set
-			if len(tc.request.ControlIDs) > 0 {
-				require.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.Controls)
-				require.Len(t, resp.CreateSubcontrol.Subcontrol.Controls, len(tc.request.ControlIDs))
+			assert.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.RefCode)
+			assert.Equal(t, tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode)
 
-				for i, c := range resp.CreateSubcontrol.Subcontrol.Controls {
-					assert.Equal(t, tc.request.ControlIDs[i], c.ID)
-				}
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Controls)
-			}
+			// ensure the control is set
+			require.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.ControlID)
+			assert.Equal(t, tc.request.ControlID, resp.CreateSubcontrol.Subcontrol.ControlID)
 
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.CreateSubcontrol.Subcontrol.Description)
@@ -357,82 +381,10 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Status)
 			}
 
-			if tc.request.SubcontrolType != nil {
-				assert.Equal(t, *tc.request.SubcontrolType, *resp.CreateSubcontrol.Subcontrol.SubcontrolType)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.SubcontrolType)
-			}
-
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.CreateSubcontrol.Subcontrol.Version)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Version)
-			}
-
-			if tc.request.SubcontrolNumber != nil {
-				assert.Equal(t, *tc.request.SubcontrolNumber, *resp.CreateSubcontrol.Subcontrol.SubcontrolNumber)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.SubcontrolNumber)
-			}
-
-			if tc.request.Family != nil {
-				assert.Equal(t, *tc.request.Family, *resp.CreateSubcontrol.Subcontrol.Family)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Family)
-			}
-
-			if tc.request.Class != nil {
-				assert.Equal(t, *tc.request.Class, *resp.CreateSubcontrol.Subcontrol.Class)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Class)
-			}
-
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.CreateSubcontrol.Subcontrol.Source)
 			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Source)
-			}
-
-			if tc.request.MappedFrameworks != nil {
-				assert.Equal(t, *tc.request.MappedFrameworks, *resp.CreateSubcontrol.Subcontrol.MappedFrameworks)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.MappedFrameworks)
-			}
-
-			if tc.request.ImplementationEvidence != nil {
-				assert.Equal(t, *tc.request.ImplementationEvidence, *resp.CreateSubcontrol.Subcontrol.ImplementationEvidence)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.ImplementationEvidence)
-			}
-
-			if tc.request.ImplementationStatus != nil {
-				assert.Equal(t, *tc.request.ImplementationStatus, *resp.CreateSubcontrol.Subcontrol.ImplementationStatus)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.ImplementationStatus)
-			}
-
-			if tc.request.ImplementationDate != nil {
-				assert.WithinDuration(t, *tc.request.ImplementationDate, *resp.CreateSubcontrol.Subcontrol.ImplementationDate, time.Second)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.ImplementationDate)
-			}
-
-			if tc.request.ImplementationVerification != nil {
-				assert.Equal(t, *tc.request.ImplementationVerification, *resp.CreateSubcontrol.Subcontrol.ImplementationVerification)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.ImplementationVerification)
-			}
-
-			if tc.request.ImplementationVerificationDate != nil {
-				assert.WithinDuration(t, *tc.request.ImplementationVerificationDate, *resp.CreateSubcontrol.Subcontrol.ImplementationVerificationDate, time.Second)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.ImplementationVerificationDate)
-			}
-
-			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.CreateSubcontrol.Subcontrol.Details)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Details)
+				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateSubcontrol.Subcontrol.Source)
 			}
 
 			// ensure the org owner has access to the subcontrol that was created by an api token
@@ -450,7 +402,6 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 	t := suite.T()
 
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID}).MustNew(testUser1.UserCtx, t)
 
@@ -464,8 +415,7 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 		{
 			name: "happy path, update field",
 			request: openlaneclient.UpdateSubcontrolInput{
-				Description:   lo.ToPtr("Updated description"),
-				AddControlIDs: []string{control1.ID, control2.ID},
+				Description: lo.ToPtr("Updated description"),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -473,37 +423,26 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateSubcontrolInput{
-				Status:                         lo.ToPtr("mitigated"),
-				Tags:                           []string{"tag1", "tag2"},
-				Version:                        lo.ToPtr("1.0.1"),
-				SubcontrolNumber:               lo.ToPtr("1.2"),
-				Family:                         lo.ToPtr("AB"),
-				Class:                          lo.ToPtr("AB-2"),
-				Source:                         lo.ToPtr("ISO27001"),
-				MappedFrameworks:               lo.ToPtr("ISO"),
-				ImplementationEvidence:         lo.ToPtr("Evidence of implementation"),
-				ImplementationStatus:           lo.ToPtr("Implemented"),
-				ImplementationDate:             lo.ToPtr(time.Now().AddDate(0, 0, -10)),
-				ImplementationVerification:     lo.ToPtr("Verification of implementation"),
-				ImplementationVerificationDate: lo.ToPtr(time.Now().AddDate(0, 0, -7)),
-				RemoveControlIDs:               []string{control2.ID},
+				Status: lo.ToPtr("mitigated"),
+				Tags:   []string{"tag1", "tag2"},
+				Source: lo.ToPtr(enums.ControlSourceFramework),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
 		},
 		{
-			name: "update not allowed, cannot remove the only control",
+			name: "update ref code to empty",
 			request: openlaneclient.UpdateSubcontrolInput{
-				RemoveControlIDs: []string{control1.ID},
+				RefCode: lo.ToPtr(""),
 			},
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "subcontrol must have at least one control assigned",
+			client:      suite.client.apiWithPAT,
+			ctx:         context.Background(),
+			expectedErr: "value is less than the required length",
 		},
 		{
 			name: "update not allowed, not permissions in same org",
 			request: openlaneclient.UpdateSubcontrolInput{
-				MappedFrameworks: lo.ToPtr("SOC"),
+				MappedCategories: []string{"Category1", "Category2"},
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -512,7 +451,7 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 		{
 			name: "update not allowed, no permissions",
 			request: openlaneclient.UpdateSubcontrolInput{
-				MappedFrameworks: lo.ToPtr("SOC"),
+				MappedCategories: []string{"Category1", "Category2"},
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
@@ -546,52 +485,8 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 				assert.ElementsMatch(t, tc.request.Tags, resp.UpdateSubcontrol.Subcontrol.Tags)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.UpdateSubcontrol.Subcontrol.Version)
-			}
-
-			if tc.request.SubcontrolNumber != nil {
-				assert.Equal(t, *tc.request.SubcontrolNumber, *resp.UpdateSubcontrol.Subcontrol.SubcontrolNumber)
-			}
-
-			if tc.request.Family != nil {
-				assert.Equal(t, *tc.request.Family, *resp.UpdateSubcontrol.Subcontrol.Family)
-			}
-
-			if tc.request.Class != nil {
-				assert.Equal(t, *tc.request.Class, *resp.UpdateSubcontrol.Subcontrol.Class)
-			}
-
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.UpdateSubcontrol.Subcontrol.Source)
-			}
-
-			if tc.request.MappedFrameworks != nil {
-				assert.Equal(t, *tc.request.MappedFrameworks, *resp.UpdateSubcontrol.Subcontrol.MappedFrameworks)
-			}
-
-			if tc.request.ImplementationEvidence != nil {
-				assert.Equal(t, *tc.request.ImplementationEvidence, *resp.UpdateSubcontrol.Subcontrol.ImplementationEvidence)
-			}
-
-			if tc.request.ImplementationStatus != nil {
-				assert.Equal(t, *tc.request.ImplementationStatus, *resp.UpdateSubcontrol.Subcontrol.ImplementationStatus)
-			}
-
-			if tc.request.ImplementationDate != nil {
-				assert.WithinDuration(t, *tc.request.ImplementationDate, *resp.UpdateSubcontrol.Subcontrol.ImplementationDate, time.Second)
-			}
-
-			if tc.request.ImplementationVerification != nil {
-				assert.Equal(t, *tc.request.ImplementationVerification, *resp.UpdateSubcontrol.Subcontrol.ImplementationVerification)
-			}
-
-			if tc.request.ImplementationVerificationDate != nil {
-				assert.WithinDuration(t, *tc.request.ImplementationVerificationDate, *resp.UpdateSubcontrol.Subcontrol.ImplementationVerificationDate, time.Second)
-			}
-
-			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.UpdateSubcontrol.Subcontrol.Details)
 			}
 		})
 	}

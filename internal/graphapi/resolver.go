@@ -39,8 +39,10 @@ const (
 )
 
 var (
-	graphPath      = "query"
-	playgroundPath = "playground"
+	graphPath               = "query"
+	playgroundPath          = "playground"
+	defaultComplexityLimit  = 100
+	introspectionComplexity = 200
 
 	graphFullPath = fmt.Sprintf("/%s", graphPath)
 )
@@ -52,6 +54,7 @@ type Resolver struct {
 	extensionsEnabled bool
 	uploader          *objects.Objects
 	isDevelopment     bool
+	complexityLimit   int
 }
 
 // NewResolver returns a resolver configured with the given ent client
@@ -76,6 +79,13 @@ func (r Resolver) WithDevelopment(dev bool) *Resolver {
 	return &r
 }
 
+// WithComplexityLimitConfig sets the complexity limit for the resolver
+func (r Resolver) WithComplexityLimitConfig(limit int) *Resolver {
+	r.complexityLimit = limit
+
+	return &r
+}
+
 // Handler is an http handler wrapping a Resolver
 type Handler struct {
 	r              *Resolver
@@ -86,8 +96,10 @@ type Handler struct {
 
 // Handler returns an http handler for a graph resolver
 func (r *Resolver) Handler(withPlayground bool) *Handler {
+	c := gqlgenerated.Config{Resolvers: r}
+
 	srv := handler.New(gqlgenerated.NewExecutableSchema(
-		gqlgenerated.Config{Resolvers: r},
+		c,
 	))
 
 	srv.AddTransport(transport.Websocket{
@@ -116,6 +128,9 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv.Use(extension.AutomaticPersistedQuery{
 		Cache: lru.New[string](100), //nolint:mnd
 	})
+
+	// add complexity limit
+	r.WithComplexityLimit(srv)
 
 	// add transactional db client
 	WithTransactions(srv, r.db)
@@ -149,6 +164,23 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	}
 
 	return h
+}
+
+func (r *Resolver) WithComplexityLimit(h *handler.Server) {
+	// prevent complex queries except the introspection query
+	h.Use(&extension.ComplexityLimit{
+		Func: func(ctx context.Context, rc *graphql.OperationContext) int {
+			if rc != nil && rc.OperationName == "IntrospectionQuery" {
+				return introspectionComplexity
+			}
+
+			if r.complexityLimit > 0 {
+				return r.complexityLimit
+			}
+
+			return defaultComplexityLimit
+		},
+	})
 }
 
 // WithTransactions adds the transactioner to the ent db client

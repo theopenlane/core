@@ -16,6 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -43,6 +45,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -120,6 +124,16 @@ var controlhistoryImplementors = []string{"ControlHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ControlHistory) IsNode() {}
+
+var controlimplementationImplementors = []string{"ControlImplementation", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ControlImplementation) IsNode() {}
+
+var controlimplementationhistoryImplementors = []string{"ControlImplementationHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ControlImplementationHistory) IsNode() {}
 
 var controlobjectiveImplementors = []string{"ControlObjective", "Node"}
 
@@ -255,6 +269,16 @@ var inviteImplementors = []string{"Invite", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Invite) IsNode() {}
+
+var mappedcontrolImplementors = []string{"MappedControl", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*MappedControl) IsNode() {}
+
+var mappedcontrolhistoryImplementors = []string{"MappedControlHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*MappedControlHistory) IsNode() {}
 
 var narrativeImplementors = []string{"Narrative", "Node"}
 
@@ -557,6 +581,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case controlimplementation.Table:
+		query := c.ControlImplementation.Query().
+			Where(controlimplementation.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlimplementationImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case controlimplementationhistory.Table:
+		query := c.ControlImplementationHistory.Query().
+			Where(controlimplementationhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlimplementationhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case controlobjective.Table:
 		query := c.ControlObjective.Query().
 			Where(controlobjective.ID(id))
@@ -796,6 +838,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(invite.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, inviteImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case mappedcontrol.Table:
+		query := c.MappedControl.Query().
+			Where(mappedcontrol.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, mappedcontrolImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case mappedcontrolhistory.Table:
+		query := c.MappedControlHistory.Query().
+			Where(mappedcontrolhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, mappedcontrolhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1309,6 +1369,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case controlimplementation.Table:
+		query := c.ControlImplementation.Query().
+			Where(controlimplementation.IDIn(ids...))
+		query, err := query.CollectFields(ctx, controlimplementationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case controlimplementationhistory.Table:
+		query := c.ControlImplementationHistory.Query().
+			Where(controlimplementationhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, controlimplementationhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case controlobjective.Table:
 		query := c.ControlObjective.Query().
 			Where(controlobjective.IDIn(ids...))
@@ -1729,6 +1821,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Invite.Query().
 			Where(invite.IDIn(ids...))
 		query, err := query.CollectFields(ctx, inviteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case mappedcontrol.Table:
+		query := c.MappedControl.Query().
+			Where(mappedcontrol.IDIn(ids...))
+		query, err := query.CollectFields(ctx, mappedcontrolImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case mappedcontrolhistory.Table:
+		query := c.MappedControlHistory.Query().
+			Where(mappedcontrolhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, mappedcontrolhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
