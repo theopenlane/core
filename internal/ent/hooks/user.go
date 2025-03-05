@@ -155,10 +155,10 @@ func HookUserPermissions() ent.Hook {
 
 			req := fgax.TupleRequest{
 				SubjectID:   userID,
-				SubjectType: "user",
+				SubjectType: auth.UserSubjectType,
 				ObjectID:    userID,
-				ObjectType:  "user",
-				Relation:    "_self",
+				ObjectType:  auth.UserSubjectType,
+				Relation:    fgax.SelfRelation,
 			}
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {

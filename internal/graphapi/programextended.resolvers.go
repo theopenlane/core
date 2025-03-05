@@ -82,15 +82,6 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		return nil, err
 	}
 
-	// create the standard
-	if input.Standard != nil {
-		input.Standard.ProgramIDs = []string{program.ID}
-		_, err = c.Standard.Create().SetInput(*input.Standard).Save(ctx)
-		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program standard"})
-		}
-	}
-
 	// create the risks
 	if input.Risks != nil {
 		c := withTransactionalMutation(ctx)
@@ -167,7 +158,7 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 		c := withTransactionalMutation(ctx)
 		builders := make([]*generated.SubcontrolCreate, len(input.Subcontrols))
 		for i := range input.Subcontrols {
-			input.Subcontrols[i].ControlIDs = []string{res.ID}
+			input.Subcontrols[i].ControlID = res.ID
 
 			builders[i] = c.Subcontrol.Create().SetInput(*input.Subcontrols[i])
 		}

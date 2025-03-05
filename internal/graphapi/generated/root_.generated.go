@@ -123,7 +123,6 @@ type ComplexityRoot struct {
 		Program     func(childComplexity int) int
 		Risk        func(childComplexity int) int
 		Source      func(childComplexity int) int
-		Standard    func(childComplexity int) int
 		Status      func(childComplexity int) int
 		Tags        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
@@ -301,43 +300,51 @@ type ComplexityRoot struct {
 	}
 
 	Control struct {
-		ActionPlans       func(childComplexity int) int
-		BlockedGroups     func(childComplexity int) int
-		Class             func(childComplexity int) int
-		ControlNumber     func(childComplexity int) int
-		ControlObjectives func(childComplexity int) int
-		ControlType       func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
-		Description       func(childComplexity int) int
-		Details           func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		Editors           func(childComplexity int) int
-		Evidence          func(childComplexity int) int
-		ExampleEvidence   func(childComplexity int) int
-		Family            func(childComplexity int) int
-		ID                func(childComplexity int) int
-		MappedFrameworks  func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Narratives        func(childComplexity int) int
-		Owner             func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Procedures        func(childComplexity int) int
-		Programs          func(childComplexity int) int
-		Risks             func(childComplexity int) int
-		Satisfies         func(childComplexity int) int
-		Source            func(childComplexity int) int
-		Standard          func(childComplexity int) int
-		Status            func(childComplexity int) int
-		Subcontrols       func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		Tasks             func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		Version           func(childComplexity int) int
-		Viewers           func(childComplexity int) int
+		ActionPlans            func(childComplexity int) int
+		AssessmentMethods      func(childComplexity int) int
+		AssessmentObjectives   func(childComplexity int) int
+		BlockedGroups          func(childComplexity int) int
+		Category               func(childComplexity int) int
+		CategoryID             func(childComplexity int) int
+		ControlObjectives      func(childComplexity int) int
+		ControlOwner           func(childComplexity int) int
+		ControlQuestions       func(childComplexity int) int
+		ControlType            func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Delegate               func(childComplexity int) int
+		DeletedAt              func(childComplexity int) int
+		DeletedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		Editors                func(childComplexity int) int
+		Evidence               func(childComplexity int) int
+		ExampleEvidence        func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Implementation         func(childComplexity int) int
+		ImplementationGuidance func(childComplexity int) int
+		InternalPolicies       func(childComplexity int) int
+		MappedCategories       func(childComplexity int) int
+		MappedControls         func(childComplexity int) int
+		Narratives             func(childComplexity int) int
+		Owner                  func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Procedures             func(childComplexity int) int
+		Programs               func(childComplexity int) int
+		RefCode                func(childComplexity int) int
+		References             func(childComplexity int) int
+		Risks                  func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		Standard               func(childComplexity int) int
+		StandardID             func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Subcategory            func(childComplexity int) int
+		Subcontrols            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		Tasks                  func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		Viewers                func(childComplexity int) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -364,32 +371,35 @@ type ComplexityRoot struct {
 	}
 
 	ControlHistory struct {
-		Class            func(childComplexity int) int
-		ControlNumber    func(childComplexity int) int
-		ControlType      func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		ExampleEvidence  func(childComplexity int) int
-		Family           func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		MappedFrameworks func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		Satisfies        func(childComplexity int) int
-		Source           func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Version          func(childComplexity int) int
+		AssessmentMethods      func(childComplexity int) int
+		AssessmentObjectives   func(childComplexity int) int
+		Category               func(childComplexity int) int
+		CategoryID             func(childComplexity int) int
+		ControlQuestions       func(childComplexity int) int
+		ControlType            func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DeletedAt              func(childComplexity int) int
+		DeletedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		ExampleEvidence        func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		ImplementationGuidance func(childComplexity int) int
+		MappedCategories       func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		RefCode                func(childComplexity int) int
+		References             func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		StandardID             func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Subcategory            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	ControlHistoryConnection struct {
@@ -403,26 +413,101 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	ControlImplementation struct {
+		Control            func(childComplexity int) int
+		ControlID          func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedBy          func(childComplexity int) int
+		Details            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		ImplementationDate func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		VerificationDate   func(childComplexity int) int
+		Verified           func(childComplexity int) int
+	}
+
+	ControlImplementationBulkCreatePayload struct {
+		ControlImplementations func(childComplexity int) int
+	}
+
+	ControlImplementationConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ControlImplementationCreatePayload struct {
+		ControlImplementation func(childComplexity int) int
+	}
+
+	ControlImplementationDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ControlImplementationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ControlImplementationHistory struct {
+		ControlID          func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedBy          func(childComplexity int) int
+		Details            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		ImplementationDate func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		VerificationDate   func(childComplexity int) int
+		Verified           func(childComplexity int) int
+	}
+
+	ControlImplementationHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ControlImplementationHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ControlImplementationSearchResult struct {
+		ControlImplementations func(childComplexity int) int
+	}
+
+	ControlImplementationUpdatePayload struct {
+		ControlImplementation func(childComplexity int) int
+	}
+
 	ControlObjective struct {
 		BlockedGroups        func(childComplexity int) int
-		Class                func(childComplexity int) int
-		ControlNumber        func(childComplexity int) int
+		Category             func(childComplexity int) int
 		ControlObjectiveType func(childComplexity int) int
 		Controls             func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedBy            func(childComplexity int) int
-		Description          func(childComplexity int) int
-		Details              func(childComplexity int) int
+		DesiredOutcome       func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
 		Evidence             func(childComplexity int) int
-		ExampleEvidence      func(childComplexity int) int
-		Family               func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		InternalPolicies     func(childComplexity int) int
-		MappedFrameworks     func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Narratives           func(childComplexity int) int
 		Owner                func(childComplexity int) int
@@ -431,8 +516,8 @@ type ComplexityRoot struct {
 		Programs             func(childComplexity int) int
 		Risks                func(childComplexity int) int
 		Source               func(childComplexity int) int
-		Standard             func(childComplexity int) int
 		Status               func(childComplexity int) int
+		Subcategory          func(childComplexity int) int
 		Subcontrols          func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		Tasks                func(childComplexity int) int
@@ -466,27 +551,23 @@ type ComplexityRoot struct {
 	}
 
 	ControlObjectiveHistory struct {
-		Class                func(childComplexity int) int
-		ControlNumber        func(childComplexity int) int
+		Category             func(childComplexity int) int
 		ControlObjectiveType func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedBy            func(childComplexity int) int
-		Description          func(childComplexity int) int
-		Details              func(childComplexity int) int
+		DesiredOutcome       func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
-		ExampleEvidence      func(childComplexity int) int
-		Family               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
-		MappedFrameworks     func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		Source               func(childComplexity int) int
 		Status               func(childComplexity int) int
+		Subcategory          func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
@@ -1582,202 +1663,283 @@ type ComplexityRoot struct {
 		Invite func(childComplexity int) int
 	}
 
+	MappedControl struct {
+		Control         func(childComplexity int) int
+		ControlID       func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		DeletedAt       func(childComplexity int) int
+		DeletedBy       func(childComplexity int) int
+		ID              func(childComplexity int) int
+		MappedControl   func(childComplexity int) int
+		MappedControlID func(childComplexity int) int
+		MappingType     func(childComplexity int) int
+		Relation        func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+	}
+
+	MappedControlBulkCreatePayload struct {
+		MappedControls func(childComplexity int) int
+	}
+
+	MappedControlConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	MappedControlCreatePayload struct {
+		MappedControl func(childComplexity int) int
+	}
+
+	MappedControlDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	MappedControlEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	MappedControlHistory struct {
+		ControlID       func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		DeletedAt       func(childComplexity int) int
+		DeletedBy       func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		MappedControlID func(childComplexity int) int
+		MappingType     func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		Relation        func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+	}
+
+	MappedControlHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	MappedControlHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	MappedControlSearchResult struct {
+		MappedControls func(childComplexity int) int
+	}
+
+	MappedControlUpdatePayload struct {
+		MappedControl func(childComplexity int) int
+	}
+
 	Mutation struct {
-		CreateAPIToken                   func(childComplexity int, input generated.CreateAPITokenInput) int
-		CreateActionPlan                 func(childComplexity int, input generated.CreateActionPlanInput) int
-		CreateBulkAPIToken               func(childComplexity int, input []*generated.CreateAPITokenInput) int
-		CreateBulkActionPlan             func(childComplexity int, input []*generated.CreateActionPlanInput) int
-		CreateBulkCSVAPIToken            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVActionPlan          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVContact             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControl             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlObjective    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDocumentData        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntity              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntityType          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEvent               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroup               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupMembership     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupSetting        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVHush                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVIntegration         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInternalPolicy      func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInvite              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVNarrative           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrgMembership       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrganizationSetting func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVPersonalAccessToken func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProcedure           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgram             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgramMembership   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVRisk                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVStandard            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubcontrol          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubscriber          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTask                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTemplate            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVUserSetting         func(childComplexity int, input graphql.Upload) int
-		CreateBulkContact                func(childComplexity int, input []*generated.CreateContactInput) int
-		CreateBulkControl                func(childComplexity int, input []*generated.CreateControlInput) int
-		CreateBulkControlObjective       func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
-		CreateBulkDocumentData           func(childComplexity int, input []*generated.CreateDocumentDataInput) int
-		CreateBulkEntity                 func(childComplexity int, input []*generated.CreateEntityInput) int
-		CreateBulkEntityType             func(childComplexity int, input []*generated.CreateEntityTypeInput) int
-		CreateBulkEvent                  func(childComplexity int, input []*generated.CreateEventInput) int
-		CreateBulkGroup                  func(childComplexity int, input []*generated.CreateGroupInput) int
-		CreateBulkGroupMembership        func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
-		CreateBulkGroupSetting           func(childComplexity int, input []*generated.CreateGroupSettingInput) int
-		CreateBulkHush                   func(childComplexity int, input []*generated.CreateHushInput) int
-		CreateBulkIntegration            func(childComplexity int, input []*generated.CreateIntegrationInput) int
-		CreateBulkInternalPolicy         func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
-		CreateBulkInvite                 func(childComplexity int, input []*generated.CreateInviteInput) int
-		CreateBulkNarrative              func(childComplexity int, input []*generated.CreateNarrativeInput) int
-		CreateBulkOrgMembership          func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
-		CreateBulkOrganizationSetting    func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
-		CreateBulkPersonalAccessToken    func(childComplexity int, input []*generated.CreatePersonalAccessTokenInput) int
-		CreateBulkProcedure              func(childComplexity int, input []*generated.CreateProcedureInput) int
-		CreateBulkProgram                func(childComplexity int, input []*generated.CreateProgramInput) int
-		CreateBulkProgramMembership      func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
-		CreateBulkRisk                   func(childComplexity int, input []*generated.CreateRiskInput) int
-		CreateBulkStandard               func(childComplexity int, input []*generated.CreateStandardInput) int
-		CreateBulkSubcontrol             func(childComplexity int, input []*generated.CreateSubcontrolInput) int
-		CreateBulkSubscriber             func(childComplexity int, input []*generated.CreateSubscriberInput) int
-		CreateBulkTask                   func(childComplexity int, input []*generated.CreateTaskInput) int
-		CreateBulkTemplate               func(childComplexity int, input []*generated.CreateTemplateInput) int
-		CreateBulkUserSetting            func(childComplexity int, input []*generated.CreateUserSettingInput) int
-		CreateContact                    func(childComplexity int, input generated.CreateContactInput) int
-		CreateControl                    func(childComplexity int, input generated.CreateControlInput) int
-		CreateControlObjective           func(childComplexity int, input generated.CreateControlObjectiveInput) int
-		CreateControlWithSubcontrols     func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
-		CreateDocumentData               func(childComplexity int, input generated.CreateDocumentDataInput) int
-		CreateEntity                     func(childComplexity int, input generated.CreateEntityInput) int
-		CreateEntityType                 func(childComplexity int, input generated.CreateEntityTypeInput) int
-		CreateEvent                      func(childComplexity int, input generated.CreateEventInput) int
-		CreateEvidence                   func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
-		CreateFullProgram                func(childComplexity int, input model.CreateFullProgramInput) int
-		CreateGroup                      func(childComplexity int, input generated.CreateGroupInput) int
-		CreateGroupByClone               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
-		CreateGroupMembership            func(childComplexity int, input generated.CreateGroupMembershipInput) int
-		CreateGroupSetting               func(childComplexity int, input generated.CreateGroupSettingInput) int
-		CreateGroupWithMembers           func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
-		CreateHush                       func(childComplexity int, input generated.CreateHushInput) int
-		CreateIntegration                func(childComplexity int, input generated.CreateIntegrationInput) int
-		CreateInternalPolicy             func(childComplexity int, input generated.CreateInternalPolicyInput) int
-		CreateInvite                     func(childComplexity int, input generated.CreateInviteInput) int
-		CreateNarrative                  func(childComplexity int, input generated.CreateNarrativeInput) int
-		CreateOnboarding                 func(childComplexity int, input generated.CreateOnboardingInput) int
-		CreateOrgMembership              func(childComplexity int, input generated.CreateOrgMembershipInput) int
-		CreateOrganization               func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
-		CreateOrganizationSetting        func(childComplexity int, input generated.CreateOrganizationSettingInput) int
-		CreateOrganizationWithMembers    func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
-		CreatePersonalAccessToken        func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
-		CreateProcedure                  func(childComplexity int, input generated.CreateProcedureInput) int
-		CreateProgram                    func(childComplexity int, input generated.CreateProgramInput) int
-		CreateProgramMembership          func(childComplexity int, input generated.CreateProgramMembershipInput) int
-		CreateProgramWithMembers         func(childComplexity int, input model.CreateProgramWithMembersInput) int
-		CreateRisk                       func(childComplexity int, input generated.CreateRiskInput) int
-		CreateStandard                   func(childComplexity int, input generated.CreateStandardInput) int
-		CreateSubcontrol                 func(childComplexity int, input generated.CreateSubcontrolInput) int
-		CreateSubscriber                 func(childComplexity int, input generated.CreateSubscriberInput) int
-		CreateTFASetting                 func(childComplexity int, input generated.CreateTFASettingInput) int
-		CreateTask                       func(childComplexity int, input generated.CreateTaskInput) int
-		CreateTemplate                   func(childComplexity int, input generated.CreateTemplateInput) int
-		CreateUser                       func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
-		CreateUserSetting                func(childComplexity int, input generated.CreateUserSettingInput) int
-		DeleteAPIToken                   func(childComplexity int, id string) int
-		DeleteActionPlan                 func(childComplexity int, id string) int
-		DeleteContact                    func(childComplexity int, id string) int
-		DeleteControl                    func(childComplexity int, id string) int
-		DeleteControlObjective           func(childComplexity int, id string) int
-		DeleteDocumentData               func(childComplexity int, id string) int
-		DeleteEntity                     func(childComplexity int, id string) int
-		DeleteEntityType                 func(childComplexity int, id string) int
-		DeleteEvent                      func(childComplexity int, id string) int
-		DeleteEvidence                   func(childComplexity int, id string) int
-		DeleteFile                       func(childComplexity int, id string) int
-		DeleteGroup                      func(childComplexity int, id string) int
-		DeleteGroupMembership            func(childComplexity int, id string) int
-		DeleteGroupSetting               func(childComplexity int, id string) int
-		DeleteHush                       func(childComplexity int, id string) int
-		DeleteIntegration                func(childComplexity int, id string) int
-		DeleteInternalPolicy             func(childComplexity int, id string) int
-		DeleteInvite                     func(childComplexity int, id string) int
-		DeleteNarrative                  func(childComplexity int, id string) int
-		DeleteOrgMembership              func(childComplexity int, id string) int
-		DeleteOrganization               func(childComplexity int, id string) int
-		DeleteOrganizationSetting        func(childComplexity int, id string) int
-		DeletePersonalAccessToken        func(childComplexity int, id string) int
-		DeleteProcedure                  func(childComplexity int, id string) int
-		DeleteProgram                    func(childComplexity int, id string) int
-		DeleteProgramMembership          func(childComplexity int, id string) int
-		DeleteRisk                       func(childComplexity int, id string) int
-		DeleteStandard                   func(childComplexity int, id string) int
-		DeleteSubcontrol                 func(childComplexity int, id string) int
-		DeleteSubscriber                 func(childComplexity int, email string, ownerID *string) int
-		DeleteTask                       func(childComplexity int, id string) int
-		DeleteTemplate                   func(childComplexity int, id string) int
-		DeleteUser                       func(childComplexity int, id string) int
-		UpdateAPIToken                   func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
-		UpdateActionPlan                 func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
-		UpdateContact                    func(childComplexity int, id string, input generated.UpdateContactInput) int
-		UpdateControl                    func(childComplexity int, id string, input generated.UpdateControlInput) int
-		UpdateControlObjective           func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
-		UpdateDocumentData               func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
-		UpdateEntity                     func(childComplexity int, id string, input generated.UpdateEntityInput) int
-		UpdateEntityType                 func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
-		UpdateEvent                      func(childComplexity int, id string, input generated.UpdateEventInput) int
-		UpdateEvidence                   func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
-		UpdateGroup                      func(childComplexity int, id string, input generated.UpdateGroupInput) int
-		UpdateGroupMembership            func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
-		UpdateGroupSetting               func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
-		UpdateHush                       func(childComplexity int, id string, input generated.UpdateHushInput) int
-		UpdateIntegration                func(childComplexity int, id string, input generated.UpdateIntegrationInput) int
-		UpdateInternalPolicy             func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
-		UpdateInvite                     func(childComplexity int, id string, input generated.UpdateInviteInput) int
-		UpdateNarrative                  func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
-		UpdateOrgMembership              func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
-		UpdateOrganization               func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
-		UpdateOrganizationSetting        func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
-		UpdatePersonalAccessToken        func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
-		UpdateProcedure                  func(childComplexity int, id string, input generated.UpdateProcedureInput) int
-		UpdateProgram                    func(childComplexity int, id string, input generated.UpdateProgramInput) int
-		UpdateProgramMembership          func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
-		UpdateRisk                       func(childComplexity int, id string, input generated.UpdateRiskInput) int
-		UpdateStandard                   func(childComplexity int, id string, input generated.UpdateStandardInput) int
-		UpdateSubcontrol                 func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
-		UpdateSubscriber                 func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
-		UpdateTFASetting                 func(childComplexity int, input generated.UpdateTFASettingInput) int
-		UpdateTask                       func(childComplexity int, id string, input generated.UpdateTaskInput) int
-		UpdateTaskComment                func(childComplexity int, id string, input generated.UpdateNoteInput) int
-		UpdateTemplate                   func(childComplexity int, id string, input generated.UpdateTemplateInput) int
-		UpdateUser                       func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
-		UpdateUserSetting                func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
+		CreateAPIToken                     func(childComplexity int, input generated.CreateAPITokenInput) int
+		CreateActionPlan                   func(childComplexity int, input generated.CreateActionPlanInput) int
+		CreateBulkAPIToken                 func(childComplexity int, input []*generated.CreateAPITokenInput) int
+		CreateBulkActionPlan               func(childComplexity int, input []*generated.CreateActionPlanInput) int
+		CreateBulkCSVAPIToken              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVActionPlan            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVContact               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControl               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlImplementation func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlObjective      func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDocumentData          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntity                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntityType            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEvent                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroup                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupMembership       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupSetting          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVHush                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVIntegration           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInternalPolicy        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInvite                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappedControl         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNarrative             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrgMembership         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrganizationSetting   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVPersonalAccessToken   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProcedure             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgram               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgramMembership     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVRisk                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubcontrol            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubscriber            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTask                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTemplate              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVUserSetting           func(childComplexity int, input graphql.Upload) int
+		CreateBulkContact                  func(childComplexity int, input []*generated.CreateContactInput) int
+		CreateBulkControl                  func(childComplexity int, input []*generated.CreateControlInput) int
+		CreateBulkControlImplementation    func(childComplexity int, input []*generated.CreateControlImplementationInput) int
+		CreateBulkControlObjective         func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
+		CreateBulkDocumentData             func(childComplexity int, input []*generated.CreateDocumentDataInput) int
+		CreateBulkEntity                   func(childComplexity int, input []*generated.CreateEntityInput) int
+		CreateBulkEntityType               func(childComplexity int, input []*generated.CreateEntityTypeInput) int
+		CreateBulkEvent                    func(childComplexity int, input []*generated.CreateEventInput) int
+		CreateBulkGroup                    func(childComplexity int, input []*generated.CreateGroupInput) int
+		CreateBulkGroupMembership          func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
+		CreateBulkGroupSetting             func(childComplexity int, input []*generated.CreateGroupSettingInput) int
+		CreateBulkHush                     func(childComplexity int, input []*generated.CreateHushInput) int
+		CreateBulkIntegration              func(childComplexity int, input []*generated.CreateIntegrationInput) int
+		CreateBulkInternalPolicy           func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
+		CreateBulkInvite                   func(childComplexity int, input []*generated.CreateInviteInput) int
+		CreateBulkMappedControl            func(childComplexity int, input []*generated.CreateMappedControlInput) int
+		CreateBulkNarrative                func(childComplexity int, input []*generated.CreateNarrativeInput) int
+		CreateBulkOrgMembership            func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
+		CreateBulkOrganizationSetting      func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
+		CreateBulkPersonalAccessToken      func(childComplexity int, input []*generated.CreatePersonalAccessTokenInput) int
+		CreateBulkProcedure                func(childComplexity int, input []*generated.CreateProcedureInput) int
+		CreateBulkProgram                  func(childComplexity int, input []*generated.CreateProgramInput) int
+		CreateBulkProgramMembership        func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
+		CreateBulkRisk                     func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkSubcontrol               func(childComplexity int, input []*generated.CreateSubcontrolInput) int
+		CreateBulkSubscriber               func(childComplexity int, input []*generated.CreateSubscriberInput) int
+		CreateBulkTask                     func(childComplexity int, input []*generated.CreateTaskInput) int
+		CreateBulkTemplate                 func(childComplexity int, input []*generated.CreateTemplateInput) int
+		CreateBulkUserSetting              func(childComplexity int, input []*generated.CreateUserSettingInput) int
+		CreateContact                      func(childComplexity int, input generated.CreateContactInput) int
+		CreateControl                      func(childComplexity int, input generated.CreateControlInput) int
+		CreateControlImplementation        func(childComplexity int, input generated.CreateControlImplementationInput) int
+		CreateControlObjective             func(childComplexity int, input generated.CreateControlObjectiveInput) int
+		CreateControlWithSubcontrols       func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
+		CreateDocumentData                 func(childComplexity int, input generated.CreateDocumentDataInput) int
+		CreateEntity                       func(childComplexity int, input generated.CreateEntityInput) int
+		CreateEntityType                   func(childComplexity int, input generated.CreateEntityTypeInput) int
+		CreateEvent                        func(childComplexity int, input generated.CreateEventInput) int
+		CreateEvidence                     func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		CreateFullProgram                  func(childComplexity int, input model.CreateFullProgramInput) int
+		CreateGroup                        func(childComplexity int, input generated.CreateGroupInput) int
+		CreateGroupByClone                 func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
+		CreateGroupMembership              func(childComplexity int, input generated.CreateGroupMembershipInput) int
+		CreateGroupSetting                 func(childComplexity int, input generated.CreateGroupSettingInput) int
+		CreateGroupWithMembers             func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
+		CreateHush                         func(childComplexity int, input generated.CreateHushInput) int
+		CreateIntegration                  func(childComplexity int, input generated.CreateIntegrationInput) int
+		CreateInternalPolicy               func(childComplexity int, input generated.CreateInternalPolicyInput) int
+		CreateInvite                       func(childComplexity int, input generated.CreateInviteInput) int
+		CreateMappedControl                func(childComplexity int, input generated.CreateMappedControlInput) int
+		CreateNarrative                    func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateOnboarding                   func(childComplexity int, input generated.CreateOnboardingInput) int
+		CreateOrgMembership                func(childComplexity int, input generated.CreateOrgMembershipInput) int
+		CreateOrganization                 func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
+		CreateOrganizationSetting          func(childComplexity int, input generated.CreateOrganizationSettingInput) int
+		CreateOrganizationWithMembers      func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
+		CreatePersonalAccessToken          func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
+		CreateProcedure                    func(childComplexity int, input generated.CreateProcedureInput) int
+		CreateProgram                      func(childComplexity int, input generated.CreateProgramInput) int
+		CreateProgramMembership            func(childComplexity int, input generated.CreateProgramMembershipInput) int
+		CreateProgramWithMembers           func(childComplexity int, input model.CreateProgramWithMembersInput) int
+		CreateRisk                         func(childComplexity int, input generated.CreateRiskInput) int
+		CreateStandard                     func(childComplexity int, input generated.CreateStandardInput) int
+		CreateSubcontrol                   func(childComplexity int, input generated.CreateSubcontrolInput) int
+		CreateSubscriber                   func(childComplexity int, input generated.CreateSubscriberInput) int
+		CreateTFASetting                   func(childComplexity int, input generated.CreateTFASettingInput) int
+		CreateTask                         func(childComplexity int, input generated.CreateTaskInput) int
+		CreateTemplate                     func(childComplexity int, input generated.CreateTemplateInput) int
+		CreateUser                         func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
+		CreateUserSetting                  func(childComplexity int, input generated.CreateUserSettingInput) int
+		DeleteAPIToken                     func(childComplexity int, id string) int
+		DeleteActionPlan                   func(childComplexity int, id string) int
+		DeleteContact                      func(childComplexity int, id string) int
+		DeleteControl                      func(childComplexity int, id string) int
+		DeleteControlImplementation        func(childComplexity int, id string) int
+		DeleteControlObjective             func(childComplexity int, id string) int
+		DeleteDocumentData                 func(childComplexity int, id string) int
+		DeleteEntity                       func(childComplexity int, id string) int
+		DeleteEntityType                   func(childComplexity int, id string) int
+		DeleteEvent                        func(childComplexity int, id string) int
+		DeleteEvidence                     func(childComplexity int, id string) int
+		DeleteFile                         func(childComplexity int, id string) int
+		DeleteGroup                        func(childComplexity int, id string) int
+		DeleteGroupMembership              func(childComplexity int, id string) int
+		DeleteGroupSetting                 func(childComplexity int, id string) int
+		DeleteHush                         func(childComplexity int, id string) int
+		DeleteIntegration                  func(childComplexity int, id string) int
+		DeleteInternalPolicy               func(childComplexity int, id string) int
+		DeleteInvite                       func(childComplexity int, id string) int
+		DeleteMappedControl                func(childComplexity int, id string) int
+		DeleteNarrative                    func(childComplexity int, id string) int
+		DeleteOrgMembership                func(childComplexity int, id string) int
+		DeleteOrganization                 func(childComplexity int, id string) int
+		DeleteOrganizationSetting          func(childComplexity int, id string) int
+		DeletePersonalAccessToken          func(childComplexity int, id string) int
+		DeleteProcedure                    func(childComplexity int, id string) int
+		DeleteProgram                      func(childComplexity int, id string) int
+		DeleteProgramMembership            func(childComplexity int, id string) int
+		DeleteRisk                         func(childComplexity int, id string) int
+		DeleteStandard                     func(childComplexity int, id string) int
+		DeleteSubcontrol                   func(childComplexity int, id string) int
+		DeleteSubscriber                   func(childComplexity int, email string, ownerID *string) int
+		DeleteTask                         func(childComplexity int, id string) int
+		DeleteTemplate                     func(childComplexity int, id string) int
+		DeleteUser                         func(childComplexity int, id string) int
+		UpdateAPIToken                     func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
+		UpdateActionPlan                   func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
+		UpdateContact                      func(childComplexity int, id string, input generated.UpdateContactInput) int
+		UpdateControl                      func(childComplexity int, id string, input generated.UpdateControlInput) int
+		UpdateControlImplementation        func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
+		UpdateControlObjective             func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
+		UpdateDocumentData                 func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
+		UpdateEntity                       func(childComplexity int, id string, input generated.UpdateEntityInput) int
+		UpdateEntityType                   func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
+		UpdateEvent                        func(childComplexity int, id string, input generated.UpdateEventInput) int
+		UpdateEvidence                     func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		UpdateGroup                        func(childComplexity int, id string, input generated.UpdateGroupInput) int
+		UpdateGroupMembership              func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
+		UpdateGroupSetting                 func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
+		UpdateHush                         func(childComplexity int, id string, input generated.UpdateHushInput) int
+		UpdateIntegration                  func(childComplexity int, id string, input generated.UpdateIntegrationInput) int
+		UpdateInternalPolicy               func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
+		UpdateInvite                       func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateMappedControl                func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
+		UpdateNarrative                    func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
+		UpdateOrgMembership                func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
+		UpdateOrganization                 func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
+		UpdateOrganizationSetting          func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
+		UpdatePersonalAccessToken          func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
+		UpdateProcedure                    func(childComplexity int, id string, input generated.UpdateProcedureInput) int
+		UpdateProgram                      func(childComplexity int, id string, input generated.UpdateProgramInput) int
+		UpdateProgramMembership            func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
+		UpdateRisk                         func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateStandard                     func(childComplexity int, id string, input generated.UpdateStandardInput) int
+		UpdateSubcontrol                   func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
+		UpdateSubscriber                   func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
+		UpdateTFASetting                   func(childComplexity int, input generated.UpdateTFASettingInput) int
+		UpdateTask                         func(childComplexity int, id string, input generated.UpdateTaskInput) int
+		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput) int
+		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
+		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
+		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 	}
 
 	Narrative struct {
-		BlockedGroups    func(childComplexity int) int
-		Control          func(childComplexity int) int
-		ControlObjective func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		Editors          func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalPolicy   func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Procedure        func(childComplexity int) int
-		Programs         func(childComplexity int) int
-		Satisfies        func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Viewers          func(childComplexity int) int
+		BlockedGroups func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		Details       func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		Editors       func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Programs      func(childComplexity int) int
+		Satisfies     func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Viewers       func(childComplexity int) int
 	}
 
 	NarrativeBulkCreatePayload struct {
@@ -1817,7 +1979,6 @@ type ComplexityRoot struct {
 		Operation   func(childComplexity int) int
 		OwnerID     func(childComplexity int) int
 		Ref         func(childComplexity int) int
-		Satisfies   func(childComplexity int) int
 		Tags        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
@@ -2113,6 +2274,7 @@ type ComplexityRoot struct {
 		Risks                    func(childComplexity int) int
 		Secrets                  func(childComplexity int) int
 		Setting                  func(childComplexity int) int
+		Standards                func(childComplexity int) int
 		Subcontrols              func(childComplexity int) int
 		Subscribers              func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -2467,7 +2629,6 @@ type ComplexityRoot struct {
 		OwnerID              func(childComplexity int) int
 		Procedures           func(childComplexity int) int
 		Risks                func(childComplexity int) int
-		Standards            func(childComplexity int) int
 		StartDate            func(childComplexity int) int
 		Status               func(childComplexity int) int
 		Subcontrols          func(childComplexity int) int
@@ -2615,176 +2776,186 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		APIToken                       func(childComplexity int, id string) int
-		APITokenSearch                 func(childComplexity int, query string) int
-		APITokens                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.APITokenWhereInput) int
-		ActionPlan                     func(childComplexity int, id string) int
-		ActionPlanHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanHistoryWhereInput) int
-		ActionPlanSearch               func(childComplexity int, query string) int
-		ActionPlans                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanWhereInput) int
-		AdminAPITokenSearch            func(childComplexity int, query string) int
-		AdminActionPlanSearch          func(childComplexity int, query string) int
-		AdminContactSearch             func(childComplexity int, query string) int
-		AdminControlObjectiveSearch    func(childComplexity int, query string) int
-		AdminControlSearch             func(childComplexity int, query string) int
-		AdminDocumentDataSearch        func(childComplexity int, query string) int
-		AdminEntitySearch              func(childComplexity int, query string) int
-		AdminEntityTypeSearch          func(childComplexity int, query string) int
-		AdminEventSearch               func(childComplexity int, query string) int
-		AdminEvidenceSearch            func(childComplexity int, query string) int
-		AdminFileSearch                func(childComplexity int, query string) int
-		AdminGroupSearch               func(childComplexity int, query string) int
-		AdminIntegrationSearch         func(childComplexity int, query string) int
-		AdminInternalPolicySearch      func(childComplexity int, query string) int
-		AdminNarrativeSearch           func(childComplexity int, query string) int
-		AdminOrgSubscriptionSearch     func(childComplexity int, query string) int
-		AdminOrganizationSearch        func(childComplexity int, query string) int
-		AdminOrganizationSettingSearch func(childComplexity int, query string) int
-		AdminPersonalAccessTokenSearch func(childComplexity int, query string) int
-		AdminProcedureSearch           func(childComplexity int, query string) int
-		AdminProgramSearch             func(childComplexity int, query string) int
-		AdminRiskSearch                func(childComplexity int, query string) int
-		AdminSearch                    func(childComplexity int, query string) int
-		AdminStandardSearch            func(childComplexity int, query string) int
-		AdminSubcontrolSearch          func(childComplexity int, query string) int
-		AdminSubscriberSearch          func(childComplexity int, query string) int
-		AdminTaskSearch                func(childComplexity int, query string) int
-		AdminTemplateSearch            func(childComplexity int, query string) int
-		AdminUserSearch                func(childComplexity int, query string) int
-		AdminUserSettingSearch         func(childComplexity int, query string) int
-		AuditLogs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) int
-		Contact                        func(childComplexity int, id string) int
-		ContactHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactHistoryWhereInput) int
-		ContactSearch                  func(childComplexity int, query string) int
-		Contacts                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactWhereInput) int
-		Control                        func(childComplexity int, id string) int
-		ControlHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlHistoryWhereInput) int
-		ControlObjective               func(childComplexity int, id string) int
-		ControlObjectiveHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveHistoryWhereInput) int
-		ControlObjectiveSearch         func(childComplexity int, query string) int
-		ControlObjectives              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveWhereInput) int
-		ControlSearch                  func(childComplexity int, query string) int
-		Controls                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlWhereInput) int
-		DocumentData                   func(childComplexity int, id string) int
-		DocumentDataHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataHistoryWhereInput) int
-		DocumentDataSearch             func(childComplexity int, query string) int
-		DocumentDataSlice              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) int
-		Entities                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityOrder, where *generated.EntityWhereInput) int
-		Entity                         func(childComplexity int, id string) int
-		EntityHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) int
-		EntitySearch                   func(childComplexity int, query string) int
-		EntityType                     func(childComplexity int, id string) int
-		EntityTypeHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) int
-		EntityTypeSearch               func(childComplexity int, query string) int
-		EntityTypes                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
-		Event                          func(childComplexity int, id string) int
-		EventHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventHistoryWhereInput) int
-		EventSearch                    func(childComplexity int, query string) int
-		Events                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
-		Evidence                       func(childComplexity int, id string) int
-		EvidenceHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceHistoryWhereInput) int
-		EvidenceSearch                 func(childComplexity int, query string) int
-		Evidences                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceWhereInput) int
-		File                           func(childComplexity int, id string) int
-		FileHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileHistoryWhereInput) int
-		FileSearch                     func(childComplexity int, query string) int
-		Files                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
-		Group                          func(childComplexity int, id string) int
-		GroupHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
-		GroupMembership                func(childComplexity int, id string) int
-		GroupMembershipHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipHistoryWhereInput) int
-		GroupMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipWhereInput) int
-		GroupSearch                    func(childComplexity int, query string) int
-		GroupSetting                   func(childComplexity int, id string) int
-		GroupSettingHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingHistoryWhereInput) int
-		GroupSettings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingWhereInput) int
-		Groups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupOrder, where *generated.GroupWhereInput) int
-		Hush                           func(childComplexity int, id string) int
-		HushHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
-		Hushes                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushOrder, where *generated.HushWhereInput) int
-		Integration                    func(childComplexity int, id string) int
-		IntegrationHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
-		IntegrationSearch              func(childComplexity int, query string) int
-		Integrations                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicies               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
-		InternalPolicy                 func(childComplexity int, id string) int
-		InternalPolicyHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyHistoryWhereInput) int
-		InternalPolicySearch           func(childComplexity int, query string) int
-		Invite                         func(childComplexity int, id string) int
-		Invites                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InviteWhereInput) int
-		Narrative                      func(childComplexity int, id string) int
-		NarrativeHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeHistoryWhereInput) int
-		NarrativeSearch                func(childComplexity int, query string) int
-		Narratives                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeWhereInput) int
-		Node                           func(childComplexity int, id string) int
-		Nodes                          func(childComplexity int, ids []string) int
-		Note                           func(childComplexity int, id string) int
-		NoteHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteHistoryWhereInput) int
-		Notes                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
-		OrgMembership                  func(childComplexity int, id string) int
-		OrgMembershipHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipHistoryWhereInput) int
-		OrgMemberships                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipWhereInput) int
-		OrgSubscription                func(childComplexity int, id string) int
-		OrgSubscriptionHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionHistoryWhereInput) int
-		OrgSubscriptionSearch          func(childComplexity int, query string) int
-		OrgSubscriptions               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionWhereInput) int
-		Organization                   func(childComplexity int, id string) int
-		OrganizationHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) int
-		OrganizationSearch             func(childComplexity int, query string) int
-		OrganizationSetting            func(childComplexity int, id string) int
-		OrganizationSettingHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingHistoryWhereInput) int
-		OrganizationSettingSearch      func(childComplexity int, query string) int
-		OrganizationSettings           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingWhereInput) int
-		Organizations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		PersonalAccessToken            func(childComplexity int, id string) int
-		PersonalAccessTokenSearch      func(childComplexity int, query string) int
-		PersonalAccessTokens           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) int
-		Procedure                      func(childComplexity int, id string) int
-		ProcedureHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureHistoryWhereInput) int
-		ProcedureSearch                func(childComplexity int, query string) int
-		Procedures                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
-		Program                        func(childComplexity int, id string) int
-		ProgramHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramHistoryWhereInput) int
-		ProgramMembership              func(childComplexity int, id string) int
-		ProgramMembershipHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipHistoryWhereInput) int
-		ProgramMemberships             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipWhereInput) int
-		ProgramSearch                  func(childComplexity int, query string) int
-		Programs                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramWhereInput) int
-		Risk                           func(childComplexity int, id string) int
-		RiskHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskHistoryWhereInput) int
-		RiskSearch                     func(childComplexity int, query string) int
-		Risks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) int
-		Search                         func(childComplexity int, query string) int
-		Self                           func(childComplexity int) int
-		Standard                       func(childComplexity int, id string) int
-		StandardHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardHistoryWhereInput) int
-		StandardSearch                 func(childComplexity int, query string) int
-		Standards                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardWhereInput) int
-		Subcontrol                     func(childComplexity int, id string) int
-		SubcontrolHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolHistoryWhereInput) int
-		SubcontrolSearch               func(childComplexity int, query string) int
-		Subcontrols                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolWhereInput) int
-		Subscriber                     func(childComplexity int, email string) int
-		SubscriberSearch               func(childComplexity int, query string) int
-		Subscribers                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubscriberWhereInput) int
-		Task                           func(childComplexity int, id string) int
-		TaskHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskHistoryWhereInput) int
-		TaskSearch                     func(childComplexity int, query string) int
-		Tasks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskWhereInput) int
-		Template                       func(childComplexity int, id string) int
-		TemplateHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
-		TemplateSearch                 func(childComplexity int, query string) int
-		Templates                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		TfaSetting                     func(childComplexity int, id *string) int
-		TfaSettings                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TFASettingWhereInput) int
-		User                           func(childComplexity int, id string) int
-		UserHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
-		UserSearch                     func(childComplexity int, query string) int
-		UserSetting                    func(childComplexity int, id string) int
-		UserSettingHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingHistoryWhereInput) int
-		UserSettingSearch              func(childComplexity int, query string) int
-		UserSettings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingWhereInput) int
-		Users                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserOrder, where *generated.UserWhereInput) int
+		APIToken                         func(childComplexity int, id string) int
+		APITokenSearch                   func(childComplexity int, query string) int
+		APITokens                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.APITokenWhereInput) int
+		ActionPlan                       func(childComplexity int, id string) int
+		ActionPlanHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanHistoryWhereInput) int
+		ActionPlanSearch                 func(childComplexity int, query string) int
+		ActionPlans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanWhereInput) int
+		AdminAPITokenSearch              func(childComplexity int, query string) int
+		AdminActionPlanSearch            func(childComplexity int, query string) int
+		AdminContactSearch               func(childComplexity int, query string) int
+		AdminControlImplementationSearch func(childComplexity int, query string) int
+		AdminControlObjectiveSearch      func(childComplexity int, query string) int
+		AdminControlSearch               func(childComplexity int, query string) int
+		AdminDocumentDataSearch          func(childComplexity int, query string) int
+		AdminEntitySearch                func(childComplexity int, query string) int
+		AdminEntityTypeSearch            func(childComplexity int, query string) int
+		AdminEventSearch                 func(childComplexity int, query string) int
+		AdminEvidenceSearch              func(childComplexity int, query string) int
+		AdminFileSearch                  func(childComplexity int, query string) int
+		AdminGroupSearch                 func(childComplexity int, query string) int
+		AdminIntegrationSearch           func(childComplexity int, query string) int
+		AdminInternalPolicySearch        func(childComplexity int, query string) int
+		AdminMappedControlSearch         func(childComplexity int, query string) int
+		AdminNarrativeSearch             func(childComplexity int, query string) int
+		AdminOrgSubscriptionSearch       func(childComplexity int, query string) int
+		AdminOrganizationSearch          func(childComplexity int, query string) int
+		AdminOrganizationSettingSearch   func(childComplexity int, query string) int
+		AdminPersonalAccessTokenSearch   func(childComplexity int, query string) int
+		AdminProcedureSearch             func(childComplexity int, query string) int
+		AdminProgramSearch               func(childComplexity int, query string) int
+		AdminRiskSearch                  func(childComplexity int, query string) int
+		AdminSearch                      func(childComplexity int, query string) int
+		AdminStandardSearch              func(childComplexity int, query string) int
+		AdminSubcontrolSearch            func(childComplexity int, query string) int
+		AdminSubscriberSearch            func(childComplexity int, query string) int
+		AdminTaskSearch                  func(childComplexity int, query string) int
+		AdminTemplateSearch              func(childComplexity int, query string) int
+		AdminUserSearch                  func(childComplexity int, query string) int
+		AdminUserSettingSearch           func(childComplexity int, query string) int
+		AuditLogs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) int
+		Contact                          func(childComplexity int, id string) int
+		ContactHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactHistoryWhereInput) int
+		ContactSearch                    func(childComplexity int, query string) int
+		Contacts                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactWhereInput) int
+		Control                          func(childComplexity int, id string) int
+		ControlHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlHistoryWhereInput) int
+		ControlImplementation            func(childComplexity int, id string) int
+		ControlImplementationHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationHistoryWhereInput) int
+		ControlImplementationSearch      func(childComplexity int, query string) int
+		ControlImplementations           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationWhereInput) int
+		ControlObjective                 func(childComplexity int, id string) int
+		ControlObjectiveHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveHistoryWhereInput) int
+		ControlObjectiveSearch           func(childComplexity int, query string) int
+		ControlObjectives                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveWhereInput) int
+		ControlSearch                    func(childComplexity int, query string) int
+		Controls                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlWhereInput) int
+		DocumentData                     func(childComplexity int, id string) int
+		DocumentDataHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataHistoryWhereInput) int
+		DocumentDataSearch               func(childComplexity int, query string) int
+		DocumentDataSlice                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) int
+		Entities                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityOrder, where *generated.EntityWhereInput) int
+		Entity                           func(childComplexity int, id string) int
+		EntityHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) int
+		EntitySearch                     func(childComplexity int, query string) int
+		EntityType                       func(childComplexity int, id string) int
+		EntityTypeHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) int
+		EntityTypeSearch                 func(childComplexity int, query string) int
+		EntityTypes                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
+		Event                            func(childComplexity int, id string) int
+		EventHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventHistoryWhereInput) int
+		EventSearch                      func(childComplexity int, query string) int
+		Events                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
+		Evidence                         func(childComplexity int, id string) int
+		EvidenceHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceHistoryWhereInput) int
+		EvidenceSearch                   func(childComplexity int, query string) int
+		Evidences                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceWhereInput) int
+		File                             func(childComplexity int, id string) int
+		FileHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileHistoryWhereInput) int
+		FileSearch                       func(childComplexity int, query string) int
+		Files                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
+		Group                            func(childComplexity int, id string) int
+		GroupHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
+		GroupMembership                  func(childComplexity int, id string) int
+		GroupMembershipHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipHistoryWhereInput) int
+		GroupMemberships                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipWhereInput) int
+		GroupSearch                      func(childComplexity int, query string) int
+		GroupSetting                     func(childComplexity int, id string) int
+		GroupSettingHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingHistoryWhereInput) int
+		GroupSettings                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingWhereInput) int
+		Groups                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupOrder, where *generated.GroupWhereInput) int
+		Hush                             func(childComplexity int, id string) int
+		HushHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
+		Hushes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushOrder, where *generated.HushWhereInput) int
+		Integration                      func(childComplexity int, id string) int
+		IntegrationHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
+		IntegrationSearch                func(childComplexity int, query string) int
+		Integrations                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicies                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
+		InternalPolicy                   func(childComplexity int, id string) int
+		InternalPolicyHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyHistoryWhereInput) int
+		InternalPolicySearch             func(childComplexity int, query string) int
+		Invite                           func(childComplexity int, id string) int
+		Invites                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InviteWhereInput) int
+		MappedControl                    func(childComplexity int, id string) int
+		MappedControlHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlHistoryWhereInput) int
+		MappedControlSearch              func(childComplexity int, query string) int
+		MappedControls                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlWhereInput) int
+		Narrative                        func(childComplexity int, id string) int
+		NarrativeHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeHistoryWhereInput) int
+		NarrativeSearch                  func(childComplexity int, query string) int
+		Narratives                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeWhereInput) int
+		Node                             func(childComplexity int, id string) int
+		Nodes                            func(childComplexity int, ids []string) int
+		Note                             func(childComplexity int, id string) int
+		NoteHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteHistoryWhereInput) int
+		Notes                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
+		OrgMembership                    func(childComplexity int, id string) int
+		OrgMembershipHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipHistoryWhereInput) int
+		OrgMemberships                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipWhereInput) int
+		OrgSubscription                  func(childComplexity int, id string) int
+		OrgSubscriptionHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionHistoryWhereInput) int
+		OrgSubscriptionSearch            func(childComplexity int, query string) int
+		OrgSubscriptions                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionWhereInput) int
+		Organization                     func(childComplexity int, id string) int
+		OrganizationHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) int
+		OrganizationSearch               func(childComplexity int, query string) int
+		OrganizationSetting              func(childComplexity int, id string) int
+		OrganizationSettingHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingHistoryWhereInput) int
+		OrganizationSettingSearch        func(childComplexity int, query string) int
+		OrganizationSettings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingWhereInput) int
+		Organizations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		PersonalAccessToken              func(childComplexity int, id string) int
+		PersonalAccessTokenSearch        func(childComplexity int, query string) int
+		PersonalAccessTokens             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) int
+		Procedure                        func(childComplexity int, id string) int
+		ProcedureHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureHistoryWhereInput) int
+		ProcedureSearch                  func(childComplexity int, query string) int
+		Procedures                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
+		Program                          func(childComplexity int, id string) int
+		ProgramHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramHistoryWhereInput) int
+		ProgramMembership                func(childComplexity int, id string) int
+		ProgramMembershipHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipHistoryWhereInput) int
+		ProgramMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipWhereInput) int
+		ProgramSearch                    func(childComplexity int, query string) int
+		Programs                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramWhereInput) int
+		Risk                             func(childComplexity int, id string) int
+		RiskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskHistoryWhereInput) int
+		RiskSearch                       func(childComplexity int, query string) int
+		Risks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) int
+		Search                           func(childComplexity int, query string) int
+		Self                             func(childComplexity int) int
+		Standard                         func(childComplexity int, id string) int
+		StandardHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardHistoryWhereInput) int
+		StandardSearch                   func(childComplexity int, query string) int
+		Standards                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardWhereInput) int
+		Subcontrol                       func(childComplexity int, id string) int
+		SubcontrolHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolHistoryWhereInput) int
+		SubcontrolSearch                 func(childComplexity int, query string) int
+		Subcontrols                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolWhereInput) int
+		Subscriber                       func(childComplexity int, email string) int
+		SubscriberSearch                 func(childComplexity int, query string) int
+		Subscribers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubscriberWhereInput) int
+		Task                             func(childComplexity int, id string) int
+		TaskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskHistoryWhereInput) int
+		TaskSearch                       func(childComplexity int, query string) int
+		Tasks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskWhereInput) int
+		Template                         func(childComplexity int, id string) int
+		TemplateHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
+		TemplateSearch                   func(childComplexity int, query string) int
+		Templates                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TfaSetting                       func(childComplexity int, id *string) int
+		TfaSettings                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TFASettingWhereInput) int
+		User                             func(childComplexity int, id string) int
+		UserHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
+		UserSearch                       func(childComplexity int, query string) int
+		UserSetting                      func(childComplexity int, id string) int
+		UserSettingHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingHistoryWhereInput) int
+		UserSettingSearch                func(childComplexity int, query string) int
+		UserSettings                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingWhereInput) int
+		Users                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	Risk struct {
@@ -2893,29 +3064,31 @@ type ComplexityRoot struct {
 	}
 
 	Standard struct {
-		ActionPlans       func(childComplexity int) int
-		Background        func(childComplexity int) int
-		ControlObjectives func(childComplexity int) int
-		Controls          func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
-		Description       func(childComplexity int) int
-		Details           func(childComplexity int) int
-		Family            func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Procedures        func(childComplexity int) int
-		Programs          func(childComplexity int) int
-		PurposeAndScope   func(childComplexity int) int
-		Satisfies         func(childComplexity int) int
-		StandardType      func(childComplexity int) int
-		Status            func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		Version           func(childComplexity int) int
+		Controls      func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		Domains       func(childComplexity int) int
+		Framework     func(childComplexity int) int
+		FreeToUse     func(childComplexity int) int
+		GoverningBody func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IsPublic      func(childComplexity int) int
+		Link          func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Revision      func(childComplexity int) int
+		ShortName     func(childComplexity int) int
+		StandardType  func(childComplexity int) int
+		Status        func(childComplexity int) int
+		SystemOwned   func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Version       func(childComplexity int) int
 	}
 
 	StandardBulkCreatePayload struct {
@@ -2942,27 +3115,32 @@ type ComplexityRoot struct {
 	}
 
 	StandardHistory struct {
-		Background      func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedBy       func(childComplexity int) int
-		Description     func(childComplexity int) int
-		Details         func(childComplexity int) int
-		Family          func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		PurposeAndScope func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Satisfies       func(childComplexity int) int
-		StandardType    func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Version         func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		Domains       func(childComplexity int) int
+		Framework     func(childComplexity int) int
+		FreeToUse     func(childComplexity int) int
+		GoverningBody func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IsPublic      func(childComplexity int) int
+		Link          func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Revision      func(childComplexity int) int
+		ShortName     func(childComplexity int) int
+		StandardType  func(childComplexity int) int
+		Status        func(childComplexity int) int
+		SystemOwned   func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Version       func(childComplexity int) int
 	}
 
 	StandardHistoryConnection struct {
@@ -2985,38 +3163,45 @@ type ComplexityRoot struct {
 	}
 
 	Subcontrol struct {
-		Class                          func(childComplexity int) int
-		Controls                       func(childComplexity int) int
-		CreatedAt                      func(childComplexity int) int
-		CreatedBy                      func(childComplexity int) int
-		DeletedAt                      func(childComplexity int) int
-		DeletedBy                      func(childComplexity int) int
-		Description                    func(childComplexity int) int
-		Details                        func(childComplexity int) int
-		DisplayID                      func(childComplexity int) int
-		Evidence                       func(childComplexity int) int
-		ExampleEvidence                func(childComplexity int) int
-		Family                         func(childComplexity int) int
-		ID                             func(childComplexity int) int
-		ImplementationDate             func(childComplexity int) int
-		ImplementationEvidence         func(childComplexity int) int
-		ImplementationStatus           func(childComplexity int) int
-		ImplementationVerification     func(childComplexity int) int
-		ImplementationVerificationDate func(childComplexity int) int
-		MappedFrameworks               func(childComplexity int) int
-		Name                           func(childComplexity int) int
-		Owner                          func(childComplexity int) int
-		OwnerID                        func(childComplexity int) int
-		Programs                       func(childComplexity int) int
-		Source                         func(childComplexity int) int
-		Status                         func(childComplexity int) int
-		SubcontrolNumber               func(childComplexity int) int
-		SubcontrolType                 func(childComplexity int) int
-		Tags                           func(childComplexity int) int
-		Tasks                          func(childComplexity int) int
-		UpdatedAt                      func(childComplexity int) int
-		UpdatedBy                      func(childComplexity int) int
-		Version                        func(childComplexity int) int
+		ActionPlans            func(childComplexity int) int
+		AssessmentMethods      func(childComplexity int) int
+		AssessmentObjectives   func(childComplexity int) int
+		Category               func(childComplexity int) int
+		CategoryID             func(childComplexity int) int
+		Control                func(childComplexity int) int
+		ControlID              func(childComplexity int) int
+		ControlObjectives      func(childComplexity int) int
+		ControlOwner           func(childComplexity int) int
+		ControlQuestions       func(childComplexity int) int
+		ControlType            func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Delegate               func(childComplexity int) int
+		DeletedAt              func(childComplexity int) int
+		DeletedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		Evidence               func(childComplexity int) int
+		ExampleEvidence        func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		ImplementationGuidance func(childComplexity int) int
+		InternalPolicies       func(childComplexity int) int
+		MappedCategories       func(childComplexity int) int
+		MappedControls         func(childComplexity int) int
+		Narratives             func(childComplexity int) int
+		Owner                  func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Procedures             func(childComplexity int) int
+		RefCode                func(childComplexity int) int
+		References             func(childComplexity int) int
+		Risks                  func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Subcategory            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		Tasks                  func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	SubcontrolBulkCreatePayload struct {
@@ -3043,36 +3228,35 @@ type ComplexityRoot struct {
 	}
 
 	SubcontrolHistory struct {
-		Class                          func(childComplexity int) int
-		CreatedAt                      func(childComplexity int) int
-		CreatedBy                      func(childComplexity int) int
-		DeletedAt                      func(childComplexity int) int
-		DeletedBy                      func(childComplexity int) int
-		Description                    func(childComplexity int) int
-		Details                        func(childComplexity int) int
-		DisplayID                      func(childComplexity int) int
-		ExampleEvidence                func(childComplexity int) int
-		Family                         func(childComplexity int) int
-		HistoryTime                    func(childComplexity int) int
-		ID                             func(childComplexity int) int
-		ImplementationDate             func(childComplexity int) int
-		ImplementationEvidence         func(childComplexity int) int
-		ImplementationStatus           func(childComplexity int) int
-		ImplementationVerification     func(childComplexity int) int
-		ImplementationVerificationDate func(childComplexity int) int
-		MappedFrameworks               func(childComplexity int) int
-		Name                           func(childComplexity int) int
-		Operation                      func(childComplexity int) int
-		OwnerID                        func(childComplexity int) int
-		Ref                            func(childComplexity int) int
-		Source                         func(childComplexity int) int
-		Status                         func(childComplexity int) int
-		SubcontrolNumber               func(childComplexity int) int
-		SubcontrolType                 func(childComplexity int) int
-		Tags                           func(childComplexity int) int
-		UpdatedAt                      func(childComplexity int) int
-		UpdatedBy                      func(childComplexity int) int
-		Version                        func(childComplexity int) int
+		AssessmentMethods      func(childComplexity int) int
+		AssessmentObjectives   func(childComplexity int) int
+		Category               func(childComplexity int) int
+		CategoryID             func(childComplexity int) int
+		ControlID              func(childComplexity int) int
+		ControlQuestions       func(childComplexity int) int
+		ControlType            func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DeletedAt              func(childComplexity int) int
+		DeletedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		ExampleEvidence        func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		ImplementationGuidance func(childComplexity int) int
+		MappedCategories       func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		RefCode                func(childComplexity int) int
+		References             func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Subcategory            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	SubcontrolHistoryConnection struct {
@@ -3881,13 +4065,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ActionPlan.Source(childComplexity), true
 
-	case "ActionPlan.standard":
-		if e.complexity.ActionPlan.Standard == nil {
-			break
-		}
-
-		return e.complexity.ActionPlan.Standard(childComplexity), true
-
 	case "ActionPlan.status":
 		if e.complexity.ActionPlan.Status == nil {
 			break
@@ -4609,6 +4786,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.ActionPlans(childComplexity), true
 
+	case "Control.assessmentMethods":
+		if e.complexity.Control.AssessmentMethods == nil {
+			break
+		}
+
+		return e.complexity.Control.AssessmentMethods(childComplexity), true
+
+	case "Control.assessmentObjectives":
+		if e.complexity.Control.AssessmentObjectives == nil {
+			break
+		}
+
+		return e.complexity.Control.AssessmentObjectives(childComplexity), true
+
 	case "Control.blockedGroups":
 		if e.complexity.Control.BlockedGroups == nil {
 			break
@@ -4616,19 +4807,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.BlockedGroups(childComplexity), true
 
-	case "Control.class":
-		if e.complexity.Control.Class == nil {
+	case "Control.category":
+		if e.complexity.Control.Category == nil {
 			break
 		}
 
-		return e.complexity.Control.Class(childComplexity), true
+		return e.complexity.Control.Category(childComplexity), true
 
-	case "Control.controlNumber":
-		if e.complexity.Control.ControlNumber == nil {
+	case "Control.categoryID":
+		if e.complexity.Control.CategoryID == nil {
 			break
 		}
 
-		return e.complexity.Control.ControlNumber(childComplexity), true
+		return e.complexity.Control.CategoryID(childComplexity), true
 
 	case "Control.controlObjectives":
 		if e.complexity.Control.ControlObjectives == nil {
@@ -4636,6 +4827,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Control.ControlObjectives(childComplexity), true
+
+	case "Control.controlOwner":
+		if e.complexity.Control.ControlOwner == nil {
+			break
+		}
+
+		return e.complexity.Control.ControlOwner(childComplexity), true
+
+	case "Control.controlQuestions":
+		if e.complexity.Control.ControlQuestions == nil {
+			break
+		}
+
+		return e.complexity.Control.ControlQuestions(childComplexity), true
 
 	case "Control.controlType":
 		if e.complexity.Control.ControlType == nil {
@@ -4658,6 +4863,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.CreatedBy(childComplexity), true
 
+	case "Control.delegate":
+		if e.complexity.Control.Delegate == nil {
+			break
+		}
+
+		return e.complexity.Control.Delegate(childComplexity), true
+
 	case "Control.deletedAt":
 		if e.complexity.Control.DeletedAt == nil {
 			break
@@ -4678,13 +4890,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Control.Description(childComplexity), true
-
-	case "Control.details":
-		if e.complexity.Control.Details == nil {
-			break
-		}
-
-		return e.complexity.Control.Details(childComplexity), true
 
 	case "Control.displayID":
 		if e.complexity.Control.DisplayID == nil {
@@ -4714,13 +4919,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.ExampleEvidence(childComplexity), true
 
-	case "Control.family":
-		if e.complexity.Control.Family == nil {
-			break
-		}
-
-		return e.complexity.Control.Family(childComplexity), true
-
 	case "Control.id":
 		if e.complexity.Control.ID == nil {
 			break
@@ -4728,19 +4926,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.ID(childComplexity), true
 
-	case "Control.mappedFrameworks":
-		if e.complexity.Control.MappedFrameworks == nil {
+	case "Control.implementation":
+		if e.complexity.Control.Implementation == nil {
 			break
 		}
 
-		return e.complexity.Control.MappedFrameworks(childComplexity), true
+		return e.complexity.Control.Implementation(childComplexity), true
 
-	case "Control.name":
-		if e.complexity.Control.Name == nil {
+	case "Control.implementationGuidance":
+		if e.complexity.Control.ImplementationGuidance == nil {
 			break
 		}
 
-		return e.complexity.Control.Name(childComplexity), true
+		return e.complexity.Control.ImplementationGuidance(childComplexity), true
+
+	case "Control.internalPolicies":
+		if e.complexity.Control.InternalPolicies == nil {
+			break
+		}
+
+		return e.complexity.Control.InternalPolicies(childComplexity), true
+
+	case "Control.mappedCategories":
+		if e.complexity.Control.MappedCategories == nil {
+			break
+		}
+
+		return e.complexity.Control.MappedCategories(childComplexity), true
+
+	case "Control.mappedControls":
+		if e.complexity.Control.MappedControls == nil {
+			break
+		}
+
+		return e.complexity.Control.MappedControls(childComplexity), true
 
 	case "Control.narratives":
 		if e.complexity.Control.Narratives == nil {
@@ -4777,19 +4996,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.Programs(childComplexity), true
 
+	case "Control.refCode":
+		if e.complexity.Control.RefCode == nil {
+			break
+		}
+
+		return e.complexity.Control.RefCode(childComplexity), true
+
+	case "Control.references":
+		if e.complexity.Control.References == nil {
+			break
+		}
+
+		return e.complexity.Control.References(childComplexity), true
+
 	case "Control.risks":
 		if e.complexity.Control.Risks == nil {
 			break
 		}
 
 		return e.complexity.Control.Risks(childComplexity), true
-
-	case "Control.satisfies":
-		if e.complexity.Control.Satisfies == nil {
-			break
-		}
-
-		return e.complexity.Control.Satisfies(childComplexity), true
 
 	case "Control.source":
 		if e.complexity.Control.Source == nil {
@@ -4805,12 +5031,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.Standard(childComplexity), true
 
+	case "Control.standardID":
+		if e.complexity.Control.StandardID == nil {
+			break
+		}
+
+		return e.complexity.Control.StandardID(childComplexity), true
+
 	case "Control.status":
 		if e.complexity.Control.Status == nil {
 			break
 		}
 
 		return e.complexity.Control.Status(childComplexity), true
+
+	case "Control.subcategory":
+		if e.complexity.Control.Subcategory == nil {
+			break
+		}
+
+		return e.complexity.Control.Subcategory(childComplexity), true
 
 	case "Control.subcontrols":
 		if e.complexity.Control.Subcontrols == nil {
@@ -4846,13 +5086,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Control.UpdatedBy(childComplexity), true
-
-	case "Control.version":
-		if e.complexity.Control.Version == nil {
-			break
-		}
-
-		return e.complexity.Control.Version(childComplexity), true
 
 	case "Control.viewers":
 		if e.complexity.Control.Viewers == nil {
@@ -4917,19 +5150,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlEdge.Node(childComplexity), true
 
-	case "ControlHistory.class":
-		if e.complexity.ControlHistory.Class == nil {
+	case "ControlHistory.assessmentMethods":
+		if e.complexity.ControlHistory.AssessmentMethods == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Class(childComplexity), true
+		return e.complexity.ControlHistory.AssessmentMethods(childComplexity), true
 
-	case "ControlHistory.controlNumber":
-		if e.complexity.ControlHistory.ControlNumber == nil {
+	case "ControlHistory.assessmentObjectives":
+		if e.complexity.ControlHistory.AssessmentObjectives == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ControlNumber(childComplexity), true
+		return e.complexity.ControlHistory.AssessmentObjectives(childComplexity), true
+
+	case "ControlHistory.category":
+		if e.complexity.ControlHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.Category(childComplexity), true
+
+	case "ControlHistory.categoryID":
+		if e.complexity.ControlHistory.CategoryID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.CategoryID(childComplexity), true
+
+	case "ControlHistory.controlQuestions":
+		if e.complexity.ControlHistory.ControlQuestions == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ControlQuestions(childComplexity), true
 
 	case "ControlHistory.controlType":
 		if e.complexity.ControlHistory.ControlType == nil {
@@ -4973,13 +5227,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.Description(childComplexity), true
 
-	case "ControlHistory.details":
-		if e.complexity.ControlHistory.Details == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.Details(childComplexity), true
-
 	case "ControlHistory.displayID":
 		if e.complexity.ControlHistory.DisplayID == nil {
 			break
@@ -4993,13 +5240,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlHistory.ExampleEvidence(childComplexity), true
-
-	case "ControlHistory.family":
-		if e.complexity.ControlHistory.Family == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.Family(childComplexity), true
 
 	case "ControlHistory.historyTime":
 		if e.complexity.ControlHistory.HistoryTime == nil {
@@ -5015,19 +5255,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.ID(childComplexity), true
 
-	case "ControlHistory.mappedFrameworks":
-		if e.complexity.ControlHistory.MappedFrameworks == nil {
+	case "ControlHistory.implementationGuidance":
+		if e.complexity.ControlHistory.ImplementationGuidance == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.MappedFrameworks(childComplexity), true
+		return e.complexity.ControlHistory.ImplementationGuidance(childComplexity), true
 
-	case "ControlHistory.name":
-		if e.complexity.ControlHistory.Name == nil {
+	case "ControlHistory.mappedCategories":
+		if e.complexity.ControlHistory.MappedCategories == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Name(childComplexity), true
+		return e.complexity.ControlHistory.MappedCategories(childComplexity), true
 
 	case "ControlHistory.operation":
 		if e.complexity.ControlHistory.Operation == nil {
@@ -5050,12 +5290,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.Ref(childComplexity), true
 
-	case "ControlHistory.satisfies":
-		if e.complexity.ControlHistory.Satisfies == nil {
+	case "ControlHistory.refCode":
+		if e.complexity.ControlHistory.RefCode == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Satisfies(childComplexity), true
+		return e.complexity.ControlHistory.RefCode(childComplexity), true
+
+	case "ControlHistory.references":
+		if e.complexity.ControlHistory.References == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.References(childComplexity), true
 
 	case "ControlHistory.source":
 		if e.complexity.ControlHistory.Source == nil {
@@ -5064,12 +5311,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.Source(childComplexity), true
 
+	case "ControlHistory.standardID":
+		if e.complexity.ControlHistory.StandardID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.StandardID(childComplexity), true
+
 	case "ControlHistory.status":
 		if e.complexity.ControlHistory.Status == nil {
 			break
 		}
 
 		return e.complexity.ControlHistory.Status(childComplexity), true
+
+	case "ControlHistory.subcategory":
+		if e.complexity.ControlHistory.Subcategory == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.Subcategory(childComplexity), true
 
 	case "ControlHistory.tags":
 		if e.complexity.ControlHistory.Tags == nil {
@@ -5091,13 +5352,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlHistory.UpdatedBy(childComplexity), true
-
-	case "ControlHistory.version":
-		if e.complexity.ControlHistory.Version == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.Version(childComplexity), true
 
 	case "ControlHistoryConnection.edges":
 		if e.complexity.ControlHistoryConnection.Edges == nil {
@@ -5134,6 +5388,335 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistoryEdge.Node(childComplexity), true
 
+	case "ControlImplementation.control":
+		if e.complexity.ControlImplementation.Control == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.Control(childComplexity), true
+
+	case "ControlImplementation.controlID":
+		if e.complexity.ControlImplementation.ControlID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.ControlID(childComplexity), true
+
+	case "ControlImplementation.createdAt":
+		if e.complexity.ControlImplementation.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.CreatedAt(childComplexity), true
+
+	case "ControlImplementation.createdBy":
+		if e.complexity.ControlImplementation.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.CreatedBy(childComplexity), true
+
+	case "ControlImplementation.deletedAt":
+		if e.complexity.ControlImplementation.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.DeletedAt(childComplexity), true
+
+	case "ControlImplementation.deletedBy":
+		if e.complexity.ControlImplementation.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.DeletedBy(childComplexity), true
+
+	case "ControlImplementation.details":
+		if e.complexity.ControlImplementation.Details == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.Details(childComplexity), true
+
+	case "ControlImplementation.id":
+		if e.complexity.ControlImplementation.ID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.ID(childComplexity), true
+
+	case "ControlImplementation.implementationDate":
+		if e.complexity.ControlImplementation.ImplementationDate == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.ImplementationDate(childComplexity), true
+
+	case "ControlImplementation.status":
+		if e.complexity.ControlImplementation.Status == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.Status(childComplexity), true
+
+	case "ControlImplementation.tags":
+		if e.complexity.ControlImplementation.Tags == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.Tags(childComplexity), true
+
+	case "ControlImplementation.updatedAt":
+		if e.complexity.ControlImplementation.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.UpdatedAt(childComplexity), true
+
+	case "ControlImplementation.updatedBy":
+		if e.complexity.ControlImplementation.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.UpdatedBy(childComplexity), true
+
+	case "ControlImplementation.verificationDate":
+		if e.complexity.ControlImplementation.VerificationDate == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.VerificationDate(childComplexity), true
+
+	case "ControlImplementation.verified":
+		if e.complexity.ControlImplementation.Verified == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.Verified(childComplexity), true
+
+	case "ControlImplementationBulkCreatePayload.controlImplementations":
+		if e.complexity.ControlImplementationBulkCreatePayload.ControlImplementations == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationBulkCreatePayload.ControlImplementations(childComplexity), true
+
+	case "ControlImplementationConnection.edges":
+		if e.complexity.ControlImplementationConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationConnection.Edges(childComplexity), true
+
+	case "ControlImplementationConnection.pageInfo":
+		if e.complexity.ControlImplementationConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationConnection.PageInfo(childComplexity), true
+
+	case "ControlImplementationConnection.totalCount":
+		if e.complexity.ControlImplementationConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationConnection.TotalCount(childComplexity), true
+
+	case "ControlImplementationCreatePayload.controlImplementation":
+		if e.complexity.ControlImplementationCreatePayload.ControlImplementation == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationCreatePayload.ControlImplementation(childComplexity), true
+
+	case "ControlImplementationDeletePayload.deletedID":
+		if e.complexity.ControlImplementationDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationDeletePayload.DeletedID(childComplexity), true
+
+	case "ControlImplementationEdge.cursor":
+		if e.complexity.ControlImplementationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationEdge.Cursor(childComplexity), true
+
+	case "ControlImplementationEdge.node":
+		if e.complexity.ControlImplementationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationEdge.Node(childComplexity), true
+
+	case "ControlImplementationHistory.controlID":
+		if e.complexity.ControlImplementationHistory.ControlID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.ControlID(childComplexity), true
+
+	case "ControlImplementationHistory.createdAt":
+		if e.complexity.ControlImplementationHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.CreatedAt(childComplexity), true
+
+	case "ControlImplementationHistory.createdBy":
+		if e.complexity.ControlImplementationHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.CreatedBy(childComplexity), true
+
+	case "ControlImplementationHistory.deletedAt":
+		if e.complexity.ControlImplementationHistory.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.DeletedAt(childComplexity), true
+
+	case "ControlImplementationHistory.deletedBy":
+		if e.complexity.ControlImplementationHistory.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.DeletedBy(childComplexity), true
+
+	case "ControlImplementationHistory.details":
+		if e.complexity.ControlImplementationHistory.Details == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.Details(childComplexity), true
+
+	case "ControlImplementationHistory.historyTime":
+		if e.complexity.ControlImplementationHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.HistoryTime(childComplexity), true
+
+	case "ControlImplementationHistory.id":
+		if e.complexity.ControlImplementationHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.ID(childComplexity), true
+
+	case "ControlImplementationHistory.implementationDate":
+		if e.complexity.ControlImplementationHistory.ImplementationDate == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.ImplementationDate(childComplexity), true
+
+	case "ControlImplementationHistory.operation":
+		if e.complexity.ControlImplementationHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.Operation(childComplexity), true
+
+	case "ControlImplementationHistory.ref":
+		if e.complexity.ControlImplementationHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.Ref(childComplexity), true
+
+	case "ControlImplementationHistory.status":
+		if e.complexity.ControlImplementationHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.Status(childComplexity), true
+
+	case "ControlImplementationHistory.tags":
+		if e.complexity.ControlImplementationHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.Tags(childComplexity), true
+
+	case "ControlImplementationHistory.updatedAt":
+		if e.complexity.ControlImplementationHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.UpdatedAt(childComplexity), true
+
+	case "ControlImplementationHistory.updatedBy":
+		if e.complexity.ControlImplementationHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.UpdatedBy(childComplexity), true
+
+	case "ControlImplementationHistory.verificationDate":
+		if e.complexity.ControlImplementationHistory.VerificationDate == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.VerificationDate(childComplexity), true
+
+	case "ControlImplementationHistory.verified":
+		if e.complexity.ControlImplementationHistory.Verified == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.Verified(childComplexity), true
+
+	case "ControlImplementationHistoryConnection.edges":
+		if e.complexity.ControlImplementationHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistoryConnection.Edges(childComplexity), true
+
+	case "ControlImplementationHistoryConnection.pageInfo":
+		if e.complexity.ControlImplementationHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistoryConnection.PageInfo(childComplexity), true
+
+	case "ControlImplementationHistoryConnection.totalCount":
+		if e.complexity.ControlImplementationHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistoryConnection.TotalCount(childComplexity), true
+
+	case "ControlImplementationHistoryEdge.cursor":
+		if e.complexity.ControlImplementationHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistoryEdge.Cursor(childComplexity), true
+
+	case "ControlImplementationHistoryEdge.node":
+		if e.complexity.ControlImplementationHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistoryEdge.Node(childComplexity), true
+
+	case "ControlImplementationSearchResult.controlImplementations":
+		if e.complexity.ControlImplementationSearchResult.ControlImplementations == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationSearchResult.ControlImplementations(childComplexity), true
+
+	case "ControlImplementationUpdatePayload.controlImplementation":
+		if e.complexity.ControlImplementationUpdatePayload.ControlImplementation == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationUpdatePayload.ControlImplementation(childComplexity), true
+
 	case "ControlObjective.blockedGroups":
 		if e.complexity.ControlObjective.BlockedGroups == nil {
 			break
@@ -5141,19 +5724,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjective.BlockedGroups(childComplexity), true
 
-	case "ControlObjective.class":
-		if e.complexity.ControlObjective.Class == nil {
+	case "ControlObjective.category":
+		if e.complexity.ControlObjective.Category == nil {
 			break
 		}
 
-		return e.complexity.ControlObjective.Class(childComplexity), true
-
-	case "ControlObjective.controlNumber":
-		if e.complexity.ControlObjective.ControlNumber == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.ControlNumber(childComplexity), true
+		return e.complexity.ControlObjective.Category(childComplexity), true
 
 	case "ControlObjective.controlObjectiveType":
 		if e.complexity.ControlObjective.ControlObjectiveType == nil {
@@ -5197,19 +5773,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjective.DeletedBy(childComplexity), true
 
-	case "ControlObjective.description":
-		if e.complexity.ControlObjective.Description == nil {
+	case "ControlObjective.desiredOutcome":
+		if e.complexity.ControlObjective.DesiredOutcome == nil {
 			break
 		}
 
-		return e.complexity.ControlObjective.Description(childComplexity), true
-
-	case "ControlObjective.details":
-		if e.complexity.ControlObjective.Details == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.Details(childComplexity), true
+		return e.complexity.ControlObjective.DesiredOutcome(childComplexity), true
 
 	case "ControlObjective.displayID":
 		if e.complexity.ControlObjective.DisplayID == nil {
@@ -5232,20 +5801,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjective.Evidence(childComplexity), true
 
-	case "ControlObjective.exampleEvidence":
-		if e.complexity.ControlObjective.ExampleEvidence == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.ExampleEvidence(childComplexity), true
-
-	case "ControlObjective.family":
-		if e.complexity.ControlObjective.Family == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.Family(childComplexity), true
-
 	case "ControlObjective.id":
 		if e.complexity.ControlObjective.ID == nil {
 			break
@@ -5259,13 +5814,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjective.InternalPolicies(childComplexity), true
-
-	case "ControlObjective.mappedFrameworks":
-		if e.complexity.ControlObjective.MappedFrameworks == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.MappedFrameworks(childComplexity), true
 
 	case "ControlObjective.name":
 		if e.complexity.ControlObjective.Name == nil {
@@ -5323,19 +5871,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjective.Source(childComplexity), true
 
-	case "ControlObjective.standard":
-		if e.complexity.ControlObjective.Standard == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.Standard(childComplexity), true
-
 	case "ControlObjective.status":
 		if e.complexity.ControlObjective.Status == nil {
 			break
 		}
 
 		return e.complexity.ControlObjective.Status(childComplexity), true
+
+	case "ControlObjective.subcategory":
+		if e.complexity.ControlObjective.Subcategory == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.Subcategory(childComplexity), true
 
 	case "ControlObjective.subcontrols":
 		if e.complexity.ControlObjective.Subcontrols == nil {
@@ -5442,19 +5990,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjectiveEdge.Node(childComplexity), true
 
-	case "ControlObjectiveHistory.class":
-		if e.complexity.ControlObjectiveHistory.Class == nil {
+	case "ControlObjectiveHistory.category":
+		if e.complexity.ControlObjectiveHistory.Category == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Class(childComplexity), true
-
-	case "ControlObjectiveHistory.controlNumber":
-		if e.complexity.ControlObjectiveHistory.ControlNumber == nil {
-			break
-		}
-
-		return e.complexity.ControlObjectiveHistory.ControlNumber(childComplexity), true
+		return e.complexity.ControlObjectiveHistory.Category(childComplexity), true
 
 	case "ControlObjectiveHistory.controlObjectiveType":
 		if e.complexity.ControlObjectiveHistory.ControlObjectiveType == nil {
@@ -5491,19 +6032,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjectiveHistory.DeletedBy(childComplexity), true
 
-	case "ControlObjectiveHistory.description":
-		if e.complexity.ControlObjectiveHistory.Description == nil {
+	case "ControlObjectiveHistory.desiredOutcome":
+		if e.complexity.ControlObjectiveHistory.DesiredOutcome == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Description(childComplexity), true
-
-	case "ControlObjectiveHistory.details":
-		if e.complexity.ControlObjectiveHistory.Details == nil {
-			break
-		}
-
-		return e.complexity.ControlObjectiveHistory.Details(childComplexity), true
+		return e.complexity.ControlObjectiveHistory.DesiredOutcome(childComplexity), true
 
 	case "ControlObjectiveHistory.displayID":
 		if e.complexity.ControlObjectiveHistory.DisplayID == nil {
@@ -5511,20 +6045,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjectiveHistory.DisplayID(childComplexity), true
-
-	case "ControlObjectiveHistory.exampleEvidence":
-		if e.complexity.ControlObjectiveHistory.ExampleEvidence == nil {
-			break
-		}
-
-		return e.complexity.ControlObjectiveHistory.ExampleEvidence(childComplexity), true
-
-	case "ControlObjectiveHistory.family":
-		if e.complexity.ControlObjectiveHistory.Family == nil {
-			break
-		}
-
-		return e.complexity.ControlObjectiveHistory.Family(childComplexity), true
 
 	case "ControlObjectiveHistory.historyTime":
 		if e.complexity.ControlObjectiveHistory.HistoryTime == nil {
@@ -5539,13 +6059,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjectiveHistory.ID(childComplexity), true
-
-	case "ControlObjectiveHistory.mappedFrameworks":
-		if e.complexity.ControlObjectiveHistory.MappedFrameworks == nil {
-			break
-		}
-
-		return e.complexity.ControlObjectiveHistory.MappedFrameworks(childComplexity), true
 
 	case "ControlObjectiveHistory.name":
 		if e.complexity.ControlObjectiveHistory.Name == nil {
@@ -5588,6 +6101,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjectiveHistory.Status(childComplexity), true
+
+	case "ControlObjectiveHistory.subcategory":
+		if e.complexity.ControlObjectiveHistory.Subcategory == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.Subcategory(childComplexity), true
 
 	case "ControlObjectiveHistory.tags":
 		if e.complexity.ControlObjectiveHistory.Tags == nil {
@@ -10300,6 +10820,314 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InviteUpdatePayload.Invite(childComplexity), true
 
+	case "MappedControl.control":
+		if e.complexity.MappedControl.Control == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.Control(childComplexity), true
+
+	case "MappedControl.controlID":
+		if e.complexity.MappedControl.ControlID == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.ControlID(childComplexity), true
+
+	case "MappedControl.createdAt":
+		if e.complexity.MappedControl.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.CreatedAt(childComplexity), true
+
+	case "MappedControl.createdBy":
+		if e.complexity.MappedControl.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.CreatedBy(childComplexity), true
+
+	case "MappedControl.deletedAt":
+		if e.complexity.MappedControl.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.DeletedAt(childComplexity), true
+
+	case "MappedControl.deletedBy":
+		if e.complexity.MappedControl.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.DeletedBy(childComplexity), true
+
+	case "MappedControl.id":
+		if e.complexity.MappedControl.ID == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.ID(childComplexity), true
+
+	case "MappedControl.mappedControl":
+		if e.complexity.MappedControl.MappedControl == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.MappedControl(childComplexity), true
+
+	case "MappedControl.mappedControlID":
+		if e.complexity.MappedControl.MappedControlID == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.MappedControlID(childComplexity), true
+
+	case "MappedControl.mappingType":
+		if e.complexity.MappedControl.MappingType == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.MappingType(childComplexity), true
+
+	case "MappedControl.relation":
+		if e.complexity.MappedControl.Relation == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.Relation(childComplexity), true
+
+	case "MappedControl.tags":
+		if e.complexity.MappedControl.Tags == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.Tags(childComplexity), true
+
+	case "MappedControl.updatedAt":
+		if e.complexity.MappedControl.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.UpdatedAt(childComplexity), true
+
+	case "MappedControl.updatedBy":
+		if e.complexity.MappedControl.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.UpdatedBy(childComplexity), true
+
+	case "MappedControlBulkCreatePayload.mappedControls":
+		if e.complexity.MappedControlBulkCreatePayload.MappedControls == nil {
+			break
+		}
+
+		return e.complexity.MappedControlBulkCreatePayload.MappedControls(childComplexity), true
+
+	case "MappedControlConnection.edges":
+		if e.complexity.MappedControlConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.MappedControlConnection.Edges(childComplexity), true
+
+	case "MappedControlConnection.pageInfo":
+		if e.complexity.MappedControlConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.MappedControlConnection.PageInfo(childComplexity), true
+
+	case "MappedControlConnection.totalCount":
+		if e.complexity.MappedControlConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.MappedControlConnection.TotalCount(childComplexity), true
+
+	case "MappedControlCreatePayload.mappedControl":
+		if e.complexity.MappedControlCreatePayload.MappedControl == nil {
+			break
+		}
+
+		return e.complexity.MappedControlCreatePayload.MappedControl(childComplexity), true
+
+	case "MappedControlDeletePayload.deletedID":
+		if e.complexity.MappedControlDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlDeletePayload.DeletedID(childComplexity), true
+
+	case "MappedControlEdge.cursor":
+		if e.complexity.MappedControlEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.MappedControlEdge.Cursor(childComplexity), true
+
+	case "MappedControlEdge.node":
+		if e.complexity.MappedControlEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.MappedControlEdge.Node(childComplexity), true
+
+	case "MappedControlHistory.controlID":
+		if e.complexity.MappedControlHistory.ControlID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.ControlID(childComplexity), true
+
+	case "MappedControlHistory.createdAt":
+		if e.complexity.MappedControlHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.CreatedAt(childComplexity), true
+
+	case "MappedControlHistory.createdBy":
+		if e.complexity.MappedControlHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.CreatedBy(childComplexity), true
+
+	case "MappedControlHistory.deletedAt":
+		if e.complexity.MappedControlHistory.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.DeletedAt(childComplexity), true
+
+	case "MappedControlHistory.deletedBy":
+		if e.complexity.MappedControlHistory.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.DeletedBy(childComplexity), true
+
+	case "MappedControlHistory.historyTime":
+		if e.complexity.MappedControlHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.HistoryTime(childComplexity), true
+
+	case "MappedControlHistory.id":
+		if e.complexity.MappedControlHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.ID(childComplexity), true
+
+	case "MappedControlHistory.mappedControlID":
+		if e.complexity.MappedControlHistory.MappedControlID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.MappedControlID(childComplexity), true
+
+	case "MappedControlHistory.mappingType":
+		if e.complexity.MappedControlHistory.MappingType == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.MappingType(childComplexity), true
+
+	case "MappedControlHistory.operation":
+		if e.complexity.MappedControlHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.Operation(childComplexity), true
+
+	case "MappedControlHistory.ref":
+		if e.complexity.MappedControlHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.Ref(childComplexity), true
+
+	case "MappedControlHistory.relation":
+		if e.complexity.MappedControlHistory.Relation == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.Relation(childComplexity), true
+
+	case "MappedControlHistory.tags":
+		if e.complexity.MappedControlHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.Tags(childComplexity), true
+
+	case "MappedControlHistory.updatedAt":
+		if e.complexity.MappedControlHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.UpdatedAt(childComplexity), true
+
+	case "MappedControlHistory.updatedBy":
+		if e.complexity.MappedControlHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.UpdatedBy(childComplexity), true
+
+	case "MappedControlHistoryConnection.edges":
+		if e.complexity.MappedControlHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistoryConnection.Edges(childComplexity), true
+
+	case "MappedControlHistoryConnection.pageInfo":
+		if e.complexity.MappedControlHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistoryConnection.PageInfo(childComplexity), true
+
+	case "MappedControlHistoryConnection.totalCount":
+		if e.complexity.MappedControlHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistoryConnection.TotalCount(childComplexity), true
+
+	case "MappedControlHistoryEdge.cursor":
+		if e.complexity.MappedControlHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistoryEdge.Cursor(childComplexity), true
+
+	case "MappedControlHistoryEdge.node":
+		if e.complexity.MappedControlHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistoryEdge.Node(childComplexity), true
+
+	case "MappedControlSearchResult.mappedControls":
+		if e.complexity.MappedControlSearchResult.MappedControls == nil {
+			break
+		}
+
+		return e.complexity.MappedControlSearchResult.MappedControls(childComplexity), true
+
+	case "MappedControlUpdatePayload.mappedControl":
+		if e.complexity.MappedControlUpdatePayload.MappedControl == nil {
+			break
+		}
+
+		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
+
 	case "Mutation.createAPIToken":
 		if e.complexity.Mutation.CreateAPIToken == nil {
 			break
@@ -10395,6 +11223,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVControl(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVControlImplementation":
+		if e.complexity.Mutation.CreateBulkCSVControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVControlImplementation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVControlImplementation(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVControlObjective":
 		if e.complexity.Mutation.CreateBulkCSVControlObjective == nil {
@@ -10540,6 +11380,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVMappedControl":
+		if e.complexity.Mutation.CreateBulkCSVMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVMappedControl_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVMappedControl(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVNarrative":
 		if e.complexity.Mutation.CreateBulkCSVNarrative == nil {
 			break
@@ -10636,18 +11488,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVStandard":
-		if e.complexity.Mutation.CreateBulkCSVStandard == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVStandard_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVStandard(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVSubcontrol":
 		if e.complexity.Mutation.CreateBulkCSVSubcontrol == nil {
 			break
@@ -10731,6 +11571,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateBulkControl(childComplexity, args["input"].([]*generated.CreateControlInput)), true
+
+	case "Mutation.createBulkControlImplementation":
+		if e.complexity.Mutation.CreateBulkControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkControlImplementation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkControlImplementation(childComplexity, args["input"].([]*generated.CreateControlImplementationInput)), true
 
 	case "Mutation.createBulkControlObjective":
 		if e.complexity.Mutation.CreateBulkControlObjective == nil {
@@ -10876,6 +11728,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkInvite(childComplexity, args["input"].([]*generated.CreateInviteInput)), true
 
+	case "Mutation.createBulkMappedControl":
+		if e.complexity.Mutation.CreateBulkMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkMappedControl_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkMappedControl(childComplexity, args["input"].([]*generated.CreateMappedControlInput)), true
+
 	case "Mutation.createBulkNarrative":
 		if e.complexity.Mutation.CreateBulkNarrative == nil {
 			break
@@ -10972,18 +11836,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkRisk(childComplexity, args["input"].([]*generated.CreateRiskInput)), true
 
-	case "Mutation.createBulkStandard":
-		if e.complexity.Mutation.CreateBulkStandard == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkStandard_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkStandard(childComplexity, args["input"].([]*generated.CreateStandardInput)), true
-
 	case "Mutation.createBulkSubcontrol":
 		if e.complexity.Mutation.CreateBulkSubcontrol == nil {
 			break
@@ -11067,6 +11919,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateControl(childComplexity, args["input"].(generated.CreateControlInput)), true
+
+	case "Mutation.createControlImplementation":
+		if e.complexity.Mutation.CreateControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createControlImplementation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateControlImplementation(childComplexity, args["input"].(generated.CreateControlImplementationInput)), true
 
 	case "Mutation.createControlObjective":
 		if e.complexity.Mutation.CreateControlObjective == nil {
@@ -11271,6 +12135,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateInvite(childComplexity, args["input"].(generated.CreateInviteInput)), true
+
+	case "Mutation.createMappedControl":
+		if e.complexity.Mutation.CreateMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createMappedControl_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateMappedControl(childComplexity, args["input"].(generated.CreateMappedControlInput)), true
 
 	case "Mutation.createNarrative":
 		if e.complexity.Mutation.CreateNarrative == nil {
@@ -11560,6 +12436,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteControl(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteControlImplementation":
+		if e.complexity.Mutation.DeleteControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteControlImplementation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteControlImplementation(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteControlObjective":
 		if e.complexity.Mutation.DeleteControlObjective == nil {
 			break
@@ -11727,6 +12615,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteInvite(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteMappedControl":
+		if e.complexity.Mutation.DeleteMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteMappedControl_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteMappedControl(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteNarrative":
 		if e.complexity.Mutation.DeleteNarrative == nil {
@@ -11956,6 +12856,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateControl(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlInput)), true
 
+	case "Mutation.updateControlImplementation":
+		if e.complexity.Mutation.UpdateControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateControlImplementation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateControlImplementation(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlImplementationInput)), true
+
 	case "Mutation.updateControlObjective":
 		if e.complexity.Mutation.UpdateControlObjective == nil {
 			break
@@ -12111,6 +13023,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateInvite(childComplexity, args["id"].(string), args["input"].(generated.UpdateInviteInput)), true
+
+	case "Mutation.updateMappedControl":
+		if e.complexity.Mutation.UpdateMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateMappedControl_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateMappedControl(childComplexity, args["id"].(string), args["input"].(generated.UpdateMappedControlInput)), true
 
 	case "Mutation.updateNarrative":
 		if e.complexity.Mutation.UpdateNarrative == nil {
@@ -12335,20 +13259,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Narrative.BlockedGroups(childComplexity), true
 
-	case "Narrative.control":
-		if e.complexity.Narrative.Control == nil {
-			break
-		}
-
-		return e.complexity.Narrative.Control(childComplexity), true
-
-	case "Narrative.controlObjective":
-		if e.complexity.Narrative.ControlObjective == nil {
-			break
-		}
-
-		return e.complexity.Narrative.ControlObjective(childComplexity), true
-
 	case "Narrative.createdAt":
 		if e.complexity.Narrative.CreatedAt == nil {
 			break
@@ -12412,13 +13322,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Narrative.ID(childComplexity), true
 
-	case "Narrative.internalPolicy":
-		if e.complexity.Narrative.InternalPolicy == nil {
-			break
-		}
-
-		return e.complexity.Narrative.InternalPolicy(childComplexity), true
-
 	case "Narrative.name":
 		if e.complexity.Narrative.Name == nil {
 			break
@@ -12439,13 +13342,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Narrative.OwnerID(childComplexity), true
-
-	case "Narrative.procedure":
-		if e.complexity.Narrative.Procedure == nil {
-			break
-		}
-
-		return e.complexity.Narrative.Procedure(childComplexity), true
 
 	case "Narrative.programs":
 		if e.complexity.Narrative.Programs == nil {
@@ -12635,13 +13531,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NarrativeHistory.Ref(childComplexity), true
-
-	case "NarrativeHistory.satisfies":
-		if e.complexity.NarrativeHistory.Satisfies == nil {
-			break
-		}
-
-		return e.complexity.NarrativeHistory.Satisfies(childComplexity), true
 
 	case "NarrativeHistory.tags":
 		if e.complexity.NarrativeHistory.Tags == nil {
@@ -14082,6 +14971,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Organization.Setting(childComplexity), true
+
+	case "Organization.standards":
+		if e.complexity.Organization.Standards == nil {
+			break
+		}
+
+		return e.complexity.Organization.Standards(childComplexity), true
 
 	case "Organization.subcontrols":
 		if e.complexity.Organization.Subcontrols == nil {
@@ -15679,13 +16575,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Program.Risks(childComplexity), true
 
-	case "Program.standards":
-		if e.complexity.Program.Standards == nil {
-			break
-		}
-
-		return e.complexity.Program.Standards(childComplexity), true
-
 	case "Program.startDate":
 		if e.complexity.Program.StartDate == nil {
 			break
@@ -16394,6 +17283,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.AdminContactSearch(childComplexity, args["query"].(string)), true
 
+	case "Query.adminControlImplementationSearch":
+		if e.complexity.Query.AdminControlImplementationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminControlImplementationSearch_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminControlImplementationSearch(childComplexity, args["query"].(string)), true
+
 	case "Query.adminControlObjectiveSearch":
 		if e.complexity.Query.AdminControlObjectiveSearch == nil {
 			break
@@ -16525,6 +17426,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.AdminInternalPolicySearch(childComplexity, args["query"].(string)), true
+
+	case "Query.adminMappedControlSearch":
+		if e.complexity.Query.AdminMappedControlSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminMappedControlSearch_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminMappedControlSearch(childComplexity, args["query"].(string)), true
 
 	case "Query.adminNarrativeSearch":
 		if e.complexity.Query.AdminNarrativeSearch == nil {
@@ -16801,6 +17714,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlHistoryWhereInput)), true
+
+	case "Query.controlImplementation":
+		if e.complexity.Query.ControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlImplementation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlImplementation(childComplexity, args["id"].(string)), true
+
+	case "Query.controlImplementationHistories":
+		if e.complexity.Query.ControlImplementationHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlImplementationHistories_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlImplementationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlImplementationHistoryWhereInput)), true
+
+	case "Query.controlImplementationSearch":
+		if e.complexity.Query.ControlImplementationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlImplementationSearch_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlImplementationSearch(childComplexity, args["query"].(string)), true
+
+	case "Query.controlImplementations":
+		if e.complexity.Query.ControlImplementations == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlImplementations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlImplementationWhereInput)), true
 
 	case "Query.controlObjective":
 		if e.complexity.Query.ControlObjective == nil {
@@ -17437,6 +18398,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InviteWhereInput)), true
+
+	case "Query.mappedControl":
+		if e.complexity.Query.MappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappedControl_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappedControl(childComplexity, args["id"].(string)), true
+
+	case "Query.mappedControlHistories":
+		if e.complexity.Query.MappedControlHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappedControlHistories_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappedControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.MappedControlHistoryWhereInput)), true
+
+	case "Query.mappedControlSearch":
+		if e.complexity.Query.MappedControlSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappedControlSearch_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappedControlSearch(childComplexity, args["query"].(string)), true
+
+	case "Query.mappedControls":
+		if e.complexity.Query.MappedControls == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappedControls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.MappedControlWhereInput)), true
 
 	case "Query.narrative":
 		if e.complexity.Query.Narrative == nil {
@@ -18792,27 +19801,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SearchResultConnection.TotalCount(childComplexity), true
 
-	case "Standard.actionPlans":
-		if e.complexity.Standard.ActionPlans == nil {
-			break
-		}
-
-		return e.complexity.Standard.ActionPlans(childComplexity), true
-
-	case "Standard.background":
-		if e.complexity.Standard.Background == nil {
-			break
-		}
-
-		return e.complexity.Standard.Background(childComplexity), true
-
-	case "Standard.controlObjectives":
-		if e.complexity.Standard.ControlObjectives == nil {
-			break
-		}
-
-		return e.complexity.Standard.ControlObjectives(childComplexity), true
-
 	case "Standard.controls":
 		if e.complexity.Standard.Controls == nil {
 			break
@@ -18855,19 +19843,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Standard.Description(childComplexity), true
 
-	case "Standard.details":
-		if e.complexity.Standard.Details == nil {
+	case "Standard.domains":
+		if e.complexity.Standard.Domains == nil {
 			break
 		}
 
-		return e.complexity.Standard.Details(childComplexity), true
+		return e.complexity.Standard.Domains(childComplexity), true
 
-	case "Standard.family":
-		if e.complexity.Standard.Family == nil {
+	case "Standard.framework":
+		if e.complexity.Standard.Framework == nil {
 			break
 		}
 
-		return e.complexity.Standard.Family(childComplexity), true
+		return e.complexity.Standard.Framework(childComplexity), true
+
+	case "Standard.freeToUse":
+		if e.complexity.Standard.FreeToUse == nil {
+			break
+		}
+
+		return e.complexity.Standard.FreeToUse(childComplexity), true
+
+	case "Standard.governingBody":
+		if e.complexity.Standard.GoverningBody == nil {
+			break
+		}
+
+		return e.complexity.Standard.GoverningBody(childComplexity), true
 
 	case "Standard.id":
 		if e.complexity.Standard.ID == nil {
@@ -18876,6 +19878,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Standard.ID(childComplexity), true
 
+	case "Standard.isPublic":
+		if e.complexity.Standard.IsPublic == nil {
+			break
+		}
+
+		return e.complexity.Standard.IsPublic(childComplexity), true
+
+	case "Standard.link":
+		if e.complexity.Standard.Link == nil {
+			break
+		}
+
+		return e.complexity.Standard.Link(childComplexity), true
+
 	case "Standard.name":
 		if e.complexity.Standard.Name == nil {
 			break
@@ -18883,33 +19899,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Standard.Name(childComplexity), true
 
-	case "Standard.procedures":
-		if e.complexity.Standard.Procedures == nil {
+	case "Standard.owner":
+		if e.complexity.Standard.Owner == nil {
 			break
 		}
 
-		return e.complexity.Standard.Procedures(childComplexity), true
+		return e.complexity.Standard.Owner(childComplexity), true
 
-	case "Standard.programs":
-		if e.complexity.Standard.Programs == nil {
+	case "Standard.ownerID":
+		if e.complexity.Standard.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.Standard.Programs(childComplexity), true
+		return e.complexity.Standard.OwnerID(childComplexity), true
 
-	case "Standard.purposeAndScope":
-		if e.complexity.Standard.PurposeAndScope == nil {
+	case "Standard.revision":
+		if e.complexity.Standard.Revision == nil {
 			break
 		}
 
-		return e.complexity.Standard.PurposeAndScope(childComplexity), true
+		return e.complexity.Standard.Revision(childComplexity), true
 
-	case "Standard.satisfies":
-		if e.complexity.Standard.Satisfies == nil {
+	case "Standard.shortName":
+		if e.complexity.Standard.ShortName == nil {
 			break
 		}
 
-		return e.complexity.Standard.Satisfies(childComplexity), true
+		return e.complexity.Standard.ShortName(childComplexity), true
 
 	case "Standard.standardType":
 		if e.complexity.Standard.StandardType == nil {
@@ -18924,6 +19940,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Standard.Status(childComplexity), true
+
+	case "Standard.systemOwned":
+		if e.complexity.Standard.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Standard.SystemOwned(childComplexity), true
 
 	case "Standard.tags":
 		if e.complexity.Standard.Tags == nil {
@@ -19009,13 +20032,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.StandardEdge.Node(childComplexity), true
 
-	case "StandardHistory.background":
-		if e.complexity.StandardHistory.Background == nil {
-			break
-		}
-
-		return e.complexity.StandardHistory.Background(childComplexity), true
-
 	case "StandardHistory.createdAt":
 		if e.complexity.StandardHistory.CreatedAt == nil {
 			break
@@ -19051,19 +20067,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.StandardHistory.Description(childComplexity), true
 
-	case "StandardHistory.details":
-		if e.complexity.StandardHistory.Details == nil {
+	case "StandardHistory.domains":
+		if e.complexity.StandardHistory.Domains == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Details(childComplexity), true
+		return e.complexity.StandardHistory.Domains(childComplexity), true
 
-	case "StandardHistory.family":
-		if e.complexity.StandardHistory.Family == nil {
+	case "StandardHistory.framework":
+		if e.complexity.StandardHistory.Framework == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Family(childComplexity), true
+		return e.complexity.StandardHistory.Framework(childComplexity), true
+
+	case "StandardHistory.freeToUse":
+		if e.complexity.StandardHistory.FreeToUse == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.FreeToUse(childComplexity), true
+
+	case "StandardHistory.governingBody":
+		if e.complexity.StandardHistory.GoverningBody == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.GoverningBody(childComplexity), true
 
 	case "StandardHistory.historyTime":
 		if e.complexity.StandardHistory.HistoryTime == nil {
@@ -19079,6 +20109,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.StandardHistory.ID(childComplexity), true
 
+	case "StandardHistory.isPublic":
+		if e.complexity.StandardHistory.IsPublic == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.IsPublic(childComplexity), true
+
+	case "StandardHistory.link":
+		if e.complexity.StandardHistory.Link == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.Link(childComplexity), true
+
 	case "StandardHistory.name":
 		if e.complexity.StandardHistory.Name == nil {
 			break
@@ -19093,12 +20137,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.StandardHistory.Operation(childComplexity), true
 
-	case "StandardHistory.purposeAndScope":
-		if e.complexity.StandardHistory.PurposeAndScope == nil {
+	case "StandardHistory.ownerID":
+		if e.complexity.StandardHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.PurposeAndScope(childComplexity), true
+		return e.complexity.StandardHistory.OwnerID(childComplexity), true
 
 	case "StandardHistory.ref":
 		if e.complexity.StandardHistory.Ref == nil {
@@ -19107,12 +20151,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.StandardHistory.Ref(childComplexity), true
 
-	case "StandardHistory.satisfies":
-		if e.complexity.StandardHistory.Satisfies == nil {
+	case "StandardHistory.revision":
+		if e.complexity.StandardHistory.Revision == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Satisfies(childComplexity), true
+		return e.complexity.StandardHistory.Revision(childComplexity), true
+
+	case "StandardHistory.shortName":
+		if e.complexity.StandardHistory.ShortName == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.ShortName(childComplexity), true
 
 	case "StandardHistory.standardType":
 		if e.complexity.StandardHistory.StandardType == nil {
@@ -19127,6 +20178,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.StandardHistory.Status(childComplexity), true
+
+	case "StandardHistory.systemOwned":
+		if e.complexity.StandardHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.SystemOwned(childComplexity), true
 
 	case "StandardHistory.tags":
 		if e.complexity.StandardHistory.Tags == nil {
@@ -19205,19 +20263,82 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.StandardUpdatePayload.Standard(childComplexity), true
 
-	case "Subcontrol.class":
-		if e.complexity.Subcontrol.Class == nil {
+	case "Subcontrol.actionPlans":
+		if e.complexity.Subcontrol.ActionPlans == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.Class(childComplexity), true
+		return e.complexity.Subcontrol.ActionPlans(childComplexity), true
 
-	case "Subcontrol.controls":
-		if e.complexity.Subcontrol.Controls == nil {
+	case "Subcontrol.assessmentMethods":
+		if e.complexity.Subcontrol.AssessmentMethods == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.Controls(childComplexity), true
+		return e.complexity.Subcontrol.AssessmentMethods(childComplexity), true
+
+	case "Subcontrol.assessmentObjectives":
+		if e.complexity.Subcontrol.AssessmentObjectives == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.AssessmentObjectives(childComplexity), true
+
+	case "Subcontrol.category":
+		if e.complexity.Subcontrol.Category == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Category(childComplexity), true
+
+	case "Subcontrol.categoryID":
+		if e.complexity.Subcontrol.CategoryID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.CategoryID(childComplexity), true
+
+	case "Subcontrol.control":
+		if e.complexity.Subcontrol.Control == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Control(childComplexity), true
+
+	case "Subcontrol.controlID":
+		if e.complexity.Subcontrol.ControlID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ControlID(childComplexity), true
+
+	case "Subcontrol.controlObjectives":
+		if e.complexity.Subcontrol.ControlObjectives == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ControlObjectives(childComplexity), true
+
+	case "Subcontrol.controlOwner":
+		if e.complexity.Subcontrol.ControlOwner == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ControlOwner(childComplexity), true
+
+	case "Subcontrol.controlQuestions":
+		if e.complexity.Subcontrol.ControlQuestions == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ControlQuestions(childComplexity), true
+
+	case "Subcontrol.controlType":
+		if e.complexity.Subcontrol.ControlType == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ControlType(childComplexity), true
 
 	case "Subcontrol.createdAt":
 		if e.complexity.Subcontrol.CreatedAt == nil {
@@ -19232,6 +20353,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Subcontrol.CreatedBy(childComplexity), true
+
+	case "Subcontrol.delegate":
+		if e.complexity.Subcontrol.Delegate == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Delegate(childComplexity), true
 
 	case "Subcontrol.deletedAt":
 		if e.complexity.Subcontrol.DeletedAt == nil {
@@ -19254,13 +20382,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.Description(childComplexity), true
 
-	case "Subcontrol.details":
-		if e.complexity.Subcontrol.Details == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.Details(childComplexity), true
-
 	case "Subcontrol.displayID":
 		if e.complexity.Subcontrol.DisplayID == nil {
 			break
@@ -19282,13 +20403,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.ExampleEvidence(childComplexity), true
 
-	case "Subcontrol.family":
-		if e.complexity.Subcontrol.Family == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.Family(childComplexity), true
-
 	case "Subcontrol.id":
 		if e.complexity.Subcontrol.ID == nil {
 			break
@@ -19296,54 +20410,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.ID(childComplexity), true
 
-	case "Subcontrol.implementationDate":
-		if e.complexity.Subcontrol.ImplementationDate == nil {
+	case "Subcontrol.implementationGuidance":
+		if e.complexity.Subcontrol.ImplementationGuidance == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.ImplementationDate(childComplexity), true
+		return e.complexity.Subcontrol.ImplementationGuidance(childComplexity), true
 
-	case "Subcontrol.implementationEvidence":
-		if e.complexity.Subcontrol.ImplementationEvidence == nil {
+	case "Subcontrol.internalPolicies":
+		if e.complexity.Subcontrol.InternalPolicies == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.ImplementationEvidence(childComplexity), true
+		return e.complexity.Subcontrol.InternalPolicies(childComplexity), true
 
-	case "Subcontrol.implementationStatus":
-		if e.complexity.Subcontrol.ImplementationStatus == nil {
+	case "Subcontrol.mappedCategories":
+		if e.complexity.Subcontrol.MappedCategories == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.ImplementationStatus(childComplexity), true
+		return e.complexity.Subcontrol.MappedCategories(childComplexity), true
 
-	case "Subcontrol.implementationVerification":
-		if e.complexity.Subcontrol.ImplementationVerification == nil {
+	case "Subcontrol.mappedControls":
+		if e.complexity.Subcontrol.MappedControls == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.ImplementationVerification(childComplexity), true
+		return e.complexity.Subcontrol.MappedControls(childComplexity), true
 
-	case "Subcontrol.implementationVerificationDate":
-		if e.complexity.Subcontrol.ImplementationVerificationDate == nil {
+	case "Subcontrol.narratives":
+		if e.complexity.Subcontrol.Narratives == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.ImplementationVerificationDate(childComplexity), true
-
-	case "Subcontrol.mappedFrameworks":
-		if e.complexity.Subcontrol.MappedFrameworks == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.MappedFrameworks(childComplexity), true
-
-	case "Subcontrol.name":
-		if e.complexity.Subcontrol.Name == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.Name(childComplexity), true
+		return e.complexity.Subcontrol.Narratives(childComplexity), true
 
 	case "Subcontrol.owner":
 		if e.complexity.Subcontrol.Owner == nil {
@@ -19359,12 +20459,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.OwnerID(childComplexity), true
 
-	case "Subcontrol.programs":
-		if e.complexity.Subcontrol.Programs == nil {
+	case "Subcontrol.procedures":
+		if e.complexity.Subcontrol.Procedures == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.Programs(childComplexity), true
+		return e.complexity.Subcontrol.Procedures(childComplexity), true
+
+	case "Subcontrol.refCode":
+		if e.complexity.Subcontrol.RefCode == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.RefCode(childComplexity), true
+
+	case "Subcontrol.references":
+		if e.complexity.Subcontrol.References == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.References(childComplexity), true
+
+	case "Subcontrol.risks":
+		if e.complexity.Subcontrol.Risks == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Risks(childComplexity), true
 
 	case "Subcontrol.source":
 		if e.complexity.Subcontrol.Source == nil {
@@ -19380,19 +20501,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.Status(childComplexity), true
 
-	case "Subcontrol.subcontrolNumber":
-		if e.complexity.Subcontrol.SubcontrolNumber == nil {
+	case "Subcontrol.subcategory":
+		if e.complexity.Subcontrol.Subcategory == nil {
 			break
 		}
 
-		return e.complexity.Subcontrol.SubcontrolNumber(childComplexity), true
-
-	case "Subcontrol.subcontrolType":
-		if e.complexity.Subcontrol.SubcontrolType == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.SubcontrolType(childComplexity), true
+		return e.complexity.Subcontrol.Subcategory(childComplexity), true
 
 	case "Subcontrol.tags":
 		if e.complexity.Subcontrol.Tags == nil {
@@ -19421,13 +20535,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Subcontrol.UpdatedBy(childComplexity), true
-
-	case "Subcontrol.version":
-		if e.complexity.Subcontrol.Version == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.Version(childComplexity), true
 
 	case "SubcontrolBulkCreatePayload.subcontrols":
 		if e.complexity.SubcontrolBulkCreatePayload.Subcontrols == nil {
@@ -19485,12 +20592,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolEdge.Node(childComplexity), true
 
-	case "SubcontrolHistory.class":
-		if e.complexity.SubcontrolHistory.Class == nil {
+	case "SubcontrolHistory.assessmentMethods":
+		if e.complexity.SubcontrolHistory.AssessmentMethods == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Class(childComplexity), true
+		return e.complexity.SubcontrolHistory.AssessmentMethods(childComplexity), true
+
+	case "SubcontrolHistory.assessmentObjectives":
+		if e.complexity.SubcontrolHistory.AssessmentObjectives == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.AssessmentObjectives(childComplexity), true
+
+	case "SubcontrolHistory.category":
+		if e.complexity.SubcontrolHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.Category(childComplexity), true
+
+	case "SubcontrolHistory.categoryID":
+		if e.complexity.SubcontrolHistory.CategoryID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.CategoryID(childComplexity), true
+
+	case "SubcontrolHistory.controlID":
+		if e.complexity.SubcontrolHistory.ControlID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ControlID(childComplexity), true
+
+	case "SubcontrolHistory.controlQuestions":
+		if e.complexity.SubcontrolHistory.ControlQuestions == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ControlQuestions(childComplexity), true
+
+	case "SubcontrolHistory.controlType":
+		if e.complexity.SubcontrolHistory.ControlType == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ControlType(childComplexity), true
 
 	case "SubcontrolHistory.createdAt":
 		if e.complexity.SubcontrolHistory.CreatedAt == nil {
@@ -19527,13 +20676,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolHistory.Description(childComplexity), true
 
-	case "SubcontrolHistory.details":
-		if e.complexity.SubcontrolHistory.Details == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.Details(childComplexity), true
-
 	case "SubcontrolHistory.displayID":
 		if e.complexity.SubcontrolHistory.DisplayID == nil {
 			break
@@ -19547,13 +20689,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SubcontrolHistory.ExampleEvidence(childComplexity), true
-
-	case "SubcontrolHistory.family":
-		if e.complexity.SubcontrolHistory.Family == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.Family(childComplexity), true
 
 	case "SubcontrolHistory.historyTime":
 		if e.complexity.SubcontrolHistory.HistoryTime == nil {
@@ -19569,54 +20704,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolHistory.ID(childComplexity), true
 
-	case "SubcontrolHistory.implementationDate":
-		if e.complexity.SubcontrolHistory.ImplementationDate == nil {
+	case "SubcontrolHistory.implementationGuidance":
+		if e.complexity.SubcontrolHistory.ImplementationGuidance == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ImplementationDate(childComplexity), true
+		return e.complexity.SubcontrolHistory.ImplementationGuidance(childComplexity), true
 
-	case "SubcontrolHistory.implementationEvidence":
-		if e.complexity.SubcontrolHistory.ImplementationEvidence == nil {
+	case "SubcontrolHistory.mappedCategories":
+		if e.complexity.SubcontrolHistory.MappedCategories == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ImplementationEvidence(childComplexity), true
-
-	case "SubcontrolHistory.implementationStatus":
-		if e.complexity.SubcontrolHistory.ImplementationStatus == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.ImplementationStatus(childComplexity), true
-
-	case "SubcontrolHistory.implementationVerification":
-		if e.complexity.SubcontrolHistory.ImplementationVerification == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.ImplementationVerification(childComplexity), true
-
-	case "SubcontrolHistory.implementationVerificationDate":
-		if e.complexity.SubcontrolHistory.ImplementationVerificationDate == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.ImplementationVerificationDate(childComplexity), true
-
-	case "SubcontrolHistory.mappedFrameworks":
-		if e.complexity.SubcontrolHistory.MappedFrameworks == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.MappedFrameworks(childComplexity), true
-
-	case "SubcontrolHistory.name":
-		if e.complexity.SubcontrolHistory.Name == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.Name(childComplexity), true
+		return e.complexity.SubcontrolHistory.MappedCategories(childComplexity), true
 
 	case "SubcontrolHistory.operation":
 		if e.complexity.SubcontrolHistory.Operation == nil {
@@ -19639,6 +20739,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolHistory.Ref(childComplexity), true
 
+	case "SubcontrolHistory.refCode":
+		if e.complexity.SubcontrolHistory.RefCode == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.RefCode(childComplexity), true
+
+	case "SubcontrolHistory.references":
+		if e.complexity.SubcontrolHistory.References == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.References(childComplexity), true
+
 	case "SubcontrolHistory.source":
 		if e.complexity.SubcontrolHistory.Source == nil {
 			break
@@ -19653,19 +20767,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolHistory.Status(childComplexity), true
 
-	case "SubcontrolHistory.subcontrolNumber":
-		if e.complexity.SubcontrolHistory.SubcontrolNumber == nil {
+	case "SubcontrolHistory.subcategory":
+		if e.complexity.SubcontrolHistory.Subcategory == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.SubcontrolNumber(childComplexity), true
-
-	case "SubcontrolHistory.subcontrolType":
-		if e.complexity.SubcontrolHistory.SubcontrolType == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.SubcontrolType(childComplexity), true
+		return e.complexity.SubcontrolHistory.Subcategory(childComplexity), true
 
 	case "SubcontrolHistory.tags":
 		if e.complexity.SubcontrolHistory.Tags == nil {
@@ -19687,13 +20794,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SubcontrolHistory.UpdatedBy(childComplexity), true
-
-	case "SubcontrolHistory.version":
-		if e.complexity.SubcontrolHistory.Version == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.Version(childComplexity), true
 
 	case "SubcontrolHistoryConnection.edges":
 		if e.complexity.SubcontrolHistoryConnection.Edges == nil {
@@ -21796,12 +22896,15 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputContactWhereInput,
 		ec.unmarshalInputControlHistoryWhereInput,
+		ec.unmarshalInputControlImplementationHistoryWhereInput,
+		ec.unmarshalInputControlImplementationWhereInput,
 		ec.unmarshalInputControlObjectiveHistoryWhereInput,
 		ec.unmarshalInputControlObjectiveWhereInput,
 		ec.unmarshalInputControlWhereInput,
 		ec.unmarshalInputCreateAPITokenInput,
 		ec.unmarshalInputCreateActionPlanInput,
 		ec.unmarshalInputCreateContactInput,
+		ec.unmarshalInputCreateControlImplementationInput,
 		ec.unmarshalInputCreateControlInput,
 		ec.unmarshalInputCreateControlObjectiveInput,
 		ec.unmarshalInputCreateControlWithSubcontrolsInput,
@@ -21819,6 +22922,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateIntegrationInput,
 		ec.unmarshalInputCreateInternalPolicyInput,
 		ec.unmarshalInputCreateInviteInput,
+		ec.unmarshalInputCreateMappedControlInput,
 		ec.unmarshalInputCreateMemberWithProgramInput,
 		ec.unmarshalInputCreateNarrativeInput,
 		ec.unmarshalInputCreateNoteInput,
@@ -21876,6 +22980,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputInternalPolicyHistoryWhereInput,
 		ec.unmarshalInputInternalPolicyWhereInput,
 		ec.unmarshalInputInviteWhereInput,
+		ec.unmarshalInputMappedControlHistoryWhereInput,
+		ec.unmarshalInputMappedControlWhereInput,
 		ec.unmarshalInputNarrativeHistoryWhereInput,
 		ec.unmarshalInputNarrativeWhereInput,
 		ec.unmarshalInputNoteHistoryWhereInput,
@@ -21916,6 +23022,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
 		ec.unmarshalInputUpdateContactInput,
+		ec.unmarshalInputUpdateControlImplementationInput,
 		ec.unmarshalInputUpdateControlInput,
 		ec.unmarshalInputUpdateControlObjectiveInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
@@ -21931,6 +23038,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateIntegrationInput,
 		ec.unmarshalInputUpdateInternalPolicyInput,
 		ec.unmarshalInputUpdateInviteInput,
+		ec.unmarshalInputUpdateMappedControlInput,
 		ec.unmarshalInputUpdateNarrativeInput,
 		ec.unmarshalInputUpdateNoteInput,
 		ec.unmarshalInputUpdateOrgMembershipInput,
@@ -22193,6 +23301,15 @@ type ActionPlanBulkCreatePayload {
         query: String!
     ): ControlSearchResult
     """
+    Search across ControlImplementation objects
+    """
+    adminControlImplementationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlImplementationSearchResult
+    """
     Search across ControlObjective objects
     """
     adminControlObjectiveSearch(
@@ -22282,6 +23399,15 @@ type ActionPlanBulkCreatePayload {
         """
         query: String!
     ): InternalPolicySearchResult
+    """
+    Search across MappedControl objects
+    """
+    adminMappedControlSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): MappedControlSearchResult
     """
     Search across Narrative objects
     """
@@ -22804,6 +23930,109 @@ type ControlBulkCreatePayload {
     Created controls
     """
     controls: [Control!]
+}`, BuiltIn: false},
+	{Name: "../schema/controlimplementation.graphql", Input: `extend type Query {
+    """
+    Look up controlImplementation by ID
+    """
+     controlImplementation(
+        """
+        ID of the controlImplementation
+        """
+        id: ID!
+    ):  ControlImplementation!
+}
+
+extend type Mutation{
+    """
+    Create a new controlImplementation
+    """
+    createControlImplementation(
+        """
+        values of the controlImplementation
+        """
+        input: CreateControlImplementationInput!
+    ): ControlImplementationCreatePayload!
+    """
+    Create multiple new controlImplementations
+    """
+    createBulkControlImplementation(
+        """
+        values of the controlImplementation
+        """
+        input: [CreateControlImplementationInput!]
+    ): ControlImplementationBulkCreatePayload!
+    """
+    Create multiple new controlImplementations via file upload
+    """
+    createBulkCSVControlImplementation(
+        """
+        csv file containing values of the controlImplementation
+        """
+        input: Upload!
+    ): ControlImplementationBulkCreatePayload!
+    """
+    Update an existing controlImplementation
+    """
+    updateControlImplementation(
+        """
+        ID of the controlImplementation
+        """
+        id: ID!
+        """
+        New values for the controlImplementation
+        """
+        input: UpdateControlImplementationInput!
+    ): ControlImplementationUpdatePayload!
+    """
+    Delete an existing controlImplementation
+    """
+    deleteControlImplementation(
+        """
+        ID of the controlImplementation
+        """
+        id: ID!
+    ): ControlImplementationDeletePayload!
+}
+
+"""
+Return response for createControlImplementation mutation
+"""
+type ControlImplementationCreatePayload {
+    """
+    Created controlImplementation
+    """
+    controlImplementation: ControlImplementation!
+}
+
+"""
+Return response for updateControlImplementation mutation
+"""
+type ControlImplementationUpdatePayload {
+    """
+    Updated controlImplementation
+    """
+    controlImplementation: ControlImplementation!
+}
+
+"""
+Return response for deleteControlImplementation mutation
+"""
+type ControlImplementationDeletePayload {
+    """
+    Deleted controlImplementation ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkControlImplementation mutation
+"""
+type ControlImplementationBulkCreatePayload {
+    """
+    Created controlImplementations
+    """
+    controlImplementations: [ControlImplementation!]
 }`, BuiltIn: false},
 	{Name: "../schema/controlobjective.graphql", Input: `extend type Query {
     """
@@ -23370,7 +24599,6 @@ type ActionPlan implements Node {
   json data including details of the action plan
   """
   details: Map
-  standard: [Standard!]
   risk: [Risk!]
   control: [Control!]
   user: [User!]
@@ -23955,11 +25183,6 @@ input ActionPlanWhereInput {
   sourceNotNil: Boolean
   sourceEqualFold: String
   sourceContainsFold: String
-  """
-  standard edge predicates
-  """
-  hasStandard: Boolean
-  hasStandardWith: [StandardWhereInput!]
   """
   risk edge predicates
   """
@@ -24729,11 +25952,7 @@ type Control implements Node {
   """
   ownerID: ID
   """
-  the name of the control
-  """
-  name: String!
-  """
-  description of the control
+  description of what the control is supposed to accomplish
   """
   description: String
   """
@@ -24741,45 +25960,61 @@ type Control implements Node {
   """
   status: String
   """
-  type of the control
-  """
-  controlType: String
-  """
-  version of the control
-  """
-  version: String
-  """
-  control number or identifier
-  """
-  controlNumber: String
-  """
-  family associated with the control
-  """
-  family: String
-  """
-  class associated with the control
-  """
-  class: String
-  """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: String
+  source: ControlControlSource
   """
-  which control objectives are satisfied by the control
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  satisfies: String
+  controlType: ControlControlType
   """
-  mapped frameworks
+  category of the control
   """
-  mappedFrameworks: String
+  category: String
   """
-  json data including details of the control
+  category id of the control
   """
-  details: Map
+  categoryID: String
   """
-  example evidence to provide for the control
+  subcategory of the control
   """
-  exampleEvidence: String
+  subcategory: String
+  """
+  mapped categories of the control to other standards
+  """
+  mappedCategories: [String!]
+  """
+  objectives of the audit assessment for the control
+  """
+  assessmentObjectives: [AssessmentObjective!]
+  """
+  methods used to verify the control implementation during an audit
+  """
+  assessmentMethods: [AssessmentMethod!]
+  """
+  questions to ask to verify the control
+  """
+  controlQuestions: [String!]
+  """
+  implementation guidance for the control
+  """
+  implementationGuidance: [ImplementationGuidance!]
+  """
+  examples of evidence for the control
+  """
+  exampleEvidence: [ExampleEvidence!]
+  """
+  references for the control
+  """
+  references: [Reference!]
+  """
+  the unique reference code for the control
+  """
+  refCode: String!
+  """
+  the id of the standard that the control belongs to, if applicable
+  """
+  standardID: ID
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -24793,16 +26028,33 @@ type Control implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  procedures: [Procedure!]
-  subcontrols: [Subcontrol!]
+  standard: Standard
+  programs: [Program!]
+  evidence: [Evidence!]
+  """
+  the implementation of the control
+  """
+  implementation: ControlImplementation
+  """
+  controls that are mapped to this control
+  """
+  mappedControls: MappedControl
   controlObjectives: [ControlObjective!]
-  standard: [Standard!]
+  subcontrols: [Subcontrol!]
+  tasks: [Task!]
   narratives: [Narrative!]
   risks: [Risk!]
   actionPlans: [ActionPlan!]
-  tasks: [Task!]
-  programs: [Program!]
-  evidence: [Evidence!]
+  procedures: [Procedure!]
+  internalPolicies: [InternalPolicy!]
+  """
+  the user who is responsible for the control
+  """
+  controlOwner: User
+  """
+  temporary delegate for the control, used for temporary control ownership
+  """
+  delegate: User
 }
 """
 A connection to a list of items.
@@ -24820,6 +26072,24 @@ type ControlConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+ControlControlSource is enum for the field source
+"""
+enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+  FRAMEWORK
+  TEMPLATE
+  USER_DEFINED
+  IMPORTED
+}
+"""
+ControlControlType is enum for the field control_type
+"""
+enum ControlControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+  PREVENTATIVE
+  DETECTIVE
+  CORRECTIVE
+  DETERRENT
 }
 """
 An edge in a connection.
@@ -24858,11 +26128,7 @@ type ControlHistory implements Node {
   """
   ownerID: String
   """
-  the name of the control
-  """
-  name: String!
-  """
-  description of the control
+  description of what the control is supposed to accomplish
   """
   description: String
   """
@@ -24870,45 +26136,61 @@ type ControlHistory implements Node {
   """
   status: String
   """
-  type of the control
-  """
-  controlType: String
-  """
-  version of the control
-  """
-  version: String
-  """
-  control number or identifier
-  """
-  controlNumber: String
-  """
-  family associated with the control
-  """
-  family: String
-  """
-  class associated with the control
-  """
-  class: String
-  """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: String
+  source: ControlHistoryControlSource
   """
-  which control objectives are satisfied by the control
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  satisfies: String
+  controlType: ControlHistoryControlType
   """
-  mapped frameworks
+  category of the control
   """
-  mappedFrameworks: String
+  category: String
   """
-  json data including details of the control
+  category id of the control
   """
-  details: Map
+  categoryID: String
   """
-  example evidence to provide for the control
+  subcategory of the control
   """
-  exampleEvidence: String
+  subcategory: String
+  """
+  mapped categories of the control to other standards
+  """
+  mappedCategories: [String!]
+  """
+  objectives of the audit assessment for the control
+  """
+  assessmentObjectives: [AssessmentObjective!]
+  """
+  methods used to verify the control implementation during an audit
+  """
+  assessmentMethods: [AssessmentMethod!]
+  """
+  questions to ask to verify the control
+  """
+  controlQuestions: [String!]
+  """
+  implementation guidance for the control
+  """
+  implementationGuidance: [ImplementationGuidance!]
+  """
+  examples of evidence for the control
+  """
+  exampleEvidence: [ExampleEvidence!]
+  """
+  references for the control
+  """
+  references: [Reference!]
+  """
+  the unique reference code for the control
+  """
+  refCode: String!
+  """
+  the id of the standard that the control belongs to, if applicable
+  """
+  standardID: String
 }
 """
 A connection to a list of items.
@@ -24926,6 +26208,24 @@ type ControlHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+ControlHistoryControlSource is enum for the field source
+"""
+enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+  FRAMEWORK
+  TEMPLATE
+  USER_DEFINED
+  IMPORTED
+}
+"""
+ControlHistoryControlType is enum for the field control_type
+"""
+enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+  PREVENTATIVE
+  DETECTIVE
+  CORRECTIVE
+  DETERRENT
 }
 """
 An edge in a connection.
@@ -25133,22 +26433,6 @@ input ControlHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -25185,167 +26469,698 @@ input ControlHistoryWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
-  control_type field predicates
-  """
-  controlType: String
-  controlTypeNEQ: String
-  controlTypeIn: [String!]
-  controlTypeNotIn: [String!]
-  controlTypeGT: String
-  controlTypeGTE: String
-  controlTypeLT: String
-  controlTypeLTE: String
-  controlTypeContains: String
-  controlTypeHasPrefix: String
-  controlTypeHasSuffix: String
-  controlTypeIsNil: Boolean
-  controlTypeNotNil: Boolean
-  controlTypeEqualFold: String
-  controlTypeContainsFold: String
-  """
-  version field predicates
-  """
-  version: String
-  versionNEQ: String
-  versionIn: [String!]
-  versionNotIn: [String!]
-  versionGT: String
-  versionGTE: String
-  versionLT: String
-  versionLTE: String
-  versionContains: String
-  versionHasPrefix: String
-  versionHasSuffix: String
-  versionIsNil: Boolean
-  versionNotNil: Boolean
-  versionEqualFold: String
-  versionContainsFold: String
-  """
-  control_number field predicates
-  """
-  controlNumber: String
-  controlNumberNEQ: String
-  controlNumberIn: [String!]
-  controlNumberNotIn: [String!]
-  controlNumberGT: String
-  controlNumberGTE: String
-  controlNumberLT: String
-  controlNumberLTE: String
-  controlNumberContains: String
-  controlNumberHasPrefix: String
-  controlNumberHasSuffix: String
-  controlNumberIsNil: Boolean
-  controlNumberNotNil: Boolean
-  controlNumberEqualFold: String
-  controlNumberContainsFold: String
-  """
-  family field predicates
-  """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
-  """
-  class field predicates
-  """
-  class: String
-  classNEQ: String
-  classIn: [String!]
-  classNotIn: [String!]
-  classGT: String
-  classGTE: String
-  classLT: String
-  classLTE: String
-  classContains: String
-  classHasPrefix: String
-  classHasSuffix: String
-  classIsNil: Boolean
-  classNotNil: Boolean
-  classEqualFold: String
-  classContainsFold: String
-  """
   source field predicates
   """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
+  source: ControlHistoryControlSource
+  sourceNEQ: ControlHistoryControlSource
+  sourceIn: [ControlHistoryControlSource!]
+  sourceNotIn: [ControlHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
   """
-  satisfies field predicates
+  control_type field predicates
   """
-  satisfies: String
-  satisfiesNEQ: String
-  satisfiesIn: [String!]
-  satisfiesNotIn: [String!]
-  satisfiesGT: String
-  satisfiesGTE: String
-  satisfiesLT: String
-  satisfiesLTE: String
-  satisfiesContains: String
-  satisfiesHasPrefix: String
-  satisfiesHasSuffix: String
-  satisfiesIsNil: Boolean
-  satisfiesNotNil: Boolean
-  satisfiesEqualFold: String
-  satisfiesContainsFold: String
+  controlType: ControlHistoryControlType
+  controlTypeNEQ: ControlHistoryControlType
+  controlTypeIn: [ControlHistoryControlType!]
+  controlTypeNotIn: [ControlHistoryControlType!]
+  controlTypeIsNil: Boolean
+  controlTypeNotNil: Boolean
   """
-  mapped_frameworks field predicates
+  category field predicates
   """
-  mappedFrameworks: String
-  mappedFrameworksNEQ: String
-  mappedFrameworksIn: [String!]
-  mappedFrameworksNotIn: [String!]
-  mappedFrameworksGT: String
-  mappedFrameworksGTE: String
-  mappedFrameworksLT: String
-  mappedFrameworksLTE: String
-  mappedFrameworksContains: String
-  mappedFrameworksHasPrefix: String
-  mappedFrameworksHasSuffix: String
-  mappedFrameworksIsNil: Boolean
-  mappedFrameworksNotNil: Boolean
-  mappedFrameworksEqualFold: String
-  mappedFrameworksContainsFold: String
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
-  example_evidence field predicates
+  category_id field predicates
   """
-  exampleEvidence: String
-  exampleEvidenceNEQ: String
-  exampleEvidenceIn: [String!]
-  exampleEvidenceNotIn: [String!]
-  exampleEvidenceGT: String
-  exampleEvidenceGTE: String
-  exampleEvidenceLT: String
-  exampleEvidenceLTE: String
-  exampleEvidenceContains: String
-  exampleEvidenceHasPrefix: String
-  exampleEvidenceHasSuffix: String
-  exampleEvidenceIsNil: Boolean
-  exampleEvidenceNotNil: Boolean
-  exampleEvidenceEqualFold: String
-  exampleEvidenceContainsFold: String
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
+  """
+  subcategory field predicates
+  """
+  subcategory: String
+  subcategoryNEQ: String
+  subcategoryIn: [String!]
+  subcategoryNotIn: [String!]
+  subcategoryGT: String
+  subcategoryGTE: String
+  subcategoryLT: String
+  subcategoryLTE: String
+  subcategoryContains: String
+  subcategoryHasPrefix: String
+  subcategoryHasSuffix: String
+  subcategoryIsNil: Boolean
+  subcategoryNotNil: Boolean
+  subcategoryEqualFold: String
+  subcategoryContainsFold: String
+  """
+  ref_code field predicates
+  """
+  refCode: String
+  refCodeNEQ: String
+  refCodeIn: [String!]
+  refCodeNotIn: [String!]
+  refCodeGT: String
+  refCodeGTE: String
+  refCodeLT: String
+  refCodeLTE: String
+  refCodeContains: String
+  refCodeHasPrefix: String
+  refCodeHasSuffix: String
+  refCodeEqualFold: String
+  refCodeContainsFold: String
+  """
+  standard_id field predicates
+  """
+  standardID: String
+  standardIDNEQ: String
+  standardIDIn: [String!]
+  standardIDNotIn: [String!]
+  standardIDGT: String
+  standardIDGTE: String
+  standardIDLT: String
+  standardIDLTE: String
+  standardIDContains: String
+  standardIDHasPrefix: String
+  standardIDHasSuffix: String
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: String
+  standardIDContainsFold: String
+}
+type ControlImplementation implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the id of the control that this implementation is for
+  """
+  controlID: String!
+  """
+  status of the control implementation
+  """
+  status: String
+  """
+  date the control was implemented
+  """
+  implementationDate: Time
+  """
+  set to true if the control implementation has been verified
+  """
+  verified: Boolean
+  """
+  date the control implementation was verified
+  """
+  verificationDate: Time
+  """
+  details of the control implementation
+  """
+  details: String
+  control: [Control!]
+}
+"""
+A connection to a list of items.
+"""
+type ControlImplementationConnection {
+  """
+  A list of edges.
+  """
+  edges: [ControlImplementationEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ControlImplementationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ControlImplementation
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type ControlImplementationHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: ControlImplementationHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the id of the control that this implementation is for
+  """
+  controlID: String!
+  """
+  status of the control implementation
+  """
+  status: String
+  """
+  date the control was implemented
+  """
+  implementationDate: Time
+  """
+  set to true if the control implementation has been verified
+  """
+  verified: Boolean
+  """
+  date the control implementation was verified
+  """
+  verificationDate: Time
+  """
+  details of the control implementation
+  """
+  details: String
+}
+"""
+A connection to a list of items.
+"""
+type ControlImplementationHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ControlImplementationHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ControlImplementationHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ControlImplementationHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ControlImplementationHistoryOpType is enum for the field operation
+"""
+enum ControlImplementationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+ControlImplementationHistoryWhereInput is used for filtering ControlImplementationHistory objects.
+Input was generated by ent.
+"""
+input ControlImplementationHistoryWhereInput {
+  not: ControlImplementationHistoryWhereInput
+  and: [ControlImplementationHistoryWhereInput!]
+  or: [ControlImplementationHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: ControlImplementationHistoryOpType
+  operationNEQ: ControlImplementationHistoryOpType
+  operationIn: [ControlImplementationHistoryOpType!]
+  operationNotIn: [ControlImplementationHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  control_id field predicates
+  """
+  controlID: String
+  controlIDNEQ: String
+  controlIDIn: [String!]
+  controlIDNotIn: [String!]
+  controlIDGT: String
+  controlIDGTE: String
+  controlIDLT: String
+  controlIDLTE: String
+  controlIDContains: String
+  controlIDHasPrefix: String
+  controlIDHasSuffix: String
+  controlIDEqualFold: String
+  controlIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  implementation_date field predicates
+  """
+  implementationDate: Time
+  implementationDateNEQ: Time
+  implementationDateIn: [Time!]
+  implementationDateNotIn: [Time!]
+  implementationDateGT: Time
+  implementationDateGTE: Time
+  implementationDateLT: Time
+  implementationDateLTE: Time
+  implementationDateIsNil: Boolean
+  implementationDateNotNil: Boolean
+  """
+  verified field predicates
+  """
+  verified: Boolean
+  verifiedNEQ: Boolean
+  verifiedIsNil: Boolean
+  verifiedNotNil: Boolean
+  """
+  verification_date field predicates
+  """
+  verificationDate: Time
+  verificationDateNEQ: Time
+  verificationDateIn: [Time!]
+  verificationDateNotIn: [Time!]
+  verificationDateGT: Time
+  verificationDateGTE: Time
+  verificationDateLT: Time
+  verificationDateLTE: Time
+  verificationDateIsNil: Boolean
+  verificationDateNotNil: Boolean
+  """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+}
+"""
+ControlImplementationWhereInput is used for filtering ControlImplementation objects.
+Input was generated by ent.
+"""
+input ControlImplementationWhereInput {
+  not: ControlImplementationWhereInput
+  and: [ControlImplementationWhereInput!]
+  or: [ControlImplementationWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  control_id field predicates
+  """
+  controlID: String
+  controlIDNEQ: String
+  controlIDIn: [String!]
+  controlIDNotIn: [String!]
+  controlIDGT: String
+  controlIDGTE: String
+  controlIDLT: String
+  controlIDLTE: String
+  controlIDContains: String
+  controlIDHasPrefix: String
+  controlIDHasSuffix: String
+  controlIDEqualFold: String
+  controlIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  implementation_date field predicates
+  """
+  implementationDate: Time
+  implementationDateNEQ: Time
+  implementationDateIn: [Time!]
+  implementationDateNotIn: [Time!]
+  implementationDateGT: Time
+  implementationDateGTE: Time
+  implementationDateLT: Time
+  implementationDateLTE: Time
+  implementationDateIsNil: Boolean
+  implementationDateNotNil: Boolean
+  """
+  verified field predicates
+  """
+  verified: Boolean
+  verifiedNEQ: Boolean
+  verifiedIsNil: Boolean
+  verifiedNotNil: Boolean
+  """
+  verification_date field predicates
+  """
+  verificationDate: Time
+  verificationDateNEQ: Time
+  verificationDateIn: [Time!]
+  verificationDateNotIn: [Time!]
+  verificationDateGT: Time
+  verificationDateGTE: Time
+  verificationDateLT: Time
+  verificationDateLTE: Time
+  verificationDateIsNil: Boolean
+  verificationDateNotNil: Boolean
+  """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
 }
 type ControlObjective implements Node {
   id: ID!
@@ -25372,15 +27187,19 @@ type ControlObjective implements Node {
   """
   name: String!
   """
-  description of the control objective
+  the desired outcome or target of the control objective
   """
-  description: String
+  desiredOutcome: String
   """
   status of the control objective
   """
   status: String
   """
-  type of the control objective
+  source of the control, e.g. framework, template, custom, etc.
+  """
+  source: ControlObjectiveControlSource
+  """
+  type of the control objective e.g. compliance, financial, operational, etc.
   """
   controlObjectiveType: String
   """
@@ -25388,33 +27207,13 @@ type ControlObjective implements Node {
   """
   version: String
   """
-  number of the control objective
+  category of the control
   """
-  controlNumber: String
+  category: String
   """
-  family of the control objective
+  subcategory of the control
   """
-  family: String
-  """
-  class associated with the control objective
-  """
-  class: String
-  """
-  source of the control objective, e.g. framework, template, user-defined, etc.
-  """
-  source: String
-  """
-  mapped frameworks
-  """
-  mappedFrameworks: String
-  """
-  json data including details of the control objective
-  """
-  details: Map
-  """
-  example evidence to provide for the control
-  """
-  exampleEvidence: String
+  subcategory: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -25428,16 +27227,15 @@ type ControlObjective implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  internalPolicies: [InternalPolicy!]
-  controls: [Control!]
-  procedures: [Procedure!]
-  risks: [Risk!]
-  subcontrols: [Subcontrol!]
-  standard: [Standard!]
-  narratives: [Narrative!]
-  tasks: [Task!]
   programs: [Program!]
   evidence: [Evidence!]
+  controls: [Control!]
+  subcontrols: [Subcontrol!]
+  internalPolicies: [InternalPolicy!]
+  procedures: [Procedure!]
+  risks: [Risk!]
+  narratives: [Narrative!]
+  tasks: [Task!]
 }
 """
 A connection to a list of items.
@@ -25455,6 +27253,15 @@ type ControlObjectiveConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+ControlObjectiveControlSource is enum for the field source
+"""
+enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+  FRAMEWORK
+  TEMPLATE
+  USER_DEFINED
+  IMPORTED
 }
 """
 An edge in a connection.
@@ -25497,15 +27304,19 @@ type ControlObjectiveHistory implements Node {
   """
   name: String!
   """
-  description of the control objective
+  the desired outcome or target of the control objective
   """
-  description: String
+  desiredOutcome: String
   """
   status of the control objective
   """
   status: String
   """
-  type of the control objective
+  source of the control, e.g. framework, template, custom, etc.
+  """
+  source: ControlObjectiveHistoryControlSource
+  """
+  type of the control objective e.g. compliance, financial, operational, etc.
   """
   controlObjectiveType: String
   """
@@ -25513,33 +27324,13 @@ type ControlObjectiveHistory implements Node {
   """
   version: String
   """
-  number of the control objective
+  category of the control
   """
-  controlNumber: String
+  category: String
   """
-  family of the control objective
+  subcategory of the control
   """
-  family: String
-  """
-  class associated with the control objective
-  """
-  class: String
-  """
-  source of the control objective, e.g. framework, template, user-defined, etc.
-  """
-  source: String
-  """
-  mapped frameworks
-  """
-  mappedFrameworks: String
-  """
-  json data including details of the control objective
-  """
-  details: Map
-  """
-  example evidence to provide for the control
-  """
-  exampleEvidence: String
+  subcategory: String
 }
 """
 A connection to a list of items.
@@ -25557,6 +27348,15 @@ type ControlObjectiveHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+ControlObjectiveHistoryControlSource is enum for the field source
+"""
+enum ControlObjectiveHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+  FRAMEWORK
+  TEMPLATE
+  USER_DEFINED
+  IMPORTED
 }
 """
 An edge in a connection.
@@ -25780,23 +27580,23 @@ input ControlObjectiveHistoryWhereInput {
   nameEqualFold: String
   nameContainsFold: String
   """
-  description field predicates
+  desired_outcome field predicates
   """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
+  desiredOutcome: String
+  desiredOutcomeNEQ: String
+  desiredOutcomeIn: [String!]
+  desiredOutcomeNotIn: [String!]
+  desiredOutcomeGT: String
+  desiredOutcomeGTE: String
+  desiredOutcomeLT: String
+  desiredOutcomeLTE: String
+  desiredOutcomeContains: String
+  desiredOutcomeHasPrefix: String
+  desiredOutcomeHasSuffix: String
+  desiredOutcomeIsNil: Boolean
+  desiredOutcomeNotNil: Boolean
+  desiredOutcomeEqualFold: String
+  desiredOutcomeContainsFold: String
   """
   status field predicates
   """
@@ -25815,6 +27615,15 @@ input ControlObjectiveHistoryWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  source field predicates
+  """
+  source: ControlObjectiveHistoryControlSource
+  sourceNEQ: ControlObjectiveHistoryControlSource
+  sourceIn: [ControlObjectiveHistoryControlSource!]
+  sourceNotIn: [ControlObjectiveHistoryControlSource!]
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
   """
   control_objective_type field predicates
   """
@@ -25852,113 +27661,41 @@ input ControlObjectiveHistoryWhereInput {
   versionEqualFold: String
   versionContainsFold: String
   """
-  control_number field predicates
+  category field predicates
   """
-  controlNumber: String
-  controlNumberNEQ: String
-  controlNumberIn: [String!]
-  controlNumberNotIn: [String!]
-  controlNumberGT: String
-  controlNumberGTE: String
-  controlNumberLT: String
-  controlNumberLTE: String
-  controlNumberContains: String
-  controlNumberHasPrefix: String
-  controlNumberHasSuffix: String
-  controlNumberIsNil: Boolean
-  controlNumberNotNil: Boolean
-  controlNumberEqualFold: String
-  controlNumberContainsFold: String
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
-  family field predicates
+  subcategory field predicates
   """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
-  """
-  class field predicates
-  """
-  class: String
-  classNEQ: String
-  classIn: [String!]
-  classNotIn: [String!]
-  classGT: String
-  classGTE: String
-  classLT: String
-  classLTE: String
-  classContains: String
-  classHasPrefix: String
-  classHasSuffix: String
-  classIsNil: Boolean
-  classNotNil: Boolean
-  classEqualFold: String
-  classContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  mapped_frameworks field predicates
-  """
-  mappedFrameworks: String
-  mappedFrameworksNEQ: String
-  mappedFrameworksIn: [String!]
-  mappedFrameworksNotIn: [String!]
-  mappedFrameworksGT: String
-  mappedFrameworksGTE: String
-  mappedFrameworksLT: String
-  mappedFrameworksLTE: String
-  mappedFrameworksContains: String
-  mappedFrameworksHasPrefix: String
-  mappedFrameworksHasSuffix: String
-  mappedFrameworksIsNil: Boolean
-  mappedFrameworksNotNil: Boolean
-  mappedFrameworksEqualFold: String
-  mappedFrameworksContainsFold: String
-  """
-  example_evidence field predicates
-  """
-  exampleEvidence: String
-  exampleEvidenceNEQ: String
-  exampleEvidenceIn: [String!]
-  exampleEvidenceNotIn: [String!]
-  exampleEvidenceGT: String
-  exampleEvidenceGTE: String
-  exampleEvidenceLT: String
-  exampleEvidenceLTE: String
-  exampleEvidenceContains: String
-  exampleEvidenceHasPrefix: String
-  exampleEvidenceHasSuffix: String
-  exampleEvidenceIsNil: Boolean
-  exampleEvidenceNotNil: Boolean
-  exampleEvidenceEqualFold: String
-  exampleEvidenceContainsFold: String
+  subcategory: String
+  subcategoryNEQ: String
+  subcategoryIn: [String!]
+  subcategoryNotIn: [String!]
+  subcategoryGT: String
+  subcategoryGTE: String
+  subcategoryLT: String
+  subcategoryLTE: String
+  subcategoryContains: String
+  subcategoryHasPrefix: String
+  subcategoryHasSuffix: String
+  subcategoryIsNil: Boolean
+  subcategoryNotNil: Boolean
+  subcategoryEqualFold: String
+  subcategoryContainsFold: String
 }
 """
 ControlObjectiveWhereInput is used for filtering ControlObjective objects.
@@ -26125,23 +27862,23 @@ input ControlObjectiveWhereInput {
   nameEqualFold: String
   nameContainsFold: String
   """
-  description field predicates
+  desired_outcome field predicates
   """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
+  desiredOutcome: String
+  desiredOutcomeNEQ: String
+  desiredOutcomeIn: [String!]
+  desiredOutcomeNotIn: [String!]
+  desiredOutcomeGT: String
+  desiredOutcomeGTE: String
+  desiredOutcomeLT: String
+  desiredOutcomeLTE: String
+  desiredOutcomeContains: String
+  desiredOutcomeHasPrefix: String
+  desiredOutcomeHasSuffix: String
+  desiredOutcomeIsNil: Boolean
+  desiredOutcomeNotNil: Boolean
+  desiredOutcomeEqualFold: String
+  desiredOutcomeContainsFold: String
   """
   status field predicates
   """
@@ -26160,6 +27897,15 @@ input ControlObjectiveWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  source field predicates
+  """
+  source: ControlObjectiveControlSource
+  sourceNEQ: ControlObjectiveControlSource
+  sourceIn: [ControlObjectiveControlSource!]
+  sourceNotIn: [ControlObjectiveControlSource!]
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
   """
   control_objective_type field predicates
   """
@@ -26197,113 +27943,41 @@ input ControlObjectiveWhereInput {
   versionEqualFold: String
   versionContainsFold: String
   """
-  control_number field predicates
+  category field predicates
   """
-  controlNumber: String
-  controlNumberNEQ: String
-  controlNumberIn: [String!]
-  controlNumberNotIn: [String!]
-  controlNumberGT: String
-  controlNumberGTE: String
-  controlNumberLT: String
-  controlNumberLTE: String
-  controlNumberContains: String
-  controlNumberHasPrefix: String
-  controlNumberHasSuffix: String
-  controlNumberIsNil: Boolean
-  controlNumberNotNil: Boolean
-  controlNumberEqualFold: String
-  controlNumberContainsFold: String
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
-  family field predicates
+  subcategory field predicates
   """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
-  """
-  class field predicates
-  """
-  class: String
-  classNEQ: String
-  classIn: [String!]
-  classNotIn: [String!]
-  classGT: String
-  classGTE: String
-  classLT: String
-  classLTE: String
-  classContains: String
-  classHasPrefix: String
-  classHasSuffix: String
-  classIsNil: Boolean
-  classNotNil: Boolean
-  classEqualFold: String
-  classContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  mapped_frameworks field predicates
-  """
-  mappedFrameworks: String
-  mappedFrameworksNEQ: String
-  mappedFrameworksIn: [String!]
-  mappedFrameworksNotIn: [String!]
-  mappedFrameworksGT: String
-  mappedFrameworksGTE: String
-  mappedFrameworksLT: String
-  mappedFrameworksLTE: String
-  mappedFrameworksContains: String
-  mappedFrameworksHasPrefix: String
-  mappedFrameworksHasSuffix: String
-  mappedFrameworksIsNil: Boolean
-  mappedFrameworksNotNil: Boolean
-  mappedFrameworksEqualFold: String
-  mappedFrameworksContainsFold: String
-  """
-  example_evidence field predicates
-  """
-  exampleEvidence: String
-  exampleEvidenceNEQ: String
-  exampleEvidenceIn: [String!]
-  exampleEvidenceNotIn: [String!]
-  exampleEvidenceGT: String
-  exampleEvidenceGTE: String
-  exampleEvidenceLT: String
-  exampleEvidenceLTE: String
-  exampleEvidenceContains: String
-  exampleEvidenceHasPrefix: String
-  exampleEvidenceHasSuffix: String
-  exampleEvidenceIsNil: Boolean
-  exampleEvidenceNotNil: Boolean
-  exampleEvidenceEqualFold: String
-  exampleEvidenceContainsFold: String
+  subcategory: String
+  subcategoryNEQ: String
+  subcategoryIn: [String!]
+  subcategoryNotIn: [String!]
+  subcategoryGT: String
+  subcategoryGTE: String
+  subcategoryLT: String
+  subcategoryLTE: String
+  subcategoryContains: String
+  subcategoryHasPrefix: String
+  subcategoryHasSuffix: String
+  subcategoryIsNil: Boolean
+  subcategoryNotNil: Boolean
+  subcategoryEqualFold: String
+  subcategoryContainsFold: String
   """
   owner edge predicates
   """
@@ -26325,15 +27999,30 @@ input ControlObjectiveWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
-  internal_policies edge predicates
+  programs edge predicates
   """
-  hasInternalPolicies: Boolean
-  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
   """
   controls edge predicates
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
   procedures edge predicates
   """
@@ -26345,16 +28034,6 @@ input ControlObjectiveWhereInput {
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
   """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
-  """
-  standard edge predicates
-  """
-  hasStandard: Boolean
-  hasStandardWith: [StandardWhereInput!]
-  """
   narratives edge predicates
   """
   hasNarratives: Boolean
@@ -26364,16 +28043,6 @@ input ControlObjectiveWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
-  """
-  programs edge predicates
-  """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
-  """
-  evidence edge predicates
-  """
-  hasEvidence: Boolean
-  hasEvidenceWith: [EvidenceWhereInput!]
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -26524,22 +28193,6 @@ input ControlWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -26576,167 +28229,111 @@ input ControlWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
-  control_type field predicates
-  """
-  controlType: String
-  controlTypeNEQ: String
-  controlTypeIn: [String!]
-  controlTypeNotIn: [String!]
-  controlTypeGT: String
-  controlTypeGTE: String
-  controlTypeLT: String
-  controlTypeLTE: String
-  controlTypeContains: String
-  controlTypeHasPrefix: String
-  controlTypeHasSuffix: String
-  controlTypeIsNil: Boolean
-  controlTypeNotNil: Boolean
-  controlTypeEqualFold: String
-  controlTypeContainsFold: String
-  """
-  version field predicates
-  """
-  version: String
-  versionNEQ: String
-  versionIn: [String!]
-  versionNotIn: [String!]
-  versionGT: String
-  versionGTE: String
-  versionLT: String
-  versionLTE: String
-  versionContains: String
-  versionHasPrefix: String
-  versionHasSuffix: String
-  versionIsNil: Boolean
-  versionNotNil: Boolean
-  versionEqualFold: String
-  versionContainsFold: String
-  """
-  control_number field predicates
-  """
-  controlNumber: String
-  controlNumberNEQ: String
-  controlNumberIn: [String!]
-  controlNumberNotIn: [String!]
-  controlNumberGT: String
-  controlNumberGTE: String
-  controlNumberLT: String
-  controlNumberLTE: String
-  controlNumberContains: String
-  controlNumberHasPrefix: String
-  controlNumberHasSuffix: String
-  controlNumberIsNil: Boolean
-  controlNumberNotNil: Boolean
-  controlNumberEqualFold: String
-  controlNumberContainsFold: String
-  """
-  family field predicates
-  """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
-  """
-  class field predicates
-  """
-  class: String
-  classNEQ: String
-  classIn: [String!]
-  classNotIn: [String!]
-  classGT: String
-  classGTE: String
-  classLT: String
-  classLTE: String
-  classContains: String
-  classHasPrefix: String
-  classHasSuffix: String
-  classIsNil: Boolean
-  classNotNil: Boolean
-  classEqualFold: String
-  classContainsFold: String
-  """
   source field predicates
   """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
+  source: ControlControlSource
+  sourceNEQ: ControlControlSource
+  sourceIn: [ControlControlSource!]
+  sourceNotIn: [ControlControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
   """
-  satisfies field predicates
+  control_type field predicates
   """
-  satisfies: String
-  satisfiesNEQ: String
-  satisfiesIn: [String!]
-  satisfiesNotIn: [String!]
-  satisfiesGT: String
-  satisfiesGTE: String
-  satisfiesLT: String
-  satisfiesLTE: String
-  satisfiesContains: String
-  satisfiesHasPrefix: String
-  satisfiesHasSuffix: String
-  satisfiesIsNil: Boolean
-  satisfiesNotNil: Boolean
-  satisfiesEqualFold: String
-  satisfiesContainsFold: String
+  controlType: ControlControlType
+  controlTypeNEQ: ControlControlType
+  controlTypeIn: [ControlControlType!]
+  controlTypeNotIn: [ControlControlType!]
+  controlTypeIsNil: Boolean
+  controlTypeNotNil: Boolean
   """
-  mapped_frameworks field predicates
+  category field predicates
   """
-  mappedFrameworks: String
-  mappedFrameworksNEQ: String
-  mappedFrameworksIn: [String!]
-  mappedFrameworksNotIn: [String!]
-  mappedFrameworksGT: String
-  mappedFrameworksGTE: String
-  mappedFrameworksLT: String
-  mappedFrameworksLTE: String
-  mappedFrameworksContains: String
-  mappedFrameworksHasPrefix: String
-  mappedFrameworksHasSuffix: String
-  mappedFrameworksIsNil: Boolean
-  mappedFrameworksNotNil: Boolean
-  mappedFrameworksEqualFold: String
-  mappedFrameworksContainsFold: String
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
-  example_evidence field predicates
+  category_id field predicates
   """
-  exampleEvidence: String
-  exampleEvidenceNEQ: String
-  exampleEvidenceIn: [String!]
-  exampleEvidenceNotIn: [String!]
-  exampleEvidenceGT: String
-  exampleEvidenceGTE: String
-  exampleEvidenceLT: String
-  exampleEvidenceLTE: String
-  exampleEvidenceContains: String
-  exampleEvidenceHasPrefix: String
-  exampleEvidenceHasSuffix: String
-  exampleEvidenceIsNil: Boolean
-  exampleEvidenceNotNil: Boolean
-  exampleEvidenceEqualFold: String
-  exampleEvidenceContainsFold: String
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
+  """
+  subcategory field predicates
+  """
+  subcategory: String
+  subcategoryNEQ: String
+  subcategoryIn: [String!]
+  subcategoryNotIn: [String!]
+  subcategoryGT: String
+  subcategoryGTE: String
+  subcategoryLT: String
+  subcategoryLTE: String
+  subcategoryContains: String
+  subcategoryHasPrefix: String
+  subcategoryHasSuffix: String
+  subcategoryIsNil: Boolean
+  subcategoryNotNil: Boolean
+  subcategoryEqualFold: String
+  subcategoryContainsFold: String
+  """
+  ref_code field predicates
+  """
+  refCode: String
+  refCodeNEQ: String
+  refCodeIn: [String!]
+  refCodeNotIn: [String!]
+  refCodeGT: String
+  refCodeGTE: String
+  refCodeLT: String
+  refCodeLTE: String
+  refCodeContains: String
+  refCodeHasPrefix: String
+  refCodeHasSuffix: String
+  refCodeEqualFold: String
+  refCodeContainsFold: String
+  """
+  standard_id field predicates
+  """
+  standardID: ID
+  standardIDNEQ: ID
+  standardIDIn: [ID!]
+  standardIDNotIn: [ID!]
+  standardIDGT: ID
+  standardIDGTE: ID
+  standardIDLT: ID
+  standardIDLTE: ID
+  standardIDContains: ID
+  standardIDHasPrefix: ID
+  standardIDHasSuffix: ID
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: ID
+  standardIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -26758,25 +28355,45 @@ input ControlWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
-  procedures edge predicates
+  standard edge predicates
   """
-  hasProcedures: Boolean
-  hasProceduresWith: [ProcedureWhereInput!]
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
   """
-  subcontrols edge predicates
+  programs edge predicates
   """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  implementation edge predicates
+  """
+  hasImplementation: Boolean
+  hasImplementationWith: [ControlImplementationWhereInput!]
+  """
+  mapped_controls edge predicates
+  """
+  hasMappedControls: Boolean
+  hasMappedControlsWith: [MappedControlWhereInput!]
   """
   control_objectives edge predicates
   """
   hasControlObjectives: Boolean
   hasControlObjectivesWith: [ControlObjectiveWhereInput!]
   """
-  standard edge predicates
+  subcontrols edge predicates
   """
-  hasStandard: Boolean
-  hasStandardWith: [StandardWhereInput!]
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
   """
   narratives edge predicates
   """
@@ -26793,20 +28410,25 @@ input ControlWhereInput {
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
   """
-  tasks edge predicates
+  procedures edge predicates
   """
-  hasTasks: Boolean
-  hasTasksWith: [TaskWhereInput!]
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
   """
-  programs edge predicates
+  internal_policies edge predicates
   """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
-  evidence edge predicates
+  control_owner edge predicates
   """
-  hasEvidence: Boolean
-  hasEvidenceWith: [EvidenceWhereInput!]
+  hasControlOwner: Boolean
+  hasControlOwnerWith: [UserWhereInput!]
+  """
+  delegate edge predicates
+  """
+  hasDelegate: Boolean
+  hasDelegateWith: [UserWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -26886,7 +28508,6 @@ input CreateActionPlanInput {
   json data including details of the action plan
   """
   details: Map
-  standardIDs: [ID!]
   riskIDs: [ID!]
   controlIDs: [ID!]
   userIDs: [ID!]
@@ -26934,6 +28555,41 @@ input CreateContactInput {
   fileIDs: [ID!]
 }
 """
+CreateControlImplementationInput is used for create ControlImplementation object.
+Input was generated by ent.
+"""
+input CreateControlImplementationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the id of the control that this implementation is for
+  """
+  controlID: String!
+  """
+  status of the control implementation
+  """
+  status: String
+  """
+  date the control was implemented
+  """
+  implementationDate: Time
+  """
+  set to true if the control implementation has been verified
+  """
+  verified: Boolean
+  """
+  date the control implementation was verified
+  """
+  verificationDate: Time
+  """
+  details of the control implementation
+  """
+  details: String
+  controlIDs: [ID!]
+}
+"""
 CreateControlInput is used for create Control object.
 Input was generated by ent.
 """
@@ -26943,11 +28599,7 @@ input CreateControlInput {
   """
   tags: [String!]
   """
-  the name of the control
-  """
-  name: String!
-  """
-  description of the control
+  description of what the control is supposed to accomplish
   """
   description: String
   """
@@ -26955,59 +28607,76 @@ input CreateControlInput {
   """
   status: String
   """
-  type of the control
-  """
-  controlType: String
-  """
-  version of the control
-  """
-  version: String
-  """
-  control number or identifier
-  """
-  controlNumber: String
-  """
-  family associated with the control
-  """
-  family: String
-  """
-  class associated with the control
-  """
-  class: String
-  """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: String
+  source: ControlControlSource
   """
-  which control objectives are satisfied by the control
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  satisfies: String
+  controlType: ControlControlType
   """
-  mapped frameworks
+  category of the control
   """
-  mappedFrameworks: String
+  category: String
   """
-  json data including details of the control
+  category id of the control
   """
-  details: Map
+  categoryID: String
   """
-  example evidence to provide for the control
+  subcategory of the control
   """
-  exampleEvidence: String
+  subcategory: String
+  """
+  mapped categories of the control to other standards
+  """
+  mappedCategories: [String!]
+  """
+  objectives of the audit assessment for the control
+  """
+  assessmentObjectives: [AssessmentObjective!]
+  """
+  methods used to verify the control implementation during an audit
+  """
+  assessmentMethods: [AssessmentMethod!]
+  """
+  questions to ask to verify the control
+  """
+  controlQuestions: [String!]
+  """
+  implementation guidance for the control
+  """
+  implementationGuidance: [ImplementationGuidance!]
+  """
+  examples of evidence for the control
+  """
+  exampleEvidence: [ExampleEvidence!]
+  """
+  references for the control
+  """
+  references: [Reference!]
+  """
+  the unique reference code for the control
+  """
+  refCode: String!
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  procedureIDs: [ID!]
-  subcontrolIDs: [ID!]
+  standardID: ID
+  programIDs: [ID!]
+  evidenceIDs: [ID!]
+  implementationID: ID
+  mappedControlsID: ID
   controlObjectiveIDs: [ID!]
-  standardIDs: [ID!]
+  subcontrolIDs: [ID!]
+  taskIDs: [ID!]
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   actionPlanIDs: [ID!]
-  taskIDs: [ID!]
-  programIDs: [ID!]
-  evidenceIDs: [ID!]
+  procedureIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  controlOwnerID: ID
+  delegateID: ID
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -27023,15 +28692,19 @@ input CreateControlObjectiveInput {
   """
   name: String!
   """
-  description of the control objective
+  the desired outcome or target of the control objective
   """
-  description: String
+  desiredOutcome: String
   """
   status of the control objective
   """
   status: String
   """
-  type of the control objective
+  source of the control, e.g. framework, template, custom, etc.
+  """
+  source: ControlObjectiveControlSource
+  """
+  type of the control objective e.g. compliance, financial, operational, etc.
   """
   controlObjectiveType: String
   """
@@ -27039,47 +28712,26 @@ input CreateControlObjectiveInput {
   """
   version: String
   """
-  number of the control objective
+  category of the control
   """
-  controlNumber: String
+  category: String
   """
-  family of the control objective
+  subcategory of the control
   """
-  family: String
-  """
-  class associated with the control objective
-  """
-  class: String
-  """
-  source of the control objective, e.g. framework, template, user-defined, etc.
-  """
-  source: String
-  """
-  mapped frameworks
-  """
-  mappedFrameworks: String
-  """
-  json data including details of the control objective
-  """
-  details: Map
-  """
-  example evidence to provide for the control
-  """
-  exampleEvidence: String
+  subcategory: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  internalPolicyIDs: [ID!]
-  controlIDs: [ID!]
-  procedureIDs: [ID!]
-  riskIDs: [ID!]
-  subcontrolIDs: [ID!]
-  standardIDs: [ID!]
-  narrativeIDs: [ID!]
-  taskIDs: [ID!]
   programIDs: [ID!]
   evidenceIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  procedureIDs: [ID!]
+  riskIDs: [ID!]
+  narrativeIDs: [ID!]
+  taskIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -27093,7 +28745,7 @@ input CreateDocumentDataInput {
   """
   the json data of the document
   """
-  data: JSON!
+  data: Map!
   ownerID: ID
   templateID: ID!
   entityIDs: [ID!]
@@ -27518,6 +29170,26 @@ input CreateInviteInput {
   eventIDs: [ID!]
 }
 """
+CreateMappedControlInput is used for create MappedControl object.
+Input was generated by ent.
+"""
+input CreateMappedControlInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+  """
+  mappingType: String
+  """
+  description of how the two controls are related
+  """
+  relation: String
+  controlID: ID!
+  mappedControlID: ID!
+}
+"""
 CreateNarrativeInput is used for create Narrative object.
 Input was generated by ent.
 """
@@ -27535,21 +29207,14 @@ input CreateNarrativeInput {
   """
   description: String
   """
-  which controls are satisfied by the narrative
+  text data for the narrative document
   """
-  satisfies: String
-  """
-  json data for the narrative document
-  """
-  details: Map
+  details: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  internalPolicyIDs: [ID!]
-  controlIDs: [ID!]
-  procedureIDs: [ID!]
-  controlObjectiveIDs: [ID!]
+  satisfyIDs: [ID!]
   programIDs: [ID!]
 }
 """
@@ -27676,6 +29341,7 @@ input CreateOrganizationInput {
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   evidenceIDs: [ID!]
+  standardIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -27884,7 +29550,6 @@ input CreateProgramInput {
   evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
-  standardIDs: [ID!]
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -27963,21 +29628,49 @@ input CreateStandardInput {
   """
   tags: [String!]
   """
-  the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+  the long name of the standard body
   """
   name: String!
+  """
+  short name of the standard, e.g. SOC 2, ISO 27001, etc.
+  """
+  shortName: String
+  """
+  unique identifier of the standard with version
+  """
+  framework: String
   """
   description of the standard
   """
   description: String
   """
-  family of the standard, e.g. 800-53, 800-171, 27001, etc.
+  governing body of the standard, e.g. AICPA, etc.
   """
-  family: String
+  governingBody: String
+  """
+  domains the standard covers, e.g. availability, confidentiality, etc.
+  """
+  domains: [String!]
+  """
+  link to the official standard documentation
+  """
+  link: String
   """
   status of the standard - active, deprecated, etc.
   """
   status: String
+  """
+  indicates if the standard should be made available to all users, only for public standards
+  """
+  isPublic: Boolean
+  """
+  indicates if the standard is freely distributable under a trial license, only for public standards
+  """
+  freeToUse: Boolean
+  """
+  indicates if the standard is owned by the the openlane system
+  """
+  systemOwned: Boolean
   """
   type of the standard - security, privacy, etc.
   """
@@ -27987,26 +29680,11 @@ input CreateStandardInput {
   """
   version: String
   """
-  purpose and scope
+  internal revision of the standard
   """
-  purposeAndScope: String
-  """
-  background of the standard
-  """
-  background: String
-  """
-  which controls are satisfied by the standard
-  """
-  satisfies: String
-  """
-  json data with details of the standard
-  """
-  details: Map
-  controlObjectiveIDs: [ID!]
+  revision: String
+  ownerID: ID
   controlIDs: [ID!]
-  procedureIDs: [ID!]
-  actionPlanIDs: [ID!]
-  programIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -28018,78 +29696,78 @@ input CreateSubcontrolInput {
   """
   tags: [String!]
   """
-  the name of the subcontrol
-  """
-  name: String!
-  """
-  description of the subcontrol
+  description of what the control is supposed to accomplish
   """
   description: String
   """
-  status of the subcontrol
+  status of the control
   """
   status: String
   """
-  type of the subcontrol
+  source of the control, e.g. framework, template, custom, etc.
   """
-  subcontrolType: String
+  source: SubcontrolControlSource
   """
-  version of the control
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  version: String
+  controlType: SubcontrolControlType
   """
-  number of the subcontrol
+  category of the control
   """
-  subcontrolNumber: String
+  category: String
   """
-  subcontrol family
+  category id of the control
   """
-  family: String
+  categoryID: String
   """
-  subcontrol class
+  subcategory of the control
   """
-  class: String
+  subcategory: String
   """
-  source of the control, e.g. framework, template, user-defined, etc.
+  mapped categories of the control to other standards
   """
-  source: String
+  mappedCategories: [String!]
   """
-  mapped frameworks that the subcontrol is part of
+  objectives of the audit assessment for the control
   """
-  mappedFrameworks: String
+  assessmentObjectives: [AssessmentObjective!]
   """
-  implementation evidence of the subcontrol
+  methods used to verify the control implementation during an audit
   """
-  implementationEvidence: String
+  assessmentMethods: [AssessmentMethod!]
   """
-  implementation status
+  questions to ask to verify the control
   """
-  implementationStatus: String
+  controlQuestions: [String!]
   """
-  date the subcontrol was implemented
+  implementation guidance for the control
   """
-  implementationDate: Time
+  implementationGuidance: [ImplementationGuidance!]
   """
-  implementation verification
+  examples of evidence for the control
   """
-  implementationVerification: String
+  exampleEvidence: [ExampleEvidence!]
   """
-  date the subcontrol implementation was verified
+  references for the control
   """
-  implementationVerificationDate: Time
+  references: [Reference!]
   """
-  json data details of the subcontrol
+  the unique reference code for the control
   """
-  details: Map
-  """
-  example evidence to provide for the control
-  """
-  exampleEvidence: String
+  refCode: String!
   ownerID: ID
-  controlIDs: [ID!]!
-  taskIDs: [ID!]
-  programIDs: [ID!]
+  controlID: ID!
+  mappedControlIDs: [ID!]
   evidenceIDs: [ID!]
+  controlObjectiveIDs: [ID!]
+  taskIDs: [ID!]
+  narrativeIDs: [ID!]
+  riskIDs: [ID!]
+  actionPlanIDs: [ID!]
+  procedureIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  controlOwnerID: ID
+  delegateID: ID
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -28196,11 +29874,11 @@ input CreateTemplateInput {
   """
   the jsonschema object of the template
   """
-  jsonconfig: JSON!
+  jsonconfig: Map!
   """
   the uischema for the template to render in the UI
   """
-  uischema: JSON
+  uischema: Map
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
@@ -28335,7 +30013,7 @@ type DocumentData implements Node {
   """
   the json data of the document
   """
-  data: JSON!
+  data: Map!
   owner: Organization
   template: Template!
   entity: [Entity!]
@@ -28397,7 +30075,7 @@ type DocumentDataHistory implements Node {
   """
   the json data of the document
   """
-  data: JSON!
+  data: Map!
 }
 """
 A connection to a list of items.
@@ -36186,6 +37864,552 @@ scalar JSON
 The builtin Map type
 """
 scalar Map
+type MappedControl implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the id of the control being mapped
+  """
+  controlID: ID!
+  """
+  the id of the control that is mapped to
+  """
+  mappedControlID: ID!
+  """
+  the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+  """
+  mappingType: String
+  """
+  description of how the two controls are related
+  """
+  relation: String
+  control: Control!
+  """
+  mapped control to the original control, meaning there is overlap between the controls
+  """
+  mappedControl: Control!
+}
+"""
+A connection to a list of items.
+"""
+type MappedControlConnection {
+  """
+  A list of edges.
+  """
+  edges: [MappedControlEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type MappedControlEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: MappedControl
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type MappedControlHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: MappedControlHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the id of the control being mapped
+  """
+  controlID: String!
+  """
+  the id of the control that is mapped to
+  """
+  mappedControlID: String!
+  """
+  the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+  """
+  mappingType: String
+  """
+  description of how the two controls are related
+  """
+  relation: String
+}
+"""
+A connection to a list of items.
+"""
+type MappedControlHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [MappedControlHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type MappedControlHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: MappedControlHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+MappedControlHistoryOpType is enum for the field operation
+"""
+enum MappedControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
+Input was generated by ent.
+"""
+input MappedControlHistoryWhereInput {
+  not: MappedControlHistoryWhereInput
+  and: [MappedControlHistoryWhereInput!]
+  or: [MappedControlHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: MappedControlHistoryOpType
+  operationNEQ: MappedControlHistoryOpType
+  operationIn: [MappedControlHistoryOpType!]
+  operationNotIn: [MappedControlHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  control_id field predicates
+  """
+  controlID: String
+  controlIDNEQ: String
+  controlIDIn: [String!]
+  controlIDNotIn: [String!]
+  controlIDGT: String
+  controlIDGTE: String
+  controlIDLT: String
+  controlIDLTE: String
+  controlIDContains: String
+  controlIDHasPrefix: String
+  controlIDHasSuffix: String
+  controlIDEqualFold: String
+  controlIDContainsFold: String
+  """
+  mapped_control_id field predicates
+  """
+  mappedControlID: String
+  mappedControlIDNEQ: String
+  mappedControlIDIn: [String!]
+  mappedControlIDNotIn: [String!]
+  mappedControlIDGT: String
+  mappedControlIDGTE: String
+  mappedControlIDLT: String
+  mappedControlIDLTE: String
+  mappedControlIDContains: String
+  mappedControlIDHasPrefix: String
+  mappedControlIDHasSuffix: String
+  mappedControlIDEqualFold: String
+  mappedControlIDContainsFold: String
+  """
+  mapping_type field predicates
+  """
+  mappingType: String
+  mappingTypeNEQ: String
+  mappingTypeIn: [String!]
+  mappingTypeNotIn: [String!]
+  mappingTypeGT: String
+  mappingTypeGTE: String
+  mappingTypeLT: String
+  mappingTypeLTE: String
+  mappingTypeContains: String
+  mappingTypeHasPrefix: String
+  mappingTypeHasSuffix: String
+  mappingTypeIsNil: Boolean
+  mappingTypeNotNil: Boolean
+  mappingTypeEqualFold: String
+  mappingTypeContainsFold: String
+  """
+  relation field predicates
+  """
+  relation: String
+  relationNEQ: String
+  relationIn: [String!]
+  relationNotIn: [String!]
+  relationGT: String
+  relationGTE: String
+  relationLT: String
+  relationLTE: String
+  relationContains: String
+  relationHasPrefix: String
+  relationHasSuffix: String
+  relationIsNil: Boolean
+  relationNotNil: Boolean
+  relationEqualFold: String
+  relationContainsFold: String
+}
+"""
+MappedControlWhereInput is used for filtering MappedControl objects.
+Input was generated by ent.
+"""
+input MappedControlWhereInput {
+  not: MappedControlWhereInput
+  and: [MappedControlWhereInput!]
+  or: [MappedControlWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  control_id field predicates
+  """
+  controlID: ID
+  controlIDNEQ: ID
+  controlIDIn: [ID!]
+  controlIDNotIn: [ID!]
+  controlIDGT: ID
+  controlIDGTE: ID
+  controlIDLT: ID
+  controlIDLTE: ID
+  controlIDContains: ID
+  controlIDHasPrefix: ID
+  controlIDHasSuffix: ID
+  controlIDEqualFold: ID
+  controlIDContainsFold: ID
+  """
+  mapped_control_id field predicates
+  """
+  mappedControlID: ID
+  mappedControlIDNEQ: ID
+  mappedControlIDIn: [ID!]
+  mappedControlIDNotIn: [ID!]
+  mappedControlIDGT: ID
+  mappedControlIDGTE: ID
+  mappedControlIDLT: ID
+  mappedControlIDLTE: ID
+  mappedControlIDContains: ID
+  mappedControlIDHasPrefix: ID
+  mappedControlIDHasSuffix: ID
+  mappedControlIDEqualFold: ID
+  mappedControlIDContainsFold: ID
+  """
+  mapping_type field predicates
+  """
+  mappingType: String
+  mappingTypeNEQ: String
+  mappingTypeIn: [String!]
+  mappingTypeNotIn: [String!]
+  mappingTypeGT: String
+  mappingTypeGTE: String
+  mappingTypeLT: String
+  mappingTypeLTE: String
+  mappingTypeContains: String
+  mappingTypeHasPrefix: String
+  mappingTypeHasSuffix: String
+  mappingTypeIsNil: Boolean
+  mappingTypeNotNil: Boolean
+  mappingTypeEqualFold: String
+  mappingTypeContainsFold: String
+  """
+  relation field predicates
+  """
+  relation: String
+  relationNEQ: String
+  relationIn: [String!]
+  relationNotIn: [String!]
+  relationGT: String
+  relationGTE: String
+  relationLT: String
+  relationLTE: String
+  relationContains: String
+  relationHasPrefix: String
+  relationHasSuffix: String
+  relationIsNil: Boolean
+  relationNotNil: Boolean
+  relationEqualFold: String
+  relationContainsFold: String
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  mapped_control edge predicates
+  """
+  hasMappedControl: Boolean
+  hasMappedControlWith: [ControlWhereInput!]
+}
 type Narrative implements Node {
   id: ID!
   createdAt: Time
@@ -36215,13 +38439,9 @@ type Narrative implements Node {
   """
   description: String
   """
-  which controls are satisfied by the narrative
+  text data for the narrative document
   """
-  satisfies: String
-  """
-  json data for the narrative document
-  """
-  details: Map
+  details: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -36235,10 +38455,10 @@ type Narrative implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  internalPolicy: [InternalPolicy!]
-  control: [Control!]
-  procedure: [Procedure!]
-  controlObjective: [ControlObjective!]
+  """
+  which controls are satisfied by the narrative
+  """
+  satisfies: [Control!]
   programs: [Program!]
 }
 """
@@ -36303,13 +38523,9 @@ type NarrativeHistory implements Node {
   """
   description: String
   """
-  which controls are satisfied by the narrative
+  text data for the narrative document
   """
-  satisfies: String
-  """
-  json data for the narrative document
-  """
-  details: Map
+  details: String
 }
 """
 A connection to a list of items.
@@ -36568,23 +38784,23 @@ input NarrativeHistoryWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
-  satisfies field predicates
+  details field predicates
   """
-  satisfies: String
-  satisfiesNEQ: String
-  satisfiesIn: [String!]
-  satisfiesNotIn: [String!]
-  satisfiesGT: String
-  satisfiesGTE: String
-  satisfiesLT: String
-  satisfiesLTE: String
-  satisfiesContains: String
-  satisfiesHasPrefix: String
-  satisfiesHasSuffix: String
-  satisfiesIsNil: Boolean
-  satisfiesNotNil: Boolean
-  satisfiesEqualFold: String
-  satisfiesContainsFold: String
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
 }
 """
 NarrativeWhereInput is used for filtering Narrative objects.
@@ -36769,23 +38985,23 @@ input NarrativeWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
-  satisfies field predicates
+  details field predicates
   """
-  satisfies: String
-  satisfiesNEQ: String
-  satisfiesIn: [String!]
-  satisfiesNotIn: [String!]
-  satisfiesGT: String
-  satisfiesGTE: String
-  satisfiesLT: String
-  satisfiesLTE: String
-  satisfiesContains: String
-  satisfiesHasPrefix: String
-  satisfiesHasSuffix: String
-  satisfiesIsNil: Boolean
-  satisfiesNotNil: Boolean
-  satisfiesEqualFold: String
-  satisfiesContainsFold: String
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
   """
   owner edge predicates
   """
@@ -36807,25 +39023,10 @@ input NarrativeWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
-  internal_policy edge predicates
+  satisfies edge predicates
   """
-  hasInternalPolicy: Boolean
-  hasInternalPolicyWith: [InternalPolicyWhereInput!]
-  """
-  control edge predicates
-  """
-  hasControl: Boolean
-  hasControlWith: [ControlWhereInput!]
-  """
-  procedure edge predicates
-  """
-  hasProcedure: Boolean
-  hasProcedureWith: [ProcedureWhereInput!]
-  """
-  control_objective edge predicates
-  """
-  hasControlObjective: Boolean
-  hasControlObjectiveWith: [ControlObjectiveWhereInput!]
+  hasSatisfies: Boolean
+  hasSatisfiesWith: [ControlWhereInput!]
   """
   programs edge predicates
   """
@@ -38847,6 +41048,7 @@ type Organization implements Node {
   controls: [Control!]
   subcontrols: [Subcontrol!]
   evidence: [Evidence!]
+  standards: [Standard!]
   members: [OrgMembership!]
 }
 """
@@ -40330,6 +42532,11 @@ input OrganizationWhereInput {
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
   """
+  standards edge predicates
+  """
+  hasStandards: Boolean
+  hasStandardsWith: [StandardWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -41639,10 +43846,6 @@ type Program implements Node {
   evidence: [Evidence!]
   narratives: [Narrative!]
   actionPlans: [ActionPlan!]
-  """
-  the framework(s) that the program is based on
-  """
-  standards: [Standard!]
   users: [User!]
   members: [ProgramMembership!]
 }
@@ -42791,11 +44994,6 @@ input ProgramWhereInput {
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
   """
-  standards edge predicates
-  """
-  hasStandards: Boolean
-  hasStandardsWith: [StandardWhereInput!]
-  """
   users edge predicates
   """
   hasUsers: Boolean
@@ -43007,6 +45205,58 @@ type Query {
     """
     where: ControlHistoryWhereInput
   ): ControlHistoryConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  controlImplementationHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for ControlImplementationHistories returned from the connection.
+    """
+    where: ControlImplementationHistoryWhereInput
+  ): ControlImplementationHistoryConnection!
   controlObjectives(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -43759,6 +46009,58 @@ type Query {
     """
     where: InviteWhereInput
   ): InviteConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
+  mappedControlHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for MappedControlHistories returned from the connection.
+    """
+    where: MappedControlHistoryWhereInput
+  ): MappedControlHistoryConnection!
   narratives(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -45613,21 +47915,53 @@ type Standard implements Node {
   """
   tags: [String!]
   """
-  the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the long name of the standard body
   """
   name: String!
+  """
+  short name of the standard, e.g. SOC 2, ISO 27001, etc.
+  """
+  shortName: String
+  """
+  unique identifier of the standard with version
+  """
+  framework: String
   """
   description of the standard
   """
   description: String
   """
-  family of the standard, e.g. 800-53, 800-171, 27001, etc.
+  governing body of the standard, e.g. AICPA, etc.
   """
-  family: String
+  governingBody: String
+  """
+  domains the standard covers, e.g. availability, confidentiality, etc.
+  """
+  domains: [String!]
+  """
+  link to the official standard documentation
+  """
+  link: String
   """
   status of the standard - active, deprecated, etc.
   """
   status: String
+  """
+  indicates if the standard should be made available to all users, only for public standards
+  """
+  isPublic: Boolean
+  """
+  indicates if the standard is freely distributable under a trial license, only for public standards
+  """
+  freeToUse: Boolean
+  """
+  indicates if the standard is owned by the the openlane system
+  """
+  systemOwned: Boolean
   """
   type of the standard - security, privacy, etc.
   """
@@ -45637,26 +47971,11 @@ type Standard implements Node {
   """
   version: String
   """
-  purpose and scope
+  internal revision of the standard
   """
-  purposeAndScope: String
-  """
-  background of the standard
-  """
-  background: String
-  """
-  which controls are satisfied by the standard
-  """
-  satisfies: String
-  """
-  json data with details of the standard
-  """
-  details: Map
-  controlObjectives: [ControlObjective!]
+  revision: String
+  owner: Organization
   controls: [Control!]
-  procedures: [Procedure!]
-  actionPlans: [ActionPlan!]
-  programs: [Program!]
 }
 """
 A connection to a list of items.
@@ -45704,21 +48023,53 @@ type StandardHistory implements Node {
   """
   tags: [String!]
   """
-  the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the long name of the standard body
   """
   name: String!
+  """
+  short name of the standard, e.g. SOC 2, ISO 27001, etc.
+  """
+  shortName: String
+  """
+  unique identifier of the standard with version
+  """
+  framework: String
   """
   description of the standard
   """
   description: String
   """
-  family of the standard, e.g. 800-53, 800-171, 27001, etc.
+  governing body of the standard, e.g. AICPA, etc.
   """
-  family: String
+  governingBody: String
+  """
+  domains the standard covers, e.g. availability, confidentiality, etc.
+  """
+  domains: [String!]
+  """
+  link to the official standard documentation
+  """
+  link: String
   """
   status of the standard - active, deprecated, etc.
   """
   status: String
+  """
+  indicates if the standard should be made available to all users, only for public standards
+  """
+  isPublic: Boolean
+  """
+  indicates if the standard is freely distributable under a trial license, only for public standards
+  """
+  freeToUse: Boolean
+  """
+  indicates if the standard is owned by the the openlane system
+  """
+  systemOwned: Boolean
   """
   type of the standard - security, privacy, etc.
   """
@@ -45728,21 +48079,9 @@ type StandardHistory implements Node {
   """
   version: String
   """
-  purpose and scope
+  internal revision of the standard
   """
-  purposeAndScope: String
-  """
-  background of the standard
-  """
-  background: String
-  """
-  which controls are satisfied by the standard
-  """
-  satisfies: String
-  """
-  json data with details of the standard
-  """
-  details: Map
+  revision: String
 }
 """
 A connection to a list of items.
@@ -45933,6 +48272,24 @@ input StandardHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -45948,6 +48305,42 @@ input StandardHistoryWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  short_name field predicates
+  """
+  shortName: String
+  shortNameNEQ: String
+  shortNameIn: [String!]
+  shortNameNotIn: [String!]
+  shortNameGT: String
+  shortNameGTE: String
+  shortNameLT: String
+  shortNameLTE: String
+  shortNameContains: String
+  shortNameHasPrefix: String
+  shortNameHasSuffix: String
+  shortNameIsNil: Boolean
+  shortNameNotNil: Boolean
+  shortNameEqualFold: String
+  shortNameContainsFold: String
+  """
+  framework field predicates
+  """
+  framework: String
+  frameworkNEQ: String
+  frameworkIn: [String!]
+  frameworkNotIn: [String!]
+  frameworkGT: String
+  frameworkGTE: String
+  frameworkLT: String
+  frameworkLTE: String
+  frameworkContains: String
+  frameworkHasPrefix: String
+  frameworkHasSuffix: String
+  frameworkIsNil: Boolean
+  frameworkNotNil: Boolean
+  frameworkEqualFold: String
+  frameworkContainsFold: String
   """
   description field predicates
   """
@@ -45967,23 +48360,41 @@ input StandardHistoryWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
-  family field predicates
+  governing_body field predicates
   """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
+  governingBody: String
+  governingBodyNEQ: String
+  governingBodyIn: [String!]
+  governingBodyNotIn: [String!]
+  governingBodyGT: String
+  governingBodyGTE: String
+  governingBodyLT: String
+  governingBodyLTE: String
+  governingBodyContains: String
+  governingBodyHasPrefix: String
+  governingBodyHasSuffix: String
+  governingBodyIsNil: Boolean
+  governingBodyNotNil: Boolean
+  governingBodyEqualFold: String
+  governingBodyContainsFold: String
+  """
+  link field predicates
+  """
+  link: String
+  linkNEQ: String
+  linkIn: [String!]
+  linkNotIn: [String!]
+  linkGT: String
+  linkGTE: String
+  linkLT: String
+  linkLTE: String
+  linkContains: String
+  linkHasPrefix: String
+  linkHasSuffix: String
+  linkIsNil: Boolean
+  linkNotNil: Boolean
+  linkEqualFold: String
+  linkContainsFold: String
   """
   status field predicates
   """
@@ -46002,6 +48413,27 @@ input StandardHistoryWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  is_public field predicates
+  """
+  isPublic: Boolean
+  isPublicNEQ: Boolean
+  isPublicIsNil: Boolean
+  isPublicNotNil: Boolean
+  """
+  free_to_use field predicates
+  """
+  freeToUse: Boolean
+  freeToUseNEQ: Boolean
+  freeToUseIsNil: Boolean
+  freeToUseNotNil: Boolean
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
   """
   standard_type field predicates
   """
@@ -46039,59 +48471,23 @@ input StandardHistoryWhereInput {
   versionEqualFold: String
   versionContainsFold: String
   """
-  purpose_and_scope field predicates
+  revision field predicates
   """
-  purposeAndScope: String
-  purposeAndScopeNEQ: String
-  purposeAndScopeIn: [String!]
-  purposeAndScopeNotIn: [String!]
-  purposeAndScopeGT: String
-  purposeAndScopeGTE: String
-  purposeAndScopeLT: String
-  purposeAndScopeLTE: String
-  purposeAndScopeContains: String
-  purposeAndScopeHasPrefix: String
-  purposeAndScopeHasSuffix: String
-  purposeAndScopeIsNil: Boolean
-  purposeAndScopeNotNil: Boolean
-  purposeAndScopeEqualFold: String
-  purposeAndScopeContainsFold: String
-  """
-  background field predicates
-  """
-  background: String
-  backgroundNEQ: String
-  backgroundIn: [String!]
-  backgroundNotIn: [String!]
-  backgroundGT: String
-  backgroundGTE: String
-  backgroundLT: String
-  backgroundLTE: String
-  backgroundContains: String
-  backgroundHasPrefix: String
-  backgroundHasSuffix: String
-  backgroundIsNil: Boolean
-  backgroundNotNil: Boolean
-  backgroundEqualFold: String
-  backgroundContainsFold: String
-  """
-  satisfies field predicates
-  """
-  satisfies: String
-  satisfiesNEQ: String
-  satisfiesIn: [String!]
-  satisfiesNotIn: [String!]
-  satisfiesGT: String
-  satisfiesGTE: String
-  satisfiesLT: String
-  satisfiesLTE: String
-  satisfiesContains: String
-  satisfiesHasPrefix: String
-  satisfiesHasSuffix: String
-  satisfiesIsNil: Boolean
-  satisfiesNotNil: Boolean
-  satisfiesEqualFold: String
-  satisfiesContainsFold: String
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
 }
 """
 StandardWhereInput is used for filtering Standard objects.
@@ -46208,6 +48604,24 @@ input StandardWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -46223,6 +48637,42 @@ input StandardWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  short_name field predicates
+  """
+  shortName: String
+  shortNameNEQ: String
+  shortNameIn: [String!]
+  shortNameNotIn: [String!]
+  shortNameGT: String
+  shortNameGTE: String
+  shortNameLT: String
+  shortNameLTE: String
+  shortNameContains: String
+  shortNameHasPrefix: String
+  shortNameHasSuffix: String
+  shortNameIsNil: Boolean
+  shortNameNotNil: Boolean
+  shortNameEqualFold: String
+  shortNameContainsFold: String
+  """
+  framework field predicates
+  """
+  framework: String
+  frameworkNEQ: String
+  frameworkIn: [String!]
+  frameworkNotIn: [String!]
+  frameworkGT: String
+  frameworkGTE: String
+  frameworkLT: String
+  frameworkLTE: String
+  frameworkContains: String
+  frameworkHasPrefix: String
+  frameworkHasSuffix: String
+  frameworkIsNil: Boolean
+  frameworkNotNil: Boolean
+  frameworkEqualFold: String
+  frameworkContainsFold: String
   """
   description field predicates
   """
@@ -46242,23 +48692,41 @@ input StandardWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
-  family field predicates
+  governing_body field predicates
   """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
+  governingBody: String
+  governingBodyNEQ: String
+  governingBodyIn: [String!]
+  governingBodyNotIn: [String!]
+  governingBodyGT: String
+  governingBodyGTE: String
+  governingBodyLT: String
+  governingBodyLTE: String
+  governingBodyContains: String
+  governingBodyHasPrefix: String
+  governingBodyHasSuffix: String
+  governingBodyIsNil: Boolean
+  governingBodyNotNil: Boolean
+  governingBodyEqualFold: String
+  governingBodyContainsFold: String
+  """
+  link field predicates
+  """
+  link: String
+  linkNEQ: String
+  linkIn: [String!]
+  linkNotIn: [String!]
+  linkGT: String
+  linkGTE: String
+  linkLT: String
+  linkLTE: String
+  linkContains: String
+  linkHasPrefix: String
+  linkHasSuffix: String
+  linkIsNil: Boolean
+  linkNotNil: Boolean
+  linkEqualFold: String
+  linkContainsFold: String
   """
   status field predicates
   """
@@ -46277,6 +48745,27 @@ input StandardWhereInput {
   statusNotNil: Boolean
   statusEqualFold: String
   statusContainsFold: String
+  """
+  is_public field predicates
+  """
+  isPublic: Boolean
+  isPublicNEQ: Boolean
+  isPublicIsNil: Boolean
+  isPublicNotNil: Boolean
+  """
+  free_to_use field predicates
+  """
+  freeToUse: Boolean
+  freeToUseNEQ: Boolean
+  freeToUseIsNil: Boolean
+  freeToUseNotNil: Boolean
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
   """
   standard_type field predicates
   """
@@ -46314,84 +48803,33 @@ input StandardWhereInput {
   versionEqualFold: String
   versionContainsFold: String
   """
-  purpose_and_scope field predicates
+  revision field predicates
   """
-  purposeAndScope: String
-  purposeAndScopeNEQ: String
-  purposeAndScopeIn: [String!]
-  purposeAndScopeNotIn: [String!]
-  purposeAndScopeGT: String
-  purposeAndScopeGTE: String
-  purposeAndScopeLT: String
-  purposeAndScopeLTE: String
-  purposeAndScopeContains: String
-  purposeAndScopeHasPrefix: String
-  purposeAndScopeHasSuffix: String
-  purposeAndScopeIsNil: Boolean
-  purposeAndScopeNotNil: Boolean
-  purposeAndScopeEqualFold: String
-  purposeAndScopeContainsFold: String
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
   """
-  background field predicates
+  owner edge predicates
   """
-  background: String
-  backgroundNEQ: String
-  backgroundIn: [String!]
-  backgroundNotIn: [String!]
-  backgroundGT: String
-  backgroundGTE: String
-  backgroundLT: String
-  backgroundLTE: String
-  backgroundContains: String
-  backgroundHasPrefix: String
-  backgroundHasSuffix: String
-  backgroundIsNil: Boolean
-  backgroundNotNil: Boolean
-  backgroundEqualFold: String
-  backgroundContainsFold: String
-  """
-  satisfies field predicates
-  """
-  satisfies: String
-  satisfiesNEQ: String
-  satisfiesIn: [String!]
-  satisfiesNotIn: [String!]
-  satisfiesGT: String
-  satisfiesGTE: String
-  satisfiesLT: String
-  satisfiesLTE: String
-  satisfiesContains: String
-  satisfiesHasPrefix: String
-  satisfiesHasSuffix: String
-  satisfiesIsNil: Boolean
-  satisfiesNotNil: Boolean
-  satisfiesEqualFold: String
-  satisfiesContainsFold: String
-  """
-  control_objectives edge predicates
-  """
-  hasControlObjectives: Boolean
-  hasControlObjectivesWith: [ControlObjectiveWhereInput!]
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
   """
   controls edge predicates
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
-  """
-  procedures edge predicates
-  """
-  hasProcedures: Boolean
-  hasProceduresWith: [ProcedureWhereInput!]
-  """
-  action_plans edge predicates
-  """
-  hasActionPlans: Boolean
-  hasActionPlansWith: [ActionPlanWhereInput!]
-  """
-  programs edge predicates
-  """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
 }
 type Subcontrol implements Node {
   id: ID!
@@ -46414,78 +48852,88 @@ type Subcontrol implements Node {
   """
   ownerID: ID
   """
-  the name of the subcontrol
-  """
-  name: String!
-  """
-  description of the subcontrol
+  description of what the control is supposed to accomplish
   """
   description: String
   """
-  status of the subcontrol
+  status of the control
   """
   status: String
   """
-  type of the subcontrol
+  source of the control, e.g. framework, template, custom, etc.
   """
-  subcontrolType: String
+  source: SubcontrolControlSource
   """
-  version of the control
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  version: String
+  controlType: SubcontrolControlType
   """
-  number of the subcontrol
+  category of the control
   """
-  subcontrolNumber: String
+  category: String
   """
-  subcontrol family
+  category id of the control
   """
-  family: String
+  categoryID: String
   """
-  subcontrol class
+  subcategory of the control
   """
-  class: String
+  subcategory: String
   """
-  source of the control, e.g. framework, template, user-defined, etc.
+  mapped categories of the control to other standards
   """
-  source: String
+  mappedCategories: [String!]
   """
-  mapped frameworks that the subcontrol is part of
+  objectives of the audit assessment for the control
   """
-  mappedFrameworks: String
+  assessmentObjectives: [AssessmentObjective!]
   """
-  implementation evidence of the subcontrol
+  methods used to verify the control implementation during an audit
   """
-  implementationEvidence: String
+  assessmentMethods: [AssessmentMethod!]
   """
-  implementation status
+  questions to ask to verify the control
   """
-  implementationStatus: String
+  controlQuestions: [String!]
   """
-  date the subcontrol was implemented
+  implementation guidance for the control
   """
-  implementationDate: Time
+  implementationGuidance: [ImplementationGuidance!]
   """
-  implementation verification
+  examples of evidence for the control
   """
-  implementationVerification: String
+  exampleEvidence: [ExampleEvidence!]
   """
-  date the subcontrol implementation was verified
+  references for the control
   """
-  implementationVerificationDate: Time
+  references: [Reference!]
   """
-  json data details of the subcontrol
+  the unique reference code for the control
   """
-  details: Map
+  refCode: String!
   """
-  example evidence to provide for the control
+  the id of the parent control
   """
-  exampleEvidence: String
+  controlID: ID!
   owner: Organization
-  controls: [Control!]!
-  tasks: [Task!]
-  programs: [Program!]
+  control: Control!
+  mappedControls: [Control!]
   evidence: [Evidence!]
+  controlObjectives: [ControlObjective!]
+  tasks: [Task!]
+  narratives: [Narrative!]
+  risks: [Risk!]
+  actionPlans: [ActionPlan!]
+  procedures: [Procedure!]
+  internalPolicies: [InternalPolicy!]
+  """
+  the user who is responsible for the subcontrol, defaults to the parent control owner if not set
+  """
+  controlOwner: User
+  """
+  temporary delegate for the control, used for temporary control ownership
+  """
+  delegate: User
 }
 """
 A connection to a list of items.
@@ -46503,6 +48951,24 @@ type SubcontrolConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+SubcontrolControlSource is enum for the field source
+"""
+enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+  FRAMEWORK
+  TEMPLATE
+  USER_DEFINED
+  IMPORTED
+}
+"""
+SubcontrolControlType is enum for the field control_type
+"""
+enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+  PREVENTATIVE
+  DETECTIVE
+  CORRECTIVE
+  DETERRENT
 }
 """
 An edge in a connection.
@@ -46541,73 +49007,69 @@ type SubcontrolHistory implements Node {
   """
   ownerID: String
   """
-  the name of the subcontrol
-  """
-  name: String!
-  """
-  description of the subcontrol
+  description of what the control is supposed to accomplish
   """
   description: String
   """
-  status of the subcontrol
+  status of the control
   """
   status: String
   """
-  type of the subcontrol
+  source of the control, e.g. framework, template, custom, etc.
   """
-  subcontrolType: String
+  source: SubcontrolHistoryControlSource
   """
-  version of the control
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  version: String
+  controlType: SubcontrolHistoryControlType
   """
-  number of the subcontrol
+  category of the control
   """
-  subcontrolNumber: String
+  category: String
   """
-  subcontrol family
+  category id of the control
   """
-  family: String
+  categoryID: String
   """
-  subcontrol class
+  subcategory of the control
   """
-  class: String
+  subcategory: String
   """
-  source of the control, e.g. framework, template, user-defined, etc.
+  mapped categories of the control to other standards
   """
-  source: String
+  mappedCategories: [String!]
   """
-  mapped frameworks that the subcontrol is part of
+  objectives of the audit assessment for the control
   """
-  mappedFrameworks: String
+  assessmentObjectives: [AssessmentObjective!]
   """
-  implementation evidence of the subcontrol
+  methods used to verify the control implementation during an audit
   """
-  implementationEvidence: String
+  assessmentMethods: [AssessmentMethod!]
   """
-  implementation status
+  questions to ask to verify the control
   """
-  implementationStatus: String
+  controlQuestions: [String!]
   """
-  date the subcontrol was implemented
+  implementation guidance for the control
   """
-  implementationDate: Time
+  implementationGuidance: [ImplementationGuidance!]
   """
-  implementation verification
+  examples of evidence for the control
   """
-  implementationVerification: String
+  exampleEvidence: [ExampleEvidence!]
   """
-  date the subcontrol implementation was verified
+  references for the control
   """
-  implementationVerificationDate: Time
+  references: [Reference!]
   """
-  json data details of the subcontrol
+  the unique reference code for the control
   """
-  details: Map
+  refCode: String!
   """
-  example evidence to provide for the control
+  the id of the parent control
   """
-  exampleEvidence: String
+  controlID: String!
 }
 """
 A connection to a list of items.
@@ -46625,6 +49087,24 @@ type SubcontrolHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+SubcontrolHistoryControlSource is enum for the field source
+"""
+enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+  FRAMEWORK
+  TEMPLATE
+  USER_DEFINED
+  IMPORTED
+}
+"""
+SubcontrolHistoryControlType is enum for the field control_type
+"""
+enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+  PREVENTATIVE
+  DETECTIVE
+  CORRECTIVE
+  DETERRENT
 }
 """
 An edge in a connection.
@@ -46832,22 +49312,6 @@ input SubcontrolHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -46884,229 +49348,109 @@ input SubcontrolHistoryWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
-  subcontrol_type field predicates
-  """
-  subcontrolType: String
-  subcontrolTypeNEQ: String
-  subcontrolTypeIn: [String!]
-  subcontrolTypeNotIn: [String!]
-  subcontrolTypeGT: String
-  subcontrolTypeGTE: String
-  subcontrolTypeLT: String
-  subcontrolTypeLTE: String
-  subcontrolTypeContains: String
-  subcontrolTypeHasPrefix: String
-  subcontrolTypeHasSuffix: String
-  subcontrolTypeIsNil: Boolean
-  subcontrolTypeNotNil: Boolean
-  subcontrolTypeEqualFold: String
-  subcontrolTypeContainsFold: String
-  """
-  version field predicates
-  """
-  version: String
-  versionNEQ: String
-  versionIn: [String!]
-  versionNotIn: [String!]
-  versionGT: String
-  versionGTE: String
-  versionLT: String
-  versionLTE: String
-  versionContains: String
-  versionHasPrefix: String
-  versionHasSuffix: String
-  versionIsNil: Boolean
-  versionNotNil: Boolean
-  versionEqualFold: String
-  versionContainsFold: String
-  """
-  subcontrol_number field predicates
-  """
-  subcontrolNumber: String
-  subcontrolNumberNEQ: String
-  subcontrolNumberIn: [String!]
-  subcontrolNumberNotIn: [String!]
-  subcontrolNumberGT: String
-  subcontrolNumberGTE: String
-  subcontrolNumberLT: String
-  subcontrolNumberLTE: String
-  subcontrolNumberContains: String
-  subcontrolNumberHasPrefix: String
-  subcontrolNumberHasSuffix: String
-  subcontrolNumberIsNil: Boolean
-  subcontrolNumberNotNil: Boolean
-  subcontrolNumberEqualFold: String
-  subcontrolNumberContainsFold: String
-  """
-  family field predicates
-  """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
-  """
-  class field predicates
-  """
-  class: String
-  classNEQ: String
-  classIn: [String!]
-  classNotIn: [String!]
-  classGT: String
-  classGTE: String
-  classLT: String
-  classLTE: String
-  classContains: String
-  classHasPrefix: String
-  classHasSuffix: String
-  classIsNil: Boolean
-  classNotNil: Boolean
-  classEqualFold: String
-  classContainsFold: String
-  """
   source field predicates
   """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
+  source: SubcontrolHistoryControlSource
+  sourceNEQ: SubcontrolHistoryControlSource
+  sourceIn: [SubcontrolHistoryControlSource!]
+  sourceNotIn: [SubcontrolHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
   """
-  mapped_frameworks field predicates
+  control_type field predicates
   """
-  mappedFrameworks: String
-  mappedFrameworksNEQ: String
-  mappedFrameworksIn: [String!]
-  mappedFrameworksNotIn: [String!]
-  mappedFrameworksGT: String
-  mappedFrameworksGTE: String
-  mappedFrameworksLT: String
-  mappedFrameworksLTE: String
-  mappedFrameworksContains: String
-  mappedFrameworksHasPrefix: String
-  mappedFrameworksHasSuffix: String
-  mappedFrameworksIsNil: Boolean
-  mappedFrameworksNotNil: Boolean
-  mappedFrameworksEqualFold: String
-  mappedFrameworksContainsFold: String
+  controlType: SubcontrolHistoryControlType
+  controlTypeNEQ: SubcontrolHistoryControlType
+  controlTypeIn: [SubcontrolHistoryControlType!]
+  controlTypeNotIn: [SubcontrolHistoryControlType!]
+  controlTypeIsNil: Boolean
+  controlTypeNotNil: Boolean
   """
-  implementation_evidence field predicates
+  category field predicates
   """
-  implementationEvidence: String
-  implementationEvidenceNEQ: String
-  implementationEvidenceIn: [String!]
-  implementationEvidenceNotIn: [String!]
-  implementationEvidenceGT: String
-  implementationEvidenceGTE: String
-  implementationEvidenceLT: String
-  implementationEvidenceLTE: String
-  implementationEvidenceContains: String
-  implementationEvidenceHasPrefix: String
-  implementationEvidenceHasSuffix: String
-  implementationEvidenceIsNil: Boolean
-  implementationEvidenceNotNil: Boolean
-  implementationEvidenceEqualFold: String
-  implementationEvidenceContainsFold: String
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
-  implementation_status field predicates
+  category_id field predicates
   """
-  implementationStatus: String
-  implementationStatusNEQ: String
-  implementationStatusIn: [String!]
-  implementationStatusNotIn: [String!]
-  implementationStatusGT: String
-  implementationStatusGTE: String
-  implementationStatusLT: String
-  implementationStatusLTE: String
-  implementationStatusContains: String
-  implementationStatusHasPrefix: String
-  implementationStatusHasSuffix: String
-  implementationStatusIsNil: Boolean
-  implementationStatusNotNil: Boolean
-  implementationStatusEqualFold: String
-  implementationStatusContainsFold: String
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
   """
-  implementation_date field predicates
+  subcategory field predicates
   """
-  implementationDate: Time
-  implementationDateNEQ: Time
-  implementationDateIn: [Time!]
-  implementationDateNotIn: [Time!]
-  implementationDateGT: Time
-  implementationDateGTE: Time
-  implementationDateLT: Time
-  implementationDateLTE: Time
-  implementationDateIsNil: Boolean
-  implementationDateNotNil: Boolean
+  subcategory: String
+  subcategoryNEQ: String
+  subcategoryIn: [String!]
+  subcategoryNotIn: [String!]
+  subcategoryGT: String
+  subcategoryGTE: String
+  subcategoryLT: String
+  subcategoryLTE: String
+  subcategoryContains: String
+  subcategoryHasPrefix: String
+  subcategoryHasSuffix: String
+  subcategoryIsNil: Boolean
+  subcategoryNotNil: Boolean
+  subcategoryEqualFold: String
+  subcategoryContainsFold: String
   """
-  implementation_verification field predicates
+  ref_code field predicates
   """
-  implementationVerification: String
-  implementationVerificationNEQ: String
-  implementationVerificationIn: [String!]
-  implementationVerificationNotIn: [String!]
-  implementationVerificationGT: String
-  implementationVerificationGTE: String
-  implementationVerificationLT: String
-  implementationVerificationLTE: String
-  implementationVerificationContains: String
-  implementationVerificationHasPrefix: String
-  implementationVerificationHasSuffix: String
-  implementationVerificationIsNil: Boolean
-  implementationVerificationNotNil: Boolean
-  implementationVerificationEqualFold: String
-  implementationVerificationContainsFold: String
+  refCode: String
+  refCodeNEQ: String
+  refCodeIn: [String!]
+  refCodeNotIn: [String!]
+  refCodeGT: String
+  refCodeGTE: String
+  refCodeLT: String
+  refCodeLTE: String
+  refCodeContains: String
+  refCodeHasPrefix: String
+  refCodeHasSuffix: String
+  refCodeEqualFold: String
+  refCodeContainsFold: String
   """
-  implementation_verification_date field predicates
+  control_id field predicates
   """
-  implementationVerificationDate: Time
-  implementationVerificationDateNEQ: Time
-  implementationVerificationDateIn: [Time!]
-  implementationVerificationDateNotIn: [Time!]
-  implementationVerificationDateGT: Time
-  implementationVerificationDateGTE: Time
-  implementationVerificationDateLT: Time
-  implementationVerificationDateLTE: Time
-  implementationVerificationDateIsNil: Boolean
-  implementationVerificationDateNotNil: Boolean
-  """
-  example_evidence field predicates
-  """
-  exampleEvidence: String
-  exampleEvidenceNEQ: String
-  exampleEvidenceIn: [String!]
-  exampleEvidenceNotIn: [String!]
-  exampleEvidenceGT: String
-  exampleEvidenceGTE: String
-  exampleEvidenceLT: String
-  exampleEvidenceLTE: String
-  exampleEvidenceContains: String
-  exampleEvidenceHasPrefix: String
-  exampleEvidenceHasSuffix: String
-  exampleEvidenceIsNil: Boolean
-  exampleEvidenceNotNil: Boolean
-  exampleEvidenceEqualFold: String
-  exampleEvidenceContainsFold: String
+  controlID: String
+  controlIDNEQ: String
+  controlIDIn: [String!]
+  controlIDNotIn: [String!]
+  controlIDGT: String
+  controlIDGTE: String
+  controlIDLT: String
+  controlIDLTE: String
+  controlIDContains: String
+  controlIDHasPrefix: String
+  controlIDHasSuffix: String
+  controlIDEqualFold: String
+  controlIDContainsFold: String
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -47257,22 +49601,6 @@ input SubcontrolWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -47309,254 +49637,174 @@ input SubcontrolWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
-  subcontrol_type field predicates
-  """
-  subcontrolType: String
-  subcontrolTypeNEQ: String
-  subcontrolTypeIn: [String!]
-  subcontrolTypeNotIn: [String!]
-  subcontrolTypeGT: String
-  subcontrolTypeGTE: String
-  subcontrolTypeLT: String
-  subcontrolTypeLTE: String
-  subcontrolTypeContains: String
-  subcontrolTypeHasPrefix: String
-  subcontrolTypeHasSuffix: String
-  subcontrolTypeIsNil: Boolean
-  subcontrolTypeNotNil: Boolean
-  subcontrolTypeEqualFold: String
-  subcontrolTypeContainsFold: String
-  """
-  version field predicates
-  """
-  version: String
-  versionNEQ: String
-  versionIn: [String!]
-  versionNotIn: [String!]
-  versionGT: String
-  versionGTE: String
-  versionLT: String
-  versionLTE: String
-  versionContains: String
-  versionHasPrefix: String
-  versionHasSuffix: String
-  versionIsNil: Boolean
-  versionNotNil: Boolean
-  versionEqualFold: String
-  versionContainsFold: String
-  """
-  subcontrol_number field predicates
-  """
-  subcontrolNumber: String
-  subcontrolNumberNEQ: String
-  subcontrolNumberIn: [String!]
-  subcontrolNumberNotIn: [String!]
-  subcontrolNumberGT: String
-  subcontrolNumberGTE: String
-  subcontrolNumberLT: String
-  subcontrolNumberLTE: String
-  subcontrolNumberContains: String
-  subcontrolNumberHasPrefix: String
-  subcontrolNumberHasSuffix: String
-  subcontrolNumberIsNil: Boolean
-  subcontrolNumberNotNil: Boolean
-  subcontrolNumberEqualFold: String
-  subcontrolNumberContainsFold: String
-  """
-  family field predicates
-  """
-  family: String
-  familyNEQ: String
-  familyIn: [String!]
-  familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
-  familyContains: String
-  familyHasPrefix: String
-  familyHasSuffix: String
-  familyIsNil: Boolean
-  familyNotNil: Boolean
-  familyEqualFold: String
-  familyContainsFold: String
-  """
-  class field predicates
-  """
-  class: String
-  classNEQ: String
-  classIn: [String!]
-  classNotIn: [String!]
-  classGT: String
-  classGTE: String
-  classLT: String
-  classLTE: String
-  classContains: String
-  classHasPrefix: String
-  classHasSuffix: String
-  classIsNil: Boolean
-  classNotNil: Boolean
-  classEqualFold: String
-  classContainsFold: String
-  """
   source field predicates
   """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
+  source: SubcontrolControlSource
+  sourceNEQ: SubcontrolControlSource
+  sourceIn: [SubcontrolControlSource!]
+  sourceNotIn: [SubcontrolControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
   """
-  mapped_frameworks field predicates
+  control_type field predicates
   """
-  mappedFrameworks: String
-  mappedFrameworksNEQ: String
-  mappedFrameworksIn: [String!]
-  mappedFrameworksNotIn: [String!]
-  mappedFrameworksGT: String
-  mappedFrameworksGTE: String
-  mappedFrameworksLT: String
-  mappedFrameworksLTE: String
-  mappedFrameworksContains: String
-  mappedFrameworksHasPrefix: String
-  mappedFrameworksHasSuffix: String
-  mappedFrameworksIsNil: Boolean
-  mappedFrameworksNotNil: Boolean
-  mappedFrameworksEqualFold: String
-  mappedFrameworksContainsFold: String
+  controlType: SubcontrolControlType
+  controlTypeNEQ: SubcontrolControlType
+  controlTypeIn: [SubcontrolControlType!]
+  controlTypeNotIn: [SubcontrolControlType!]
+  controlTypeIsNil: Boolean
+  controlTypeNotNil: Boolean
   """
-  implementation_evidence field predicates
+  category field predicates
   """
-  implementationEvidence: String
-  implementationEvidenceNEQ: String
-  implementationEvidenceIn: [String!]
-  implementationEvidenceNotIn: [String!]
-  implementationEvidenceGT: String
-  implementationEvidenceGTE: String
-  implementationEvidenceLT: String
-  implementationEvidenceLTE: String
-  implementationEvidenceContains: String
-  implementationEvidenceHasPrefix: String
-  implementationEvidenceHasSuffix: String
-  implementationEvidenceIsNil: Boolean
-  implementationEvidenceNotNil: Boolean
-  implementationEvidenceEqualFold: String
-  implementationEvidenceContainsFold: String
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
   """
-  implementation_status field predicates
+  category_id field predicates
   """
-  implementationStatus: String
-  implementationStatusNEQ: String
-  implementationStatusIn: [String!]
-  implementationStatusNotIn: [String!]
-  implementationStatusGT: String
-  implementationStatusGTE: String
-  implementationStatusLT: String
-  implementationStatusLTE: String
-  implementationStatusContains: String
-  implementationStatusHasPrefix: String
-  implementationStatusHasSuffix: String
-  implementationStatusIsNil: Boolean
-  implementationStatusNotNil: Boolean
-  implementationStatusEqualFold: String
-  implementationStatusContainsFold: String
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
   """
-  implementation_date field predicates
+  subcategory field predicates
   """
-  implementationDate: Time
-  implementationDateNEQ: Time
-  implementationDateIn: [Time!]
-  implementationDateNotIn: [Time!]
-  implementationDateGT: Time
-  implementationDateGTE: Time
-  implementationDateLT: Time
-  implementationDateLTE: Time
-  implementationDateIsNil: Boolean
-  implementationDateNotNil: Boolean
+  subcategory: String
+  subcategoryNEQ: String
+  subcategoryIn: [String!]
+  subcategoryNotIn: [String!]
+  subcategoryGT: String
+  subcategoryGTE: String
+  subcategoryLT: String
+  subcategoryLTE: String
+  subcategoryContains: String
+  subcategoryHasPrefix: String
+  subcategoryHasSuffix: String
+  subcategoryIsNil: Boolean
+  subcategoryNotNil: Boolean
+  subcategoryEqualFold: String
+  subcategoryContainsFold: String
   """
-  implementation_verification field predicates
+  ref_code field predicates
   """
-  implementationVerification: String
-  implementationVerificationNEQ: String
-  implementationVerificationIn: [String!]
-  implementationVerificationNotIn: [String!]
-  implementationVerificationGT: String
-  implementationVerificationGTE: String
-  implementationVerificationLT: String
-  implementationVerificationLTE: String
-  implementationVerificationContains: String
-  implementationVerificationHasPrefix: String
-  implementationVerificationHasSuffix: String
-  implementationVerificationIsNil: Boolean
-  implementationVerificationNotNil: Boolean
-  implementationVerificationEqualFold: String
-  implementationVerificationContainsFold: String
+  refCode: String
+  refCodeNEQ: String
+  refCodeIn: [String!]
+  refCodeNotIn: [String!]
+  refCodeGT: String
+  refCodeGTE: String
+  refCodeLT: String
+  refCodeLTE: String
+  refCodeContains: String
+  refCodeHasPrefix: String
+  refCodeHasSuffix: String
+  refCodeEqualFold: String
+  refCodeContainsFold: String
   """
-  implementation_verification_date field predicates
+  control_id field predicates
   """
-  implementationVerificationDate: Time
-  implementationVerificationDateNEQ: Time
-  implementationVerificationDateIn: [Time!]
-  implementationVerificationDateNotIn: [Time!]
-  implementationVerificationDateGT: Time
-  implementationVerificationDateGTE: Time
-  implementationVerificationDateLT: Time
-  implementationVerificationDateLTE: Time
-  implementationVerificationDateIsNil: Boolean
-  implementationVerificationDateNotNil: Boolean
-  """
-  example_evidence field predicates
-  """
-  exampleEvidence: String
-  exampleEvidenceNEQ: String
-  exampleEvidenceIn: [String!]
-  exampleEvidenceNotIn: [String!]
-  exampleEvidenceGT: String
-  exampleEvidenceGTE: String
-  exampleEvidenceLT: String
-  exampleEvidenceLTE: String
-  exampleEvidenceContains: String
-  exampleEvidenceHasPrefix: String
-  exampleEvidenceHasSuffix: String
-  exampleEvidenceIsNil: Boolean
-  exampleEvidenceNotNil: Boolean
-  exampleEvidenceEqualFold: String
-  exampleEvidenceContainsFold: String
+  controlID: ID
+  controlIDNEQ: ID
+  controlIDIn: [ID!]
+  controlIDNotIn: [ID!]
+  controlIDGT: ID
+  controlIDGTE: ID
+  controlIDLT: ID
+  controlIDLTE: ID
+  controlIDContains: ID
+  controlIDHasPrefix: ID
+  controlIDHasSuffix: ID
+  controlIDEqualFold: ID
+  controlIDContainsFold: ID
   """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  controls edge predicates
+  control edge predicates
   """
-  hasControls: Boolean
-  hasControlsWith: [ControlWhereInput!]
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  mapped_controls edge predicates
+  """
+  hasMappedControls: Boolean
+  hasMappedControlsWith: [ControlWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  control_objectives edge predicates
+  """
+  hasControlObjectives: Boolean
+  hasControlObjectivesWith: [ControlObjectiveWhereInput!]
   """
   tasks edge predicates
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
   """
-  programs edge predicates
+  narratives edge predicates
   """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
+  hasNarratives: Boolean
+  hasNarrativesWith: [NarrativeWhereInput!]
   """
-  evidence edge predicates
+  risks edge predicates
   """
-  hasEvidence: Boolean
-  hasEvidenceWith: [EvidenceWhereInput!]
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
+  control_owner edge predicates
+  """
+  hasControlOwner: Boolean
+  hasControlOwnerWith: [UserWhereInput!]
+  """
+  delegate edge predicates
+  """
+  hasDelegate: Boolean
+  hasDelegateWith: [UserWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -48922,11 +51170,11 @@ type Template implements Node {
   """
   the jsonschema object of the template
   """
-  jsonconfig: JSON!
+  jsonconfig: Map!
   """
   the uischema for the template to render in the UI
   """
-  uischema: JSON
+  uischema: Map
   owner: Organization
   documents: [DocumentData!]
   files: [File!]
@@ -49002,11 +51250,11 @@ type TemplateHistory implements Node {
   """
   the jsonschema object of the template
   """
-  jsonconfig: JSON!
+  jsonconfig: Map!
   """
   the uischema for the template to render in the UI
   """
-  uischema: JSON
+  uischema: Map
 }
 """
 A connection to a list of items.
@@ -49587,9 +51835,6 @@ input UpdateActionPlanInput {
   """
   details: Map
   clearDetails: Boolean
-  addStandardIDs: [ID!]
-  removeStandardIDs: [ID!]
-  clearStandard: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisk: Boolean
@@ -49657,6 +51902,50 @@ input UpdateContactInput {
   clearFiles: Boolean
 }
 """
+UpdateControlImplementationInput is used for update ControlImplementation object.
+Input was generated by ent.
+"""
+input UpdateControlImplementationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the id of the control that this implementation is for
+  """
+  controlID: String
+  """
+  status of the control implementation
+  """
+  status: String
+  clearStatus: Boolean
+  """
+  date the control was implemented
+  """
+  implementationDate: Time
+  clearImplementationDate: Boolean
+  """
+  set to true if the control implementation has been verified
+  """
+  verified: Boolean
+  clearVerified: Boolean
+  """
+  date the control implementation was verified
+  """
+  verificationDate: Time
+  clearVerificationDate: Boolean
+  """
+  details of the control implementation
+  """
+  details: String
+  clearDetails: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControl: Boolean
+}
+"""
 UpdateControlInput is used for update Control object.
 Input was generated by ent.
 """
@@ -49668,11 +51957,7 @@ input UpdateControlInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  the name of the control
-  """
-  name: String
-  """
-  description of the control
+  description of what the control is supposed to accomplish
   """
   description: String
   clearDescription: Boolean
@@ -49682,55 +51967,76 @@ input UpdateControlInput {
   status: String
   clearStatus: Boolean
   """
-  type of the control
-  """
-  controlType: String
-  clearControlType: Boolean
-  """
-  version of the control
-  """
-  version: String
-  clearVersion: Boolean
-  """
-  control number or identifier
-  """
-  controlNumber: String
-  clearControlNumber: Boolean
-  """
-  family associated with the control
-  """
-  family: String
-  clearFamily: Boolean
-  """
-  class associated with the control
-  """
-  class: String
-  clearClass: Boolean
-  """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: String
+  source: ControlControlSource
   clearSource: Boolean
   """
-  which control objectives are satisfied by the control
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  satisfies: String
-  clearSatisfies: Boolean
+  controlType: ControlControlType
+  clearControlType: Boolean
   """
-  mapped frameworks
+  category of the control
   """
-  mappedFrameworks: String
-  clearMappedFrameworks: Boolean
+  category: String
+  clearCategory: Boolean
   """
-  json data including details of the control
+  category id of the control
   """
-  details: Map
-  clearDetails: Boolean
+  categoryID: String
+  clearCategoryID: Boolean
   """
-  example evidence to provide for the control
+  subcategory of the control
   """
-  exampleEvidence: String
+  subcategory: String
+  clearSubcategory: Boolean
+  """
+  mapped categories of the control to other standards
+  """
+  mappedCategories: [String!]
+  appendMappedCategories: [String!]
+  clearMappedCategories: Boolean
+  """
+  objectives of the audit assessment for the control
+  """
+  assessmentObjectives: [AssessmentObjective!]
+  appendAssessmentObjectives: [AssessmentObjective!]
+  clearAssessmentObjectives: Boolean
+  """
+  methods used to verify the control implementation during an audit
+  """
+  assessmentMethods: [AssessmentMethod!]
+  appendAssessmentMethods: [AssessmentMethod!]
+  clearAssessmentMethods: Boolean
+  """
+  questions to ask to verify the control
+  """
+  controlQuestions: [String!]
+  appendControlQuestions: [String!]
+  clearControlQuestions: Boolean
+  """
+  implementation guidance for the control
+  """
+  implementationGuidance: [ImplementationGuidance!]
+  appendImplementationGuidance: [ImplementationGuidance!]
+  clearImplementationGuidance: Boolean
+  """
+  examples of evidence for the control
+  """
+  exampleEvidence: [ExampleEvidence!]
+  appendExampleEvidence: [ExampleEvidence!]
   clearExampleEvidence: Boolean
+  """
+  references for the control
+  """
+  references: [Reference!]
+  appendReferences: [Reference!]
+  clearReferences: Boolean
+  """
+  the unique reference code for the control
+  """
+  refCode: String
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -49740,18 +52046,27 @@ input UpdateControlInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
-  addProcedureIDs: [ID!]
-  removeProcedureIDs: [ID!]
-  clearProcedures: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
+  standardID: ID
+  clearStandard: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
+  implementationID: ID
+  clearImplementation: Boolean
+  mappedControlsID: ID
+  clearMappedControls: Boolean
   addControlObjectiveIDs: [ID!]
   removeControlObjectiveIDs: [ID!]
   clearControlObjectives: Boolean
-  addStandardIDs: [ID!]
-  removeStandardIDs: [ID!]
-  clearStandard: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
   addNarrativeIDs: [ID!]
   removeNarrativeIDs: [ID!]
   clearNarratives: Boolean
@@ -49761,15 +52076,16 @@ input UpdateControlInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
-  addTaskIDs: [ID!]
-  removeTaskIDs: [ID!]
-  clearTasks: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
-  addEvidenceIDs: [ID!]
-  removeEvidenceIDs: [ID!]
-  clearEvidence: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  controlOwnerID: ID
+  clearControlOwner: Boolean
+  delegateID: ID
+  clearDelegate: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -49787,17 +52103,22 @@ input UpdateControlObjectiveInput {
   """
   name: String
   """
-  description of the control objective
+  the desired outcome or target of the control objective
   """
-  description: String
-  clearDescription: Boolean
+  desiredOutcome: String
+  clearDesiredOutcome: Boolean
   """
   status of the control objective
   """
   status: String
   clearStatus: Boolean
   """
-  type of the control objective
+  source of the control, e.g. framework, template, custom, etc.
+  """
+  source: ControlObjectiveControlSource
+  clearSource: Boolean
+  """
+  type of the control objective e.g. compliance, financial, operational, etc.
   """
   controlObjectiveType: String
   clearControlObjectiveType: Boolean
@@ -49807,40 +52128,15 @@ input UpdateControlObjectiveInput {
   version: String
   clearVersion: Boolean
   """
-  number of the control objective
+  category of the control
   """
-  controlNumber: String
-  clearControlNumber: Boolean
+  category: String
+  clearCategory: Boolean
   """
-  family of the control objective
+  subcategory of the control
   """
-  family: String
-  clearFamily: Boolean
-  """
-  class associated with the control objective
-  """
-  class: String
-  clearClass: Boolean
-  """
-  source of the control objective, e.g. framework, template, user-defined, etc.
-  """
-  source: String
-  clearSource: Boolean
-  """
-  mapped frameworks
-  """
-  mappedFrameworks: String
-  clearMappedFrameworks: Boolean
-  """
-  json data including details of the control objective
-  """
-  details: Map
-  clearDetails: Boolean
-  """
-  example evidence to provide for the control
-  """
-  exampleEvidence: String
-  clearExampleEvidence: Boolean
+  subcategory: String
+  clearSubcategory: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -49850,36 +52146,33 @@ input UpdateControlObjectiveInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
-  addInternalPolicyIDs: [ID!]
-  removeInternalPolicyIDs: [ID!]
-  clearInternalPolicies: Boolean
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControls: Boolean
-  addProcedureIDs: [ID!]
-  removeProcedureIDs: [ID!]
-  clearProcedures: Boolean
-  addRiskIDs: [ID!]
-  removeRiskIDs: [ID!]
-  clearRisks: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
-  addStandardIDs: [ID!]
-  removeStandardIDs: [ID!]
-  clearStandard: Boolean
-  addNarrativeIDs: [ID!]
-  removeNarrativeIDs: [ID!]
-  clearNarratives: Boolean
-  addTaskIDs: [ID!]
-  removeTaskIDs: [ID!]
-  clearTasks: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addNarrativeIDs: [ID!]
+  removeNarrativeIDs: [ID!]
+  clearNarratives: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -49895,7 +52188,7 @@ input UpdateDocumentDataInput {
   """
   the json data of the document
   """
-  data: JSON
+  data: Map
   templateID: ID
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
@@ -50512,6 +52805,28 @@ input UpdateInviteInput {
   clearEvents: Boolean
 }
 """
+UpdateMappedControlInput is used for update MappedControl object.
+Input was generated by ent.
+"""
+input UpdateMappedControlInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+  """
+  mappingType: String
+  clearMappingType: Boolean
+  """
+  description of how the two controls are related
+  """
+  relation: String
+  clearRelation: Boolean
+}
+"""
 UpdateNarrativeInput is used for update Narrative object.
 Input was generated by ent.
 """
@@ -50532,14 +52847,9 @@ input UpdateNarrativeInput {
   description: String
   clearDescription: Boolean
   """
-  which controls are satisfied by the narrative
+  text data for the narrative document
   """
-  satisfies: String
-  clearSatisfies: Boolean
-  """
-  json data for the narrative document
-  """
-  details: Map
+  details: String
   clearDetails: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
@@ -50550,18 +52860,9 @@ input UpdateNarrativeInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
-  addInternalPolicyIDs: [ID!]
-  removeInternalPolicyIDs: [ID!]
-  clearInternalPolicy: Boolean
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControl: Boolean
-  addProcedureIDs: [ID!]
-  removeProcedureIDs: [ID!]
-  clearProcedure: Boolean
-  addControlObjectiveIDs: [ID!]
-  removeControlObjectiveIDs: [ID!]
-  clearControlObjective: Boolean
+  addSatisfyIDs: [ID!]
+  removeSatisfyIDs: [ID!]
+  clearSatisfies: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
@@ -50731,6 +53032,9 @@ input UpdateOrganizationInput {
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
+  addStandardIDs: [ID!]
+  removeStandardIDs: [ID!]
+  clearStandards: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -51027,9 +53331,6 @@ input UpdateProgramInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
-  addStandardIDs: [ID!]
-  removeStandardIDs: [ID!]
-  clearStandards: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.
@@ -51132,24 +53433,60 @@ input UpdateStandardInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+  the long name of the standard body
   """
   name: String
+  """
+  short name of the standard, e.g. SOC 2, ISO 27001, etc.
+  """
+  shortName: String
+  clearShortName: Boolean
+  """
+  unique identifier of the standard with version
+  """
+  framework: String
+  clearFramework: Boolean
   """
   description of the standard
   """
   description: String
   clearDescription: Boolean
   """
-  family of the standard, e.g. 800-53, 800-171, 27001, etc.
+  governing body of the standard, e.g. AICPA, etc.
   """
-  family: String
-  clearFamily: Boolean
+  governingBody: String
+  clearGoverningBody: Boolean
+  """
+  domains the standard covers, e.g. availability, confidentiality, etc.
+  """
+  domains: [String!]
+  appendDomains: [String!]
+  clearDomains: Boolean
+  """
+  link to the official standard documentation
+  """
+  link: String
+  clearLink: Boolean
   """
   status of the standard - active, deprecated, etc.
   """
   status: String
   clearStatus: Boolean
+  """
+  indicates if the standard should be made available to all users, only for public standards
+  """
+  isPublic: Boolean
+  clearIsPublic: Boolean
+  """
+  indicates if the standard is freely distributable under a trial license, only for public standards
+  """
+  freeToUse: Boolean
+  clearFreeToUse: Boolean
+  """
+  indicates if the standard is owned by the the openlane system
+  """
+  systemOwned: Boolean
+  clearSystemOwned: Boolean
   """
   type of the standard - security, privacy, etc.
   """
@@ -51161,40 +53498,15 @@ input UpdateStandardInput {
   version: String
   clearVersion: Boolean
   """
-  purpose and scope
+  internal revision of the standard
   """
-  purposeAndScope: String
-  clearPurposeAndScope: Boolean
-  """
-  background of the standard
-  """
-  background: String
-  clearBackground: Boolean
-  """
-  which controls are satisfied by the standard
-  """
-  satisfies: String
-  clearSatisfies: Boolean
-  """
-  json data with details of the standard
-  """
-  details: Map
-  clearDetails: Boolean
-  addControlObjectiveIDs: [ID!]
-  removeControlObjectiveIDs: [ID!]
-  clearControlObjectives: Boolean
+  revision: String
+  clearRevision: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
-  addProcedureIDs: [ID!]
-  removeProcedureIDs: [ID!]
-  clearProcedures: Boolean
-  addActionPlanIDs: [ID!]
-  removeActionPlanIDs: [ID!]
-  clearActionPlans: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -51208,100 +53520,118 @@ input UpdateSubcontrolInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  the name of the subcontrol
-  """
-  name: String
-  """
-  description of the subcontrol
+  description of what the control is supposed to accomplish
   """
   description: String
   clearDescription: Boolean
   """
-  status of the subcontrol
+  status of the control
   """
   status: String
   clearStatus: Boolean
   """
-  type of the subcontrol
+  source of the control, e.g. framework, template, custom, etc.
   """
-  subcontrolType: String
-  clearSubcontrolType: Boolean
-  """
-  version of the control
-  """
-  version: String
-  clearVersion: Boolean
-  """
-  number of the subcontrol
-  """
-  subcontrolNumber: String
-  clearSubcontrolNumber: Boolean
-  """
-  subcontrol family
-  """
-  family: String
-  clearFamily: Boolean
-  """
-  subcontrol class
-  """
-  class: String
-  clearClass: Boolean
-  """
-  source of the control, e.g. framework, template, user-defined, etc.
-  """
-  source: String
+  source: SubcontrolControlSource
   clearSource: Boolean
   """
-  mapped frameworks that the subcontrol is part of
+  type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  mappedFrameworks: String
-  clearMappedFrameworks: Boolean
+  controlType: SubcontrolControlType
+  clearControlType: Boolean
   """
-  implementation evidence of the subcontrol
+  category of the control
   """
-  implementationEvidence: String
-  clearImplementationEvidence: Boolean
+  category: String
+  clearCategory: Boolean
   """
-  implementation status
+  category id of the control
   """
-  implementationStatus: String
-  clearImplementationStatus: Boolean
+  categoryID: String
+  clearCategoryID: Boolean
   """
-  date the subcontrol was implemented
+  subcategory of the control
   """
-  implementationDate: Time
-  clearImplementationDate: Boolean
+  subcategory: String
+  clearSubcategory: Boolean
   """
-  implementation verification
+  mapped categories of the control to other standards
   """
-  implementationVerification: String
-  clearImplementationVerification: Boolean
+  mappedCategories: [String!]
+  appendMappedCategories: [String!]
+  clearMappedCategories: Boolean
   """
-  date the subcontrol implementation was verified
+  objectives of the audit assessment for the control
   """
-  implementationVerificationDate: Time
-  clearImplementationVerificationDate: Boolean
+  assessmentObjectives: [AssessmentObjective!]
+  appendAssessmentObjectives: [AssessmentObjective!]
+  clearAssessmentObjectives: Boolean
   """
-  json data details of the subcontrol
+  methods used to verify the control implementation during an audit
   """
-  details: Map
-  clearDetails: Boolean
+  assessmentMethods: [AssessmentMethod!]
+  appendAssessmentMethods: [AssessmentMethod!]
+  clearAssessmentMethods: Boolean
   """
-  example evidence to provide for the control
+  questions to ask to verify the control
   """
-  exampleEvidence: String
+  controlQuestions: [String!]
+  appendControlQuestions: [String!]
+  clearControlQuestions: Boolean
+  """
+  implementation guidance for the control
+  """
+  implementationGuidance: [ImplementationGuidance!]
+  appendImplementationGuidance: [ImplementationGuidance!]
+  clearImplementationGuidance: Boolean
+  """
+  examples of evidence for the control
+  """
+  exampleEvidence: [ExampleEvidence!]
+  appendExampleEvidence: [ExampleEvidence!]
   clearExampleEvidence: Boolean
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  addTaskIDs: [ID!]
-  removeTaskIDs: [ID!]
-  clearTasks: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
+  """
+  references for the control
+  """
+  references: [Reference!]
+  appendReferences: [Reference!]
+  clearReferences: Boolean
+  """
+  the unique reference code for the control
+  """
+  refCode: String
+  controlID: ID
+  addMappedControlIDs: [ID!]
+  removeMappedControlIDs: [ID!]
+  clearMappedControls: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
+  addControlObjectiveIDs: [ID!]
+  removeControlObjectiveIDs: [ID!]
+  clearControlObjectives: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addNarrativeIDs: [ID!]
+  removeNarrativeIDs: [ID!]
+  clearNarratives: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  controlOwnerID: ID
+  clearControlOwner: Boolean
+  delegateID: ID
+  clearDelegate: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -51447,11 +53777,11 @@ input UpdateTemplateInput {
   """
   the jsonschema object of the template
   """
-  jsonconfig: JSON
+  jsonconfig: Map
   """
   the uischema for the template to render in the UI
   """
-  uischema: JSON
+  uischema: Map
   clearUischema: Boolean
   ownerID: ID
   clearOwner: Boolean
@@ -54461,6 +56791,109 @@ type InviteBulkCreatePayload {
     """
     invites: [Invite!]
 }`, BuiltIn: false},
+	{Name: "../schema/mappedcontrol.graphql", Input: `extend type Query {
+    """
+    Look up mappedControl by ID
+    """
+     mappedControl(
+        """
+        ID of the mappedControl
+        """
+        id: ID!
+    ):  MappedControl!
+}
+
+extend type Mutation{
+    """
+    Create a new mappedControl
+    """
+    createMappedControl(
+        """
+        values of the mappedControl
+        """
+        input: CreateMappedControlInput!
+    ): MappedControlCreatePayload!
+    """
+    Create multiple new mappedControls
+    """
+    createBulkMappedControl(
+        """
+        values of the mappedControl
+        """
+        input: [CreateMappedControlInput!]
+    ): MappedControlBulkCreatePayload!
+    """
+    Create multiple new mappedControls via file upload
+    """
+    createBulkCSVMappedControl(
+        """
+        csv file containing values of the mappedControl
+        """
+        input: Upload!
+    ): MappedControlBulkCreatePayload!
+    """
+    Update an existing mappedControl
+    """
+    updateMappedControl(
+        """
+        ID of the mappedControl
+        """
+        id: ID!
+        """
+        New values for the mappedControl
+        """
+        input: UpdateMappedControlInput!
+    ): MappedControlUpdatePayload!
+    """
+    Delete an existing mappedControl
+    """
+    deleteMappedControl(
+        """
+        ID of the mappedControl
+        """
+        id: ID!
+    ): MappedControlDeletePayload!
+}
+
+"""
+Return response for createMappedControl mutation
+"""
+type MappedControlCreatePayload {
+    """
+    Created mappedControl
+    """
+    mappedControl: MappedControl!
+}
+
+"""
+Return response for updateMappedControl mutation
+"""
+type MappedControlUpdatePayload {
+    """
+    Updated mappedControl
+    """
+    mappedControl: MappedControl!
+}
+
+"""
+Return response for deleteMappedControl mutation
+"""
+type MappedControlDeletePayload {
+    """
+    Deleted mappedControl ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkMappedControl mutation
+"""
+type MappedControlBulkCreatePayload {
+    """
+    Created mappedControls
+    """
+    mappedControls: [MappedControl!]
+}`, BuiltIn: false},
 	{Name: "../schema/narrative.graphql", Input: `extend type Query {
     """
     Look up narrative by ID
@@ -55296,7 +57729,6 @@ input CreateControlWithSubcontrolsInput{
 
 input CreateFullProgramInput{
   program: CreateProgramInput!
-  standard: CreateStandardInput!
   controls: [CreateControlWithSubcontrolsInput!]
   risks: [CreateRiskInput!]
   internalPolicies: [CreateInternalPolicyInput!]
@@ -55551,7 +57983,12 @@ type RiskBulkCreatePayload {
 }`, BuiltIn: false},
 	{Name: "../schema/scalars.graphql", Input: `scalar Upload
 scalar Address
-scalar Price`, BuiltIn: false},
+scalar Price
+scalar AssessmentObjective
+scalar AssessmentMethod
+scalar ExampleEvidence
+scalar Reference
+scalar ImplementationGuidance`, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across APIToken objects
@@ -55589,6 +58026,15 @@ scalar Price`, BuiltIn: false},
         """
         query: String!
     ): ControlSearchResult
+    """
+    Search across ControlImplementation objects
+    """
+    controlImplementationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlImplementationSearchResult
     """
     Search across ControlObjective objects
     """
@@ -55679,6 +58125,15 @@ scalar Price`, BuiltIn: false},
         """
         query: String!
     ): InternalPolicySearchResult
+    """
+    Search across MappedControl objects
+    """
+    mappedControlSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): MappedControlSearchResult
     """
     Search across Narrative objects
     """
@@ -55820,6 +58275,7 @@ union SearchResult =
   | ActionPlanSearchResult
   | ContactSearchResult
   | ControlSearchResult
+  | ControlImplementationSearchResult
   | ControlObjectiveSearchResult
   | DocumentDataSearchResult
   | EntitySearchResult
@@ -55830,6 +58286,7 @@ union SearchResult =
   | GroupSearchResult
   | IntegrationSearchResult
   | InternalPolicySearchResult
+  | MappedControlSearchResult
   | NarrativeSearchResult
   | OrgSubscriptionSearchResult
   | OrganizationSearchResult
@@ -55898,6 +58355,10 @@ type  ControlSearchResult {
    controls: [ Control!]
 }
 
+type  ControlImplementationSearchResult {
+   controlImplementations: [ ControlImplementation!]
+}
+
 type  ControlObjectiveSearchResult {
    controlObjectives: [ ControlObjective!]
 }
@@ -55936,6 +58397,10 @@ type  IntegrationSearchResult {
 
 type  InternalPolicySearchResult {
    internalPolicies: [ InternalPolicy!]
+}
+
+type  MappedControlSearchResult {
+   mappedControls: [ MappedControl!]
 }
 
 type  NarrativeSearchResult {
@@ -56020,24 +58485,6 @@ extend type Mutation{
         """
         input: CreateStandardInput!
     ): StandardCreatePayload!
-    """
-    Create multiple new standards
-    """
-    createBulkStandard(
-        """
-        values of the standard
-        """
-        input: [CreateStandardInput!]
-    ): StandardBulkCreatePayload!
-    """
-    Create multiple new standards via file upload
-    """
-    createBulkCSVStandard(
-        """
-        csv file containing values of the standard
-        """
-        input: Upload!
-    ): StandardBulkCreatePayload!
     """
     Update an existing standard
     """

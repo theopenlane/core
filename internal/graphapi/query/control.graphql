@@ -1,52 +1,61 @@
-
-mutation CreateBulkCSVControl($input: Upload!) {
-  createBulkCSVControl(input: $input) {
+mutation CreateBulkControl($input: [CreateControlInput!]) {
+  createBulkControl(input: $input) {
     controls {
-      class
-      controlNumber
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
       controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      mappedFrameworks
-      name
-      satisfies
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
+      standardID
       status
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
 
-mutation CreateBulkControl($input: [CreateControlInput!]) {
-  createBulkControl(input: $input) {
+mutation CreateBulkCSVControl($input: Upload!) {
+  createBulkCSVControl(input: $input) {
     controls {
-      class
-      controlNumber
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
       controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      mappedFrameworks
-      name
-      satisfies
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
+      standardID
       status
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
@@ -54,31 +63,43 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
 mutation CreateControl($input: CreateControlInput!) {
   createControl(input: $input) {
     control {
-      class
-      controlNumber
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
       controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      mappedFrameworks
-      name
-      satisfies
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
+      standardID
       status
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
-      subcontrols {
+      controlOwner {
         id
-        name
+        firstName
+        lastName
+      }
+      delegate {
+        id
+        firstName
+        lastName
       }
       programs {
         id
+        displayID
         name
       }
       editors {
@@ -107,31 +128,49 @@ query GetAllControls {
   controls {
     edges {
       node {
-        class
-        controlNumber
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlQuestions
         controlType
         createdAt
         createdBy
         description
-        details
         displayID
-        family
+        exampleEvidence
         id
-        mappedFrameworks
-        name
-        satisfies
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        references
         source
+        standardID
         status
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
-        subcontrols {
+        controlOwner {
+          id
+          firstName
+          lastName
+        }
+        delegate {
+          id
+          firstName
+          lastName
+        }
+        standard {
           id
           name
+          shortName
+          governingBody
         }
         programs {
           id
+          displayID
           name
         }
         editors {
@@ -150,33 +189,52 @@ query GetAllControls {
     }
   }
 }
+
 query GetControlByID($controlId: ID!) {
   control(id: $controlId) {
-    class
-    controlNumber
+    assessmentMethods
+    assessmentObjectives
+    category
+    categoryID
+    controlQuestions
     controlType
     createdAt
     createdBy
     description
-    details
     displayID
-    family
+    exampleEvidence
     id
-    mappedFrameworks
-    name
-    satisfies
+    implementationGuidance
+    mappedCategories
+    ownerID
+    refCode
+    references
     source
+    standardID
     status
+    subcategory
     tags
     updatedAt
     updatedBy
-    version
-    subcontrols {
+    controlOwner {
+      id
+      firstName
+      lastName
+    }
+    delegate {
+      id
+      firstName
+      lastName
+    }
+    standard {
       id
       name
+      shortName
+      governingBody
     }
     programs {
       id
+      displayID
       name
     }
     editors {
@@ -198,31 +256,49 @@ query GetControls($where: ControlWhereInput) {
   controls(where: $where) {
     edges {
       node {
-        class
-        controlNumber
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlQuestions
         controlType
         createdAt
         createdBy
         description
-        details
         displayID
-        family
+        exampleEvidence
         id
-        mappedFrameworks
-        name
-        satisfies
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        references
         source
+        standardID
         status
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
-        subcontrols {
+        controlOwner {
+          id
+          firstName
+          lastName
+        }
+        delegate {
+          id
+          firstName
+          lastName
+        }
+        standard {
           id
           name
-       }
+          shortName
+          governingBody
+        }
         programs {
           id
+          displayID
           name
         }
         editors {
@@ -241,34 +317,53 @@ query GetControls($where: ControlWhereInput) {
     }
   }
 }
+
 mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
   updateControl(id: $updateControlId, input: $input) {
     control {
-      class
-      controlNumber
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
       controlType
       createdAt
       createdBy
       description
-      details
       displayID
-      family
+      exampleEvidence
       id
-      mappedFrameworks
-      name
-      satisfies
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
       source
+      standardID
       status
+      subcategory
       tags
       updatedAt
       updatedBy
-      version
-      subcontrols {
+      controlOwner {
+        id
+        firstName
+        lastName
+      }
+      delegate {
+        id
+        firstName
+        lastName
+      }
+      standard {
         id
         name
+        shortName
+        governingBody
       }
       programs {
         id
+        displayID
         name
       }
       editors {

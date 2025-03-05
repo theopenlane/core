@@ -6,17 +6,34 @@ package graphapi
 
 import (
 	"context"
+	"errors"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/graphutils"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateStandard is the resolver for the createStandard field.
 func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*model.StandardCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("organization_id")
+	}
+
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
 	if err != nil {
+		// special case for standards which are system owned
+		if errors.Is(err, privacy.Deny) {
+			return nil, rout.ErrPermissionDenied
+		}
+
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
 	}
 
@@ -25,28 +42,18 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 	}, nil
 }
 
-// CreateBulkStandard is the resolver for the createBulkStandard field.
-func (r *mutationResolver) CreateBulkStandard(ctx context.Context, input []*generated.CreateStandardInput) (*model.StandardBulkCreatePayload, error) {
-	return r.bulkCreateStandard(ctx, input)
-}
-
-// CreateBulkCSVStandard is the resolver for the createBulkCSVStandard field.
-func (r *mutationResolver) CreateBulkCSVStandard(ctx context.Context, input graphql.Upload) (*model.StandardBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateStandardInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	return r.bulkCreateStandard(ctx, data)
-}
-
 // UpdateStandard is the resolver for the updateStandard field.
 func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput) (*model.StandardUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "standard"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request
@@ -79,7 +86,93 @@ func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*mode
 
 // Standard is the resolver for the standard field.
 func (r *queryResolver) Standard(ctx context.Context, id string) (*generated.Standard, error) {
-	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
+	query := withTransactionalMutation(ctx).Standard.Query().Where(standard.ID(id))
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControl) {
+		query.WithNamedControls("controls", func(q *generated.ControlQuery) {
+			filter := q.Where(control.StandardID(id))
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+				filter.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeSubcontrol) {
+				filter.WithNamedSubcontrols("subcontrols", func(q *generated.SubcontrolQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+				filter.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeMappedControl) {
+				filter.WithMappedControls(func(q *generated.MappedControlQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeTask) {
+				filter.WithNamedTasks("tasks", func(q *generated.TaskQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeRisk) {
+				filter.WithNamedRisks("risks", func(q *generated.RiskQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeEvidence) {
+				filter.WithNamedEvidence("evidence", func(q *generated.EvidenceQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeNarrative) {
+				filter.WithNamedNarratives("narratives", func(q *generated.NarrativeQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeProcedure) {
+				filter.WithNamedProcedures("procedures", func(q *generated.ProcedureQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeInternalPolicy) {
+				filter.WithNamedInternalPolicies("internalPolicies", func(q *generated.InternalPolicyQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeActionPlan) {
+				filter.WithNamedActionPlans("actionPlans", func(q *generated.ActionPlanQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, "controlOwner") {
+				filter.WithControlOwner(func(q *generated.UserQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, "delegate") {
+				filter.WithDelegate(func(q *generated.UserQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+		})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
 	}

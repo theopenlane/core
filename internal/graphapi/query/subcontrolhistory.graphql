@@ -4,31 +4,33 @@ query GetAllSubcontrolHistories {
   subcontrolHistories {
     edges {
       node {
-        class
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlID
+        controlQuestions
+        controlType
         createdAt
         createdBy
         description
-        details
-        family
+        displayID
+        exampleEvidence
         historyTime
         id
-        implementationDate
-        implementationEvidence
-        implementationStatus
-        implementationVerification
-        implementationVerificationDate
-        mappedFrameworks
-        name
+        implementationGuidance
+        mappedCategories
         operation
+        ownerID
         ref
+        refCode
+        references
         source
         status
-        subcontrolNumber
-        subcontrolType
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }
@@ -38,31 +40,33 @@ query GetSubcontrolHistories($where: SubcontrolHistoryWhereInput) {
   subcontrolHistories(where: $where) {
     edges {
       node {
-        class
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlID
+        controlQuestions
+        controlType
         createdAt
         createdBy
         description
-        details
-        family
+        displayID
+        exampleEvidence
         historyTime
         id
-        implementationDate
-        implementationEvidence
-        implementationStatus
-        implementationVerification
-        implementationVerificationDate
-        mappedFrameworks
-        name
+        implementationGuidance
+        mappedCategories
         operation
+        ownerID
         ref
+        refCode
+        references
         source
         status
-        subcontrolNumber
-        subcontrolType
+        subcategory
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }

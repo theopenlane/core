@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -115,11 +116,6 @@ func OwnerID(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldName, v))
-}
-
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldDescription, v))
@@ -130,69 +126,29 @@ func Status(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldStatus, v))
 }
 
-// SubcontrolType applies equality check predicate on the "subcontrol_type" field. It's identical to SubcontrolTypeEQ.
-func SubcontrolType(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcontrolType, v))
+// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
+func Category(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldCategory, v))
 }
 
-// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
-func Version(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldVersion, v))
+// CategoryID applies equality check predicate on the "category_id" field. It's identical to CategoryIDEQ.
+func CategoryID(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldCategoryID, v))
 }
 
-// SubcontrolNumber applies equality check predicate on the "subcontrol_number" field. It's identical to SubcontrolNumberEQ.
-func SubcontrolNumber(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcontrolNumber, v))
+// Subcategory applies equality check predicate on the "subcategory" field. It's identical to SubcategoryEQ.
+func Subcategory(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcategory, v))
 }
 
-// Family applies equality check predicate on the "family" field. It's identical to FamilyEQ.
-func Family(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldFamily, v))
+// RefCode applies equality check predicate on the "ref_code" field. It's identical to RefCodeEQ.
+func RefCode(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldRefCode, v))
 }
 
-// Class applies equality check predicate on the "class" field. It's identical to ClassEQ.
-func Class(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldClass, v))
-}
-
-// Source applies equality check predicate on the "source" field. It's identical to SourceEQ.
-func Source(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSource, v))
-}
-
-// MappedFrameworks applies equality check predicate on the "mapped_frameworks" field. It's identical to MappedFrameworksEQ.
-func MappedFrameworks(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldMappedFrameworks, v))
-}
-
-// ImplementationEvidence applies equality check predicate on the "implementation_evidence" field. It's identical to ImplementationEvidenceEQ.
-func ImplementationEvidence(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationEvidence, v))
-}
-
-// ImplementationStatus applies equality check predicate on the "implementation_status" field. It's identical to ImplementationStatusEQ.
-func ImplementationStatus(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationStatus, v))
-}
-
-// ImplementationDate applies equality check predicate on the "implementation_date" field. It's identical to ImplementationDateEQ.
-func ImplementationDate(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationDate, v))
-}
-
-// ImplementationVerification applies equality check predicate on the "implementation_verification" field. It's identical to ImplementationVerificationEQ.
-func ImplementationVerification(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationDate applies equality check predicate on the "implementation_verification_date" field. It's identical to ImplementationVerificationDateEQ.
-func ImplementationVerificationDate(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationVerificationDate, v))
-}
-
-// ExampleEvidence applies equality check predicate on the "example_evidence" field. It's identical to ExampleEvidenceEQ.
-func ExampleEvidence(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldExampleEvidence, v))
+// ControlID applies equality check predicate on the "control_id" field. It's identical to ControlIDEQ.
+func ControlID(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlID, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -855,71 +811,6 @@ func OwnerIDContainsFold(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldName, v))
-}
-
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldName, v))
-}
-
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldName, vs...))
-}
-
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldName, vs...))
-}
-
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldName, v))
-}
-
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldName, v))
-}
-
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldName, v))
-}
-
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldName, v))
-}
-
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldName, v))
-}
-
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldName, v))
-}
-
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldName, v))
-}
-
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldName, v))
-}
-
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldName, v))
-}
-
 // DescriptionEQ applies the EQ predicate on the "description" field.
 func DescriptionEQ(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldDescription, v))
@@ -1070,434 +961,34 @@ func StatusContainsFold(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldStatus, v))
 }
 
-// SubcontrolTypeEQ applies the EQ predicate on the "subcontrol_type" field.
-func SubcontrolTypeEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeNEQ applies the NEQ predicate on the "subcontrol_type" field.
-func SubcontrolTypeNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeIn applies the In predicate on the "subcontrol_type" field.
-func SubcontrolTypeIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldSubcontrolType, vs...))
-}
-
-// SubcontrolTypeNotIn applies the NotIn predicate on the "subcontrol_type" field.
-func SubcontrolTypeNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldSubcontrolType, vs...))
-}
-
-// SubcontrolTypeGT applies the GT predicate on the "subcontrol_type" field.
-func SubcontrolTypeGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeGTE applies the GTE predicate on the "subcontrol_type" field.
-func SubcontrolTypeGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeLT applies the LT predicate on the "subcontrol_type" field.
-func SubcontrolTypeLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeLTE applies the LTE predicate on the "subcontrol_type" field.
-func SubcontrolTypeLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeContains applies the Contains predicate on the "subcontrol_type" field.
-func SubcontrolTypeContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeHasPrefix applies the HasPrefix predicate on the "subcontrol_type" field.
-func SubcontrolTypeHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeHasSuffix applies the HasSuffix predicate on the "subcontrol_type" field.
-func SubcontrolTypeHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeIsNil applies the IsNil predicate on the "subcontrol_type" field.
-func SubcontrolTypeIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldSubcontrolType))
-}
-
-// SubcontrolTypeNotNil applies the NotNil predicate on the "subcontrol_type" field.
-func SubcontrolTypeNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldSubcontrolType))
-}
-
-// SubcontrolTypeEqualFold applies the EqualFold predicate on the "subcontrol_type" field.
-func SubcontrolTypeEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldSubcontrolType, v))
-}
-
-// SubcontrolTypeContainsFold applies the ContainsFold predicate on the "subcontrol_type" field.
-func SubcontrolTypeContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldSubcontrolType, v))
-}
-
-// VersionEQ applies the EQ predicate on the "version" field.
-func VersionEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldVersion, v))
-}
-
-// VersionNEQ applies the NEQ predicate on the "version" field.
-func VersionNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldVersion, v))
-}
-
-// VersionIn applies the In predicate on the "version" field.
-func VersionIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldVersion, vs...))
-}
-
-// VersionNotIn applies the NotIn predicate on the "version" field.
-func VersionNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldVersion, vs...))
-}
-
-// VersionGT applies the GT predicate on the "version" field.
-func VersionGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldVersion, v))
-}
-
-// VersionGTE applies the GTE predicate on the "version" field.
-func VersionGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldVersion, v))
-}
-
-// VersionLT applies the LT predicate on the "version" field.
-func VersionLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldVersion, v))
-}
-
-// VersionLTE applies the LTE predicate on the "version" field.
-func VersionLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldVersion, v))
-}
-
-// VersionContains applies the Contains predicate on the "version" field.
-func VersionContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldVersion, v))
-}
-
-// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
-func VersionHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldVersion, v))
-}
-
-// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
-func VersionHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldVersion, v))
-}
-
-// VersionIsNil applies the IsNil predicate on the "version" field.
-func VersionIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldVersion))
-}
-
-// VersionNotNil applies the NotNil predicate on the "version" field.
-func VersionNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldVersion))
-}
-
-// VersionEqualFold applies the EqualFold predicate on the "version" field.
-func VersionEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldVersion, v))
-}
-
-// VersionContainsFold applies the ContainsFold predicate on the "version" field.
-func VersionContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldVersion, v))
-}
-
-// SubcontrolNumberEQ applies the EQ predicate on the "subcontrol_number" field.
-func SubcontrolNumberEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberNEQ applies the NEQ predicate on the "subcontrol_number" field.
-func SubcontrolNumberNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberIn applies the In predicate on the "subcontrol_number" field.
-func SubcontrolNumberIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldSubcontrolNumber, vs...))
-}
-
-// SubcontrolNumberNotIn applies the NotIn predicate on the "subcontrol_number" field.
-func SubcontrolNumberNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldSubcontrolNumber, vs...))
-}
-
-// SubcontrolNumberGT applies the GT predicate on the "subcontrol_number" field.
-func SubcontrolNumberGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberGTE applies the GTE predicate on the "subcontrol_number" field.
-func SubcontrolNumberGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberLT applies the LT predicate on the "subcontrol_number" field.
-func SubcontrolNumberLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberLTE applies the LTE predicate on the "subcontrol_number" field.
-func SubcontrolNumberLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberContains applies the Contains predicate on the "subcontrol_number" field.
-func SubcontrolNumberContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberHasPrefix applies the HasPrefix predicate on the "subcontrol_number" field.
-func SubcontrolNumberHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberHasSuffix applies the HasSuffix predicate on the "subcontrol_number" field.
-func SubcontrolNumberHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberIsNil applies the IsNil predicate on the "subcontrol_number" field.
-func SubcontrolNumberIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldSubcontrolNumber))
-}
-
-// SubcontrolNumberNotNil applies the NotNil predicate on the "subcontrol_number" field.
-func SubcontrolNumberNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldSubcontrolNumber))
-}
-
-// SubcontrolNumberEqualFold applies the EqualFold predicate on the "subcontrol_number" field.
-func SubcontrolNumberEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldSubcontrolNumber, v))
-}
-
-// SubcontrolNumberContainsFold applies the ContainsFold predicate on the "subcontrol_number" field.
-func SubcontrolNumberContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldSubcontrolNumber, v))
-}
-
-// FamilyEQ applies the EQ predicate on the "family" field.
-func FamilyEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldFamily, v))
-}
-
-// FamilyNEQ applies the NEQ predicate on the "family" field.
-func FamilyNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldFamily, v))
-}
-
-// FamilyIn applies the In predicate on the "family" field.
-func FamilyIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldFamily, vs...))
-}
-
-// FamilyNotIn applies the NotIn predicate on the "family" field.
-func FamilyNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldFamily, vs...))
-}
-
-// FamilyGT applies the GT predicate on the "family" field.
-func FamilyGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldFamily, v))
-}
-
-// FamilyGTE applies the GTE predicate on the "family" field.
-func FamilyGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldFamily, v))
-}
-
-// FamilyLT applies the LT predicate on the "family" field.
-func FamilyLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldFamily, v))
-}
-
-// FamilyLTE applies the LTE predicate on the "family" field.
-func FamilyLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldFamily, v))
-}
-
-// FamilyContains applies the Contains predicate on the "family" field.
-func FamilyContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldFamily, v))
-}
-
-// FamilyHasPrefix applies the HasPrefix predicate on the "family" field.
-func FamilyHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldFamily, v))
-}
-
-// FamilyHasSuffix applies the HasSuffix predicate on the "family" field.
-func FamilyHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldFamily, v))
-}
-
-// FamilyIsNil applies the IsNil predicate on the "family" field.
-func FamilyIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldFamily))
-}
-
-// FamilyNotNil applies the NotNil predicate on the "family" field.
-func FamilyNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldFamily))
-}
-
-// FamilyEqualFold applies the EqualFold predicate on the "family" field.
-func FamilyEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldFamily, v))
-}
-
-// FamilyContainsFold applies the ContainsFold predicate on the "family" field.
-func FamilyContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldFamily, v))
-}
-
-// ClassEQ applies the EQ predicate on the "class" field.
-func ClassEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldClass, v))
-}
-
-// ClassNEQ applies the NEQ predicate on the "class" field.
-func ClassNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldClass, v))
-}
-
-// ClassIn applies the In predicate on the "class" field.
-func ClassIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldClass, vs...))
-}
-
-// ClassNotIn applies the NotIn predicate on the "class" field.
-func ClassNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldClass, vs...))
-}
-
-// ClassGT applies the GT predicate on the "class" field.
-func ClassGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldClass, v))
-}
-
-// ClassGTE applies the GTE predicate on the "class" field.
-func ClassGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldClass, v))
-}
-
-// ClassLT applies the LT predicate on the "class" field.
-func ClassLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldClass, v))
-}
-
-// ClassLTE applies the LTE predicate on the "class" field.
-func ClassLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldClass, v))
-}
-
-// ClassContains applies the Contains predicate on the "class" field.
-func ClassContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldClass, v))
-}
-
-// ClassHasPrefix applies the HasPrefix predicate on the "class" field.
-func ClassHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldClass, v))
-}
-
-// ClassHasSuffix applies the HasSuffix predicate on the "class" field.
-func ClassHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldClass, v))
-}
-
-// ClassIsNil applies the IsNil predicate on the "class" field.
-func ClassIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldClass))
-}
-
-// ClassNotNil applies the NotNil predicate on the "class" field.
-func ClassNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldClass))
-}
-
-// ClassEqualFold applies the EqualFold predicate on the "class" field.
-func ClassEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldClass, v))
-}
-
-// ClassContainsFold applies the ContainsFold predicate on the "class" field.
-func ClassContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldClass, v))
-}
-
 // SourceEQ applies the EQ predicate on the "source" field.
-func SourceEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSource, v))
+func SourceEQ(v enums.ControlSource) predicate.SubcontrolHistory {
+	vc := v
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSource, vc))
 }
 
 // SourceNEQ applies the NEQ predicate on the "source" field.
-func SourceNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldSource, v))
+func SourceNEQ(v enums.ControlSource) predicate.SubcontrolHistory {
+	vc := v
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldSource, vc))
 }
 
 // SourceIn applies the In predicate on the "source" field.
-func SourceIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldSource, vs...))
+func SourceIn(vs ...enums.ControlSource) predicate.SubcontrolHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldSource, v...))
 }
 
 // SourceNotIn applies the NotIn predicate on the "source" field.
-func SourceNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldSource, vs...))
-}
-
-// SourceGT applies the GT predicate on the "source" field.
-func SourceGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldSource, v))
-}
-
-// SourceGTE applies the GTE predicate on the "source" field.
-func SourceGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldSource, v))
-}
-
-// SourceLT applies the LT predicate on the "source" field.
-func SourceLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldSource, v))
-}
-
-// SourceLTE applies the LTE predicate on the "source" field.
-func SourceLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldSource, v))
-}
-
-// SourceContains applies the Contains predicate on the "source" field.
-func SourceContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldSource, v))
-}
-
-// SourceHasPrefix applies the HasPrefix predicate on the "source" field.
-func SourceHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldSource, v))
-}
-
-// SourceHasSuffix applies the HasSuffix predicate on the "source" field.
-func SourceHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldSource, v))
+func SourceNotIn(vs ...enums.ControlSource) predicate.SubcontrolHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldSource, v...))
 }
 
 // SourceIsNil applies the IsNil predicate on the "source" field.
@@ -1510,479 +1001,319 @@ func SourceNotNil() predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldSource))
 }
 
-// SourceEqualFold applies the EqualFold predicate on the "source" field.
-func SourceEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldSource, v))
+// ControlTypeEQ applies the EQ predicate on the "control_type" field.
+func ControlTypeEQ(v enums.ControlType) predicate.SubcontrolHistory {
+	vc := v
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlType, vc))
 }
 
-// SourceContainsFold applies the ContainsFold predicate on the "source" field.
-func SourceContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldSource, v))
+// ControlTypeNEQ applies the NEQ predicate on the "control_type" field.
+func ControlTypeNEQ(v enums.ControlType) predicate.SubcontrolHistory {
+	vc := v
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldControlType, vc))
 }
 
-// MappedFrameworksEQ applies the EQ predicate on the "mapped_frameworks" field.
-func MappedFrameworksEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldMappedFrameworks, v))
+// ControlTypeIn applies the In predicate on the "control_type" field.
+func ControlTypeIn(vs ...enums.ControlType) predicate.SubcontrolHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldControlType, v...))
 }
 
-// MappedFrameworksNEQ applies the NEQ predicate on the "mapped_frameworks" field.
-func MappedFrameworksNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldMappedFrameworks, v))
+// ControlTypeNotIn applies the NotIn predicate on the "control_type" field.
+func ControlTypeNotIn(vs ...enums.ControlType) predicate.SubcontrolHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldControlType, v...))
 }
 
-// MappedFrameworksIn applies the In predicate on the "mapped_frameworks" field.
-func MappedFrameworksIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldMappedFrameworks, vs...))
+// ControlTypeIsNil applies the IsNil predicate on the "control_type" field.
+func ControlTypeIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldControlType))
 }
 
-// MappedFrameworksNotIn applies the NotIn predicate on the "mapped_frameworks" field.
-func MappedFrameworksNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldMappedFrameworks, vs...))
+// ControlTypeNotNil applies the NotNil predicate on the "control_type" field.
+func ControlTypeNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldControlType))
 }
 
-// MappedFrameworksGT applies the GT predicate on the "mapped_frameworks" field.
-func MappedFrameworksGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldMappedFrameworks, v))
+// CategoryEQ applies the EQ predicate on the "category" field.
+func CategoryEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldCategory, v))
 }
 
-// MappedFrameworksGTE applies the GTE predicate on the "mapped_frameworks" field.
-func MappedFrameworksGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldMappedFrameworks, v))
+// CategoryNEQ applies the NEQ predicate on the "category" field.
+func CategoryNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldCategory, v))
 }
 
-// MappedFrameworksLT applies the LT predicate on the "mapped_frameworks" field.
-func MappedFrameworksLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldMappedFrameworks, v))
+// CategoryIn applies the In predicate on the "category" field.
+func CategoryIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldCategory, vs...))
 }
 
-// MappedFrameworksLTE applies the LTE predicate on the "mapped_frameworks" field.
-func MappedFrameworksLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldMappedFrameworks, v))
+// CategoryNotIn applies the NotIn predicate on the "category" field.
+func CategoryNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldCategory, vs...))
 }
 
-// MappedFrameworksContains applies the Contains predicate on the "mapped_frameworks" field.
-func MappedFrameworksContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldMappedFrameworks, v))
+// CategoryGT applies the GT predicate on the "category" field.
+func CategoryGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldCategory, v))
 }
 
-// MappedFrameworksHasPrefix applies the HasPrefix predicate on the "mapped_frameworks" field.
-func MappedFrameworksHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldMappedFrameworks, v))
+// CategoryGTE applies the GTE predicate on the "category" field.
+func CategoryGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldCategory, v))
 }
 
-// MappedFrameworksHasSuffix applies the HasSuffix predicate on the "mapped_frameworks" field.
-func MappedFrameworksHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldMappedFrameworks, v))
+// CategoryLT applies the LT predicate on the "category" field.
+func CategoryLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldCategory, v))
 }
 
-// MappedFrameworksIsNil applies the IsNil predicate on the "mapped_frameworks" field.
-func MappedFrameworksIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldMappedFrameworks))
+// CategoryLTE applies the LTE predicate on the "category" field.
+func CategoryLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldCategory, v))
 }
 
-// MappedFrameworksNotNil applies the NotNil predicate on the "mapped_frameworks" field.
-func MappedFrameworksNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldMappedFrameworks))
+// CategoryContains applies the Contains predicate on the "category" field.
+func CategoryContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldCategory, v))
 }
 
-// MappedFrameworksEqualFold applies the EqualFold predicate on the "mapped_frameworks" field.
-func MappedFrameworksEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldMappedFrameworks, v))
+// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
+func CategoryHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldCategory, v))
 }
 
-// MappedFrameworksContainsFold applies the ContainsFold predicate on the "mapped_frameworks" field.
-func MappedFrameworksContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldMappedFrameworks, v))
+// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
+func CategoryHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldCategory, v))
 }
 
-// ImplementationEvidenceEQ applies the EQ predicate on the "implementation_evidence" field.
-func ImplementationEvidenceEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationEvidence, v))
+// CategoryIsNil applies the IsNil predicate on the "category" field.
+func CategoryIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldCategory))
 }
 
-// ImplementationEvidenceNEQ applies the NEQ predicate on the "implementation_evidence" field.
-func ImplementationEvidenceNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldImplementationEvidence, v))
+// CategoryNotNil applies the NotNil predicate on the "category" field.
+func CategoryNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldCategory))
 }
 
-// ImplementationEvidenceIn applies the In predicate on the "implementation_evidence" field.
-func ImplementationEvidenceIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldImplementationEvidence, vs...))
+// CategoryEqualFold applies the EqualFold predicate on the "category" field.
+func CategoryEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldCategory, v))
 }
 
-// ImplementationEvidenceNotIn applies the NotIn predicate on the "implementation_evidence" field.
-func ImplementationEvidenceNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldImplementationEvidence, vs...))
+// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
+func CategoryContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldCategory, v))
 }
 
-// ImplementationEvidenceGT applies the GT predicate on the "implementation_evidence" field.
-func ImplementationEvidenceGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldImplementationEvidence, v))
+// CategoryIDEQ applies the EQ predicate on the "category_id" field.
+func CategoryIDEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceGTE applies the GTE predicate on the "implementation_evidence" field.
-func ImplementationEvidenceGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldImplementationEvidence, v))
+// CategoryIDNEQ applies the NEQ predicate on the "category_id" field.
+func CategoryIDNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceLT applies the LT predicate on the "implementation_evidence" field.
-func ImplementationEvidenceLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldImplementationEvidence, v))
+// CategoryIDIn applies the In predicate on the "category_id" field.
+func CategoryIDIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldCategoryID, vs...))
 }
 
-// ImplementationEvidenceLTE applies the LTE predicate on the "implementation_evidence" field.
-func ImplementationEvidenceLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldImplementationEvidence, v))
+// CategoryIDNotIn applies the NotIn predicate on the "category_id" field.
+func CategoryIDNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldCategoryID, vs...))
 }
 
-// ImplementationEvidenceContains applies the Contains predicate on the "implementation_evidence" field.
-func ImplementationEvidenceContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldImplementationEvidence, v))
+// CategoryIDGT applies the GT predicate on the "category_id" field.
+func CategoryIDGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceHasPrefix applies the HasPrefix predicate on the "implementation_evidence" field.
-func ImplementationEvidenceHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldImplementationEvidence, v))
+// CategoryIDGTE applies the GTE predicate on the "category_id" field.
+func CategoryIDGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceHasSuffix applies the HasSuffix predicate on the "implementation_evidence" field.
-func ImplementationEvidenceHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldImplementationEvidence, v))
+// CategoryIDLT applies the LT predicate on the "category_id" field.
+func CategoryIDLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceIsNil applies the IsNil predicate on the "implementation_evidence" field.
-func ImplementationEvidenceIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldImplementationEvidence))
+// CategoryIDLTE applies the LTE predicate on the "category_id" field.
+func CategoryIDLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceNotNil applies the NotNil predicate on the "implementation_evidence" field.
-func ImplementationEvidenceNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldImplementationEvidence))
+// CategoryIDContains applies the Contains predicate on the "category_id" field.
+func CategoryIDContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceEqualFold applies the EqualFold predicate on the "implementation_evidence" field.
-func ImplementationEvidenceEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldImplementationEvidence, v))
+// CategoryIDHasPrefix applies the HasPrefix predicate on the "category_id" field.
+func CategoryIDHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldCategoryID, v))
 }
 
-// ImplementationEvidenceContainsFold applies the ContainsFold predicate on the "implementation_evidence" field.
-func ImplementationEvidenceContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldImplementationEvidence, v))
+// CategoryIDHasSuffix applies the HasSuffix predicate on the "category_id" field.
+func CategoryIDHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldCategoryID, v))
 }
 
-// ImplementationStatusEQ applies the EQ predicate on the "implementation_status" field.
-func ImplementationStatusEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationStatus, v))
+// CategoryIDIsNil applies the IsNil predicate on the "category_id" field.
+func CategoryIDIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldCategoryID))
 }
 
-// ImplementationStatusNEQ applies the NEQ predicate on the "implementation_status" field.
-func ImplementationStatusNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldImplementationStatus, v))
+// CategoryIDNotNil applies the NotNil predicate on the "category_id" field.
+func CategoryIDNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldCategoryID))
 }
 
-// ImplementationStatusIn applies the In predicate on the "implementation_status" field.
-func ImplementationStatusIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldImplementationStatus, vs...))
+// CategoryIDEqualFold applies the EqualFold predicate on the "category_id" field.
+func CategoryIDEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldCategoryID, v))
 }
 
-// ImplementationStatusNotIn applies the NotIn predicate on the "implementation_status" field.
-func ImplementationStatusNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldImplementationStatus, vs...))
+// CategoryIDContainsFold applies the ContainsFold predicate on the "category_id" field.
+func CategoryIDContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldCategoryID, v))
 }
 
-// ImplementationStatusGT applies the GT predicate on the "implementation_status" field.
-func ImplementationStatusGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldImplementationStatus, v))
+// SubcategoryEQ applies the EQ predicate on the "subcategory" field.
+func SubcategoryEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcategory, v))
 }
 
-// ImplementationStatusGTE applies the GTE predicate on the "implementation_status" field.
-func ImplementationStatusGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldImplementationStatus, v))
+// SubcategoryNEQ applies the NEQ predicate on the "subcategory" field.
+func SubcategoryNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldSubcategory, v))
 }
 
-// ImplementationStatusLT applies the LT predicate on the "implementation_status" field.
-func ImplementationStatusLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldImplementationStatus, v))
+// SubcategoryIn applies the In predicate on the "subcategory" field.
+func SubcategoryIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldSubcategory, vs...))
 }
 
-// ImplementationStatusLTE applies the LTE predicate on the "implementation_status" field.
-func ImplementationStatusLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldImplementationStatus, v))
+// SubcategoryNotIn applies the NotIn predicate on the "subcategory" field.
+func SubcategoryNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldSubcategory, vs...))
 }
 
-// ImplementationStatusContains applies the Contains predicate on the "implementation_status" field.
-func ImplementationStatusContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldImplementationStatus, v))
+// SubcategoryGT applies the GT predicate on the "subcategory" field.
+func SubcategoryGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldSubcategory, v))
 }
 
-// ImplementationStatusHasPrefix applies the HasPrefix predicate on the "implementation_status" field.
-func ImplementationStatusHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldImplementationStatus, v))
+// SubcategoryGTE applies the GTE predicate on the "subcategory" field.
+func SubcategoryGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldSubcategory, v))
 }
 
-// ImplementationStatusHasSuffix applies the HasSuffix predicate on the "implementation_status" field.
-func ImplementationStatusHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldImplementationStatus, v))
+// SubcategoryLT applies the LT predicate on the "subcategory" field.
+func SubcategoryLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldSubcategory, v))
 }
 
-// ImplementationStatusIsNil applies the IsNil predicate on the "implementation_status" field.
-func ImplementationStatusIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldImplementationStatus))
+// SubcategoryLTE applies the LTE predicate on the "subcategory" field.
+func SubcategoryLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldSubcategory, v))
 }
 
-// ImplementationStatusNotNil applies the NotNil predicate on the "implementation_status" field.
-func ImplementationStatusNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldImplementationStatus))
+// SubcategoryContains applies the Contains predicate on the "subcategory" field.
+func SubcategoryContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldSubcategory, v))
 }
 
-// ImplementationStatusEqualFold applies the EqualFold predicate on the "implementation_status" field.
-func ImplementationStatusEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldImplementationStatus, v))
+// SubcategoryHasPrefix applies the HasPrefix predicate on the "subcategory" field.
+func SubcategoryHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldSubcategory, v))
 }
 
-// ImplementationStatusContainsFold applies the ContainsFold predicate on the "implementation_status" field.
-func ImplementationStatusContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldImplementationStatus, v))
+// SubcategoryHasSuffix applies the HasSuffix predicate on the "subcategory" field.
+func SubcategoryHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldSubcategory, v))
 }
 
-// ImplementationDateEQ applies the EQ predicate on the "implementation_date" field.
-func ImplementationDateEQ(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationDate, v))
+// SubcategoryIsNil applies the IsNil predicate on the "subcategory" field.
+func SubcategoryIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldSubcategory))
 }
 
-// ImplementationDateNEQ applies the NEQ predicate on the "implementation_date" field.
-func ImplementationDateNEQ(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldImplementationDate, v))
+// SubcategoryNotNil applies the NotNil predicate on the "subcategory" field.
+func SubcategoryNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldSubcategory))
 }
 
-// ImplementationDateIn applies the In predicate on the "implementation_date" field.
-func ImplementationDateIn(vs ...time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldImplementationDate, vs...))
+// SubcategoryEqualFold applies the EqualFold predicate on the "subcategory" field.
+func SubcategoryEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldSubcategory, v))
 }
 
-// ImplementationDateNotIn applies the NotIn predicate on the "implementation_date" field.
-func ImplementationDateNotIn(vs ...time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldImplementationDate, vs...))
+// SubcategoryContainsFold applies the ContainsFold predicate on the "subcategory" field.
+func SubcategoryContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldSubcategory, v))
 }
 
-// ImplementationDateGT applies the GT predicate on the "implementation_date" field.
-func ImplementationDateGT(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldImplementationDate, v))
+// MappedCategoriesIsNil applies the IsNil predicate on the "mapped_categories" field.
+func MappedCategoriesIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldMappedCategories))
 }
 
-// ImplementationDateGTE applies the GTE predicate on the "implementation_date" field.
-func ImplementationDateGTE(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldImplementationDate, v))
+// MappedCategoriesNotNil applies the NotNil predicate on the "mapped_categories" field.
+func MappedCategoriesNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldMappedCategories))
 }
 
-// ImplementationDateLT applies the LT predicate on the "implementation_date" field.
-func ImplementationDateLT(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldImplementationDate, v))
+// AssessmentObjectivesIsNil applies the IsNil predicate on the "assessment_objectives" field.
+func AssessmentObjectivesIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldAssessmentObjectives))
 }
 
-// ImplementationDateLTE applies the LTE predicate on the "implementation_date" field.
-func ImplementationDateLTE(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldImplementationDate, v))
+// AssessmentObjectivesNotNil applies the NotNil predicate on the "assessment_objectives" field.
+func AssessmentObjectivesNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldAssessmentObjectives))
 }
 
-// ImplementationDateIsNil applies the IsNil predicate on the "implementation_date" field.
-func ImplementationDateIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldImplementationDate))
+// AssessmentMethodsIsNil applies the IsNil predicate on the "assessment_methods" field.
+func AssessmentMethodsIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldAssessmentMethods))
 }
 
-// ImplementationDateNotNil applies the NotNil predicate on the "implementation_date" field.
-func ImplementationDateNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldImplementationDate))
+// AssessmentMethodsNotNil applies the NotNil predicate on the "assessment_methods" field.
+func AssessmentMethodsNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldAssessmentMethods))
 }
 
-// ImplementationVerificationEQ applies the EQ predicate on the "implementation_verification" field.
-func ImplementationVerificationEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationVerification, v))
+// ControlQuestionsIsNil applies the IsNil predicate on the "control_questions" field.
+func ControlQuestionsIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldControlQuestions))
 }
 
-// ImplementationVerificationNEQ applies the NEQ predicate on the "implementation_verification" field.
-func ImplementationVerificationNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldImplementationVerification, v))
+// ControlQuestionsNotNil applies the NotNil predicate on the "control_questions" field.
+func ControlQuestionsNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldControlQuestions))
 }
 
-// ImplementationVerificationIn applies the In predicate on the "implementation_verification" field.
-func ImplementationVerificationIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldImplementationVerification, vs...))
+// ImplementationGuidanceIsNil applies the IsNil predicate on the "implementation_guidance" field.
+func ImplementationGuidanceIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldImplementationGuidance))
 }
 
-// ImplementationVerificationNotIn applies the NotIn predicate on the "implementation_verification" field.
-func ImplementationVerificationNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldImplementationVerification, vs...))
-}
-
-// ImplementationVerificationGT applies the GT predicate on the "implementation_verification" field.
-func ImplementationVerificationGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationGTE applies the GTE predicate on the "implementation_verification" field.
-func ImplementationVerificationGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationLT applies the LT predicate on the "implementation_verification" field.
-func ImplementationVerificationLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationLTE applies the LTE predicate on the "implementation_verification" field.
-func ImplementationVerificationLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationContains applies the Contains predicate on the "implementation_verification" field.
-func ImplementationVerificationContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationHasPrefix applies the HasPrefix predicate on the "implementation_verification" field.
-func ImplementationVerificationHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationHasSuffix applies the HasSuffix predicate on the "implementation_verification" field.
-func ImplementationVerificationHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationIsNil applies the IsNil predicate on the "implementation_verification" field.
-func ImplementationVerificationIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldImplementationVerification))
-}
-
-// ImplementationVerificationNotNil applies the NotNil predicate on the "implementation_verification" field.
-func ImplementationVerificationNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldImplementationVerification))
-}
-
-// ImplementationVerificationEqualFold applies the EqualFold predicate on the "implementation_verification" field.
-func ImplementationVerificationEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationContainsFold applies the ContainsFold predicate on the "implementation_verification" field.
-func ImplementationVerificationContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldImplementationVerification, v))
-}
-
-// ImplementationVerificationDateEQ applies the EQ predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateEQ(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldImplementationVerificationDate, v))
-}
-
-// ImplementationVerificationDateNEQ applies the NEQ predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateNEQ(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldImplementationVerificationDate, v))
-}
-
-// ImplementationVerificationDateIn applies the In predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateIn(vs ...time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldImplementationVerificationDate, vs...))
-}
-
-// ImplementationVerificationDateNotIn applies the NotIn predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateNotIn(vs ...time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldImplementationVerificationDate, vs...))
-}
-
-// ImplementationVerificationDateGT applies the GT predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateGT(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldImplementationVerificationDate, v))
-}
-
-// ImplementationVerificationDateGTE applies the GTE predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateGTE(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldImplementationVerificationDate, v))
-}
-
-// ImplementationVerificationDateLT applies the LT predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateLT(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldImplementationVerificationDate, v))
-}
-
-// ImplementationVerificationDateLTE applies the LTE predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateLTE(v time.Time) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldImplementationVerificationDate, v))
-}
-
-// ImplementationVerificationDateIsNil applies the IsNil predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldImplementationVerificationDate))
-}
-
-// ImplementationVerificationDateNotNil applies the NotNil predicate on the "implementation_verification_date" field.
-func ImplementationVerificationDateNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldImplementationVerificationDate))
-}
-
-// DetailsIsNil applies the IsNil predicate on the "details" field.
-func DetailsIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldDetails))
-}
-
-// DetailsNotNil applies the NotNil predicate on the "details" field.
-func DetailsNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldDetails))
-}
-
-// ExampleEvidenceEQ applies the EQ predicate on the "example_evidence" field.
-func ExampleEvidenceEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceNEQ applies the NEQ predicate on the "example_evidence" field.
-func ExampleEvidenceNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceIn applies the In predicate on the "example_evidence" field.
-func ExampleEvidenceIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldExampleEvidence, vs...))
-}
-
-// ExampleEvidenceNotIn applies the NotIn predicate on the "example_evidence" field.
-func ExampleEvidenceNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldExampleEvidence, vs...))
-}
-
-// ExampleEvidenceGT applies the GT predicate on the "example_evidence" field.
-func ExampleEvidenceGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceGTE applies the GTE predicate on the "example_evidence" field.
-func ExampleEvidenceGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceLT applies the LT predicate on the "example_evidence" field.
-func ExampleEvidenceLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceLTE applies the LTE predicate on the "example_evidence" field.
-func ExampleEvidenceLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceContains applies the Contains predicate on the "example_evidence" field.
-func ExampleEvidenceContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceHasPrefix applies the HasPrefix predicate on the "example_evidence" field.
-func ExampleEvidenceHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceHasSuffix applies the HasSuffix predicate on the "example_evidence" field.
-func ExampleEvidenceHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldExampleEvidence, v))
+// ImplementationGuidanceNotNil applies the NotNil predicate on the "implementation_guidance" field.
+func ImplementationGuidanceNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldImplementationGuidance))
 }
 
 // ExampleEvidenceIsNil applies the IsNil predicate on the "example_evidence" field.
@@ -1995,14 +1326,144 @@ func ExampleEvidenceNotNil() predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldExampleEvidence))
 }
 
-// ExampleEvidenceEqualFold applies the EqualFold predicate on the "example_evidence" field.
-func ExampleEvidenceEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldExampleEvidence, v))
+// ReferencesIsNil applies the IsNil predicate on the "references" field.
+func ReferencesIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldReferences))
 }
 
-// ExampleEvidenceContainsFold applies the ContainsFold predicate on the "example_evidence" field.
-func ExampleEvidenceContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldExampleEvidence, v))
+// ReferencesNotNil applies the NotNil predicate on the "references" field.
+func ReferencesNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldReferences))
+}
+
+// RefCodeEQ applies the EQ predicate on the "ref_code" field.
+func RefCodeEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldRefCode, v))
+}
+
+// RefCodeNEQ applies the NEQ predicate on the "ref_code" field.
+func RefCodeNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldRefCode, v))
+}
+
+// RefCodeIn applies the In predicate on the "ref_code" field.
+func RefCodeIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldRefCode, vs...))
+}
+
+// RefCodeNotIn applies the NotIn predicate on the "ref_code" field.
+func RefCodeNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldRefCode, vs...))
+}
+
+// RefCodeGT applies the GT predicate on the "ref_code" field.
+func RefCodeGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldRefCode, v))
+}
+
+// RefCodeGTE applies the GTE predicate on the "ref_code" field.
+func RefCodeGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldRefCode, v))
+}
+
+// RefCodeLT applies the LT predicate on the "ref_code" field.
+func RefCodeLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldRefCode, v))
+}
+
+// RefCodeLTE applies the LTE predicate on the "ref_code" field.
+func RefCodeLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldRefCode, v))
+}
+
+// RefCodeContains applies the Contains predicate on the "ref_code" field.
+func RefCodeContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldRefCode, v))
+}
+
+// RefCodeHasPrefix applies the HasPrefix predicate on the "ref_code" field.
+func RefCodeHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldRefCode, v))
+}
+
+// RefCodeHasSuffix applies the HasSuffix predicate on the "ref_code" field.
+func RefCodeHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldRefCode, v))
+}
+
+// RefCodeEqualFold applies the EqualFold predicate on the "ref_code" field.
+func RefCodeEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldRefCode, v))
+}
+
+// RefCodeContainsFold applies the ContainsFold predicate on the "ref_code" field.
+func RefCodeContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldRefCode, v))
+}
+
+// ControlIDEQ applies the EQ predicate on the "control_id" field.
+func ControlIDEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlID, v))
+}
+
+// ControlIDNEQ applies the NEQ predicate on the "control_id" field.
+func ControlIDNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldControlID, v))
+}
+
+// ControlIDIn applies the In predicate on the "control_id" field.
+func ControlIDIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldControlID, vs...))
+}
+
+// ControlIDNotIn applies the NotIn predicate on the "control_id" field.
+func ControlIDNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldControlID, vs...))
+}
+
+// ControlIDGT applies the GT predicate on the "control_id" field.
+func ControlIDGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldControlID, v))
+}
+
+// ControlIDGTE applies the GTE predicate on the "control_id" field.
+func ControlIDGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldControlID, v))
+}
+
+// ControlIDLT applies the LT predicate on the "control_id" field.
+func ControlIDLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldControlID, v))
+}
+
+// ControlIDLTE applies the LTE predicate on the "control_id" field.
+func ControlIDLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldControlID, v))
+}
+
+// ControlIDContains applies the Contains predicate on the "control_id" field.
+func ControlIDContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldControlID, v))
+}
+
+// ControlIDHasPrefix applies the HasPrefix predicate on the "control_id" field.
+func ControlIDHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldControlID, v))
+}
+
+// ControlIDHasSuffix applies the HasSuffix predicate on the "control_id" field.
+func ControlIDHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldControlID, v))
+}
+
+// ControlIDEqualFold applies the EqualFold predicate on the "control_id" field.
+func ControlIDEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldControlID, v))
+}
+
+// ControlIDContainsFold applies the ContainsFold predicate on the "control_id" field.
+func ControlIDContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldControlID, v))
 }
 
 // And groups predicates with the AND operator between them.

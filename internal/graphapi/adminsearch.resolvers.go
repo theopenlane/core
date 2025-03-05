@@ -17,36 +17,38 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 	}
 
 	var (
-		errors                     []error
-		apitokenResults            []*generated.APIToken
-		actionplanResults          []*generated.ActionPlan
-		contactResults             []*generated.Contact
-		controlResults             []*generated.Control
-		controlobjectiveResults    []*generated.ControlObjective
-		documentdataResults        []*generated.DocumentData
-		entityResults              []*generated.Entity
-		entitytypeResults          []*generated.EntityType
-		eventResults               []*generated.Event
-		evidenceResults            []*generated.Evidence
-		fileResults                []*generated.File
-		groupResults               []*generated.Group
-		integrationResults         []*generated.Integration
-		internalpolicyResults      []*generated.InternalPolicy
-		narrativeResults           []*generated.Narrative
-		orgsubscriptionResults     []*generated.OrgSubscription
-		organizationResults        []*generated.Organization
-		organizationsettingResults []*generated.OrganizationSetting
-		personalaccesstokenResults []*generated.PersonalAccessToken
-		procedureResults           []*generated.Procedure
-		programResults             []*generated.Program
-		riskResults                []*generated.Risk
-		standardResults            []*generated.Standard
-		subcontrolResults          []*generated.Subcontrol
-		subscriberResults          []*generated.Subscriber
-		taskResults                []*generated.Task
-		templateResults            []*generated.Template
-		userResults                []*generated.User
-		usersettingResults         []*generated.UserSetting
+		errors                       []error
+		apitokenResults              []*generated.APIToken
+		actionplanResults            []*generated.ActionPlan
+		contactResults               []*generated.Contact
+		controlResults               []*generated.Control
+		controlimplementationResults []*generated.ControlImplementation
+		controlobjectiveResults      []*generated.ControlObjective
+		documentdataResults          []*generated.DocumentData
+		entityResults                []*generated.Entity
+		entitytypeResults            []*generated.EntityType
+		eventResults                 []*generated.Event
+		evidenceResults              []*generated.Evidence
+		fileResults                  []*generated.File
+		groupResults                 []*generated.Group
+		integrationResults           []*generated.Integration
+		internalpolicyResults        []*generated.InternalPolicy
+		mappedcontrolResults         []*generated.MappedControl
+		narrativeResults             []*generated.Narrative
+		orgsubscriptionResults       []*generated.OrgSubscription
+		organizationResults          []*generated.Organization
+		organizationsettingResults   []*generated.OrganizationSetting
+		personalaccesstokenResults   []*generated.PersonalAccessToken
+		procedureResults             []*generated.Procedure
+		programResults               []*generated.Program
+		riskResults                  []*generated.Risk
+		standardResults              []*generated.Standard
+		subcontrolResults            []*generated.Subcontrol
+		subscriberResults            []*generated.Subscriber
+		taskResults                  []*generated.Task
+		templateResults              []*generated.Template
+		userResults                  []*generated.User
+		usersettingResults           []*generated.UserSetting
 	)
 
 	r.withPool().SubmitMultipleAndWait([]func(){
@@ -74,6 +76,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		func() {
 			var err error
 			controlResults, err = searchControls(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			controlimplementationResults, err = searchControlImplementations(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -144,6 +153,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		func() {
 			var err error
 			internalpolicyResults, err = searchInternalPolicies(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			mappedcontrolResults, err = searchMappedControls(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -293,6 +309,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 
 		resultCount += len(controlResults)
 	}
+	if len(controlimplementationResults) > 0 {
+		nodes = append(nodes, model.ControlImplementationSearchResult{
+			ControlImplementations: controlimplementationResults,
+		})
+
+		resultCount += len(controlimplementationResults)
+	}
 	if len(controlobjectiveResults) > 0 {
 		nodes = append(nodes, model.ControlObjectiveSearchResult{
 			ControlObjectives: controlobjectiveResults,
@@ -362,6 +385,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		})
 
 		resultCount += len(internalpolicyResults)
+	}
+	if len(mappedcontrolResults) > 0 {
+		nodes = append(nodes, model.MappedControlSearchResult{
+			MappedControls: mappedcontrolResults,
+		})
+
+		resultCount += len(mappedcontrolResults)
 	}
 	if len(narrativeResults) > 0 {
 		nodes = append(nodes, model.NarrativeSearchResult{
@@ -522,6 +552,18 @@ func (r *queryResolver) AdminControlSearch(ctx context.Context, query string) (*
 		Controls: controlResults,
 	}, nil
 }
+func (r *queryResolver) AdminControlImplementationSearch(ctx context.Context, query string) (*model.ControlImplementationSearchResult, error) {
+	controlimplementationResults, err := adminSearchControlImplementations(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &model.ControlImplementationSearchResult{
+		ControlImplementations: controlimplementationResults,
+	}, nil
+}
 func (r *queryResolver) AdminControlObjectiveSearch(ctx context.Context, query string) (*model.ControlObjectiveSearchResult, error) {
 	controlobjectiveResults, err := adminSearchControlObjectives(ctx, query)
 
@@ -640,6 +682,18 @@ func (r *queryResolver) AdminInternalPolicySearch(ctx context.Context, query str
 	// return the results
 	return &model.InternalPolicySearchResult{
 		InternalPolicies: internalpolicyResults,
+	}, nil
+}
+func (r *queryResolver) AdminMappedControlSearch(ctx context.Context, query string) (*model.MappedControlSearchResult, error) {
+	mappedcontrolResults, err := adminSearchMappedControls(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &model.MappedControlSearchResult{
+		MappedControls: mappedcontrolResults,
 	}, nil
 }
 func (r *queryResolver) AdminNarrativeSearch(ctx context.Context, query string) (*model.NarrativeSearchResult, error) {

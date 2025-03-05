@@ -45,8 +45,6 @@ const (
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldSatisfies holds the string denoting the satisfies field in the database.
-	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
 	// Table holds the table name of the narrativehistory in the database.
@@ -70,7 +68,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldDescription,
-	FieldSatisfies,
 	FieldDetails,
 }
 
@@ -188,9 +185,9 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// BySatisfies orders the results by the satisfies field.
-func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
 }
 
 var (

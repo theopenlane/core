@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -23,15 +24,13 @@ func init() {
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "name of the control objective")
-	createCmd.Flags().StringP("description", "d", "", "description of the control objective")
-	createCmd.Flags().StringP("status", "s", "", "status of the control objective")
-	createCmd.Flags().StringP("type", "t", "", "type of the control objective")
+	createCmd.Flags().StringP("desired-outcome", "o", "", "desired outcome of the control objective")
+	createCmd.Flags().StringP("source", "s", "", "source of the control objective, e.g. framework, template, custom, etc.")
 	createCmd.Flags().StringP("version", "v", "", "version of the control objective")
-	createCmd.Flags().StringP("control-number", "c", "", "number of the control objective")
-	createCmd.Flags().StringP("family", "f", "", "family of the control objective")
-	createCmd.Flags().StringP("class", "l", "", "class associated with the control objective")
-	createCmd.Flags().StringP("source", "o", "", "source of the control objective")
-	createCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks")
+	createCmd.Flags().StringP("status", "t", "", "status of the control objective")
+	createCmd.Flags().StringP("control-objective-type", "y", "", "type of the control objective e.g. compliance, operational, strategic, or reporting")
+
+	createCmd.Flags().StringSliceP("controls", "c", []string{}, "control ID(s) associated with the control objective")
 	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the control objective")
 	createCmd.Flags().StringSliceP("editors", "e", []string{}, "group ID(s) given editor access to the control objective")
 	createCmd.Flags().StringSliceP("viewers", "w", []string{}, "group ID(s) given viewer access to the control objective")
@@ -46,21 +45,14 @@ func createValidation() (input openlaneclient.CreateControlObjectiveInput, err e
 		return input, cmd.NewRequiredFieldMissingError("name")
 	}
 
-	input.ProgramIDs = cmd.Config.Strings("programs")
-
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
+	desiredOutcome := cmd.Config.String("desired-outcome")
+	if desiredOutcome != "" {
+		input.DesiredOutcome = &desiredOutcome
 	}
 
-	status := cmd.Config.String("status")
-	if status != "" {
-		input.Status = &status
-	}
-
-	controlObjectiveType := cmd.Config.String("type")
-	if controlObjectiveType != "" {
-		input.ControlObjectiveType = &controlObjectiveType
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
 	}
 
 	version := cmd.Config.String("version")
@@ -68,29 +60,24 @@ func createValidation() (input openlaneclient.CreateControlObjectiveInput, err e
 		input.Version = &version
 	}
 
-	controlNumber := cmd.Config.String("control-number")
-	if controlNumber != "" {
-		input.ControlNumber = &controlNumber
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = &status
 	}
 
-	family := cmd.Config.String("family")
-	if family != "" {
-		input.Family = &family
+	controlObjectiveType := cmd.Config.String("control-objective-type")
+	if controlObjectiveType != "" {
+		input.ControlObjectiveType = &controlObjectiveType
 	}
 
-	class := cmd.Config.String("class")
-	if class != "" {
-		input.Class = &class
+	controlIDs := cmd.Config.Strings("controls")
+	if len(controlIDs) > 0 {
+		input.ControlIDs = controlIDs
 	}
 
-	source := cmd.Config.String("source")
-	if source != "" {
-		input.Source = &source
-	}
-
-	mappedFrameworks := cmd.Config.String("mapped-frameworks")
-	if mappedFrameworks != "" {
-		input.MappedFrameworks = &mappedFrameworks
+	programIDs := cmd.Config.Strings("programs")
+	if len(programIDs) > 0 {
+		input.ProgramIDs = programIDs
 	}
 
 	viewerGroupIDs := cmd.Config.Strings("viewers")
