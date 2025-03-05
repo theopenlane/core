@@ -136,6 +136,13 @@ tasks:
         vars:
           EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
 
+  login:admin:
+    desc: a task to login as the system admin
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+
   login:google:
     desc: a task to login with google oauth
     aliases: [google]

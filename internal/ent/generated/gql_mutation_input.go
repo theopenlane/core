@@ -5,7 +5,6 @@ package generated
 import (
 	"time"
 
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -1477,7 +1476,7 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 // CreateDocumentDataInput represents a mutation input for creating documentdataslice.
 type CreateDocumentDataInput struct {
 	Tags       []string
-	Data       customtypes.JSONObject
+	Data       map[string]interface{}
 	OwnerID    *string
 	TemplateID string
 	EntityIDs  []string
@@ -1515,7 +1514,7 @@ type UpdateDocumentDataInput struct {
 	ClearTags       bool
 	Tags            []string
 	AppendTags      []string
-	Data            customtypes.JSONObject
+	Data            map[string]interface{}
 	TemplateID      *string
 	ClearEntity     bool
 	AddEntityIDs    []string

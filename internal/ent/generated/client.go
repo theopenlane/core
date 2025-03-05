@@ -2748,7 +2748,8 @@ func (c *ControlImplementationHistoryClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *ControlImplementationHistoryClient) Interceptors() []Interceptor {
-	return c.inters.ControlImplementationHistory
+	inters := c.inters.ControlImplementationHistory
+	return append(inters[:len(inters):len(inters)], controlimplementationhistory.Interceptors[:]...)
 }
 
 func (c *ControlImplementationHistoryClient) mutate(ctx context.Context, m *ControlImplementationHistoryMutation) (Value, error) {
@@ -8813,7 +8814,8 @@ func (c *MappedControlHistoryClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *MappedControlHistoryClient) Interceptors() []Interceptor {
-	return c.inters.MappedControlHistory
+	inters := c.inters.MappedControlHistory
+	return append(inters[:len(inters):len(inters)], mappedcontrolhistory.Interceptors[:]...)
 }
 
 func (c *MappedControlHistoryClient) mutate(ctx context.Context, m *MappedControlHistoryMutation) (Value, error) {

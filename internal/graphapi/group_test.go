@@ -726,7 +726,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 						ID:          &control.ID,
 						Permissions: enums.Editor,
 						DisplayID:   &control.DisplayID,
-						Name:        &control.RefCode, // TODO: sfunk confirm this works ok
+						Name:        &control.RefCode,
 					},
 				},
 			},
@@ -937,6 +937,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 
 			if tc.updateInput.AddProgramViewerIDs != nil || tc.updateInput.AddProcedureEditorIDs != nil || tc.updateInput.AddControlBlockedGroupIDs != nil {
 				assert.Equal(t, len(tc.expectedRes.Permissions), len(updatedGroup.Permissions))
+				assert.ElementsMatch(t, tc.expectedRes.Permissions, updatedGroup.Permissions)
 
 				// ensure user can now get access to the program
 				programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)

@@ -8,7 +8,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	emixin "github.com/theopenlane/entx/mixin"
 )
 
@@ -17,7 +19,7 @@ type MappedControl struct {
 	ent.Schema
 }
 
-// Fields of the MappedControls
+// Fields of the MappedControl
 func (MappedControl) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("control_id").
@@ -39,7 +41,7 @@ func (MappedControl) Fields() []ent.Field {
 	}
 }
 
-// Mixin of the MappedControls
+// Mixin of the MappedControl
 func (MappedControl) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
@@ -49,7 +51,7 @@ func (MappedControl) Mixin() []ent.Mixin {
 	}
 }
 
-// Edges of the MappedControls
+// Edges of the MappedControl
 func (MappedControl) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("control", Control.Type).
@@ -66,7 +68,7 @@ func (MappedControl) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the MappedControls
+// Indexes of the MappedControl
 func (MappedControl) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("control_id", "mapped_control_id").
@@ -74,39 +76,33 @@ func (MappedControl) Indexes() []ent.Index {
 	}
 }
 
-// Annotations of the MappedControls
+// Annotations of the MappedControl
 func (MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-		// entfga.MembershipChecks("control"),
 	}
 }
 
-// Hooks of the MappedControls
+// Hooks of the MappedControl
 func (MappedControl) Hooks() []ent.Hook {
 	return []ent.Hook{}
 }
 
-// Interceptors of the MappedControls
+// Interceptors of the MappedControl
 func (MappedControl) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{}
 }
 
-// // Policy of the MappedControls
-// func (MappedControls) Policy() ent.Policy {
-// 	// add the new policy here, the default post-policy is to deny all
-// 	// so you need to ensure there are rules in place to allow the actions you want
-// 	return policy.NewPolicy(
-// 		policy.WithQueryRules(
-// 			// add query rules here, the below is the recommended default
-// 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-// 		),
-// 		policy.WithMutationRules(
-// 			// add mutation rules here, the below is the recommended default
-// 			policy.CheckCreateAccess(),
-// 			entfga.CheckEditAccess[*generated.MappedControlsMutation](),
-// 		),
-// 	)
-// }
+// Policy of the MappedControl
+func (MappedControl) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+		),
+		policy.WithMutationRules(
+			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+		),
+	)
+}

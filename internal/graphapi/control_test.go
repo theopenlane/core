@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -101,9 +102,8 @@ func (suite *GraphTestSuite) TestQueryControl() {
 			assert.Equal(t, tc.queryID, resp.Control.ID)
 			assert.NotEmpty(t, resp.Control.RefCode)
 
-			// TODO (sfunk): check why this is gone
-			// require.Len(t, resp.Control., 1)
-			// assert.NotEmpty(t, resp.Control.Programs[0].ID)
+			require.Len(t, resp.Control.Programs, 1)
+			assert.NotEmpty(t, resp.Control.Programs[0].ID)
 		})
 	}
 }
@@ -198,11 +198,55 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "happy path, all input",
 			request: openlaneclient.CreateControlInput{
-				RefCode:     "A-2",
-				Description: lo.ToPtr("A description of the Control"),
-				Status:      lo.ToPtr("mitigated"),
-				Source:      &enums.ControlSourceFramework,
-				ProgramIDs:  []string{program1.ID, program2.ID}, // multiple programs
+				RefCode:          "A-2",
+				Description:      lo.ToPtr("A description of the Control"),
+				Status:           lo.ToPtr("mitigated"),
+				Tags:             []string{"tag1", "tag2"},
+				ControlType:      &enums.ControlTypeDetective,
+				Category:         lo.ToPtr("Availability"),
+				CategoryID:       lo.ToPtr("A"),
+				Subcategory:      lo.ToPtr("Additional Criteria for Availability"),
+				MappedCategories: []string{"Govern", "Protect"},
+				ControlQuestions: []string{"What is the control question?"},
+				AssessmentObjectives: []*models.AssessmentObjective{
+					{
+						Class:     "class",
+						ID:        "id",
+						Objective: "objective for the control",
+					},
+				},
+				AssessmentMethods: []*models.AssessmentMethod{
+					{
+						ID:     "id",
+						Type:   "Examine",
+						Method: "method of assessment for the control",
+					},
+				},
+				ImplementationGuidance: []*models.ImplementationGuidance{
+					{
+						ReferenceID: "ref-id",
+						Guidance: []string{
+							"guidance 1",
+							"guidance 2",
+						},
+					},
+				},
+				ExampleEvidence: []*models.ExampleEvidence{
+					{
+						DocumentationType: "policy",
+						Description:       "description of the example evidence",
+					},
+				},
+				References: []*models.Reference{
+					{
+						Name: "name of ref",
+						URL:  "https://example.com",
+					},
+				},
+				ControlOwnerID: &viewOnlyUser.ID,
+				DelegateID:     &viewOnlyUser2.ID,
+				Source:         &enums.ControlSourceFramework,
+				ProgramIDs:     []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -312,17 +356,17 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			assert.NotEmpty(t, resp.CreateControl.Control.DisplayID)
 			assert.Contains(t, resp.CreateControl.Control.DisplayID, "CTL-")
 
-			// // ensure the program is set
-			// if len(tc.request.ProgramIDs) > 0 {
-			// 	require.NotEmpty(t, resp.CreateControl.Control.Programs)
-			// 	require.Len(t, resp.CreateControl.Control.Programs, len(tc.request.ProgramIDs))
+			// ensure the program is set
+			if len(tc.request.ProgramIDs) > 0 {
+				require.NotEmpty(t, resp.CreateControl.Control.Programs)
+				require.Len(t, resp.CreateControl.Control.Programs, len(tc.request.ProgramIDs))
 
-			// 	for i, p := range resp.CreateControl.Control.Programs {
-			// 		assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
-			// 	}
-			// } else {
-			// 	assert.Empty(t, resp.CreateControl.Control.Programs)
-			// }
+				for i, p := range resp.CreateControl.Control.Programs {
+					assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
+				}
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.Programs)
+			}
 
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.CreateControl.Control.Description)
@@ -348,26 +392,103 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateControl.Control.Source)
 			}
 
-			// if len(tc.request.EditorIDs) > 0 {
-			// 	require.Len(t, resp.CreateControl.Control.Editors, 1)
-			// 	for _, edge := range resp.CreateControl.Control.Editors {
-			// 		assert.Equal(t, testUser1.GroupID, edge.ID)
-			// 	}
-			// }
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.CreateControl.Control.Category)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.Category)
+			}
 
-			// if len(tc.request.BlockedGroupIDs) > 0 {
-			// 	require.Len(t, resp.CreateControl.Control.BlockedGroups, 1)
-			// 	for _, edge := range resp.CreateControl.Control.BlockedGroups {
-			// 		assert.Equal(t, blockedGroup.ID, edge.ID)
-			// 	}
-			// }
+			if tc.request.CategoryID != nil {
+				assert.Equal(t, *tc.request.CategoryID, *resp.CreateControl.Control.CategoryID)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.CategoryID)
+			}
 
-			// if len(tc.request.ViewerIDs) > 0 {
-			// 	require.Len(t, resp.CreateControl.Control.Viewers, 1)
-			// 	for _, edge := range resp.CreateControl.Control.Viewers {
-			// 		assert.Equal(t, viewerGroup.ID, edge.ID)
-			// 	}
-			// }
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.CreateControl.Control.Subcategory)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.Subcategory)
+			}
+
+			if tc.request.MappedCategories != nil {
+				assert.ElementsMatch(t, tc.request.MappedCategories, resp.CreateControl.Control.MappedCategories)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.MappedCategories)
+			}
+
+			if tc.request.ControlQuestions != nil {
+				assert.ElementsMatch(t, tc.request.ControlQuestions, resp.CreateControl.Control.ControlQuestions)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ControlQuestions)
+			}
+
+			if tc.request.AssessmentObjectives != nil {
+				require.Len(t, resp.CreateControl.Control.AssessmentObjectives, len(tc.request.AssessmentObjectives))
+				assert.ElementsMatch(t, tc.request.AssessmentObjectives, resp.CreateControl.Control.AssessmentObjectives)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.AssessmentObjectives)
+			}
+
+			if tc.request.AssessmentMethods != nil {
+				require.Len(t, resp.CreateControl.Control.AssessmentMethods, len(tc.request.AssessmentMethods))
+				assert.ElementsMatch(t, tc.request.AssessmentMethods, resp.CreateControl.Control.AssessmentMethods)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.AssessmentMethods)
+			}
+
+			if tc.request.ImplementationGuidance != nil {
+				require.Len(t, resp.CreateControl.Control.ImplementationGuidance, len(tc.request.ImplementationGuidance))
+				assert.ElementsMatch(t, tc.request.ImplementationGuidance, resp.CreateControl.Control.ImplementationGuidance)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ImplementationGuidance)
+			}
+
+			if tc.request.ExampleEvidence != nil {
+				require.Len(t, resp.CreateControl.Control.ExampleEvidence, len(tc.request.ExampleEvidence))
+				assert.ElementsMatch(t, tc.request.ExampleEvidence, resp.CreateControl.Control.ExampleEvidence)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ExampleEvidence)
+			}
+
+			if tc.request.References != nil {
+				require.Len(t, resp.CreateControl.Control.References, len(tc.request.References))
+				assert.ElementsMatch(t, tc.request.References, resp.CreateControl.Control.References)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.References)
+			}
+
+			if tc.request.ControlOwnerID != nil {
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateControl.Control.ControlOwner.ID)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ControlOwner)
+			}
+
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, resp.CreateControl.Control.Delegate.ID)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.Delegate)
+			}
+
+			if len(tc.request.EditorIDs) > 0 {
+				require.Len(t, resp.CreateControl.Control.Editors, 1)
+				for _, edge := range resp.CreateControl.Control.Editors {
+					assert.Equal(t, testUser1.GroupID, edge.ID)
+				}
+			}
+
+			if len(tc.request.BlockedGroupIDs) > 0 {
+				require.Len(t, resp.CreateControl.Control.BlockedGroups, 1)
+				for _, edge := range resp.CreateControl.Control.BlockedGroups {
+					assert.Equal(t, blockedGroup.ID, edge.ID)
+				}
+			}
+
+			if len(tc.request.ViewerIDs) > 0 {
+				require.Len(t, resp.CreateControl.Control.Viewers, 1)
+				for _, edge := range resp.CreateControl.Control.Viewers {
+					assert.Equal(t, viewerGroup.ID, edge.ID)
+				}
+			}
 
 			// ensure the org owner has access to the control that was created by an api token
 			if tc.client == suite.client.apiWithToken {
@@ -422,8 +543,61 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateControlInput{
-				Status: lo.ToPtr("mitigated"),
-				Tags:   []string{"tag1", "tag2"},
+				Status:      lo.ToPtr("mitigated"),
+				Tags:        []string{"tag1", "tag2"},
+				ControlType: &enums.ControlTypeDetective,
+				Category:    lo.ToPtr("Availability"),
+				CategoryID:  lo.ToPtr("A"),
+				Subcategory: lo.ToPtr("Additional Criteria for Availability"),
+				AppendReferences: []*models.Reference{
+					{
+						Name: "name of ref",
+						URL:  "https://example.com",
+					},
+				},
+				AppendMappedCategories: []string{"Govern", "Protect"},
+				AppendControlQuestions: []string{"What is the control question?"},
+				AppendAssessmentObjectives: []*models.AssessmentObjective{
+					{
+						Class:     "class",
+						ID:        "id",
+						Objective: "objective for the control",
+					},
+				},
+				AppendAssessmentMethods: []*models.AssessmentMethod{
+					{
+						ID:     "id",
+						Type:   "Examine",
+						Method: "method of assessment for the control",
+					},
+				},
+				AppendImplementationGuidance: []*models.ImplementationGuidance{
+					{
+						ReferenceID: "ref-id",
+						Guidance: []string{
+							"guidance 1",
+							"guidance 2",
+						},
+					},
+				},
+				AppendExampleEvidence: []*models.ExampleEvidence{
+					{
+						DocumentationType: "policy",
+						Description:       "description of the example evidence",
+					},
+				},
+				ControlOwnerID: &viewOnlyUser.ID,
+				DelegateID:     &viewOnlyUser2.ID,
+				Source:         &enums.ControlSourceFramework,
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, remove some things",
+			request: openlaneclient.UpdateControlInput{
+				ClearReferences:       lo.ToPtr(true),
+				ClearMappedCategories: lo.ToPtr(true),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -486,24 +660,90 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 				assert.Equal(t, *tc.request.Source, *resp.UpdateControl.Control.Source)
 			}
 
-			// if len(tc.request.AddViewerIDs) > 0 {
-			// 	require.Len(t, resp.UpdateControl.Control.Viewers, 1)
-			// 	found := false
-			// 	for _, edge := range resp.UpdateControl.Control.Viewers {
-			// 		if edge.ID == tc.request.AddViewerIDs[0] {
-			// 			found = true
-			// 			break
-			// 		}
-			// 	}
+			if tc.request.ControlType != nil {
+				assert.Equal(t, *tc.request.ControlType, *resp.UpdateControl.Control.ControlType)
+			}
 
-			// 	assert.True(t, found)
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.UpdateControl.Control.Category)
+			}
 
-			// 	// ensure the user has access to the control now
-			// 	res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)
-			// 	require.NoError(t, err)
-			// 	require.NotEmpty(t, res)
-			// 	assert.Equal(t, control.ID, res.Control.ID)
-			// }
+			if tc.request.CategoryID != nil {
+				assert.Equal(t, *tc.request.CategoryID, *resp.UpdateControl.Control.CategoryID)
+			}
+
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.UpdateControl.Control.Subcategory)
+			}
+
+			if tc.request.AppendMappedCategories != nil {
+				assert.ElementsMatch(t, tc.request.MappedCategories, resp.UpdateControl.Control.MappedCategories)
+			}
+
+			if tc.request.AppendControlQuestions != nil {
+				assert.ElementsMatch(t, tc.request.ControlQuestions, resp.UpdateControl.Control.ControlQuestions)
+			}
+
+			if tc.request.AppendAssessmentObjectives != nil {
+				assert.ElementsMatch(t, tc.request.AssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
+			}
+
+			if tc.request.AppendAssessmentMethods != nil {
+				assert.ElementsMatch(t, tc.request.AssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
+			}
+
+			if tc.request.AppendImplementationGuidance != nil {
+				assert.ElementsMatch(t, tc.request.ImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
+			}
+
+			if tc.request.AppendExampleEvidence != nil {
+				assert.ElementsMatch(t, tc.request.ExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
+			}
+
+			if tc.request.ControlOwnerID != nil {
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateControl.Control.ControlOwner.ID)
+			}
+
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, resp.UpdateControl.Control.Delegate.ID)
+			}
+
+			if tc.request.AppendReferences != nil {
+				assert.ElementsMatch(t, tc.request.AppendReferences, resp.UpdateControl.Control.References)
+			}
+
+			if tc.request.ClearReferences != nil && *tc.request.ClearReferences {
+				assert.Empty(t, resp.UpdateControl.Control.References)
+			}
+
+			if tc.request.ClearMappedCategories != nil && *tc.request.ClearMappedCategories {
+				assert.Empty(t, resp.UpdateControl.Control.MappedCategories)
+			}
+
+			// ensure the program is set
+			if len(tc.request.AddProgramIDs) > 0 {
+				require.NotEmpty(t, resp.UpdateControl.Control.Programs)
+				require.Len(t, resp.UpdateControl.Control.Programs, len(tc.request.AddProgramIDs))
+			}
+
+			if len(tc.request.AddViewerIDs) > 0 {
+				require.Len(t, resp.UpdateControl.Control.Viewers, 1)
+				found := false
+				for _, edge := range resp.UpdateControl.Control.Viewers {
+					if edge.ID == tc.request.AddViewerIDs[0] {
+						found = true
+						break
+					}
+				}
+
+				assert.True(t, found)
+
+				// ensure the user has access to the control now
+				res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)
+				require.NoError(t, err)
+				require.NotEmpty(t, res)
+				assert.Equal(t, control.ID, res.Control.ID)
+			}
 		})
 	}
 }

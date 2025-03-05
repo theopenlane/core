@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -372,6 +373,12 @@ func (ciq *ControlImplementationQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ciq.sql = prev
+	}
+	if controlimplementation.Policy == nil {
+		return errors.New("generated: uninitialized controlimplementation.Policy (forgotten import generated/runtime?)")
+	}
+	if err := controlimplementation.Policy.EvalQuery(ctx, ciq); err != nil {
+		return err
 	}
 	return nil
 }

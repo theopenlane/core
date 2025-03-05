@@ -75,6 +75,18 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
           displayID
           name
       }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
     }
   }
 }
@@ -116,6 +128,18 @@ query GetAllControlObjectives {
             displayID
             name
         }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
       }
     }
   }
@@ -139,16 +163,28 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     updatedBy
     version
     controls {
-      id
-      displayID
-      refCode
-      description
-    }
-    programs {
         id
         displayID
+        refCode
+        description
+      }
+      programs {
+          id
+          displayID
+          name
+      }
+      editors {
+        id
         name
-    }
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
   }
 }
 
@@ -172,10 +208,34 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
         updatedAt
         updatedBy
         version
+        controls {
+          id
+          displayID
+          refCode
+          description
+        }
+        programs {
+          id
+          displayID
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
       }
     }
   }
 }
+
 mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
   updateControlObjective(id: $updateControlObjectiveId, input: $input) {
     controlObjective {
@@ -205,6 +265,18 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
           id
           displayID
           name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
       }
     }
   }

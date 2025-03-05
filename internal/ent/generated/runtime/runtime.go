@@ -434,10 +434,21 @@ func init() {
 	// controlhistory.DefaultID holds the default value on creation for the id field.
 	controlhistory.DefaultID = controlhistoryDescID.Default.(func() string)
 	controlimplementationMixin := schema.ControlImplementation{}.Mixin()
+	controlimplementation.Policy = privacy.NewPolicies(schema.ControlImplementation{})
+	controlimplementation.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := controlimplementation.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	controlimplementationMixinHooks0 := controlimplementationMixin[0].Hooks()
 	controlimplementationMixinHooks2 := controlimplementationMixin[2].Hooks()
-	controlimplementation.Hooks[0] = controlimplementationMixinHooks0[0]
-	controlimplementation.Hooks[1] = controlimplementationMixinHooks2[0]
+
+	controlimplementation.Hooks[1] = controlimplementationMixinHooks0[0]
+
+	controlimplementation.Hooks[2] = controlimplementationMixinHooks2[0]
 	controlimplementationMixinInters2 := controlimplementationMixin[2].Interceptors()
 	controlimplementation.Interceptors[0] = controlimplementationMixinInters2[0]
 	controlimplementationMixinFields0 := controlimplementationMixin[0].Fields()
@@ -470,6 +481,8 @@ func init() {
 	controlimplementationDescID := controlimplementationMixinFields1[0].Descriptor()
 	// controlimplementation.DefaultID holds the default value on creation for the id field.
 	controlimplementation.DefaultID = controlimplementationDescID.Default.(func() string)
+	controlimplementationhistoryInters := schema.ControlImplementationHistory{}.Interceptors()
+	controlimplementationhistory.Interceptors[0] = controlimplementationhistoryInters[0]
 	controlimplementationhistoryFields := schema.ControlImplementationHistory{}.Fields()
 	_ = controlimplementationhistoryFields
 	// controlimplementationhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -1875,10 +1888,21 @@ func init() {
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
 	mappedcontrolMixin := schema.MappedControl{}.Mixin()
+	mappedcontrol.Policy = privacy.NewPolicies(schema.MappedControl{})
+	mappedcontrol.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := mappedcontrol.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	mappedcontrolMixinHooks0 := mappedcontrolMixin[0].Hooks()
 	mappedcontrolMixinHooks2 := mappedcontrolMixin[2].Hooks()
-	mappedcontrol.Hooks[0] = mappedcontrolMixinHooks0[0]
-	mappedcontrol.Hooks[1] = mappedcontrolMixinHooks2[0]
+
+	mappedcontrol.Hooks[1] = mappedcontrolMixinHooks0[0]
+
+	mappedcontrol.Hooks[2] = mappedcontrolMixinHooks2[0]
 	mappedcontrolMixinInters2 := mappedcontrolMixin[2].Interceptors()
 	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters2[0]
 	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
@@ -1915,6 +1939,8 @@ func init() {
 	mappedcontrolDescID := mappedcontrolMixinFields1[0].Descriptor()
 	// mappedcontrol.DefaultID holds the default value on creation for the id field.
 	mappedcontrol.DefaultID = mappedcontrolDescID.Default.(func() string)
+	mappedcontrolhistoryInters := schema.MappedControlHistory{}.Interceptors()
+	mappedcontrolhistory.Interceptors[0] = mappedcontrolhistoryInters[0]
 	mappedcontrolhistoryFields := schema.MappedControlHistory{}.Fields()
 	_ = mappedcontrolhistoryFields
 	// mappedcontrolhistoryDescHistoryTime is the schema descriptor for history_time field.

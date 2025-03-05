@@ -28563,7 +28563,7 @@ input CreateDocumentDataInput {
   """
   the json data of the document
   """
-  data: JSON!
+  data: Map!
   ownerID: ID
   templateID: ID!
   entityIDs: [ID!]
@@ -29815,7 +29815,7 @@ type DocumentData implements Node {
   """
   the json data of the document
   """
-  data: JSON!
+  data: Map!
   owner: Organization
   template: Template!
   entity: [Entity!]
@@ -29877,7 +29877,7 @@ type DocumentDataHistory implements Node {
   """
   the json data of the document
   """
-  data: JSON!
+  data: Map!
 }
 """
 A connection to a list of items.
@@ -51792,7 +51792,7 @@ input UpdateDocumentDataInput {
   """
   the json data of the document
   """
-  data: JSON
+  data: Map
   templateID: ID
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
@@ -57331,7 +57331,6 @@ input CreateControlWithSubcontrolsInput{
 
 input CreateFullProgramInput{
   program: CreateProgramInput!
-  standard: CreateStandardInput!
   controls: [CreateControlWithSubcontrolsInput!]
   risks: [CreateRiskInput!]
   internalPolicies: [CreateInternalPolicyInput!]

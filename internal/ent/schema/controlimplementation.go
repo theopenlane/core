@@ -7,7 +7,9 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	emixin "github.com/theopenlane/entx/mixin"
 )
 
@@ -58,44 +60,23 @@ func (ControlImplementation) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the ControlImplementation
-func (ControlImplementation) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the ControlImplementation
 func (ControlImplementation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-		// entfga.MembershipChecks("control"),
 	}
 }
 
-// Hooks of the ControlImplementation
-func (ControlImplementation) Hooks() []ent.Hook {
-	return []ent.Hook{}
+// Policy of the ControlImplementation
+func (ControlImplementation) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+		),
+		policy.WithMutationRules(
+			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+		),
+	)
 }
-
-// Interceptors of the ControlImplementation
-func (ControlImplementation) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
-// // Policy of the ControlImplementation
-// func (ControlImplementation) Policy() ent.Policy {
-// 	// add the new policy here, the default post-policy is to deny all
-// 	// so you need to ensure there are rules in place to allow the actions you want
-// 	return policy.NewPolicy(
-// 		policy.WithQueryRules(
-// 			// add query rules here, the below is the recommended default
-// 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-// 		),
-// 		policy.WithMutationRules(
-// 			// add mutation rules here, the below is the recommended default
-// 			policy.CheckCreateAccess(),
-// 			entfga.CheckEditAccess[*generated.ControlImplementationMutation](),
-// 		),
-// 	)
-// }

@@ -126,6 +126,22 @@ query GetAllSubcontrols {
         tags
         updatedAt
         updatedBy
+        control {
+          id
+          displayID
+          refCode
+          description
+        }
+        controlOwner {
+          id
+          firstName
+          lastName
+        }
+        delegate {
+          id
+          firstName
+          lastName
+        }
       }
     }
   }
@@ -156,6 +172,22 @@ query GetSubcontrolByID($subcontrolId: ID!) {
     tags
     updatedAt
     updatedBy
+    control {
+      id
+      displayID
+      refCode
+      description
+    }
+    controlOwner {
+      id
+      firstName
+      lastName
+    }
+    delegate {
+      id
+      firstName
+      lastName
+    }
   }
 }
 
@@ -187,6 +219,22 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
         tags
         updatedAt
         updatedBy
+        control {
+          id
+          displayID
+          refCode
+          description
+        }
+        controlOwner {
+          id
+          firstName
+          lastName
+        }
+        delegate {
+          id
+          firstName
+          lastName
+        }
       }
     }
   }
@@ -218,6 +266,22 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       tags
       updatedAt
       updatedBy
+      control {
+        id
+        displayID
+        refCode
+        description
+      }
+      controlOwner {
+        id
+        firstName
+        lastName
+      }
+      delegate {
+        id
+        firstName
+        lastName
+      }
     }
   }
 }

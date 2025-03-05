@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -408,6 +409,12 @@ func (mcq *MappedControlQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		mcq.sql = prev
+	}
+	if mappedcontrol.Policy == nil {
+		return errors.New("generated: uninitialized mappedcontrol.Policy (forgotten import generated/runtime?)")
+	}
+	if err := mappedcontrol.Policy.EvalQuery(ctx, mcq); err != nil {
+		return err
 	}
 	return nil
 }

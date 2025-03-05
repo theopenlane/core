@@ -239,7 +239,6 @@ type CreateControlWithSubcontrolsInput struct {
 
 type CreateFullProgramInput struct {
 	Program          *generated.CreateProgramInput          `json:"program"`
-	Standard         *generated.CreateStandardInput         `json:"standard"`
 	Controls         []*CreateControlWithSubcontrolsInput   `json:"controls,omitempty"`
 	Risks            []*generated.CreateRiskInput           `json:"risks,omitempty"`
 	InternalPolicies []*generated.CreateInternalPolicyInput `json:"internalPolicies,omitempty"`

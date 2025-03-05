@@ -3,7 +3,6 @@
 package openlaneclient
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"strconv"
@@ -3630,11 +3629,11 @@ type CreateDocumentDataInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the json data of the document
-	Data       json.RawMessage `json:"data"`
-	OwnerID    *string         `json:"ownerID,omitempty"`
-	TemplateID string          `json:"templateID"`
-	EntityIDs  []string        `json:"entityIDs,omitempty"`
-	FileIDs    []string        `json:"fileIDs,omitempty"`
+	Data       map[string]any `json:"data"`
+	OwnerID    *string        `json:"ownerID,omitempty"`
+	TemplateID string         `json:"templateID"`
+	EntityIDs  []string       `json:"entityIDs,omitempty"`
+	FileIDs    []string       `json:"fileIDs,omitempty"`
 }
 
 // CreateEntityInput is used for create Entity object.
@@ -3768,7 +3767,6 @@ type CreateFileInput struct {
 
 type CreateFullProgramInput struct {
 	Program          *CreateProgramInput                  `json:"program"`
-	Standard         *CreateStandardInput                 `json:"standard"`
 	Controls         []*CreateControlWithSubcontrolsInput `json:"controls,omitempty"`
 	Risks            []*CreateRiskInput                   `json:"risks,omitempty"`
 	InternalPolicies []*CreateInternalPolicyInput         `json:"internalPolicies,omitempty"`
@@ -4469,11 +4467,11 @@ type DocumentData struct {
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
-	Data     json.RawMessage `json:"data"`
-	Owner    *Organization   `json:"owner,omitempty"`
-	Template *Template       `json:"template"`
-	Entity   []*Entity       `json:"entity,omitempty"`
-	Files    []*File         `json:"files,omitempty"`
+	Data     map[string]any `json:"data"`
+	Owner    *Organization  `json:"owner,omitempty"`
+	Template *Template      `json:"template"`
+	Entity   []*Entity      `json:"entity,omitempty"`
+	Files    []*File        `json:"files,omitempty"`
 }
 
 func (DocumentData) IsNode() {}
@@ -4532,7 +4530,7 @@ type DocumentDataHistory struct {
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
-	Data json.RawMessage `json:"data"`
+	Data map[string]any `json:"data"`
 }
 
 func (DocumentDataHistory) IsNode() {}
@@ -20865,14 +20863,14 @@ type UpdateDocumentDataInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the json data of the document
-	Data            json.RawMessage `json:"data,omitempty"`
-	TemplateID      *string         `json:"templateID,omitempty"`
-	AddEntityIDs    []string        `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs []string        `json:"removeEntityIDs,omitempty"`
-	ClearEntity     *bool           `json:"clearEntity,omitempty"`
-	AddFileIDs      []string        `json:"addFileIDs,omitempty"`
-	RemoveFileIDs   []string        `json:"removeFileIDs,omitempty"`
-	ClearFiles      *bool           `json:"clearFiles,omitempty"`
+	Data            map[string]any `json:"data,omitempty"`
+	TemplateID      *string        `json:"templateID,omitempty"`
+	AddEntityIDs    []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntity     *bool          `json:"clearEntity,omitempty"`
+	AddFileIDs      []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs   []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles      *bool          `json:"clearFiles,omitempty"`
 }
 
 // UpdateEntityInput is used for update Entity object.

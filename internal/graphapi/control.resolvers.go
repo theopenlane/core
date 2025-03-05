@@ -14,13 +14,16 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/graphutils"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateControl is the resolver for the createControl field.
 func (r *mutationResolver) CreateControl(ctx context.Context, input generated.CreateControlInput) (*model.ControlCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Debug().Err(err).Msg("failed to set organization in auth context, not required for system owned objects")
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("organization_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Control.Create().SetInput(input).Save(ctx)
@@ -59,11 +62,13 @@ func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input g
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Debug().Err(err).Msg("failed to set organization in auth context, not required for system owned objects")
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendReferences(input.AppendReferences)
 
 	res, err = req.Save(ctx)
 	if err != nil {

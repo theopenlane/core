@@ -199,6 +199,8 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 			name: "happy path, all input",
 			request: openlaneclient.CreateControlObjectiveInput{
 				Name:                 "Another ControlObjective",
+				Category:             lo.ToPtr("Category"),
+				Subcategory:          lo.ToPtr("Subcategory"),
 				DesiredOutcome:       lo.ToPtr("Desired Outcome"),
 				Status:               lo.ToPtr("mitigated"),
 				ControlObjectiveType: lo.ToPtr("operational"),
@@ -333,6 +335,18 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Status)
 			}
 
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.CreateControlObjective.ControlObjective.Category)
+			} else {
+				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Category)
+			}
+
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.CreateControlObjective.ControlObjective.Subcategory)
+			} else {
+				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Subcategory)
+			}
+
 			if tc.request.ControlObjectiveType != nil {
 				assert.Equal(t, *tc.request.ControlObjectiveType, *resp.CreateControlObjective.ControlObjective.ControlObjectiveType)
 			} else {
@@ -399,10 +413,14 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateControlObjectiveInput{
-				Status:         lo.ToPtr("mitigated"),
-				Tags:           []string{"tag1", "tag2"},
-				DesiredOutcome: lo.ToPtr("Updated outcome again"),
-				Version:        lo.ToPtr("1.1"),
+				Status:               lo.ToPtr("mitigated"),
+				Tags:                 []string{"tag1", "tag2"},
+				Category:             lo.ToPtr("Category Updated"),
+				Subcategory:          lo.ToPtr("Subcategory Updated"),
+				ControlObjectiveType: lo.ToPtr("operational"),
+				Source:               &enums.ControlSourceUserDefined,
+				DesiredOutcome:       lo.ToPtr("Updated outcome again"),
+				Version:              lo.ToPtr("1.1"),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -457,25 +475,40 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 				assert.Equal(t, *tc.request.Version, *resp.UpdateControlObjective.ControlObjective.Version)
 			}
 
-			// TODO (sfunk) - see why this isn't here anymore
-			// if len(tc.request.AddViewerIDs) > 0 {
-			// 	require.Len(t, resp.UpdateControlObjective.ControlObjective.Viewers, 1)
-			// 	found := false
-			// 	for _, edge := range resp.UpdateControlObjective.ControlObjective.Viewers {
-			// 		if edge.ID == tc.request.AddViewerIDs[0] {
-			// 			found = true
-			// 			break
-			// 		}
-			// 	}
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.UpdateControlObjective.ControlObjective.Category)
+			}
 
-			// 	assert.True(t, found)
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.UpdateControlObjective.ControlObjective.Subcategory)
+			}
 
-			// 	// ensure the user has access to the control objective now
-			// 	res, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
-			// 	require.NoError(t, err)
-			// 	require.NotEmpty(t, res)
-			// 	assert.Equal(t, controlObjective.ID, res.ControlObjective.ID)
-			// }
+			if tc.request.ControlObjectiveType != nil {
+				assert.Equal(t, *tc.request.ControlObjectiveType, *resp.UpdateControlObjective.ControlObjective.ControlObjectiveType)
+			}
+
+			if tc.request.Source != nil {
+				assert.Equal(t, *tc.request.Source, *resp.UpdateControlObjective.ControlObjective.Source)
+			}
+
+			if len(tc.request.AddViewerIDs) > 0 {
+				require.Len(t, resp.UpdateControlObjective.ControlObjective.Viewers, 1)
+				found := false
+				for _, edge := range resp.UpdateControlObjective.ControlObjective.Viewers {
+					if edge.ID == tc.request.AddViewerIDs[0] {
+						found = true
+						break
+					}
+				}
+
+				assert.True(t, found)
+
+				// ensure the user has access to the control objective now
+				res, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
+				require.NoError(t, err)
+				require.NotEmpty(t, res)
+				assert.Equal(t, controlObjective.ID, res.ControlObjective.ID)
+			}
 		})
 	}
 }

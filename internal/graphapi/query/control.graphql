@@ -87,6 +87,33 @@ mutation CreateControl($input: CreateControlInput!) {
       tags
       updatedAt
       updatedBy
+      controlOwner {
+        id
+        firstName
+        lastName
+      }
+      delegate {
+        id
+        firstName
+        lastName
+      }
+      programs {
+        id
+        displayID
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -125,6 +152,16 @@ query GetAllControls {
         tags
         updatedAt
         updatedBy
+        controlOwner {
+          id
+          firstName
+          lastName
+        }
+        delegate {
+          id
+          firstName
+          lastName
+        }
         standard {
           id
           name
@@ -134,6 +171,18 @@ query GetAllControls {
         programs {
           id
           displayID
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
           name
         }
       }
@@ -167,6 +216,16 @@ query GetControlByID($controlId: ID!) {
     tags
     updatedAt
     updatedBy
+    controlOwner {
+      id
+      firstName
+      lastName
+    }
+    delegate {
+      id
+      firstName
+      lastName
+    }
     standard {
       id
       name
@@ -176,6 +235,18 @@ query GetControlByID($controlId: ID!) {
     programs {
       id
       displayID
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
       name
     }
   }
@@ -209,6 +280,16 @@ query GetControls($where: ControlWhereInput) {
         tags
         updatedAt
         updatedBy
+        controlOwner {
+          id
+          firstName
+          lastName
+        }
+        delegate {
+          id
+          firstName
+          lastName
+        }
         standard {
           id
           name
@@ -218,6 +299,18 @@ query GetControls($where: ControlWhereInput) {
         programs {
           id
           displayID
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
           name
         }
       }
@@ -252,6 +345,16 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       tags
       updatedAt
       updatedBy
+      controlOwner {
+        id
+        firstName
+        lastName
+      }
+      delegate {
+        id
+        firstName
+        lastName
+      }
       standard {
         id
         name
@@ -261,6 +364,18 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       programs {
         id
         displayID
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
         name
       }
     }
