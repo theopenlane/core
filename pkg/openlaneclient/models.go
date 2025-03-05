@@ -5887,25 +5887,11 @@ type Event struct {
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
-	// the unique identifier of the event as it relates to the source or outside system
-	EventID string `json:"eventID"`
-	// an identifier to correleate the event to another object or source, if needed
-	CorrelationID *string `json:"correlationID,omitempty"`
-	// the type of event
-	EventType *string `json:"eventType,omitempty"`
-	// event metadata
-	Metadata map[string]any `json:"metadata,omitempty"`
-	// the source of the event
-	Source *string `json:"source,omitempty"`
-	// indicates if additional processing is required for the event
-	AdditionalProcessingRequired *bool `json:"additionalProcessingRequired,omitempty"`
-	// details about the additional processing required
-	AdditionalProcessingDetails *string `json:"additionalProcessingDetails,omitempty"`
-	// the listener ID who processed the event
-	ProcessedBy *string `json:"processedBy,omitempty"`
-	// the time the event was processed
-	ProcessedAt         *time.Time             `json:"processedAt,omitempty"`
+	Tags                []string               `json:"tags,omitempty"`
+	EventID             *string                `json:"eventID,omitempty"`
+	CorrelationID       *string                `json:"correlationID,omitempty"`
+	EventType           string                 `json:"eventType"`
+	Metadata            map[string]any         `json:"metadata,omitempty"`
 	User                []*User                `json:"user,omitempty"`
 	Group               []*Group               `json:"group,omitempty"`
 	Integration         []*Integration         `json:"integration,omitempty"`
@@ -5968,25 +5954,11 @@ type EventHistory struct {
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
-	// the unique identifier of the event as it relates to the source or outside system
-	EventID string `json:"eventID"`
-	// an identifier to correleate the event to another object or source, if needed
-	CorrelationID *string `json:"correlationID,omitempty"`
-	// the type of event
-	EventType *string `json:"eventType,omitempty"`
-	// event metadata
-	Metadata map[string]any `json:"metadata,omitempty"`
-	// the source of the event
-	Source *string `json:"source,omitempty"`
-	// indicates if additional processing is required for the event
-	AdditionalProcessingRequired *bool `json:"additionalProcessingRequired,omitempty"`
-	// details about the additional processing required
-	AdditionalProcessingDetails *string `json:"additionalProcessingDetails,omitempty"`
-	// the listener ID who processed the event
-	ProcessedBy *string `json:"processedBy,omitempty"`
-	// the time the event was processed
-	ProcessedAt *time.Time `json:"processedAt,omitempty"`
+	Tags          []string       `json:"tags,omitempty"`
+	EventID       *string        `json:"eventID,omitempty"`
+	CorrelationID *string        `json:"correlationID,omitempty"`
+	EventType     string         `json:"eventType"`
+	Metadata      map[string]any `json:"metadata,omitempty"`
 }
 
 func (EventHistory) IsNode() {}
@@ -6122,6 +6094,8 @@ type EventHistoryWhereInput struct {
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
+	EventIDIsNil        *bool    `json:"eventIDIsNil,omitempty"`
+	EventIDNotNil       *bool    `json:"eventIDNotNil,omitempty"`
 	EventIDEqualFold    *string  `json:"eventIDEqualFold,omitempty"`
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 	// correlation_id field predicates
@@ -6152,74 +6126,8 @@ type EventHistoryWhereInput struct {
 	EventTypeContains     *string  `json:"eventTypeContains,omitempty"`
 	EventTypeHasPrefix    *string  `json:"eventTypeHasPrefix,omitempty"`
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
-	EventTypeIsNil        *bool    `json:"eventTypeIsNil,omitempty"`
-	EventTypeNotNil       *bool    `json:"eventTypeNotNil,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
-	// source field predicates
-	Source             *string  `json:"source,omitempty"`
-	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
-	SourceIn           []string `json:"sourceIn,omitempty"`
-	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
-	SourceGt           *string  `json:"sourceGT,omitempty"`
-	SourceGte          *string  `json:"sourceGTE,omitempty"`
-	SourceLt           *string  `json:"sourceLT,omitempty"`
-	SourceLte          *string  `json:"sourceLTE,omitempty"`
-	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
-	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
-	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
-	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
-	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
-	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
-	// additional_processing_required field predicates
-	AdditionalProcessingRequired       *bool `json:"additionalProcessingRequired,omitempty"`
-	AdditionalProcessingRequiredNeq    *bool `json:"additionalProcessingRequiredNEQ,omitempty"`
-	AdditionalProcessingRequiredIsNil  *bool `json:"additionalProcessingRequiredIsNil,omitempty"`
-	AdditionalProcessingRequiredNotNil *bool `json:"additionalProcessingRequiredNotNil,omitempty"`
-	// additional_processing_details field predicates
-	AdditionalProcessingDetails             *string  `json:"additionalProcessingDetails,omitempty"`
-	AdditionalProcessingDetailsNeq          *string  `json:"additionalProcessingDetailsNEQ,omitempty"`
-	AdditionalProcessingDetailsIn           []string `json:"additionalProcessingDetailsIn,omitempty"`
-	AdditionalProcessingDetailsNotIn        []string `json:"additionalProcessingDetailsNotIn,omitempty"`
-	AdditionalProcessingDetailsGt           *string  `json:"additionalProcessingDetailsGT,omitempty"`
-	AdditionalProcessingDetailsGte          *string  `json:"additionalProcessingDetailsGTE,omitempty"`
-	AdditionalProcessingDetailsLt           *string  `json:"additionalProcessingDetailsLT,omitempty"`
-	AdditionalProcessingDetailsLte          *string  `json:"additionalProcessingDetailsLTE,omitempty"`
-	AdditionalProcessingDetailsContains     *string  `json:"additionalProcessingDetailsContains,omitempty"`
-	AdditionalProcessingDetailsHasPrefix    *string  `json:"additionalProcessingDetailsHasPrefix,omitempty"`
-	AdditionalProcessingDetailsHasSuffix    *string  `json:"additionalProcessingDetailsHasSuffix,omitempty"`
-	AdditionalProcessingDetailsIsNil        *bool    `json:"additionalProcessingDetailsIsNil,omitempty"`
-	AdditionalProcessingDetailsNotNil       *bool    `json:"additionalProcessingDetailsNotNil,omitempty"`
-	AdditionalProcessingDetailsEqualFold    *string  `json:"additionalProcessingDetailsEqualFold,omitempty"`
-	AdditionalProcessingDetailsContainsFold *string  `json:"additionalProcessingDetailsContainsFold,omitempty"`
-	// processed_by field predicates
-	ProcessedBy             *string  `json:"processedBy,omitempty"`
-	ProcessedByNeq          *string  `json:"processedByNEQ,omitempty"`
-	ProcessedByIn           []string `json:"processedByIn,omitempty"`
-	ProcessedByNotIn        []string `json:"processedByNotIn,omitempty"`
-	ProcessedByGt           *string  `json:"processedByGT,omitempty"`
-	ProcessedByGte          *string  `json:"processedByGTE,omitempty"`
-	ProcessedByLt           *string  `json:"processedByLT,omitempty"`
-	ProcessedByLte          *string  `json:"processedByLTE,omitempty"`
-	ProcessedByContains     *string  `json:"processedByContains,omitempty"`
-	ProcessedByHasPrefix    *string  `json:"processedByHasPrefix,omitempty"`
-	ProcessedByHasSuffix    *string  `json:"processedByHasSuffix,omitempty"`
-	ProcessedByIsNil        *bool    `json:"processedByIsNil,omitempty"`
-	ProcessedByNotNil       *bool    `json:"processedByNotNil,omitempty"`
-	ProcessedByEqualFold    *string  `json:"processedByEqualFold,omitempty"`
-	ProcessedByContainsFold *string  `json:"processedByContainsFold,omitempty"`
-	// processed_at field predicates
-	ProcessedAt       *time.Time   `json:"processedAt,omitempty"`
-	ProcessedAtNeq    *time.Time   `json:"processedAtNEQ,omitempty"`
-	ProcessedAtIn     []*time.Time `json:"processedAtIn,omitempty"`
-	ProcessedAtNotIn  []*time.Time `json:"processedAtNotIn,omitempty"`
-	ProcessedAtGt     *time.Time   `json:"processedAtGT,omitempty"`
-	ProcessedAtGte    *time.Time   `json:"processedAtGTE,omitempty"`
-	ProcessedAtLt     *time.Time   `json:"processedAtLT,omitempty"`
-	ProcessedAtLte    *time.Time   `json:"processedAtLTE,omitempty"`
-	ProcessedAtIsNil  *bool        `json:"processedAtIsNil,omitempty"`
-	ProcessedAtNotNil *bool        `json:"processedAtNotNil,omitempty"`
 }
 
 type EventSearchResult struct {
@@ -6317,6 +6225,8 @@ type EventWhereInput struct {
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
+	EventIDIsNil        *bool    `json:"eventIDIsNil,omitempty"`
+	EventIDNotNil       *bool    `json:"eventIDNotNil,omitempty"`
 	EventIDEqualFold    *string  `json:"eventIDEqualFold,omitempty"`
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 	// correlation_id field predicates
@@ -6347,74 +6257,8 @@ type EventWhereInput struct {
 	EventTypeContains     *string  `json:"eventTypeContains,omitempty"`
 	EventTypeHasPrefix    *string  `json:"eventTypeHasPrefix,omitempty"`
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
-	EventTypeIsNil        *bool    `json:"eventTypeIsNil,omitempty"`
-	EventTypeNotNil       *bool    `json:"eventTypeNotNil,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
-	// source field predicates
-	Source             *string  `json:"source,omitempty"`
-	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
-	SourceIn           []string `json:"sourceIn,omitempty"`
-	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
-	SourceGt           *string  `json:"sourceGT,omitempty"`
-	SourceGte          *string  `json:"sourceGTE,omitempty"`
-	SourceLt           *string  `json:"sourceLT,omitempty"`
-	SourceLte          *string  `json:"sourceLTE,omitempty"`
-	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
-	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
-	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
-	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
-	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
-	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
-	// additional_processing_required field predicates
-	AdditionalProcessingRequired       *bool `json:"additionalProcessingRequired,omitempty"`
-	AdditionalProcessingRequiredNeq    *bool `json:"additionalProcessingRequiredNEQ,omitempty"`
-	AdditionalProcessingRequiredIsNil  *bool `json:"additionalProcessingRequiredIsNil,omitempty"`
-	AdditionalProcessingRequiredNotNil *bool `json:"additionalProcessingRequiredNotNil,omitempty"`
-	// additional_processing_details field predicates
-	AdditionalProcessingDetails             *string  `json:"additionalProcessingDetails,omitempty"`
-	AdditionalProcessingDetailsNeq          *string  `json:"additionalProcessingDetailsNEQ,omitempty"`
-	AdditionalProcessingDetailsIn           []string `json:"additionalProcessingDetailsIn,omitempty"`
-	AdditionalProcessingDetailsNotIn        []string `json:"additionalProcessingDetailsNotIn,omitempty"`
-	AdditionalProcessingDetailsGt           *string  `json:"additionalProcessingDetailsGT,omitempty"`
-	AdditionalProcessingDetailsGte          *string  `json:"additionalProcessingDetailsGTE,omitempty"`
-	AdditionalProcessingDetailsLt           *string  `json:"additionalProcessingDetailsLT,omitempty"`
-	AdditionalProcessingDetailsLte          *string  `json:"additionalProcessingDetailsLTE,omitempty"`
-	AdditionalProcessingDetailsContains     *string  `json:"additionalProcessingDetailsContains,omitempty"`
-	AdditionalProcessingDetailsHasPrefix    *string  `json:"additionalProcessingDetailsHasPrefix,omitempty"`
-	AdditionalProcessingDetailsHasSuffix    *string  `json:"additionalProcessingDetailsHasSuffix,omitempty"`
-	AdditionalProcessingDetailsIsNil        *bool    `json:"additionalProcessingDetailsIsNil,omitempty"`
-	AdditionalProcessingDetailsNotNil       *bool    `json:"additionalProcessingDetailsNotNil,omitempty"`
-	AdditionalProcessingDetailsEqualFold    *string  `json:"additionalProcessingDetailsEqualFold,omitempty"`
-	AdditionalProcessingDetailsContainsFold *string  `json:"additionalProcessingDetailsContainsFold,omitempty"`
-	// processed_by field predicates
-	ProcessedBy             *string  `json:"processedBy,omitempty"`
-	ProcessedByNeq          *string  `json:"processedByNEQ,omitempty"`
-	ProcessedByIn           []string `json:"processedByIn,omitempty"`
-	ProcessedByNotIn        []string `json:"processedByNotIn,omitempty"`
-	ProcessedByGt           *string  `json:"processedByGT,omitempty"`
-	ProcessedByGte          *string  `json:"processedByGTE,omitempty"`
-	ProcessedByLt           *string  `json:"processedByLT,omitempty"`
-	ProcessedByLte          *string  `json:"processedByLTE,omitempty"`
-	ProcessedByContains     *string  `json:"processedByContains,omitempty"`
-	ProcessedByHasPrefix    *string  `json:"processedByHasPrefix,omitempty"`
-	ProcessedByHasSuffix    *string  `json:"processedByHasSuffix,omitempty"`
-	ProcessedByIsNil        *bool    `json:"processedByIsNil,omitempty"`
-	ProcessedByNotNil       *bool    `json:"processedByNotNil,omitempty"`
-	ProcessedByEqualFold    *string  `json:"processedByEqualFold,omitempty"`
-	ProcessedByContainsFold *string  `json:"processedByContainsFold,omitempty"`
-	// processed_at field predicates
-	ProcessedAt       *time.Time   `json:"processedAt,omitempty"`
-	ProcessedAtNeq    *time.Time   `json:"processedAtNEQ,omitempty"`
-	ProcessedAtIn     []*time.Time `json:"processedAtIn,omitempty"`
-	ProcessedAtNotIn  []*time.Time `json:"processedAtNotIn,omitempty"`
-	ProcessedAtGt     *time.Time   `json:"processedAtGT,omitempty"`
-	ProcessedAtGte    *time.Time   `json:"processedAtGTE,omitempty"`
-	ProcessedAtLt     *time.Time   `json:"processedAtLT,omitempty"`
-	ProcessedAtLte    *time.Time   `json:"processedAtLTE,omitempty"`
-	ProcessedAtIsNil  *bool        `json:"processedAtIsNil,omitempty"`
-	ProcessedAtNotNil *bool        `json:"processedAtNotNil,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`

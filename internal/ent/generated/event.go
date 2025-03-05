@@ -28,24 +28,14 @@ type Event struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the unique identifier of the event as it relates to the source or outside system
+	// EventID holds the value of the "event_id" field.
 	EventID string `json:"event_id,omitempty"`
-	// an identifier to correleate the event to another object or source, if needed
+	// CorrelationID holds the value of the "correlation_id" field.
 	CorrelationID string `json:"correlation_id,omitempty"`
-	// the type of event
+	// EventType holds the value of the "event_type" field.
 	EventType string `json:"event_type,omitempty"`
-	// event metadata
+	// Metadata holds the value of the "metadata" field.
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// the source of the event
-	Source string `json:"source,omitempty"`
-	// indicates if additional processing is required for the event
-	AdditionalProcessingRequired bool `json:"additional_processing_required,omitempty"`
-	// details about the additional processing required
-	AdditionalProcessingDetails string `json:"additional_processing_details,omitempty"`
-	// the listener ID who processed the event
-	ProcessedBy string `json:"processed_by,omitempty"`
-	// the time the event was processed
-	ProcessedAt time.Time `json:"processed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EventQuery when eager-loading is set.
 	Edges        EventEdges `json:"edges"`
@@ -213,11 +203,9 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case event.FieldTags, event.FieldMetadata:
 			values[i] = new([]byte)
-		case event.FieldAdditionalProcessingRequired:
-			values[i] = new(sql.NullBool)
-		case event.FieldID, event.FieldCreatedBy, event.FieldUpdatedBy, event.FieldEventID, event.FieldCorrelationID, event.FieldEventType, event.FieldSource, event.FieldAdditionalProcessingDetails, event.FieldProcessedBy:
+		case event.FieldID, event.FieldCreatedBy, event.FieldUpdatedBy, event.FieldEventID, event.FieldCorrelationID, event.FieldEventType:
 			values[i] = new(sql.NullString)
-		case event.FieldCreatedAt, event.FieldUpdatedAt, event.FieldProcessedAt:
+		case event.FieldCreatedAt, event.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -420,21 +408,6 @@ func (e *Event) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", e.Metadata))
-	builder.WriteString(", ")
-	builder.WriteString("source=")
-	builder.WriteString(e.Source)
-	builder.WriteString(", ")
-	builder.WriteString("additional_processing_required=")
-	builder.WriteString(fmt.Sprintf("%v", e.AdditionalProcessingRequired))
-	builder.WriteString(", ")
-	builder.WriteString("additional_processing_details=")
-	builder.WriteString(e.AdditionalProcessingDetails)
-	builder.WriteString(", ")
-	builder.WriteString("processed_by=")
-	builder.WriteString(e.ProcessedBy)
-	builder.WriteString(", ")
-	builder.WriteString("processed_at=")
-	builder.WriteString(e.ProcessedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

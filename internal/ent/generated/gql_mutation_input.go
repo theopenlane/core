@@ -1933,30 +1933,15 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	m.SetEventID(i.EventID)
+	if v := i.EventID; v != nil {
+		m.SetEventID(*v)
+	}
 	if v := i.CorrelationID; v != nil {
 		m.SetCorrelationID(*v)
 	}
-	if v := i.EventType; v != nil {
-		m.SetEventType(*v)
-	}
+	m.SetEventType(i.EventType)
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
-	}
-	if v := i.Source; v != nil {
-		m.SetSource(*v)
-	}
-	if v := i.AdditionalProcessingRequired; v != nil {
-		m.SetAdditionalProcessingRequired(*v)
-	}
-	if v := i.AdditionalProcessingDetails; v != nil {
-		m.SetAdditionalProcessingDetails(*v)
-	}
-	if v := i.ProcessedBy; v != nil {
-		m.SetProcessedBy(*v)
-	}
-	if v := i.ProcessedAt; v != nil {
-		m.SetProcessedAt(*v)
 	}
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
@@ -2051,14 +2036,17 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearEventID {
+		m.ClearEventID()
+	}
+	if v := i.EventID; v != nil {
+		m.SetEventID(*v)
+	}
 	if i.ClearCorrelationID {
 		m.ClearCorrelationID()
 	}
 	if v := i.CorrelationID; v != nil {
 		m.SetCorrelationID(*v)
-	}
-	if i.ClearEventType {
-		m.ClearEventType()
 	}
 	if v := i.EventType; v != nil {
 		m.SetEventType(*v)
@@ -2068,36 +2056,6 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
-	}
-	if i.ClearSource {
-		m.ClearSource()
-	}
-	if v := i.Source; v != nil {
-		m.SetSource(*v)
-	}
-	if i.ClearAdditionalProcessingRequired {
-		m.ClearAdditionalProcessingRequired()
-	}
-	if v := i.AdditionalProcessingRequired; v != nil {
-		m.SetAdditionalProcessingRequired(*v)
-	}
-	if i.ClearAdditionalProcessingDetails {
-		m.ClearAdditionalProcessingDetails()
-	}
-	if v := i.AdditionalProcessingDetails; v != nil {
-		m.SetAdditionalProcessingDetails(*v)
-	}
-	if i.ClearProcessedBy {
-		m.ClearProcessedBy()
-	}
-	if v := i.ProcessedBy; v != nil {
-		m.SetProcessedBy(*v)
-	}
-	if i.ClearProcessedAt {
-		m.ClearProcessedAt()
-	}
-	if v := i.ProcessedAt; v != nil {
-		m.SetProcessedAt(*v)
 	}
 	if i.ClearUser {
 		m.ClearUser()

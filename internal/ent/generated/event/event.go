@@ -33,16 +33,6 @@ const (
 	FieldEventType = "event_type"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
-	// FieldSource holds the string denoting the source field in the database.
-	FieldSource = "source"
-	// FieldAdditionalProcessingRequired holds the string denoting the additional_processing_required field in the database.
-	FieldAdditionalProcessingRequired = "additional_processing_required"
-	// FieldAdditionalProcessingDetails holds the string denoting the additional_processing_details field in the database.
-	FieldAdditionalProcessingDetails = "additional_processing_details"
-	// FieldProcessedBy holds the string denoting the processed_by field in the database.
-	FieldProcessedBy = "processed_by"
-	// FieldProcessedAt holds the string denoting the processed_at field in the database.
-	FieldProcessedAt = "processed_at"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
@@ -209,8 +199,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// DefaultAdditionalProcessingRequired holds the default value on creation for the "additional_processing_required" field.
-	DefaultAdditionalProcessingRequired bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -256,31 +244,6 @@ func ByCorrelationID(opts ...sql.OrderTermOption) OrderOption {
 // ByEventType orders the results by the event_type field.
 func ByEventType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEventType, opts...).ToFunc()
-}
-
-// BySource orders the results by the source field.
-func BySource(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSource, opts...).ToFunc()
-}
-
-// ByAdditionalProcessingRequired orders the results by the additional_processing_required field.
-func ByAdditionalProcessingRequired(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAdditionalProcessingRequired, opts...).ToFunc()
-}
-
-// ByAdditionalProcessingDetails orders the results by the additional_processing_details field.
-func ByAdditionalProcessingDetails(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAdditionalProcessingDetails, opts...).ToFunc()
-}
-
-// ByProcessedBy orders the results by the processed_by field.
-func ByProcessedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProcessedBy, opts...).ToFunc()
-}
-
-// ByProcessedAt orders the results by the processed_at field.
-func ByProcessedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProcessedAt, opts...).ToFunc()
 }
 
 // ByUserCount orders the results by user count.
