@@ -332,6 +332,9 @@
         },
         "stripeBillingPortalSuccessURL": {
           "type": "string"
+        },
+        "stripeCancellationReturnURL": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

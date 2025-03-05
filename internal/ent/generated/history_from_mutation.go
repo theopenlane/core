@@ -1838,6 +1838,26 @@ func (m *EventMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMetadata(metadata)
 	}
 
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if additionalProcessingRequired, exists := m.AdditionalProcessingRequired(); exists {
+		create = create.SetAdditionalProcessingRequired(additionalProcessingRequired)
+	}
+
+	if additionalProcessingDetails, exists := m.AdditionalProcessingDetails(); exists {
+		create = create.SetAdditionalProcessingDetails(additionalProcessingDetails)
+	}
+
+	if processedBy, exists := m.ProcessedBy(); exists {
+		create = create.SetProcessedBy(processedBy)
+	}
+
+	if processedAt, exists := m.ProcessedAt(); exists {
+		create = create.SetProcessedAt(processedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -1922,6 +1942,36 @@ func (m *EventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMetadata(event.Metadata)
 		}
 
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(event.Source)
+		}
+
+		if additionalProcessingRequired, exists := m.AdditionalProcessingRequired(); exists {
+			create = create.SetAdditionalProcessingRequired(additionalProcessingRequired)
+		} else {
+			create = create.SetAdditionalProcessingRequired(event.AdditionalProcessingRequired)
+		}
+
+		if additionalProcessingDetails, exists := m.AdditionalProcessingDetails(); exists {
+			create = create.SetAdditionalProcessingDetails(additionalProcessingDetails)
+		} else {
+			create = create.SetAdditionalProcessingDetails(event.AdditionalProcessingDetails)
+		}
+
+		if processedBy, exists := m.ProcessedBy(); exists {
+			create = create.SetProcessedBy(processedBy)
+		} else {
+			create = create.SetProcessedBy(event.ProcessedBy)
+		}
+
+		if processedAt, exists := m.ProcessedAt(); exists {
+			create = create.SetProcessedAt(processedAt)
+		} else {
+			create = create.SetProcessedAt(event.ProcessedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1963,6 +2013,11 @@ func (m *EventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetCorrelationID(event.CorrelationID).
 			SetEventType(event.EventType).
 			SetMetadata(event.Metadata).
+			SetSource(event.Source).
+			SetAdditionalProcessingRequired(event.AdditionalProcessingRequired).
+			SetAdditionalProcessingDetails(event.AdditionalProcessingDetails).
+			SetProcessedBy(event.ProcessedBy).
+			SetProcessedAt(event.ProcessedAt).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -566,15 +566,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Event",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			event.FieldCreatedAt:     {Type: field.TypeTime, Column: event.FieldCreatedAt},
-			event.FieldUpdatedAt:     {Type: field.TypeTime, Column: event.FieldUpdatedAt},
-			event.FieldCreatedBy:     {Type: field.TypeString, Column: event.FieldCreatedBy},
-			event.FieldUpdatedBy:     {Type: field.TypeString, Column: event.FieldUpdatedBy},
-			event.FieldTags:          {Type: field.TypeJSON, Column: event.FieldTags},
-			event.FieldEventID:       {Type: field.TypeString, Column: event.FieldEventID},
-			event.FieldCorrelationID: {Type: field.TypeString, Column: event.FieldCorrelationID},
-			event.FieldEventType:     {Type: field.TypeString, Column: event.FieldEventType},
-			event.FieldMetadata:      {Type: field.TypeJSON, Column: event.FieldMetadata},
+			event.FieldCreatedAt:                    {Type: field.TypeTime, Column: event.FieldCreatedAt},
+			event.FieldUpdatedAt:                    {Type: field.TypeTime, Column: event.FieldUpdatedAt},
+			event.FieldCreatedBy:                    {Type: field.TypeString, Column: event.FieldCreatedBy},
+			event.FieldUpdatedBy:                    {Type: field.TypeString, Column: event.FieldUpdatedBy},
+			event.FieldTags:                         {Type: field.TypeJSON, Column: event.FieldTags},
+			event.FieldEventID:                      {Type: field.TypeString, Column: event.FieldEventID},
+			event.FieldCorrelationID:                {Type: field.TypeString, Column: event.FieldCorrelationID},
+			event.FieldEventType:                    {Type: field.TypeString, Column: event.FieldEventType},
+			event.FieldMetadata:                     {Type: field.TypeJSON, Column: event.FieldMetadata},
+			event.FieldSource:                       {Type: field.TypeString, Column: event.FieldSource},
+			event.FieldAdditionalProcessingRequired: {Type: field.TypeBool, Column: event.FieldAdditionalProcessingRequired},
+			event.FieldAdditionalProcessingDetails:  {Type: field.TypeString, Column: event.FieldAdditionalProcessingDetails},
+			event.FieldProcessedBy:                  {Type: field.TypeString, Column: event.FieldProcessedBy},
+			event.FieldProcessedAt:                  {Type: field.TypeTime, Column: event.FieldProcessedAt},
 		},
 	}
 	graph.Nodes[17] = &sqlgraph.Node{
@@ -588,18 +593,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EventHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			eventhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: eventhistory.FieldHistoryTime},
-			eventhistory.FieldRef:           {Type: field.TypeString, Column: eventhistory.FieldRef},
-			eventhistory.FieldOperation:     {Type: field.TypeEnum, Column: eventhistory.FieldOperation},
-			eventhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: eventhistory.FieldCreatedAt},
-			eventhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: eventhistory.FieldUpdatedAt},
-			eventhistory.FieldCreatedBy:     {Type: field.TypeString, Column: eventhistory.FieldCreatedBy},
-			eventhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: eventhistory.FieldUpdatedBy},
-			eventhistory.FieldTags:          {Type: field.TypeJSON, Column: eventhistory.FieldTags},
-			eventhistory.FieldEventID:       {Type: field.TypeString, Column: eventhistory.FieldEventID},
-			eventhistory.FieldCorrelationID: {Type: field.TypeString, Column: eventhistory.FieldCorrelationID},
-			eventhistory.FieldEventType:     {Type: field.TypeString, Column: eventhistory.FieldEventType},
-			eventhistory.FieldMetadata:      {Type: field.TypeJSON, Column: eventhistory.FieldMetadata},
+			eventhistory.FieldHistoryTime:                  {Type: field.TypeTime, Column: eventhistory.FieldHistoryTime},
+			eventhistory.FieldRef:                          {Type: field.TypeString, Column: eventhistory.FieldRef},
+			eventhistory.FieldOperation:                    {Type: field.TypeEnum, Column: eventhistory.FieldOperation},
+			eventhistory.FieldCreatedAt:                    {Type: field.TypeTime, Column: eventhistory.FieldCreatedAt},
+			eventhistory.FieldUpdatedAt:                    {Type: field.TypeTime, Column: eventhistory.FieldUpdatedAt},
+			eventhistory.FieldCreatedBy:                    {Type: field.TypeString, Column: eventhistory.FieldCreatedBy},
+			eventhistory.FieldUpdatedBy:                    {Type: field.TypeString, Column: eventhistory.FieldUpdatedBy},
+			eventhistory.FieldTags:                         {Type: field.TypeJSON, Column: eventhistory.FieldTags},
+			eventhistory.FieldEventID:                      {Type: field.TypeString, Column: eventhistory.FieldEventID},
+			eventhistory.FieldCorrelationID:                {Type: field.TypeString, Column: eventhistory.FieldCorrelationID},
+			eventhistory.FieldEventType:                    {Type: field.TypeString, Column: eventhistory.FieldEventType},
+			eventhistory.FieldMetadata:                     {Type: field.TypeJSON, Column: eventhistory.FieldMetadata},
+			eventhistory.FieldSource:                       {Type: field.TypeString, Column: eventhistory.FieldSource},
+			eventhistory.FieldAdditionalProcessingRequired: {Type: field.TypeBool, Column: eventhistory.FieldAdditionalProcessingRequired},
+			eventhistory.FieldAdditionalProcessingDetails:  {Type: field.TypeString, Column: eventhistory.FieldAdditionalProcessingDetails},
+			eventhistory.FieldProcessedBy:                  {Type: field.TypeString, Column: eventhistory.FieldProcessedBy},
+			eventhistory.FieldProcessedAt:                  {Type: field.TypeTime, Column: eventhistory.FieldProcessedAt},
 		},
 	}
 	graph.Nodes[18] = &sqlgraph.Node{
@@ -2963,6 +2973,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"orgsubscription",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+		},
+		"Event",
+		"OrgSubscription",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3973,10 +3995,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"events",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 		},
 		"OrgSubscription",
@@ -8360,6 +8382,31 @@ func (f *EventFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(event.FieldMetadata))
 }
 
+// WhereSource applies the entql string predicate on the source field.
+func (f *EventFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(event.FieldSource))
+}
+
+// WhereAdditionalProcessingRequired applies the entql bool predicate on the additional_processing_required field.
+func (f *EventFilter) WhereAdditionalProcessingRequired(p entql.BoolP) {
+	f.Where(p.Field(event.FieldAdditionalProcessingRequired))
+}
+
+// WhereAdditionalProcessingDetails applies the entql string predicate on the additional_processing_details field.
+func (f *EventFilter) WhereAdditionalProcessingDetails(p entql.StringP) {
+	f.Where(p.Field(event.FieldAdditionalProcessingDetails))
+}
+
+// WhereProcessedBy applies the entql string predicate on the processed_by field.
+func (f *EventFilter) WhereProcessedBy(p entql.StringP) {
+	f.Where(p.Field(event.FieldProcessedBy))
+}
+
+// WhereProcessedAt applies the entql time.Time predicate on the processed_at field.
+func (f *EventFilter) WhereProcessedAt(p entql.TimeP) {
+	f.Where(p.Field(event.FieldProcessedAt))
+}
+
 // WhereHasUser applies a predicate to check if query has an edge user.
 func (f *EventFilter) WhereHasUser() {
 	f.Where(entql.HasEdge("user"))
@@ -8514,6 +8561,20 @@ func (f *EventFilter) WhereHasFileWith(preds ...predicate.File) {
 	})))
 }
 
+// WhereHasOrgsubscription applies a predicate to check if query has an edge orgsubscription.
+func (f *EventFilter) WhereHasOrgsubscription() {
+	f.Where(entql.HasEdge("orgsubscription"))
+}
+
+// WhereHasOrgsubscriptionWith applies a predicate to check if query has an edge orgsubscription with a given conditions (other predicates).
+func (f *EventFilter) WhereHasOrgsubscriptionWith(preds ...predicate.OrgSubscription) {
+	f.Where(entql.HasEdgeWith("orgsubscription", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (ehq *EventHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	ehq.predicates = append(ehq.predicates, pred)
@@ -8612,6 +8673,31 @@ func (f *EventHistoryFilter) WhereEventType(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *EventHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(eventhistory.FieldMetadata))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *EventHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldSource))
+}
+
+// WhereAdditionalProcessingRequired applies the entql bool predicate on the additional_processing_required field.
+func (f *EventHistoryFilter) WhereAdditionalProcessingRequired(p entql.BoolP) {
+	f.Where(p.Field(eventhistory.FieldAdditionalProcessingRequired))
+}
+
+// WhereAdditionalProcessingDetails applies the entql string predicate on the additional_processing_details field.
+func (f *EventHistoryFilter) WhereAdditionalProcessingDetails(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldAdditionalProcessingDetails))
+}
+
+// WhereProcessedBy applies the entql string predicate on the processed_by field.
+func (f *EventHistoryFilter) WhereProcessedBy(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldProcessedBy))
+}
+
+// WhereProcessedAt applies the entql time.Time predicate on the processed_at field.
+func (f *EventHistoryFilter) WhereProcessedAt(p entql.TimeP) {
+	f.Where(p.Field(eventhistory.FieldProcessedAt))
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -602,6 +602,21 @@ func (eh *EventHistory) changes(new *EventHistory) []Change {
 	if !reflect.DeepEqual(eh.Metadata, new.Metadata) {
 		changes = append(changes, NewChange(eventhistory.FieldMetadata, eh.Metadata, new.Metadata))
 	}
+	if !reflect.DeepEqual(eh.Source, new.Source) {
+		changes = append(changes, NewChange(eventhistory.FieldSource, eh.Source, new.Source))
+	}
+	if !reflect.DeepEqual(eh.AdditionalProcessingRequired, new.AdditionalProcessingRequired) {
+		changes = append(changes, NewChange(eventhistory.FieldAdditionalProcessingRequired, eh.AdditionalProcessingRequired, new.AdditionalProcessingRequired))
+	}
+	if !reflect.DeepEqual(eh.AdditionalProcessingDetails, new.AdditionalProcessingDetails) {
+		changes = append(changes, NewChange(eventhistory.FieldAdditionalProcessingDetails, eh.AdditionalProcessingDetails, new.AdditionalProcessingDetails))
+	}
+	if !reflect.DeepEqual(eh.ProcessedBy, new.ProcessedBy) {
+		changes = append(changes, NewChange(eventhistory.FieldProcessedBy, eh.ProcessedBy, new.ProcessedBy))
+	}
+	if !reflect.DeepEqual(eh.ProcessedAt, new.ProcessedAt) {
+		changes = append(changes, NewChange(eventhistory.FieldProcessedAt, eh.ProcessedAt, new.ProcessedAt))
+	}
 	return changes
 }
 

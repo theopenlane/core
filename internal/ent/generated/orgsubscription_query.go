@@ -107,11 +107,11 @@ func (osq *OrgSubscriptionQuery) QueryEvents() *EventQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
 			sqlgraph.To(event.Table, event.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.EventsTable, orgsubscription.EventsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, orgsubscription.EventsTable, orgsubscription.EventsPrimaryKey...),
 		)
 		schemaConfig := osq.schemaConfig
 		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -505,33 +505,64 @@ func (osq *OrgSubscriptionQuery) loadOwner(ctx context.Context, query *Organizat
 	return nil
 }
 func (osq *OrgSubscriptionQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *Event)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*OrgSubscription)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*OrgSubscription)
+	nids := make(map[string]map[*OrgSubscription]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Event(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(orgsubscription.EventsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(orgsubscription.EventsTable)
+		joinT.Schema(osq.schemaConfig.OrgSubscriptionEvents)
+		s.Join(joinT).On(s.C(event.FieldID), joinT.C(orgsubscription.EventsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(orgsubscription.EventsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(orgsubscription.EventsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*OrgSubscription]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Event](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.org_subscription_events
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "org_subscription_events" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "org_subscription_events" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "events" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

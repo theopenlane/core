@@ -13,4 +13,6 @@ var (
 	ErrCustomerLookupFailed = errors.New("failed to lookup customer")
 	// ErrCustomerIDRequired is returned when a customer ID is required
 	ErrCustomerIDRequired = errors.New("customer ID is required")
+	// ErrMissingAPIKey is returned when the API key is missing
+	ErrMissingAPIKey = errors.New("missing API key")
 )
