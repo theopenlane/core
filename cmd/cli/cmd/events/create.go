@@ -31,9 +31,8 @@ func init() {
 
 // createValidation validates the required fields for the command
 func createValidation() (input openlaneclient.CreateEventInput, err error) {
-	eventType := cmd.Config.String("type")
-	input.EventType = &eventType
-	if input.EventType == nil {
+	input.EventType = cmd.Config.String("type")
+	if input.EventType == "" {
 		return input, cmd.NewRequiredFieldMissingError("type")
 	}
 
