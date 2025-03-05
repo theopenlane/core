@@ -950,10 +950,6 @@ func init() {
 	eventDescTags := eventMixinFields2[0].Descriptor()
 	// event.DefaultTags holds the default value on creation for the tags field.
 	event.DefaultTags = eventDescTags.Default.([]string)
-	// eventDescAdditionalProcessingRequired is the schema descriptor for additional_processing_required field.
-	eventDescAdditionalProcessingRequired := eventFields[5].Descriptor()
-	// event.DefaultAdditionalProcessingRequired holds the default value on creation for the additional_processing_required field.
-	event.DefaultAdditionalProcessingRequired = eventDescAdditionalProcessingRequired.Default.(bool)
 	// eventDescID is the schema descriptor for id field.
 	eventDescID := eventMixinFields1[0].Descriptor()
 	// event.DefaultID holds the default value on creation for the id field.
@@ -978,10 +974,6 @@ func init() {
 	eventhistoryDescTags := eventhistoryFields[8].Descriptor()
 	// eventhistory.DefaultTags holds the default value on creation for the tags field.
 	eventhistory.DefaultTags = eventhistoryDescTags.Default.([]string)
-	// eventhistoryDescAdditionalProcessingRequired is the schema descriptor for additional_processing_required field.
-	eventhistoryDescAdditionalProcessingRequired := eventhistoryFields[14].Descriptor()
-	// eventhistory.DefaultAdditionalProcessingRequired holds the default value on creation for the additional_processing_required field.
-	eventhistory.DefaultAdditionalProcessingRequired = eventhistoryDescAdditionalProcessingRequired.Default.(bool)
 	// eventhistoryDescID is the schema descriptor for id field.
 	eventhistoryDescID := eventhistoryFields[7].Descriptor()
 	// eventhistory.DefaultID holds the default value on creation for the id field.

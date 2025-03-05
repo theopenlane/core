@@ -3222,31 +3222,6 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, event.FieldMetadata)
 				fieldSeen[event.FieldMetadata] = struct{}{}
 			}
-		case "source":
-			if _, ok := fieldSeen[event.FieldSource]; !ok {
-				selectedFields = append(selectedFields, event.FieldSource)
-				fieldSeen[event.FieldSource] = struct{}{}
-			}
-		case "additionalProcessingRequired":
-			if _, ok := fieldSeen[event.FieldAdditionalProcessingRequired]; !ok {
-				selectedFields = append(selectedFields, event.FieldAdditionalProcessingRequired)
-				fieldSeen[event.FieldAdditionalProcessingRequired] = struct{}{}
-			}
-		case "additionalProcessingDetails":
-			if _, ok := fieldSeen[event.FieldAdditionalProcessingDetails]; !ok {
-				selectedFields = append(selectedFields, event.FieldAdditionalProcessingDetails)
-				fieldSeen[event.FieldAdditionalProcessingDetails] = struct{}{}
-			}
-		case "processedBy":
-			if _, ok := fieldSeen[event.FieldProcessedBy]; !ok {
-				selectedFields = append(selectedFields, event.FieldProcessedBy)
-				fieldSeen[event.FieldProcessedBy] = struct{}{}
-			}
-		case "processedAt":
-			if _, ok := fieldSeen[event.FieldProcessedAt]; !ok {
-				selectedFields = append(selectedFields, event.FieldProcessedAt)
-				fieldSeen[event.FieldProcessedAt] = struct{}{}
-			}
 		case "id":
 		case "__typename":
 		default:
@@ -3368,31 +3343,6 @@ func (eh *EventHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[eventhistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, eventhistory.FieldMetadata)
 				fieldSeen[eventhistory.FieldMetadata] = struct{}{}
-			}
-		case "source":
-			if _, ok := fieldSeen[eventhistory.FieldSource]; !ok {
-				selectedFields = append(selectedFields, eventhistory.FieldSource)
-				fieldSeen[eventhistory.FieldSource] = struct{}{}
-			}
-		case "additionalProcessingRequired":
-			if _, ok := fieldSeen[eventhistory.FieldAdditionalProcessingRequired]; !ok {
-				selectedFields = append(selectedFields, eventhistory.FieldAdditionalProcessingRequired)
-				fieldSeen[eventhistory.FieldAdditionalProcessingRequired] = struct{}{}
-			}
-		case "additionalProcessingDetails":
-			if _, ok := fieldSeen[eventhistory.FieldAdditionalProcessingDetails]; !ok {
-				selectedFields = append(selectedFields, eventhistory.FieldAdditionalProcessingDetails)
-				fieldSeen[eventhistory.FieldAdditionalProcessingDetails] = struct{}{}
-			}
-		case "processedBy":
-			if _, ok := fieldSeen[eventhistory.FieldProcessedBy]; !ok {
-				selectedFields = append(selectedFields, eventhistory.FieldProcessedBy)
-				fieldSeen[eventhistory.FieldProcessedBy] = struct{}{}
-			}
-		case "processedAt":
-			if _, ok := fieldSeen[eventhistory.FieldProcessedAt]; !ok {
-				selectedFields = append(selectedFields, eventhistory.FieldProcessedAt)
-				fieldSeen[eventhistory.FieldProcessedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":

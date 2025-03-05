@@ -384,9 +384,6 @@ func adminSearchEvents(ctx context.Context, query string) ([]*generated.Event, e
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(metadata)::text LIKE $6", likeQuery)) // search by Metadata
 			},
-			event.SourceContainsFold(query),                      // search by Source
-			event.AdditionalProcessingDetailsContainsFold(query), // search by AdditionalProcessingDetails
-			event.ProcessedByContainsFold(query),                 // search by ProcessedBy
 		),
 	).All(ctx)
 }
