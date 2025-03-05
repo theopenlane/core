@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -136,8 +135,8 @@ func (ddc *DocumentDataCreate) SetTemplateID(s string) *DocumentDataCreate {
 }
 
 // SetData sets the "data" field.
-func (ddc *DocumentDataCreate) SetData(co customtypes.JSONObject) *DocumentDataCreate {
-	ddc.mutation.SetData(co)
+func (ddc *DocumentDataCreate) SetData(m map[string]interface{}) *DocumentDataCreate {
+	ddc.mutation.SetData(m)
 	return ddc
 }
 

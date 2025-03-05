@@ -160,6 +160,36 @@ type ControlDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkControlImplementation mutation
+type ControlImplementationBulkCreatePayload struct {
+	// Created controlImplementations
+	ControlImplementations []*generated.ControlImplementation `json:"controlImplementations,omitempty"`
+}
+
+// Return response for createControlImplementation mutation
+type ControlImplementationCreatePayload struct {
+	// Created controlImplementation
+	ControlImplementation *generated.ControlImplementation `json:"controlImplementation"`
+}
+
+// Return response for deleteControlImplementation mutation
+type ControlImplementationDeletePayload struct {
+	// Deleted controlImplementation ID
+	DeletedID string `json:"deletedID"`
+}
+
+type ControlImplementationSearchResult struct {
+	ControlImplementations []*generated.ControlImplementation `json:"controlImplementations,omitempty"`
+}
+
+func (ControlImplementationSearchResult) IsSearchResult() {}
+
+// Return response for updateControlImplementation mutation
+type ControlImplementationUpdatePayload struct {
+	// Updated controlImplementation
+	ControlImplementation *generated.ControlImplementation `json:"controlImplementation"`
+}
+
 // Return response for createBulkControlObjective mutation
 type ControlObjectiveBulkCreatePayload struct {
 	// Created controlObjectives
@@ -209,7 +239,6 @@ type CreateControlWithSubcontrolsInput struct {
 
 type CreateFullProgramInput struct {
 	Program          *generated.CreateProgramInput          `json:"program"`
-	Standard         *generated.CreateStandardInput         `json:"standard"`
 	Controls         []*CreateControlWithSubcontrolsInput   `json:"controls,omitempty"`
 	Risks            []*generated.CreateRiskInput           `json:"risks,omitempty"`
 	InternalPolicies []*generated.CreateInternalPolicyInput `json:"internalPolicies,omitempty"`
@@ -591,6 +620,36 @@ type InviteDeletePayload struct {
 type InviteUpdatePayload struct {
 	// Updated invite
 	Invite *generated.Invite `json:"invite"`
+}
+
+// Return response for createBulkMappedControl mutation
+type MappedControlBulkCreatePayload struct {
+	// Created mappedControls
+	MappedControls []*generated.MappedControl `json:"mappedControls,omitempty"`
+}
+
+// Return response for createMappedControl mutation
+type MappedControlCreatePayload struct {
+	// Created mappedControl
+	MappedControl *generated.MappedControl `json:"mappedControl"`
+}
+
+// Return response for deleteMappedControl mutation
+type MappedControlDeletePayload struct {
+	// Deleted mappedControl ID
+	DeletedID string `json:"deletedID"`
+}
+
+type MappedControlSearchResult struct {
+	MappedControls []*generated.MappedControl `json:"mappedControls,omitempty"`
+}
+
+func (MappedControlSearchResult) IsSearchResult() {}
+
+// Return response for updateMappedControl mutation
+type MappedControlUpdatePayload struct {
+	// Updated mappedControl
+	MappedControl *generated.MappedControl `json:"mappedControl"`
 }
 
 // Return response for createBulkNarrative mutation

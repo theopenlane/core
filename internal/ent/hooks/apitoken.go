@@ -42,6 +42,17 @@ func HookCreateAPIToken() ent.Hook {
 				return retVal, err
 			}
 
+			// add self relation tuple for the token
+			req := fgax.TupleRequest{
+				SubjectID:   token.ID,
+				SubjectType: auth.ServiceSubjectType,
+				ObjectID:    token.ID,
+				ObjectType:  auth.ServiceSubjectType,
+				Relation:    fgax.SelfRelation,
+			}
+
+			tuples = append(tuples, fgax.GetTupleKey(req))
+
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {

@@ -21,24 +21,6 @@ extend type Mutation{
         input: CreateStandardInput!
     ): StandardCreatePayload!
     """
-    Create multiple new standards
-    """
-    createBulkStandard(
-        """
-        values of the standard
-        """
-        input: [CreateStandardInput!]
-    ): StandardBulkCreatePayload!
-    """
-    Create multiple new standards via file upload
-    """
-    createBulkCSVStandard(
-        """
-        csv file containing values of the standard
-        """
-        input: Upload!
-    ): StandardBulkCreatePayload!
-    """
     Update an existing standard
     """
     updateStandard(

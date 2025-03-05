@@ -1,64 +1,23 @@
-mutation CreateBulkCSVStandard($input: Upload!) {
-  createBulkCSVStandard(input: $input) {
-    standards {
-      background
-      createdAt
-      createdBy
-      description
-      details
-      family
-      id
-      name
-      purposeAndScope
-      satisfies
-      standardType
-      status
-      tags
-      updatedAt
-      updatedBy
-      version
-    }
-  }
-}
-
-mutation CreateBulkStandard($input: [CreateStandardInput!]) {
-  createBulkStandard(input: $input) {
-    standards {
-      background
-      createdAt
-      createdBy
-      description
-      details
-      family
-      id
-      name
-      purposeAndScope
-      satisfies
-      standardType
-      status
-      tags
-      updatedAt
-      updatedBy
-      version
-    }
-  }
-}
-
 mutation CreateStandard($input: CreateStandardInput!) {
   createStandard(input: $input) {
     standard {
-      background
       createdAt
       createdBy
       description
-      details
-      family
+      domains
+      framework
+      freeToUse
+      governingBody
       id
+      isPublic
+      link
       name
-      purposeAndScope
-      satisfies
+      ownerID
+      revision
+      shortName
       standardType
       status
+      systemOwned
       tags
       updatedAt
       updatedBy
@@ -77,18 +36,23 @@ query GetAllStandards {
   standards {
     edges {
       node {
-        background
         createdAt
         createdBy
         description
-        details
-        family
+        domains
+        framework
+        freeToUse
+        governingBody
         id
+        isPublic
+        link
         name
-        purposeAndScope
-        satisfies
+        ownerID
+        revision
+        shortName
         standardType
         status
+        systemOwned
         tags
         updatedAt
         updatedBy
@@ -100,18 +64,23 @@ query GetAllStandards {
 
 query GetStandardByID($standardId: ID!) {
   standard(id: $standardId) {
-    background
     createdAt
     createdBy
     description
-    details
-    family
+    domains
+    framework
+    freeToUse
+    governingBody
     id
+    isPublic
+    link
     name
-    purposeAndScope
-    satisfies
+    ownerID
+    revision
+    shortName
     standardType
     status
+    systemOwned
     tags
     updatedAt
     updatedBy
@@ -123,18 +92,23 @@ query GetStandards($where: StandardWhereInput) {
   standards(where: $where) {
     edges {
       node {
-        background
         createdAt
         createdBy
         description
-        details
-        family
+        domains
+        framework
+        freeToUse
+        governingBody
         id
+        isPublic
+        link
         name
-        purposeAndScope
-        satisfies
+        ownerID
+        revision
+        shortName
         standardType
         status
+        systemOwned
         tags
         updatedAt
         updatedBy
@@ -147,18 +121,23 @@ query GetStandards($where: StandardWhereInput) {
 mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
   updateStandard(id: $updateStandardId, input: $input) {
     standard {
-      background
       createdAt
       createdBy
       description
-      details
-      family
+      domains
+      framework
+      freeToUse
+      governingBody
       id
+      isPublic
+      link
       name
-      purposeAndScope
-      satisfies
+      ownerID
+      revision
+      shortName
       standardType
       status
+      systemOwned
       tags
       updatedAt
       updatedBy

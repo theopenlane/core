@@ -5,7 +5,6 @@ package generated
 import (
 	"time"
 
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -180,7 +179,6 @@ type CreateActionPlanInput struct {
 	Priority    *string
 	Source      *string
 	Details     map[string]interface{}
-	StandardIDs []string
 	RiskIDs     []string
 	ControlIDs  []string
 	UserIDs     []string
@@ -211,9 +209,6 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
-	if v := i.StandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
@@ -236,37 +231,34 @@ func (c *ActionPlanCreate) SetInput(i CreateActionPlanInput) *ActionPlanCreate {
 
 // UpdateActionPlanInput represents a mutation input for updating actionplans.
 type UpdateActionPlanInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	Name              *string
-	ClearDescription  bool
-	Description       *string
-	ClearStatus       bool
-	Status            *string
-	ClearDueDate      bool
-	DueDate           *time.Time
-	ClearPriority     bool
-	Priority          *string
-	ClearSource       bool
-	Source            *string
-	ClearDetails      bool
-	Details           map[string]interface{}
-	ClearStandard     bool
-	AddStandardIDs    []string
-	RemoveStandardIDs []string
-	ClearRisk         bool
-	AddRiskIDs        []string
-	RemoveRiskIDs     []string
-	ClearControl      bool
-	AddControlIDs     []string
-	RemoveControlIDs  []string
-	ClearUser         bool
-	AddUserIDs        []string
-	RemoveUserIDs     []string
-	ClearProgram      bool
-	AddProgramIDs     []string
-	RemoveProgramIDs  []string
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	Name             *string
+	ClearDescription bool
+	Description      *string
+	ClearStatus      bool
+	Status           *string
+	ClearDueDate     bool
+	DueDate          *time.Time
+	ClearPriority    bool
+	Priority         *string
+	ClearSource      bool
+	Source           *string
+	ClearDetails     bool
+	Details          map[string]interface{}
+	ClearRisk        bool
+	AddRiskIDs       []string
+	RemoveRiskIDs    []string
+	ClearControl     bool
+	AddControlIDs    []string
+	RemoveControlIDs []string
+	ClearUser        bool
+	AddUserIDs       []string
+	RemoveUserIDs    []string
+	ClearProgram     bool
+	AddProgramIDs    []string
+	RemoveProgramIDs []string
 }
 
 // Mutate applies the UpdateActionPlanInput on the ActionPlanMutation builder.
@@ -318,15 +310,6 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
-	}
-	if i.ClearStandard {
-		m.ClearStandard()
-	}
-	if v := i.AddStandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
-	if v := i.RemoveStandardIDs; len(v) > 0 {
-		m.RemoveStandardIDs(v...)
 	}
 	if i.ClearRisk {
 		m.ClearRisk()
@@ -548,34 +531,41 @@ func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
 
 // CreateControlInput represents a mutation input for creating controls.
 type CreateControlInput struct {
-	Tags                []string
-	Name                string
-	Description         *string
-	Status              *string
-	ControlType         *string
-	Version             *string
-	ControlNumber       *string
-	Family              *string
-	Class               *string
-	Source              *string
-	Satisfies           *string
-	MappedFrameworks    *string
-	Details             map[string]interface{}
-	ExampleEvidence     *string
-	OwnerID             *string
-	BlockedGroupIDs     []string
-	EditorIDs           []string
-	ViewerIDs           []string
-	ProcedureIDs        []string
-	SubcontrolIDs       []string
-	ControlObjectiveIDs []string
-	StandardIDs         []string
-	NarrativeIDs        []string
-	RiskIDs             []string
-	ActionPlanIDs       []string
-	TaskIDs             []string
-	ProgramIDs          []string
-	EvidenceIDs         []string
+	Tags                   []string
+	Description            *string
+	Status                 *string
+	Source                 *enums.ControlSource
+	ControlType            *enums.ControlType
+	Category               *string
+	CategoryID             *string
+	Subcategory            *string
+	MappedCategories       []string
+	AssessmentObjectives   []models.AssessmentObjective
+	AssessmentMethods      []models.AssessmentMethod
+	ControlQuestions       []string
+	ImplementationGuidance []models.ImplementationGuidance
+	ExampleEvidence        []models.ExampleEvidence
+	References             []models.Reference
+	RefCode                string
+	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ViewerIDs              []string
+	StandardID             *string
+	ProgramIDs             []string
+	EvidenceIDs            []string
+	ImplementationID       *string
+	MappedControlsID       *string
+	ControlObjectiveIDs    []string
+	SubcontrolIDs          []string
+	TaskIDs                []string
+	NarrativeIDs           []string
+	RiskIDs                []string
+	ActionPlanIDs          []string
+	ProcedureIDs           []string
+	InternalPolicyIDs      []string
+	ControlOwnerID         *string
+	DelegateID             *string
 }
 
 // Mutate applies the CreateControlInput on the ControlMutation builder.
@@ -583,43 +573,49 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	m.SetName(i.Name)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
-	if v := i.ControlType; v != nil {
-		m.SetControlType(*v)
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if v := i.ControlNumber; v != nil {
-		m.SetControlNumber(*v)
-	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
-	}
-	if v := i.Class; v != nil {
-		m.SetClass(*v)
-	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
+	if v := i.ControlType; v != nil {
+		m.SetControlType(*v)
 	}
-	if v := i.MappedFrameworks; v != nil {
-		m.SetMappedFrameworks(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
+	}
+	if v := i.Subcategory; v != nil {
+		m.SetSubcategory(*v)
+	}
+	if v := i.MappedCategories; v != nil {
+		m.SetMappedCategories(v)
+	}
+	if v := i.AssessmentObjectives; v != nil {
+		m.SetAssessmentObjectives(v)
+	}
+	if v := i.AssessmentMethods; v != nil {
+		m.SetAssessmentMethods(v)
+	}
+	if v := i.ControlQuestions; v != nil {
+		m.SetControlQuestions(v)
+	}
+	if v := i.ImplementationGuidance; v != nil {
+		m.SetImplementationGuidance(v)
 	}
 	if v := i.ExampleEvidence; v != nil {
-		m.SetExampleEvidence(*v)
+		m.SetExampleEvidence(v)
 	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	m.SetRefCode(i.RefCode)
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -632,17 +628,29 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	if v := i.ProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
 	}
-	if v := i.SubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.ImplementationID; v != nil {
+		m.SetImplementationID(*v)
+	}
+	if v := i.MappedControlsID; v != nil {
+		m.SetMappedControlsID(*v)
 	}
 	if v := i.ControlObjectiveIDs; len(v) > 0 {
 		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.StandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
 	}
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
@@ -653,14 +661,17 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
-	if v := i.TaskIDs; len(v) > 0 {
-		m.AddTaskIDs(v...)
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
 	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.EvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
+	if v := i.ControlOwnerID; v != nil {
+		m.SetControlOwnerID(*v)
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 }
 
@@ -672,73 +683,94 @@ func (c *ControlCreate) SetInput(i CreateControlInput) *ControlCreate {
 
 // UpdateControlInput represents a mutation input for updating controls.
 type UpdateControlInput struct {
-	ClearTags                 bool
-	Tags                      []string
-	AppendTags                []string
-	Name                      *string
-	ClearDescription          bool
-	Description               *string
-	ClearStatus               bool
-	Status                    *string
-	ClearControlType          bool
-	ControlType               *string
-	ClearVersion              bool
-	Version                   *string
-	ClearControlNumber        bool
-	ControlNumber             *string
-	ClearFamily               bool
-	Family                    *string
-	ClearClass                bool
-	Class                     *string
-	ClearSource               bool
-	Source                    *string
-	ClearSatisfies            bool
-	Satisfies                 *string
-	ClearMappedFrameworks     bool
-	MappedFrameworks          *string
-	ClearDetails              bool
-	Details                   map[string]interface{}
-	ClearExampleEvidence      bool
-	ExampleEvidence           *string
-	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string
-	RemoveBlockedGroupIDs     []string
-	ClearEditors              bool
-	AddEditorIDs              []string
-	RemoveEditorIDs           []string
-	ClearViewers              bool
-	AddViewerIDs              []string
-	RemoveViewerIDs           []string
-	ClearProcedures           bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
-	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string
-	RemoveSubcontrolIDs       []string
-	ClearControlObjectives    bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
-	ClearStandard             bool
-	AddStandardIDs            []string
-	RemoveStandardIDs         []string
-	ClearNarratives           bool
-	AddNarrativeIDs           []string
-	RemoveNarrativeIDs        []string
-	ClearRisks                bool
-	AddRiskIDs                []string
-	RemoveRiskIDs             []string
-	ClearActionPlans          bool
-	AddActionPlanIDs          []string
-	RemoveActionPlanIDs       []string
-	ClearTasks                bool
-	AddTaskIDs                []string
-	RemoveTaskIDs             []string
-	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
-	ClearEvidence             bool
-	AddEvidenceIDs            []string
-	RemoveEvidenceIDs         []string
+	ClearTags                    bool
+	Tags                         []string
+	AppendTags                   []string
+	ClearDescription             bool
+	Description                  *string
+	ClearStatus                  bool
+	Status                       *string
+	ClearSource                  bool
+	Source                       *enums.ControlSource
+	ClearControlType             bool
+	ControlType                  *enums.ControlType
+	ClearCategory                bool
+	Category                     *string
+	ClearCategoryID              bool
+	CategoryID                   *string
+	ClearSubcategory             bool
+	Subcategory                  *string
+	ClearMappedCategories        bool
+	MappedCategories             []string
+	AppendMappedCategories       []string
+	ClearAssessmentObjectives    bool
+	AssessmentObjectives         []models.AssessmentObjective
+	AppendAssessmentObjectives   []models.AssessmentObjective
+	ClearAssessmentMethods       bool
+	AssessmentMethods            []models.AssessmentMethod
+	AppendAssessmentMethods      []models.AssessmentMethod
+	ClearControlQuestions        bool
+	ControlQuestions             []string
+	AppendControlQuestions       []string
+	ClearImplementationGuidance  bool
+	ImplementationGuidance       []models.ImplementationGuidance
+	AppendImplementationGuidance []models.ImplementationGuidance
+	ClearExampleEvidence         bool
+	ExampleEvidence              []models.ExampleEvidence
+	AppendExampleEvidence        []models.ExampleEvidence
+	ClearReferences              bool
+	References                   []models.Reference
+	AppendReferences             []models.Reference
+	RefCode                      *string
+	ClearBlockedGroups           bool
+	AddBlockedGroupIDs           []string
+	RemoveBlockedGroupIDs        []string
+	ClearEditors                 bool
+	AddEditorIDs                 []string
+	RemoveEditorIDs              []string
+	ClearViewers                 bool
+	AddViewerIDs                 []string
+	RemoveViewerIDs              []string
+	ClearStandard                bool
+	StandardID                   *string
+	ClearPrograms                bool
+	AddProgramIDs                []string
+	RemoveProgramIDs             []string
+	ClearEvidence                bool
+	AddEvidenceIDs               []string
+	RemoveEvidenceIDs            []string
+	ClearImplementation          bool
+	ImplementationID             *string
+	ClearMappedControls          bool
+	MappedControlsID             *string
+	ClearControlObjectives       bool
+	AddControlObjectiveIDs       []string
+	RemoveControlObjectiveIDs    []string
+	ClearSubcontrols             bool
+	AddSubcontrolIDs             []string
+	RemoveSubcontrolIDs          []string
+	ClearTasks                   bool
+	AddTaskIDs                   []string
+	RemoveTaskIDs                []string
+	ClearNarratives              bool
+	AddNarrativeIDs              []string
+	RemoveNarrativeIDs           []string
+	ClearRisks                   bool
+	AddRiskIDs                   []string
+	RemoveRiskIDs                []string
+	ClearActionPlans             bool
+	AddActionPlanIDs             []string
+	RemoveActionPlanIDs          []string
+	ClearProcedures              bool
+	AddProcedureIDs              []string
+	RemoveProcedureIDs           []string
+	ClearInternalPolicies        bool
+	AddInternalPolicyIDs         []string
+	RemoveInternalPolicyIDs      []string
+	ClearControlOwner            bool
+	ControlOwnerID               *string
+	ClearDelegate                bool
+	DelegateID                   *string
 }
 
 // Mutate applies the UpdateControlInput on the ControlMutation builder.
@@ -752,9 +784,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
 	if i.ClearDescription {
 		m.ClearDescription()
 	}
@@ -767,65 +796,101 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
-	if i.ClearControlType {
-		m.ClearControlType()
-	}
-	if v := i.ControlType; v != nil {
-		m.SetControlType(*v)
-	}
-	if i.ClearVersion {
-		m.ClearVersion()
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if i.ClearControlNumber {
-		m.ClearControlNumber()
-	}
-	if v := i.ControlNumber; v != nil {
-		m.SetControlNumber(*v)
-	}
-	if i.ClearFamily {
-		m.ClearFamily()
-	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
-	}
-	if i.ClearClass {
-		m.ClearClass()
-	}
-	if v := i.Class; v != nil {
-		m.SetClass(*v)
-	}
 	if i.ClearSource {
 		m.ClearSource()
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if i.ClearSatisfies {
-		m.ClearSatisfies()
+	if i.ClearControlType {
+		m.ClearControlType()
 	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
+	if v := i.ControlType; v != nil {
+		m.SetControlType(*v)
 	}
-	if i.ClearMappedFrameworks {
-		m.ClearMappedFrameworks()
+	if i.ClearCategory {
+		m.ClearCategory()
 	}
-	if v := i.MappedFrameworks; v != nil {
-		m.SetMappedFrameworks(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
-	if i.ClearDetails {
-		m.ClearDetails()
+	if i.ClearCategoryID {
+		m.ClearCategoryID()
 	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
+	}
+	if i.ClearSubcategory {
+		m.ClearSubcategory()
+	}
+	if v := i.Subcategory; v != nil {
+		m.SetSubcategory(*v)
+	}
+	if i.ClearMappedCategories {
+		m.ClearMappedCategories()
+	}
+	if v := i.MappedCategories; v != nil {
+		m.SetMappedCategories(v)
+	}
+	if i.AppendMappedCategories != nil {
+		m.AppendMappedCategories(i.MappedCategories)
+	}
+	if i.ClearAssessmentObjectives {
+		m.ClearAssessmentObjectives()
+	}
+	if v := i.AssessmentObjectives; v != nil {
+		m.SetAssessmentObjectives(v)
+	}
+	if i.AppendAssessmentObjectives != nil {
+		m.AppendAssessmentObjectives(i.AssessmentObjectives)
+	}
+	if i.ClearAssessmentMethods {
+		m.ClearAssessmentMethods()
+	}
+	if v := i.AssessmentMethods; v != nil {
+		m.SetAssessmentMethods(v)
+	}
+	if i.AppendAssessmentMethods != nil {
+		m.AppendAssessmentMethods(i.AssessmentMethods)
+	}
+	if i.ClearControlQuestions {
+		m.ClearControlQuestions()
+	}
+	if v := i.ControlQuestions; v != nil {
+		m.SetControlQuestions(v)
+	}
+	if i.AppendControlQuestions != nil {
+		m.AppendControlQuestions(i.ControlQuestions)
+	}
+	if i.ClearImplementationGuidance {
+		m.ClearImplementationGuidance()
+	}
+	if v := i.ImplementationGuidance; v != nil {
+		m.SetImplementationGuidance(v)
+	}
+	if i.AppendImplementationGuidance != nil {
+		m.AppendImplementationGuidance(i.ImplementationGuidance)
 	}
 	if i.ClearExampleEvidence {
 		m.ClearExampleEvidence()
 	}
 	if v := i.ExampleEvidence; v != nil {
-		m.SetExampleEvidence(*v)
+		m.SetExampleEvidence(v)
+	}
+	if i.AppendExampleEvidence != nil {
+		m.AppendExampleEvidence(i.ExampleEvidence)
+	}
+	if i.ClearReferences {
+		m.ClearReferences()
+	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	if i.AppendReferences != nil {
+		m.AppendReferences(i.References)
+	}
+	if v := i.RefCode; v != nil {
+		m.SetRefCode(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -854,23 +919,41 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
-	if i.ClearProcedures {
-		m.ClearProcedures()
+	if i.ClearStandard {
+		m.ClearStandard()
 	}
-	if v := i.AddProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
 	}
-	if v := i.RemoveProcedureIDs; len(v) > 0 {
-		m.RemoveProcedureIDs(v...)
+	if i.ClearPrograms {
+		m.ClearPrograms()
 	}
-	if i.ClearSubcontrols {
-		m.ClearSubcontrols()
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
 	}
-	if v := i.AddSubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
 	}
-	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
-		m.RemoveSubcontrolIDs(v...)
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearImplementation {
+		m.ClearImplementation()
+	}
+	if v := i.ImplementationID; v != nil {
+		m.SetImplementationID(*v)
+	}
+	if i.ClearMappedControls {
+		m.ClearMappedControls()
+	}
+	if v := i.MappedControlsID; v != nil {
+		m.SetMappedControlsID(*v)
 	}
 	if i.ClearControlObjectives {
 		m.ClearControlObjectives()
@@ -881,14 +964,23 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
 		m.RemoveControlObjectiveIDs(v...)
 	}
-	if i.ClearStandard {
-		m.ClearStandard()
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
 	}
-	if v := i.AddStandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
 	}
-	if v := i.RemoveStandardIDs; len(v) > 0 {
-		m.RemoveStandardIDs(v...)
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 	if i.ClearNarratives {
 		m.ClearNarratives()
@@ -917,32 +1009,35 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
 	}
-	if i.ClearTasks {
-		m.ClearTasks()
+	if i.ClearProcedures {
+		m.ClearProcedures()
 	}
-	if v := i.AddTaskIDs; len(v) > 0 {
-		m.AddTaskIDs(v...)
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
 	}
-	if v := i.RemoveTaskIDs; len(v) > 0 {
-		m.RemoveTaskIDs(v...)
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
 	}
-	if i.ClearPrograms {
-		m.ClearPrograms()
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
 	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
-	if i.ClearEvidence {
-		m.ClearEvidence()
+	if i.ClearControlOwner {
+		m.ClearControlOwner()
 	}
-	if v := i.AddEvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
+	if v := i.ControlOwnerID; v != nil {
+		m.SetControlOwnerID(*v)
 	}
-	if v := i.RemoveEvidenceIDs; len(v) > 0 {
-		m.RemoveEvidenceIDs(v...)
+	if i.ClearDelegate {
+		m.ClearDelegate()
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 }
 
@@ -958,35 +1053,162 @@ func (c *ControlUpdateOne) SetInput(i UpdateControlInput) *ControlUpdateOne {
 	return c
 }
 
+// CreateControlImplementationInput represents a mutation input for creating controlimplementations.
+type CreateControlImplementationInput struct {
+	Tags               []string
+	ControlID          string
+	Status             *string
+	ImplementationDate *time.Time
+	Verified           *bool
+	VerificationDate   *time.Time
+	Details            *string
+	ControlIDs         []string
+}
+
+// Mutate applies the CreateControlImplementationInput on the ControlImplementationMutation builder.
+func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetControlID(i.ControlID)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.ImplementationDate; v != nil {
+		m.SetImplementationDate(*v)
+	}
+	if v := i.Verified; v != nil {
+		m.SetVerified(*v)
+	}
+	if v := i.VerificationDate; v != nil {
+		m.SetVerificationDate(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateControlImplementationInput on the ControlImplementationCreate builder.
+func (c *ControlImplementationCreate) SetInput(i CreateControlImplementationInput) *ControlImplementationCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateControlImplementationInput represents a mutation input for updating controlimplementations.
+type UpdateControlImplementationInput struct {
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	ControlID               *string
+	ClearStatus             bool
+	Status                  *string
+	ClearImplementationDate bool
+	ImplementationDate      *time.Time
+	ClearVerified           bool
+	Verified                *bool
+	ClearVerificationDate   bool
+	VerificationDate        *time.Time
+	ClearDetails            bool
+	Details                 *string
+	ClearControl            bool
+	AddControlIDs           []string
+	RemoveControlIDs        []string
+}
+
+// Mutate applies the UpdateControlImplementationInput on the ControlImplementationMutation builder.
+func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearImplementationDate {
+		m.ClearImplementationDate()
+	}
+	if v := i.ImplementationDate; v != nil {
+		m.SetImplementationDate(*v)
+	}
+	if i.ClearVerified {
+		m.ClearVerified()
+	}
+	if v := i.Verified; v != nil {
+		m.SetVerified(*v)
+	}
+	if i.ClearVerificationDate {
+		m.ClearVerificationDate()
+	}
+	if v := i.VerificationDate; v != nil {
+		m.SetVerificationDate(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateControlImplementationInput on the ControlImplementationUpdate builder.
+func (c *ControlImplementationUpdate) SetInput(i UpdateControlImplementationInput) *ControlImplementationUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateControlImplementationInput on the ControlImplementationUpdateOne builder.
+func (c *ControlImplementationUpdateOne) SetInput(i UpdateControlImplementationInput) *ControlImplementationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateControlObjectiveInput represents a mutation input for creating controlobjectives.
 type CreateControlObjectiveInput struct {
 	Tags                 []string
 	Name                 string
-	Description          *string
+	DesiredOutcome       *string
 	Status               *string
+	Source               *enums.ControlSource
 	ControlObjectiveType *string
 	Version              *string
-	ControlNumber        *string
-	Family               *string
-	Class                *string
-	Source               *string
-	MappedFrameworks     *string
-	Details              map[string]interface{}
-	ExampleEvidence      *string
+	Category             *string
+	Subcategory          *string
 	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
 	ViewerIDs            []string
-	InternalPolicyIDs    []string
-	ControlIDs           []string
-	ProcedureIDs         []string
-	RiskIDs              []string
-	SubcontrolIDs        []string
-	StandardIDs          []string
-	NarrativeIDs         []string
-	TaskIDs              []string
 	ProgramIDs           []string
 	EvidenceIDs          []string
+	ControlIDs           []string
+	SubcontrolIDs        []string
+	InternalPolicyIDs    []string
+	ProcedureIDs         []string
+	RiskIDs              []string
+	NarrativeIDs         []string
+	TaskIDs              []string
 }
 
 // Mutate applies the CreateControlObjectiveInput on the ControlObjectiveMutation builder.
@@ -995,11 +1217,14 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
+	if v := i.DesiredOutcome; v != nil {
+		m.SetDesiredOutcome(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
 	}
 	if v := i.ControlObjectiveType; v != nil {
 		m.SetControlObjectiveType(*v)
@@ -1007,26 +1232,11 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.ControlNumber; v != nil {
-		m.SetControlNumber(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
-	}
-	if v := i.Class; v != nil {
-		m.SetClass(*v)
-	}
-	if v := i.Source; v != nil {
-		m.SetSource(*v)
-	}
-	if v := i.MappedFrameworks; v != nil {
-		m.SetMappedFrameworks(*v)
-	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
-	}
-	if v := i.ExampleEvidence; v != nil {
-		m.SetExampleEvidence(*v)
+	if v := i.Subcategory; v != nil {
+		m.SetSubcategory(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1040,11 +1250,20 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	if v := i.InternalPolicyIDs; len(v) > 0 {
-		m.AddInternalPolicyIDs(v...)
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
@@ -1052,23 +1271,11 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
-	if v := i.SubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.StandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
-	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.EvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
 	}
 }
 
@@ -1084,28 +1291,20 @@ type UpdateControlObjectiveInput struct {
 	Tags                      []string
 	AppendTags                []string
 	Name                      *string
-	ClearDescription          bool
-	Description               *string
+	ClearDesiredOutcome       bool
+	DesiredOutcome            *string
 	ClearStatus               bool
 	Status                    *string
+	ClearSource               bool
+	Source                    *enums.ControlSource
 	ClearControlObjectiveType bool
 	ControlObjectiveType      *string
 	ClearVersion              bool
 	Version                   *string
-	ClearControlNumber        bool
-	ControlNumber             *string
-	ClearFamily               bool
-	Family                    *string
-	ClearClass                bool
-	Class                     *string
-	ClearSource               bool
-	Source                    *string
-	ClearMappedFrameworks     bool
-	MappedFrameworks          *string
-	ClearDetails              bool
-	Details                   map[string]interface{}
-	ClearExampleEvidence      bool
-	ExampleEvidence           *string
+	ClearCategory             bool
+	Category                  *string
+	ClearSubcategory          bool
+	Subcategory               *string
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string
 	RemoveBlockedGroupIDs     []string
@@ -1115,36 +1314,33 @@ type UpdateControlObjectiveInput struct {
 	ClearViewers              bool
 	AddViewerIDs              []string
 	RemoveViewerIDs           []string
-	ClearInternalPolicies     bool
-	AddInternalPolicyIDs      []string
-	RemoveInternalPolicyIDs   []string
-	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
-	ClearProcedures           bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
-	ClearRisks                bool
-	AddRiskIDs                []string
-	RemoveRiskIDs             []string
-	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string
-	RemoveSubcontrolIDs       []string
-	ClearStandard             bool
-	AddStandardIDs            []string
-	RemoveStandardIDs         []string
-	ClearNarratives           bool
-	AddNarrativeIDs           []string
-	RemoveNarrativeIDs        []string
-	ClearTasks                bool
-	AddTaskIDs                []string
-	RemoveTaskIDs             []string
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
 	ClearEvidence             bool
 	AddEvidenceIDs            []string
 	RemoveEvidenceIDs         []string
+	ClearControls             bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
+	ClearSubcontrols          bool
+	AddSubcontrolIDs          []string
+	RemoveSubcontrolIDs       []string
+	ClearInternalPolicies     bool
+	AddInternalPolicyIDs      []string
+	RemoveInternalPolicyIDs   []string
+	ClearProcedures           bool
+	AddProcedureIDs           []string
+	RemoveProcedureIDs        []string
+	ClearRisks                bool
+	AddRiskIDs                []string
+	RemoveRiskIDs             []string
+	ClearNarratives           bool
+	AddNarrativeIDs           []string
+	RemoveNarrativeIDs        []string
+	ClearTasks                bool
+	AddTaskIDs                []string
+	RemoveTaskIDs             []string
 }
 
 // Mutate applies the UpdateControlObjectiveInput on the ControlObjectiveMutation builder.
@@ -1161,17 +1357,23 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
-	if i.ClearDescription {
-		m.ClearDescription()
+	if i.ClearDesiredOutcome {
+		m.ClearDesiredOutcome()
 	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
+	if v := i.DesiredOutcome; v != nil {
+		m.SetDesiredOutcome(*v)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
 	}
 	if i.ClearControlObjectiveType {
 		m.ClearControlObjectiveType()
@@ -1185,47 +1387,17 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if i.ClearControlNumber {
-		m.ClearControlNumber()
+	if i.ClearCategory {
+		m.ClearCategory()
 	}
-	if v := i.ControlNumber; v != nil {
-		m.SetControlNumber(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
-	if i.ClearFamily {
-		m.ClearFamily()
+	if i.ClearSubcategory {
+		m.ClearSubcategory()
 	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
-	}
-	if i.ClearClass {
-		m.ClearClass()
-	}
-	if v := i.Class; v != nil {
-		m.SetClass(*v)
-	}
-	if i.ClearSource {
-		m.ClearSource()
-	}
-	if v := i.Source; v != nil {
-		m.SetSource(*v)
-	}
-	if i.ClearMappedFrameworks {
-		m.ClearMappedFrameworks()
-	}
-	if v := i.MappedFrameworks; v != nil {
-		m.SetMappedFrameworks(*v)
-	}
-	if i.ClearDetails {
-		m.ClearDetails()
-	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
-	}
-	if i.ClearExampleEvidence {
-		m.ClearExampleEvidence()
-	}
-	if v := i.ExampleEvidence; v != nil {
-		m.SetExampleEvidence(*v)
+	if v := i.Subcategory; v != nil {
+		m.SetSubcategory(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -1254,14 +1426,23 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
-	if i.ClearInternalPolicies {
-		m.ClearInternalPolicies()
+	if i.ClearPrograms {
+		m.ClearPrograms()
 	}
-	if v := i.AddInternalPolicyIDs; len(v) > 0 {
-		m.AddInternalPolicyIDs(v...)
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
 	}
-	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
-		m.RemoveInternalPolicyIDs(v...)
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -1271,6 +1452,24 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearProcedures {
 		m.ClearProcedures()
@@ -1290,24 +1489,6 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
 	}
-	if i.ClearSubcontrols {
-		m.ClearSubcontrols()
-	}
-	if v := i.AddSubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
-		m.RemoveSubcontrolIDs(v...)
-	}
-	if i.ClearStandard {
-		m.ClearStandard()
-	}
-	if v := i.AddStandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
-	if v := i.RemoveStandardIDs; len(v) > 0 {
-		m.RemoveStandardIDs(v...)
-	}
 	if i.ClearNarratives {
 		m.ClearNarratives()
 	}
@@ -1326,24 +1507,6 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
 	}
-	if i.ClearPrograms {
-		m.ClearPrograms()
-	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
-	}
-	if i.ClearEvidence {
-		m.ClearEvidence()
-	}
-	if v := i.AddEvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
-	}
-	if v := i.RemoveEvidenceIDs; len(v) > 0 {
-		m.RemoveEvidenceIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the UpdateControlObjectiveInput on the ControlObjectiveUpdate builder.
@@ -1361,7 +1524,7 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 // CreateDocumentDataInput represents a mutation input for creating documentdataslice.
 type CreateDocumentDataInput struct {
 	Tags       []string
-	Data       customtypes.JSONObject
+	Data       map[string]interface{}
 	OwnerID    *string
 	TemplateID string
 	EntityIDs  []string
@@ -1399,7 +1562,7 @@ type UpdateDocumentDataInput struct {
 	ClearTags       bool
 	Tags            []string
 	AppendTags      []string
-	Data            customtypes.JSONObject
+	Data            map[string]interface{}
 	TemplateID      *string
 	ClearEntity     bool
 	AddEntityIDs    []string
@@ -3876,22 +4039,96 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 	return c
 }
 
+// CreateMappedControlInput represents a mutation input for creating mappedcontrols.
+type CreateMappedControlInput struct {
+	Tags            []string
+	MappingType     *string
+	Relation        *string
+	ControlID       string
+	MappedControlID string
+}
+
+// Mutate applies the CreateMappedControlInput on the MappedControlMutation builder.
+func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.MappingType; v != nil {
+		m.SetMappingType(*v)
+	}
+	if v := i.Relation; v != nil {
+		m.SetRelation(*v)
+	}
+	m.SetControlID(i.ControlID)
+	m.SetMappedControlID(i.MappedControlID)
+}
+
+// SetInput applies the change-set in the CreateMappedControlInput on the MappedControlCreate builder.
+func (c *MappedControlCreate) SetInput(i CreateMappedControlInput) *MappedControlCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateMappedControlInput represents a mutation input for updating mappedcontrols.
+type UpdateMappedControlInput struct {
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	ClearMappingType bool
+	MappingType      *string
+	ClearRelation    bool
+	Relation         *string
+}
+
+// Mutate applies the UpdateMappedControlInput on the MappedControlMutation builder.
+func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearMappingType {
+		m.ClearMappingType()
+	}
+	if v := i.MappingType; v != nil {
+		m.SetMappingType(*v)
+	}
+	if i.ClearRelation {
+		m.ClearRelation()
+	}
+	if v := i.Relation; v != nil {
+		m.SetRelation(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateMappedControlInput on the MappedControlUpdate builder.
+func (c *MappedControlUpdate) SetInput(i UpdateMappedControlInput) *MappedControlUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateMappedControlInput on the MappedControlUpdateOne builder.
+func (c *MappedControlUpdateOne) SetInput(i UpdateMappedControlInput) *MappedControlUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateNarrativeInput represents a mutation input for creating narratives.
 type CreateNarrativeInput struct {
-	Tags                []string
-	Name                string
-	Description         *string
-	Satisfies           *string
-	Details             map[string]interface{}
-	OwnerID             *string
-	BlockedGroupIDs     []string
-	EditorIDs           []string
-	ViewerIDs           []string
-	InternalPolicyIDs   []string
-	ControlIDs          []string
-	ProcedureIDs        []string
-	ControlObjectiveIDs []string
-	ProgramIDs          []string
+	Tags            []string
+	Name            string
+	Description     *string
+	Details         *string
+	OwnerID         *string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	ViewerIDs       []string
+	SatisfyIDs      []string
+	ProgramIDs      []string
 }
 
 // Mutate applies the CreateNarrativeInput on the NarrativeMutation builder.
@@ -3903,11 +4140,8 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -3921,17 +4155,8 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	if v := i.InternalPolicyIDs; len(v) > 0 {
-		m.AddInternalPolicyIDs(v...)
-	}
-	if v := i.ControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.ProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
-	}
-	if v := i.ControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
+	if v := i.SatisfyIDs; len(v) > 0 {
+		m.AddSatisfyIDs(v...)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -3946,40 +4171,29 @@ func (c *NarrativeCreate) SetInput(i CreateNarrativeInput) *NarrativeCreate {
 
 // UpdateNarrativeInput represents a mutation input for updating narratives.
 type UpdateNarrativeInput struct {
-	ClearTags                 bool
-	Tags                      []string
-	AppendTags                []string
-	Name                      *string
-	ClearDescription          bool
-	Description               *string
-	ClearSatisfies            bool
-	Satisfies                 *string
-	ClearDetails              bool
-	Details                   map[string]interface{}
-	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string
-	RemoveBlockedGroupIDs     []string
-	ClearEditors              bool
-	AddEditorIDs              []string
-	RemoveEditorIDs           []string
-	ClearViewers              bool
-	AddViewerIDs              []string
-	RemoveViewerIDs           []string
-	ClearInternalPolicy       bool
-	AddInternalPolicyIDs      []string
-	RemoveInternalPolicyIDs   []string
-	ClearControl              bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
-	ClearProcedure            bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
-	ClearControlObjective     bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
-	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	Name                  *string
+	ClearDescription      bool
+	Description           *string
+	ClearDetails          bool
+	Details               *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
+	ClearSatisfies        bool
+	AddSatisfyIDs         []string
+	RemoveSatisfyIDs      []string
+	ClearPrograms         bool
+	AddProgramIDs         []string
+	RemoveProgramIDs      []string
 }
 
 // Mutate applies the UpdateNarrativeInput on the NarrativeMutation builder.
@@ -4002,17 +4216,11 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearSatisfies {
-		m.ClearSatisfies()
-	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
 	if i.ClearDetails {
 		m.ClearDetails()
 	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -4041,41 +4249,14 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
-	if i.ClearInternalPolicy {
-		m.ClearInternalPolicy()
+	if i.ClearSatisfies {
+		m.ClearSatisfies()
 	}
-	if v := i.AddInternalPolicyIDs; len(v) > 0 {
-		m.AddInternalPolicyIDs(v...)
+	if v := i.AddSatisfyIDs; len(v) > 0 {
+		m.AddSatisfyIDs(v...)
 	}
-	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
-		m.RemoveInternalPolicyIDs(v...)
-	}
-	if i.ClearControl {
-		m.ClearControl()
-	}
-	if v := i.AddControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.RemoveControlIDs; len(v) > 0 {
-		m.RemoveControlIDs(v...)
-	}
-	if i.ClearProcedure {
-		m.ClearProcedure()
-	}
-	if v := i.AddProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
-	}
-	if v := i.RemoveProcedureIDs; len(v) > 0 {
-		m.RemoveProcedureIDs(v...)
-	}
-	if i.ClearControlObjective {
-		m.ClearControlObjective()
-	}
-	if v := i.AddControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
-	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
-		m.RemoveControlObjectiveIDs(v...)
+	if v := i.RemoveSatisfyIDs; len(v) > 0 {
+		m.RemoveSatisfyIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -4302,6 +4483,7 @@ type CreateOrganizationInput struct {
 	ControlIDs                 []string
 	SubcontrolIDs              []string
 	EvidenceIDs                []string
+	StandardIDs                []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -4442,6 +4624,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
+	if v := i.StandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -4572,6 +4757,9 @@ type UpdateOrganizationInput struct {
 	ClearEvidence                    bool
 	AddEvidenceIDs                   []string
 	RemoveEvidenceIDs                []string
+	ClearStandards                   bool
+	AddStandardIDs                   []string
+	RemoveStandardIDs                []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -4935,6 +5123,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveEvidenceIDs; len(v) > 0 {
 		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearStandards {
+		m.ClearStandards()
+	}
+	if v := i.AddStandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RemoveStandardIDs; len(v) > 0 {
+		m.RemoveStandardIDs(v...)
 	}
 }
 
@@ -5653,7 +5850,6 @@ type CreateProgramInput struct {
 	EvidenceIDs          []string
 	NarrativeIDs         []string
 	ActionPlanIDs        []string
-	StandardIDs          []string
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -5731,9 +5927,6 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
-	if v := i.StandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the CreateProgramInput on the ProgramCreate builder.
@@ -5805,9 +5998,6 @@ type UpdateProgramInput struct {
 	ClearActionPlans          bool
 	AddActionPlanIDs          []string
 	RemoveActionPlanIDs       []string
-	ClearStandards            bool
-	AddStandardIDs            []string
-	RemoveStandardIDs         []string
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -5994,15 +6184,6 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
-	}
-	if i.ClearStandards {
-		m.ClearStandards()
-	}
-	if v := i.AddStandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
-	if v := i.RemoveStandardIDs; len(v) > 0 {
-		m.RemoveStandardIDs(v...)
 	}
 }
 
@@ -6346,22 +6527,23 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 
 // CreateStandardInput represents a mutation input for creating standards.
 type CreateStandardInput struct {
-	Tags                []string
-	Name                string
-	Description         *string
-	Family              *string
-	Status              *string
-	StandardType        *string
-	Version             *string
-	PurposeAndScope     *string
-	Background          *string
-	Satisfies           *string
-	Details             map[string]interface{}
-	ControlObjectiveIDs []string
-	ControlIDs          []string
-	ProcedureIDs        []string
-	ActionPlanIDs       []string
-	ProgramIDs          []string
+	Tags          []string
+	Name          string
+	ShortName     *string
+	Framework     *string
+	Description   *string
+	GoverningBody *string
+	Domains       []string
+	Link          *string
+	Status        *string
+	IsPublic      *bool
+	FreeToUse     *bool
+	SystemOwned   *bool
+	StandardType  *string
+	Version       *string
+	Revision      *string
+	OwnerID       *string
+	ControlIDs    []string
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
@@ -6370,14 +6552,35 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
+	if v := i.ShortName; v != nil {
+		m.SetShortName(*v)
+	}
+	if v := i.Framework; v != nil {
+		m.SetFramework(*v)
+	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
+	if v := i.GoverningBody; v != nil {
+		m.SetGoverningBody(*v)
+	}
+	if v := i.Domains; v != nil {
+		m.SetDomains(v)
+	}
+	if v := i.Link; v != nil {
+		m.SetLink(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.IsPublic; v != nil {
+		m.SetIsPublic(*v)
+	}
+	if v := i.FreeToUse; v != nil {
+		m.SetFreeToUse(*v)
+	}
+	if v := i.SystemOwned; v != nil {
+		m.SetSystemOwned(*v)
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
@@ -6385,32 +6588,14 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.PurposeAndScope; v != nil {
-		m.SetPurposeAndScope(*v)
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
-	if v := i.Background; v != nil {
-		m.SetBackground(*v)
-	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
-	}
-	if v := i.ControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
-	}
-	if v := i.ProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
-	}
-	if v := i.ActionPlanIDs; len(v) > 0 {
-		m.AddActionPlanIDs(v...)
-	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
 	}
 }
 
@@ -6422,43 +6607,42 @@ func (c *StandardCreate) SetInput(i CreateStandardInput) *StandardCreate {
 
 // UpdateStandardInput represents a mutation input for updating standards.
 type UpdateStandardInput struct {
-	ClearTags                 bool
-	Tags                      []string
-	AppendTags                []string
-	Name                      *string
-	ClearDescription          bool
-	Description               *string
-	ClearFamily               bool
-	Family                    *string
-	ClearStatus               bool
-	Status                    *string
-	ClearStandardType         bool
-	StandardType              *string
-	ClearVersion              bool
-	Version                   *string
-	ClearPurposeAndScope      bool
-	PurposeAndScope           *string
-	ClearBackground           bool
-	Background                *string
-	ClearSatisfies            bool
-	Satisfies                 *string
-	ClearDetails              bool
-	Details                   map[string]interface{}
-	ClearControlObjectives    bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
-	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
-	ClearProcedures           bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
-	ClearActionPlans          bool
-	AddActionPlanIDs          []string
-	RemoveActionPlanIDs       []string
-	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
+	ClearTags          bool
+	Tags               []string
+	AppendTags         []string
+	Name               *string
+	ClearShortName     bool
+	ShortName          *string
+	ClearFramework     bool
+	Framework          *string
+	ClearDescription   bool
+	Description        *string
+	ClearGoverningBody bool
+	GoverningBody      *string
+	ClearDomains       bool
+	Domains            []string
+	AppendDomains      []string
+	ClearLink          bool
+	Link               *string
+	ClearStatus        bool
+	Status             *string
+	ClearIsPublic      bool
+	IsPublic           *bool
+	ClearFreeToUse     bool
+	FreeToUse          *bool
+	ClearSystemOwned   bool
+	SystemOwned        *bool
+	ClearStandardType  bool
+	StandardType       *string
+	ClearVersion       bool
+	Version            *string
+	ClearRevision      bool
+	Revision           *string
+	ClearOwner         bool
+	OwnerID            *string
+	ClearControls      bool
+	AddControlIDs      []string
+	RemoveControlIDs   []string
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -6475,23 +6659,68 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
+	if i.ClearShortName {
+		m.ClearShortName()
+	}
+	if v := i.ShortName; v != nil {
+		m.SetShortName(*v)
+	}
+	if i.ClearFramework {
+		m.ClearFramework()
+	}
+	if v := i.Framework; v != nil {
+		m.SetFramework(*v)
+	}
 	if i.ClearDescription {
 		m.ClearDescription()
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearFamily {
-		m.ClearFamily()
+	if i.ClearGoverningBody {
+		m.ClearGoverningBody()
 	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
+	if v := i.GoverningBody; v != nil {
+		m.SetGoverningBody(*v)
+	}
+	if i.ClearDomains {
+		m.ClearDomains()
+	}
+	if v := i.Domains; v != nil {
+		m.SetDomains(v)
+	}
+	if i.AppendDomains != nil {
+		m.AppendDomains(i.Domains)
+	}
+	if i.ClearLink {
+		m.ClearLink()
+	}
+	if v := i.Link; v != nil {
+		m.SetLink(*v)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearIsPublic {
+		m.ClearIsPublic()
+	}
+	if v := i.IsPublic; v != nil {
+		m.SetIsPublic(*v)
+	}
+	if i.ClearFreeToUse {
+		m.ClearFreeToUse()
+	}
+	if v := i.FreeToUse; v != nil {
+		m.SetFreeToUse(*v)
+	}
+	if i.ClearSystemOwned {
+		m.ClearSystemOwned()
+	}
+	if v := i.SystemOwned; v != nil {
+		m.SetSystemOwned(*v)
 	}
 	if i.ClearStandardType {
 		m.ClearStandardType()
@@ -6505,38 +6734,17 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if i.ClearPurposeAndScope {
-		m.ClearPurposeAndScope()
+	if i.ClearRevision {
+		m.ClearRevision()
 	}
-	if v := i.PurposeAndScope; v != nil {
-		m.SetPurposeAndScope(*v)
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
-	if i.ClearBackground {
-		m.ClearBackground()
+	if i.ClearOwner {
+		m.ClearOwner()
 	}
-	if v := i.Background; v != nil {
-		m.SetBackground(*v)
-	}
-	if i.ClearSatisfies {
-		m.ClearSatisfies()
-	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
-	if i.ClearDetails {
-		m.ClearDetails()
-	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
-	}
-	if i.ClearControlObjectives {
-		m.ClearControlObjectives()
-	}
-	if v := i.AddControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
-	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
-		m.RemoveControlObjectiveIDs(v...)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -6546,33 +6754,6 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
-	}
-	if i.ClearProcedures {
-		m.ClearProcedures()
-	}
-	if v := i.AddProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
-	}
-	if v := i.RemoveProcedureIDs; len(v) > 0 {
-		m.RemoveProcedureIDs(v...)
-	}
-	if i.ClearActionPlans {
-		m.ClearActionPlans()
-	}
-	if v := i.AddActionPlanIDs; len(v) > 0 {
-		m.AddActionPlanIDs(v...)
-	}
-	if v := i.RemoveActionPlanIDs; len(v) > 0 {
-		m.RemoveActionPlanIDs(v...)
-	}
-	if i.ClearPrograms {
-		m.ClearPrograms()
-	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
 	}
 }
 
@@ -6590,29 +6771,35 @@ func (c *StandardUpdateOne) SetInput(i UpdateStandardInput) *StandardUpdateOne {
 
 // CreateSubcontrolInput represents a mutation input for creating subcontrols.
 type CreateSubcontrolInput struct {
-	Tags                           []string
-	Name                           string
-	Description                    *string
-	Status                         *string
-	SubcontrolType                 *string
-	Version                        *string
-	SubcontrolNumber               *string
-	Family                         *string
-	Class                          *string
-	Source                         *string
-	MappedFrameworks               *string
-	ImplementationEvidence         *string
-	ImplementationStatus           *string
-	ImplementationDate             *time.Time
-	ImplementationVerification     *string
-	ImplementationVerificationDate *time.Time
-	Details                        map[string]interface{}
-	ExampleEvidence                *string
-	OwnerID                        *string
-	ControlIDs                     []string
-	TaskIDs                        []string
-	ProgramIDs                     []string
-	EvidenceIDs                    []string
+	Tags                   []string
+	Description            *string
+	Status                 *string
+	Source                 *enums.ControlSource
+	ControlType            *enums.ControlType
+	Category               *string
+	CategoryID             *string
+	Subcategory            *string
+	MappedCategories       []string
+	AssessmentObjectives   []models.AssessmentObjective
+	AssessmentMethods      []models.AssessmentMethod
+	ControlQuestions       []string
+	ImplementationGuidance []models.ImplementationGuidance
+	ExampleEvidence        []models.ExampleEvidence
+	References             []models.Reference
+	RefCode                string
+	OwnerID                *string
+	ControlID              string
+	MappedControlIDs       []string
+	EvidenceIDs            []string
+	ControlObjectiveIDs    []string
+	TaskIDs                []string
+	NarrativeIDs           []string
+	RiskIDs                []string
+	ActionPlanIDs          []string
+	ProcedureIDs           []string
+	InternalPolicyIDs      []string
+	ControlOwnerID         *string
+	DelegateID             *string
 }
 
 // Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
@@ -6620,69 +6807,85 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	m.SetName(i.Name)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
-	if v := i.SubcontrolType; v != nil {
-		m.SetSubcontrolType(*v)
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if v := i.SubcontrolNumber; v != nil {
-		m.SetSubcontrolNumber(*v)
-	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
-	}
-	if v := i.Class; v != nil {
-		m.SetClass(*v)
-	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if v := i.MappedFrameworks; v != nil {
-		m.SetMappedFrameworks(*v)
+	if v := i.ControlType; v != nil {
+		m.SetControlType(*v)
 	}
-	if v := i.ImplementationEvidence; v != nil {
-		m.SetImplementationEvidence(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
-	if v := i.ImplementationStatus; v != nil {
-		m.SetImplementationStatus(*v)
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
 	}
-	if v := i.ImplementationDate; v != nil {
-		m.SetImplementationDate(*v)
+	if v := i.Subcategory; v != nil {
+		m.SetSubcategory(*v)
 	}
-	if v := i.ImplementationVerification; v != nil {
-		m.SetImplementationVerification(*v)
+	if v := i.MappedCategories; v != nil {
+		m.SetMappedCategories(v)
 	}
-	if v := i.ImplementationVerificationDate; v != nil {
-		m.SetImplementationVerificationDate(*v)
+	if v := i.AssessmentObjectives; v != nil {
+		m.SetAssessmentObjectives(v)
 	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if v := i.AssessmentMethods; v != nil {
+		m.SetAssessmentMethods(v)
+	}
+	if v := i.ControlQuestions; v != nil {
+		m.SetControlQuestions(v)
+	}
+	if v := i.ImplementationGuidance; v != nil {
+		m.SetImplementationGuidance(v)
 	}
 	if v := i.ExampleEvidence; v != nil {
-		m.SetExampleEvidence(*v)
+		m.SetExampleEvidence(v)
 	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	m.SetRefCode(i.RefCode)
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.ControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
+	m.SetControlID(i.ControlID)
+	if v := i.MappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
+	if v := i.NarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
 	}
-	if v := i.EvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.ControlOwnerID; v != nil {
+		m.SetControlOwnerID(*v)
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 }
 
@@ -6694,53 +6897,77 @@ func (c *SubcontrolCreate) SetInput(i CreateSubcontrolInput) *SubcontrolCreate {
 
 // UpdateSubcontrolInput represents a mutation input for updating subcontrols.
 type UpdateSubcontrolInput struct {
-	ClearTags                           bool
-	Tags                                []string
-	AppendTags                          []string
-	Name                                *string
-	ClearDescription                    bool
-	Description                         *string
-	ClearStatus                         bool
-	Status                              *string
-	ClearSubcontrolType                 bool
-	SubcontrolType                      *string
-	ClearVersion                        bool
-	Version                             *string
-	ClearSubcontrolNumber               bool
-	SubcontrolNumber                    *string
-	ClearFamily                         bool
-	Family                              *string
-	ClearClass                          bool
-	Class                               *string
-	ClearSource                         bool
-	Source                              *string
-	ClearMappedFrameworks               bool
-	MappedFrameworks                    *string
-	ClearImplementationEvidence         bool
-	ImplementationEvidence              *string
-	ClearImplementationStatus           bool
-	ImplementationStatus                *string
-	ClearImplementationDate             bool
-	ImplementationDate                  *time.Time
-	ClearImplementationVerification     bool
-	ImplementationVerification          *string
-	ClearImplementationVerificationDate bool
-	ImplementationVerificationDate      *time.Time
-	ClearDetails                        bool
-	Details                             map[string]interface{}
-	ClearExampleEvidence                bool
-	ExampleEvidence                     *string
-	AddControlIDs                       []string
-	RemoveControlIDs                    []string
-	ClearTasks                          bool
-	AddTaskIDs                          []string
-	RemoveTaskIDs                       []string
-	ClearPrograms                       bool
-	AddProgramIDs                       []string
-	RemoveProgramIDs                    []string
-	ClearEvidence                       bool
-	AddEvidenceIDs                      []string
-	RemoveEvidenceIDs                   []string
+	ClearTags                    bool
+	Tags                         []string
+	AppendTags                   []string
+	ClearDescription             bool
+	Description                  *string
+	ClearStatus                  bool
+	Status                       *string
+	ClearSource                  bool
+	Source                       *enums.ControlSource
+	ClearControlType             bool
+	ControlType                  *enums.ControlType
+	ClearCategory                bool
+	Category                     *string
+	ClearCategoryID              bool
+	CategoryID                   *string
+	ClearSubcategory             bool
+	Subcategory                  *string
+	ClearMappedCategories        bool
+	MappedCategories             []string
+	AppendMappedCategories       []string
+	ClearAssessmentObjectives    bool
+	AssessmentObjectives         []models.AssessmentObjective
+	AppendAssessmentObjectives   []models.AssessmentObjective
+	ClearAssessmentMethods       bool
+	AssessmentMethods            []models.AssessmentMethod
+	AppendAssessmentMethods      []models.AssessmentMethod
+	ClearControlQuestions        bool
+	ControlQuestions             []string
+	AppendControlQuestions       []string
+	ClearImplementationGuidance  bool
+	ImplementationGuidance       []models.ImplementationGuidance
+	AppendImplementationGuidance []models.ImplementationGuidance
+	ClearExampleEvidence         bool
+	ExampleEvidence              []models.ExampleEvidence
+	AppendExampleEvidence        []models.ExampleEvidence
+	ClearReferences              bool
+	References                   []models.Reference
+	AppendReferences             []models.Reference
+	RefCode                      *string
+	ControlID                    *string
+	ClearMappedControls          bool
+	AddMappedControlIDs          []string
+	RemoveMappedControlIDs       []string
+	ClearEvidence                bool
+	AddEvidenceIDs               []string
+	RemoveEvidenceIDs            []string
+	ClearControlObjectives       bool
+	AddControlObjectiveIDs       []string
+	RemoveControlObjectiveIDs    []string
+	ClearTasks                   bool
+	AddTaskIDs                   []string
+	RemoveTaskIDs                []string
+	ClearNarratives              bool
+	AddNarrativeIDs              []string
+	RemoveNarrativeIDs           []string
+	ClearRisks                   bool
+	AddRiskIDs                   []string
+	RemoveRiskIDs                []string
+	ClearActionPlans             bool
+	AddActionPlanIDs             []string
+	RemoveActionPlanIDs          []string
+	ClearProcedures              bool
+	AddProcedureIDs              []string
+	RemoveProcedureIDs           []string
+	ClearInternalPolicies        bool
+	AddInternalPolicyIDs         []string
+	RemoveInternalPolicyIDs      []string
+	ClearControlOwner            bool
+	ControlOwnerID               *string
+	ClearDelegate                bool
+	DelegateID                   *string
 }
 
 // Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
@@ -6754,9 +6981,6 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
 	if i.ClearDescription {
 		m.ClearDescription()
 	}
@@ -6769,95 +6993,131 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
-	if i.ClearSubcontrolType {
-		m.ClearSubcontrolType()
-	}
-	if v := i.SubcontrolType; v != nil {
-		m.SetSubcontrolType(*v)
-	}
-	if i.ClearVersion {
-		m.ClearVersion()
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if i.ClearSubcontrolNumber {
-		m.ClearSubcontrolNumber()
-	}
-	if v := i.SubcontrolNumber; v != nil {
-		m.SetSubcontrolNumber(*v)
-	}
-	if i.ClearFamily {
-		m.ClearFamily()
-	}
-	if v := i.Family; v != nil {
-		m.SetFamily(*v)
-	}
-	if i.ClearClass {
-		m.ClearClass()
-	}
-	if v := i.Class; v != nil {
-		m.SetClass(*v)
-	}
 	if i.ClearSource {
 		m.ClearSource()
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if i.ClearMappedFrameworks {
-		m.ClearMappedFrameworks()
+	if i.ClearControlType {
+		m.ClearControlType()
 	}
-	if v := i.MappedFrameworks; v != nil {
-		m.SetMappedFrameworks(*v)
+	if v := i.ControlType; v != nil {
+		m.SetControlType(*v)
 	}
-	if i.ClearImplementationEvidence {
-		m.ClearImplementationEvidence()
+	if i.ClearCategory {
+		m.ClearCategory()
 	}
-	if v := i.ImplementationEvidence; v != nil {
-		m.SetImplementationEvidence(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
-	if i.ClearImplementationStatus {
-		m.ClearImplementationStatus()
+	if i.ClearCategoryID {
+		m.ClearCategoryID()
 	}
-	if v := i.ImplementationStatus; v != nil {
-		m.SetImplementationStatus(*v)
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
 	}
-	if i.ClearImplementationDate {
-		m.ClearImplementationDate()
+	if i.ClearSubcategory {
+		m.ClearSubcategory()
 	}
-	if v := i.ImplementationDate; v != nil {
-		m.SetImplementationDate(*v)
+	if v := i.Subcategory; v != nil {
+		m.SetSubcategory(*v)
 	}
-	if i.ClearImplementationVerification {
-		m.ClearImplementationVerification()
+	if i.ClearMappedCategories {
+		m.ClearMappedCategories()
 	}
-	if v := i.ImplementationVerification; v != nil {
-		m.SetImplementationVerification(*v)
+	if v := i.MappedCategories; v != nil {
+		m.SetMappedCategories(v)
 	}
-	if i.ClearImplementationVerificationDate {
-		m.ClearImplementationVerificationDate()
+	if i.AppendMappedCategories != nil {
+		m.AppendMappedCategories(i.MappedCategories)
 	}
-	if v := i.ImplementationVerificationDate; v != nil {
-		m.SetImplementationVerificationDate(*v)
+	if i.ClearAssessmentObjectives {
+		m.ClearAssessmentObjectives()
 	}
-	if i.ClearDetails {
-		m.ClearDetails()
+	if v := i.AssessmentObjectives; v != nil {
+		m.SetAssessmentObjectives(v)
 	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if i.AppendAssessmentObjectives != nil {
+		m.AppendAssessmentObjectives(i.AssessmentObjectives)
+	}
+	if i.ClearAssessmentMethods {
+		m.ClearAssessmentMethods()
+	}
+	if v := i.AssessmentMethods; v != nil {
+		m.SetAssessmentMethods(v)
+	}
+	if i.AppendAssessmentMethods != nil {
+		m.AppendAssessmentMethods(i.AssessmentMethods)
+	}
+	if i.ClearControlQuestions {
+		m.ClearControlQuestions()
+	}
+	if v := i.ControlQuestions; v != nil {
+		m.SetControlQuestions(v)
+	}
+	if i.AppendControlQuestions != nil {
+		m.AppendControlQuestions(i.ControlQuestions)
+	}
+	if i.ClearImplementationGuidance {
+		m.ClearImplementationGuidance()
+	}
+	if v := i.ImplementationGuidance; v != nil {
+		m.SetImplementationGuidance(v)
+	}
+	if i.AppendImplementationGuidance != nil {
+		m.AppendImplementationGuidance(i.ImplementationGuidance)
 	}
 	if i.ClearExampleEvidence {
 		m.ClearExampleEvidence()
 	}
 	if v := i.ExampleEvidence; v != nil {
-		m.SetExampleEvidence(*v)
+		m.SetExampleEvidence(v)
 	}
-	if v := i.AddControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
+	if i.AppendExampleEvidence != nil {
+		m.AppendExampleEvidence(i.ExampleEvidence)
 	}
-	if v := i.RemoveControlIDs; len(v) > 0 {
-		m.RemoveControlIDs(v...)
+	if i.ClearReferences {
+		m.ClearReferences()
+	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	if i.AppendReferences != nil {
+		m.AppendReferences(i.References)
+	}
+	if v := i.RefCode; v != nil {
+		m.SetRefCode(*v)
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if i.ClearMappedControls {
+		m.ClearMappedControls()
+	}
+	if v := i.AddMappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
+	}
+	if v := i.RemoveMappedControlIDs; len(v) > 0 {
+		m.RemoveMappedControlIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
+	}
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
+	}
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
 	}
 	if i.ClearTasks {
 		m.ClearTasks()
@@ -6868,23 +7128,62 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
 	}
-	if i.ClearPrograms {
-		m.ClearPrograms()
+	if i.ClearNarratives {
+		m.ClearNarratives()
 	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
+	if v := i.AddNarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
 	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
+	if v := i.RemoveNarrativeIDs; len(v) > 0 {
+		m.RemoveNarrativeIDs(v...)
 	}
-	if i.ClearEvidence {
-		m.ClearEvidence()
+	if i.ClearRisks {
+		m.ClearRisks()
 	}
-	if v := i.AddEvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
 	}
-	if v := i.RemoveEvidenceIDs; len(v) > 0 {
-		m.RemoveEvidenceIDs(v...)
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearProcedures {
+		m.ClearProcedures()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
+	}
+	if i.ClearControlOwner {
+		m.ClearControlOwner()
+	}
+	if v := i.ControlOwnerID; v != nil {
+		m.SetControlOwnerID(*v)
+	}
+	if i.ClearDelegate {
+		m.ClearDelegate()
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 }
 
@@ -7352,8 +7651,8 @@ type CreateTemplateInput struct {
 	Name         string
 	TemplateType *enums.DocumentType
 	Description  *string
-	Jsonconfig   customtypes.JSONObject
-	Uischema     customtypes.JSONObject
+	Jsonconfig   map[string]interface{}
+	Uischema     map[string]interface{}
 	OwnerID      *string
 	DocumentIDs  []string
 	FileIDs      []string
@@ -7403,9 +7702,9 @@ type UpdateTemplateInput struct {
 	TemplateType      *enums.DocumentType
 	ClearDescription  bool
 	Description       *string
-	Jsonconfig        customtypes.JSONObject
+	Jsonconfig        map[string]interface{}
 	ClearUischema     bool
-	Uischema          customtypes.JSONObject
+	Uischema          map[string]interface{}
 	ClearOwner        bool
 	OwnerID           *string
 	ClearDocuments    bool

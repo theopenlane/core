@@ -10,6 +10,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/internal/graphutils"
 )
 
 // Node is the resolver for the node field.
@@ -114,7 +115,87 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 
 // Controls is the resolver for the controls field.
 func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlWhereInput) (*generated.ControlConnection, error) {
-	res, err := withTransactionalMutation(ctx).Control.Query().Paginate(
+	query := withTransactionalMutation(ctx).Control.Query()
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeSubcontrol) {
+		query.WithNamedSubcontrols("subcontrols", func(q *generated.SubcontrolQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeMappedControl) {
+		query.WithMappedControls(func(q *generated.MappedControlQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeTask) {
+		query.WithNamedTasks("tasks", func(q *generated.TaskQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeRisk) {
+		query.WithNamedRisks("risks", func(q *generated.RiskQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeEvidence) {
+		query.WithNamedEvidence("evidence", func(q *generated.EvidenceQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeNarrative) {
+		query.WithNamedNarratives("narratives", func(q *generated.NarrativeQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeProcedure) {
+		query.WithNamedProcedures("procedures", func(q *generated.ProcedureQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeInternalPolicy) {
+		query.WithNamedInternalPolicies("internalPolicies", func(q *generated.InternalPolicyQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeActionPlan) {
+		query.WithNamedActionPlans("actionPlans", func(q *generated.ActionPlanQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, "controlOwner") {
+		query.WithControlOwner(func(q *generated.UserQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, "delegate") {
+		query.WithDelegate(func(q *generated.UserQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	res, err := query.Paginate(
 		ctx,
 		after,
 		first,
@@ -139,6 +220,38 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 		generated.WithControlHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlhistory"})
+	}
+
+	return res, err
+}
+
+// ControlImplementations is the resolver for the controlImplementations field.
+func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationWhereInput) (*generated.ControlImplementationConnection, error) {
+	res, err := withTransactionalMutation(ctx).ControlImplementation.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlImplementationFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementation"})
+	}
+
+	return res, err
+}
+
+// ControlImplementationHistories is the resolver for the controlImplementationHistories field.
+func (r *queryResolver) ControlImplementationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationHistoryWhereInput) (*generated.ControlImplementationHistoryConnection, error) {
+	res, err := withTransactionalMutation(ctx).ControlImplementationHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlImplementationHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementationhistory"})
 	}
 
 	return res, err
@@ -586,6 +699,38 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 	return res, err
 }
 
+// MappedControls is the resolver for the mappedControls field.
+func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlWhereInput) (*generated.MappedControlConnection, error) {
+	res, err := withTransactionalMutation(ctx).MappedControl.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithMappedControlFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
+	}
+
+	return res, err
+}
+
+// MappedControlHistories is the resolver for the mappedControlHistories field.
+func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlHistoryWhereInput) (*generated.MappedControlHistoryConnection, error) {
+	res, err := withTransactionalMutation(ctx).MappedControlHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithMappedControlHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrolhistory"})
+	}
+
+	return res, err
+}
+
 // Narratives is the resolver for the narratives field.
 func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeWhereInput) (*generated.NarrativeConnection, error) {
 	res, err := withTransactionalMutation(ctx).Narrative.Query().Paginate(
@@ -926,7 +1071,93 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 
 // Standards is the resolver for the standards field.
 func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
-	res, err := withTransactionalMutation(ctx).Standard.Query().Paginate(
+	query := withTransactionalMutation(ctx).Standard.Query()
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControl) {
+		query.WithNamedControls("controls", func(q *generated.ControlQuery) {
+			filter := q
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+				filter.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeSubcontrol) {
+				filter.WithNamedSubcontrols("subcontrols", func(q *generated.SubcontrolQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+				filter.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeMappedControl) {
+				filter.WithMappedControls(func(q *generated.MappedControlQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeTask) {
+				filter.WithNamedTasks("tasks", func(q *generated.TaskQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeRisk) {
+				filter.WithNamedRisks("risks", func(q *generated.RiskQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeEvidence) {
+				filter.WithNamedEvidence("evidence", func(q *generated.EvidenceQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeNarrative) {
+				filter.WithNamedNarratives("narratives", func(q *generated.NarrativeQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeProcedure) {
+				filter.WithNamedProcedures("procedures", func(q *generated.ProcedureQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeInternalPolicy) {
+				filter.WithNamedInternalPolicies("internalPolicies", func(q *generated.InternalPolicyQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, generated.TypeActionPlan) {
+				filter.WithNamedActionPlans("actionPlans", func(q *generated.ActionPlanQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, "controlOwner") {
+				filter.WithControlOwner(func(q *generated.UserQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+
+			if graphutils.CheckForRequestedField(ctx, "delegate") {
+				filter.WithDelegate(func(q *generated.UserQuery) {
+					q.Limit(edgesResultsLimit)
+				})
+			}
+		})
+	}
+
+	res, err := query.Paginate(
 		ctx,
 		after,
 		first,
@@ -958,7 +1189,63 @@ func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cur
 
 // Subcontrols is the resolver for the subcontrols field.
 func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolWhereInput) (*generated.SubcontrolConnection, error) {
-	res, err := withTransactionalMutation(ctx).Subcontrol.Query().Paginate(
+	query := withTransactionalMutation(ctx).Subcontrol.Query()
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeTask) {
+		query.WithNamedTasks("tasks", func(q *generated.TaskQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeRisk) {
+		query.WithNamedRisks("risks", func(q *generated.RiskQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeEvidence) {
+		query.WithNamedEvidence("evidence", func(q *generated.EvidenceQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeNarrative) {
+		query.WithNamedNarratives("narratives", func(q *generated.NarrativeQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeProcedure) {
+		query.WithNamedProcedures("procedures", func(q *generated.ProcedureQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeInternalPolicy) {
+		query.WithNamedInternalPolicies("internalPolicies", func(q *generated.InternalPolicyQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeActionPlan) {
+		query.WithNamedActionPlans("actionPlans", func(q *generated.ActionPlanQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	res, err := query.Paginate(
 		ctx,
 		after,
 		first,

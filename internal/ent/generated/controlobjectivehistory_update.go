@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -136,23 +137,23 @@ func (cohu *ControlObjectiveHistoryUpdate) SetNillableName(s *string) *ControlOb
 	return cohu
 }
 
-// SetDescription sets the "description" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetDescription(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetDescription(s)
+// SetDesiredOutcome sets the "desired_outcome" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetDesiredOutcome(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetDesiredOutcome(s)
 	return cohu
 }
 
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableDescription(s *string) *ControlObjectiveHistoryUpdate {
+// SetNillableDesiredOutcome sets the "desired_outcome" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableDesiredOutcome(s *string) *ControlObjectiveHistoryUpdate {
 	if s != nil {
-		cohu.SetDescription(*s)
+		cohu.SetDesiredOutcome(*s)
 	}
 	return cohu
 }
 
-// ClearDescription clears the value of the "description" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearDescription() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearDescription()
+// ClearDesiredOutcome clears the value of the "desired_outcome" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearDesiredOutcome() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearDesiredOutcome()
 	return cohu
 }
 
@@ -173,6 +174,26 @@ func (cohu *ControlObjectiveHistoryUpdate) SetNillableStatus(s *string) *Control
 // ClearStatus clears the value of the "status" field.
 func (cohu *ControlObjectiveHistoryUpdate) ClearStatus() *ControlObjectiveHistoryUpdate {
 	cohu.mutation.ClearStatus()
+	return cohu
+}
+
+// SetSource sets the "source" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetSource(es enums.ControlSource) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetSource(es)
+	return cohu
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableSource(es *enums.ControlSource) *ControlObjectiveHistoryUpdate {
+	if es != nil {
+		cohu.SetSource(*es)
+	}
+	return cohu
+}
+
+// ClearSource clears the value of the "source" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearSource() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearSource()
 	return cohu
 }
 
@@ -216,135 +237,43 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearVersion() *ControlObjectiveHisto
 	return cohu
 }
 
-// SetControlNumber sets the "control_number" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetControlNumber(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetControlNumber(s)
+// SetCategory sets the "category" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetCategory(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetCategory(s)
 	return cohu
 }
 
-// SetNillableControlNumber sets the "control_number" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableControlNumber(s *string) *ControlObjectiveHistoryUpdate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableCategory(s *string) *ControlObjectiveHistoryUpdate {
 	if s != nil {
-		cohu.SetControlNumber(*s)
+		cohu.SetCategory(*s)
 	}
 	return cohu
 }
 
-// ClearControlNumber clears the value of the "control_number" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearControlNumber() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearControlNumber()
+// ClearCategory clears the value of the "category" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearCategory() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearCategory()
 	return cohu
 }
 
-// SetFamily sets the "family" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetFamily(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetFamily(s)
+// SetSubcategory sets the "subcategory" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetSubcategory(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetSubcategory(s)
 	return cohu
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableFamily(s *string) *ControlObjectiveHistoryUpdate {
+// SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableSubcategory(s *string) *ControlObjectiveHistoryUpdate {
 	if s != nil {
-		cohu.SetFamily(*s)
+		cohu.SetSubcategory(*s)
 	}
 	return cohu
 }
 
-// ClearFamily clears the value of the "family" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearFamily() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearFamily()
-	return cohu
-}
-
-// SetClass sets the "class" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetClass(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetClass(s)
-	return cohu
-}
-
-// SetNillableClass sets the "class" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableClass(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetClass(*s)
-	}
-	return cohu
-}
-
-// ClearClass clears the value of the "class" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearClass() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearClass()
-	return cohu
-}
-
-// SetSource sets the "source" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetSource(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetSource(s)
-	return cohu
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableSource(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetSource(*s)
-	}
-	return cohu
-}
-
-// ClearSource clears the value of the "source" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearSource() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearSource()
-	return cohu
-}
-
-// SetMappedFrameworks sets the "mapped_frameworks" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetMappedFrameworks(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetMappedFrameworks(s)
-	return cohu
-}
-
-// SetNillableMappedFrameworks sets the "mapped_frameworks" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableMappedFrameworks(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetMappedFrameworks(*s)
-	}
-	return cohu
-}
-
-// ClearMappedFrameworks clears the value of the "mapped_frameworks" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearMappedFrameworks() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearMappedFrameworks()
-	return cohu
-}
-
-// SetDetails sets the "details" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetDetails(m map[string]interface{}) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetDetails(m)
-	return cohu
-}
-
-// ClearDetails clears the value of the "details" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearDetails() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearDetails()
-	return cohu
-}
-
-// SetExampleEvidence sets the "example_evidence" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetExampleEvidence(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetExampleEvidence(s)
-	return cohu
-}
-
-// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableExampleEvidence(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetExampleEvidence(*s)
-	}
-	return cohu
-}
-
-// ClearExampleEvidence clears the value of the "example_evidence" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearExampleEvidence() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearExampleEvidence()
+// ClearSubcategory clears the value of the "subcategory" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearSubcategory() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearSubcategory()
 	return cohu
 }
 
@@ -389,6 +318,16 @@ func (cohu *ControlObjectiveHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cohu *ControlObjectiveHistoryUpdate) check() error {
+	if v, ok := cohu.mutation.Source(); ok {
+		if err := controlobjectivehistory.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.source": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cohu *ControlObjectiveHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlObjectiveHistoryUpdate {
 	cohu.modifiers = append(cohu.modifiers, modifiers...)
@@ -396,6 +335,9 @@ func (cohu *ControlObjectiveHistoryUpdate) Modify(modifiers ...func(u *sql.Updat
 }
 
 func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := cohu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlobjectivehistory.Table, controlobjectivehistory.Columns, sqlgraph.NewFieldSpec(controlobjectivehistory.FieldID, field.TypeString))
 	if ps := cohu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -454,17 +396,23 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if value, ok := cohu.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := cohu.mutation.Description(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDescription, field.TypeString, value)
+	if value, ok := cohu.mutation.DesiredOutcome(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString, value)
 	}
-	if cohu.mutation.DescriptionCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldDescription, field.TypeString)
+	if cohu.mutation.DesiredOutcomeCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := cohu.mutation.Status(); ok {
 		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeString, value)
 	}
 	if cohu.mutation.StatusCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldStatus, field.TypeString)
+	}
+	if value, ok := cohu.mutation.Source(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeEnum, value)
+	}
+	if cohu.mutation.SourceCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSource, field.TypeEnum)
 	}
 	if value, ok := cohu.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjectivehistory.FieldControlObjectiveType, field.TypeString, value)
@@ -478,47 +426,17 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.VersionCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := cohu.mutation.ControlNumber(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlNumber, field.TypeString, value)
+	if value, ok := cohu.mutation.Category(); ok {
+		_spec.SetField(controlobjectivehistory.FieldCategory, field.TypeString, value)
 	}
-	if cohu.mutation.ControlNumberCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldControlNumber, field.TypeString)
+	if cohu.mutation.CategoryCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := cohu.mutation.Family(); ok {
-		_spec.SetField(controlobjectivehistory.FieldFamily, field.TypeString, value)
+	if value, ok := cohu.mutation.Subcategory(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSubcategory, field.TypeString, value)
 	}
-	if cohu.mutation.FamilyCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldFamily, field.TypeString)
-	}
-	if value, ok := cohu.mutation.Class(); ok {
-		_spec.SetField(controlobjectivehistory.FieldClass, field.TypeString, value)
-	}
-	if cohu.mutation.ClassCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldClass, field.TypeString)
-	}
-	if value, ok := cohu.mutation.Source(); ok {
-		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeString, value)
-	}
-	if cohu.mutation.SourceCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldSource, field.TypeString)
-	}
-	if value, ok := cohu.mutation.MappedFrameworks(); ok {
-		_spec.SetField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString, value)
-	}
-	if cohu.mutation.MappedFrameworksCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString)
-	}
-	if value, ok := cohu.mutation.Details(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDetails, field.TypeJSON, value)
-	}
-	if cohu.mutation.DetailsCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldDetails, field.TypeJSON)
-	}
-	if value, ok := cohu.mutation.ExampleEvidence(); ok {
-		_spec.SetField(controlobjectivehistory.FieldExampleEvidence, field.TypeString, value)
-	}
-	if cohu.mutation.ExampleEvidenceCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldExampleEvidence, field.TypeString)
+	if cohu.mutation.SubcategoryCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSubcategory, field.TypeString)
 	}
 	_spec.Node.Schema = cohu.schemaConfig.ControlObjectiveHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cohu.schemaConfig)
@@ -648,23 +566,23 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableName(s *string) *Contr
 	return cohuo
 }
 
-// SetDescription sets the "description" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetDescription(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetDescription(s)
+// SetDesiredOutcome sets the "desired_outcome" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetDesiredOutcome(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetDesiredOutcome(s)
 	return cohuo
 }
 
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableDescription(s *string) *ControlObjectiveHistoryUpdateOne {
+// SetNillableDesiredOutcome sets the "desired_outcome" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableDesiredOutcome(s *string) *ControlObjectiveHistoryUpdateOne {
 	if s != nil {
-		cohuo.SetDescription(*s)
+		cohuo.SetDesiredOutcome(*s)
 	}
 	return cohuo
 }
 
-// ClearDescription clears the value of the "description" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDescription() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearDescription()
+// ClearDesiredOutcome clears the value of the "desired_outcome" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDesiredOutcome() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearDesiredOutcome()
 	return cohuo
 }
 
@@ -685,6 +603,26 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableStatus(s *string) *Con
 // ClearStatus clears the value of the "status" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) ClearStatus() *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.ClearStatus()
+	return cohuo
+}
+
+// SetSource sets the "source" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetSource(es enums.ControlSource) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetSource(es)
+	return cohuo
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableSource(es *enums.ControlSource) *ControlObjectiveHistoryUpdateOne {
+	if es != nil {
+		cohuo.SetSource(*es)
+	}
+	return cohuo
+}
+
+// ClearSource clears the value of the "source" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearSource() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearSource()
 	return cohuo
 }
 
@@ -728,135 +666,43 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearVersion() *ControlObjectiveH
 	return cohuo
 }
 
-// SetControlNumber sets the "control_number" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetControlNumber(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetControlNumber(s)
+// SetCategory sets the "category" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetCategory(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetCategory(s)
 	return cohuo
 }
 
-// SetNillableControlNumber sets the "control_number" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableControlNumber(s *string) *ControlObjectiveHistoryUpdateOne {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableCategory(s *string) *ControlObjectiveHistoryUpdateOne {
 	if s != nil {
-		cohuo.SetControlNumber(*s)
+		cohuo.SetCategory(*s)
 	}
 	return cohuo
 }
 
-// ClearControlNumber clears the value of the "control_number" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearControlNumber() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearControlNumber()
+// ClearCategory clears the value of the "category" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearCategory() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearCategory()
 	return cohuo
 }
 
-// SetFamily sets the "family" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetFamily(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetFamily(s)
+// SetSubcategory sets the "subcategory" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetSubcategory(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetSubcategory(s)
 	return cohuo
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableFamily(s *string) *ControlObjectiveHistoryUpdateOne {
+// SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableSubcategory(s *string) *ControlObjectiveHistoryUpdateOne {
 	if s != nil {
-		cohuo.SetFamily(*s)
+		cohuo.SetSubcategory(*s)
 	}
 	return cohuo
 }
 
-// ClearFamily clears the value of the "family" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearFamily() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearFamily()
-	return cohuo
-}
-
-// SetClass sets the "class" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetClass(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetClass(s)
-	return cohuo
-}
-
-// SetNillableClass sets the "class" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableClass(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetClass(*s)
-	}
-	return cohuo
-}
-
-// ClearClass clears the value of the "class" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearClass() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearClass()
-	return cohuo
-}
-
-// SetSource sets the "source" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetSource(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetSource(s)
-	return cohuo
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableSource(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetSource(*s)
-	}
-	return cohuo
-}
-
-// ClearSource clears the value of the "source" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearSource() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearSource()
-	return cohuo
-}
-
-// SetMappedFrameworks sets the "mapped_frameworks" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetMappedFrameworks(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetMappedFrameworks(s)
-	return cohuo
-}
-
-// SetNillableMappedFrameworks sets the "mapped_frameworks" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableMappedFrameworks(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetMappedFrameworks(*s)
-	}
-	return cohuo
-}
-
-// ClearMappedFrameworks clears the value of the "mapped_frameworks" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearMappedFrameworks() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearMappedFrameworks()
-	return cohuo
-}
-
-// SetDetails sets the "details" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetDetails(m map[string]interface{}) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetDetails(m)
-	return cohuo
-}
-
-// ClearDetails clears the value of the "details" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDetails() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearDetails()
-	return cohuo
-}
-
-// SetExampleEvidence sets the "example_evidence" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetExampleEvidence(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetExampleEvidence(s)
-	return cohuo
-}
-
-// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableExampleEvidence(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetExampleEvidence(*s)
-	}
-	return cohuo
-}
-
-// ClearExampleEvidence clears the value of the "example_evidence" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearExampleEvidence() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearExampleEvidence()
+// ClearSubcategory clears the value of the "subcategory" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearSubcategory() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearSubcategory()
 	return cohuo
 }
 
@@ -914,6 +760,16 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cohuo *ControlObjectiveHistoryUpdateOne) check() error {
+	if v, ok := cohuo.mutation.Source(); ok {
+		if err := controlobjectivehistory.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.source": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cohuo *ControlObjectiveHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlObjectiveHistoryUpdateOne {
 	cohuo.modifiers = append(cohuo.modifiers, modifiers...)
@@ -921,6 +777,9 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) Modify(modifiers ...func(u *sql.U
 }
 
 func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlObjectiveHistory, err error) {
+	if err := cohuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlobjectivehistory.Table, controlobjectivehistory.Columns, sqlgraph.NewFieldSpec(controlobjectivehistory.FieldID, field.TypeString))
 	id, ok := cohuo.mutation.ID()
 	if !ok {
@@ -996,17 +855,23 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if value, ok := cohuo.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := cohuo.mutation.Description(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDescription, field.TypeString, value)
+	if value, ok := cohuo.mutation.DesiredOutcome(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString, value)
 	}
-	if cohuo.mutation.DescriptionCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldDescription, field.TypeString)
+	if cohuo.mutation.DesiredOutcomeCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := cohuo.mutation.Status(); ok {
 		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeString, value)
 	}
 	if cohuo.mutation.StatusCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldStatus, field.TypeString)
+	}
+	if value, ok := cohuo.mutation.Source(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeEnum, value)
+	}
+	if cohuo.mutation.SourceCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSource, field.TypeEnum)
 	}
 	if value, ok := cohuo.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjectivehistory.FieldControlObjectiveType, field.TypeString, value)
@@ -1020,47 +885,17 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.VersionCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.ControlNumber(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlNumber, field.TypeString, value)
+	if value, ok := cohuo.mutation.Category(); ok {
+		_spec.SetField(controlobjectivehistory.FieldCategory, field.TypeString, value)
 	}
-	if cohuo.mutation.ControlNumberCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldControlNumber, field.TypeString)
+	if cohuo.mutation.CategoryCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.Family(); ok {
-		_spec.SetField(controlobjectivehistory.FieldFamily, field.TypeString, value)
+	if value, ok := cohuo.mutation.Subcategory(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSubcategory, field.TypeString, value)
 	}
-	if cohuo.mutation.FamilyCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldFamily, field.TypeString)
-	}
-	if value, ok := cohuo.mutation.Class(); ok {
-		_spec.SetField(controlobjectivehistory.FieldClass, field.TypeString, value)
-	}
-	if cohuo.mutation.ClassCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldClass, field.TypeString)
-	}
-	if value, ok := cohuo.mutation.Source(); ok {
-		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeString, value)
-	}
-	if cohuo.mutation.SourceCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldSource, field.TypeString)
-	}
-	if value, ok := cohuo.mutation.MappedFrameworks(); ok {
-		_spec.SetField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString, value)
-	}
-	if cohuo.mutation.MappedFrameworksCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString)
-	}
-	if value, ok := cohuo.mutation.Details(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDetails, field.TypeJSON, value)
-	}
-	if cohuo.mutation.DetailsCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldDetails, field.TypeJSON)
-	}
-	if value, ok := cohuo.mutation.ExampleEvidence(); ok {
-		_spec.SetField(controlobjectivehistory.FieldExampleEvidence, field.TypeString, value)
-	}
-	if cohuo.mutation.ExampleEvidenceCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldExampleEvidence, field.TypeString)
+	if cohuo.mutation.SubcategoryCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSubcategory, field.TypeString)
 	}
 	_spec.Node.Schema = cohuo.schemaConfig.ControlObjectiveHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cohuo.schemaConfig)

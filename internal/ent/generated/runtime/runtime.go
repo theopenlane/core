@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -41,6 +43,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -399,10 +403,10 @@ func init() {
 	controlDescOwnerID := controlMixinFields4[0].Descriptor()
 	// control.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	control.OwnerIDValidator = controlDescOwnerID.Validators[0].(func(string) error)
-	// controlDescName is the schema descriptor for name field.
-	controlDescName := controlFields[0].Descriptor()
-	// control.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	control.NameValidator = controlDescName.Validators[0].(func(string) error)
+	// controlDescRefCode is the schema descriptor for ref_code field.
+	controlDescRefCode := controlFields[14].Descriptor()
+	// control.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
+	control.RefCodeValidator = controlDescRefCode.Validators[0].(func(string) error)
 	// controlDescID is the schema descriptor for id field.
 	controlDescID := controlMixinFields2[0].Descriptor()
 	// control.DefaultID holds the default value on creation for the id field.
@@ -433,6 +437,80 @@ func init() {
 	controlhistoryDescID := controlhistoryFields[9].Descriptor()
 	// controlhistory.DefaultID holds the default value on creation for the id field.
 	controlhistory.DefaultID = controlhistoryDescID.Default.(func() string)
+	controlimplementationMixin := schema.ControlImplementation{}.Mixin()
+	controlimplementation.Policy = privacy.NewPolicies(schema.ControlImplementation{})
+	controlimplementation.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := controlimplementation.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	controlimplementationMixinHooks0 := controlimplementationMixin[0].Hooks()
+	controlimplementationMixinHooks2 := controlimplementationMixin[2].Hooks()
+
+	controlimplementation.Hooks[1] = controlimplementationMixinHooks0[0]
+
+	controlimplementation.Hooks[2] = controlimplementationMixinHooks2[0]
+	controlimplementationMixinInters2 := controlimplementationMixin[2].Interceptors()
+	controlimplementation.Interceptors[0] = controlimplementationMixinInters2[0]
+	controlimplementationMixinFields0 := controlimplementationMixin[0].Fields()
+	_ = controlimplementationMixinFields0
+	controlimplementationMixinFields1 := controlimplementationMixin[1].Fields()
+	_ = controlimplementationMixinFields1
+	controlimplementationMixinFields3 := controlimplementationMixin[3].Fields()
+	_ = controlimplementationMixinFields3
+	controlimplementationFields := schema.ControlImplementation{}.Fields()
+	_ = controlimplementationFields
+	// controlimplementationDescCreatedAt is the schema descriptor for created_at field.
+	controlimplementationDescCreatedAt := controlimplementationMixinFields0[0].Descriptor()
+	// controlimplementation.DefaultCreatedAt holds the default value on creation for the created_at field.
+	controlimplementation.DefaultCreatedAt = controlimplementationDescCreatedAt.Default.(func() time.Time)
+	// controlimplementationDescUpdatedAt is the schema descriptor for updated_at field.
+	controlimplementationDescUpdatedAt := controlimplementationMixinFields0[1].Descriptor()
+	// controlimplementation.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	controlimplementation.DefaultUpdatedAt = controlimplementationDescUpdatedAt.Default.(func() time.Time)
+	// controlimplementation.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	controlimplementation.UpdateDefaultUpdatedAt = controlimplementationDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlimplementationDescTags is the schema descriptor for tags field.
+	controlimplementationDescTags := controlimplementationMixinFields3[0].Descriptor()
+	// controlimplementation.DefaultTags holds the default value on creation for the tags field.
+	controlimplementation.DefaultTags = controlimplementationDescTags.Default.([]string)
+	// controlimplementationDescControlID is the schema descriptor for control_id field.
+	controlimplementationDescControlID := controlimplementationFields[0].Descriptor()
+	// controlimplementation.ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
+	controlimplementation.ControlIDValidator = controlimplementationDescControlID.Validators[0].(func(string) error)
+	// controlimplementationDescID is the schema descriptor for id field.
+	controlimplementationDescID := controlimplementationMixinFields1[0].Descriptor()
+	// controlimplementation.DefaultID holds the default value on creation for the id field.
+	controlimplementation.DefaultID = controlimplementationDescID.Default.(func() string)
+	controlimplementationhistoryInters := schema.ControlImplementationHistory{}.Interceptors()
+	controlimplementationhistory.Interceptors[0] = controlimplementationhistoryInters[0]
+	controlimplementationhistoryFields := schema.ControlImplementationHistory{}.Fields()
+	_ = controlimplementationhistoryFields
+	// controlimplementationhistoryDescHistoryTime is the schema descriptor for history_time field.
+	controlimplementationhistoryDescHistoryTime := controlimplementationhistoryFields[0].Descriptor()
+	// controlimplementationhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	controlimplementationhistory.DefaultHistoryTime = controlimplementationhistoryDescHistoryTime.Default.(func() time.Time)
+	// controlimplementationhistoryDescCreatedAt is the schema descriptor for created_at field.
+	controlimplementationhistoryDescCreatedAt := controlimplementationhistoryFields[3].Descriptor()
+	// controlimplementationhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	controlimplementationhistory.DefaultCreatedAt = controlimplementationhistoryDescCreatedAt.Default.(func() time.Time)
+	// controlimplementationhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	controlimplementationhistoryDescUpdatedAt := controlimplementationhistoryFields[4].Descriptor()
+	// controlimplementationhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	controlimplementationhistory.DefaultUpdatedAt = controlimplementationhistoryDescUpdatedAt.Default.(func() time.Time)
+	// controlimplementationhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	controlimplementationhistory.UpdateDefaultUpdatedAt = controlimplementationhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlimplementationhistoryDescTags is the schema descriptor for tags field.
+	controlimplementationhistoryDescTags := controlimplementationhistoryFields[10].Descriptor()
+	// controlimplementationhistory.DefaultTags holds the default value on creation for the tags field.
+	controlimplementationhistory.DefaultTags = controlimplementationhistoryDescTags.Default.([]string)
+	// controlimplementationhistoryDescID is the schema descriptor for id field.
+	controlimplementationhistoryDescID := controlimplementationhistoryFields[7].Descriptor()
+	// controlimplementationhistory.DefaultID holds the default value on creation for the id field.
+	controlimplementationhistory.DefaultID = controlimplementationhistoryDescID.Default.(func() string)
 	controlobjectiveMixin := schema.ControlObjective{}.Mixin()
 	controlobjective.Policy = privacy.NewPolicies(schema.ControlObjective{})
 	controlobjective.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1813,6 +1891,84 @@ func init() {
 	inviteDescID := inviteMixinFields1[0].Descriptor()
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
+	mappedcontrolMixin := schema.MappedControl{}.Mixin()
+	mappedcontrol.Policy = privacy.NewPolicies(schema.MappedControl{})
+	mappedcontrol.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := mappedcontrol.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	mappedcontrolMixinHooks0 := mappedcontrolMixin[0].Hooks()
+	mappedcontrolMixinHooks2 := mappedcontrolMixin[2].Hooks()
+
+	mappedcontrol.Hooks[1] = mappedcontrolMixinHooks0[0]
+
+	mappedcontrol.Hooks[2] = mappedcontrolMixinHooks2[0]
+	mappedcontrolMixinInters2 := mappedcontrolMixin[2].Interceptors()
+	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters2[0]
+	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
+	_ = mappedcontrolMixinFields0
+	mappedcontrolMixinFields1 := mappedcontrolMixin[1].Fields()
+	_ = mappedcontrolMixinFields1
+	mappedcontrolMixinFields3 := mappedcontrolMixin[3].Fields()
+	_ = mappedcontrolMixinFields3
+	mappedcontrolFields := schema.MappedControl{}.Fields()
+	_ = mappedcontrolFields
+	// mappedcontrolDescCreatedAt is the schema descriptor for created_at field.
+	mappedcontrolDescCreatedAt := mappedcontrolMixinFields0[0].Descriptor()
+	// mappedcontrol.DefaultCreatedAt holds the default value on creation for the created_at field.
+	mappedcontrol.DefaultCreatedAt = mappedcontrolDescCreatedAt.Default.(func() time.Time)
+	// mappedcontrolDescUpdatedAt is the schema descriptor for updated_at field.
+	mappedcontrolDescUpdatedAt := mappedcontrolMixinFields0[1].Descriptor()
+	// mappedcontrol.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	mappedcontrol.DefaultUpdatedAt = mappedcontrolDescUpdatedAt.Default.(func() time.Time)
+	// mappedcontrol.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	mappedcontrol.UpdateDefaultUpdatedAt = mappedcontrolDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// mappedcontrolDescTags is the schema descriptor for tags field.
+	mappedcontrolDescTags := mappedcontrolMixinFields3[0].Descriptor()
+	// mappedcontrol.DefaultTags holds the default value on creation for the tags field.
+	mappedcontrol.DefaultTags = mappedcontrolDescTags.Default.([]string)
+	// mappedcontrolDescControlID is the schema descriptor for control_id field.
+	mappedcontrolDescControlID := mappedcontrolFields[0].Descriptor()
+	// mappedcontrol.ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
+	mappedcontrol.ControlIDValidator = mappedcontrolDescControlID.Validators[0].(func(string) error)
+	// mappedcontrolDescMappedControlID is the schema descriptor for mapped_control_id field.
+	mappedcontrolDescMappedControlID := mappedcontrolFields[1].Descriptor()
+	// mappedcontrol.MappedControlIDValidator is a validator for the "mapped_control_id" field. It is called by the builders before save.
+	mappedcontrol.MappedControlIDValidator = mappedcontrolDescMappedControlID.Validators[0].(func(string) error)
+	// mappedcontrolDescID is the schema descriptor for id field.
+	mappedcontrolDescID := mappedcontrolMixinFields1[0].Descriptor()
+	// mappedcontrol.DefaultID holds the default value on creation for the id field.
+	mappedcontrol.DefaultID = mappedcontrolDescID.Default.(func() string)
+	mappedcontrolhistoryInters := schema.MappedControlHistory{}.Interceptors()
+	mappedcontrolhistory.Interceptors[0] = mappedcontrolhistoryInters[0]
+	mappedcontrolhistoryFields := schema.MappedControlHistory{}.Fields()
+	_ = mappedcontrolhistoryFields
+	// mappedcontrolhistoryDescHistoryTime is the schema descriptor for history_time field.
+	mappedcontrolhistoryDescHistoryTime := mappedcontrolhistoryFields[0].Descriptor()
+	// mappedcontrolhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	mappedcontrolhistory.DefaultHistoryTime = mappedcontrolhistoryDescHistoryTime.Default.(func() time.Time)
+	// mappedcontrolhistoryDescCreatedAt is the schema descriptor for created_at field.
+	mappedcontrolhistoryDescCreatedAt := mappedcontrolhistoryFields[3].Descriptor()
+	// mappedcontrolhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	mappedcontrolhistory.DefaultCreatedAt = mappedcontrolhistoryDescCreatedAt.Default.(func() time.Time)
+	// mappedcontrolhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	mappedcontrolhistoryDescUpdatedAt := mappedcontrolhistoryFields[4].Descriptor()
+	// mappedcontrolhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	mappedcontrolhistory.DefaultUpdatedAt = mappedcontrolhistoryDescUpdatedAt.Default.(func() time.Time)
+	// mappedcontrolhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	mappedcontrolhistory.UpdateDefaultUpdatedAt = mappedcontrolhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// mappedcontrolhistoryDescTags is the schema descriptor for tags field.
+	mappedcontrolhistoryDescTags := mappedcontrolhistoryFields[10].Descriptor()
+	// mappedcontrolhistory.DefaultTags holds the default value on creation for the tags field.
+	mappedcontrolhistory.DefaultTags = mappedcontrolhistoryDescTags.Default.([]string)
+	// mappedcontrolhistoryDescID is the schema descriptor for id field.
+	mappedcontrolhistoryDescID := mappedcontrolhistoryFields[7].Descriptor()
+	// mappedcontrolhistory.DefaultID holds the default value on creation for the id field.
+	mappedcontrolhistory.DefaultID = mappedcontrolhistoryDescID.Default.(func() string)
 	narrativeMixin := schema.Narrative{}.Mixin()
 	narrative.Policy = privacy.NewPolicies(schema.Narrative{})
 	narrative.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -3004,12 +3160,33 @@ func init() {
 	// riskhistory.DefaultID holds the default value on creation for the id field.
 	riskhistory.DefaultID = riskhistoryDescID.Default.(func() string)
 	standardMixin := schema.Standard{}.Mixin()
+	standard.Policy = privacy.NewPolicies(schema.Standard{})
+	standard.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := standard.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	standardMixinHooks0 := standardMixin[0].Hooks()
 	standardMixinHooks1 := standardMixin[1].Hooks()
-	standard.Hooks[0] = standardMixinHooks0[0]
-	standard.Hooks[1] = standardMixinHooks1[0]
+	standardMixinHooks4 := standardMixin[4].Hooks()
+	standardHooks := schema.Standard{}.Hooks()
+
+	standard.Hooks[1] = standardMixinHooks0[0]
+
+	standard.Hooks[2] = standardMixinHooks1[0]
+
+	standard.Hooks[3] = standardMixinHooks4[0]
+
+	standard.Hooks[4] = standardHooks[0]
 	standardMixinInters1 := standardMixin[1].Interceptors()
+	standardMixinInters4 := standardMixin[4].Interceptors()
+	standardInters := schema.Standard{}.Interceptors()
 	standard.Interceptors[0] = standardMixinInters1[0]
+	standard.Interceptors[1] = standardMixinInters4[0]
+	standard.Interceptors[2] = standardInters[0]
 	standardMixinFields0 := standardMixin[0].Fields()
 	_ = standardMixinFields0
 	standardMixinFields2 := standardMixin[2].Fields()
@@ -3036,10 +3213,24 @@ func init() {
 	standardDescName := standardFields[0].Descriptor()
 	// standard.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	standard.NameValidator = standardDescName.Validators[0].(func(string) error)
+	// standardDescIsPublic is the schema descriptor for is_public field.
+	standardDescIsPublic := standardFields[8].Descriptor()
+	// standard.DefaultIsPublic holds the default value on creation for the is_public field.
+	standard.DefaultIsPublic = standardDescIsPublic.Default.(bool)
+	// standardDescFreeToUse is the schema descriptor for free_to_use field.
+	standardDescFreeToUse := standardFields[9].Descriptor()
+	// standard.DefaultFreeToUse holds the default value on creation for the free_to_use field.
+	standard.DefaultFreeToUse = standardDescFreeToUse.Default.(bool)
+	// standardDescSystemOwned is the schema descriptor for system_owned field.
+	standardDescSystemOwned := standardFields[10].Descriptor()
+	// standard.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	standard.DefaultSystemOwned = standardDescSystemOwned.Default.(bool)
 	// standardDescID is the schema descriptor for id field.
 	standardDescID := standardMixinFields2[0].Descriptor()
 	// standard.DefaultID holds the default value on creation for the id field.
 	standard.DefaultID = standardDescID.Default.(func() string)
+	standardhistoryInters := schema.StandardHistory{}.Interceptors()
+	standardhistory.Interceptors[0] = standardhistoryInters[0]
 	standardhistoryFields := schema.StandardHistory{}.Fields()
 	_ = standardhistoryFields
 	// standardhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -3060,6 +3251,18 @@ func init() {
 	standardhistoryDescTags := standardhistoryFields[10].Descriptor()
 	// standardhistory.DefaultTags holds the default value on creation for the tags field.
 	standardhistory.DefaultTags = standardhistoryDescTags.Default.([]string)
+	// standardhistoryDescIsPublic is the schema descriptor for is_public field.
+	standardhistoryDescIsPublic := standardhistoryFields[20].Descriptor()
+	// standardhistory.DefaultIsPublic holds the default value on creation for the is_public field.
+	standardhistory.DefaultIsPublic = standardhistoryDescIsPublic.Default.(bool)
+	// standardhistoryDescFreeToUse is the schema descriptor for free_to_use field.
+	standardhistoryDescFreeToUse := standardhistoryFields[21].Descriptor()
+	// standardhistory.DefaultFreeToUse holds the default value on creation for the free_to_use field.
+	standardhistory.DefaultFreeToUse = standardhistoryDescFreeToUse.Default.(bool)
+	// standardhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	standardhistoryDescSystemOwned := standardhistoryFields[22].Descriptor()
+	// standardhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	standardhistory.DefaultSystemOwned = standardhistoryDescSystemOwned.Default.(bool)
 	// standardhistoryDescID is the schema descriptor for id field.
 	standardhistoryDescID := standardhistoryFields[9].Descriptor()
 	// standardhistory.DefaultID holds the default value on creation for the id field.
@@ -3129,10 +3332,14 @@ func init() {
 	subcontrolDescOwnerID := subcontrolMixinFields4[0].Descriptor()
 	// subcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	subcontrol.OwnerIDValidator = subcontrolDescOwnerID.Validators[0].(func(string) error)
-	// subcontrolDescName is the schema descriptor for name field.
-	subcontrolDescName := subcontrolFields[0].Descriptor()
-	// subcontrol.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	subcontrol.NameValidator = subcontrolDescName.Validators[0].(func(string) error)
+	// subcontrolDescRefCode is the schema descriptor for ref_code field.
+	subcontrolDescRefCode := subcontrolFields[14].Descriptor()
+	// subcontrol.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
+	subcontrol.RefCodeValidator = subcontrolDescRefCode.Validators[0].(func(string) error)
+	// subcontrolDescControlID is the schema descriptor for control_id field.
+	subcontrolDescControlID := subcontrolFields[15].Descriptor()
+	// subcontrol.ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
+	subcontrol.ControlIDValidator = subcontrolDescControlID.Validators[0].(func(string) error)
 	// subcontrolDescID is the schema descriptor for id field.
 	subcontrolDescID := subcontrolMixinFields2[0].Descriptor()
 	// subcontrol.DefaultID holds the default value on creation for the id field.

@@ -100,9 +100,6 @@ func (suite *GraphTestSuite) TestQueryControlObjective() {
 
 			assert.Equal(t, tc.queryID, resp.ControlObjective.ID)
 			assert.NotEmpty(t, resp.ControlObjective.Name)
-
-			require.Len(t, resp.ControlObjective.Programs, 1)
-			assert.NotEmpty(t, resp.ControlObjective.Programs[0].ID)
 		})
 	}
 }
@@ -202,16 +199,12 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 			name: "happy path, all input",
 			request: openlaneclient.CreateControlObjectiveInput{
 				Name:                 "Another ControlObjective",
-				Description:          lo.ToPtr("A description of the ControlObjective"),
+				Category:             lo.ToPtr("Category"),
+				Subcategory:          lo.ToPtr("Subcategory"),
+				DesiredOutcome:       lo.ToPtr("Desired Outcome"),
 				Status:               lo.ToPtr("mitigated"),
 				ControlObjectiveType: lo.ToPtr("operational"),
 				Version:              lo.ToPtr("1.0"),
-				ControlNumber:        lo.ToPtr("1.1"),
-				Family:               lo.ToPtr("family"),
-				Class:                lo.ToPtr("class"),
-				Source:               lo.ToPtr("source"),
-				MappedFrameworks:     lo.ToPtr("mapped frameworks"),
-				Details:              map[string]interface{}{"stuff": "things"},
 				ProgramIDs:           []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
@@ -330,28 +323,28 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 			assert.NotEmpty(t, resp.CreateControlObjective.ControlObjective.DisplayID)
 			assert.Contains(t, resp.CreateControlObjective.ControlObjective.DisplayID, "CLO-")
 
-			// ensure the program is set
-			if len(tc.request.ProgramIDs) > 0 {
-				require.NotEmpty(t, resp.CreateControlObjective.ControlObjective.Programs)
-				require.Len(t, resp.CreateControlObjective.ControlObjective.Programs, len(tc.request.ProgramIDs))
-
-				for i, p := range resp.CreateControlObjective.ControlObjective.Programs {
-					assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
-				}
+			if tc.request.DesiredOutcome != nil {
+				assert.Equal(t, *tc.request.DesiredOutcome, *resp.CreateControlObjective.ControlObjective.DesiredOutcome)
 			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Programs)
-			}
-
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateControlObjective.ControlObjective.Description)
-			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Description)
+				assert.Empty(t, resp.CreateControlObjective.ControlObjective.DesiredOutcome)
 			}
 
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateControlObjective.ControlObjective.Status)
 			} else {
 				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Status)
+			}
+
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.CreateControlObjective.ControlObjective.Category)
+			} else {
+				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Category)
+			}
+
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.CreateControlObjective.ControlObjective.Subcategory)
+			} else {
+				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Subcategory)
 			}
 
 			if tc.request.ControlObjectiveType != nil {
@@ -366,61 +359,10 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Version)
 			}
 
-			if tc.request.ControlNumber != nil {
-				assert.Equal(t, *tc.request.ControlNumber, *resp.CreateControlObjective.ControlObjective.ControlNumber)
-			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.ControlNumber)
-			}
-
-			if tc.request.Family != nil {
-				assert.Equal(t, *tc.request.Family, *resp.CreateControlObjective.ControlObjective.Family)
-			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Family)
-			}
-
-			if tc.request.Class != nil {
-				assert.Equal(t, *tc.request.Class, *resp.CreateControlObjective.ControlObjective.Class)
-			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Class)
-			}
-
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.CreateControlObjective.ControlObjective.Source)
 			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Source)
-			}
-
-			if tc.request.MappedFrameworks != nil {
-				assert.Equal(t, *tc.request.MappedFrameworks, *resp.CreateControlObjective.ControlObjective.MappedFrameworks)
-			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.MappedFrameworks)
-			}
-
-			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.CreateControlObjective.ControlObjective.Details)
-			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Details)
-			}
-
-			if len(tc.request.EditorIDs) > 0 {
-				require.Len(t, resp.CreateControlObjective.ControlObjective.Editors, 1)
-				for _, edge := range resp.CreateControlObjective.ControlObjective.Editors {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
-				}
-			}
-
-			if len(tc.request.BlockedGroupIDs) > 0 {
-				require.Len(t, resp.CreateControlObjective.ControlObjective.BlockedGroups, 1)
-				for _, edge := range resp.CreateControlObjective.ControlObjective.BlockedGroups {
-					assert.Equal(t, blockedGroup.ID, edge.ID)
-				}
-			}
-
-			if len(tc.request.ViewerIDs) > 0 {
-				require.Len(t, resp.CreateControlObjective.ControlObjective.Viewers, 1)
-				for _, edge := range resp.CreateControlObjective.ControlObjective.Viewers {
-					assert.Equal(t, viewerGroup.ID, edge.ID)
-				}
+				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateControlObjective.ControlObjective.Source)
 			}
 
 			// ensure the org owner has access to the control objective that was created by an api token
@@ -462,8 +404,8 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 		{
 			name: "happy path, update field",
 			request: openlaneclient.UpdateControlObjectiveInput{
-				Description:  lo.ToPtr("Updated description"),
-				AddViewerIDs: []string{groupMember.GroupID},
+				DesiredOutcome: lo.ToPtr("Updated outcome"),
+				AddViewerIDs:   []string{groupMember.GroupID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -471,15 +413,14 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateControlObjectiveInput{
-				Status:           lo.ToPtr("mitigated"),
-				Tags:             []string{"tag1", "tag2"},
-				Description:      lo.ToPtr("Updated description"),
-				Version:          lo.ToPtr("1.1"),
-				ControlNumber:    lo.ToPtr("1.2"),
-				Family:           lo.ToPtr("family2"),
-				Class:            lo.ToPtr("class2"),
-				Source:           lo.ToPtr("source2"),
-				MappedFrameworks: lo.ToPtr("mapped frameworks2"),
+				Status:               lo.ToPtr("mitigated"),
+				Tags:                 []string{"tag1", "tag2"},
+				Category:             lo.ToPtr("Category Updated"),
+				Subcategory:          lo.ToPtr("Subcategory Updated"),
+				ControlObjectiveType: lo.ToPtr("operational"),
+				Source:               &enums.ControlSourceUserDefined,
+				DesiredOutcome:       lo.ToPtr("Updated outcome again"),
+				Version:              lo.ToPtr("1.1"),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -496,7 +437,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 		{
 			name: "update not allowed, no permissions",
 			request: openlaneclient.UpdateControlObjectiveInput{
-				Family: lo.ToPtr("family3"),
+				DesiredOutcome: lo.ToPtr("update this"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
@@ -518,8 +459,8 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateControlObjective.ControlObjective.Description)
+			if tc.request.DesiredOutcome != nil {
+				assert.Equal(t, *tc.request.DesiredOutcome, *resp.UpdateControlObjective.ControlObjective.DesiredOutcome)
 			}
 
 			if tc.request.Status != nil {
@@ -534,28 +475,20 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 				assert.Equal(t, *tc.request.Version, *resp.UpdateControlObjective.ControlObjective.Version)
 			}
 
-			if tc.request.ControlNumber != nil {
-				assert.Equal(t, *tc.request.ControlNumber, *resp.UpdateControlObjective.ControlObjective.ControlNumber)
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.UpdateControlObjective.ControlObjective.Category)
 			}
 
-			if tc.request.Family != nil {
-				assert.Equal(t, *tc.request.Family, *resp.UpdateControlObjective.ControlObjective.Family)
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.UpdateControlObjective.ControlObjective.Subcategory)
 			}
 
-			if tc.request.Class != nil {
-				assert.Equal(t, *tc.request.Class, *resp.UpdateControlObjective.ControlObjective.Class)
+			if tc.request.ControlObjectiveType != nil {
+				assert.Equal(t, *tc.request.ControlObjectiveType, *resp.UpdateControlObjective.ControlObjective.ControlObjectiveType)
 			}
 
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.UpdateControlObjective.ControlObjective.Source)
-			}
-
-			if tc.request.MappedFrameworks != nil {
-				assert.Equal(t, *tc.request.MappedFrameworks, *resp.UpdateControlObjective.ControlObjective.MappedFrameworks)
-			}
-
-			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.UpdateControlObjective.ControlObjective.Details)
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {

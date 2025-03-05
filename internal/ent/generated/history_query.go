@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
@@ -24,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
@@ -177,6 +179,52 @@ func (chq *ControlHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Cont
 	return chq.
 		Where(controlhistory.HistoryTimeLTE(time)).
 		Order(controlhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ci *ControlImplementation) History() *ControlImplementationHistoryQuery {
+	historyClient := NewControlImplementationHistoryClient(ci.config)
+	return historyClient.Query().Where(controlimplementationhistory.Ref(ci.ID))
+}
+
+func (cih *ControlImplementationHistory) Next(ctx context.Context) (*ControlImplementationHistory, error) {
+	client := NewControlImplementationHistoryClient(cih.config)
+	return client.Query().
+		Where(
+			controlimplementationhistory.Ref(cih.Ref),
+			controlimplementationhistory.HistoryTimeGT(cih.HistoryTime),
+		).
+		Order(controlimplementationhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (cih *ControlImplementationHistory) Prev(ctx context.Context) (*ControlImplementationHistory, error) {
+	client := NewControlImplementationHistoryClient(cih.config)
+	return client.Query().
+		Where(
+			controlimplementationhistory.Ref(cih.Ref),
+			controlimplementationhistory.HistoryTimeLT(cih.HistoryTime),
+		).
+		Order(controlimplementationhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cihq *ControlImplementationHistoryQuery) Earliest(ctx context.Context) (*ControlImplementationHistory, error) {
+	return cihq.
+		Order(controlimplementationhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (cihq *ControlImplementationHistoryQuery) Latest(ctx context.Context) (*ControlImplementationHistory, error) {
+	return cihq.
+		Order(controlimplementationhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cihq *ControlImplementationHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ControlImplementationHistory, error) {
+	return cihq.
+		Where(controlimplementationhistory.HistoryTimeLTE(time)).
+		Order(controlimplementationhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -775,6 +823,52 @@ func (iphq *InternalPolicyHistoryQuery) AsOf(ctx context.Context, time time.Time
 	return iphq.
 		Where(internalpolicyhistory.HistoryTimeLTE(time)).
 		Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (mc *MappedControl) History() *MappedControlHistoryQuery {
+	historyClient := NewMappedControlHistoryClient(mc.config)
+	return historyClient.Query().Where(mappedcontrolhistory.Ref(mc.ID))
+}
+
+func (mch *MappedControlHistory) Next(ctx context.Context) (*MappedControlHistory, error) {
+	client := NewMappedControlHistoryClient(mch.config)
+	return client.Query().
+		Where(
+			mappedcontrolhistory.Ref(mch.Ref),
+			mappedcontrolhistory.HistoryTimeGT(mch.HistoryTime),
+		).
+		Order(mappedcontrolhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (mch *MappedControlHistory) Prev(ctx context.Context) (*MappedControlHistory, error) {
+	client := NewMappedControlHistoryClient(mch.config)
+	return client.Query().
+		Where(
+			mappedcontrolhistory.Ref(mch.Ref),
+			mappedcontrolhistory.HistoryTimeLT(mch.HistoryTime),
+		).
+		Order(mappedcontrolhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (mchq *MappedControlHistoryQuery) Earliest(ctx context.Context) (*MappedControlHistory, error) {
+	return mchq.
+		Order(mappedcontrolhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (mchq *MappedControlHistoryQuery) Latest(ctx context.Context) (*MappedControlHistory, error) {
+	return mchq.
+		Order(mappedcontrolhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (mchq *MappedControlHistoryQuery) AsOf(ctx context.Context, time time.Time) (*MappedControlHistory, error) {
+	return mchq.
+		Where(mappedcontrolhistory.HistoryTimeLTE(time)).
+		Order(mappedcontrolhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

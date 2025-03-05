@@ -203,8 +203,7 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 			request: openlaneclient.CreateNarrativeInput{
 				Name:        "Another Narrative",
 				Description: lo.ToPtr("A description of the Narrative"),
-				Satisfies:   lo.ToPtr("controls"),
-				Details:     map[string]interface{}{"stuff": "things"},
+				Details:     lo.ToPtr("Details of the Narrative"),
 				ProgramIDs:  []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
@@ -338,12 +337,6 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 				assert.Empty(t, resp.CreateNarrative.Narrative.Description)
 			}
 
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.CreateNarrative.Narrative.Satisfies)
-			} else {
-				assert.Empty(t, resp.CreateNarrative.Narrative.Satisfies)
-			}
-
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.CreateNarrative.Narrative.Details)
 			} else {
@@ -410,6 +403,7 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 		{
 			name: "happy path, update field",
 			request: openlaneclient.UpdateNarrativeInput{
+				Tags:         []string{"tag1", "tag2"},
 				Description:  lo.ToPtr("Updated description"),
 				AddViewerIDs: []string{groupMember.GroupID},
 			},
@@ -419,10 +413,10 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateNarrativeInput{
-				Satisfies: lo.ToPtr("Updated controls"),
-				Tags:      []string{"tag1", "tag2"},
-				Name:      lo.ToPtr("Updated Name"),
-				Details:   map[string]interface{}{"key": "value"},
+				AppendTags:  []string{"tag3", "tag4"},
+				Name:        lo.ToPtr("Updated Name"),
+				Description: lo.ToPtr("Updated Description"),
+				Details:     lo.ToPtr("Updated Details"),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -461,20 +455,23 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 
+			if tc.request.Name != nil {
+				assert.Equal(t, *tc.request.Name, resp.UpdateNarrative.Narrative.Name)
+			}
+
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.UpdateNarrative.Narrative.Description)
 			}
 
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.UpdateNarrative.Narrative.Satisfies)
-			}
-
 			if tc.request.Tags != nil {
+				require.Len(t, resp.UpdateNarrative.Narrative.Tags, 2)
 				assert.ElementsMatch(t, tc.request.Tags, resp.UpdateNarrative.Narrative.Tags)
 			}
 
 			if tc.request.AppendTags != nil {
+				assert.Len(t, resp.UpdateNarrative.Narrative.Tags, 4)
 				assert.Contains(t, resp.UpdateNarrative.Narrative.Tags, tc.request.AppendTags[0])
+				assert.Contains(t, resp.UpdateNarrative.Narrative.Tags, tc.request.AppendTags[1])
 			}
 
 			if tc.request.Details != nil {

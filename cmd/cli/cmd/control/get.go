@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 var getCmd = &cobra.Command{
@@ -20,7 +21,7 @@ var getCmd = &cobra.Command{
 func init() {
 	command.AddCommand(getCmd)
 	getCmd.Flags().StringP("id", "i", "", "control id to query")
-
+	getCmd.Flags().StringP("ref-code", "r", "", "the unique reference code of the control")
 }
 
 // get an existing control in the platform
@@ -35,10 +36,21 @@ func get(ctx context.Context) error {
 	}
 	// filter options
 	id := cmd.Config.String("id")
+	refCode := cmd.Config.String("ref-code")
 
-	// if an control ID is provided, filter on that control, otherwise get all
+	// if an control ID is provided, filter on that control
 	if id != "" {
 		o, err := client.GetControlByID(ctx, id)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
+
+	// if a ref code is provided, filter on that control
+	if refCode != "" {
+		o, err := client.GetControls(ctx, &openlaneclient.ControlWhereInput{
+			RefCode: &refCode,
+		})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

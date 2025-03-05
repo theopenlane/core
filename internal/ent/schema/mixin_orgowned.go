@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -64,6 +65,15 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				}
 			}
 
+			skip, err := o.skipOrgHookForAdmins(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if skip {
+				return next.Mutate(ctx, m)
+			}
+
 			// set owner on create mutation
 			if m.Op() == ent.OpCreate {
 				if err := setOwnerIDField(ctx, m); err != nil {
@@ -95,9 +105,14 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 // orgHookCreateFunc is a HookFunc that sets the owner on create mutations
 var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if m.Op() != ent.OpCreate {
+			skip, err := o.skipOrgHookForAdmins(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if skip {
 				return next.Mutate(ctx, m)
 			}
 
@@ -129,7 +144,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 			return retVal, err
 		})
-	}
+	}, ent.OpCreate)
 }
 
 // setOwnerIDField sets the owner id field on the mutation based on the current organization

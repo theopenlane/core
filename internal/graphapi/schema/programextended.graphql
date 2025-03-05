@@ -15,7 +15,6 @@ input CreateControlWithSubcontrolsInput{
 
 input CreateFullProgramInput{
   program: CreateProgramInput!
-  standard: CreateStandardInput!
   controls: [CreateControlWithSubcontrolsInput!]
   risks: [CreateRiskInput!]
   internalPolicies: [CreateInternalPolicyInput!]

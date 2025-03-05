@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -141,8 +140,8 @@ func (ddu *DocumentDataUpdate) SetNillableTemplateID(s *string) *DocumentDataUpd
 }
 
 // SetData sets the "data" field.
-func (ddu *DocumentDataUpdate) SetData(co customtypes.JSONObject) *DocumentDataUpdate {
-	ddu.mutation.SetData(co)
+func (ddu *DocumentDataUpdate) SetData(m map[string]interface{}) *DocumentDataUpdate {
+	ddu.mutation.SetData(m)
 	return ddu
 }
 
@@ -602,8 +601,8 @@ func (dduo *DocumentDataUpdateOne) SetNillableTemplateID(s *string) *DocumentDat
 }
 
 // SetData sets the "data" field.
-func (dduo *DocumentDataUpdateOne) SetData(co customtypes.JSONObject) *DocumentDataUpdateOne {
-	dduo.mutation.SetData(co)
+func (dduo *DocumentDataUpdateOne) SetData(m map[string]interface{}) *DocumentDataUpdateOne {
+	dduo.mutation.SetData(m)
 	return dduo
 }
 

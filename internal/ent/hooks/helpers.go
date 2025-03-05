@@ -14,7 +14,9 @@ import (
 // GenericMutation is an interface for getting a mutation ID and type
 type GenericMutation interface {
 	ID() (id string, exists bool)
+	IDs(ctx context.Context) ([]string, error)
 	Type() string
+	Op() ent.Op
 	Client() *generated.Client
 }
 

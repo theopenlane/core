@@ -16,6 +16,7 @@ import (
 	sliceutil "github.com/theopenlane/utils/slice"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
@@ -24,6 +25,9 @@ import (
 const (
 	// defaultMaxWorkers is the default number of workers in the pond pool when the pool was not created on server startup
 	defaultMaxWorkers = 10
+
+	// edgesResultsLimit is the max results returned for a edges within a query
+	edgesResultsLimit = 100
 )
 
 // withTransactionalMutation automatically wrap the GraphQL mutations with a database transaction.
@@ -182,6 +186,16 @@ func setOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 	}
 
 	if inputOrgID == nil {
+		// allow system admins to bypass the organization check
+		isAdmin, err := rule.CheckIsSystemAdmin(ctx, nil)
+		if err != nil {
+			return err
+		}
+
+		if isAdmin {
+			return nil
+		}
+
 		// this would happen on a PAT authenticated request because the org id is not set
 		return ErrNoOrganizationID
 	}

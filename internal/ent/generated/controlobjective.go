@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ControlObjective is the model entity for the ControlObjective schema.
@@ -39,33 +40,24 @@ type ControlObjective struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the control objective
 	Name string `json:"name,omitempty"`
-	// description of the control objective
-	Description string `json:"description,omitempty"`
+	// the desired outcome or target of the control objective
+	DesiredOutcome string `json:"desired_outcome,omitempty"`
 	// status of the control objective
 	Status string `json:"status,omitempty"`
-	// type of the control objective
+	// source of the control, e.g. framework, template, custom, etc.
+	Source enums.ControlSource `json:"source,omitempty"`
+	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType string `json:"control_objective_type,omitempty"`
 	// version of the control objective
 	Version string `json:"version,omitempty"`
-	// number of the control objective
-	ControlNumber string `json:"control_number,omitempty"`
-	// family of the control objective
-	Family string `json:"family,omitempty"`
-	// class associated with the control objective
-	Class string `json:"class,omitempty"`
-	// source of the control objective, e.g. framework, template, user-defined, etc.
-	Source string `json:"source,omitempty"`
-	// mapped frameworks
-	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// json data including details of the control objective
-	Details map[string]interface{} `json:"details,omitempty"`
-	// example evidence to provide for the control
-	ExampleEvidence string `json:"example_evidence,omitempty"`
+	// category of the control
+	Category string `json:"category,omitempty"`
+	// subcategory of the control
+	Subcategory string `json:"subcategory,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlObjectiveQuery when eager-loading is set.
-	Edges                      ControlObjectiveEdges `json:"edges"`
-	control_control_objectives *string
-	selectValues               sql.SelectValues
+	Edges        ControlObjectiveEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // ControlObjectiveEdges holds the relations/edges for other nodes in the graph.
@@ -78,45 +70,42 @@ type ControlObjectiveEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
-	// InternalPolicies holds the value of the internal_policies edge.
-	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
-	// Controls holds the value of the controls edge.
-	Controls []*Control `json:"controls,omitempty"`
-	// Procedures holds the value of the procedures edge.
-	Procedures []*Procedure `json:"procedures,omitempty"`
-	// Risks holds the value of the risks edge.
-	Risks []*Risk `json:"risks,omitempty"`
-	// Subcontrols holds the value of the subcontrols edge.
-	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
-	// Standard holds the value of the standard edge.
-	Standard []*Standard `json:"standard,omitempty"`
-	// Narratives holds the value of the narratives edge.
-	Narratives []*Narrative `json:"narratives,omitempty"`
-	// Tasks holds the value of the tasks edge.
-	Tasks []*Task `json:"tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
+	// Procedures holds the value of the procedures edge.
+	Procedures []*Procedure `json:"procedures,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
+	// Narratives holds the value of the narratives edge.
+	Narratives []*Narrative `json:"narratives,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [13]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
 	namedViewers          map[string][]*Group
-	namedInternalPolicies map[string][]*InternalPolicy
-	namedControls         map[string][]*Control
-	namedProcedures       map[string][]*Procedure
-	namedRisks            map[string][]*Risk
-	namedSubcontrols      map[string][]*Subcontrol
-	namedStandard         map[string][]*Standard
-	namedNarratives       map[string][]*Narrative
-	namedTasks            map[string][]*Task
 	namedPrograms         map[string][]*Program
 	namedEvidence         map[string][]*Evidence
+	namedControls         map[string][]*Control
+	namedSubcontrols      map[string][]*Subcontrol
+	namedInternalPolicies map[string][]*InternalPolicy
+	namedProcedures       map[string][]*Procedure
+	namedRisks            map[string][]*Risk
+	namedNarratives       map[string][]*Narrative
+	namedTasks            map[string][]*Task
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -157,82 +146,10 @@ func (e ControlObjectiveEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
-// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[4] {
-		return e.InternalPolicies, nil
-	}
-	return nil, &NotLoadedError{edge: "internal_policies"}
-}
-
-// ControlsOrErr returns the Controls value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[5] {
-		return e.Controls, nil
-	}
-	return nil, &NotLoadedError{edge: "controls"}
-}
-
-// ProceduresOrErr returns the Procedures value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[6] {
-		return e.Procedures, nil
-	}
-	return nil, &NotLoadedError{edge: "procedures"}
-}
-
-// RisksOrErr returns the Risks value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[7] {
-		return e.Risks, nil
-	}
-	return nil, &NotLoadedError{edge: "risks"}
-}
-
-// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[8] {
-		return e.Subcontrols, nil
-	}
-	return nil, &NotLoadedError{edge: "subcontrols"}
-}
-
-// StandardOrErr returns the Standard value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) StandardOrErr() ([]*Standard, error) {
-	if e.loadedTypes[9] {
-		return e.Standard, nil
-	}
-	return nil, &NotLoadedError{edge: "standard"}
-}
-
-// NarrativesOrErr returns the Narratives value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[10] {
-		return e.Narratives, nil
-	}
-	return nil, &NotLoadedError{edge: "narratives"}
-}
-
-// TasksOrErr returns the Tasks value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlObjectiveEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[11] {
-		return e.Tasks, nil
-	}
-	return nil, &NotLoadedError{edge: "tasks"}
-}
-
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[4] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -241,10 +158,73 @@ func (e ControlObjectiveEdges) ProgramsOrErr() ([]*Program, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[5] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
+}
+
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[6] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[7] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[8] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
+// ProceduresOrErr returns the Procedures value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) ProceduresOrErr() ([]*Procedure, error) {
+	if e.loadedTypes[9] {
+		return e.Procedures, nil
+	}
+	return nil, &NotLoadedError{edge: "procedures"}
+}
+
+// RisksOrErr returns the Risks value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) RisksOrErr() ([]*Risk, error) {
+	if e.loadedTypes[10] {
+		return e.Risks, nil
+	}
+	return nil, &NotLoadedError{edge: "risks"}
+}
+
+// NarrativesOrErr returns the Narratives value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) NarrativesOrErr() ([]*Narrative, error) {
+	if e.loadedTypes[11] {
+		return e.Narratives, nil
+	}
+	return nil, &NotLoadedError{edge: "narratives"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[12] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -252,14 +232,12 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlobjective.FieldTags, controlobjective.FieldDetails:
+		case controlobjective.FieldTags:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks, controlobjective.FieldExampleEvidence:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDesiredOutcome, controlobjective.FieldStatus, controlobjective.FieldSource, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldCategory, controlobjective.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case controlobjective.ForeignKeys[0]: // control_control_objectives
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -343,17 +321,23 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.Name = value.String
 			}
-		case controlobjective.FieldDescription:
+		case controlobjective.FieldDesiredOutcome:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
+				return fmt.Errorf("unexpected type %T for field desired_outcome", values[i])
 			} else if value.Valid {
-				co.Description = value.String
+				co.DesiredOutcome = value.String
 			}
 		case controlobjective.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				co.Status = value.String
+			}
+		case controlobjective.FieldSource:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				co.Source = enums.ControlSource(value.String)
 			}
 		case controlobjective.FieldControlObjectiveType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -367,56 +351,17 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.Version = value.String
 			}
-		case controlobjective.FieldControlNumber:
+		case controlobjective.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_number", values[i])
+				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				co.ControlNumber = value.String
+				co.Category = value.String
 			}
-		case controlobjective.FieldFamily:
+		case controlobjective.FieldSubcategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field family", values[i])
+				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
 			} else if value.Valid {
-				co.Family = value.String
-			}
-		case controlobjective.FieldClass:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field class", values[i])
-			} else if value.Valid {
-				co.Class = value.String
-			}
-		case controlobjective.FieldSource:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field source", values[i])
-			} else if value.Valid {
-				co.Source = value.String
-			}
-		case controlobjective.FieldMappedFrameworks:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_frameworks", values[i])
-			} else if value.Valid {
-				co.MappedFrameworks = value.String
-			}
-		case controlobjective.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &co.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
-			}
-		case controlobjective.FieldExampleEvidence:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
-			} else if value.Valid {
-				co.ExampleEvidence = value.String
-			}
-		case controlobjective.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_control_objectives", values[i])
-			} else if value.Valid {
-				co.control_control_objectives = new(string)
-				*co.control_control_objectives = value.String
+				co.Subcategory = value.String
 			}
 		default:
 			co.selectValues.Set(columns[i], values[i])
@@ -451,14 +396,29 @@ func (co *ControlObjective) QueryViewers() *GroupQuery {
 	return NewControlObjectiveClient(co.config).QueryViewers(co)
 }
 
-// QueryInternalPolicies queries the "internal_policies" edge of the ControlObjective entity.
-func (co *ControlObjective) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewControlObjectiveClient(co.config).QueryInternalPolicies(co)
+// QueryPrograms queries the "programs" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryPrograms() *ProgramQuery {
+	return NewControlObjectiveClient(co.config).QueryPrograms(co)
+}
+
+// QueryEvidence queries the "evidence" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryEvidence() *EvidenceQuery {
+	return NewControlObjectiveClient(co.config).QueryEvidence(co)
 }
 
 // QueryControls queries the "controls" edge of the ControlObjective entity.
 func (co *ControlObjective) QueryControls() *ControlQuery {
 	return NewControlObjectiveClient(co.config).QueryControls(co)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the ControlObjective entity.
+func (co *ControlObjective) QuerySubcontrols() *SubcontrolQuery {
+	return NewControlObjectiveClient(co.config).QuerySubcontrols(co)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewControlObjectiveClient(co.config).QueryInternalPolicies(co)
 }
 
 // QueryProcedures queries the "procedures" edge of the ControlObjective entity.
@@ -471,16 +431,6 @@ func (co *ControlObjective) QueryRisks() *RiskQuery {
 	return NewControlObjectiveClient(co.config).QueryRisks(co)
 }
 
-// QuerySubcontrols queries the "subcontrols" edge of the ControlObjective entity.
-func (co *ControlObjective) QuerySubcontrols() *SubcontrolQuery {
-	return NewControlObjectiveClient(co.config).QuerySubcontrols(co)
-}
-
-// QueryStandard queries the "standard" edge of the ControlObjective entity.
-func (co *ControlObjective) QueryStandard() *StandardQuery {
-	return NewControlObjectiveClient(co.config).QueryStandard(co)
-}
-
 // QueryNarratives queries the "narratives" edge of the ControlObjective entity.
 func (co *ControlObjective) QueryNarratives() *NarrativeQuery {
 	return NewControlObjectiveClient(co.config).QueryNarratives(co)
@@ -489,16 +439,6 @@ func (co *ControlObjective) QueryNarratives() *NarrativeQuery {
 // QueryTasks queries the "tasks" edge of the ControlObjective entity.
 func (co *ControlObjective) QueryTasks() *TaskQuery {
 	return NewControlObjectiveClient(co.config).QueryTasks(co)
-}
-
-// QueryPrograms queries the "programs" edge of the ControlObjective entity.
-func (co *ControlObjective) QueryPrograms() *ProgramQuery {
-	return NewControlObjectiveClient(co.config).QueryPrograms(co)
-}
-
-// QueryEvidence queries the "evidence" edge of the ControlObjective entity.
-func (co *ControlObjective) QueryEvidence() *EvidenceQuery {
-	return NewControlObjectiveClient(co.config).QueryEvidence(co)
 }
 
 // Update returns a builder for updating this ControlObjective.
@@ -554,11 +494,14 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(co.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(co.Description)
+	builder.WriteString("desired_outcome=")
+	builder.WriteString(co.DesiredOutcome)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(co.Status)
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(fmt.Sprintf("%v", co.Source))
 	builder.WriteString(", ")
 	builder.WriteString("control_objective_type=")
 	builder.WriteString(co.ControlObjectiveType)
@@ -566,26 +509,11 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(co.Version)
 	builder.WriteString(", ")
-	builder.WriteString("control_number=")
-	builder.WriteString(co.ControlNumber)
+	builder.WriteString("category=")
+	builder.WriteString(co.Category)
 	builder.WriteString(", ")
-	builder.WriteString("family=")
-	builder.WriteString(co.Family)
-	builder.WriteString(", ")
-	builder.WriteString("class=")
-	builder.WriteString(co.Class)
-	builder.WriteString(", ")
-	builder.WriteString("source=")
-	builder.WriteString(co.Source)
-	builder.WriteString(", ")
-	builder.WriteString("mapped_frameworks=")
-	builder.WriteString(co.MappedFrameworks)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", co.Details))
-	builder.WriteString(", ")
-	builder.WriteString("example_evidence=")
-	builder.WriteString(co.ExampleEvidence)
+	builder.WriteString("subcategory=")
+	builder.WriteString(co.Subcategory)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -662,27 +590,51 @@ func (co *ControlObjective) appendNamedViewers(name string, edges ...*Group) {
 	}
 }
 
-// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (co *ControlObjective) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if co.Edges.namedInternalPolicies == nil {
+func (co *ControlObjective) NamedPrograms(name string) ([]*Program, error) {
+	if co.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := co.Edges.namedInternalPolicies[name]
+	nodes, ok := co.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (co *ControlObjective) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if co.Edges.namedInternalPolicies == nil {
-		co.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (co *ControlObjective) appendNamedPrograms(name string, edges ...*Program) {
+	if co.Edges.namedPrograms == nil {
+		co.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		co.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		co.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		co.Edges.namedInternalPolicies[name] = append(co.Edges.namedInternalPolicies[name], edges...)
+		co.Edges.namedPrograms[name] = append(co.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (co *ControlObjective) NamedEvidence(name string) ([]*Evidence, error) {
+	if co.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := co.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (co *ControlObjective) appendNamedEvidence(name string, edges ...*Evidence) {
+	if co.Edges.namedEvidence == nil {
+		co.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		co.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		co.Edges.namedEvidence[name] = append(co.Edges.namedEvidence[name], edges...)
 	}
 }
 
@@ -707,6 +659,54 @@ func (co *ControlObjective) appendNamedControls(name string, edges ...*Control) 
 		co.Edges.namedControls[name] = []*Control{}
 	} else {
 		co.Edges.namedControls[name] = append(co.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (co *ControlObjective) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if co.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := co.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (co *ControlObjective) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if co.Edges.namedSubcontrols == nil {
+		co.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		co.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		co.Edges.namedSubcontrols[name] = append(co.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (co *ControlObjective) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if co.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := co.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (co *ControlObjective) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if co.Edges.namedInternalPolicies == nil {
+		co.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		co.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		co.Edges.namedInternalPolicies[name] = append(co.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
@@ -758,54 +758,6 @@ func (co *ControlObjective) appendNamedRisks(name string, edges ...*Risk) {
 	}
 }
 
-// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (co *ControlObjective) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if co.Edges.namedSubcontrols == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := co.Edges.namedSubcontrols[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (co *ControlObjective) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if co.Edges.namedSubcontrols == nil {
-		co.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
-	}
-	if len(edges) == 0 {
-		co.Edges.namedSubcontrols[name] = []*Subcontrol{}
-	} else {
-		co.Edges.namedSubcontrols[name] = append(co.Edges.namedSubcontrols[name], edges...)
-	}
-}
-
-// NamedStandard returns the Standard named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (co *ControlObjective) NamedStandard(name string) ([]*Standard, error) {
-	if co.Edges.namedStandard == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := co.Edges.namedStandard[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (co *ControlObjective) appendNamedStandard(name string, edges ...*Standard) {
-	if co.Edges.namedStandard == nil {
-		co.Edges.namedStandard = make(map[string][]*Standard)
-	}
-	if len(edges) == 0 {
-		co.Edges.namedStandard[name] = []*Standard{}
-	} else {
-		co.Edges.namedStandard[name] = append(co.Edges.namedStandard[name], edges...)
-	}
-}
-
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (co *ControlObjective) NamedNarratives(name string) ([]*Narrative, error) {
@@ -851,54 +803,6 @@ func (co *ControlObjective) appendNamedTasks(name string, edges ...*Task) {
 		co.Edges.namedTasks[name] = []*Task{}
 	} else {
 		co.Edges.namedTasks[name] = append(co.Edges.namedTasks[name], edges...)
-	}
-}
-
-// NamedPrograms returns the Programs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (co *ControlObjective) NamedPrograms(name string) ([]*Program, error) {
-	if co.Edges.namedPrograms == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := co.Edges.namedPrograms[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (co *ControlObjective) appendNamedPrograms(name string, edges ...*Program) {
-	if co.Edges.namedPrograms == nil {
-		co.Edges.namedPrograms = make(map[string][]*Program)
-	}
-	if len(edges) == 0 {
-		co.Edges.namedPrograms[name] = []*Program{}
-	} else {
-		co.Edges.namedPrograms[name] = append(co.Edges.namedPrograms[name], edges...)
-	}
-}
-
-// NamedEvidence returns the Evidence named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (co *ControlObjective) NamedEvidence(name string) ([]*Evidence, error) {
-	if co.Edges.namedEvidence == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := co.Edges.namedEvidence[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (co *ControlObjective) appendNamedEvidence(name string, edges ...*Evidence) {
-	if co.Edges.namedEvidence == nil {
-		co.Edges.namedEvidence = make(map[string][]*Evidence)
-	}
-	if len(edges) == 0 {
-		co.Edges.namedEvidence[name] = []*Evidence{}
-	} else {
-		co.Edges.namedEvidence[name] = append(co.Edges.namedEvidence[name], edges...)
 	}
 }
 

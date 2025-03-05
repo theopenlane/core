@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -26,22 +25,21 @@ import (
 // ActionPlanQuery is the builder for querying ActionPlan entities.
 type ActionPlanQuery struct {
 	config
-	ctx               *QueryContext
-	order             []actionplan.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.ActionPlan
-	withStandard      *StandardQuery
-	withRisk          *RiskQuery
-	withControl       *ControlQuery
-	withUser          *UserQuery
-	withProgram       *ProgramQuery
-	loadTotal         []func(context.Context, []*ActionPlan) error
-	modifiers         []func(*sql.Selector)
-	withNamedStandard map[string]*StandardQuery
-	withNamedRisk     map[string]*RiskQuery
-	withNamedControl  map[string]*ControlQuery
-	withNamedUser     map[string]*UserQuery
-	withNamedProgram  map[string]*ProgramQuery
+	ctx              *QueryContext
+	order            []actionplan.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.ActionPlan
+	withRisk         *RiskQuery
+	withControl      *ControlQuery
+	withUser         *UserQuery
+	withProgram      *ProgramQuery
+	withFKs          bool
+	loadTotal        []func(context.Context, []*ActionPlan) error
+	modifiers        []func(*sql.Selector)
+	withNamedRisk    map[string]*RiskQuery
+	withNamedControl map[string]*ControlQuery
+	withNamedUser    map[string]*UserQuery
+	withNamedProgram map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -76,31 +74,6 @@ func (apq *ActionPlanQuery) Unique(unique bool) *ActionPlanQuery {
 func (apq *ActionPlanQuery) Order(o ...actionplan.OrderOption) *ActionPlanQuery {
 	apq.order = append(apq.order, o...)
 	return apq
-}
-
-// QueryStandard chains the current query on the "standard" edge.
-func (apq *ActionPlanQuery) QueryStandard() *StandardQuery {
-	query := (&StandardClient{config: apq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := apq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := apq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
-			sqlgraph.To(standard.Table, standard.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.StandardTable, actionplan.StandardPrimaryKey...),
-		)
-		schemaConfig := apq.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardActionPlans
-		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // QueryRisk chains the current query on the "risk" edge.
@@ -390,32 +363,20 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 		return nil
 	}
 	return &ActionPlanQuery{
-		config:       apq.config,
-		ctx:          apq.ctx.Clone(),
-		order:        append([]actionplan.OrderOption{}, apq.order...),
-		inters:       append([]Interceptor{}, apq.inters...),
-		predicates:   append([]predicate.ActionPlan{}, apq.predicates...),
-		withStandard: apq.withStandard.Clone(),
-		withRisk:     apq.withRisk.Clone(),
-		withControl:  apq.withControl.Clone(),
-		withUser:     apq.withUser.Clone(),
-		withProgram:  apq.withProgram.Clone(),
+		config:      apq.config,
+		ctx:         apq.ctx.Clone(),
+		order:       append([]actionplan.OrderOption{}, apq.order...),
+		inters:      append([]Interceptor{}, apq.inters...),
+		predicates:  append([]predicate.ActionPlan{}, apq.predicates...),
+		withRisk:    apq.withRisk.Clone(),
+		withControl: apq.withControl.Clone(),
+		withUser:    apq.withUser.Clone(),
+		withProgram: apq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       apq.sql.Clone(),
 		path:      apq.path,
 		modifiers: append([]func(*sql.Selector){}, apq.modifiers...),
 	}
-}
-
-// WithStandard tells the query-builder to eager-load the nodes that are connected to
-// the "standard" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithStandard(opts ...func(*StandardQuery)) *ActionPlanQuery {
-	query := (&StandardClient{config: apq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	apq.withStandard = query
-	return apq
 }
 
 // WithRisk tells the query-builder to eager-load the nodes that are connected to
@@ -539,15 +500,18 @@ func (apq *ActionPlanQuery) prepareQuery(ctx context.Context) error {
 func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ActionPlan, error) {
 	var (
 		nodes       = []*ActionPlan{}
+		withFKs     = apq.withFKs
 		_spec       = apq.querySpec()
-		loadedTypes = [5]bool{
-			apq.withStandard != nil,
+		loadedTypes = [4]bool{
 			apq.withRisk != nil,
 			apq.withControl != nil,
 			apq.withUser != nil,
 			apq.withProgram != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, actionplan.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ActionPlan).scanValues(nil, columns)
 	}
@@ -570,13 +534,6 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
-	}
-	if query := apq.withStandard; query != nil {
-		if err := apq.loadStandard(ctx, query, nodes,
-			func(n *ActionPlan) { n.Edges.Standard = []*Standard{} },
-			func(n *ActionPlan, e *Standard) { n.Edges.Standard = append(n.Edges.Standard, e) }); err != nil {
-			return nil, err
-		}
 	}
 	if query := apq.withRisk; query != nil {
 		if err := apq.loadRisk(ctx, query, nodes,
@@ -603,13 +560,6 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := apq.loadProgram(ctx, query, nodes,
 			func(n *ActionPlan) { n.Edges.Program = []*Program{} },
 			func(n *ActionPlan, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range apq.withNamedStandard {
-		if err := apq.loadStandard(ctx, query, nodes,
-			func(n *ActionPlan) { n.appendNamedStandard(name) },
-			func(n *ActionPlan, e *Standard) { n.appendNamedStandard(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -649,68 +599,6 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (apq *ActionPlanQuery) loadStandard(ctx context.Context, query *StandardQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Standard)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*ActionPlan)
-	nids := make(map[string]map[*ActionPlan]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(actionplan.StandardTable)
-		joinT.Schema(apq.schemaConfig.StandardActionPlans)
-		s.Join(joinT).On(s.C(standard.FieldID), joinT.C(actionplan.StandardPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(actionplan.StandardPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(actionplan.StandardPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Standard](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "standard" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Risk)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
@@ -1056,20 +944,6 @@ func (apq *ActionPlanQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (apq *ActionPlanQuery) Modify(modifiers ...func(s *sql.Selector)) *ActionPlanSelect {
 	apq.modifiers = append(apq.modifiers, modifiers...)
 	return apq.Select()
-}
-
-// WithNamedStandard tells the query-builder to eager-load the nodes that are connected to the "standard"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithNamedStandard(name string, opts ...func(*StandardQuery)) *ActionPlanQuery {
-	query := (&StandardClient{config: apq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if apq.withNamedStandard == nil {
-		apq.withNamedStandard = make(map[string]*StandardQuery)
-	}
-	apq.withNamedStandard[name] = query
-	return apq
 }
 
 // WithNamedRisk tells the query-builder to eager-load the nodes that are connected to the "risk"

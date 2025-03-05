@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -40,7 +39,7 @@ type DocumentData struct {
 	// the template id of the document
 	TemplateID string `json:"template_id,omitempty"`
 	// the json data of the document
-	Data customtypes.JSONObject `json:"data,omitempty"`
+	Data map[string]interface{} `json:"data,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DocumentDataQuery when eager-loading is set.
 	Edges        DocumentDataEdges `json:"edges"`

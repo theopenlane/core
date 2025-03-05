@@ -1477,11 +1477,11 @@ func HasNarratives() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, NarrativesTable, NarrativesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
+		step.Edge.Schema = schemaConfig.Narrative
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1492,7 +1492,7 @@ func HasNarrativesWith(preds ...predicate.Narrative) predicate.Procedure {
 		step := newNarrativesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
+		step.Edge.Schema = schemaConfig.Narrative
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

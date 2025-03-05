@@ -47,10 +47,8 @@ type NarrativeHistory struct {
 	Name string `json:"name,omitempty"`
 	// the description of the narrative
 	Description string `json:"description,omitempty"`
-	// which controls are satisfied by the narrative
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data for the narrative document
-	Details      map[string]interface{} `json:"details,omitempty"`
+	// text data for the narrative document
+	Details      string `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -59,11 +57,11 @@ func (*NarrativeHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case narrativehistory.FieldTags, narrativehistory.FieldDetails:
+		case narrativehistory.FieldTags:
 			values[i] = new([]byte)
 		case narrativehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldCreatedBy, narrativehistory.FieldUpdatedBy, narrativehistory.FieldDeletedBy, narrativehistory.FieldDisplayID, narrativehistory.FieldOwnerID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldSatisfies:
+		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldCreatedBy, narrativehistory.FieldUpdatedBy, narrativehistory.FieldDeletedBy, narrativehistory.FieldDisplayID, narrativehistory.FieldOwnerID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldDetails:
 			values[i] = new(sql.NullString)
 		case narrativehistory.FieldHistoryTime, narrativehistory.FieldCreatedAt, narrativehistory.FieldUpdatedAt, narrativehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -174,19 +172,11 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nh.Description = value.String
 			}
-		case narrativehistory.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				nh.Satisfies = value.String
-			}
 		case narrativehistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &nh.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				nh.Details = value.String
 			}
 		default:
 			nh.selectValues.Set(columns[i], values[i])
@@ -266,11 +256,8 @@ func (nh *NarrativeHistory) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(nh.Description)
 	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(nh.Satisfies)
-	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", nh.Details))
+	builder.WriteString(nh.Details)
 	builder.WriteByte(')')
 	return builder.String()
 }

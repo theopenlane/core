@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -73,7 +74,7 @@ func (suite *GraphTestSuite) TestQueryControl() {
 			if tc.queryID == "" {
 				resp, err := suite.client.api.CreateControl(testUser1.UserCtx,
 					openlaneclient.CreateControlInput{
-						Name:       "Control",
+						RefCode:    "CC-1.1",
 						ProgramIDs: []string{program.ID},
 					})
 
@@ -99,7 +100,7 @@ func (suite *GraphTestSuite) TestQueryControl() {
 			require.NotEmpty(t, resp.Control)
 
 			assert.Equal(t, tc.queryID, resp.Control.ID)
-			assert.NotEmpty(t, resp.Control.Name)
+			assert.NotEmpty(t, resp.Control.RefCode)
 
 			require.Len(t, resp.Control.Programs, 1)
 			assert.NotEmpty(t, resp.Control.Programs[0].ID)
@@ -189,7 +190,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "happy path, minimal input",
 			request: openlaneclient.CreateControlInput{
-				Name: "Control",
+				RefCode: "A-1",
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -197,19 +198,55 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "happy path, all input",
 			request: openlaneclient.CreateControlInput{
-				Name:             "Another Control",
+				RefCode:          "A-2",
 				Description:      lo.ToPtr("A description of the Control"),
 				Status:           lo.ToPtr("mitigated"),
-				ControlType:      lo.ToPtr("operational"),
-				Version:          lo.ToPtr("1.0.0"),
-				ControlNumber:    lo.ToPtr("1.1"),
-				Family:           lo.ToPtr("AC"),
-				Class:            lo.ToPtr("AC-1"),
-				Source:           lo.ToPtr("NIST framework"),
-				MappedFrameworks: lo.ToPtr("NIST"),
-				Satisfies:        lo.ToPtr("AC-1, AC-2"),
-				Details:          map[string]interface{}{"stuff": "things"},
-				ProgramIDs:       []string{program1.ID, program2.ID}, // multiple programs
+				Tags:             []string{"tag1", "tag2"},
+				ControlType:      &enums.ControlTypeDetective,
+				Category:         lo.ToPtr("Availability"),
+				CategoryID:       lo.ToPtr("A"),
+				Subcategory:      lo.ToPtr("Additional Criteria for Availability"),
+				MappedCategories: []string{"Govern", "Protect"},
+				ControlQuestions: []string{"What is the control question?"},
+				AssessmentObjectives: []*models.AssessmentObjective{
+					{
+						Class:     "class",
+						ID:        "id",
+						Objective: "objective for the control",
+					},
+				},
+				AssessmentMethods: []*models.AssessmentMethod{
+					{
+						ID:     "id",
+						Type:   "Examine",
+						Method: "method of assessment for the control",
+					},
+				},
+				ImplementationGuidance: []*models.ImplementationGuidance{
+					{
+						ReferenceID: "ref-id",
+						Guidance: []string{
+							"guidance 1",
+							"guidance 2",
+						},
+					},
+				},
+				ExampleEvidence: []*models.ExampleEvidence{
+					{
+						DocumentationType: "policy",
+						Description:       "description of the example evidence",
+					},
+				},
+				References: []*models.Reference{
+					{
+						Name: "name of ref",
+						URL:  "https://example.com",
+					},
+				},
+				ControlOwnerID: &viewOnlyUser.ID,
+				DelegateID:     &viewOnlyUser2.ID,
+				Source:         &enums.ControlSourceFramework,
+				ProgramIDs:     []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -217,7 +254,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "add groups",
 			request: openlaneclient.CreateControlInput{
-				Name:            "Test Control CC1.2",
+				RefCode:         "A-3",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
@@ -228,7 +265,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "happy path, using pat",
 			request: openlaneclient.CreateControlInput{
-				Name:    "Control",
+				RefCode: "A-4",
 				OwnerID: &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
@@ -237,7 +274,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "using pat with no owner id",
 			request: openlaneclient.CreateControlInput{
-				Name: "Control",
+				RefCode: "A-4",
 			},
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
@@ -246,7 +283,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "using api token",
 			request: openlaneclient.CreateControlInput{
-				Name: "Control",
+				RefCode: "A-5",
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -254,7 +291,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "user not authorized, not enough permissions",
 			request: openlaneclient.CreateControlInput{
-				Name: "Control",
+				RefCode: "A-6",
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -263,7 +300,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "user authorized, they were added to the program",
 			request: openlaneclient.CreateControlInput{
-				Name:       "Control",
+				RefCode:    "A-7",
 				ProgramIDs: []string{program1.ID},
 			},
 			client: suite.client.api,
@@ -272,7 +309,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "user authorized, user not authorized to one of the programs",
 			request: openlaneclient.CreateControlInput{
-				Name:       "Control",
+				RefCode:    "A-8",
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
 			client:      suite.client.api,
@@ -280,8 +317,10 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name:        "missing required name",
-			request:     openlaneclient.CreateControlInput{},
+			name: "missing required ref code",
+			request: openlaneclient.CreateControlInput{
+				Description: lo.ToPtr("A description of the Control"),
+			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
@@ -289,7 +328,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		{
 			name: "user not authorized, no permissions to one of the programs",
 			request: openlaneclient.CreateControlInput{
-				Name:       "Control",
+				RefCode:    "A-9",
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
 			client:      suite.client.api,
@@ -314,10 +353,13 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 
 			// check required fields
 			require.NotEmpty(t, resp.CreateControl.Control.ID)
-			assert.Equal(t, tc.request.Name, resp.CreateControl.Control.Name)
+			assert.Equal(t, tc.request.RefCode, resp.CreateControl.Control.RefCode)
 
 			assert.NotEmpty(t, resp.CreateControl.Control.DisplayID)
 			assert.Contains(t, resp.CreateControl.Control.DisplayID, "CTL-")
+
+			assert.NotEmpty(t, resp.CreateControl.Control.RefCode)
+			assert.Equal(t, tc.request.RefCode, resp.CreateControl.Control.RefCode)
 
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
@@ -346,55 +388,90 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			if tc.request.ControlType != nil {
 				assert.Equal(t, *tc.request.ControlType, *resp.CreateControl.Control.ControlType)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.ControlType)
-			}
-
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.CreateControl.Control.Version)
-			} else {
-				assert.Empty(t, resp.CreateControl.Control.Version)
-			}
-
-			if tc.request.ControlNumber != nil {
-				assert.Equal(t, *tc.request.ControlNumber, *resp.CreateControl.Control.ControlNumber)
-			} else {
-				assert.Empty(t, resp.CreateControl.Control.ControlNumber)
-			}
-
-			if tc.request.Family != nil {
-				assert.Equal(t, *tc.request.Family, *resp.CreateControl.Control.Family)
-			} else {
-				assert.Empty(t, resp.CreateControl.Control.Family)
-			}
-
-			if tc.request.Class != nil {
-				assert.Equal(t, *tc.request.Class, *resp.CreateControl.Control.Class)
-			} else {
-				assert.Empty(t, resp.CreateControl.Control.Class)
+				assert.Equal(t, enums.ControlTypePreventative, *resp.CreateControl.Control.ControlType) // default value
 			}
 
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.CreateControl.Control.Source)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Source)
+				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateControl.Control.Source)
 			}
 
-			if tc.request.MappedFrameworks != nil {
-				assert.Equal(t, *tc.request.MappedFrameworks, *resp.CreateControl.Control.MappedFrameworks)
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.CreateControl.Control.Category)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.MappedFrameworks)
+				assert.Empty(t, resp.CreateControl.Control.Category)
 			}
 
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.CreateControl.Control.Satisfies)
+			if tc.request.CategoryID != nil {
+				assert.Equal(t, *tc.request.CategoryID, *resp.CreateControl.Control.CategoryID)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Satisfies)
+				assert.Empty(t, resp.CreateControl.Control.CategoryID)
 			}
 
-			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.CreateControl.Control.Details)
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.CreateControl.Control.Subcategory)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Details)
+				assert.Empty(t, resp.CreateControl.Control.Subcategory)
+			}
+
+			if tc.request.MappedCategories != nil {
+				assert.ElementsMatch(t, tc.request.MappedCategories, resp.CreateControl.Control.MappedCategories)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.MappedCategories)
+			}
+
+			if tc.request.ControlQuestions != nil {
+				assert.ElementsMatch(t, tc.request.ControlQuestions, resp.CreateControl.Control.ControlQuestions)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ControlQuestions)
+			}
+
+			if tc.request.AssessmentObjectives != nil {
+				require.Len(t, resp.CreateControl.Control.AssessmentObjectives, len(tc.request.AssessmentObjectives))
+				assert.ElementsMatch(t, tc.request.AssessmentObjectives, resp.CreateControl.Control.AssessmentObjectives)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.AssessmentObjectives)
+			}
+
+			if tc.request.AssessmentMethods != nil {
+				require.Len(t, resp.CreateControl.Control.AssessmentMethods, len(tc.request.AssessmentMethods))
+				assert.ElementsMatch(t, tc.request.AssessmentMethods, resp.CreateControl.Control.AssessmentMethods)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.AssessmentMethods)
+			}
+
+			if tc.request.ImplementationGuidance != nil {
+				require.Len(t, resp.CreateControl.Control.ImplementationGuidance, len(tc.request.ImplementationGuidance))
+				assert.ElementsMatch(t, tc.request.ImplementationGuidance, resp.CreateControl.Control.ImplementationGuidance)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ImplementationGuidance)
+			}
+
+			if tc.request.ExampleEvidence != nil {
+				require.Len(t, resp.CreateControl.Control.ExampleEvidence, len(tc.request.ExampleEvidence))
+				assert.ElementsMatch(t, tc.request.ExampleEvidence, resp.CreateControl.Control.ExampleEvidence)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ExampleEvidence)
+			}
+
+			if tc.request.References != nil {
+				require.Len(t, resp.CreateControl.Control.References, len(tc.request.References))
+				assert.ElementsMatch(t, tc.request.References, resp.CreateControl.Control.References)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.References)
+			}
+
+			if tc.request.ControlOwnerID != nil {
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateControl.Control.ControlOwner.ID)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.ControlOwner)
+			}
+
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, resp.CreateControl.Control.Delegate.ID)
+			} else {
+				assert.Empty(t, resp.CreateControl.Control.Delegate)
 			}
 
 			if len(tc.request.EditorIDs) > 0 {
@@ -471,23 +548,78 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateControlInput{
-				Status:           lo.ToPtr("mitigated"),
-				Tags:             []string{"tag1", "tag2"},
-				Version:          lo.ToPtr("1.0.1"),
-				ControlNumber:    lo.ToPtr("1.2"),
-				Family:           lo.ToPtr("AB"),
-				Class:            lo.ToPtr("AB-2"),
-				Source:           lo.ToPtr("ISO27001"),
-				MappedFrameworks: lo.ToPtr("ISO"),
-				Satisfies:        lo.ToPtr("AB-2, AB-3"),
+				Status:      lo.ToPtr("mitigated"),
+				Tags:        []string{"tag1", "tag2"},
+				ControlType: &enums.ControlTypeDetective,
+				Category:    lo.ToPtr("Availability"),
+				CategoryID:  lo.ToPtr("A"),
+				Subcategory: lo.ToPtr("Additional Criteria for Availability"),
+				AppendReferences: []*models.Reference{
+					{
+						Name: "name of ref",
+						URL:  "https://example.com",
+					},
+				},
+				AppendMappedCategories: []string{"Govern", "Protect"},
+				AppendControlQuestions: []string{"What is the control question?"},
+				AppendAssessmentObjectives: []*models.AssessmentObjective{
+					{
+						Class:     "class",
+						ID:        "id",
+						Objective: "objective for the control",
+					},
+				},
+				AppendAssessmentMethods: []*models.AssessmentMethod{
+					{
+						ID:     "id",
+						Type:   "Examine",
+						Method: "method of assessment for the control",
+					},
+				},
+				AppendImplementationGuidance: []*models.ImplementationGuidance{
+					{
+						ReferenceID: "ref-id",
+						Guidance: []string{
+							"guidance 1",
+							"guidance 2",
+						},
+					},
+				},
+				AppendExampleEvidence: []*models.ExampleEvidence{
+					{
+						DocumentationType: "policy",
+						Description:       "description of the example evidence",
+					},
+				},
+				ControlOwnerID: &viewOnlyUser.ID,
+				DelegateID:     &viewOnlyUser2.ID,
+				Source:         &enums.ControlSourceFramework,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
 		},
 		{
+			name: "happy path, remove some things",
+			request: openlaneclient.UpdateControlInput{
+				ClearReferences:       lo.ToPtr(true),
+				ClearMappedCategories: lo.ToPtr(true),
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "update ref code to empty",
+			request: openlaneclient.UpdateControlInput{
+				RefCode: lo.ToPtr(""),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "value is less than the required length",
+		},
+		{
 			name: "update not allowed, not permissions in same org",
 			request: openlaneclient.UpdateControlInput{
-				MappedFrameworks: lo.ToPtr("SOC"),
+				Status: lo.ToPtr("waiting"),
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -496,7 +628,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "update allowed, user added to one of the programs",
 			request: openlaneclient.UpdateControlInput{
-				MappedFrameworks: lo.ToPtr("SOC2"),
+				Status: lo.ToPtr("waiting"),
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -504,7 +636,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "update not allowed, no permissions",
 			request: openlaneclient.UpdateControlInput{
-				MappedFrameworks: lo.ToPtr("SOC"),
+				Status: lo.ToPtr("waiting"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
@@ -538,36 +670,74 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 				assert.ElementsMatch(t, tc.request.Tags, resp.UpdateControl.Control.Tags)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.UpdateControl.Control.Version)
-			}
-
-			if tc.request.ControlNumber != nil {
-				assert.Equal(t, *tc.request.ControlNumber, *resp.UpdateControl.Control.ControlNumber)
-			}
-
-			if tc.request.Family != nil {
-				assert.Equal(t, *tc.request.Family, *resp.UpdateControl.Control.Family)
-			}
-
-			if tc.request.Class != nil {
-				assert.Equal(t, *tc.request.Class, *resp.UpdateControl.Control.Class)
-			}
-
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.UpdateControl.Control.Source)
 			}
 
-			if tc.request.MappedFrameworks != nil {
-				assert.Equal(t, *tc.request.MappedFrameworks, *resp.UpdateControl.Control.MappedFrameworks)
+			if tc.request.ControlType != nil {
+				assert.Equal(t, *tc.request.ControlType, *resp.UpdateControl.Control.ControlType)
 			}
 
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.UpdateControl.Control.Satisfies)
+			if tc.request.Category != nil {
+				assert.Equal(t, *tc.request.Category, *resp.UpdateControl.Control.Category)
 			}
 
-			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.UpdateControl.Control.Details)
+			if tc.request.CategoryID != nil {
+				assert.Equal(t, *tc.request.CategoryID, *resp.UpdateControl.Control.CategoryID)
+			}
+
+			if tc.request.Subcategory != nil {
+				assert.Equal(t, *tc.request.Subcategory, *resp.UpdateControl.Control.Subcategory)
+			}
+
+			if tc.request.AppendMappedCategories != nil {
+				assert.ElementsMatch(t, tc.request.MappedCategories, resp.UpdateControl.Control.MappedCategories)
+			}
+
+			if tc.request.AppendControlQuestions != nil {
+				assert.ElementsMatch(t, tc.request.ControlQuestions, resp.UpdateControl.Control.ControlQuestions)
+			}
+
+			if tc.request.AppendAssessmentObjectives != nil {
+				assert.ElementsMatch(t, tc.request.AssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
+			}
+
+			if tc.request.AppendAssessmentMethods != nil {
+				assert.ElementsMatch(t, tc.request.AssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
+			}
+
+			if tc.request.AppendImplementationGuidance != nil {
+				assert.ElementsMatch(t, tc.request.ImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
+			}
+
+			if tc.request.AppendExampleEvidence != nil {
+				assert.ElementsMatch(t, tc.request.ExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
+			}
+
+			if tc.request.ControlOwnerID != nil {
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateControl.Control.ControlOwner.ID)
+			}
+
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, resp.UpdateControl.Control.Delegate.ID)
+			}
+
+			if tc.request.AppendReferences != nil {
+				assert.ElementsMatch(t, tc.request.AppendReferences, resp.UpdateControl.Control.References)
+			}
+
+			if tc.request.ClearReferences != nil && *tc.request.ClearReferences {
+				assert.Empty(t, resp.UpdateControl.Control.References)
+			}
+
+			if tc.request.ClearMappedCategories != nil && *tc.request.ClearMappedCategories {
+				assert.Empty(t, resp.UpdateControl.Control.MappedCategories)
+			}
+
+			// ensure the program is set
+			if len(tc.request.AddProgramIDs) > 0 {
+				require.NotEmpty(t, resp.UpdateControl.Control.Programs)
+				require.Len(t, resp.UpdateControl.Control.Programs, len(tc.request.AddProgramIDs))
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {

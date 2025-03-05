@@ -6,6 +6,12 @@
   relation: parent
   object: control:control-1
 - user: user:ulid-of-member
+  relation: editor
+  object: standard:standard-parent-control-1
+- user: standard:standard-parent-control-1
+  relation: parent
+  object: control:control-standard-1
+- user: user:ulid-of-member
   relation: member
   object: program:program-1
 - user: group:group-control-1-editor#member

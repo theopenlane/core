@@ -57,8 +57,10 @@ type InternalPolicy struct {
 	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
-	Edges        InternalPolicyEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                        InternalPolicyEdges `json:"edges"`
+	control_internal_policies    *string
+	subcontrol_internal_policies *string
+	selectValues                 sql.SelectValues
 }
 
 // InternalPolicyEdges holds the relations/edges for other nodes in the graph.
@@ -191,6 +193,10 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
+		case internalpolicy.ForeignKeys[0]: // control_internal_policies
+			values[i] = new(sql.NullString)
+		case internalpolicy.ForeignKeys[1]: // subcontrol_internal_policies
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -323,6 +329,20 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &ip.Details); err != nil {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
+			}
+		case internalpolicy.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_internal_policies", values[i])
+			} else if value.Valid {
+				ip.control_internal_policies = new(string)
+				*ip.control_internal_policies = value.String
+			}
+		case internalpolicy.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_internal_policies", values[i])
+			} else if value.Valid {
+				ip.subcontrol_internal_policies = new(string)
+				*ip.subcontrol_internal_policies = value.String
 			}
 		default:
 			ip.selectValues.Set(columns[i], values[i])

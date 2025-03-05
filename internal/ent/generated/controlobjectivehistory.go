@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -45,29 +46,21 @@ type ControlObjectiveHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the control objective
 	Name string `json:"name,omitempty"`
-	// description of the control objective
-	Description string `json:"description,omitempty"`
+	// the desired outcome or target of the control objective
+	DesiredOutcome string `json:"desired_outcome,omitempty"`
 	// status of the control objective
 	Status string `json:"status,omitempty"`
-	// type of the control objective
+	// source of the control, e.g. framework, template, custom, etc.
+	Source enums.ControlSource `json:"source,omitempty"`
+	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType string `json:"control_objective_type,omitempty"`
 	// version of the control objective
 	Version string `json:"version,omitempty"`
-	// number of the control objective
-	ControlNumber string `json:"control_number,omitempty"`
-	// family of the control objective
-	Family string `json:"family,omitempty"`
-	// class associated with the control objective
-	Class string `json:"class,omitempty"`
-	// source of the control objective, e.g. framework, template, user-defined, etc.
-	Source string `json:"source,omitempty"`
-	// mapped frameworks
-	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// json data including details of the control objective
-	Details map[string]interface{} `json:"details,omitempty"`
-	// example evidence to provide for the control
-	ExampleEvidence string `json:"example_evidence,omitempty"`
-	selectValues    sql.SelectValues
+	// category of the control
+	Category string `json:"category,omitempty"`
+	// subcategory of the control
+	Subcategory  string `json:"subcategory,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -75,11 +68,11 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlobjectivehistory.FieldTags, controlobjectivehistory.FieldDetails:
+		case controlobjectivehistory.FieldTags:
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks, controlobjectivehistory.FieldExampleEvidence:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -184,17 +177,23 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.Name = value.String
 			}
-		case controlobjectivehistory.FieldDescription:
+		case controlobjectivehistory.FieldDesiredOutcome:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
+				return fmt.Errorf("unexpected type %T for field desired_outcome", values[i])
 			} else if value.Valid {
-				coh.Description = value.String
+				coh.DesiredOutcome = value.String
 			}
 		case controlobjectivehistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				coh.Status = value.String
+			}
+		case controlobjectivehistory.FieldSource:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				coh.Source = enums.ControlSource(value.String)
 			}
 		case controlobjectivehistory.FieldControlObjectiveType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -208,49 +207,17 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.Version = value.String
 			}
-		case controlobjectivehistory.FieldControlNumber:
+		case controlobjectivehistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_number", values[i])
+				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				coh.ControlNumber = value.String
+				coh.Category = value.String
 			}
-		case controlobjectivehistory.FieldFamily:
+		case controlobjectivehistory.FieldSubcategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field family", values[i])
+				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
 			} else if value.Valid {
-				coh.Family = value.String
-			}
-		case controlobjectivehistory.FieldClass:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field class", values[i])
-			} else if value.Valid {
-				coh.Class = value.String
-			}
-		case controlobjectivehistory.FieldSource:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field source", values[i])
-			} else if value.Valid {
-				coh.Source = value.String
-			}
-		case controlobjectivehistory.FieldMappedFrameworks:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_frameworks", values[i])
-			} else if value.Valid {
-				coh.MappedFrameworks = value.String
-			}
-		case controlobjectivehistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &coh.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
-			}
-		case controlobjectivehistory.FieldExampleEvidence:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
-			} else if value.Valid {
-				coh.ExampleEvidence = value.String
+				coh.Subcategory = value.String
 			}
 		default:
 			coh.selectValues.Set(columns[i], values[i])
@@ -327,11 +294,14 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(coh.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(coh.Description)
+	builder.WriteString("desired_outcome=")
+	builder.WriteString(coh.DesiredOutcome)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(coh.Status)
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(fmt.Sprintf("%v", coh.Source))
 	builder.WriteString(", ")
 	builder.WriteString("control_objective_type=")
 	builder.WriteString(coh.ControlObjectiveType)
@@ -339,26 +309,11 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(coh.Version)
 	builder.WriteString(", ")
-	builder.WriteString("control_number=")
-	builder.WriteString(coh.ControlNumber)
+	builder.WriteString("category=")
+	builder.WriteString(coh.Category)
 	builder.WriteString(", ")
-	builder.WriteString("family=")
-	builder.WriteString(coh.Family)
-	builder.WriteString(", ")
-	builder.WriteString("class=")
-	builder.WriteString(coh.Class)
-	builder.WriteString(", ")
-	builder.WriteString("source=")
-	builder.WriteString(coh.Source)
-	builder.WriteString(", ")
-	builder.WriteString("mapped_frameworks=")
-	builder.WriteString(coh.MappedFrameworks)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", coh.Details))
-	builder.WriteString(", ")
-	builder.WriteString("example_evidence=")
-	builder.WriteString(coh.ExampleEvidence)
+	builder.WriteString("subcategory=")
+	builder.WriteString(coh.Subcategory)
 	builder.WriteByte(')')
 	return builder.String()
 }

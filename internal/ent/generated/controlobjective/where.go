@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -112,9 +113,9 @@ func Name(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldName, v))
 }
 
-// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
-func Description(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldDescription, v))
+// DesiredOutcome applies equality check predicate on the "desired_outcome" field. It's identical to DesiredOutcomeEQ.
+func DesiredOutcome(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldDesiredOutcome, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
@@ -132,34 +133,14 @@ func Version(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldVersion, v))
 }
 
-// ControlNumber applies equality check predicate on the "control_number" field. It's identical to ControlNumberEQ.
-func ControlNumber(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldControlNumber, v))
+// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
+func Category(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldCategory, v))
 }
 
-// Family applies equality check predicate on the "family" field. It's identical to FamilyEQ.
-func Family(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldFamily, v))
-}
-
-// Class applies equality check predicate on the "class" field. It's identical to ClassEQ.
-func Class(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldClass, v))
-}
-
-// Source applies equality check predicate on the "source" field. It's identical to SourceEQ.
-func Source(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldSource, v))
-}
-
-// MappedFrameworks applies equality check predicate on the "mapped_frameworks" field. It's identical to MappedFrameworksEQ.
-func MappedFrameworks(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldMappedFrameworks, v))
-}
-
-// ExampleEvidence applies equality check predicate on the "example_evidence" field. It's identical to ExampleEvidenceEQ.
-func ExampleEvidence(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldExampleEvidence, v))
+// Subcategory applies equality check predicate on the "subcategory" field. It's identical to SubcategoryEQ.
+func Subcategory(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldSubcategory, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -752,79 +733,79 @@ func NameContainsFold(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldContainsFold(FieldName, v))
 }
 
-// DescriptionEQ applies the EQ predicate on the "description" field.
-func DescriptionEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldDescription, v))
+// DesiredOutcomeEQ applies the EQ predicate on the "desired_outcome" field.
+func DesiredOutcomeEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldDesiredOutcome, v))
 }
 
-// DescriptionNEQ applies the NEQ predicate on the "description" field.
-func DescriptionNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldDescription, v))
+// DesiredOutcomeNEQ applies the NEQ predicate on the "desired_outcome" field.
+func DesiredOutcomeNEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNEQ(FieldDesiredOutcome, v))
 }
 
-// DescriptionIn applies the In predicate on the "description" field.
-func DescriptionIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldDescription, vs...))
+// DesiredOutcomeIn applies the In predicate on the "desired_outcome" field.
+func DesiredOutcomeIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIn(FieldDesiredOutcome, vs...))
 }
 
-// DescriptionNotIn applies the NotIn predicate on the "description" field.
-func DescriptionNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldDescription, vs...))
+// DesiredOutcomeNotIn applies the NotIn predicate on the "desired_outcome" field.
+func DesiredOutcomeNotIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotIn(FieldDesiredOutcome, vs...))
 }
 
-// DescriptionGT applies the GT predicate on the "description" field.
-func DescriptionGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldDescription, v))
+// DesiredOutcomeGT applies the GT predicate on the "desired_outcome" field.
+func DesiredOutcomeGT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGT(FieldDesiredOutcome, v))
 }
 
-// DescriptionGTE applies the GTE predicate on the "description" field.
-func DescriptionGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldDescription, v))
+// DesiredOutcomeGTE applies the GTE predicate on the "desired_outcome" field.
+func DesiredOutcomeGTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGTE(FieldDesiredOutcome, v))
 }
 
-// DescriptionLT applies the LT predicate on the "description" field.
-func DescriptionLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldDescription, v))
+// DesiredOutcomeLT applies the LT predicate on the "desired_outcome" field.
+func DesiredOutcomeLT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLT(FieldDesiredOutcome, v))
 }
 
-// DescriptionLTE applies the LTE predicate on the "description" field.
-func DescriptionLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldDescription, v))
+// DesiredOutcomeLTE applies the LTE predicate on the "desired_outcome" field.
+func DesiredOutcomeLTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLTE(FieldDesiredOutcome, v))
 }
 
-// DescriptionContains applies the Contains predicate on the "description" field.
-func DescriptionContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldDescription, v))
+// DesiredOutcomeContains applies the Contains predicate on the "desired_outcome" field.
+func DesiredOutcomeContains(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContains(FieldDesiredOutcome, v))
 }
 
-// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
-func DescriptionHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldDescription, v))
+// DesiredOutcomeHasPrefix applies the HasPrefix predicate on the "desired_outcome" field.
+func DesiredOutcomeHasPrefix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasPrefix(FieldDesiredOutcome, v))
 }
 
-// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
-func DescriptionHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldDescription, v))
+// DesiredOutcomeHasSuffix applies the HasSuffix predicate on the "desired_outcome" field.
+func DesiredOutcomeHasSuffix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasSuffix(FieldDesiredOutcome, v))
 }
 
-// DescriptionIsNil applies the IsNil predicate on the "description" field.
-func DescriptionIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldDescription))
+// DesiredOutcomeIsNil applies the IsNil predicate on the "desired_outcome" field.
+func DesiredOutcomeIsNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIsNull(FieldDesiredOutcome))
 }
 
-// DescriptionNotNil applies the NotNil predicate on the "description" field.
-func DescriptionNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldDescription))
+// DesiredOutcomeNotNil applies the NotNil predicate on the "desired_outcome" field.
+func DesiredOutcomeNotNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotNull(FieldDesiredOutcome))
 }
 
-// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
-func DescriptionEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldDescription, v))
+// DesiredOutcomeEqualFold applies the EqualFold predicate on the "desired_outcome" field.
+func DesiredOutcomeEqualFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEqualFold(FieldDesiredOutcome, v))
 }
 
-// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
-func DescriptionContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldDescription, v))
+// DesiredOutcomeContainsFold applies the ContainsFold predicate on the "desired_outcome" field.
+func DesiredOutcomeContainsFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContainsFold(FieldDesiredOutcome, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
@@ -900,6 +881,46 @@ func StatusEqualFold(v string) predicate.ControlObjective {
 // StatusContainsFold applies the ContainsFold predicate on the "status" field.
 func StatusContainsFold(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// SourceEQ applies the EQ predicate on the "source" field.
+func SourceEQ(v enums.ControlSource) predicate.ControlObjective {
+	vc := v
+	return predicate.ControlObjective(sql.FieldEQ(FieldSource, vc))
+}
+
+// SourceNEQ applies the NEQ predicate on the "source" field.
+func SourceNEQ(v enums.ControlSource) predicate.ControlObjective {
+	vc := v
+	return predicate.ControlObjective(sql.FieldNEQ(FieldSource, vc))
+}
+
+// SourceIn applies the In predicate on the "source" field.
+func SourceIn(vs ...enums.ControlSource) predicate.ControlObjective {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlObjective(sql.FieldIn(FieldSource, v...))
+}
+
+// SourceNotIn applies the NotIn predicate on the "source" field.
+func SourceNotIn(vs ...enums.ControlSource) predicate.ControlObjective {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlObjective(sql.FieldNotIn(FieldSource, v...))
+}
+
+// SourceIsNil applies the IsNil predicate on the "source" field.
+func SourceIsNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIsNull(FieldSource))
+}
+
+// SourceNotNil applies the NotNil predicate on the "source" field.
+func SourceNotNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotNull(FieldSource))
 }
 
 // ControlObjectiveTypeEQ applies the EQ predicate on the "control_objective_type" field.
@@ -1052,464 +1073,154 @@ func VersionContainsFold(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldContainsFold(FieldVersion, v))
 }
 
-// ControlNumberEQ applies the EQ predicate on the "control_number" field.
-func ControlNumberEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldControlNumber, v))
+// CategoryEQ applies the EQ predicate on the "category" field.
+func CategoryEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldCategory, v))
 }
 
-// ControlNumberNEQ applies the NEQ predicate on the "control_number" field.
-func ControlNumberNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldControlNumber, v))
+// CategoryNEQ applies the NEQ predicate on the "category" field.
+func CategoryNEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNEQ(FieldCategory, v))
 }
 
-// ControlNumberIn applies the In predicate on the "control_number" field.
-func ControlNumberIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldControlNumber, vs...))
+// CategoryIn applies the In predicate on the "category" field.
+func CategoryIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIn(FieldCategory, vs...))
 }
 
-// ControlNumberNotIn applies the NotIn predicate on the "control_number" field.
-func ControlNumberNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldControlNumber, vs...))
+// CategoryNotIn applies the NotIn predicate on the "category" field.
+func CategoryNotIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotIn(FieldCategory, vs...))
 }
 
-// ControlNumberGT applies the GT predicate on the "control_number" field.
-func ControlNumberGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldControlNumber, v))
+// CategoryGT applies the GT predicate on the "category" field.
+func CategoryGT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGT(FieldCategory, v))
 }
 
-// ControlNumberGTE applies the GTE predicate on the "control_number" field.
-func ControlNumberGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldControlNumber, v))
+// CategoryGTE applies the GTE predicate on the "category" field.
+func CategoryGTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGTE(FieldCategory, v))
 }
 
-// ControlNumberLT applies the LT predicate on the "control_number" field.
-func ControlNumberLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldControlNumber, v))
+// CategoryLT applies the LT predicate on the "category" field.
+func CategoryLT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLT(FieldCategory, v))
 }
 
-// ControlNumberLTE applies the LTE predicate on the "control_number" field.
-func ControlNumberLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldControlNumber, v))
+// CategoryLTE applies the LTE predicate on the "category" field.
+func CategoryLTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLTE(FieldCategory, v))
 }
 
-// ControlNumberContains applies the Contains predicate on the "control_number" field.
-func ControlNumberContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldControlNumber, v))
+// CategoryContains applies the Contains predicate on the "category" field.
+func CategoryContains(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContains(FieldCategory, v))
 }
 
-// ControlNumberHasPrefix applies the HasPrefix predicate on the "control_number" field.
-func ControlNumberHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldControlNumber, v))
+// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
+func CategoryHasPrefix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasPrefix(FieldCategory, v))
 }
 
-// ControlNumberHasSuffix applies the HasSuffix predicate on the "control_number" field.
-func ControlNumberHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldControlNumber, v))
+// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
+func CategoryHasSuffix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasSuffix(FieldCategory, v))
 }
 
-// ControlNumberIsNil applies the IsNil predicate on the "control_number" field.
-func ControlNumberIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldControlNumber))
+// CategoryIsNil applies the IsNil predicate on the "category" field.
+func CategoryIsNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIsNull(FieldCategory))
 }
 
-// ControlNumberNotNil applies the NotNil predicate on the "control_number" field.
-func ControlNumberNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldControlNumber))
+// CategoryNotNil applies the NotNil predicate on the "category" field.
+func CategoryNotNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotNull(FieldCategory))
 }
 
-// ControlNumberEqualFold applies the EqualFold predicate on the "control_number" field.
-func ControlNumberEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldControlNumber, v))
+// CategoryEqualFold applies the EqualFold predicate on the "category" field.
+func CategoryEqualFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEqualFold(FieldCategory, v))
 }
 
-// ControlNumberContainsFold applies the ContainsFold predicate on the "control_number" field.
-func ControlNumberContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldControlNumber, v))
+// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
+func CategoryContainsFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContainsFold(FieldCategory, v))
 }
 
-// FamilyEQ applies the EQ predicate on the "family" field.
-func FamilyEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldFamily, v))
+// SubcategoryEQ applies the EQ predicate on the "subcategory" field.
+func SubcategoryEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldSubcategory, v))
 }
 
-// FamilyNEQ applies the NEQ predicate on the "family" field.
-func FamilyNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldFamily, v))
+// SubcategoryNEQ applies the NEQ predicate on the "subcategory" field.
+func SubcategoryNEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNEQ(FieldSubcategory, v))
 }
 
-// FamilyIn applies the In predicate on the "family" field.
-func FamilyIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldFamily, vs...))
+// SubcategoryIn applies the In predicate on the "subcategory" field.
+func SubcategoryIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIn(FieldSubcategory, vs...))
 }
 
-// FamilyNotIn applies the NotIn predicate on the "family" field.
-func FamilyNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldFamily, vs...))
+// SubcategoryNotIn applies the NotIn predicate on the "subcategory" field.
+func SubcategoryNotIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotIn(FieldSubcategory, vs...))
 }
 
-// FamilyGT applies the GT predicate on the "family" field.
-func FamilyGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldFamily, v))
+// SubcategoryGT applies the GT predicate on the "subcategory" field.
+func SubcategoryGT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGT(FieldSubcategory, v))
 }
 
-// FamilyGTE applies the GTE predicate on the "family" field.
-func FamilyGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldFamily, v))
+// SubcategoryGTE applies the GTE predicate on the "subcategory" field.
+func SubcategoryGTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGTE(FieldSubcategory, v))
 }
 
-// FamilyLT applies the LT predicate on the "family" field.
-func FamilyLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldFamily, v))
+// SubcategoryLT applies the LT predicate on the "subcategory" field.
+func SubcategoryLT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLT(FieldSubcategory, v))
 }
 
-// FamilyLTE applies the LTE predicate on the "family" field.
-func FamilyLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldFamily, v))
+// SubcategoryLTE applies the LTE predicate on the "subcategory" field.
+func SubcategoryLTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLTE(FieldSubcategory, v))
 }
 
-// FamilyContains applies the Contains predicate on the "family" field.
-func FamilyContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldFamily, v))
+// SubcategoryContains applies the Contains predicate on the "subcategory" field.
+func SubcategoryContains(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContains(FieldSubcategory, v))
 }
 
-// FamilyHasPrefix applies the HasPrefix predicate on the "family" field.
-func FamilyHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldFamily, v))
+// SubcategoryHasPrefix applies the HasPrefix predicate on the "subcategory" field.
+func SubcategoryHasPrefix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasPrefix(FieldSubcategory, v))
 }
 
-// FamilyHasSuffix applies the HasSuffix predicate on the "family" field.
-func FamilyHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldFamily, v))
+// SubcategoryHasSuffix applies the HasSuffix predicate on the "subcategory" field.
+func SubcategoryHasSuffix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasSuffix(FieldSubcategory, v))
 }
 
-// FamilyIsNil applies the IsNil predicate on the "family" field.
-func FamilyIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldFamily))
+// SubcategoryIsNil applies the IsNil predicate on the "subcategory" field.
+func SubcategoryIsNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIsNull(FieldSubcategory))
 }
 
-// FamilyNotNil applies the NotNil predicate on the "family" field.
-func FamilyNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldFamily))
+// SubcategoryNotNil applies the NotNil predicate on the "subcategory" field.
+func SubcategoryNotNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotNull(FieldSubcategory))
 }
 
-// FamilyEqualFold applies the EqualFold predicate on the "family" field.
-func FamilyEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldFamily, v))
+// SubcategoryEqualFold applies the EqualFold predicate on the "subcategory" field.
+func SubcategoryEqualFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEqualFold(FieldSubcategory, v))
 }
 
-// FamilyContainsFold applies the ContainsFold predicate on the "family" field.
-func FamilyContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldFamily, v))
-}
-
-// ClassEQ applies the EQ predicate on the "class" field.
-func ClassEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldClass, v))
-}
-
-// ClassNEQ applies the NEQ predicate on the "class" field.
-func ClassNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldClass, v))
-}
-
-// ClassIn applies the In predicate on the "class" field.
-func ClassIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldClass, vs...))
-}
-
-// ClassNotIn applies the NotIn predicate on the "class" field.
-func ClassNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldClass, vs...))
-}
-
-// ClassGT applies the GT predicate on the "class" field.
-func ClassGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldClass, v))
-}
-
-// ClassGTE applies the GTE predicate on the "class" field.
-func ClassGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldClass, v))
-}
-
-// ClassLT applies the LT predicate on the "class" field.
-func ClassLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldClass, v))
-}
-
-// ClassLTE applies the LTE predicate on the "class" field.
-func ClassLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldClass, v))
-}
-
-// ClassContains applies the Contains predicate on the "class" field.
-func ClassContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldClass, v))
-}
-
-// ClassHasPrefix applies the HasPrefix predicate on the "class" field.
-func ClassHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldClass, v))
-}
-
-// ClassHasSuffix applies the HasSuffix predicate on the "class" field.
-func ClassHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldClass, v))
-}
-
-// ClassIsNil applies the IsNil predicate on the "class" field.
-func ClassIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldClass))
-}
-
-// ClassNotNil applies the NotNil predicate on the "class" field.
-func ClassNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldClass))
-}
-
-// ClassEqualFold applies the EqualFold predicate on the "class" field.
-func ClassEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldClass, v))
-}
-
-// ClassContainsFold applies the ContainsFold predicate on the "class" field.
-func ClassContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldClass, v))
-}
-
-// SourceEQ applies the EQ predicate on the "source" field.
-func SourceEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldSource, v))
-}
-
-// SourceNEQ applies the NEQ predicate on the "source" field.
-func SourceNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldSource, v))
-}
-
-// SourceIn applies the In predicate on the "source" field.
-func SourceIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldSource, vs...))
-}
-
-// SourceNotIn applies the NotIn predicate on the "source" field.
-func SourceNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldSource, vs...))
-}
-
-// SourceGT applies the GT predicate on the "source" field.
-func SourceGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldSource, v))
-}
-
-// SourceGTE applies the GTE predicate on the "source" field.
-func SourceGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldSource, v))
-}
-
-// SourceLT applies the LT predicate on the "source" field.
-func SourceLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldSource, v))
-}
-
-// SourceLTE applies the LTE predicate on the "source" field.
-func SourceLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldSource, v))
-}
-
-// SourceContains applies the Contains predicate on the "source" field.
-func SourceContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldSource, v))
-}
-
-// SourceHasPrefix applies the HasPrefix predicate on the "source" field.
-func SourceHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldSource, v))
-}
-
-// SourceHasSuffix applies the HasSuffix predicate on the "source" field.
-func SourceHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldSource, v))
-}
-
-// SourceIsNil applies the IsNil predicate on the "source" field.
-func SourceIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldSource))
-}
-
-// SourceNotNil applies the NotNil predicate on the "source" field.
-func SourceNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldSource))
-}
-
-// SourceEqualFold applies the EqualFold predicate on the "source" field.
-func SourceEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldSource, v))
-}
-
-// SourceContainsFold applies the ContainsFold predicate on the "source" field.
-func SourceContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldSource, v))
-}
-
-// MappedFrameworksEQ applies the EQ predicate on the "mapped_frameworks" field.
-func MappedFrameworksEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksNEQ applies the NEQ predicate on the "mapped_frameworks" field.
-func MappedFrameworksNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksIn applies the In predicate on the "mapped_frameworks" field.
-func MappedFrameworksIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldMappedFrameworks, vs...))
-}
-
-// MappedFrameworksNotIn applies the NotIn predicate on the "mapped_frameworks" field.
-func MappedFrameworksNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldMappedFrameworks, vs...))
-}
-
-// MappedFrameworksGT applies the GT predicate on the "mapped_frameworks" field.
-func MappedFrameworksGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksGTE applies the GTE predicate on the "mapped_frameworks" field.
-func MappedFrameworksGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksLT applies the LT predicate on the "mapped_frameworks" field.
-func MappedFrameworksLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksLTE applies the LTE predicate on the "mapped_frameworks" field.
-func MappedFrameworksLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksContains applies the Contains predicate on the "mapped_frameworks" field.
-func MappedFrameworksContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksHasPrefix applies the HasPrefix predicate on the "mapped_frameworks" field.
-func MappedFrameworksHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksHasSuffix applies the HasSuffix predicate on the "mapped_frameworks" field.
-func MappedFrameworksHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksIsNil applies the IsNil predicate on the "mapped_frameworks" field.
-func MappedFrameworksIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldMappedFrameworks))
-}
-
-// MappedFrameworksNotNil applies the NotNil predicate on the "mapped_frameworks" field.
-func MappedFrameworksNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldMappedFrameworks))
-}
-
-// MappedFrameworksEqualFold applies the EqualFold predicate on the "mapped_frameworks" field.
-func MappedFrameworksEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldMappedFrameworks, v))
-}
-
-// MappedFrameworksContainsFold applies the ContainsFold predicate on the "mapped_frameworks" field.
-func MappedFrameworksContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldMappedFrameworks, v))
-}
-
-// DetailsIsNil applies the IsNil predicate on the "details" field.
-func DetailsIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldDetails))
-}
-
-// DetailsNotNil applies the NotNil predicate on the "details" field.
-func DetailsNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldDetails))
-}
-
-// ExampleEvidenceEQ applies the EQ predicate on the "example_evidence" field.
-func ExampleEvidenceEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceNEQ applies the NEQ predicate on the "example_evidence" field.
-func ExampleEvidenceNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceIn applies the In predicate on the "example_evidence" field.
-func ExampleEvidenceIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldExampleEvidence, vs...))
-}
-
-// ExampleEvidenceNotIn applies the NotIn predicate on the "example_evidence" field.
-func ExampleEvidenceNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldExampleEvidence, vs...))
-}
-
-// ExampleEvidenceGT applies the GT predicate on the "example_evidence" field.
-func ExampleEvidenceGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceGTE applies the GTE predicate on the "example_evidence" field.
-func ExampleEvidenceGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceLT applies the LT predicate on the "example_evidence" field.
-func ExampleEvidenceLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceLTE applies the LTE predicate on the "example_evidence" field.
-func ExampleEvidenceLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceContains applies the Contains predicate on the "example_evidence" field.
-func ExampleEvidenceContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceHasPrefix applies the HasPrefix predicate on the "example_evidence" field.
-func ExampleEvidenceHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceHasSuffix applies the HasSuffix predicate on the "example_evidence" field.
-func ExampleEvidenceHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceIsNil applies the IsNil predicate on the "example_evidence" field.
-func ExampleEvidenceIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldExampleEvidence))
-}
-
-// ExampleEvidenceNotNil applies the NotNil predicate on the "example_evidence" field.
-func ExampleEvidenceNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldExampleEvidence))
-}
-
-// ExampleEvidenceEqualFold applies the EqualFold predicate on the "example_evidence" field.
-func ExampleEvidenceEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldExampleEvidence, v))
-}
-
-// ExampleEvidenceContainsFold applies the ContainsFold predicate on the "example_evidence" field.
-func ExampleEvidenceContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldExampleEvidence, v))
+// SubcategoryContainsFold applies the ContainsFold predicate on the "subcategory" field.
+func SubcategoryContainsFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContainsFold(FieldSubcategory, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -1628,6 +1339,122 @@ func HasViewersWith(preds ...predicate.Group) predicate.ControlObjective {
 	})
 }
 
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControlObjectives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := newProgramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControlObjectives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvidence applies the HasEdge predicate on the "evidence" edge.
+func HasEvidence() predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
+func HasEvidenceWith(preds ...predicate.Evidence) predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := newEvidenceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlObjectives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := newControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlObjectives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
+func HasSubcontrols() predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
+func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.ControlObjective {
+	return predicate.ControlObjective(func(s *sql.Selector) {
+		step := newSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
 func HasInternalPolicies() predicate.ControlObjective {
 	return predicate.ControlObjective(func(s *sql.Selector) {
@@ -1649,35 +1476,6 @@ func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Contro
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasControls applies the HasEdge predicate on the "controls" edge.
-func HasControls() predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
-func HasControlsWith(preds ...predicate.Control) predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := newControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1744,74 +1542,16 @@ func HasRisksWith(preds ...predicate.Risk) predicate.ControlObjective {
 	})
 }
 
-// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
-func HasSubcontrols() predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
-func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := newSubcontrolsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasStandard applies the HasEdge predicate on the "standard" edge.
-func HasStandard() predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, StandardTable, StandardPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardControlObjectives
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasStandardWith applies the HasEdge predicate on the "standard" edge with a given conditions (other predicates).
-func HasStandardWith(preds ...predicate.Standard) predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := newStandardStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardControlObjectives
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasNarratives applies the HasEdge predicate on the "narratives" edge.
 func HasNarratives() predicate.ControlObjective {
 	return predicate.ControlObjective(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, NarrativesTable, NarrativesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives
+		step.Edge.Schema = schemaConfig.Narrative
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1822,7 +1562,7 @@ func HasNarrativesWith(preds ...predicate.Narrative) predicate.ControlObjective 
 		step := newNarrativesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives
+		step.Edge.Schema = schemaConfig.Narrative
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1852,64 +1592,6 @@ func HasTasksWith(preds ...predicate.Task) predicate.ControlObjective {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasPrograms applies the HasEdge predicate on the "programs" edge.
-func HasPrograms() predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramControlObjectives
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
-func HasProgramsWith(preds ...predicate.Program) predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := newProgramsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramControlObjectives
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEvidence applies the HasEdge predicate on the "evidence" edge.
-func HasEvidence() predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
-func HasEvidenceWith(preds ...predicate.Evidence) predicate.ControlObjective {
-	return predicate.ControlObjective(func(s *sql.Selector) {
-		step := newEvidenceStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

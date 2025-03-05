@@ -87,16 +87,10 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Subcontrol) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Status", "SubcontrolType", "Version", "SubcontrolNumber", "Family", "Class", "Source", "MappedFrameworks", "ImplementationEvidence", "ImplementationStatus", "ImplementationVerification", "Controls")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Status", "Parent Control")
 
 	for _, i := range out {
-		controls := []string{}
-
-		for _, p := range i.Controls {
-			controls = append(controls, p.Name)
-		}
-
-		writer.AddRow(i.ID, i.Name, *i.Description, *i.Status, *i.SubcontrolType, *i.Version, *i.SubcontrolNumber, *i.Family, *i.Class, *i.Source, *i.MappedFrameworks, *i.ImplementationEvidence, *i.ImplementationStatus, *i.ImplementationVerification, strings.Join(controls, ","))
+		writer.AddRow(i.ID, i.RefCode, *i.Description, *i.Status, i.ControlID)
 	}
 
 	writer.Render()
