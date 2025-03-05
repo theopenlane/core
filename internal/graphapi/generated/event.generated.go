@@ -85,16 +85,6 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "source":
-				return ec.fieldContext_Event_source(ctx, field)
-			case "additionalProcessingRequired":
-				return ec.fieldContext_Event_additionalProcessingRequired(ctx, field)
-			case "additionalProcessingDetails":
-				return ec.fieldContext_Event_additionalProcessingDetails(ctx, field)
-			case "processedBy":
-				return ec.fieldContext_Event_processedBy(ctx, field)
-			case "processedAt":
-				return ec.fieldContext_Event_processedAt(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -185,16 +175,6 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "source":
-				return ec.fieldContext_Event_source(ctx, field)
-			case "additionalProcessingRequired":
-				return ec.fieldContext_Event_additionalProcessingRequired(ctx, field)
-			case "additionalProcessingDetails":
-				return ec.fieldContext_Event_additionalProcessingDetails(ctx, field)
-			case "processedBy":
-				return ec.fieldContext_Event_processedBy(ctx, field)
-			case "processedAt":
-				return ec.fieldContext_Event_processedAt(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -329,16 +309,6 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "source":
-				return ec.fieldContext_Event_source(ctx, field)
-			case "additionalProcessingRequired":
-				return ec.fieldContext_Event_additionalProcessingRequired(ctx, field)
-			case "additionalProcessingDetails":
-				return ec.fieldContext_Event_additionalProcessingDetails(ctx, field)
-			case "processedBy":
-				return ec.fieldContext_Event_processedBy(ctx, field)
-			case "processedAt":
-				return ec.fieldContext_Event_processedAt(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
