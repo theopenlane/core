@@ -47,7 +47,7 @@ type UserOwnedMixin struct {
 
 // Fields of the UserOwnedMixin
 func (userOwned UserOwnedMixin) Fields() []ent.Field {
-	ownerIDField := field.String("owner_id").
+	ownerIDField := field.String(ownerFieldName).
 		Annotations(
 			entgql.Skip(),
 		).
@@ -70,7 +70,7 @@ func (userOwned UserOwnedMixin) Edges() []ent.Edge {
 
 	ownerEdge := edge.
 		From("owner", User.Type).
-		Field("owner_id").
+		Field(ownerFieldName).
 		Ref(userOwned.Ref).
 		Unique()
 
@@ -96,7 +96,7 @@ func (userOwned UserOwnedMixin) Indexes() []ent.Index {
 	}
 
 	return []ent.Index{
-		index.Fields("owner_id").
+		index.Fields(ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

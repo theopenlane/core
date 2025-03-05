@@ -55,7 +55,7 @@ type ObjectOwnedMixin struct {
 	HookFuncs []HookFunc
 	// InterceptorFunc is the interceptor function for the object owned mixin
 	// that will be called on all queries
-	InterceptorFunc InterceptorFunc
+	InterceptorFuncs []InterceptorFunc
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -78,12 +78,13 @@ func NewObjectOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
 		o.HookFuncs = []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc}
 	}
 
-	if o.WithOrganizationOwner {
-		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
+	if o.InterceptorFuncs == nil {
+		o.InterceptorFuncs = []InterceptorFunc{defaultObjectInterceptorFunc}
 	}
 
-	if o.InterceptorFunc == nil {
-		o.InterceptorFunc = defaultObjectInterceptorFunc
+	if o.WithOrganizationOwner {
+		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
+		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
 	}
 
 	return o
@@ -96,7 +97,7 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 	// add the organization owner field if the flag is set
 	if o.WithOrganizationOwner {
 		fields = append(fields,
-			field.String("owner_id").
+			field.String(ownerFieldName).
 				Comment("the ID of the organization owner of the object").
 				Immutable(). // Immutable because it is set on creation and never changes
 				Optional().  // Optional because it doesn't need to be provided as input
@@ -142,7 +143,7 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 	if o.WithOrganizationOwner {
 		edges = append(edges,
 			edge.From("owner", Organization.Type).
-				Field("owner_id").
+				Field(ownerFieldName).
 				Immutable().
 				Unique().
 				Ref(o.Ref))
@@ -191,17 +192,20 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 		return []ent.Interceptor{}
 	}
 
-	return []ent.Interceptor{
-		o.InterceptorFunc(o),
+	res := []ent.Interceptor{}
+	for _, interceptorFunc := range o.InterceptorFuncs {
+		res = append(res, interceptorFunc(o))
 	}
+
+	return res
 }
 
 // P adds a storage-level predicate to the queries and mutations.
 func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objectIDs []string) {
 	// if the field is only owned by one field, use that field
 	// this is used by the organization owned mixin
-	if len(o.FieldNames) == 1 && o.FieldNames[0] == "owner_id" {
-		w.WhereP(sql.FieldIn(o.FieldNames[0], objectIDs...))
+	if len(o.FieldNames) == 1 && o.FieldNames[0] == ownerFieldName || o.WithOrganizationOwner {
+		w.WhereP(sql.FieldIn(ownerFieldName, objectIDs...))
 		return
 	}
 

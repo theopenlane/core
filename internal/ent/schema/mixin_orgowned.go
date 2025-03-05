@@ -45,8 +45,8 @@ func NewOrgOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
 		o.HookFuncs = []HookFunc{defaultOrgHookFunc}
 	}
 
-	if o.InterceptorFunc == nil {
-		o.InterceptorFunc = defaultOrgInterceptorFunc
+	if o.InterceptorFuncs == nil {
+		o.InterceptorFuncs = []InterceptorFunc{defaultOrgInterceptorFunc}
 	}
 
 	return o
