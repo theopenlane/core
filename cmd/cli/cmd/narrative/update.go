@@ -2,6 +2,7 @@ package narrative
 
 import (
 	"context"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -26,6 +27,8 @@ func init() {
 	// command line flags for the update command
 	updateCmd.Flags().StringP("name", "n", "", "name of the narrative")
 	updateCmd.Flags().StringP("description", "d", "", "description of the narrative")
+	updateCmd.Flags().StringP("details", "t", "", "details of the narrative")
+	updateCmd.Flags().StringP("details-file", "f", "", "file containing the details of the narrative")
 
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the narrative")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the narrative")
@@ -48,6 +51,21 @@ func updateValidation() (id string, input openlaneclient.UpdateNarrativeInput, e
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
+	}
+
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
+	} else {
+		detailsFile := cmd.Config.String("details-file")
+		if detailsFile != "" {
+			contents, err := os.ReadFile(detailsFile)
+			cobra.CheckErr(err)
+
+			details := string(contents)
+
+			input.Details = &details
+		}
 	}
 
 	addPrograms := cmd.Config.Strings("add-programs")

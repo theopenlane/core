@@ -11,16 +11,13 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateSubcontrol is the resolver for the createSubcontrol field.
 func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("organization_id")
+		log.Debug().Err(err).Msg("failed to set organization in auth context, not required for system owned objects")
 	}
 
 	res, err := withTransactionalMutation(ctx).Subcontrol.Create().SetInput(input).Save(ctx)
@@ -59,9 +56,7 @@ func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, inpu
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
+		log.Debug().Err(err).Msg("failed to set organization in auth context, not required for system owned objects")
 	}
 
 	// setup update request

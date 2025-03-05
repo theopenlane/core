@@ -22,9 +22,7 @@ import (
 func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*model.StandardCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("organization_id")
+		log.Debug().Err(err).Msg("failed to set organization in auth context, not required for system owned objects")
 	}
 
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
@@ -51,9 +49,7 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
+		log.Debug().Err(err).Msg("failed to set organization in auth context, not required for system owned objects")
 	}
 
 	// setup update request

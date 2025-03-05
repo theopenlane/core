@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -26,6 +27,14 @@ func init() {
 	// command line flags for the update command
 	updateCmd.Flags().StringP("ref-code", "r", "", "the unique reference code of the control")
 	updateCmd.Flags().StringP("description", "d", "", "description of the control")
+	updateCmd.Flags().StringP("source", "s", "", "source of the control, e.g. framework, template, custom, etc.")
+	updateCmd.Flags().StringP("category", "c", "", "category of the control")
+	updateCmd.Flags().StringP("category-id", "a", "", "category id of the control")
+	updateCmd.Flags().StringP("subcategory", "b", "", "subcategory of the control")
+	updateCmd.Flags().StringP("status", "t", "", "status of the control")
+	updateCmd.Flags().StringP("control-type", "y", "", "type of the control e.g. preventive, detective, corrective, or deterrent")
+	updateCmd.Flags().StringSliceP("mapped-categories", "m", []string{}, "mapped categories of the control to other standards")
+	updateCmd.Flags().StringP("framework-id", "f", "", "framework of the control")
 
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the control")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the control")
@@ -50,6 +59,46 @@ func updateValidation() (id string, input openlaneclient.UpdateControlInput, err
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
+	}
+
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	category := cmd.Config.String("category")
+	if category != "" {
+		input.Category = &category
+	}
+
+	categoryID := cmd.Config.String("category-id")
+	if categoryID != "" {
+		input.CategoryID = &categoryID
+	}
+
+	subcategory := cmd.Config.String("subcategory")
+	if subcategory != "" {
+		input.Subcategory = &subcategory
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = &status
+	}
+
+	controlType := cmd.Config.String("control-type")
+	if controlType != "" {
+		input.ControlType = enums.ToControlType(controlType)
+	}
+
+	mappedCategories := cmd.Config.Strings("mapped-categories")
+	if len(mappedCategories) > 0 {
+		input.MappedCategories = mappedCategories
+	}
+
+	frameworkID := cmd.Config.String("framework-id")
+	if frameworkID != "" {
+		input.StandardID = &frameworkID
 	}
 
 	addPrograms := cmd.Config.Strings("add-programs")

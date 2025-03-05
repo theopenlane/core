@@ -39,6 +39,9 @@ func createValidation() (input openlaneclient.CreateTemplateInput, err error) {
 	}
 
 	jsonConfig := cmd.Config.String("json-config")
+	if jsonConfig == "" {
+		return input, cmd.NewRequiredFieldMissingError("json config")
+	}
 
 	data, err := os.ReadFile(jsonConfig)
 	cobra.CheckErr(err)

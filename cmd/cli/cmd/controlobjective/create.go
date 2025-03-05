@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -23,7 +24,13 @@ func init() {
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "name of the control objective")
+	createCmd.Flags().StringP("desired-outcome", "o", "", "desired outcome of the control objective")
+	createCmd.Flags().StringP("source", "s", "", "source of the control objective, e.g. framework, template, custom, etc.")
+	createCmd.Flags().StringP("version", "v", "", "version of the control objective")
+	createCmd.Flags().StringP("status", "t", "", "status of the control objective")
+	createCmd.Flags().StringP("control-objective-type", "y", "", "type of the control objective e.g. compliance, operational, strategic, or reporting")
 
+	createCmd.Flags().StringSliceP("controls", "c", []string{}, "control ID(s) associated with the control objective")
 	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the control objective")
 	createCmd.Flags().StringSliceP("editors", "e", []string{}, "group ID(s) given editor access to the control objective")
 	createCmd.Flags().StringSliceP("viewers", "w", []string{}, "group ID(s) given viewer access to the control objective")
@@ -38,7 +45,40 @@ func createValidation() (input openlaneclient.CreateControlObjectiveInput, err e
 		return input, cmd.NewRequiredFieldMissingError("name")
 	}
 
-	input.ProgramIDs = cmd.Config.Strings("programs")
+	desiredOutcome := cmd.Config.String("desired-outcome")
+	if desiredOutcome != "" {
+		input.DesiredOutcome = &desiredOutcome
+	}
+
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	version := cmd.Config.String("version")
+	if version != "" {
+		input.Version = &version
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = &status
+	}
+
+	controlObjectiveType := cmd.Config.String("control-objective-type")
+	if controlObjectiveType != "" {
+		input.ControlObjectiveType = &controlObjectiveType
+	}
+
+	controlIDs := cmd.Config.Strings("controls")
+	if len(controlIDs) > 0 {
+		input.ControlIDs = controlIDs
+	}
+
+	programIDs := cmd.Config.Strings("programs")
+	if len(programIDs) > 0 {
+		input.ProgramIDs = programIDs
+	}
 
 	viewerGroupIDs := cmd.Config.Strings("viewers")
 	if len(viewerGroupIDs) > 0 {

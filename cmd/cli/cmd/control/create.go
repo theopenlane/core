@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -24,6 +25,14 @@ func init() {
 	// command line flags for the create command
 	createCmd.Flags().StringP("ref-code", "r", "", "the unique reference code of the control")
 	createCmd.Flags().StringP("description", "d", "", "description of the control")
+	createCmd.Flags().StringP("source", "s", "", "source of the control, e.g. framework, template, custom, etc.")
+	createCmd.Flags().StringP("category", "a", "", "category of the control")
+	createCmd.Flags().StringP("category-id", "i", "", "category id of the control")
+	createCmd.Flags().StringP("subcategory", "b", "", "subcategory of the control")
+	createCmd.Flags().StringP("status", "t", "", "status of the control")
+	createCmd.Flags().StringP("control-type", "y", "", "type of the control e.g. preventive, detective, corrective, or deterrent")
+	createCmd.Flags().StringSliceP("mapped-categories", "m", []string{}, "mapped categories of the control to other standards")
+	createCmd.Flags().StringP("framework-id", "f", "", "framework of the control")
 
 	createCmd.Flags().StringSliceP("editors", "e", []string{}, "group ID(s) given editor access to the control")
 	createCmd.Flags().StringSliceP("viewers", "w", []string{}, "group ID(s) given viewer access to the control")
@@ -39,11 +48,54 @@ func createValidation() (input openlaneclient.CreateControlInput, err error) {
 		return input, cmd.NewRequiredFieldMissingError("name")
 	}
 
-	input.ProgramIDs = cmd.Config.Strings("programs")
-
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
+	}
+
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	category := cmd.Config.String("category")
+	if category != "" {
+		input.Category = &category
+	}
+
+	categoryID := cmd.Config.String("category-id")
+	if categoryID != "" {
+		input.CategoryID = &categoryID
+	}
+
+	subcategory := cmd.Config.String("subcategory")
+	if subcategory != "" {
+		input.Subcategory = &subcategory
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = &status
+	}
+
+	controlType := cmd.Config.String("control-type")
+	if controlType != "" {
+		input.ControlType = enums.ToControlType(controlType)
+	}
+
+	mappedCategories := cmd.Config.Strings("mapped-categories")
+	if len(mappedCategories) > 0 {
+		input.MappedCategories = mappedCategories
+	}
+
+	frameworkID := cmd.Config.String("framework-id")
+	if frameworkID != "" {
+		input.StandardID = &frameworkID
+	}
+
+	programs := cmd.Config.Strings("programs")
+	if len(programs) > 0 {
+		input.ProgramIDs = programs
 	}
 
 	editors := cmd.Config.Strings("editors")

@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -26,6 +27,13 @@ func init() {
 	// command line flags for the update command
 	updateCmd.Flags().StringP("ref-code", "n", "", "the unique reference code of the subcontrol")
 	updateCmd.Flags().StringP("description", "d", "", "description of the subcontrol")
+	updateCmd.Flags().StringP("source", "s", "", "source of the subcontrol, e.g. framework, template, custom, etc.")
+	updateCmd.Flags().StringP("category", "a", "", "category of the subcontrol")
+	updateCmd.Flags().StringP("category-id", "c", "", "category id of the subcontrol")
+	updateCmd.Flags().StringP("subcategory", "b", "", "subcategory of the subcontrol")
+	updateCmd.Flags().StringP("status", "t", "", "status of the subcontrol")
+	updateCmd.Flags().StringP("control-type", "y", "", "type of the subcontrol e.g. preventive, detective, corrective, or deterrent")
+	updateCmd.Flags().StringSliceP("mapped-categories", "m", []string{}, "mapped categories of the subcontrol to other standards")
 }
 
 // updateValidation validates the required fields for the command
@@ -45,6 +53,41 @@ func updateValidation() (id string, input openlaneclient.UpdateSubcontrolInput, 
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
+	}
+
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	category := cmd.Config.String("category")
+	if category != "" {
+		input.Category = &category
+	}
+
+	categoryID := cmd.Config.String("category-id")
+	if categoryID != "" {
+		input.CategoryID = &categoryID
+	}
+
+	subcategory := cmd.Config.String("subcategory")
+	if subcategory != "" {
+		input.Subcategory = &subcategory
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = &status
+	}
+
+	controlType := cmd.Config.String("control-type")
+	if controlType != "" {
+		input.ControlType = enums.ToControlType(controlType)
+	}
+
+	mappedCategories := cmd.Config.Strings("mapped-categories")
+	if len(mappedCategories) > 0 {
+		input.MappedCategories = mappedCategories
 	}
 
 	return id, input, nil

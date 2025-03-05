@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -25,10 +26,14 @@ func init() {
 
 	// command line flags for the update command
 	updateCmd.Flags().StringP("name", "n", "", "name of the control objective")
-	updateCmd.Flags().StringP("status", "s", "", "status of the control objective")
-	updateCmd.Flags().StringP("type", "t", "", "type of the control objective")
+	updateCmd.Flags().StringP("desired-outcome", "o", "", "desired outcome of the control objective")
+	updateCmd.Flags().StringP("source", "s", "", "source of the control objective, e.g. framework, template, custom, etc.")
 	updateCmd.Flags().StringP("version", "v", "", "version of the control objective")
+	updateCmd.Flags().StringP("status", "t", "", "status of the control objective")
+	updateCmd.Flags().StringP("control-objective-type", "y", "", "type of the control objective e.g. compliance, operational, strategic, or reporting")
 
+	updateCmd.Flags().StringSlice("add-controls", []string{}, "add control(s) to the control objective")
+	updateCmd.Flags().StringSlice("remove-controls", []string{}, "remove control(s) from the control objective")
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the control objective")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the control objective")
 	updateCmd.Flags().StringSliceP("add-editors", "e", []string{}, "group ID(s) given editor access to the control objective")
@@ -49,6 +54,41 @@ func updateValidation() (id string, input openlaneclient.UpdateControlObjectiveI
 		input.Name = &name
 	}
 
+	desiredOutcome := cmd.Config.String("desired-outcome")
+	if desiredOutcome != "" {
+		input.DesiredOutcome = &desiredOutcome
+	}
+
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	version := cmd.Config.String("version")
+	if version != "" {
+		input.Version = &version
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = &status
+	}
+
+	controlObjectiveType := cmd.Config.String("control-objective-type")
+	if controlObjectiveType != "" {
+		input.ControlObjectiveType = &controlObjectiveType
+	}
+
+	addControls := cmd.Config.Strings("add-controls")
+	if len(addControls) > 0 {
+		input.AddControlIDs = addControls
+	}
+
+	removeControls := cmd.Config.Strings("remove-controls")
+	if len(removeControls) > 0 {
+		input.RemoveControlIDs = removeControls
+	}
+
 	addPrograms := cmd.Config.Strings("add-programs")
 	if len(addPrograms) > 0 {
 		input.AddProgramIDs = addPrograms
@@ -57,21 +97,6 @@ func updateValidation() (id string, input openlaneclient.UpdateControlObjectiveI
 	removePrograms := cmd.Config.Strings("remove-programs")
 	if len(removePrograms) > 0 {
 		input.RemoveProgramIDs = removePrograms
-	}
-
-	status := cmd.Config.String("status")
-	if status != "" {
-		input.Status = &status
-	}
-
-	controlObjectiveType := cmd.Config.String("type")
-	if controlObjectiveType != "" {
-		input.ControlObjectiveType = &controlObjectiveType
-	}
-
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
 	}
 
 	viewerGroupIDs := cmd.Config.Strings("add-viewers")

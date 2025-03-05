@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -39,7 +40,6 @@ func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 					}
 				}
 			}
-
 		}
 
 		allowAdmin, err := CheckIsSystemAdmin(ctx, m)

@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 var getCmd = &cobra.Command{
@@ -20,7 +21,9 @@ var getCmd = &cobra.Command{
 func init() {
 	command.AddCommand(getCmd)
 	getCmd.Flags().StringP("id", "i", "", "subcontrol id to query")
-
+	getCmd.Flags().StringP("ref-code", "r", "", "the unique reference code of the subcontrol")
+	getCmd.Flags().StringP("control-id", "c", "", "control id to filter the query")
+	getCmd.Flags().StringP("control", "o", "", "control ref code to filter the query")
 }
 
 // get an existing subcontrol in the platform
@@ -35,10 +38,47 @@ func get(ctx context.Context) error {
 	}
 	// filter options
 	id := cmd.Config.String("id")
+	refCode := cmd.Config.String("ref-code")
+	controlRefCode := cmd.Config.String("control")
+	controlID := cmd.Config.String("control")
 
-	// if an subcontrol ID is provided, filter on that subcontrol, otherwise get all
+	// if an subcontrol ID is provided, filter on that subcontrol
 	if id != "" {
 		o, err := client.GetSubcontrolByID(ctx, id)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
+
+	// if a ref code is provided, filter on that control
+	if refCode != "" {
+		o, err := client.GetSubcontrols(ctx, &openlaneclient.SubcontrolWhereInput{
+			RefCode: &refCode,
+		})
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
+
+	// if a control ID is provided, filter on that control
+	if controlID != "" {
+		o, err := client.GetSubcontrols(ctx, &openlaneclient.SubcontrolWhereInput{
+			ControlID: &controlID,
+		})
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
+
+	// if a control ref code is provided, filter on that control
+	if controlRefCode != "" {
+		where := &openlaneclient.ControlWhereInput{
+			RefCode: &controlRefCode,
+		}
+
+		o, err := client.GetSubcontrols(ctx, &openlaneclient.SubcontrolWhereInput{
+			HasControlWith: []*openlaneclient.ControlWhereInput{where},
+		})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

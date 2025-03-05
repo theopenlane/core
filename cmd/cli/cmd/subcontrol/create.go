@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -24,8 +25,15 @@ func init() {
 	// command line flags for the create command
 	createCmd.Flags().StringP("ref-code", "n", "", "the unique reference code of the subcontrol")
 	createCmd.Flags().StringP("description", "d", "", "description of the subcontrol")
+	createCmd.Flags().StringP("source", "s", "", "source of the subcontrol, e.g. framework, template, custom, etc.")
+	createCmd.Flags().StringP("category", "a", "", "category of the subcontrol")
+	createCmd.Flags().StringP("category-id", "i", "", "category id of the subcontrol")
+	createCmd.Flags().StringP("subcategory", "b", "", "subcategory of the subcontrol")
+	createCmd.Flags().StringP("status", "t", "", "status of the subcontrol")
+	createCmd.Flags().StringP("control-type", "y", "", "type of the subcontrol e.g. preventive, detective, corrective, or deterrent")
+	createCmd.Flags().StringSliceP("mapped-categories", "m", []string{}, "mapped categories of the subcontrol to other standards")
 
-	createCmd.Flags().StringP("control", "c", "", "[required] control ID associated with the subcontrol")
+	createCmd.Flags().StringP("control", "c", "", "[required] subcontrol ID associated with the subcontrol")
 }
 
 // createValidation validates the required fields for the command
@@ -45,6 +53,41 @@ func createValidation() (input openlaneclient.CreateSubcontrolInput, err error) 
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
+	}
+
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	category := cmd.Config.String("category")
+	if category != "" {
+		input.Category = &category
+	}
+
+	categoryID := cmd.Config.String("category-id")
+	if categoryID != "" {
+		input.CategoryID = &categoryID
+	}
+
+	subcategory := cmd.Config.String("subcategory")
+	if subcategory != "" {
+		input.Subcategory = &subcategory
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = &status
+	}
+
+	controlType := cmd.Config.String("control-type")
+	if controlType != "" {
+		input.ControlType = enums.ToControlType(controlType)
+	}
+
+	mappedCategories := cmd.Config.Strings("mapped-categories")
+	if len(mappedCategories) > 0 {
+		input.MappedCategories = mappedCategories
 	}
 
 	return input, nil
