@@ -64,6 +64,10 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				}
 			}
 
+			if _, allow := privacy.DecisionFromContext(ctx); allow {
+				return next.Mutate(ctx, m)
+			}
+
 			// set owner on create mutation
 			if m.Op() == ent.OpCreate {
 				if err := setOwnerIDField(ctx, m); err != nil {
@@ -136,7 +140,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 func setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 	// if the context has the organization creation context key, skip the hook
 	// because we don't want the owner to be based on the current organization
-	if _, ok := contextx.From[hooks.OrganizationCreationContextKey](ctx); ok {
+	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
 		return nil
 	}
 
@@ -236,14 +240,9 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		}
 	}
 
-	// Allow the interceptor to skip the query if the context has an allow
-	// bypass and its for a token
-	// these are queried during the auth flow and should not be filtered
-	if q.Type() == generated.TypeAPIToken || q.Type() == generated.TypePersonalAccessToken {
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
-			return true
-		}
-
+	// Allow the interceptor to skip the query if the context has an allow bypass
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return true
 	}
 
 	// skip interceptor if the context has the managed group key

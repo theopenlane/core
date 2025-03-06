@@ -55,17 +55,17 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 	}
 
 	if !exists {
-		//		meowevent, err := h.createEvent(newCtx, ent.CreateEventInput{EventID: event.ID})
-		//		if err != nil {
-		//			return h.InternalServerError(ctx, err)
-		//		}
+		meowevent, err := h.createEvent(newCtx, ent.CreateEventInput{EventID: &event.ID})
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
 
-		//		log.Debug().Msgf("Internal event: %v", meowevent)
-		//
-		//		_, err = h.HandleEvent(newCtx, &event)
-		//		if err != nil {
-		//			return h.InternalServerError(ctx, err)
-		//		}
+		log.Debug().Msgf("Internal event: %v", meowevent)
+
+		_, err = h.HandleEvent(newCtx, &event)
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
 	}
 
 	return h.Success(ctx, nil)
