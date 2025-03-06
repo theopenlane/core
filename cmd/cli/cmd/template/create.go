@@ -2,6 +2,7 @@ package templates
 
 import (
 	"context"
+	"encoding/json"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -38,11 +39,19 @@ func createValidation() (input openlaneclient.CreateTemplateInput, err error) {
 	}
 
 	jsonConfig := cmd.Config.String("json-config")
+	if jsonConfig == "" {
+		return input, cmd.NewRequiredFieldMissingError("json config")
+	}
 
 	data, err := os.ReadFile(jsonConfig)
 	cobra.CheckErr(err)
 
-	input.Jsonconfig = data
+	// Unmarshal the JSON data into the map
+	var jsonData map[string]any
+	err = json.Unmarshal(data, &jsonData)
+	cobra.CheckErr(err)
+
+	input.Jsonconfig = jsonData
 
 	description := cmd.Config.String("description")
 	if description != "" {
@@ -54,7 +63,12 @@ func createValidation() (input openlaneclient.CreateTemplateInput, err error) {
 		data, err = os.ReadFile(uiSchema)
 		cobra.CheckErr(err)
 
-		input.Uischema = data
+		// Unmarshal the JSON data into the map
+		var jsonData map[string]any
+		err = json.Unmarshal(data, &jsonData)
+		cobra.CheckErr(err)
+
+		input.Uischema = jsonData
 	}
 
 	templateType := cmd.Config.String("type")

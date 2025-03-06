@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
@@ -196,14 +195,14 @@ func (thc *TemplateHistoryCreate) SetNillableDescription(s *string) *TemplateHis
 }
 
 // SetJsonconfig sets the "jsonconfig" field.
-func (thc *TemplateHistoryCreate) SetJsonconfig(co customtypes.JSONObject) *TemplateHistoryCreate {
-	thc.mutation.SetJsonconfig(co)
+func (thc *TemplateHistoryCreate) SetJsonconfig(m map[string]interface{}) *TemplateHistoryCreate {
+	thc.mutation.SetJsonconfig(m)
 	return thc
 }
 
 // SetUischema sets the "uischema" field.
-func (thc *TemplateHistoryCreate) SetUischema(co customtypes.JSONObject) *TemplateHistoryCreate {
-	thc.mutation.SetUischema(co)
+func (thc *TemplateHistoryCreate) SetUischema(m map[string]interface{}) *TemplateHistoryCreate {
+	thc.mutation.SetUischema(m)
 	return thc
 }
 

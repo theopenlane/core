@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/entx/history"
@@ -36,26 +37,36 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldShortName holds the string denoting the short_name field in the database.
+	FieldShortName = "short_name"
+	// FieldFramework holds the string denoting the framework field in the database.
+	FieldFramework = "framework"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldFamily holds the string denoting the family field in the database.
-	FieldFamily = "family"
+	// FieldGoverningBody holds the string denoting the governing_body field in the database.
+	FieldGoverningBody = "governing_body"
+	// FieldDomains holds the string denoting the domains field in the database.
+	FieldDomains = "domains"
+	// FieldLink holds the string denoting the link field in the database.
+	FieldLink = "link"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldIsPublic holds the string denoting the is_public field in the database.
+	FieldIsPublic = "is_public"
+	// FieldFreeToUse holds the string denoting the free_to_use field in the database.
+	FieldFreeToUse = "free_to_use"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
 	// FieldStandardType holds the string denoting the standard_type field in the database.
 	FieldStandardType = "standard_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
-	// FieldPurposeAndScope holds the string denoting the purpose_and_scope field in the database.
-	FieldPurposeAndScope = "purpose_and_scope"
-	// FieldBackground holds the string denoting the background field in the database.
-	FieldBackground = "background"
-	// FieldSatisfies holds the string denoting the satisfies field in the database.
-	FieldSatisfies = "satisfies"
-	// FieldDetails holds the string denoting the details field in the database.
-	FieldDetails = "details"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// Table holds the table name of the standardhistory in the database.
 	Table = "standard_history"
 )
@@ -73,16 +84,21 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
 	FieldName,
+	FieldShortName,
+	FieldFramework,
 	FieldDescription,
-	FieldFamily,
+	FieldGoverningBody,
+	FieldDomains,
+	FieldLink,
 	FieldStatus,
+	FieldIsPublic,
+	FieldFreeToUse,
+	FieldSystemOwned,
 	FieldStandardType,
 	FieldVersion,
-	FieldPurposeAndScope,
-	FieldBackground,
-	FieldSatisfies,
-	FieldDetails,
+	FieldRevision,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -95,7 +111,13 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+	Interceptors [1]ent.Interceptor
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -106,6 +128,12 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultIsPublic holds the default value on creation for the "is_public" field.
+	DefaultIsPublic bool
+	// DefaultFreeToUse holds the default value on creation for the "free_to_use" field.
+	DefaultFreeToUse bool
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -173,9 +201,24 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByShortName orders the results by the short_name field.
+func ByShortName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldShortName, opts...).ToFunc()
+}
+
+// ByFramework orders the results by the framework field.
+func ByFramework(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFramework, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.
@@ -183,14 +226,34 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// ByFamily orders the results by the family field.
-func ByFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFamily, opts...).ToFunc()
+// ByGoverningBody orders the results by the governing_body field.
+func ByGoverningBody(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGoverningBody, opts...).ToFunc()
+}
+
+// ByLink orders the results by the link field.
+func ByLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLink, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByIsPublic orders the results by the is_public field.
+func ByIsPublic(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsPublic, opts...).ToFunc()
+}
+
+// ByFreeToUse orders the results by the free_to_use field.
+func ByFreeToUse(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFreeToUse, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
 }
 
 // ByStandardType orders the results by the standard_type field.
@@ -203,19 +266,9 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
-// ByPurposeAndScope orders the results by the purpose_and_scope field.
-func ByPurposeAndScope(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPurposeAndScope, opts...).ToFunc()
-}
-
-// ByBackground orders the results by the background field.
-func ByBackground(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBackground, opts...).ToFunc()
-}
-
-// BySatisfies orders the results by the satisfies field.
-func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 var (

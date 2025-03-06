@@ -1,0 +1,132 @@
+
+mutation CreateBulkCSVControlImplementation($input: Upload!) {
+  createBulkCSVControlImplementation(input: $input) {
+    controlImplementations {
+      createdAt
+      createdBy
+      details
+      id
+      implementationDate
+      status
+      tags
+      updatedAt
+      updatedBy
+      verificationDate
+      verified
+    }
+  }
+}
+
+mutation CreateBulkControlImplementation($input: [CreateControlImplementationInput!]) {
+  createBulkControlImplementation(input: $input) {
+    controlImplementations {
+      createdAt
+      createdBy
+      details
+      id
+      implementationDate
+      status
+      tags
+      updatedAt
+      updatedBy
+      verificationDate
+      verified
+    }
+  }
+}
+
+mutation CreateControlImplementation($input: CreateControlImplementationInput!) {
+  createControlImplementation(input: $input) {
+    controlImplementation {
+      createdAt
+      createdBy
+      details
+      id
+      implementationDate
+      status
+      tags
+      updatedAt
+      updatedBy
+      verificationDate
+      verified
+    }
+  }
+}
+
+mutation DeleteControlImplementation($deleteControlImplementationId: ID!) {
+  deleteControlImplementation(id: $deleteControlImplementationId) {
+    deletedID
+  }
+}
+
+query GetAllControlImplementations {
+  controlImplementations {
+    edges {
+      node {
+        createdAt
+        createdBy
+        details
+        id
+        implementationDate
+        status
+        tags
+        updatedAt
+        updatedBy
+        verificationDate
+        verified
+      }
+    }
+  }
+}
+query GetControlImplementationByID($controlImplementationId: ID!) {
+  controlImplementation(id: $controlImplementationId) {
+    createdAt
+    createdBy
+    details
+    id
+    implementationDate
+    status
+    tags
+    updatedAt
+    updatedBy
+    verificationDate
+    verified
+  }
+}
+
+query GetControlImplementations($where: ControlImplementationWhereInput) {
+  controlImplementations(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        details
+        id
+        implementationDate
+        status
+        tags
+        updatedAt
+        updatedBy
+        verificationDate
+        verified
+      }
+    }
+  }
+}
+mutation UpdateControlImplementation($updateControlImplementationId: ID!, $input: UpdateControlImplementationInput!) {
+  updateControlImplementation(id: $updateControlImplementationId, input: $input) {
+    controlImplementation {
+      createdAt
+      createdBy
+      details
+      id
+      implementationDate
+      status
+      tags
+      updatedAt
+      updatedBy
+      verificationDate
+      verified
+    }
+  }
+}

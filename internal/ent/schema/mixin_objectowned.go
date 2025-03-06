@@ -39,8 +39,8 @@ type ObjectOwnedMixin struct {
 	SkipUserTuple bool
 	// Required makes the owner id field required as input
 	Required bool
-	// AllowEmpty allows the owner id field to be empty
-	AllowEmpty bool
+	// AllowEmptyForSystemAdmin allows the owner id field to be empty for system admins
+	AllowEmptyForSystemAdmin bool
 	// SkipOASGeneration skips open api spec generation for the field
 	SkipOASGeneration bool
 	// SkipInterceptor skips the interceptor for that schema for all queries, or specific types,
@@ -118,7 +118,7 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 			objectIDField.Optional()
 
 			// if explicitly set to allow empty values, otherwise ensure it is not empty
-			if !o.AllowEmpty {
+			if !o.AllowEmptyForSystemAdmin {
 				objectIDField.NotEmpty()
 			}
 		}
@@ -171,11 +171,6 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 
 // Hooks of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Hooks() []ent.Hook {
-	if o.AllowEmpty {
-		// do not add hooks if the field is optional
-		return []ent.Hook{}
-	}
-
 	res := []ent.Hook{}
 	for _, hookFunc := range o.HookFuncs {
 		res = append(res, hookFunc(o))
@@ -186,11 +181,6 @@ func (o ObjectOwnedMixin) Hooks() []ent.Hook {
 
 // Interceptors of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
-	if o.AllowEmpty {
-		// do not add interceptors if the field is optional
-		return []ent.Interceptor{}
-	}
-
 	return []ent.Interceptor{
 		o.InterceptorFunc(o),
 	}
@@ -201,7 +191,22 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 	// if the field is only owned by one field, use that field
 	// this is used by the organization owned mixin
 	if len(o.FieldNames) == 1 && o.FieldNames[0] == "owner_id" {
-		w.WhereP(sql.FieldIn(o.FieldNames[0], objectIDs...))
+		selector := sql.FieldIn(o.FieldNames[0], objectIDs...)
+		if o.AllowEmptyForSystemAdmin {
+			// allow for empty values if the flag is set
+			w.WhereP(
+				sql.OrPredicates(
+					sql.FieldIsNull(o.FieldNames[0]),
+					selector,
+				),
+			)
+
+			return
+		}
+
+		// default selector by owner_id
+		w.WhereP(selector)
+
 		return
 	}
 
@@ -236,6 +241,15 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
 					return next.Mutate(ctx, m)
 				}
+			}
+
+			skip, err := o.skipOrgHookForAdmins(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if skip {
+				return next.Mutate(ctx, m)
 			}
 
 			if m.Op() != ent.OpCreate {
@@ -277,4 +291,21 @@ func getObjectType(kind any) string {
 	objectType := reflect.TypeOf(kind).String()
 
 	return strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(objectType, "func(schema.", ""), ")", ""))
+}
+
+// skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins
+func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context, m ent.Mutation) (bool, error) {
+	if o.AllowEmptyForSystemAdmin {
+		isAdmin, err := rule.CheckIsSystemAdmin(ctx, m)
+		if err != nil {
+			return false, err
+		}
+
+		// skip hook for system admins to create system level objects
+		if isAdmin {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }

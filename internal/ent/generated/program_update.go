@@ -27,7 +27,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -520,21 +519,6 @@ func (pu *ProgramUpdate) AddActionPlans(a ...*ActionPlan) *ProgramUpdate {
 	return pu.AddActionPlanIDs(ids...)
 }
 
-// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
-func (pu *ProgramUpdate) AddStandardIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddStandardIDs(ids...)
-	return pu
-}
-
-// AddStandards adds the "standards" edges to the Standard entity.
-func (pu *ProgramUpdate) AddStandards(s ...*Standard) *ProgramUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return pu.AddStandardIDs(ids...)
-}
-
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (pu *ProgramUpdate) AddUserIDs(ids ...string) *ProgramUpdate {
 	pu.mutation.AddUserIDs(ids...)
@@ -889,27 +873,6 @@ func (pu *ProgramUpdate) RemoveActionPlans(a ...*ActionPlan) *ProgramUpdate {
 		ids[i] = a[i].ID
 	}
 	return pu.RemoveActionPlanIDs(ids...)
-}
-
-// ClearStandards clears all "standards" edges to the Standard entity.
-func (pu *ProgramUpdate) ClearStandards() *ProgramUpdate {
-	pu.mutation.ClearStandards()
-	return pu
-}
-
-// RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
-func (pu *ProgramUpdate) RemoveStandardIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveStandardIDs(ids...)
-	return pu
-}
-
-// RemoveStandards removes "standards" edges to Standard entities.
-func (pu *ProgramUpdate) RemoveStandards(s ...*Standard) *ProgramUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return pu.RemoveStandardIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
@@ -1333,30 +1296,30 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.SubcontrolsTable,
-			Columns: program.SubcontrolsPrimaryKey,
+			Columns: []string{program.SubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramSubcontrols
+		edge.Schema = pu.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !pu.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.SubcontrolsTable,
-			Columns: program.SubcontrolsPrimaryKey,
+			Columns: []string{program.SubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramSubcontrols
+		edge.Schema = pu.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1364,16 +1327,16 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := pu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.SubcontrolsTable,
-			Columns: program.SubcontrolsPrimaryKey,
+			Columns: []string{program.SubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramSubcontrols
+		edge.Schema = pu.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1854,54 +1817,6 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = pu.schemaConfig.ProgramActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if pu.mutation.StandardsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   program.StandardsTable,
-			Columns: program.StandardsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.StandardPrograms
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !pu.mutation.StandardsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   program.StandardsTable,
-			Columns: program.StandardsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.StandardPrograms
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.StandardsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   program.StandardsTable,
-			Columns: program.StandardsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.StandardPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2518,21 +2433,6 @@ func (puo *ProgramUpdateOne) AddActionPlans(a ...*ActionPlan) *ProgramUpdateOne 
 	return puo.AddActionPlanIDs(ids...)
 }
 
-// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
-func (puo *ProgramUpdateOne) AddStandardIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddStandardIDs(ids...)
-	return puo
-}
-
-// AddStandards adds the "standards" edges to the Standard entity.
-func (puo *ProgramUpdateOne) AddStandards(s ...*Standard) *ProgramUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return puo.AddStandardIDs(ids...)
-}
-
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (puo *ProgramUpdateOne) AddUserIDs(ids ...string) *ProgramUpdateOne {
 	puo.mutation.AddUserIDs(ids...)
@@ -2887,27 +2787,6 @@ func (puo *ProgramUpdateOne) RemoveActionPlans(a ...*ActionPlan) *ProgramUpdateO
 		ids[i] = a[i].ID
 	}
 	return puo.RemoveActionPlanIDs(ids...)
-}
-
-// ClearStandards clears all "standards" edges to the Standard entity.
-func (puo *ProgramUpdateOne) ClearStandards() *ProgramUpdateOne {
-	puo.mutation.ClearStandards()
-	return puo
-}
-
-// RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
-func (puo *ProgramUpdateOne) RemoveStandardIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveStandardIDs(ids...)
-	return puo
-}
-
-// RemoveStandards removes "standards" edges to Standard entities.
-func (puo *ProgramUpdateOne) RemoveStandards(s ...*Standard) *ProgramUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return puo.RemoveStandardIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
@@ -3361,30 +3240,30 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if puo.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.SubcontrolsTable,
-			Columns: program.SubcontrolsPrimaryKey,
+			Columns: []string{program.SubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramSubcontrols
+		edge.Schema = puo.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !puo.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.SubcontrolsTable,
-			Columns: program.SubcontrolsPrimaryKey,
+			Columns: []string{program.SubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramSubcontrols
+		edge.Schema = puo.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3392,16 +3271,16 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if nodes := puo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.SubcontrolsTable,
-			Columns: program.SubcontrolsPrimaryKey,
+			Columns: []string{program.SubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramSubcontrols
+		edge.Schema = puo.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3882,54 +3761,6 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 			},
 		}
 		edge.Schema = puo.schemaConfig.ProgramActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.StandardsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   program.StandardsTable,
-			Columns: program.StandardsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.StandardPrograms
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !puo.mutation.StandardsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   program.StandardsTable,
-			Columns: program.StandardsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.StandardPrograms
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.StandardsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   program.StandardsTable,
-			Columns: program.StandardsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.StandardPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

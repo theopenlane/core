@@ -145,9 +145,51 @@ func (shc *StandardHistoryCreate) SetTags(s []string) *StandardHistoryCreate {
 	return shc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (shc *StandardHistoryCreate) SetOwnerID(s string) *StandardHistoryCreate {
+	shc.mutation.SetOwnerID(s)
+	return shc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableOwnerID(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetOwnerID(*s)
+	}
+	return shc
+}
+
 // SetName sets the "name" field.
 func (shc *StandardHistoryCreate) SetName(s string) *StandardHistoryCreate {
 	shc.mutation.SetName(s)
+	return shc
+}
+
+// SetShortName sets the "short_name" field.
+func (shc *StandardHistoryCreate) SetShortName(s string) *StandardHistoryCreate {
+	shc.mutation.SetShortName(s)
+	return shc
+}
+
+// SetNillableShortName sets the "short_name" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableShortName(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetShortName(*s)
+	}
+	return shc
+}
+
+// SetFramework sets the "framework" field.
+func (shc *StandardHistoryCreate) SetFramework(s string) *StandardHistoryCreate {
+	shc.mutation.SetFramework(s)
+	return shc
+}
+
+// SetNillableFramework sets the "framework" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableFramework(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetFramework(*s)
+	}
 	return shc
 }
 
@@ -165,16 +207,36 @@ func (shc *StandardHistoryCreate) SetNillableDescription(s *string) *StandardHis
 	return shc
 }
 
-// SetFamily sets the "family" field.
-func (shc *StandardHistoryCreate) SetFamily(s string) *StandardHistoryCreate {
-	shc.mutation.SetFamily(s)
+// SetGoverningBody sets the "governing_body" field.
+func (shc *StandardHistoryCreate) SetGoverningBody(s string) *StandardHistoryCreate {
+	shc.mutation.SetGoverningBody(s)
 	return shc
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableFamily(s *string) *StandardHistoryCreate {
+// SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableGoverningBody(s *string) *StandardHistoryCreate {
 	if s != nil {
-		shc.SetFamily(*s)
+		shc.SetGoverningBody(*s)
+	}
+	return shc
+}
+
+// SetDomains sets the "domains" field.
+func (shc *StandardHistoryCreate) SetDomains(s []string) *StandardHistoryCreate {
+	shc.mutation.SetDomains(s)
+	return shc
+}
+
+// SetLink sets the "link" field.
+func (shc *StandardHistoryCreate) SetLink(s string) *StandardHistoryCreate {
+	shc.mutation.SetLink(s)
+	return shc
+}
+
+// SetNillableLink sets the "link" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableLink(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetLink(*s)
 	}
 	return shc
 }
@@ -189,6 +251,48 @@ func (shc *StandardHistoryCreate) SetStatus(s string) *StandardHistoryCreate {
 func (shc *StandardHistoryCreate) SetNillableStatus(s *string) *StandardHistoryCreate {
 	if s != nil {
 		shc.SetStatus(*s)
+	}
+	return shc
+}
+
+// SetIsPublic sets the "is_public" field.
+func (shc *StandardHistoryCreate) SetIsPublic(b bool) *StandardHistoryCreate {
+	shc.mutation.SetIsPublic(b)
+	return shc
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableIsPublic(b *bool) *StandardHistoryCreate {
+	if b != nil {
+		shc.SetIsPublic(*b)
+	}
+	return shc
+}
+
+// SetFreeToUse sets the "free_to_use" field.
+func (shc *StandardHistoryCreate) SetFreeToUse(b bool) *StandardHistoryCreate {
+	shc.mutation.SetFreeToUse(b)
+	return shc
+}
+
+// SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableFreeToUse(b *bool) *StandardHistoryCreate {
+	if b != nil {
+		shc.SetFreeToUse(*b)
+	}
+	return shc
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (shc *StandardHistoryCreate) SetSystemOwned(b bool) *StandardHistoryCreate {
+	shc.mutation.SetSystemOwned(b)
+	return shc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableSystemOwned(b *bool) *StandardHistoryCreate {
+	if b != nil {
+		shc.SetSystemOwned(*b)
 	}
 	return shc
 }
@@ -221,51 +325,17 @@ func (shc *StandardHistoryCreate) SetNillableVersion(s *string) *StandardHistory
 	return shc
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (shc *StandardHistoryCreate) SetPurposeAndScope(s string) *StandardHistoryCreate {
-	shc.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (shc *StandardHistoryCreate) SetRevision(s string) *StandardHistoryCreate {
+	shc.mutation.SetRevision(s)
 	return shc
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillablePurposeAndScope(s *string) *StandardHistoryCreate {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableRevision(s *string) *StandardHistoryCreate {
 	if s != nil {
-		shc.SetPurposeAndScope(*s)
+		shc.SetRevision(*s)
 	}
-	return shc
-}
-
-// SetBackground sets the "background" field.
-func (shc *StandardHistoryCreate) SetBackground(s string) *StandardHistoryCreate {
-	shc.mutation.SetBackground(s)
-	return shc
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableBackground(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetBackground(*s)
-	}
-	return shc
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (shc *StandardHistoryCreate) SetSatisfies(s string) *StandardHistoryCreate {
-	shc.mutation.SetSatisfies(s)
-	return shc
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableSatisfies(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetSatisfies(*s)
-	}
-	return shc
-}
-
-// SetDetails sets the "details" field.
-func (shc *StandardHistoryCreate) SetDetails(m map[string]interface{}) *StandardHistoryCreate {
-	shc.mutation.SetDetails(m)
 	return shc
 }
 
@@ -333,6 +403,18 @@ func (shc *StandardHistoryCreate) defaults() {
 	if _, ok := shc.mutation.Tags(); !ok {
 		v := standardhistory.DefaultTags
 		shc.mutation.SetTags(v)
+	}
+	if _, ok := shc.mutation.IsPublic(); !ok {
+		v := standardhistory.DefaultIsPublic
+		shc.mutation.SetIsPublic(v)
+	}
+	if _, ok := shc.mutation.FreeToUse(); !ok {
+		v := standardhistory.DefaultFreeToUse
+		shc.mutation.SetFreeToUse(v)
+	}
+	if _, ok := shc.mutation.SystemOwned(); !ok {
+		v := standardhistory.DefaultSystemOwned
+		shc.mutation.SetSystemOwned(v)
 	}
 	if _, ok := shc.mutation.ID(); !ok {
 		v := standardhistory.DefaultID()
@@ -432,21 +514,53 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := shc.mutation.OwnerID(); ok {
+		_spec.SetField(standardhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
 	if value, ok := shc.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := shc.mutation.ShortName(); ok {
+		_spec.SetField(standardhistory.FieldShortName, field.TypeString, value)
+		_node.ShortName = value
+	}
+	if value, ok := shc.mutation.Framework(); ok {
+		_spec.SetField(standardhistory.FieldFramework, field.TypeString, value)
+		_node.Framework = value
 	}
 	if value, ok := shc.mutation.Description(); ok {
 		_spec.SetField(standardhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := shc.mutation.Family(); ok {
-		_spec.SetField(standardhistory.FieldFamily, field.TypeString, value)
-		_node.Family = value
+	if value, ok := shc.mutation.GoverningBody(); ok {
+		_spec.SetField(standardhistory.FieldGoverningBody, field.TypeString, value)
+		_node.GoverningBody = value
+	}
+	if value, ok := shc.mutation.Domains(); ok {
+		_spec.SetField(standardhistory.FieldDomains, field.TypeJSON, value)
+		_node.Domains = value
+	}
+	if value, ok := shc.mutation.Link(); ok {
+		_spec.SetField(standardhistory.FieldLink, field.TypeString, value)
+		_node.Link = value
 	}
 	if value, ok := shc.mutation.Status(); ok {
 		_spec.SetField(standardhistory.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := shc.mutation.IsPublic(); ok {
+		_spec.SetField(standardhistory.FieldIsPublic, field.TypeBool, value)
+		_node.IsPublic = value
+	}
+	if value, ok := shc.mutation.FreeToUse(); ok {
+		_spec.SetField(standardhistory.FieldFreeToUse, field.TypeBool, value)
+		_node.FreeToUse = value
+	}
+	if value, ok := shc.mutation.SystemOwned(); ok {
+		_spec.SetField(standardhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
 	}
 	if value, ok := shc.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)
@@ -456,21 +570,9 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := shc.mutation.PurposeAndScope(); ok {
-		_spec.SetField(standardhistory.FieldPurposeAndScope, field.TypeString, value)
-		_node.PurposeAndScope = value
-	}
-	if value, ok := shc.mutation.Background(); ok {
-		_spec.SetField(standardhistory.FieldBackground, field.TypeString, value)
-		_node.Background = value
-	}
-	if value, ok := shc.mutation.Satisfies(); ok {
-		_spec.SetField(standardhistory.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
-	}
-	if value, ok := shc.mutation.Details(); ok {
-		_spec.SetField(standardhistory.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
+	if value, ok := shc.mutation.Revision(); ok {
+		_spec.SetField(standardhistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	return _node, _spec
 }

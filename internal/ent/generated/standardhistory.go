@@ -39,26 +39,36 @@ type StandardHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// the long name of the standard body
 	Name string `json:"name,omitempty"`
+	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
+	ShortName string `json:"short_name,omitempty"`
+	// unique identifier of the standard with version
+	Framework string `json:"framework,omitempty"`
 	// description of the standard
 	Description string `json:"description,omitempty"`
-	// family of the standard, e.g. 800-53, 800-171, 27001, etc.
-	Family string `json:"family,omitempty"`
+	// governing body of the standard, e.g. AICPA, etc.
+	GoverningBody string `json:"governing_body,omitempty"`
+	// domains the standard covers, e.g. availability, confidentiality, etc.
+	Domains []string `json:"domains,omitempty"`
+	// link to the official standard documentation
+	Link string `json:"link,omitempty"`
 	// status of the standard - active, deprecated, etc.
 	Status string `json:"status,omitempty"`
+	// indicates if the standard should be made available to all users, only for public standards
+	IsPublic bool `json:"is_public,omitempty"`
+	// indicates if the standard is freely distributable under a trial license, only for public standards
+	FreeToUse bool `json:"free_to_use,omitempty"`
+	// indicates if the standard is owned by the the openlane system
+	SystemOwned bool `json:"system_owned,omitempty"`
 	// type of the standard - security, privacy, etc.
 	StandardType string `json:"standard_type,omitempty"`
 	// version of the standard
 	Version string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background of the standard
-	Background string `json:"background,omitempty"`
-	// which controls are satisfied by the standard
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data with details of the standard
-	Details      map[string]interface{} `json:"details,omitempty"`
+	// internal revision of the standard
+	Revision     string `json:"revision,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -67,11 +77,13 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case standardhistory.FieldTags, standardhistory.FieldDetails:
+		case standardhistory.FieldTags, standardhistory.FieldDomains:
 			values[i] = new([]byte)
 		case standardhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldName, standardhistory.FieldDescription, standardhistory.FieldFamily, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldPurposeAndScope, standardhistory.FieldBackground, standardhistory.FieldSatisfies:
+		case standardhistory.FieldIsPublic, standardhistory.FieldFreeToUse, standardhistory.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldOwnerID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldRevision:
 			values[i] = new(sql.NullString)
 		case standardhistory.FieldHistoryTime, standardhistory.FieldCreatedAt, standardhistory.FieldUpdatedAt, standardhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -158,11 +170,29 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case standardhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				sh.OwnerID = value.String
+			}
 		case standardhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				sh.Name = value.String
+			}
+		case standardhistory.FieldShortName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field short_name", values[i])
+			} else if value.Valid {
+				sh.ShortName = value.String
+			}
+		case standardhistory.FieldFramework:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field framework", values[i])
+			} else if value.Valid {
+				sh.Framework = value.String
 			}
 		case standardhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -170,17 +200,49 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.Description = value.String
 			}
-		case standardhistory.FieldFamily:
+		case standardhistory.FieldGoverningBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field family", values[i])
+				return fmt.Errorf("unexpected type %T for field governing_body", values[i])
 			} else if value.Valid {
-				sh.Family = value.String
+				sh.GoverningBody = value.String
+			}
+		case standardhistory.FieldDomains:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field domains", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &sh.Domains); err != nil {
+					return fmt.Errorf("unmarshal field domains: %w", err)
+				}
+			}
+		case standardhistory.FieldLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field link", values[i])
+			} else if value.Valid {
+				sh.Link = value.String
 			}
 		case standardhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				sh.Status = value.String
+			}
+		case standardhistory.FieldIsPublic:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_public", values[i])
+			} else if value.Valid {
+				sh.IsPublic = value.Bool
+			}
+		case standardhistory.FieldFreeToUse:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field free_to_use", values[i])
+			} else if value.Valid {
+				sh.FreeToUse = value.Bool
+			}
+		case standardhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				sh.SystemOwned = value.Bool
 			}
 		case standardhistory.FieldStandardType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -194,31 +256,11 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.Version = value.String
 			}
-		case standardhistory.FieldPurposeAndScope:
+		case standardhistory.FieldRevision:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field purpose_and_scope", values[i])
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				sh.PurposeAndScope = value.String
-			}
-		case standardhistory.FieldBackground:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field background", values[i])
-			} else if value.Valid {
-				sh.Background = value.String
-			}
-		case standardhistory.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				sh.Satisfies = value.String
-			}
-		case standardhistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sh.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+				sh.Revision = value.String
 			}
 		default:
 			sh.selectValues.Set(columns[i], values[i])
@@ -286,17 +328,41 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(sh.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(sh.Name)
+	builder.WriteString(", ")
+	builder.WriteString("short_name=")
+	builder.WriteString(sh.ShortName)
+	builder.WriteString(", ")
+	builder.WriteString("framework=")
+	builder.WriteString(sh.Framework)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(sh.Description)
 	builder.WriteString(", ")
-	builder.WriteString("family=")
-	builder.WriteString(sh.Family)
+	builder.WriteString("governing_body=")
+	builder.WriteString(sh.GoverningBody)
+	builder.WriteString(", ")
+	builder.WriteString("domains=")
+	builder.WriteString(fmt.Sprintf("%v", sh.Domains))
+	builder.WriteString(", ")
+	builder.WriteString("link=")
+	builder.WriteString(sh.Link)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(sh.Status)
+	builder.WriteString(", ")
+	builder.WriteString("is_public=")
+	builder.WriteString(fmt.Sprintf("%v", sh.IsPublic))
+	builder.WriteString(", ")
+	builder.WriteString("free_to_use=")
+	builder.WriteString(fmt.Sprintf("%v", sh.FreeToUse))
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", sh.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("standard_type=")
 	builder.WriteString(sh.StandardType)
@@ -304,17 +370,8 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(sh.Version)
 	builder.WriteString(", ")
-	builder.WriteString("purpose_and_scope=")
-	builder.WriteString(sh.PurposeAndScope)
-	builder.WriteString(", ")
-	builder.WriteString("background=")
-	builder.WriteString(sh.Background)
-	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(sh.Satisfies)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", sh.Details))
+	builder.WriteString("revision=")
+	builder.WriteString(sh.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

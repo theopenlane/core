@@ -39,6 +39,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -95,6 +96,7 @@ type OrganizationQuery struct {
 	withControls                      *ControlQuery
 	withSubcontrols                   *SubcontrolQuery
 	withEvidence                      *EvidenceQuery
+	withStandards                     *StandardQuery
 	withMembers                       *OrgMembershipQuery
 	loadTotal                         []func(context.Context, []*Organization) error
 	modifiers                         []func(*sql.Selector)
@@ -135,6 +137,7 @@ type OrganizationQuery struct {
 	withNamedControls                 map[string]*ControlQuery
 	withNamedSubcontrols              map[string]*SubcontrolQuery
 	withNamedEvidence                 map[string]*EvidenceQuery
+	withNamedStandards                map[string]*StandardQuery
 	withNamedMembers                  map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1172,6 +1175,31 @@ func (oq *OrganizationQuery) QueryEvidence() *EvidenceQuery {
 	return query
 }
 
+// QueryStandards chains the current query on the "standards" edge.
+func (oq *OrganizationQuery) QueryStandards() *StandardQuery {
+	query := (&StandardClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.StandardsTable, organization.StandardsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1429,6 +1457,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withControls:                 oq.withControls.Clone(),
 		withSubcontrols:              oq.withSubcontrols.Clone(),
 		withEvidence:                 oq.withEvidence.Clone(),
+		withStandards:                oq.withStandards.Clone(),
 		withMembers:                  oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -1877,6 +1906,17 @@ func (oq *OrganizationQuery) WithEvidence(opts ...func(*EvidenceQuery)) *Organiz
 	return oq
 }
 
+// WithStandards tells the query-builder to eager-load the nodes that are connected to
+// the "standards" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithStandards(opts ...func(*StandardQuery)) *OrganizationQuery {
+	query := (&StandardClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withStandards = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1972,7 +2012,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [41]bool{
+		loadedTypes = [42]bool{
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -2013,6 +2053,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withControls != nil,
 			oq.withSubcontrols != nil,
 			oq.withEvidence != nil,
+			oq.withStandards != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -2328,6 +2369,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withStandards; query != nil {
+		if err := oq.loadStandards(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Standards = []*Standard{} },
+			func(n *Organization, e *Standard) { n.Edges.Standards = append(n.Edges.Standards, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -2591,6 +2639,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadEvidence(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedEvidence(name) },
 			func(n *Organization, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedStandards {
+		if err := oq.loadStandards(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedStandards(name) },
+			func(n *Organization, e *Standard) { n.appendNamedStandards(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3781,6 +3836,7 @@ func (oq *OrganizationQuery) loadInternalPolicies(ctx context.Context, query *In
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(internalpolicy.FieldOwnerID)
 	}
@@ -3842,7 +3898,6 @@ func (oq *OrganizationQuery) loadControlObjectives(ctx context.Context, query *C
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(controlobjective.FieldOwnerID)
 	}
@@ -3873,6 +3928,7 @@ func (oq *OrganizationQuery) loadNarratives(ctx context.Context, query *Narrativ
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(narrative.FieldOwnerID)
 	}
@@ -3970,6 +4026,36 @@ func (oq *OrganizationQuery) loadEvidence(ctx context.Context, query *EvidenceQu
 	}
 	query.Where(predicate.Evidence(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.EvidenceColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadStandards(ctx context.Context, query *StandardQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Standard)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(standard.FieldOwnerID)
+	}
+	query.Where(predicate.Standard(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.StandardsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -4635,6 +4721,20 @@ func (oq *OrganizationQuery) WithNamedEvidence(name string, opts ...func(*Eviden
 		oq.withNamedEvidence = make(map[string]*EvidenceQuery)
 	}
 	oq.withNamedEvidence[name] = query
+	return oq
+}
+
+// WithNamedStandards tells the query-builder to eager-load the nodes that are connected to the "standards"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedStandards(name string, opts ...func(*StandardQuery)) *OrganizationQuery {
+	query := (&StandardClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedStandards == nil {
+		oq.withNamedStandards = make(map[string]*StandardQuery)
+	}
+	oq.withNamedStandards[name] = query
 	return oq
 }
 

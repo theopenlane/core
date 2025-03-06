@@ -85,50 +85,64 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subcontrol_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
-			case "subcontrolType":
-				return ec.fieldContext_Subcontrol_subcontrolType(ctx, field)
-			case "version":
-				return ec.fieldContext_Subcontrol_version(ctx, field)
-			case "subcontrolNumber":
-				return ec.fieldContext_Subcontrol_subcontrolNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_Subcontrol_family(ctx, field)
-			case "class":
-				return ec.fieldContext_Subcontrol_class(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_Subcontrol_mappedFrameworks(ctx, field)
-			case "implementationEvidence":
-				return ec.fieldContext_Subcontrol_implementationEvidence(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
-			case "implementationDate":
-				return ec.fieldContext_Subcontrol_implementationDate(ctx, field)
-			case "implementationVerification":
-				return ec.fieldContext_Subcontrol_implementationVerification(ctx, field)
-			case "implementationVerificationDate":
-				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
-			case "details":
-				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "controlType":
+				return ec.fieldContext_Subcontrol_controlType(ctx, field)
+			case "category":
+				return ec.fieldContext_Subcontrol_category(ctx, field)
+			case "categoryID":
+				return ec.fieldContext_Subcontrol_categoryID(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_Subcontrol_subcategory(ctx, field)
+			case "mappedCategories":
+				return ec.fieldContext_Subcontrol_mappedCategories(ctx, field)
+			case "assessmentObjectives":
+				return ec.fieldContext_Subcontrol_assessmentObjectives(ctx, field)
+			case "assessmentMethods":
+				return ec.fieldContext_Subcontrol_assessmentMethods(ctx, field)
+			case "controlQuestions":
+				return ec.fieldContext_Subcontrol_controlQuestions(ctx, field)
+			case "implementationGuidance":
+				return ec.fieldContext_Subcontrol_implementationGuidance(ctx, field)
 			case "exampleEvidence":
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
+			case "references":
+				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "refCode":
+				return ec.fieldContext_Subcontrol_refCode(ctx, field)
+			case "controlID":
+				return ec.fieldContext_Subcontrol_controlID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "controls":
-				return ec.fieldContext_Subcontrol_controls(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Subcontrol_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Subcontrol_controlObjectives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Subcontrol_tasks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_Subcontrol_narratives(ctx, field)
+			case "risks":
+				return ec.fieldContext_Subcontrol_risks(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Subcontrol_actionPlans(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Subcontrol_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "controlOwner":
+				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -195,50 +209,64 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subcontrol_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
-			case "subcontrolType":
-				return ec.fieldContext_Subcontrol_subcontrolType(ctx, field)
-			case "version":
-				return ec.fieldContext_Subcontrol_version(ctx, field)
-			case "subcontrolNumber":
-				return ec.fieldContext_Subcontrol_subcontrolNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_Subcontrol_family(ctx, field)
-			case "class":
-				return ec.fieldContext_Subcontrol_class(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_Subcontrol_mappedFrameworks(ctx, field)
-			case "implementationEvidence":
-				return ec.fieldContext_Subcontrol_implementationEvidence(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
-			case "implementationDate":
-				return ec.fieldContext_Subcontrol_implementationDate(ctx, field)
-			case "implementationVerification":
-				return ec.fieldContext_Subcontrol_implementationVerification(ctx, field)
-			case "implementationVerificationDate":
-				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
-			case "details":
-				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "controlType":
+				return ec.fieldContext_Subcontrol_controlType(ctx, field)
+			case "category":
+				return ec.fieldContext_Subcontrol_category(ctx, field)
+			case "categoryID":
+				return ec.fieldContext_Subcontrol_categoryID(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_Subcontrol_subcategory(ctx, field)
+			case "mappedCategories":
+				return ec.fieldContext_Subcontrol_mappedCategories(ctx, field)
+			case "assessmentObjectives":
+				return ec.fieldContext_Subcontrol_assessmentObjectives(ctx, field)
+			case "assessmentMethods":
+				return ec.fieldContext_Subcontrol_assessmentMethods(ctx, field)
+			case "controlQuestions":
+				return ec.fieldContext_Subcontrol_controlQuestions(ctx, field)
+			case "implementationGuidance":
+				return ec.fieldContext_Subcontrol_implementationGuidance(ctx, field)
 			case "exampleEvidence":
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
+			case "references":
+				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "refCode":
+				return ec.fieldContext_Subcontrol_refCode(ctx, field)
+			case "controlID":
+				return ec.fieldContext_Subcontrol_controlID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "controls":
-				return ec.fieldContext_Subcontrol_controls(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Subcontrol_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Subcontrol_controlObjectives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Subcontrol_tasks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_Subcontrol_narratives(ctx, field)
+			case "risks":
+				return ec.fieldContext_Subcontrol_risks(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Subcontrol_actionPlans(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Subcontrol_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "controlOwner":
+				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -349,50 +377,64 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subcontrol_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
-			case "subcontrolType":
-				return ec.fieldContext_Subcontrol_subcontrolType(ctx, field)
-			case "version":
-				return ec.fieldContext_Subcontrol_version(ctx, field)
-			case "subcontrolNumber":
-				return ec.fieldContext_Subcontrol_subcontrolNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_Subcontrol_family(ctx, field)
-			case "class":
-				return ec.fieldContext_Subcontrol_class(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_Subcontrol_mappedFrameworks(ctx, field)
-			case "implementationEvidence":
-				return ec.fieldContext_Subcontrol_implementationEvidence(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
-			case "implementationDate":
-				return ec.fieldContext_Subcontrol_implementationDate(ctx, field)
-			case "implementationVerification":
-				return ec.fieldContext_Subcontrol_implementationVerification(ctx, field)
-			case "implementationVerificationDate":
-				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
-			case "details":
-				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "controlType":
+				return ec.fieldContext_Subcontrol_controlType(ctx, field)
+			case "category":
+				return ec.fieldContext_Subcontrol_category(ctx, field)
+			case "categoryID":
+				return ec.fieldContext_Subcontrol_categoryID(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_Subcontrol_subcategory(ctx, field)
+			case "mappedCategories":
+				return ec.fieldContext_Subcontrol_mappedCategories(ctx, field)
+			case "assessmentObjectives":
+				return ec.fieldContext_Subcontrol_assessmentObjectives(ctx, field)
+			case "assessmentMethods":
+				return ec.fieldContext_Subcontrol_assessmentMethods(ctx, field)
+			case "controlQuestions":
+				return ec.fieldContext_Subcontrol_controlQuestions(ctx, field)
+			case "implementationGuidance":
+				return ec.fieldContext_Subcontrol_implementationGuidance(ctx, field)
 			case "exampleEvidence":
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
+			case "references":
+				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "refCode":
+				return ec.fieldContext_Subcontrol_refCode(ctx, field)
+			case "controlID":
+				return ec.fieldContext_Subcontrol_controlID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "controls":
-				return ec.fieldContext_Subcontrol_controls(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Subcontrol_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Subcontrol_controlObjectives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Subcontrol_tasks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_Subcontrol_narratives(ctx, field)
+			case "risks":
+				return ec.fieldContext_Subcontrol_risks(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Subcontrol_actionPlans(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Subcontrol_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "controlOwner":
+				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},

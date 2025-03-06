@@ -14,8 +14,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/entdb"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/testutils"
@@ -107,8 +111,30 @@ func (suite *HookTestSuite) seedUser() *generated.User {
 	t := suite.T()
 
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
-	user, err := suite.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
+	newUser, err := suite.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
 	require.NoError(t, err)
 
-	return user
+	// get user and their org memberships
+	newUser, err = suite.client.User.Query().Where(user.ID(newUser.ID)).WithOrgMemberships().Only(ctx)
+	require.NoError(t, err)
+
+	return newUser
+}
+
+func (suite *HookTestSuite) seedSystemAdmin() *generated.User {
+	newUser := suite.seedUser()
+
+	req := fgax.TupleRequest{
+		SubjectID:   newUser.ID,
+		SubjectType: auth.UserSubjectType,
+		ObjectID:    rule.SystemObjectID,
+		ObjectType:  rule.SystemObject,
+		Relation:    fgax.SystemAdminRelation,
+	}
+
+	// add system admin relation for user
+	_, err := suite.client.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
+	require.NoError(suite.T(), err)
+
+	return newUser
 }

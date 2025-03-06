@@ -17,6 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -44,6 +46,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -270,19 +274,6 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-
-		case "standard":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&StandardClient{config: ap.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
-				return err
-			}
-			ap.WithNamedStandard(alias, func(wq *StandardQuery) {
-				*wq = *query
-			})
 
 		case "risk":
 			var (
@@ -999,29 +990,70 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				*wq = *query
 			})
 
-		case "procedures":
+		case "standard":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: c.config}).Query()
+				query = (&StandardClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			c.withStandard = query
+			if _, ok := fieldSeen[control.FieldStandardID]; !ok {
+				selectedFields = append(selectedFields, control.FieldStandardID)
+				fieldSeen[control.FieldStandardID] = struct{}{}
+			}
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
-		case "subcontrols":
+		case "evidence":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: c.config}).Query()
+				query = (&EvidenceClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			c.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+				*wq = *query
+			})
+
+		case "controlImplementations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlImplementationClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlimplementationImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
+				*wq = *query
+			})
+
+		case "mappedControls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MappedControlClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, mappedcontrolImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedMappedControls(alias, func(wq *MappedControlQuery) {
 				*wq = *query
 			})
 
@@ -1038,16 +1070,29 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				*wq = *query
 			})
 
-		case "standard":
+		case "subcontrols":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&StandardClient{config: c.config}).Query()
+				query = (&SubcontrolClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedStandard(alias, func(wq *StandardQuery) {
+			c.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
+
+		case "tasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -1090,44 +1135,53 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				*wq = *query
 			})
 
-		case "tasks":
+		case "procedures":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: c.config}).Query()
+				query = (&ProcedureClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedTasks(alias, func(wq *TaskQuery) {
+			c.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
-		case "programs":
+		case "internalPolicies":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: c.config}).Query()
+				query = (&InternalPolicyClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			c.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
-		case "evidence":
+		case "controlOwner":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: c.config}).Query()
+				query = (&GroupClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
-				*wq = *query
-			})
+			c.withControlOwner = query
+
+		case "delegate":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			c.withDelegate = query
 		case "createdAt":
 			if _, ok := fieldSeen[control.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, control.FieldCreatedAt)
@@ -1173,11 +1227,6 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldOwnerID)
 				fieldSeen[control.FieldOwnerID] = struct{}{}
 			}
-		case "name":
-			if _, ok := fieldSeen[control.FieldName]; !ok {
-				selectedFields = append(selectedFields, control.FieldName)
-				fieldSeen[control.FieldName] = struct{}{}
-			}
 		case "description":
 			if _, ok := fieldSeen[control.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, control.FieldDescription)
@@ -1188,55 +1237,75 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldStatus)
 				fieldSeen[control.FieldStatus] = struct{}{}
 			}
-		case "controlType":
-			if _, ok := fieldSeen[control.FieldControlType]; !ok {
-				selectedFields = append(selectedFields, control.FieldControlType)
-				fieldSeen[control.FieldControlType] = struct{}{}
-			}
-		case "version":
-			if _, ok := fieldSeen[control.FieldVersion]; !ok {
-				selectedFields = append(selectedFields, control.FieldVersion)
-				fieldSeen[control.FieldVersion] = struct{}{}
-			}
-		case "controlNumber":
-			if _, ok := fieldSeen[control.FieldControlNumber]; !ok {
-				selectedFields = append(selectedFields, control.FieldControlNumber)
-				fieldSeen[control.FieldControlNumber] = struct{}{}
-			}
-		case "family":
-			if _, ok := fieldSeen[control.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, control.FieldFamily)
-				fieldSeen[control.FieldFamily] = struct{}{}
-			}
-		case "class":
-			if _, ok := fieldSeen[control.FieldClass]; !ok {
-				selectedFields = append(selectedFields, control.FieldClass)
-				fieldSeen[control.FieldClass] = struct{}{}
-			}
 		case "source":
 			if _, ok := fieldSeen[control.FieldSource]; !ok {
 				selectedFields = append(selectedFields, control.FieldSource)
 				fieldSeen[control.FieldSource] = struct{}{}
 			}
-		case "satisfies":
-			if _, ok := fieldSeen[control.FieldSatisfies]; !ok {
-				selectedFields = append(selectedFields, control.FieldSatisfies)
-				fieldSeen[control.FieldSatisfies] = struct{}{}
+		case "controlType":
+			if _, ok := fieldSeen[control.FieldControlType]; !ok {
+				selectedFields = append(selectedFields, control.FieldControlType)
+				fieldSeen[control.FieldControlType] = struct{}{}
 			}
-		case "mappedFrameworks":
-			if _, ok := fieldSeen[control.FieldMappedFrameworks]; !ok {
-				selectedFields = append(selectedFields, control.FieldMappedFrameworks)
-				fieldSeen[control.FieldMappedFrameworks] = struct{}{}
+		case "category":
+			if _, ok := fieldSeen[control.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, control.FieldCategory)
+				fieldSeen[control.FieldCategory] = struct{}{}
 			}
-		case "details":
-			if _, ok := fieldSeen[control.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, control.FieldDetails)
-				fieldSeen[control.FieldDetails] = struct{}{}
+		case "categoryID":
+			if _, ok := fieldSeen[control.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, control.FieldCategoryID)
+				fieldSeen[control.FieldCategoryID] = struct{}{}
+			}
+		case "subcategory":
+			if _, ok := fieldSeen[control.FieldSubcategory]; !ok {
+				selectedFields = append(selectedFields, control.FieldSubcategory)
+				fieldSeen[control.FieldSubcategory] = struct{}{}
+			}
+		case "mappedCategories":
+			if _, ok := fieldSeen[control.FieldMappedCategories]; !ok {
+				selectedFields = append(selectedFields, control.FieldMappedCategories)
+				fieldSeen[control.FieldMappedCategories] = struct{}{}
+			}
+		case "assessmentObjectives":
+			if _, ok := fieldSeen[control.FieldAssessmentObjectives]; !ok {
+				selectedFields = append(selectedFields, control.FieldAssessmentObjectives)
+				fieldSeen[control.FieldAssessmentObjectives] = struct{}{}
+			}
+		case "assessmentMethods":
+			if _, ok := fieldSeen[control.FieldAssessmentMethods]; !ok {
+				selectedFields = append(selectedFields, control.FieldAssessmentMethods)
+				fieldSeen[control.FieldAssessmentMethods] = struct{}{}
+			}
+		case "controlQuestions":
+			if _, ok := fieldSeen[control.FieldControlQuestions]; !ok {
+				selectedFields = append(selectedFields, control.FieldControlQuestions)
+				fieldSeen[control.FieldControlQuestions] = struct{}{}
+			}
+		case "implementationGuidance":
+			if _, ok := fieldSeen[control.FieldImplementationGuidance]; !ok {
+				selectedFields = append(selectedFields, control.FieldImplementationGuidance)
+				fieldSeen[control.FieldImplementationGuidance] = struct{}{}
 			}
 		case "exampleEvidence":
 			if _, ok := fieldSeen[control.FieldExampleEvidence]; !ok {
 				selectedFields = append(selectedFields, control.FieldExampleEvidence)
 				fieldSeen[control.FieldExampleEvidence] = struct{}{}
+			}
+		case "references":
+			if _, ok := fieldSeen[control.FieldReferences]; !ok {
+				selectedFields = append(selectedFields, control.FieldReferences)
+				fieldSeen[control.FieldReferences] = struct{}{}
+			}
+		case "refCode":
+			if _, ok := fieldSeen[control.FieldRefCode]; !ok {
+				selectedFields = append(selectedFields, control.FieldRefCode)
+				fieldSeen[control.FieldRefCode] = struct{}{}
+			}
+		case "standardID":
+			if _, ok := fieldSeen[control.FieldStandardID]; !ok {
+				selectedFields = append(selectedFields, control.FieldStandardID)
+				fieldSeen[control.FieldStandardID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1360,11 +1429,6 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldOwnerID)
 				fieldSeen[controlhistory.FieldOwnerID] = struct{}{}
 			}
-		case "name":
-			if _, ok := fieldSeen[controlhistory.FieldName]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldName)
-				fieldSeen[controlhistory.FieldName] = struct{}{}
-			}
 		case "description":
 			if _, ok := fieldSeen[controlhistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldDescription)
@@ -1375,55 +1439,75 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldStatus)
 				fieldSeen[controlhistory.FieldStatus] = struct{}{}
 			}
-		case "controlType":
-			if _, ok := fieldSeen[controlhistory.FieldControlType]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldControlType)
-				fieldSeen[controlhistory.FieldControlType] = struct{}{}
-			}
-		case "version":
-			if _, ok := fieldSeen[controlhistory.FieldVersion]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldVersion)
-				fieldSeen[controlhistory.FieldVersion] = struct{}{}
-			}
-		case "controlNumber":
-			if _, ok := fieldSeen[controlhistory.FieldControlNumber]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldControlNumber)
-				fieldSeen[controlhistory.FieldControlNumber] = struct{}{}
-			}
-		case "family":
-			if _, ok := fieldSeen[controlhistory.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldFamily)
-				fieldSeen[controlhistory.FieldFamily] = struct{}{}
-			}
-		case "class":
-			if _, ok := fieldSeen[controlhistory.FieldClass]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldClass)
-				fieldSeen[controlhistory.FieldClass] = struct{}{}
-			}
 		case "source":
 			if _, ok := fieldSeen[controlhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldSource)
 				fieldSeen[controlhistory.FieldSource] = struct{}{}
 			}
-		case "satisfies":
-			if _, ok := fieldSeen[controlhistory.FieldSatisfies]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldSatisfies)
-				fieldSeen[controlhistory.FieldSatisfies] = struct{}{}
+		case "controlType":
+			if _, ok := fieldSeen[controlhistory.FieldControlType]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldControlType)
+				fieldSeen[controlhistory.FieldControlType] = struct{}{}
 			}
-		case "mappedFrameworks":
-			if _, ok := fieldSeen[controlhistory.FieldMappedFrameworks]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldMappedFrameworks)
-				fieldSeen[controlhistory.FieldMappedFrameworks] = struct{}{}
+		case "category":
+			if _, ok := fieldSeen[controlhistory.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldCategory)
+				fieldSeen[controlhistory.FieldCategory] = struct{}{}
 			}
-		case "details":
-			if _, ok := fieldSeen[controlhistory.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldDetails)
-				fieldSeen[controlhistory.FieldDetails] = struct{}{}
+		case "categoryID":
+			if _, ok := fieldSeen[controlhistory.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldCategoryID)
+				fieldSeen[controlhistory.FieldCategoryID] = struct{}{}
+			}
+		case "subcategory":
+			if _, ok := fieldSeen[controlhistory.FieldSubcategory]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSubcategory)
+				fieldSeen[controlhistory.FieldSubcategory] = struct{}{}
+			}
+		case "mappedCategories":
+			if _, ok := fieldSeen[controlhistory.FieldMappedCategories]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldMappedCategories)
+				fieldSeen[controlhistory.FieldMappedCategories] = struct{}{}
+			}
+		case "assessmentObjectives":
+			if _, ok := fieldSeen[controlhistory.FieldAssessmentObjectives]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldAssessmentObjectives)
+				fieldSeen[controlhistory.FieldAssessmentObjectives] = struct{}{}
+			}
+		case "assessmentMethods":
+			if _, ok := fieldSeen[controlhistory.FieldAssessmentMethods]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldAssessmentMethods)
+				fieldSeen[controlhistory.FieldAssessmentMethods] = struct{}{}
+			}
+		case "controlQuestions":
+			if _, ok := fieldSeen[controlhistory.FieldControlQuestions]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldControlQuestions)
+				fieldSeen[controlhistory.FieldControlQuestions] = struct{}{}
+			}
+		case "implementationGuidance":
+			if _, ok := fieldSeen[controlhistory.FieldImplementationGuidance]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldImplementationGuidance)
+				fieldSeen[controlhistory.FieldImplementationGuidance] = struct{}{}
 			}
 		case "exampleEvidence":
 			if _, ok := fieldSeen[controlhistory.FieldExampleEvidence]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldExampleEvidence)
 				fieldSeen[controlhistory.FieldExampleEvidence] = struct{}{}
+			}
+		case "references":
+			if _, ok := fieldSeen[controlhistory.FieldReferences]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldReferences)
+				fieldSeen[controlhistory.FieldReferences] = struct{}{}
+			}
+		case "refCode":
+			if _, ok := fieldSeen[controlhistory.FieldRefCode]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldRefCode)
+				fieldSeen[controlhistory.FieldRefCode] = struct{}{}
+			}
+		case "standardID":
+			if _, ok := fieldSeen[controlhistory.FieldStandardID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldStandardID)
+				fieldSeen[controlhistory.FieldStandardID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1462,6 +1546,278 @@ func newControlHistoryPaginateArgs(rv map[string]any) *controlhistoryPaginateArg
 	}
 	if v, ok := rv[whereField].(*ControlHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithControlHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (ci *ControlImplementationQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlImplementationQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return ci, nil
+	}
+	if err := ci.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return ci, nil
+}
+
+func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(controlimplementation.Columns))
+		selectedFields = []string{controlimplementation.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "controls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: ci.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			ci.WithNamedControls(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[controlimplementation.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldCreatedAt)
+				fieldSeen[controlimplementation.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[controlimplementation.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldUpdatedAt)
+				fieldSeen[controlimplementation.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[controlimplementation.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldCreatedBy)
+				fieldSeen[controlimplementation.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[controlimplementation.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldUpdatedBy)
+				fieldSeen[controlimplementation.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[controlimplementation.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldDeletedAt)
+				fieldSeen[controlimplementation.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[controlimplementation.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldDeletedBy)
+				fieldSeen[controlimplementation.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[controlimplementation.FieldTags]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldTags)
+				fieldSeen[controlimplementation.FieldTags] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[controlimplementation.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldStatus)
+				fieldSeen[controlimplementation.FieldStatus] = struct{}{}
+			}
+		case "implementationDate":
+			if _, ok := fieldSeen[controlimplementation.FieldImplementationDate]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldImplementationDate)
+				fieldSeen[controlimplementation.FieldImplementationDate] = struct{}{}
+			}
+		case "verified":
+			if _, ok := fieldSeen[controlimplementation.FieldVerified]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldVerified)
+				fieldSeen[controlimplementation.FieldVerified] = struct{}{}
+			}
+		case "verificationDate":
+			if _, ok := fieldSeen[controlimplementation.FieldVerificationDate]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldVerificationDate)
+				fieldSeen[controlimplementation.FieldVerificationDate] = struct{}{}
+			}
+		case "details":
+			if _, ok := fieldSeen[controlimplementation.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldDetails)
+				fieldSeen[controlimplementation.FieldDetails] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		ci.Select(selectedFields...)
+	}
+	return nil
+}
+
+type controlimplementationPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ControlImplementationPaginateOption
+}
+
+func newControlImplementationPaginateArgs(rv map[string]any) *controlimplementationPaginateArgs {
+	args := &controlimplementationPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ControlImplementationWhereInput); ok {
+		args.opts = append(args.opts, WithControlImplementationFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (cih *ControlImplementationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlImplementationHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return cih, nil
+	}
+	if err := cih.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return cih, nil
+}
+
+func (cih *ControlImplementationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(controlimplementationhistory.Columns))
+		selectedFields = []string{controlimplementationhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldHistoryTime)
+				fieldSeen[controlimplementationhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldRef)
+				fieldSeen[controlimplementationhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldOperation)
+				fieldSeen[controlimplementationhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldCreatedAt)
+				fieldSeen[controlimplementationhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldUpdatedAt)
+				fieldSeen[controlimplementationhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldCreatedBy)
+				fieldSeen[controlimplementationhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldUpdatedBy)
+				fieldSeen[controlimplementationhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldDeletedAt)
+				fieldSeen[controlimplementationhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldDeletedBy)
+				fieldSeen[controlimplementationhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldTags)
+				fieldSeen[controlimplementationhistory.FieldTags] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldStatus)
+				fieldSeen[controlimplementationhistory.FieldStatus] = struct{}{}
+			}
+		case "implementationDate":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldImplementationDate]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldImplementationDate)
+				fieldSeen[controlimplementationhistory.FieldImplementationDate] = struct{}{}
+			}
+		case "verified":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldVerified]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldVerified)
+				fieldSeen[controlimplementationhistory.FieldVerified] = struct{}{}
+			}
+		case "verificationDate":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldVerificationDate]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldVerificationDate)
+				fieldSeen[controlimplementationhistory.FieldVerificationDate] = struct{}{}
+			}
+		case "details":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldDetails)
+				fieldSeen[controlimplementationhistory.FieldDetails] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		cih.Select(selectedFields...)
+	}
+	return nil
+}
+
+type controlimplementationhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ControlImplementationHistoryPaginateOption
+}
+
+func newControlImplementationHistoryPaginateArgs(rv map[string]any) *controlimplementationhistoryPaginateArgs {
+	args := &controlimplementationhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ControlImplementationHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithControlImplementationHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -1542,16 +1898,29 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				*wq = *query
 			})
 
-		case "internalPolicies":
+		case "programs":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: co.config}).Query()
+				query = (&ProgramClient{config: co.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
 				return err
 			}
-			co.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			co.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -1565,6 +1934,32 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				return err
 			}
 			co.WithNamedControls(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
+
+		case "internalPolicies":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -1594,32 +1989,6 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				*wq = *query
 			})
 
-		case "subcontrols":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&SubcontrolClient{config: co.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
-				return err
-			}
-			co.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
-				*wq = *query
-			})
-
-		case "standard":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&StandardClient{config: co.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
-				return err
-			}
-			co.WithNamedStandard(alias, func(wq *StandardQuery) {
-				*wq = *query
-			})
-
 		case "narratives":
 			var (
 				alias = field.Alias
@@ -1643,32 +2012,6 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				return err
 			}
 			co.WithNamedTasks(alias, func(wq *TaskQuery) {
-				*wq = *query
-			})
-
-		case "programs":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProgramClient{config: co.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
-				return err
-			}
-			co.WithNamedPrograms(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
-
-		case "evidence":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&EvidenceClient{config: co.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
-				return err
-			}
-			co.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -1721,15 +2064,20 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldName)
 				fieldSeen[controlobjective.FieldName] = struct{}{}
 			}
-		case "description":
-			if _, ok := fieldSeen[controlobjective.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldDescription)
-				fieldSeen[controlobjective.FieldDescription] = struct{}{}
+		case "desiredOutcome":
+			if _, ok := fieldSeen[controlobjective.FieldDesiredOutcome]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldDesiredOutcome)
+				fieldSeen[controlobjective.FieldDesiredOutcome] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[controlobjective.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldStatus)
 				fieldSeen[controlobjective.FieldStatus] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[controlobjective.FieldSource]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldSource)
+				fieldSeen[controlobjective.FieldSource] = struct{}{}
 			}
 		case "controlObjectiveType":
 			if _, ok := fieldSeen[controlobjective.FieldControlObjectiveType]; !ok {
@@ -1741,40 +2089,15 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldVersion)
 				fieldSeen[controlobjective.FieldVersion] = struct{}{}
 			}
-		case "controlNumber":
-			if _, ok := fieldSeen[controlobjective.FieldControlNumber]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldControlNumber)
-				fieldSeen[controlobjective.FieldControlNumber] = struct{}{}
+		case "category":
+			if _, ok := fieldSeen[controlobjective.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldCategory)
+				fieldSeen[controlobjective.FieldCategory] = struct{}{}
 			}
-		case "family":
-			if _, ok := fieldSeen[controlobjective.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldFamily)
-				fieldSeen[controlobjective.FieldFamily] = struct{}{}
-			}
-		case "class":
-			if _, ok := fieldSeen[controlobjective.FieldClass]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldClass)
-				fieldSeen[controlobjective.FieldClass] = struct{}{}
-			}
-		case "source":
-			if _, ok := fieldSeen[controlobjective.FieldSource]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldSource)
-				fieldSeen[controlobjective.FieldSource] = struct{}{}
-			}
-		case "mappedFrameworks":
-			if _, ok := fieldSeen[controlobjective.FieldMappedFrameworks]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldMappedFrameworks)
-				fieldSeen[controlobjective.FieldMappedFrameworks] = struct{}{}
-			}
-		case "details":
-			if _, ok := fieldSeen[controlobjective.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldDetails)
-				fieldSeen[controlobjective.FieldDetails] = struct{}{}
-			}
-		case "exampleEvidence":
-			if _, ok := fieldSeen[controlobjective.FieldExampleEvidence]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldExampleEvidence)
-				fieldSeen[controlobjective.FieldExampleEvidence] = struct{}{}
+		case "subcategory":
+			if _, ok := fieldSeen[controlobjective.FieldSubcategory]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldSubcategory)
+				fieldSeen[controlobjective.FieldSubcategory] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1903,15 +2226,20 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldName)
 				fieldSeen[controlobjectivehistory.FieldName] = struct{}{}
 			}
-		case "description":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldDescription)
-				fieldSeen[controlobjectivehistory.FieldDescription] = struct{}{}
+		case "desiredOutcome":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldDesiredOutcome]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldDesiredOutcome)
+				fieldSeen[controlobjectivehistory.FieldDesiredOutcome] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldStatus)
 				fieldSeen[controlobjectivehistory.FieldStatus] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldSource]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldSource)
+				fieldSeen[controlobjectivehistory.FieldSource] = struct{}{}
 			}
 		case "controlObjectiveType":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldControlObjectiveType]; !ok {
@@ -1923,40 +2251,15 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldVersion)
 				fieldSeen[controlobjectivehistory.FieldVersion] = struct{}{}
 			}
-		case "controlNumber":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldControlNumber]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldControlNumber)
-				fieldSeen[controlobjectivehistory.FieldControlNumber] = struct{}{}
+		case "category":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldCategory)
+				fieldSeen[controlobjectivehistory.FieldCategory] = struct{}{}
 			}
-		case "family":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldFamily)
-				fieldSeen[controlobjectivehistory.FieldFamily] = struct{}{}
-			}
-		case "class":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldClass]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldClass)
-				fieldSeen[controlobjectivehistory.FieldClass] = struct{}{}
-			}
-		case "source":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldSource]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldSource)
-				fieldSeen[controlobjectivehistory.FieldSource] = struct{}{}
-			}
-		case "mappedFrameworks":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldMappedFrameworks]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldMappedFrameworks)
-				fieldSeen[controlobjectivehistory.FieldMappedFrameworks] = struct{}{}
-			}
-		case "details":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldDetails)
-				fieldSeen[controlobjectivehistory.FieldDetails] = struct{}{}
-			}
-		case "exampleEvidence":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldExampleEvidence]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldExampleEvidence)
-				fieldSeen[controlobjectivehistory.FieldExampleEvidence] = struct{}{}
+		case "subcategory":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldSubcategory]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldSubcategory)
+				fieldSeen[controlobjectivehistory.FieldSubcategory] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -6739,6 +7042,261 @@ func newInvitePaginateArgs(rv map[string]any) *invitePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (mc *MappedControlQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappedControlQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return mc, nil
+	}
+	if err := mc.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return mc, nil
+}
+
+func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(mappedcontrol.Columns))
+		selectedFields = []string{mappedcontrol.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "controls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: mc.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			mc.WithNamedControls(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: mc.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			mc.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[mappedcontrol.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldCreatedAt)
+				fieldSeen[mappedcontrol.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[mappedcontrol.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldUpdatedAt)
+				fieldSeen[mappedcontrol.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[mappedcontrol.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldCreatedBy)
+				fieldSeen[mappedcontrol.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[mappedcontrol.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldUpdatedBy)
+				fieldSeen[mappedcontrol.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[mappedcontrol.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldDeletedAt)
+				fieldSeen[mappedcontrol.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[mappedcontrol.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldDeletedBy)
+				fieldSeen[mappedcontrol.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[mappedcontrol.FieldTags]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldTags)
+				fieldSeen[mappedcontrol.FieldTags] = struct{}{}
+			}
+		case "mappingType":
+			if _, ok := fieldSeen[mappedcontrol.FieldMappingType]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldMappingType)
+				fieldSeen[mappedcontrol.FieldMappingType] = struct{}{}
+			}
+		case "relation":
+			if _, ok := fieldSeen[mappedcontrol.FieldRelation]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldRelation)
+				fieldSeen[mappedcontrol.FieldRelation] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		mc.Select(selectedFields...)
+	}
+	return nil
+}
+
+type mappedcontrolPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []MappedControlPaginateOption
+}
+
+func newMappedControlPaginateArgs(rv map[string]any) *mappedcontrolPaginateArgs {
+	args := &mappedcontrolPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*MappedControlWhereInput); ok {
+		args.opts = append(args.opts, WithMappedControlFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (mch *MappedControlHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappedControlHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return mch, nil
+	}
+	if err := mch.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return mch, nil
+}
+
+func (mch *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(mappedcontrolhistory.Columns))
+		selectedFields = []string{mappedcontrolhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldHistoryTime)
+				fieldSeen[mappedcontrolhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldRef)
+				fieldSeen[mappedcontrolhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldOperation)
+				fieldSeen[mappedcontrolhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldCreatedAt)
+				fieldSeen[mappedcontrolhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldUpdatedAt)
+				fieldSeen[mappedcontrolhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldCreatedBy)
+				fieldSeen[mappedcontrolhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldUpdatedBy)
+				fieldSeen[mappedcontrolhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldDeletedAt)
+				fieldSeen[mappedcontrolhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldDeletedBy)
+				fieldSeen[mappedcontrolhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldTags)
+				fieldSeen[mappedcontrolhistory.FieldTags] = struct{}{}
+			}
+		case "mappingType":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldMappingType]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldMappingType)
+				fieldSeen[mappedcontrolhistory.FieldMappingType] = struct{}{}
+			}
+		case "relation":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldRelation]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldRelation)
+				fieldSeen[mappedcontrolhistory.FieldRelation] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		mch.Select(selectedFields...)
+	}
+	return nil
+}
+
+type mappedcontrolhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []MappedControlHistoryPaginateOption
+}
+
+func newMappedControlHistoryPaginateArgs(rv map[string]any) *mappedcontrolhistoryPaginateArgs {
+	args := &mappedcontrolhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*MappedControlHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithMappedControlHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (n *NarrativeQuery) CollectFields(ctx context.Context, satisfies ...string) (*NarrativeQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -6814,20 +7372,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				*wq = *query
 			})
 
-		case "internalPolicy":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: n.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
-				return err
-			}
-			n.WithNamedInternalPolicy(alias, func(wq *InternalPolicyQuery) {
-				*wq = *query
-			})
-
-		case "control":
+		case "satisfies":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -6836,33 +7381,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
 				return err
 			}
-			n.WithNamedControl(alias, func(wq *ControlQuery) {
-				*wq = *query
-			})
-
-		case "procedure":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProcedureClient{config: n.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
-				return err
-			}
-			n.WithNamedProcedure(alias, func(wq *ProcedureQuery) {
-				*wq = *query
-			})
-
-		case "controlObjective":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: n.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
-				return err
-			}
-			n.WithNamedControlObjective(alias, func(wq *ControlObjectiveQuery) {
+			n.WithNamedSatisfies(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -6932,11 +7451,6 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[narrative.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, narrative.FieldDescription)
 				fieldSeen[narrative.FieldDescription] = struct{}{}
-			}
-		case "satisfies":
-			if _, ok := fieldSeen[narrative.FieldSatisfies]; !ok {
-				selectedFields = append(selectedFields, narrative.FieldSatisfies)
-				fieldSeen[narrative.FieldSatisfies] = struct{}{}
 			}
 		case "details":
 			if _, ok := fieldSeen[narrative.FieldDetails]; !ok {
@@ -7074,11 +7588,6 @@ func (nh *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[narrativehistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, narrativehistory.FieldDescription)
 				fieldSeen[narrativehistory.FieldDescription] = struct{}{}
-			}
-		case "satisfies":
-			if _, ok := fieldSeen[narrativehistory.FieldSatisfies]; !ok {
-				selectedFields = append(selectedFields, narrativehistory.FieldSatisfies)
-				fieldSeen[narrativehistory.FieldSatisfies] = struct{}{}
 			}
 		case "details":
 			if _, ok := fieldSeen[narrativehistory.FieldDetails]; !ok {
@@ -8767,6 +9276,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "standards":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&StandardClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedStandards(alias, func(wq *StandardQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -10296,19 +10818,6 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				*wq = *query
 			})
 
-		case "standards":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&StandardClient{config: pr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
-				return err
-			}
-			pr.WithNamedStandards(alias, func(wq *StandardQuery) {
-				*wq = *query
-			})
-
 		case "users":
 			var (
 				alias = field.Alias
@@ -11338,18 +11847,20 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "controlObjectives":
+		case "owner":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: s.config}).Query()
+				query = (&OrganizationClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
-				*wq = *query
-			})
+			s.withOwner = query
+			if _, ok := fieldSeen[standard.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldOwnerID)
+				fieldSeen[standard.FieldOwnerID] = struct{}{}
+			}
 
 		case "controls":
 			var (
@@ -11361,45 +11872,6 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				return err
 			}
 			s.WithNamedControls(alias, func(wq *ControlQuery) {
-				*wq = *query
-			})
-
-		case "procedures":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProcedureClient{config: s.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
-				return err
-			}
-			s.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
-				*wq = *query
-			})
-
-		case "actionPlans":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ActionPlanClient{config: s.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
-				return err
-			}
-			s.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
-				*wq = *query
-			})
-
-		case "programs":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProgramClient{config: s.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
-				return err
-			}
-			s.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -11437,25 +11909,65 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, standard.FieldTags)
 				fieldSeen[standard.FieldTags] = struct{}{}
 			}
+		case "ownerID":
+			if _, ok := fieldSeen[standard.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldOwnerID)
+				fieldSeen[standard.FieldOwnerID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[standard.FieldName]; !ok {
 				selectedFields = append(selectedFields, standard.FieldName)
 				fieldSeen[standard.FieldName] = struct{}{}
+			}
+		case "shortName":
+			if _, ok := fieldSeen[standard.FieldShortName]; !ok {
+				selectedFields = append(selectedFields, standard.FieldShortName)
+				fieldSeen[standard.FieldShortName] = struct{}{}
+			}
+		case "framework":
+			if _, ok := fieldSeen[standard.FieldFramework]; !ok {
+				selectedFields = append(selectedFields, standard.FieldFramework)
+				fieldSeen[standard.FieldFramework] = struct{}{}
 			}
 		case "description":
 			if _, ok := fieldSeen[standard.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, standard.FieldDescription)
 				fieldSeen[standard.FieldDescription] = struct{}{}
 			}
-		case "family":
-			if _, ok := fieldSeen[standard.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, standard.FieldFamily)
-				fieldSeen[standard.FieldFamily] = struct{}{}
+		case "governingBody":
+			if _, ok := fieldSeen[standard.FieldGoverningBody]; !ok {
+				selectedFields = append(selectedFields, standard.FieldGoverningBody)
+				fieldSeen[standard.FieldGoverningBody] = struct{}{}
+			}
+		case "domains":
+			if _, ok := fieldSeen[standard.FieldDomains]; !ok {
+				selectedFields = append(selectedFields, standard.FieldDomains)
+				fieldSeen[standard.FieldDomains] = struct{}{}
+			}
+		case "link":
+			if _, ok := fieldSeen[standard.FieldLink]; !ok {
+				selectedFields = append(selectedFields, standard.FieldLink)
+				fieldSeen[standard.FieldLink] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[standard.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, standard.FieldStatus)
 				fieldSeen[standard.FieldStatus] = struct{}{}
+			}
+		case "isPublic":
+			if _, ok := fieldSeen[standard.FieldIsPublic]; !ok {
+				selectedFields = append(selectedFields, standard.FieldIsPublic)
+				fieldSeen[standard.FieldIsPublic] = struct{}{}
+			}
+		case "freeToUse":
+			if _, ok := fieldSeen[standard.FieldFreeToUse]; !ok {
+				selectedFields = append(selectedFields, standard.FieldFreeToUse)
+				fieldSeen[standard.FieldFreeToUse] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[standard.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, standard.FieldSystemOwned)
+				fieldSeen[standard.FieldSystemOwned] = struct{}{}
 			}
 		case "standardType":
 			if _, ok := fieldSeen[standard.FieldStandardType]; !ok {
@@ -11467,25 +11979,10 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, standard.FieldVersion)
 				fieldSeen[standard.FieldVersion] = struct{}{}
 			}
-		case "purposeAndScope":
-			if _, ok := fieldSeen[standard.FieldPurposeAndScope]; !ok {
-				selectedFields = append(selectedFields, standard.FieldPurposeAndScope)
-				fieldSeen[standard.FieldPurposeAndScope] = struct{}{}
-			}
-		case "background":
-			if _, ok := fieldSeen[standard.FieldBackground]; !ok {
-				selectedFields = append(selectedFields, standard.FieldBackground)
-				fieldSeen[standard.FieldBackground] = struct{}{}
-			}
-		case "satisfies":
-			if _, ok := fieldSeen[standard.FieldSatisfies]; !ok {
-				selectedFields = append(selectedFields, standard.FieldSatisfies)
-				fieldSeen[standard.FieldSatisfies] = struct{}{}
-			}
-		case "details":
-			if _, ok := fieldSeen[standard.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, standard.FieldDetails)
-				fieldSeen[standard.FieldDetails] = struct{}{}
+		case "revision":
+			if _, ok := fieldSeen[standard.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, standard.FieldRevision)
+				fieldSeen[standard.FieldRevision] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -11599,25 +12096,65 @@ func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, standardhistory.FieldTags)
 				fieldSeen[standardhistory.FieldTags] = struct{}{}
 			}
+		case "ownerID":
+			if _, ok := fieldSeen[standardhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldOwnerID)
+				fieldSeen[standardhistory.FieldOwnerID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[standardhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldName)
 				fieldSeen[standardhistory.FieldName] = struct{}{}
+			}
+		case "shortName":
+			if _, ok := fieldSeen[standardhistory.FieldShortName]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldShortName)
+				fieldSeen[standardhistory.FieldShortName] = struct{}{}
+			}
+		case "framework":
+			if _, ok := fieldSeen[standardhistory.FieldFramework]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldFramework)
+				fieldSeen[standardhistory.FieldFramework] = struct{}{}
 			}
 		case "description":
 			if _, ok := fieldSeen[standardhistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldDescription)
 				fieldSeen[standardhistory.FieldDescription] = struct{}{}
 			}
-		case "family":
-			if _, ok := fieldSeen[standardhistory.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldFamily)
-				fieldSeen[standardhistory.FieldFamily] = struct{}{}
+		case "governingBody":
+			if _, ok := fieldSeen[standardhistory.FieldGoverningBody]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldGoverningBody)
+				fieldSeen[standardhistory.FieldGoverningBody] = struct{}{}
+			}
+		case "domains":
+			if _, ok := fieldSeen[standardhistory.FieldDomains]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldDomains)
+				fieldSeen[standardhistory.FieldDomains] = struct{}{}
+			}
+		case "link":
+			if _, ok := fieldSeen[standardhistory.FieldLink]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldLink)
+				fieldSeen[standardhistory.FieldLink] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[standardhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldStatus)
 				fieldSeen[standardhistory.FieldStatus] = struct{}{}
+			}
+		case "isPublic":
+			if _, ok := fieldSeen[standardhistory.FieldIsPublic]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldIsPublic)
+				fieldSeen[standardhistory.FieldIsPublic] = struct{}{}
+			}
+		case "freeToUse":
+			if _, ok := fieldSeen[standardhistory.FieldFreeToUse]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldFreeToUse)
+				fieldSeen[standardhistory.FieldFreeToUse] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[standardhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldSystemOwned)
+				fieldSeen[standardhistory.FieldSystemOwned] = struct{}{}
 			}
 		case "standardType":
 			if _, ok := fieldSeen[standardhistory.FieldStandardType]; !ok {
@@ -11629,25 +12166,10 @@ func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, standardhistory.FieldVersion)
 				fieldSeen[standardhistory.FieldVersion] = struct{}{}
 			}
-		case "purposeAndScope":
-			if _, ok := fieldSeen[standardhistory.FieldPurposeAndScope]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldPurposeAndScope)
-				fieldSeen[standardhistory.FieldPurposeAndScope] = struct{}{}
-			}
-		case "background":
-			if _, ok := fieldSeen[standardhistory.FieldBackground]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldBackground)
-				fieldSeen[standardhistory.FieldBackground] = struct{}{}
-			}
-		case "satisfies":
-			if _, ok := fieldSeen[standardhistory.FieldSatisfies]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldSatisfies)
-				fieldSeen[standardhistory.FieldSatisfies] = struct{}{}
-			}
-		case "details":
-			if _, ok := fieldSeen[standardhistory.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldDetails)
-				fieldSeen[standardhistory.FieldDetails] = struct{}{}
+		case "revision":
+			if _, ok := fieldSeen[standardhistory.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldRevision)
+				fieldSeen[standardhistory.FieldRevision] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -11727,16 +12249,57 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				fieldSeen[subcontrol.FieldOwnerID] = struct{}{}
 			}
 
-		case "controls":
+		case "control":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&ControlClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedControls(alias, func(wq *ControlQuery) {
+			s.withControl = query
+			if _, ok := fieldSeen[subcontrol.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldControlID)
+				fieldSeen[subcontrol.FieldControlID] = struct{}{}
+			}
+
+		case "mappedControls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MappedControlClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, mappedcontrolImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedMappedControls(alias, func(wq *MappedControlQuery) {
+				*wq = *query
+			})
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+				*wq = *query
+			})
+
+		case "controlObjectives":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -11753,31 +12316,92 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				*wq = *query
 			})
 
-		case "programs":
+		case "narratives":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: s.config}).Query()
+				query = (&NarrativeClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			s.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
-		case "evidence":
+		case "risks":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: s.config}).Query()
+				query = (&RiskClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			s.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
+
+		case "actionPlans":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ActionPlanClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
+				*wq = *query
+			})
+
+		case "procedures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "internalPolicies":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
+		case "controlOwner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			s.withControlOwner = query
+
+		case "delegate":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			s.withDelegate = query
 		case "createdAt":
 			if _, ok := fieldSeen[subcontrol.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldCreatedAt)
@@ -11823,11 +12447,6 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldOwnerID)
 				fieldSeen[subcontrol.FieldOwnerID] = struct{}{}
 			}
-		case "name":
-			if _, ok := fieldSeen[subcontrol.FieldName]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldName)
-				fieldSeen[subcontrol.FieldName] = struct{}{}
-			}
 		case "description":
 			if _, ok := fieldSeen[subcontrol.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldDescription)
@@ -11838,75 +12457,75 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldStatus)
 				fieldSeen[subcontrol.FieldStatus] = struct{}{}
 			}
-		case "subcontrolType":
-			if _, ok := fieldSeen[subcontrol.FieldSubcontrolType]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldSubcontrolType)
-				fieldSeen[subcontrol.FieldSubcontrolType] = struct{}{}
-			}
-		case "version":
-			if _, ok := fieldSeen[subcontrol.FieldVersion]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldVersion)
-				fieldSeen[subcontrol.FieldVersion] = struct{}{}
-			}
-		case "subcontrolNumber":
-			if _, ok := fieldSeen[subcontrol.FieldSubcontrolNumber]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldSubcontrolNumber)
-				fieldSeen[subcontrol.FieldSubcontrolNumber] = struct{}{}
-			}
-		case "family":
-			if _, ok := fieldSeen[subcontrol.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldFamily)
-				fieldSeen[subcontrol.FieldFamily] = struct{}{}
-			}
-		case "class":
-			if _, ok := fieldSeen[subcontrol.FieldClass]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldClass)
-				fieldSeen[subcontrol.FieldClass] = struct{}{}
-			}
 		case "source":
 			if _, ok := fieldSeen[subcontrol.FieldSource]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldSource)
 				fieldSeen[subcontrol.FieldSource] = struct{}{}
 			}
-		case "mappedFrameworks":
-			if _, ok := fieldSeen[subcontrol.FieldMappedFrameworks]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldMappedFrameworks)
-				fieldSeen[subcontrol.FieldMappedFrameworks] = struct{}{}
+		case "controlType":
+			if _, ok := fieldSeen[subcontrol.FieldControlType]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldControlType)
+				fieldSeen[subcontrol.FieldControlType] = struct{}{}
 			}
-		case "implementationEvidence":
-			if _, ok := fieldSeen[subcontrol.FieldImplementationEvidence]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldImplementationEvidence)
-				fieldSeen[subcontrol.FieldImplementationEvidence] = struct{}{}
+		case "category":
+			if _, ok := fieldSeen[subcontrol.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldCategory)
+				fieldSeen[subcontrol.FieldCategory] = struct{}{}
 			}
-		case "implementationStatus":
-			if _, ok := fieldSeen[subcontrol.FieldImplementationStatus]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldImplementationStatus)
-				fieldSeen[subcontrol.FieldImplementationStatus] = struct{}{}
+		case "categoryID":
+			if _, ok := fieldSeen[subcontrol.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldCategoryID)
+				fieldSeen[subcontrol.FieldCategoryID] = struct{}{}
 			}
-		case "implementationDate":
-			if _, ok := fieldSeen[subcontrol.FieldImplementationDate]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldImplementationDate)
-				fieldSeen[subcontrol.FieldImplementationDate] = struct{}{}
+		case "subcategory":
+			if _, ok := fieldSeen[subcontrol.FieldSubcategory]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldSubcategory)
+				fieldSeen[subcontrol.FieldSubcategory] = struct{}{}
 			}
-		case "implementationVerification":
-			if _, ok := fieldSeen[subcontrol.FieldImplementationVerification]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldImplementationVerification)
-				fieldSeen[subcontrol.FieldImplementationVerification] = struct{}{}
+		case "mappedCategories":
+			if _, ok := fieldSeen[subcontrol.FieldMappedCategories]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldMappedCategories)
+				fieldSeen[subcontrol.FieldMappedCategories] = struct{}{}
 			}
-		case "implementationVerificationDate":
-			if _, ok := fieldSeen[subcontrol.FieldImplementationVerificationDate]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldImplementationVerificationDate)
-				fieldSeen[subcontrol.FieldImplementationVerificationDate] = struct{}{}
+		case "assessmentObjectives":
+			if _, ok := fieldSeen[subcontrol.FieldAssessmentObjectives]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldAssessmentObjectives)
+				fieldSeen[subcontrol.FieldAssessmentObjectives] = struct{}{}
 			}
-		case "details":
-			if _, ok := fieldSeen[subcontrol.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldDetails)
-				fieldSeen[subcontrol.FieldDetails] = struct{}{}
+		case "assessmentMethods":
+			if _, ok := fieldSeen[subcontrol.FieldAssessmentMethods]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldAssessmentMethods)
+				fieldSeen[subcontrol.FieldAssessmentMethods] = struct{}{}
+			}
+		case "controlQuestions":
+			if _, ok := fieldSeen[subcontrol.FieldControlQuestions]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldControlQuestions)
+				fieldSeen[subcontrol.FieldControlQuestions] = struct{}{}
+			}
+		case "implementationGuidance":
+			if _, ok := fieldSeen[subcontrol.FieldImplementationGuidance]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldImplementationGuidance)
+				fieldSeen[subcontrol.FieldImplementationGuidance] = struct{}{}
 			}
 		case "exampleEvidence":
 			if _, ok := fieldSeen[subcontrol.FieldExampleEvidence]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldExampleEvidence)
 				fieldSeen[subcontrol.FieldExampleEvidence] = struct{}{}
+			}
+		case "references":
+			if _, ok := fieldSeen[subcontrol.FieldReferences]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldReferences)
+				fieldSeen[subcontrol.FieldReferences] = struct{}{}
+			}
+		case "refCode":
+			if _, ok := fieldSeen[subcontrol.FieldRefCode]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldRefCode)
+				fieldSeen[subcontrol.FieldRefCode] = struct{}{}
+			}
+		case "controlID":
+			if _, ok := fieldSeen[subcontrol.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldControlID)
+				fieldSeen[subcontrol.FieldControlID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -12030,11 +12649,6 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldOwnerID)
 				fieldSeen[subcontrolhistory.FieldOwnerID] = struct{}{}
 			}
-		case "name":
-			if _, ok := fieldSeen[subcontrolhistory.FieldName]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldName)
-				fieldSeen[subcontrolhistory.FieldName] = struct{}{}
-			}
 		case "description":
 			if _, ok := fieldSeen[subcontrolhistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldDescription)
@@ -12045,75 +12659,75 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldStatus)
 				fieldSeen[subcontrolhistory.FieldStatus] = struct{}{}
 			}
-		case "subcontrolType":
-			if _, ok := fieldSeen[subcontrolhistory.FieldSubcontrolType]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldSubcontrolType)
-				fieldSeen[subcontrolhistory.FieldSubcontrolType] = struct{}{}
-			}
-		case "version":
-			if _, ok := fieldSeen[subcontrolhistory.FieldVersion]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldVersion)
-				fieldSeen[subcontrolhistory.FieldVersion] = struct{}{}
-			}
-		case "subcontrolNumber":
-			if _, ok := fieldSeen[subcontrolhistory.FieldSubcontrolNumber]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldSubcontrolNumber)
-				fieldSeen[subcontrolhistory.FieldSubcontrolNumber] = struct{}{}
-			}
-		case "family":
-			if _, ok := fieldSeen[subcontrolhistory.FieldFamily]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldFamily)
-				fieldSeen[subcontrolhistory.FieldFamily] = struct{}{}
-			}
-		case "class":
-			if _, ok := fieldSeen[subcontrolhistory.FieldClass]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldClass)
-				fieldSeen[subcontrolhistory.FieldClass] = struct{}{}
-			}
 		case "source":
 			if _, ok := fieldSeen[subcontrolhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldSource)
 				fieldSeen[subcontrolhistory.FieldSource] = struct{}{}
 			}
-		case "mappedFrameworks":
-			if _, ok := fieldSeen[subcontrolhistory.FieldMappedFrameworks]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldMappedFrameworks)
-				fieldSeen[subcontrolhistory.FieldMappedFrameworks] = struct{}{}
+		case "controlType":
+			if _, ok := fieldSeen[subcontrolhistory.FieldControlType]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldControlType)
+				fieldSeen[subcontrolhistory.FieldControlType] = struct{}{}
 			}
-		case "implementationEvidence":
-			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationEvidence]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationEvidence)
-				fieldSeen[subcontrolhistory.FieldImplementationEvidence] = struct{}{}
+		case "category":
+			if _, ok := fieldSeen[subcontrolhistory.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldCategory)
+				fieldSeen[subcontrolhistory.FieldCategory] = struct{}{}
 			}
-		case "implementationStatus":
-			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationStatus]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationStatus)
-				fieldSeen[subcontrolhistory.FieldImplementationStatus] = struct{}{}
+		case "categoryID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldCategoryID)
+				fieldSeen[subcontrolhistory.FieldCategoryID] = struct{}{}
 			}
-		case "implementationDate":
-			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationDate]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationDate)
-				fieldSeen[subcontrolhistory.FieldImplementationDate] = struct{}{}
+		case "subcategory":
+			if _, ok := fieldSeen[subcontrolhistory.FieldSubcategory]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldSubcategory)
+				fieldSeen[subcontrolhistory.FieldSubcategory] = struct{}{}
 			}
-		case "implementationVerification":
-			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationVerification]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationVerification)
-				fieldSeen[subcontrolhistory.FieldImplementationVerification] = struct{}{}
+		case "mappedCategories":
+			if _, ok := fieldSeen[subcontrolhistory.FieldMappedCategories]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldMappedCategories)
+				fieldSeen[subcontrolhistory.FieldMappedCategories] = struct{}{}
 			}
-		case "implementationVerificationDate":
-			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationVerificationDate]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationVerificationDate)
-				fieldSeen[subcontrolhistory.FieldImplementationVerificationDate] = struct{}{}
+		case "assessmentObjectives":
+			if _, ok := fieldSeen[subcontrolhistory.FieldAssessmentObjectives]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldAssessmentObjectives)
+				fieldSeen[subcontrolhistory.FieldAssessmentObjectives] = struct{}{}
 			}
-		case "details":
-			if _, ok := fieldSeen[subcontrolhistory.FieldDetails]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldDetails)
-				fieldSeen[subcontrolhistory.FieldDetails] = struct{}{}
+		case "assessmentMethods":
+			if _, ok := fieldSeen[subcontrolhistory.FieldAssessmentMethods]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldAssessmentMethods)
+				fieldSeen[subcontrolhistory.FieldAssessmentMethods] = struct{}{}
+			}
+		case "controlQuestions":
+			if _, ok := fieldSeen[subcontrolhistory.FieldControlQuestions]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldControlQuestions)
+				fieldSeen[subcontrolhistory.FieldControlQuestions] = struct{}{}
+			}
+		case "implementationGuidance":
+			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationGuidance]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationGuidance)
+				fieldSeen[subcontrolhistory.FieldImplementationGuidance] = struct{}{}
 			}
 		case "exampleEvidence":
 			if _, ok := fieldSeen[subcontrolhistory.FieldExampleEvidence]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldExampleEvidence)
 				fieldSeen[subcontrolhistory.FieldExampleEvidence] = struct{}{}
+			}
+		case "references":
+			if _, ok := fieldSeen[subcontrolhistory.FieldReferences]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldReferences)
+				fieldSeen[subcontrolhistory.FieldReferences] = struct{}{}
+			}
+		case "refCode":
+			if _, ok := fieldSeen[subcontrolhistory.FieldRefCode]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldRefCode)
+				fieldSeen[subcontrolhistory.FieldRefCode] = struct{}{}
+			}
+		case "controlID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldControlID)
+				fieldSeen[subcontrolhistory.FieldControlID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

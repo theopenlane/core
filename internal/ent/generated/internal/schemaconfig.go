@@ -17,18 +17,20 @@ type SchemaConfig struct {
 	ControlBlockedGroups             string // Control-blocked_groups->Group table.
 	ControlEditors                   string // Control-editors->Group table.
 	ControlViewers                   string // Control-viewers->Group table.
-	ControlProcedures                string // Control-procedures->Procedure table.
-	ControlSubcontrols               string // Control-subcontrols->Subcontrol table.
+	ControlControlImplementations    string // Control-control_implementations->ControlImplementation table.
+	ControlControlObjectives         string // Control-control_objectives->ControlObjective table.
+	ControlTasks                     string // Control-tasks->Task table.
 	ControlNarratives                string // Control-narratives->Narrative table.
 	ControlRisks                     string // Control-risks->Risk table.
 	ControlActionPlans               string // Control-action_plans->ActionPlan table.
-	ControlTasks                     string // Control-tasks->Task table.
+	ControlProcedures                string // Control-procedures->Procedure table.
 	ControlHistory                   string // ControlHistory table.
+	ControlImplementation            string // ControlImplementation table.
+	ControlImplementationHistory     string // ControlImplementationHistory table.
 	ControlObjective                 string // ControlObjective table.
 	ControlObjectiveBlockedGroups    string // ControlObjective-blocked_groups->Group table.
 	ControlObjectiveEditors          string // ControlObjective-editors->Group table.
 	ControlObjectiveViewers          string // ControlObjective-viewers->Group table.
-	ControlObjectiveNarratives       string // ControlObjective-narratives->Narrative table.
 	ControlObjectiveTasks            string // ControlObjective-tasks->Task table.
 	ControlObjectiveHistory          string // ControlObjectiveHistory table.
 	DocumentData                     string // DocumentData table.
@@ -75,11 +77,14 @@ type SchemaConfig struct {
 	InternalPolicyEditors            string // InternalPolicy-editors->Group table.
 	InternalPolicyControlObjectives  string // InternalPolicy-control_objectives->ControlObjective table.
 	InternalPolicyProcedures         string // InternalPolicy-procedures->Procedure table.
-	InternalPolicyNarratives         string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks              string // InternalPolicy-tasks->Task table.
 	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
+	MappedControl                    string // MappedControl table.
+	MappedControlControls            string // MappedControl-controls->Control table.
+	MappedControlSubcontrols         string // MappedControl-subcontrols->Subcontrol table.
+	MappedControlHistory             string // MappedControlHistory table.
 	Narrative                        string // Narrative table.
 	NarrativeBlockedGroups           string // Narrative-blocked_groups->Group table.
 	NarrativeEditors                 string // Narrative-editors->Group table.
@@ -108,7 +113,6 @@ type SchemaConfig struct {
 	Procedure                        string // Procedure table.
 	ProcedureBlockedGroups           string // Procedure-blocked_groups->Group table.
 	ProcedureEditors                 string // Procedure-editors->Group table.
-	ProcedureNarratives              string // Procedure-narratives->Narrative table.
 	ProcedureRisks                   string // Procedure-risks->Risk table.
 	ProcedureTasks                   string // Procedure-tasks->Task table.
 	ProcedureHistory                 string // ProcedureHistory table.
@@ -117,7 +121,6 @@ type SchemaConfig struct {
 	ProgramEditors                   string // Program-editors->Group table.
 	ProgramViewers                   string // Program-viewers->Group table.
 	ProgramControls                  string // Program-controls->Control table.
-	ProgramSubcontrols               string // Program-subcontrols->Subcontrol table.
 	ProgramControlObjectives         string // Program-control_objectives->ControlObjective table.
 	ProgramInternalPolicies          string // Program-internal_policies->InternalPolicy table.
 	ProgramProcedures                string // Program-procedures->Procedure table.
@@ -137,12 +140,9 @@ type SchemaConfig struct {
 	RiskActionPlans                  string // Risk-action_plans->ActionPlan table.
 	RiskHistory                      string // RiskHistory table.
 	Standard                         string // Standard table.
-	StandardControlObjectives        string // Standard-control_objectives->ControlObjective table.
-	StandardControls                 string // Standard-controls->Control table.
-	StandardActionPlans              string // Standard-action_plans->ActionPlan table.
-	StandardPrograms                 string // Standard-programs->Program table.
 	StandardHistory                  string // StandardHistory table.
 	Subcontrol                       string // Subcontrol table.
+	SubcontrolControlObjectives      string // Subcontrol-control_objectives->ControlObjective table.
 	SubcontrolTasks                  string // Subcontrol-tasks->Task table.
 	SubcontrolHistory                string // SubcontrolHistory table.
 	Subscriber                       string // Subscriber table.

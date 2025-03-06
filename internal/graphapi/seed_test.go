@@ -19,7 +19,7 @@ var (
 	testUser2 testUserDetails
 	// viewOnlyUser is a test user that is a member of the first user's organization
 	viewOnlyUser testUserDetails
-	// viewOnlyUser2 is a test user that is an admin of the first user's organization
+	// viewOnlyUser2 is a test user that is a member of the first user's organization
 	viewOnlyUser2 testUserDetails
 	// adminUser is a test user that is an admin of the first user's organization
 	adminUser testUserDetails

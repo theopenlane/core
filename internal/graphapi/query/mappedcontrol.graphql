@@ -1,0 +1,181 @@
+
+mutation CreateBulkCSVMappedControl($input: Upload!) {
+  createBulkCSVMappedControl(input: $input) {
+    mappedControls {
+      createdAt
+      createdBy
+      id
+      mappingType
+      relation
+      controls {
+        id
+        refCode
+        description
+      }
+      subcontrols {
+        id
+        refCode
+        description
+      }
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkMappedControl($input: [CreateMappedControlInput!]) {
+  createBulkMappedControl(input: $input) {
+    mappedControls {
+      createdAt
+      createdBy
+      id
+      mappingType
+      relation
+      tags
+      controls {
+        id
+        refCode
+        description
+      }
+      subcontrols {
+        id
+        refCode
+        description
+      }
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateMappedControl($input: CreateMappedControlInput!) {
+  createMappedControl(input: $input) {
+    mappedControl {
+      createdAt
+      createdBy
+      id
+      mappingType
+      relation
+      controls {
+        id
+        refCode
+        description
+      }
+      subcontrols {
+        id
+        refCode
+        description
+      }
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteMappedControl($deleteMappedControlId: ID!) {
+  deleteMappedControl(id: $deleteMappedControlId) {
+    deletedID
+  }
+}
+
+query GetAllMappedControls {
+  mappedControls {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        mappingType
+        relation
+        controls {
+          id
+          refCode
+          description
+        }
+        subcontrols {
+          id
+          refCode
+          description
+        }
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetMappedControlByID($mappedControlId: ID!) {
+  mappedControl(id: $mappedControlId) {
+    createdAt
+    createdBy
+    id
+    mappingType
+    relation
+    controls {
+      id
+      refCode
+      description
+    }
+    subcontrols {
+      id
+      refCode
+      description
+    }
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetMappedControls($where: MappedControlWhereInput) {
+  mappedControls(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        mappingType
+        relation
+        controls {
+          id
+          refCode
+          description
+        }
+        subcontrols {
+          id
+          refCode
+          description
+        }
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedControlInput!) {
+  updateMappedControl(id: $updateMappedControlId, input: $input) {
+    mappedControl {
+      createdAt
+      createdBy
+      id
+      mappingType
+      relation
+      controls {
+        id
+        refCode
+        description
+      }
+      subcontrols {
+        id
+        refCode
+        description
+      }
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

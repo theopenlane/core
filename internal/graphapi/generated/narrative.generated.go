@@ -89,8 +89,6 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Narrative_description(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
 			case "owner":
@@ -101,14 +99,8 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Narrative_viewers(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Narrative_internalPolicy(ctx, field)
-			case "control":
-				return ec.fieldContext_Narrative_control(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Narrative_procedure(ctx, field)
-			case "controlObjective":
-				return ec.fieldContext_Narrative_controlObjective(ctx, field)
+			case "satisfies":
+				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
 			}
@@ -181,8 +173,6 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Narrative_description(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
 			case "owner":
@@ -193,14 +183,8 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Narrative_viewers(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Narrative_internalPolicy(ctx, field)
-			case "control":
-				return ec.fieldContext_Narrative_control(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Narrative_procedure(ctx, field)
-			case "controlObjective":
-				return ec.fieldContext_Narrative_controlObjective(ctx, field)
+			case "satisfies":
+				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
 			}
@@ -317,8 +301,6 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Narrative_description(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
 			case "owner":
@@ -329,14 +311,8 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Narrative_viewers(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Narrative_internalPolicy(ctx, field)
-			case "control":
-				return ec.fieldContext_Narrative_control(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Narrative_procedure(ctx, field)
-			case "controlObjective":
-				return ec.fieldContext_Narrative_controlObjective(ctx, field)
+			case "satisfies":
+				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
 			}

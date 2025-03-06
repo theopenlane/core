@@ -3,11 +3,14 @@
 package subcontrol
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -33,50 +36,64 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldSubcontrolType holds the string denoting the subcontrol_type field in the database.
-	FieldSubcontrolType = "subcontrol_type"
-	// FieldVersion holds the string denoting the version field in the database.
-	FieldVersion = "version"
-	// FieldSubcontrolNumber holds the string denoting the subcontrol_number field in the database.
-	FieldSubcontrolNumber = "subcontrol_number"
-	// FieldFamily holds the string denoting the family field in the database.
-	FieldFamily = "family"
-	// FieldClass holds the string denoting the class field in the database.
-	FieldClass = "class"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// FieldMappedFrameworks holds the string denoting the mapped_frameworks field in the database.
-	FieldMappedFrameworks = "mapped_frameworks"
-	// FieldImplementationEvidence holds the string denoting the implementation_evidence field in the database.
-	FieldImplementationEvidence = "implementation_evidence"
-	// FieldImplementationStatus holds the string denoting the implementation_status field in the database.
-	FieldImplementationStatus = "implementation_status"
-	// FieldImplementationDate holds the string denoting the implementation_date field in the database.
-	FieldImplementationDate = "implementation_date"
-	// FieldImplementationVerification holds the string denoting the implementation_verification field in the database.
-	FieldImplementationVerification = "implementation_verification"
-	// FieldImplementationVerificationDate holds the string denoting the implementation_verification_date field in the database.
-	FieldImplementationVerificationDate = "implementation_verification_date"
-	// FieldDetails holds the string denoting the details field in the database.
-	FieldDetails = "details"
+	// FieldControlType holds the string denoting the control_type field in the database.
+	FieldControlType = "control_type"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
+	// FieldCategoryID holds the string denoting the category_id field in the database.
+	FieldCategoryID = "category_id"
+	// FieldSubcategory holds the string denoting the subcategory field in the database.
+	FieldSubcategory = "subcategory"
+	// FieldMappedCategories holds the string denoting the mapped_categories field in the database.
+	FieldMappedCategories = "mapped_categories"
+	// FieldAssessmentObjectives holds the string denoting the assessment_objectives field in the database.
+	FieldAssessmentObjectives = "assessment_objectives"
+	// FieldAssessmentMethods holds the string denoting the assessment_methods field in the database.
+	FieldAssessmentMethods = "assessment_methods"
+	// FieldControlQuestions holds the string denoting the control_questions field in the database.
+	FieldControlQuestions = "control_questions"
+	// FieldImplementationGuidance holds the string denoting the implementation_guidance field in the database.
+	FieldImplementationGuidance = "implementation_guidance"
 	// FieldExampleEvidence holds the string denoting the example_evidence field in the database.
 	FieldExampleEvidence = "example_evidence"
+	// FieldReferences holds the string denoting the references field in the database.
+	FieldReferences = "references"
+	// FieldRefCode holds the string denoting the ref_code field in the database.
+	FieldRefCode = "ref_code"
+	// FieldControlID holds the string denoting the control_id field in the database.
+	FieldControlID = "control_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeControls holds the string denoting the controls edge name in mutations.
-	EdgeControls = "controls"
-	// EdgeTasks holds the string denoting the tasks edge name in mutations.
-	EdgeTasks = "tasks"
-	// EdgePrograms holds the string denoting the programs edge name in mutations.
-	EdgePrograms = "programs"
+	// EdgeControl holds the string denoting the control edge name in mutations.
+	EdgeControl = "control"
+	// EdgeMappedControls holds the string denoting the mapped_controls edge name in mutations.
+	EdgeMappedControls = "mapped_controls"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
+	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
+	EdgeControlObjectives = "control_objectives"
+	// EdgeTasks holds the string denoting the tasks edge name in mutations.
+	EdgeTasks = "tasks"
+	// EdgeNarratives holds the string denoting the narratives edge name in mutations.
+	EdgeNarratives = "narratives"
+	// EdgeRisks holds the string denoting the risks edge name in mutations.
+	EdgeRisks = "risks"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
+	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
+	EdgeProcedures = "procedures"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
+	// EdgeControlOwner holds the string denoting the control_owner edge name in mutations.
+	EdgeControlOwner = "control_owner"
+	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
+	EdgeDelegate = "delegate"
 	// Table holds the table name of the subcontrol in the database.
 	Table = "subcontrols"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -86,26 +103,82 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
-	ControlsTable = "control_subcontrols"
-	// ControlsInverseTable is the table name for the Control entity.
+	// ControlTable is the table that holds the control relation/edge.
+	ControlTable = "subcontrols"
+	// ControlInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlsInverseTable = "controls"
-	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
-	TasksTable = "subcontrol_tasks"
-	// TasksInverseTable is the table name for the Task entity.
-	// It exists in this package in order to avoid circular dependency with the "task" package.
-	TasksInverseTable = "tasks"
-	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
-	ProgramsTable = "program_subcontrols"
-	// ProgramsInverseTable is the table name for the Program entity.
-	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramsInverseTable = "programs"
+	ControlInverseTable = "controls"
+	// ControlColumn is the table column denoting the control relation/edge.
+	ControlColumn = "control_id"
+	// MappedControlsTable is the table that holds the mapped_controls relation/edge. The primary key declared below.
+	MappedControlsTable = "mapped_control_subcontrols"
+	// MappedControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedControlsInverseTable = "mapped_controls"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
 	EvidenceTable = "evidence_subcontrols"
 	// EvidenceInverseTable is the table name for the Evidence entity.
 	// It exists in this package in order to avoid circular dependency with the "evidence" package.
 	EvidenceInverseTable = "evidences"
+	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
+	ControlObjectivesTable = "subcontrol_control_objectives"
+	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
+	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
+	ControlObjectivesInverseTable = "control_objectives"
+	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
+	TasksTable = "subcontrol_tasks"
+	// TasksInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	TasksInverseTable = "tasks"
+	// NarrativesTable is the table that holds the narratives relation/edge.
+	NarrativesTable = "narratives"
+	// NarrativesInverseTable is the table name for the Narrative entity.
+	// It exists in this package in order to avoid circular dependency with the "narrative" package.
+	NarrativesInverseTable = "narratives"
+	// NarrativesColumn is the table column denoting the narratives relation/edge.
+	NarrativesColumn = "subcontrol_narratives"
+	// RisksTable is the table that holds the risks relation/edge.
+	RisksTable = "risks"
+	// RisksInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RisksInverseTable = "risks"
+	// RisksColumn is the table column denoting the risks relation/edge.
+	RisksColumn = "subcontrol_risks"
+	// ActionPlansTable is the table that holds the action_plans relation/edge.
+	ActionPlansTable = "action_plans"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlansInverseTable = "action_plans"
+	// ActionPlansColumn is the table column denoting the action_plans relation/edge.
+	ActionPlansColumn = "subcontrol_action_plans"
+	// ProceduresTable is the table that holds the procedures relation/edge.
+	ProceduresTable = "procedures"
+	// ProceduresInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProceduresInverseTable = "procedures"
+	// ProceduresColumn is the table column denoting the procedures relation/edge.
+	ProceduresColumn = "subcontrol_procedures"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge.
+	InternalPoliciesTable = "internal_policies"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPoliciesInverseTable = "internal_policies"
+	// InternalPoliciesColumn is the table column denoting the internal_policies relation/edge.
+	InternalPoliciesColumn = "subcontrol_internal_policies"
+	// ControlOwnerTable is the table that holds the control_owner relation/edge.
+	ControlOwnerTable = "subcontrols"
+	// ControlOwnerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ControlOwnerInverseTable = "groups"
+	// ControlOwnerColumn is the table column denoting the control_owner relation/edge.
+	ControlOwnerColumn = "subcontrol_control_owner"
+	// DelegateTable is the table that holds the delegate relation/edge.
+	DelegateTable = "subcontrols"
+	// DelegateInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateInverseTable = "groups"
+	// DelegateColumn is the table column denoting the delegate relation/edge.
+	DelegateColumn = "subcontrol_delegate"
 )
 
 // Columns holds all SQL columns for subcontrol fields.
@@ -120,45 +193,46 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
-	FieldName,
 	FieldDescription,
 	FieldStatus,
-	FieldSubcontrolType,
-	FieldVersion,
-	FieldSubcontrolNumber,
-	FieldFamily,
-	FieldClass,
 	FieldSource,
-	FieldMappedFrameworks,
-	FieldImplementationEvidence,
-	FieldImplementationStatus,
-	FieldImplementationDate,
-	FieldImplementationVerification,
-	FieldImplementationVerificationDate,
-	FieldDetails,
+	FieldControlType,
+	FieldCategory,
+	FieldCategoryID,
+	FieldSubcategory,
+	FieldMappedCategories,
+	FieldAssessmentObjectives,
+	FieldAssessmentMethods,
+	FieldControlQuestions,
+	FieldImplementationGuidance,
 	FieldExampleEvidence,
+	FieldReferences,
+	FieldRefCode,
+	FieldControlID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "subcontrols"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"control_objective_subcontrols",
+	"program_subcontrols",
+	"subcontrol_control_owner",
+	"subcontrol_delegate",
 	"user_subcontrols",
 }
 
 var (
-	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
-	// primary key for the controls relation (M2M).
-	ControlsPrimaryKey = []string{"control_id", "subcontrol_id"}
-	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
-	// primary key for the tasks relation (M2M).
-	TasksPrimaryKey = []string{"subcontrol_id", "task_id"}
-	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
-	// primary key for the programs relation (M2M).
-	ProgramsPrimaryKey = []string{"program_id", "subcontrol_id"}
+	// MappedControlsPrimaryKey and MappedControlsColumn2 are the table columns denoting the
+	// primary key for the mapped_controls relation (M2M).
+	MappedControlsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"evidence_id", "subcontrol_id"}
+	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
+	// primary key for the control_objectives relation (M2M).
+	ControlObjectivesPrimaryKey = []string{"subcontrol_id", "control_objective_id"}
+	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
+	// primary key for the tasks relation (M2M).
+	TasksPrimaryKey = []string{"subcontrol_id", "task_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -197,11 +271,37 @@ var (
 	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
-	// NameValidator is a validator for the "name" field. It is called by the builders before save.
-	NameValidator func(string) error
+	// RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
+	RefCodeValidator func(string) error
+	// ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
+	ControlIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultSource enums.ControlSource = "USER_DEFINED"
+
+// SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
+func SourceValidator(s enums.ControlSource) error {
+	switch s.String() {
+	case "FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED":
+		return nil
+	default:
+		return fmt.Errorf("subcontrol: invalid enum value for source field: %q", s)
+	}
+}
+
+const DefaultControlType enums.ControlType = "PREVENTATIVE"
+
+// ControlTypeValidator is a validator for the "control_type" field enum values. It is called by the builders before save.
+func ControlTypeValidator(ct enums.ControlType) error {
+	switch ct.String() {
+	case "PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT":
+		return nil
+	default:
+		return fmt.Errorf("subcontrol: invalid enum value for control_type field: %q", ct)
+	}
+}
 
 // OrderOption defines the ordering options for the Subcontrol queries.
 type OrderOption func(*sql.Selector)
@@ -251,11 +351,6 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
-}
-
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
@@ -266,69 +361,39 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// BySubcontrolType orders the results by the subcontrol_type field.
-func BySubcontrolType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSubcontrolType, opts...).ToFunc()
-}
-
-// ByVersion orders the results by the version field.
-func ByVersion(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVersion, opts...).ToFunc()
-}
-
-// BySubcontrolNumber orders the results by the subcontrol_number field.
-func BySubcontrolNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSubcontrolNumber, opts...).ToFunc()
-}
-
-// ByFamily orders the results by the family field.
-func ByFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFamily, opts...).ToFunc()
-}
-
-// ByClass orders the results by the class field.
-func ByClass(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldClass, opts...).ToFunc()
-}
-
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
-// ByMappedFrameworks orders the results by the mapped_frameworks field.
-func ByMappedFrameworks(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappedFrameworks, opts...).ToFunc()
+// ByControlType orders the results by the control_type field.
+func ByControlType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlType, opts...).ToFunc()
 }
 
-// ByImplementationEvidence orders the results by the implementation_evidence field.
-func ByImplementationEvidence(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationEvidence, opts...).ToFunc()
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
-// ByImplementationStatus orders the results by the implementation_status field.
-func ByImplementationStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationStatus, opts...).ToFunc()
+// ByCategoryID orders the results by the category_id field.
+func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryID, opts...).ToFunc()
 }
 
-// ByImplementationDate orders the results by the implementation_date field.
-func ByImplementationDate(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationDate, opts...).ToFunc()
+// BySubcategory orders the results by the subcategory field.
+func BySubcategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubcategory, opts...).ToFunc()
 }
 
-// ByImplementationVerification orders the results by the implementation_verification field.
-func ByImplementationVerification(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationVerification, opts...).ToFunc()
+// ByRefCode orders the results by the ref_code field.
+func ByRefCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefCode, opts...).ToFunc()
 }
 
-// ByImplementationVerificationDate orders the results by the implementation_verification_date field.
-func ByImplementationVerificationDate(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationVerificationDate, opts...).ToFunc()
-}
-
-// ByExampleEvidence orders the results by the example_evidence field.
-func ByExampleEvidence(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExampleEvidence, opts...).ToFunc()
+// ByControlID orders the results by the control_id field.
+func ByControlID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -338,17 +403,52 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByControlsCount orders the results by controls count.
-func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlField orders the results by control field.
+func ByControlField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+		sqlgraph.OrderByNeighborTerms(s, newControlStep(), sql.OrderByField(field, opts...))
 	}
 }
 
-// ByControls orders the results by controls terms.
-func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByMappedControlsCount orders the results by mapped_controls count.
+func ByMappedControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborsCount(s, newMappedControlsStep(), opts...)
+	}
+}
+
+// ByMappedControls orders the results by mapped_controls terms.
+func ByMappedControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlObjectivesCount orders the results by control_objectives count.
+func ByControlObjectivesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectivesStep(), opts...)
+	}
+}
+
+// ByControlObjectives orders the results by control_objectives terms.
+func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -366,31 +466,87 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByProgramsCount orders the results by programs count.
-func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByNarrativesCount orders the results by narratives count.
+func ByNarrativesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newNarrativesStep(), opts...)
 	}
 }
 
-// ByPrograms orders the results by programs terms.
-func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByNarratives orders the results by narratives terms.
+func ByNarratives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newNarrativesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByEvidenceCount orders the results by evidence count.
-func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+// ByRisksCount orders the results by risks count.
+func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newRisksStep(), opts...)
 	}
 }
 
-// ByEvidence orders the results by evidence terms.
-func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByRisks orders the results by risks terms.
+func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
+	}
+}
+
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProceduresCount orders the results by procedures count.
+func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProceduresStep(), opts...)
+	}
+}
+
+// ByProcedures orders the results by procedures terms.
+func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProceduresStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
+	}
+}
+
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlOwnerField orders the results by control_owner field.
+func ByControlOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateField orders the results by delegate field.
+func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -400,25 +556,18 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newControlsStep() *sqlgraph.Step {
+func newControlStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+		sqlgraph.To(ControlInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ControlTable, ControlColumn),
 	)
 }
-func newTasksStep() *sqlgraph.Step {
+func newMappedControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TasksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
-	)
-}
-func newProgramsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+		sqlgraph.To(MappedControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {
@@ -428,3 +577,80 @@ func newEvidenceStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
 	)
 }
+func newControlObjectivesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
+	)
+}
+func newTasksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TasksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newNarrativesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NarrativesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
+	)
+}
+func newRisksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RisksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+	)
+}
+func newActionPlansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
+	)
+}
+func newProceduresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProceduresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
+	)
+}
+func newInternalPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
+	)
+}
+func newControlOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlOwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ControlOwnerTable, ControlOwnerColumn),
+	)
+}
+func newDelegateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+
+var (
+	// enums.ControlSource must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlSource)(nil)
+	// enums.ControlSource must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlSource)(nil)
+)
+
+var (
+	// enums.ControlType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlType)(nil)
+	// enums.ControlType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlType)(nil)
+)

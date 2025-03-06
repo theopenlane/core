@@ -937,35 +937,6 @@ func DetailsNotNil() predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNotNull(FieldDetails))
 }
 
-// HasStandard applies the HasEdge predicate on the "standard" edge.
-func HasStandard() predicate.ActionPlan {
-	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, StandardTable, StandardPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardActionPlans
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasStandardWith applies the HasEdge predicate on the "standard" edge with a given conditions (other predicates).
-func HasStandardWith(preds ...predicate.Standard) predicate.ActionPlan {
-	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := newStandardStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardActionPlans
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasRisk applies the HasEdge predicate on the "risk" edge.
 func HasRisk() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {

@@ -37,8 +37,6 @@ const (
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldSatisfies holds the string denoting the satisfies field in the database.
-	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -49,14 +47,8 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
-	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
-	EdgeInternalPolicy = "internal_policy"
-	// EdgeControl holds the string denoting the control edge name in mutations.
-	EdgeControl = "control"
-	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
-	EdgeProcedure = "procedure"
-	// EdgeControlObjective holds the string denoting the control_objective edge name in mutations.
-	EdgeControlObjective = "control_objective"
+	// EdgeSatisfies holds the string denoting the satisfies edge name in mutations.
+	EdgeSatisfies = "satisfies"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
 	// Table holds the table name of the narrative in the database.
@@ -83,26 +75,11 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
-	// InternalPolicyTable is the table that holds the internal_policy relation/edge. The primary key declared below.
-	InternalPolicyTable = "internal_policy_narratives"
-	// InternalPolicyInverseTable is the table name for the InternalPolicy entity.
-	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	InternalPolicyInverseTable = "internal_policies"
-	// ControlTable is the table that holds the control relation/edge. The primary key declared below.
-	ControlTable = "control_narratives"
-	// ControlInverseTable is the table name for the Control entity.
+	// SatisfiesTable is the table that holds the satisfies relation/edge. The primary key declared below.
+	SatisfiesTable = "control_narratives"
+	// SatisfiesInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlInverseTable = "controls"
-	// ProcedureTable is the table that holds the procedure relation/edge. The primary key declared below.
-	ProcedureTable = "procedure_narratives"
-	// ProcedureInverseTable is the table name for the Procedure entity.
-	// It exists in this package in order to avoid circular dependency with the "procedure" package.
-	ProcedureInverseTable = "procedures"
-	// ControlObjectiveTable is the table that holds the control_objective relation/edge. The primary key declared below.
-	ControlObjectiveTable = "control_objective_narratives"
-	// ControlObjectiveInverseTable is the table name for the ControlObjective entity.
-	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlObjectiveInverseTable = "control_objectives"
+	SatisfiesInverseTable = "controls"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_narratives"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -124,8 +101,16 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldDescription,
-	FieldSatisfies,
 	FieldDetails,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "narratives"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"control_objective_narratives",
+	"internal_policy_narratives",
+	"procedure_narratives",
+	"subcontrol_narratives",
 }
 
 var (
@@ -138,18 +123,9 @@ var (
 	// ViewersPrimaryKey and ViewersColumn2 are the table columns denoting the
 	// primary key for the viewers relation (M2M).
 	ViewersPrimaryKey = []string{"narrative_id", "group_id"}
-	// InternalPolicyPrimaryKey and InternalPolicyColumn2 are the table columns denoting the
-	// primary key for the internal_policy relation (M2M).
-	InternalPolicyPrimaryKey = []string{"internal_policy_id", "narrative_id"}
-	// ControlPrimaryKey and ControlColumn2 are the table columns denoting the
-	// primary key for the control relation (M2M).
-	ControlPrimaryKey = []string{"control_id", "narrative_id"}
-	// ProcedurePrimaryKey and ProcedureColumn2 are the table columns denoting the
-	// primary key for the procedure relation (M2M).
-	ProcedurePrimaryKey = []string{"procedure_id", "narrative_id"}
-	// ControlObjectivePrimaryKey and ControlObjectiveColumn2 are the table columns denoting the
-	// primary key for the control_objective relation (M2M).
-	ControlObjectivePrimaryKey = []string{"control_objective_id", "narrative_id"}
+	// SatisfiesPrimaryKey and SatisfiesColumn2 are the table columns denoting the
+	// primary key for the satisfies relation (M2M).
+	SatisfiesPrimaryKey = []string{"control_id", "narrative_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "narrative_id"}
@@ -159,6 +135,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -250,9 +231,9 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// BySatisfies orders the results by the satisfies field.
-func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -304,59 +285,17 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByInternalPolicyCount orders the results by internal_policy count.
-func ByInternalPolicyCount(opts ...sql.OrderTermOption) OrderOption {
+// BySatisfiesCount orders the results by satisfies count.
+func BySatisfiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newSatisfiesStep(), opts...)
 	}
 }
 
-// ByInternalPolicy orders the results by internal_policy terms.
-func ByInternalPolicy(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// BySatisfies orders the results by satisfies terms.
+func BySatisfies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByControlCount orders the results by control count.
-func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlStep(), opts...)
-	}
-}
-
-// ByControl orders the results by control terms.
-func ByControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByProcedureCount orders the results by procedure count.
-func ByProcedureCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProcedureStep(), opts...)
-	}
-}
-
-// ByProcedure orders the results by procedure terms.
-func ByProcedure(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProcedureStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByControlObjectiveCount orders the results by control_objective count.
-func ByControlObjectiveCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlObjectiveStep(), opts...)
-	}
-}
-
-// ByControlObjective orders the results by control_objective terms.
-func ByControlObjective(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlObjectiveStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newSatisfiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -401,32 +340,11 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 	)
 }
-func newInternalPolicyStep() *sqlgraph.Step {
+func newSatisfiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InternalPolicyInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
-	)
-}
-func newControlStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
-	)
-}
-func newProcedureStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProcedureInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureTable, ProcedurePrimaryKey...),
-	)
-}
-func newControlObjectiveStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlObjectiveInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveTable, ControlObjectivePrimaryKey...),
+		sqlgraph.To(SatisfiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SatisfiesTable, SatisfiesPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

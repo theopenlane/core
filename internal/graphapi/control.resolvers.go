@@ -10,7 +10,10 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -65,7 +68,7 @@ func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input g
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendReferences(input.AppendReferences)
 
 	res, err = req.Save(ctx)
 	if err != nil {
@@ -94,7 +97,87 @@ func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*model
 
 // Control is the resolver for the control field.
 func (r *queryResolver) Control(ctx context.Context, id string) (*generated.Control, error) {
-	res, err := withTransactionalMutation(ctx).Control.Get(ctx, id)
+	query := withTransactionalMutation(ctx).Control.Query().Where(control.ID(id))
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeSubcontrol) {
+		query.WithNamedSubcontrols("subcontrols", func(q *generated.SubcontrolQuery) {
+			q.Where(subcontrol.ControlID(id)).Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
+		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeMappedControl) {
+		query.WithMappedControls(func(q *generated.MappedControlQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeTask) {
+		query.WithNamedTasks("tasks", func(q *generated.TaskQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeRisk) {
+		query.WithNamedRisks("risks", func(q *generated.RiskQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeEvidence) {
+		query.WithNamedEvidence("evidence", func(q *generated.EvidenceQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeNarrative) {
+		query.WithNamedNarratives("narratives", func(q *generated.NarrativeQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeProcedure) {
+		query.WithNamedProcedures("procedures", func(q *generated.ProcedureQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeInternalPolicy) {
+		query.WithNamedInternalPolicies("internalPolicies", func(q *generated.InternalPolicyQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, generated.TypeActionPlan) {
+		query.WithNamedActionPlans("actionPlans", func(q *generated.ActionPlanQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, "controlOwner") {
+		query.WithControlOwner(func(q *generated.GroupQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, "delegate") {
+		query.WithDelegate(func(q *generated.GroupQuery) {
+			q.Limit(edgesResultsLimit)
+		})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
 	}

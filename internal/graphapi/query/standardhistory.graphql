@@ -1,24 +1,27 @@
-
-
 query GetAllStandardHistories {
   standardHistories {
     edges {
       node {
-        background
         createdAt
         createdBy
         description
-        details
-        family
+        domains
+        framework
+        freeToUse
+        governingBody
         historyTime
         id
+        isPublic
+        link
         name
         operation
-        purposeAndScope
+        ownerID
         ref
-        satisfies
+        revision
+        shortName
         standardType
         status
+        systemOwned
         tags
         updatedAt
         updatedBy
@@ -32,21 +35,26 @@ query GetStandardHistories($where: StandardHistoryWhereInput) {
   standardHistories(where: $where) {
     edges {
       node {
-        background
         createdAt
         createdBy
         description
-        details
-        family
+        domains
+        framework
+        freeToUse
+        governingBody
         historyTime
         id
+        isPublic
+        link
         name
         operation
-        purposeAndScope
+        ownerID
         ref
-        satisfies
+        revision
+        shortName
         standardType
         status
+        systemOwned
         tags
         updatedAt
         updatedBy

@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -496,21 +495,6 @@ func (pc *ProgramCreate) AddActionPlans(a ...*ActionPlan) *ProgramCreate {
 	return pc.AddActionPlanIDs(ids...)
 }
 
-// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
-func (pc *ProgramCreate) AddStandardIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddStandardIDs(ids...)
-	return pc
-}
-
-// AddStandards adds the "standards" edges to the Standard entity.
-func (pc *ProgramCreate) AddStandards(s ...*Standard) *ProgramCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return pc.AddStandardIDs(ids...)
-}
-
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (pc *ProgramCreate) AddUserIDs(ids ...string) *ProgramCreate {
 	pc.mutation.AddUserIDs(ids...)
@@ -850,16 +834,16 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	}
 	if nodes := pc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.SubcontrolsTable,
-			Columns: program.SubcontrolsPrimaryKey,
+			Columns: []string{program.SubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramSubcontrols
+		edge.Schema = pc.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1030,23 +1014,6 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = pc.schemaConfig.ProgramActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.StandardsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   program.StandardsTable,
-			Columns: program.StandardsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pc.schemaConfig.StandardPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
