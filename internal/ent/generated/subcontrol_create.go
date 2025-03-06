@@ -14,14 +14,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -319,17 +320,17 @@ func (sc *SubcontrolCreate) SetControl(c *Control) *SubcontrolCreate {
 	return sc.SetControlID(c.ID)
 }
 
-// AddMappedControlIDs adds the "mapped_controls" edge to the Control entity by IDs.
+// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
 func (sc *SubcontrolCreate) AddMappedControlIDs(ids ...string) *SubcontrolCreate {
 	sc.mutation.AddMappedControlIDs(ids...)
 	return sc
 }
 
-// AddMappedControls adds the "mapped_controls" edges to the Control entity.
-func (sc *SubcontrolCreate) AddMappedControls(c ...*Control) *SubcontrolCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
+func (sc *SubcontrolCreate) AddMappedControls(m ...*MappedControl) *SubcontrolCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
 	}
 	return sc.AddMappedControlIDs(ids...)
 }
@@ -454,13 +455,13 @@ func (sc *SubcontrolCreate) AddInternalPolicies(i ...*InternalPolicy) *Subcontro
 	return sc.AddInternalPolicyIDs(ids...)
 }
 
-// SetControlOwnerID sets the "control_owner" edge to the User entity by ID.
+// SetControlOwnerID sets the "control_owner" edge to the Group entity by ID.
 func (sc *SubcontrolCreate) SetControlOwnerID(id string) *SubcontrolCreate {
 	sc.mutation.SetControlOwnerID(id)
 	return sc
 }
 
-// SetNillableControlOwnerID sets the "control_owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableControlOwnerID sets the "control_owner" edge to the Group entity by ID if the given value is not nil.
 func (sc *SubcontrolCreate) SetNillableControlOwnerID(id *string) *SubcontrolCreate {
 	if id != nil {
 		sc = sc.SetControlOwnerID(*id)
@@ -468,18 +469,18 @@ func (sc *SubcontrolCreate) SetNillableControlOwnerID(id *string) *SubcontrolCre
 	return sc
 }
 
-// SetControlOwner sets the "control_owner" edge to the User entity.
-func (sc *SubcontrolCreate) SetControlOwner(u *User) *SubcontrolCreate {
-	return sc.SetControlOwnerID(u.ID)
+// SetControlOwner sets the "control_owner" edge to the Group entity.
+func (sc *SubcontrolCreate) SetControlOwner(g *Group) *SubcontrolCreate {
+	return sc.SetControlOwnerID(g.ID)
 }
 
-// SetDelegateID sets the "delegate" edge to the User entity by ID.
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
 func (sc *SubcontrolCreate) SetDelegateID(id string) *SubcontrolCreate {
 	sc.mutation.SetDelegateID(id)
 	return sc
 }
 
-// SetNillableDelegateID sets the "delegate" edge to the User entity by ID if the given value is not nil.
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
 func (sc *SubcontrolCreate) SetNillableDelegateID(id *string) *SubcontrolCreate {
 	if id != nil {
 		sc = sc.SetDelegateID(*id)
@@ -487,9 +488,9 @@ func (sc *SubcontrolCreate) SetNillableDelegateID(id *string) *SubcontrolCreate 
 	return sc
 }
 
-// SetDelegate sets the "delegate" edge to the User entity.
-func (sc *SubcontrolCreate) SetDelegate(u *User) *SubcontrolCreate {
-	return sc.SetDelegateID(u.ID)
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (sc *SubcontrolCreate) SetDelegate(g *Group) *SubcontrolCreate {
+	return sc.SetDelegateID(g.ID)
 }
 
 // Mutation returns the SubcontrolMutation object of the builder.
@@ -775,16 +776,16 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	}
 	if nodes := sc.mutation.MappedControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.MappedControlsTable,
-			Columns: []string{subcontrol.MappedControlsColumn},
+			Columns: subcontrol.MappedControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Control
+		edge.Schema = sc.schemaConfig.MappedControlSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -934,7 +935,7 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			Columns: []string{subcontrol.ControlOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subcontrol
@@ -952,7 +953,7 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			Columns: []string{subcontrol.DelegateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subcontrol

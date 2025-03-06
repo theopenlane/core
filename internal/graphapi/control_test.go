@@ -171,6 +171,9 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	deleteGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	// add adminUser to the program so that they can create a control associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
@@ -243,8 +246,8 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 						URL:  "https://example.com",
 					},
 				},
-				ControlOwnerID: &viewOnlyUser.ID,
-				DelegateID:     &viewOnlyUser2.ID,
+				ControlOwnerID: &ownerGroup.ID,
+				DelegateID:     &deleteGroup.ID,
 				Source:         &enums.ControlSourceFramework,
 				ProgramIDs:     []string{program1.ID, program2.ID}, // multiple programs
 			},
@@ -463,12 +466,14 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			}
 
 			if tc.request.ControlOwnerID != nil {
+				require.NotEmpty(t, resp.CreateControl.Control.ControlOwner)
 				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateControl.Control.ControlOwner.ID)
 			} else {
 				assert.Empty(t, resp.CreateControl.Control.ControlOwner)
 			}
 
 			if tc.request.DelegateID != nil {
+				require.NotEmpty(t, resp.CreateControl.Control.Delegate)
 				assert.Equal(t, *tc.request.DelegateID, resp.CreateControl.Control.Delegate.ID)
 			} else {
 				assert.Empty(t, resp.CreateControl.Control.Delegate)
@@ -512,6 +517,9 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
+
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	deleteGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can update the control
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
@@ -591,8 +599,8 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 						Description:       "description of the example evidence",
 					},
 				},
-				ControlOwnerID: &viewOnlyUser.ID,
-				DelegateID:     &viewOnlyUser2.ID,
+				ControlOwnerID: &ownerGroup.ID,
+				DelegateID:     &deleteGroup.ID,
 				Source:         &enums.ControlSourceFramework,
 			},
 			client: suite.client.apiWithPAT,
@@ -715,10 +723,12 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			}
 
 			if tc.request.ControlOwnerID != nil {
+				require.NotNil(t, resp.UpdateControl.Control.ControlOwner)
 				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateControl.Control.ControlOwner.ID)
 			}
 
 			if tc.request.DelegateID != nil {
+				require.NotNil(t, resp.UpdateControl.Control.Delegate)
 				assert.Equal(t, *tc.request.DelegateID, resp.UpdateControl.Control.Delegate.ID)
 			}
 

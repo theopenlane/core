@@ -39,10 +39,6 @@ type MappedControlHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control being mapped
-	ControlID string `json:"control_id,omitempty"`
-	// the id of the control that is mapped to
-	MappedControlID string `json:"mapped_control_id,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType string `json:"mapping_type,omitempty"`
 	// description of how the two controls are related
@@ -59,7 +55,7 @@ func (*MappedControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case mappedcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldControlID, mappedcontrolhistory.FieldMappedControlID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation:
+		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation:
 			values[i] = new(sql.NullString)
 		case mappedcontrolhistory.FieldHistoryTime, mappedcontrolhistory.FieldCreatedAt, mappedcontrolhistory.FieldUpdatedAt, mappedcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -146,18 +142,6 @@ func (mch *MappedControlHistory) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
-		case mappedcontrolhistory.FieldControlID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_id", values[i])
-			} else if value.Valid {
-				mch.ControlID = value.String
-			}
-		case mappedcontrolhistory.FieldMappedControlID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_id", values[i])
-			} else if value.Valid {
-				mch.MappedControlID = value.String
-			}
 		case mappedcontrolhistory.FieldMappingType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mapping_type", values[i])
@@ -235,12 +219,6 @@ func (mch *MappedControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", mch.Tags))
-	builder.WriteString(", ")
-	builder.WriteString("control_id=")
-	builder.WriteString(mch.ControlID)
-	builder.WriteString(", ")
-	builder.WriteString("mapped_control_id=")
-	builder.WriteString(mch.MappedControlID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_type=")
 	builder.WriteString(mch.MappingType)

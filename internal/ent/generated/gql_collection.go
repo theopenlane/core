@@ -1031,16 +1031,18 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				*wq = *query
 			})
 
-		case "implementation":
+		case "controlImplementations":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&ControlImplementationClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlimplementationImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlimplementationImplementors)...); err != nil {
 				return err
 			}
-			c.withImplementation = query
+			c.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
+				*wq = *query
+			})
 
 		case "mappedControls":
 			var (
@@ -1048,10 +1050,12 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				path  = append(path, alias)
 				query = (&MappedControlClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, mappedcontrolImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, mappedcontrolImplementors)...); err != nil {
 				return err
 			}
-			c.withMappedControls = query
+			c.WithNamedMappedControls(alias, func(wq *MappedControlQuery) {
+				*wq = *query
+			})
 
 		case "controlObjectives":
 			var (
@@ -1161,9 +1165,9 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: c.config}).Query()
+				query = (&GroupClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
 			c.withControlOwner = query
@@ -1172,9 +1176,9 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: c.config}).Query()
+				query = (&GroupClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
 			c.withDelegate = query
@@ -1568,7 +1572,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "control":
+		case "controls":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -1577,7 +1581,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
 				return err
 			}
-			ci.WithNamedControl(alias, func(wq *ControlQuery) {
+			ci.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -1614,11 +1618,6 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[controlimplementation.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlimplementation.FieldTags)
 				fieldSeen[controlimplementation.FieldTags] = struct{}{}
-			}
-		case "controlID":
-			if _, ok := fieldSeen[controlimplementation.FieldControlID]; !ok {
-				selectedFields = append(selectedFields, controlimplementation.FieldControlID)
-				fieldSeen[controlimplementation.FieldControlID] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[controlimplementation.FieldStatus]; !ok {
@@ -1756,11 +1755,6 @@ func (cih *ControlImplementationHistoryQuery) collectField(ctx context.Context, 
 			if _, ok := fieldSeen[controlimplementationhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldTags)
 				fieldSeen[controlimplementationhistory.FieldTags] = struct{}{}
-			}
-		case "controlID":
-			if _, ok := fieldSeen[controlimplementationhistory.FieldControlID]; !ok {
-				selectedFields = append(selectedFields, controlimplementationhistory.FieldControlID)
-				fieldSeen[controlimplementationhistory.FieldControlID] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[controlimplementationhistory.FieldStatus]; !ok {
@@ -7069,35 +7063,31 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "control":
+		case "controls":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&ControlClient{config: mc.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
 				return err
 			}
-			mc.withControl = query
-			if _, ok := fieldSeen[mappedcontrol.FieldControlID]; !ok {
-				selectedFields = append(selectedFields, mappedcontrol.FieldControlID)
-				fieldSeen[mappedcontrol.FieldControlID] = struct{}{}
-			}
+			mc.WithNamedControls(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
 
-		case "mappedControl":
+		case "subcontrols":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: mc.config}).Query()
+				query = (&SubcontrolClient{config: mc.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
 				return err
 			}
-			mc.withMappedControl = query
-			if _, ok := fieldSeen[mappedcontrol.FieldMappedControlID]; !ok {
-				selectedFields = append(selectedFields, mappedcontrol.FieldMappedControlID)
-				fieldSeen[mappedcontrol.FieldMappedControlID] = struct{}{}
-			}
+			mc.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[mappedcontrol.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, mappedcontrol.FieldCreatedAt)
@@ -7132,16 +7122,6 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[mappedcontrol.FieldTags]; !ok {
 				selectedFields = append(selectedFields, mappedcontrol.FieldTags)
 				fieldSeen[mappedcontrol.FieldTags] = struct{}{}
-			}
-		case "controlID":
-			if _, ok := fieldSeen[mappedcontrol.FieldControlID]; !ok {
-				selectedFields = append(selectedFields, mappedcontrol.FieldControlID)
-				fieldSeen[mappedcontrol.FieldControlID] = struct{}{}
-			}
-		case "mappedControlID":
-			if _, ok := fieldSeen[mappedcontrol.FieldMappedControlID]; !ok {
-				selectedFields = append(selectedFields, mappedcontrol.FieldMappedControlID)
-				fieldSeen[mappedcontrol.FieldMappedControlID] = struct{}{}
 			}
 		case "mappingType":
 			if _, ok := fieldSeen[mappedcontrol.FieldMappingType]; !ok {
@@ -7264,16 +7244,6 @@ func (mch *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldTags)
 				fieldSeen[mappedcontrolhistory.FieldTags] = struct{}{}
-			}
-		case "controlID":
-			if _, ok := fieldSeen[mappedcontrolhistory.FieldControlID]; !ok {
-				selectedFields = append(selectedFields, mappedcontrolhistory.FieldControlID)
-				fieldSeen[mappedcontrolhistory.FieldControlID] = struct{}{}
-			}
-		case "mappedControlID":
-			if _, ok := fieldSeen[mappedcontrolhistory.FieldMappedControlID]; !ok {
-				selectedFields = append(selectedFields, mappedcontrolhistory.FieldMappedControlID)
-				fieldSeen[mappedcontrolhistory.FieldMappedControlID] = struct{}{}
 			}
 		case "mappingType":
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldMappingType]; !ok {
@@ -12298,12 +12268,12 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: s.config}).Query()
+				query = (&MappedControlClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, mappedcontrolImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedMappedControls(alias, func(wq *ControlQuery) {
+			s.WithNamedMappedControls(alias, func(wq *MappedControlQuery) {
 				*wq = *query
 			})
 
@@ -12415,9 +12385,9 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&GroupClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
 			s.withControlOwner = query
@@ -12426,9 +12396,9 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&GroupClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
 			s.withDelegate = query

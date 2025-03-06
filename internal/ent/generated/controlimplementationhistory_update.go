@@ -122,20 +122,6 @@ func (cihu *ControlImplementationHistoryUpdate) ClearTags() *ControlImplementati
 	return cihu
 }
 
-// SetControlID sets the "control_id" field.
-func (cihu *ControlImplementationHistoryUpdate) SetControlID(s string) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetControlID(s)
-	return cihu
-}
-
-// SetNillableControlID sets the "control_id" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableControlID(s *string) *ControlImplementationHistoryUpdate {
-	if s != nil {
-		cihu.SetControlID(*s)
-	}
-	return cihu
-}
-
 // SetStatus sets the "status" field.
 func (cihu *ControlImplementationHistoryUpdate) SetStatus(s string) *ControlImplementationHistoryUpdate {
 	cihu.mutation.SetStatus(s)
@@ -336,9 +322,6 @@ func (cihu *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (n 
 	if cihu.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := cihu.mutation.ControlID(); ok {
-		_spec.SetField(controlimplementationhistory.FieldControlID, field.TypeString, value)
-	}
 	if value, ok := cihu.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeString, value)
 	}
@@ -480,20 +463,6 @@ func (cihuo *ControlImplementationHistoryUpdateOne) AppendTags(s []string) *Cont
 // ClearTags clears the value of the "tags" field.
 func (cihuo *ControlImplementationHistoryUpdateOne) ClearTags() *ControlImplementationHistoryUpdateOne {
 	cihuo.mutation.ClearTags()
-	return cihuo
-}
-
-// SetControlID sets the "control_id" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetControlID(s string) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetControlID(s)
-	return cihuo
-}
-
-// SetNillableControlID sets the "control_id" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableControlID(s *string) *ControlImplementationHistoryUpdateOne {
-	if s != nil {
-		cihuo.SetControlID(*s)
-	}
 	return cihuo
 }
 
@@ -726,9 +695,6 @@ func (cihuo *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context)
 	}
 	if cihuo.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := cihuo.mutation.ControlID(); ok {
-		_spec.SetField(controlimplementationhistory.FieldControlID, field.TypeString, value)
 	}
 	if value, ok := cihuo.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeString, value)

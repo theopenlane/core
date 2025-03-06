@@ -1536,27 +1536,27 @@ func HasEvidenceWith(preds ...predicate.Evidence) predicate.Control {
 	})
 }
 
-// HasImplementation applies the HasEdge predicate on the "implementation" edge.
-func HasImplementation() predicate.Control {
+// HasControlImplementations applies the HasEdge predicate on the "control_implementations" edge.
+func HasControlImplementations() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, ImplementationTable, ImplementationColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, ControlImplementationsTable, ControlImplementationsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlImplementations
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasImplementationWith applies the HasEdge predicate on the "implementation" edge with a given conditions (other predicates).
-func HasImplementationWith(preds ...predicate.ControlImplementation) predicate.Control {
+// HasControlImplementationsWith applies the HasEdge predicate on the "control_implementations" edge with a given conditions (other predicates).
+func HasControlImplementationsWith(preds ...predicate.ControlImplementation) predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
-		step := newImplementationStep()
+		step := newControlImplementationsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlImplementations
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1570,11 +1570,11 @@ func HasMappedControls() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, MappedControlsTable, MappedControlsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.MappedControlControls
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1585,7 +1585,7 @@ func HasMappedControlsWith(preds ...predicate.MappedControl) predicate.Control {
 		step := newMappedControlsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.MappedControlControls
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1834,18 +1834,18 @@ func HasControlOwner() predicate.Control {
 			sqlgraph.Edge(sqlgraph.M2O, false, ControlOwnerTable, ControlOwnerColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasControlOwnerWith applies the HasEdge predicate on the "control_owner" edge with a given conditions (other predicates).
-func HasControlOwnerWith(preds ...predicate.User) predicate.Control {
+func HasControlOwnerWith(preds ...predicate.Group) predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
 		step := newControlOwnerStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -1863,18 +1863,18 @@ func HasDelegate() predicate.Control {
 			sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasDelegateWith applies the HasEdge predicate on the "delegate" edge with a given conditions (other predicates).
-func HasDelegateWith(preds ...predicate.User) predicate.Control {
+func HasDelegateWith(preds ...predicate.Group) predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
 		step := newDelegateStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

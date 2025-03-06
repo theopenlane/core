@@ -184,13 +184,13 @@ func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[strin
 	}
 
 	if graphutils.CheckForRequestedField(ctx, "controlOwner") {
-		query.WithControlOwner(func(q *generated.UserQuery) {
+		query.WithControlOwner(func(q *generated.GroupQuery) {
 			q.Limit(edgesResultsLimit)
 		})
 	}
 
 	if graphutils.CheckForRequestedField(ctx, "delegate") {
-		query.WithDelegate(func(q *generated.UserQuery) {
+		query.WithDelegate(func(q *generated.GroupQuery) {
 			q.Limit(edgesResultsLimit)
 		})
 	}
@@ -1144,13 +1144,13 @@ func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[stri
 			}
 
 			if graphutils.CheckForRequestedField(ctx, "controlOwner") {
-				filter.WithControlOwner(func(q *generated.UserQuery) {
+				filter.WithControlOwner(func(q *generated.GroupQuery) {
 					q.Limit(edgesResultsLimit)
 				})
 			}
 
 			if graphutils.CheckForRequestedField(ctx, "delegate") {
-				filter.WithDelegate(func(q *generated.UserQuery) {
+				filter.WithDelegate(func(q *generated.GroupQuery) {
 					q.Limit(edgesResultsLimit)
 				})
 			}

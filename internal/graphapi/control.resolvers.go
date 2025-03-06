@@ -166,13 +166,13 @@ func (r *queryResolver) Control(ctx context.Context, id string) (*generated.Cont
 	}
 
 	if graphutils.CheckForRequestedField(ctx, "controlOwner") {
-		query.WithControlOwner(func(q *generated.UserQuery) {
+		query.WithControlOwner(func(q *generated.GroupQuery) {
 			q.Limit(edgesResultsLimit)
 		})
 	}
 
 	if graphutils.CheckForRequestedField(ctx, "delegate") {
-		query.WithDelegate(func(q *generated.UserQuery) {
+		query.WithDelegate(func(q *generated.GroupQuery) {
 			q.Limit(edgesResultsLimit)
 		})
 	}

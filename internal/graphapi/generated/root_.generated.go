@@ -306,6 +306,7 @@ type ComplexityRoot struct {
 		BlockedGroups          func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
+		ControlImplementations func(childComplexity int) int
 		ControlObjectives      func(childComplexity int) int
 		ControlOwner           func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
@@ -321,7 +322,6 @@ type ComplexityRoot struct {
 		Evidence               func(childComplexity int) int
 		ExampleEvidence        func(childComplexity int) int
 		ID                     func(childComplexity int) int
-		Implementation         func(childComplexity int) int
 		ImplementationGuidance func(childComplexity int) int
 		InternalPolicies       func(childComplexity int) int
 		MappedCategories       func(childComplexity int) int
@@ -414,8 +414,7 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementation struct {
-		Control            func(childComplexity int) int
-		ControlID          func(childComplexity int) int
+		Controls           func(childComplexity int) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		DeletedAt          func(childComplexity int) int
@@ -455,7 +454,6 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementationHistory struct {
-		ControlID          func(childComplexity int) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		DeletedAt          func(childComplexity int) int
@@ -1664,20 +1662,18 @@ type ComplexityRoot struct {
 	}
 
 	MappedControl struct {
-		Control         func(childComplexity int) int
-		ControlID       func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedBy       func(childComplexity int) int
-		ID              func(childComplexity int) int
-		MappedControl   func(childComplexity int) int
-		MappedControlID func(childComplexity int) int
-		MappingType     func(childComplexity int) int
-		Relation        func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		Controls    func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
+		DeletedBy   func(childComplexity int) int
+		ID          func(childComplexity int) int
+		MappingType func(childComplexity int) int
+		Relation    func(childComplexity int) int
+		Subcontrols func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
 	}
 
 	MappedControlBulkCreatePayload struct {
@@ -1704,21 +1700,19 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlHistory struct {
-		ControlID       func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedBy       func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		MappedControlID func(childComplexity int) int
-		MappingType     func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Relation        func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
+		DeletedBy   func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		MappingType func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		Relation    func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
 	}
 
 	MappedControlHistoryConnection struct {
@@ -4821,6 +4815,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.CategoryID(childComplexity), true
 
+	case "Control.controlImplementations":
+		if e.complexity.Control.ControlImplementations == nil {
+			break
+		}
+
+		return e.complexity.Control.ControlImplementations(childComplexity), true
+
 	case "Control.controlObjectives":
 		if e.complexity.Control.ControlObjectives == nil {
 			break
@@ -4925,13 +4926,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Control.ID(childComplexity), true
-
-	case "Control.implementation":
-		if e.complexity.Control.Implementation == nil {
-			break
-		}
-
-		return e.complexity.Control.Implementation(childComplexity), true
 
 	case "Control.implementationGuidance":
 		if e.complexity.Control.ImplementationGuidance == nil {
@@ -5388,19 +5382,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistoryEdge.Node(childComplexity), true
 
-	case "ControlImplementation.control":
-		if e.complexity.ControlImplementation.Control == nil {
+	case "ControlImplementation.controls":
+		if e.complexity.ControlImplementation.Controls == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementation.Control(childComplexity), true
-
-	case "ControlImplementation.controlID":
-		if e.complexity.ControlImplementation.ControlID == nil {
-			break
-		}
-
-		return e.complexity.ControlImplementation.ControlID(childComplexity), true
+		return e.complexity.ControlImplementation.Controls(childComplexity), true
 
 	case "ControlImplementation.createdAt":
 		if e.complexity.ControlImplementation.CreatedAt == nil {
@@ -5548,13 +5535,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlImplementationEdge.Node(childComplexity), true
-
-	case "ControlImplementationHistory.controlID":
-		if e.complexity.ControlImplementationHistory.ControlID == nil {
-			break
-		}
-
-		return e.complexity.ControlImplementationHistory.ControlID(childComplexity), true
 
 	case "ControlImplementationHistory.createdAt":
 		if e.complexity.ControlImplementationHistory.CreatedAt == nil {
@@ -10820,19 +10800,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InviteUpdatePayload.Invite(childComplexity), true
 
-	case "MappedControl.control":
-		if e.complexity.MappedControl.Control == nil {
+	case "MappedControl.controls":
+		if e.complexity.MappedControl.Controls == nil {
 			break
 		}
 
-		return e.complexity.MappedControl.Control(childComplexity), true
-
-	case "MappedControl.controlID":
-		if e.complexity.MappedControl.ControlID == nil {
-			break
-		}
-
-		return e.complexity.MappedControl.ControlID(childComplexity), true
+		return e.complexity.MappedControl.Controls(childComplexity), true
 
 	case "MappedControl.createdAt":
 		if e.complexity.MappedControl.CreatedAt == nil {
@@ -10869,20 +10842,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MappedControl.ID(childComplexity), true
 
-	case "MappedControl.mappedControl":
-		if e.complexity.MappedControl.MappedControl == nil {
-			break
-		}
-
-		return e.complexity.MappedControl.MappedControl(childComplexity), true
-
-	case "MappedControl.mappedControlID":
-		if e.complexity.MappedControl.MappedControlID == nil {
-			break
-		}
-
-		return e.complexity.MappedControl.MappedControlID(childComplexity), true
-
 	case "MappedControl.mappingType":
 		if e.complexity.MappedControl.MappingType == nil {
 			break
@@ -10896,6 +10855,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.MappedControl.Relation(childComplexity), true
+
+	case "MappedControl.subcontrols":
+		if e.complexity.MappedControl.Subcontrols == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.Subcontrols(childComplexity), true
 
 	case "MappedControl.tags":
 		if e.complexity.MappedControl.Tags == nil {
@@ -10974,13 +10940,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MappedControlEdge.Node(childComplexity), true
 
-	case "MappedControlHistory.controlID":
-		if e.complexity.MappedControlHistory.ControlID == nil {
-			break
-		}
-
-		return e.complexity.MappedControlHistory.ControlID(childComplexity), true
-
 	case "MappedControlHistory.createdAt":
 		if e.complexity.MappedControlHistory.CreatedAt == nil {
 			break
@@ -11022,13 +10981,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.MappedControlHistory.ID(childComplexity), true
-
-	case "MappedControlHistory.mappedControlID":
-		if e.complexity.MappedControlHistory.MappedControlID == nil {
-			break
-		}
-
-		return e.complexity.MappedControlHistory.MappedControlID(childComplexity), true
 
 	case "MappedControlHistory.mappingType":
 		if e.complexity.MappedControlHistory.MappingType == nil {
@@ -26032,13 +25984,13 @@ type Control implements Node {
   programs: [Program!]
   evidence: [Evidence!]
   """
-  the implementation of the control
+  the implementation(s) of the control
   """
-  implementation: ControlImplementation
+  controlImplementations: [ControlImplementation!]
   """
-  controls that are mapped to this control
+  mapped subcontrols that have a relation to another control or subcontrol
   """
-  mappedControls: MappedControl
+  mappedControls: [MappedControl!]
   controlObjectives: [ControlObjective!]
   subcontrols: [Subcontrol!]
   tasks: [Task!]
@@ -26048,13 +26000,13 @@ type Control implements Node {
   procedures: [Procedure!]
   internalPolicies: [InternalPolicy!]
   """
-  the user who is responsible for the control
+  the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
-  controlOwner: User
+  controlOwner: Group
   """
   temporary delegate for the control, used for temporary control ownership
   """
-  delegate: User
+  delegate: Group
 }
 """
 A connection to a list of items.
@@ -26588,10 +26540,6 @@ type ControlImplementation implements Node {
   """
   tags: [String!]
   """
-  the id of the control that this implementation is for
-  """
-  controlID: String!
-  """
   status of the control implementation
   """
   status: String
@@ -26611,7 +26559,7 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
-  control: [Control!]
+  controls: [Control!]
 }
 """
 A connection to a list of items.
@@ -26658,10 +26606,6 @@ type ControlImplementationHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
-  """
-  the id of the control that this implementation is for
-  """
-  controlID: String!
   """
   status of the control implementation
   """
@@ -26872,22 +26816,6 @@ input ControlImplementationHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
-  control_id field predicates
-  """
-  controlID: String
-  controlIDNEQ: String
-  controlIDIn: [String!]
-  controlIDNotIn: [String!]
-  controlIDGT: String
-  controlIDGTE: String
-  controlIDLT: String
-  controlIDLTE: String
-  controlIDContains: String
-  controlIDHasPrefix: String
-  controlIDHasSuffix: String
-  controlIDEqualFold: String
-  controlIDContainsFold: String
-  """
   status field predicates
   """
   status: String
@@ -27072,22 +27000,6 @@ input ControlImplementationWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
-  control_id field predicates
-  """
-  controlID: String
-  controlIDNEQ: String
-  controlIDIn: [String!]
-  controlIDNotIn: [String!]
-  controlIDGT: String
-  controlIDGTE: String
-  controlIDLT: String
-  controlIDLTE: String
-  controlIDContains: String
-  controlIDHasPrefix: String
-  controlIDHasSuffix: String
-  controlIDEqualFold: String
-  controlIDContainsFold: String
-  """
   status field predicates
   """
   status: String
@@ -27157,10 +27069,10 @@ input ControlImplementationWhereInput {
   detailsEqualFold: String
   detailsContainsFold: String
   """
-  control edge predicates
+  controls edge predicates
   """
-  hasControl: Boolean
-  hasControlWith: [ControlWhereInput!]
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
 }
 type ControlObjective implements Node {
   id: ID!
@@ -28370,10 +28282,10 @@ input ControlWhereInput {
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
   """
-  implementation edge predicates
+  control_implementations edge predicates
   """
-  hasImplementation: Boolean
-  hasImplementationWith: [ControlImplementationWhereInput!]
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
   """
   mapped_controls edge predicates
   """
@@ -28423,12 +28335,12 @@ input ControlWhereInput {
   control_owner edge predicates
   """
   hasControlOwner: Boolean
-  hasControlOwnerWith: [UserWhereInput!]
+  hasControlOwnerWith: [GroupWhereInput!]
   """
   delegate edge predicates
   """
   hasDelegate: Boolean
-  hasDelegateWith: [UserWhereInput!]
+  hasDelegateWith: [GroupWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -28564,10 +28476,6 @@ input CreateControlImplementationInput {
   """
   tags: [String!]
   """
-  the id of the control that this implementation is for
-  """
-  controlID: String!
-  """
   status of the control implementation
   """
   status: String
@@ -28665,8 +28573,8 @@ input CreateControlInput {
   standardID: ID
   programIDs: [ID!]
   evidenceIDs: [ID!]
-  implementationID: ID
-  mappedControlsID: ID
+  controlImplementationIDs: [ID!]
+  mappedControlIDs: [ID!]
   controlObjectiveIDs: [ID!]
   subcontrolIDs: [ID!]
   taskIDs: [ID!]
@@ -29186,8 +29094,8 @@ input CreateMappedControlInput {
   description of how the two controls are related
   """
   relation: String
-  controlID: ID!
-  mappedControlID: ID!
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
 }
 """
 CreateNarrativeInput is used for create Narrative object.
@@ -37877,14 +37785,6 @@ type MappedControl implements Node {
   """
   tags: [String!]
   """
-  the id of the control being mapped
-  """
-  controlID: ID!
-  """
-  the id of the control that is mapped to
-  """
-  mappedControlID: ID!
-  """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
   mappingType: String
@@ -37892,11 +37792,14 @@ type MappedControl implements Node {
   description of how the two controls are related
   """
   relation: String
-  control: Control!
   """
-  mapped control to the original control, meaning there is overlap between the controls
+  mapped controls that have a relation to each other
   """
-  mappedControl: Control!
+  controls: [Control!]
+  """
+  mapped subcontrols that have a relation to each other
+  """
+  subcontrols: [Subcontrol!]
 }
 """
 A connection to a list of items.
@@ -37943,14 +37846,6 @@ type MappedControlHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
-  """
-  the id of the control being mapped
-  """
-  controlID: String!
-  """
-  the id of the control that is mapped to
-  """
-  mappedControlID: String!
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
@@ -38149,38 +38044,6 @@ input MappedControlHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
-  control_id field predicates
-  """
-  controlID: String
-  controlIDNEQ: String
-  controlIDIn: [String!]
-  controlIDNotIn: [String!]
-  controlIDGT: String
-  controlIDGTE: String
-  controlIDLT: String
-  controlIDLTE: String
-  controlIDContains: String
-  controlIDHasPrefix: String
-  controlIDHasSuffix: String
-  controlIDEqualFold: String
-  controlIDContainsFold: String
-  """
-  mapped_control_id field predicates
-  """
-  mappedControlID: String
-  mappedControlIDNEQ: String
-  mappedControlIDIn: [String!]
-  mappedControlIDNotIn: [String!]
-  mappedControlIDGT: String
-  mappedControlIDGTE: String
-  mappedControlIDLT: String
-  mappedControlIDLTE: String
-  mappedControlIDContains: String
-  mappedControlIDHasPrefix: String
-  mappedControlIDHasSuffix: String
-  mappedControlIDEqualFold: String
-  mappedControlIDContainsFold: String
-  """
   mapping_type field predicates
   """
   mappingType: String
@@ -38332,38 +38195,6 @@ input MappedControlWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
-  control_id field predicates
-  """
-  controlID: ID
-  controlIDNEQ: ID
-  controlIDIn: [ID!]
-  controlIDNotIn: [ID!]
-  controlIDGT: ID
-  controlIDGTE: ID
-  controlIDLT: ID
-  controlIDLTE: ID
-  controlIDContains: ID
-  controlIDHasPrefix: ID
-  controlIDHasSuffix: ID
-  controlIDEqualFold: ID
-  controlIDContainsFold: ID
-  """
-  mapped_control_id field predicates
-  """
-  mappedControlID: ID
-  mappedControlIDNEQ: ID
-  mappedControlIDIn: [ID!]
-  mappedControlIDNotIn: [ID!]
-  mappedControlIDGT: ID
-  mappedControlIDGTE: ID
-  mappedControlIDLT: ID
-  mappedControlIDLTE: ID
-  mappedControlIDContains: ID
-  mappedControlIDHasPrefix: ID
-  mappedControlIDHasSuffix: ID
-  mappedControlIDEqualFold: ID
-  mappedControlIDContainsFold: ID
-  """
   mapping_type field predicates
   """
   mappingType: String
@@ -38400,15 +38231,15 @@ input MappedControlWhereInput {
   relationEqualFold: String
   relationContainsFold: String
   """
-  control edge predicates
+  controls edge predicates
   """
-  hasControl: Boolean
-  hasControlWith: [ControlWhereInput!]
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
   """
-  mapped_control edge predicates
+  subcontrols edge predicates
   """
-  hasMappedControl: Boolean
-  hasMappedControlWith: [ControlWhereInput!]
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 type Narrative implements Node {
   id: ID!
@@ -48917,7 +48748,10 @@ type Subcontrol implements Node {
   controlID: ID!
   owner: Organization
   control: Control!
-  mappedControls: [Control!]
+  """
+  mapped subcontrols that have a relation to another control or subcontrol
+  """
+  mappedControls: [MappedControl!]
   evidence: [Evidence!]
   controlObjectives: [ControlObjective!]
   tasks: [Task!]
@@ -48929,11 +48763,11 @@ type Subcontrol implements Node {
   """
   the user who is responsible for the subcontrol, defaults to the parent control owner if not set
   """
-  controlOwner: User
+  controlOwner: Group
   """
   temporary delegate for the control, used for temporary control ownership
   """
-  delegate: User
+  delegate: Group
 }
 """
 A connection to a list of items.
@@ -49754,7 +49588,7 @@ input SubcontrolWhereInput {
   mapped_controls edge predicates
   """
   hasMappedControls: Boolean
-  hasMappedControlsWith: [ControlWhereInput!]
+  hasMappedControlsWith: [MappedControlWhereInput!]
   """
   evidence edge predicates
   """
@@ -49799,12 +49633,12 @@ input SubcontrolWhereInput {
   control_owner edge predicates
   """
   hasControlOwner: Boolean
-  hasControlOwnerWith: [UserWhereInput!]
+  hasControlOwnerWith: [GroupWhereInput!]
   """
   delegate edge predicates
   """
   hasDelegate: Boolean
-  hasDelegateWith: [UserWhereInput!]
+  hasDelegateWith: [GroupWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -51913,10 +51747,6 @@ input UpdateControlImplementationInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  the id of the control that this implementation is for
-  """
-  controlID: String
-  """
   status of the control implementation
   """
   status: String
@@ -51943,7 +51773,7 @@ input UpdateControlImplementationInput {
   clearDetails: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
-  clearControl: Boolean
+  clearControls: Boolean
 }
 """
 UpdateControlInput is used for update Control object.
@@ -52054,9 +51884,11 @@ input UpdateControlInput {
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
-  implementationID: ID
-  clearImplementation: Boolean
-  mappedControlsID: ID
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
+  addMappedControlIDs: [ID!]
+  removeMappedControlIDs: [ID!]
   clearMappedControls: Boolean
   addControlObjectiveIDs: [ID!]
   removeControlObjectiveIDs: [ID!]
@@ -52825,6 +52657,12 @@ input UpdateMappedControlInput {
   """
   relation: String
   clearRelation: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
 }
 """
 UpdateNarrativeInput is used for update Narrative object.

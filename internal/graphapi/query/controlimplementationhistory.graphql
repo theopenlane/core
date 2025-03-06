@@ -4,7 +4,6 @@ query GetAllControlImplementationHistories {
   controlImplementationHistories {
     edges {
       node {
-        controlID
         createdAt
         createdBy
         details
@@ -28,7 +27,6 @@ query GetControlImplementationHistories($where: ControlImplementationHistoryWher
   controlImplementationHistories(where: $where) {
     edges {
       node {
-        controlID
         createdAt
         createdBy
         details

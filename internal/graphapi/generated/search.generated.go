@@ -328,8 +328,6 @@ func (ec *executionContext) fieldContext_ControlImplementationSearchResult_contr
 				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_ControlImplementation_controlID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":
@@ -340,8 +338,8 @@ func (ec *executionContext) fieldContext_ControlImplementationSearchResult_contr
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
-			case "control":
-				return ec.fieldContext_ControlImplementation_control(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},
@@ -556,8 +554,8 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
-			case "implementation":
-				return ec.fieldContext_Control_implementation(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Control_controlImplementations(ctx, field)
 			case "mappedControls":
 				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlObjectives":
@@ -1456,18 +1454,14 @@ func (ec *executionContext) fieldContext_MappedControlSearchResult_mappedControl
 				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_MappedControl_controlID(ctx, field)
-			case "mappedControlID":
-				return ec.fieldContext_MappedControl_mappedControlID(ctx, field)
 			case "mappingType":
 				return ec.fieldContext_MappedControl_mappingType(ctx, field)
 			case "relation":
 				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "control":
-				return ec.fieldContext_MappedControl_control(ctx, field)
-			case "mappedControl":
-				return ec.fieldContext_MappedControl_mappedControl(ctx, field)
+			case "controls":
+				return ec.fieldContext_MappedControl_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
 		},

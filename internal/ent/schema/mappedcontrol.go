@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -22,22 +21,22 @@ type MappedControl struct {
 // Fields of the MappedControl
 func (MappedControl) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("control_id").
-			Comment("the id of the control being mapped").
-			Unique().
-			Immutable().
-			NotEmpty(),
-		field.String("mapped_control_id").
-			Unique().
-			Immutable().
-			NotEmpty().
-			Comment("the id of the control that is mapped to"),
 		field.String("mapping_type").
 			Comment("the type of mapping between the two controls, e.g. subset, intersect, equal, superset").
 			Optional(),
 		field.String("relation").
 			Comment("description of how the two controls are related").
 			Optional(),
+	}
+}
+
+// Edges of the MappedControl
+func (MappedControl) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("controls", Control.Type).
+			Comment("mapped controls that have a relation to each other"),
+		edge.To("subcontrols", Subcontrol.Type).
+			Comment("mapped subcontrols that have a relation to each other"),
 	}
 }
 
@@ -48,31 +47,6 @@ func (MappedControl) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
-	}
-}
-
-// Edges of the MappedControl
-func (MappedControl) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("control", Control.Type).
-			Unique().
-			Required().
-			Field("control_id").
-			Immutable(),
-		edge.To("mapped_control", Control.Type).
-			Comment("mapped control to the original control, meaning there is overlap between the controls").
-			Unique().
-			Required().
-			Field("mapped_control_id").
-			Immutable(),
-	}
-}
-
-// Indexes of the MappedControl
-func (MappedControl) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("control_id", "mapped_control_id").
-			Unique(),
 	}
 }
 

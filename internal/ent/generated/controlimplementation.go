@@ -32,8 +32,6 @@ type ControlImplementation struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control that this implementation is for
-	ControlID string `json:"control_id,omitempty"`
 	// status of the control implementation
 	Status string `json:"status,omitempty"`
 	// date the control was implemented
@@ -52,24 +50,24 @@ type ControlImplementation struct {
 
 // ControlImplementationEdges holds the relations/edges for other nodes in the graph.
 type ControlImplementationEdges struct {
-	// Control holds the value of the control edge.
-	Control []*Control `json:"control,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
 
-	namedControl map[string][]*Control
+	namedControls map[string][]*Control
 }
 
-// ControlOrErr returns the Control value or an error if the edge
+// ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
-func (e ControlImplementationEdges) ControlOrErr() ([]*Control, error) {
+func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
 	if e.loadedTypes[0] {
-		return e.Control, nil
+		return e.Controls, nil
 	}
-	return nil, &NotLoadedError{edge: "control"}
+	return nil, &NotLoadedError{edge: "controls"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -81,7 +79,7 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlimplementation.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldDeletedBy, controlimplementation.FieldControlID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
+		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldDeletedBy, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementation.FieldCreatedAt, controlimplementation.FieldUpdatedAt, controlimplementation.FieldDeletedAt, controlimplementation.FieldImplementationDate, controlimplementation.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -150,12 +148,6 @@ func (ci *ControlImplementation) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
-		case controlimplementation.FieldControlID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_id", values[i])
-			} else if value.Valid {
-				ci.ControlID = value.String
-			}
 		case controlimplementation.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -199,9 +191,9 @@ func (ci *ControlImplementation) Value(name string) (ent.Value, error) {
 	return ci.selectValues.Get(name)
 }
 
-// QueryControl queries the "control" edge of the ControlImplementation entity.
-func (ci *ControlImplementation) QueryControl() *ControlQuery {
-	return NewControlImplementationClient(ci.config).QueryControl(ci)
+// QueryControls queries the "controls" edge of the ControlImplementation entity.
+func (ci *ControlImplementation) QueryControls() *ControlQuery {
+	return NewControlImplementationClient(ci.config).QueryControls(ci)
 }
 
 // Update returns a builder for updating this ControlImplementation.
@@ -248,9 +240,6 @@ func (ci *ControlImplementation) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ci.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("control_id=")
-	builder.WriteString(ci.ControlID)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(ci.Status)
 	builder.WriteString(", ")
@@ -269,27 +258,27 @@ func (ci *ControlImplementation) String() string {
 	return builder.String()
 }
 
-// NamedControl returns the Control named value or an error if the edge was not
+// NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ci *ControlImplementation) NamedControl(name string) ([]*Control, error) {
-	if ci.Edges.namedControl == nil {
+func (ci *ControlImplementation) NamedControls(name string) ([]*Control, error) {
+	if ci.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ci.Edges.namedControl[name]
+	nodes, ok := ci.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ci *ControlImplementation) appendNamedControl(name string, edges ...*Control) {
-	if ci.Edges.namedControl == nil {
-		ci.Edges.namedControl = make(map[string][]*Control)
+func (ci *ControlImplementation) appendNamedControls(name string, edges ...*Control) {
+	if ci.Edges.namedControls == nil {
+		ci.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		ci.Edges.namedControl[name] = []*Control{}
+		ci.Edges.namedControls[name] = []*Control{}
 	} else {
-		ci.Edges.namedControl[name] = append(ci.Edges.namedControl[name], edges...)
+		ci.Edges.namedControls[name] = append(ci.Edges.namedControls[name], edges...)
 	}
 }
 

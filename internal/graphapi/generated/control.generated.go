@@ -131,8 +131,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
-			case "implementation":
-				return ec.fieldContext_Control_implementation(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Control_controlImplementations(ctx, field)
 			case "mappedControls":
 				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlObjectives":
@@ -267,8 +267,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
-			case "implementation":
-				return ec.fieldContext_Control_implementation(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Control_controlImplementations(ctx, field)
 			case "mappedControls":
 				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlObjectives":
@@ -447,8 +447,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
-			case "implementation":
-				return ec.fieldContext_Control_implementation(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Control_controlImplementations(ctx, field)
 			case "mappedControls":
 				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlObjectives":

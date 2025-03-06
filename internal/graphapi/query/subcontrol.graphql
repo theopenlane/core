@@ -133,13 +133,11 @@ query GetAllSubcontrols {
         }
         controlOwner {
           id
-          firstName
-          lastName
+          name
         }
         delegate {
           id
-          firstName
-          lastName
+          name
         }
       }
     }
@@ -180,13 +178,11 @@ query GetSubcontrolByID($subcontrolId: ID!) {
     }
     controlOwner {
       id
-      firstName
-      lastName
+      name
     }
     delegate {
       id
-      firstName
-      lastName
+      name
     }
   }
 }
@@ -227,13 +223,11 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
         }
         controlOwner {
           id
-          firstName
-          lastName
+          name
         }
         delegate {
           id
-          firstName
-          lastName
+          name
         }
       }
     }
@@ -275,13 +269,11 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       }
       controlOwner {
         id
-        firstName
-        lastName
+        name
       }
       delegate {
         id
-        firstName
-        lastName
+        name
       }
     }
   }

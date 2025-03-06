@@ -26,7 +26,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -407,42 +406,34 @@ func (cc *ControlCreate) AddEvidence(e ...*Evidence) *ControlCreate {
 	return cc.AddEvidenceIDs(ids...)
 }
 
-// SetImplementationID sets the "implementation" edge to the ControlImplementation entity by ID.
-func (cc *ControlCreate) SetImplementationID(id string) *ControlCreate {
-	cc.mutation.SetImplementationID(id)
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (cc *ControlCreate) AddControlImplementationIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddControlImplementationIDs(ids...)
 	return cc
 }
 
-// SetNillableImplementationID sets the "implementation" edge to the ControlImplementation entity by ID if the given value is not nil.
-func (cc *ControlCreate) SetNillableImplementationID(id *string) *ControlCreate {
-	if id != nil {
-		cc = cc.SetImplementationID(*id)
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (cc *ControlCreate) AddControlImplementations(c ...*ControlImplementation) *ControlCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
 	}
+	return cc.AddControlImplementationIDs(ids...)
+}
+
+// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
+func (cc *ControlCreate) AddMappedControlIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddMappedControlIDs(ids...)
 	return cc
 }
 
-// SetImplementation sets the "implementation" edge to the ControlImplementation entity.
-func (cc *ControlCreate) SetImplementation(c *ControlImplementation) *ControlCreate {
-	return cc.SetImplementationID(c.ID)
-}
-
-// SetMappedControlsID sets the "mapped_controls" edge to the MappedControl entity by ID.
-func (cc *ControlCreate) SetMappedControlsID(id string) *ControlCreate {
-	cc.mutation.SetMappedControlsID(id)
-	return cc
-}
-
-// SetNillableMappedControlsID sets the "mapped_controls" edge to the MappedControl entity by ID if the given value is not nil.
-func (cc *ControlCreate) SetNillableMappedControlsID(id *string) *ControlCreate {
-	if id != nil {
-		cc = cc.SetMappedControlsID(*id)
+// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
+func (cc *ControlCreate) AddMappedControls(m ...*MappedControl) *ControlCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
 	}
-	return cc
-}
-
-// SetMappedControls sets the "mapped_controls" edge to the MappedControl entity.
-func (cc *ControlCreate) SetMappedControls(m *MappedControl) *ControlCreate {
-	return cc.SetMappedControlsID(m.ID)
+	return cc.AddMappedControlIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -565,13 +556,13 @@ func (cc *ControlCreate) AddInternalPolicies(i ...*InternalPolicy) *ControlCreat
 	return cc.AddInternalPolicyIDs(ids...)
 }
 
-// SetControlOwnerID sets the "control_owner" edge to the User entity by ID.
+// SetControlOwnerID sets the "control_owner" edge to the Group entity by ID.
 func (cc *ControlCreate) SetControlOwnerID(id string) *ControlCreate {
 	cc.mutation.SetControlOwnerID(id)
 	return cc
 }
 
-// SetNillableControlOwnerID sets the "control_owner" edge to the User entity by ID if the given value is not nil.
+// SetNillableControlOwnerID sets the "control_owner" edge to the Group entity by ID if the given value is not nil.
 func (cc *ControlCreate) SetNillableControlOwnerID(id *string) *ControlCreate {
 	if id != nil {
 		cc = cc.SetControlOwnerID(*id)
@@ -579,18 +570,18 @@ func (cc *ControlCreate) SetNillableControlOwnerID(id *string) *ControlCreate {
 	return cc
 }
 
-// SetControlOwner sets the "control_owner" edge to the User entity.
-func (cc *ControlCreate) SetControlOwner(u *User) *ControlCreate {
-	return cc.SetControlOwnerID(u.ID)
+// SetControlOwner sets the "control_owner" edge to the Group entity.
+func (cc *ControlCreate) SetControlOwner(g *Group) *ControlCreate {
+	return cc.SetControlOwnerID(g.ID)
 }
 
-// SetDelegateID sets the "delegate" edge to the User entity by ID.
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
 func (cc *ControlCreate) SetDelegateID(id string) *ControlCreate {
 	cc.mutation.SetDelegateID(id)
 	return cc
 }
 
-// SetNillableDelegateID sets the "delegate" edge to the User entity by ID if the given value is not nil.
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
 func (cc *ControlCreate) SetNillableDelegateID(id *string) *ControlCreate {
 	if id != nil {
 		cc = cc.SetDelegateID(*id)
@@ -598,9 +589,9 @@ func (cc *ControlCreate) SetNillableDelegateID(id *string) *ControlCreate {
 	return cc
 }
 
-// SetDelegate sets the "delegate" edge to the User entity.
-func (cc *ControlCreate) SetDelegate(u *User) *ControlCreate {
-	return cc.SetDelegateID(u.ID)
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (cc *ControlCreate) SetDelegate(g *Group) *ControlCreate {
+	return cc.SetDelegateID(g.ID)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -958,40 +949,38 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ImplementationIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ImplementationTable,
-			Columns: []string{control.ImplementationColumn},
+			Table:   control.ControlImplementationsTable,
+			Columns: control.ControlImplementationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Control
+		edge.Schema = cc.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.control_implementation = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.MappedControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   control.MappedControlsTable,
-			Columns: []string{control.MappedControlsColumn},
+			Columns: control.MappedControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Control
+		edge.Schema = cc.schemaConfig.MappedControlControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.control_mapped_controls = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
@@ -1138,7 +1127,7 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			Columns: []string{control.ControlOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cc.schemaConfig.Control
@@ -1156,7 +1145,7 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			Columns: []string{control.DelegateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cc.schemaConfig.Control

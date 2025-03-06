@@ -57,15 +57,13 @@ func (Control) Edges() []ent.Edge {
 		edge.From("evidence", Evidence.Type).
 			Ref("controls"),
 
-		edge.To("implementation", ControlImplementation.Type).
-			Unique().
-			Annotations(entx.CascadeAnnotationField("Control")). // cascade delete the implementation when the control is deleted
-			Comment("the implementation of the control"),
+		edge.To("control_implementations", ControlImplementation.Type).
+			Annotations(entx.CascadeAnnotationField("Controls")). // cascade delete the implementation when the control is deleted
+			Comment("the implementation(s) of the control"),
 
-		edge.To("mapped_controls", MappedControl.Type).
-			Unique().
-			Annotations(entx.CascadeAnnotationField("Control")). // cascade delete the mapped control when the control is deleted
-			Comment("controls that are mapped to this control"),
+		edge.From("mapped_controls", MappedControl.Type).
+			Ref("controls").
+			Comment("mapped subcontrols that have a relation to another control or subcontrol"),
 
 		// controls have control objectives and subcontrols
 		edge.To("control_objectives", ControlObjective.Type),
@@ -84,10 +82,10 @@ func (Control) Edges() []ent.Edge {
 		edge.To("internal_policies", InternalPolicy.Type),
 
 		// owner is the user who is responsible for the control
-		edge.To("control_owner", User.Type).
+		edge.To("control_owner", Group.Type).
 			Unique().
-			Comment("the user who is responsible for the control"),
-		edge.To("delegate", User.Type).
+			Comment("the group of users who are responsible for the control, will be assigned tasks, approval, etc."),
+		edge.To("delegate", Group.Type).
 			Unique().
 			Comment("temporary delegate for the control, used for temporary control ownership"),
 	}

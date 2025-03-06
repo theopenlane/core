@@ -110,13 +110,11 @@ const (
 	ControlInverseTable = "controls"
 	// ControlColumn is the table column denoting the control relation/edge.
 	ControlColumn = "control_id"
-	// MappedControlsTable is the table that holds the mapped_controls relation/edge.
-	MappedControlsTable = "controls"
-	// MappedControlsInverseTable is the table name for the Control entity.
-	// It exists in this package in order to avoid circular dependency with the "control" package.
-	MappedControlsInverseTable = "controls"
-	// MappedControlsColumn is the table column denoting the mapped_controls relation/edge.
-	MappedControlsColumn = "subcontrol_mapped_controls"
+	// MappedControlsTable is the table that holds the mapped_controls relation/edge. The primary key declared below.
+	MappedControlsTable = "mapped_control_subcontrols"
+	// MappedControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedControlsInverseTable = "mapped_controls"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
 	EvidenceTable = "evidence_subcontrols"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -169,16 +167,16 @@ const (
 	InternalPoliciesColumn = "subcontrol_internal_policies"
 	// ControlOwnerTable is the table that holds the control_owner relation/edge.
 	ControlOwnerTable = "subcontrols"
-	// ControlOwnerInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	ControlOwnerInverseTable = "users"
+	// ControlOwnerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ControlOwnerInverseTable = "groups"
 	// ControlOwnerColumn is the table column denoting the control_owner relation/edge.
 	ControlOwnerColumn = "subcontrol_control_owner"
 	// DelegateTable is the table that holds the delegate relation/edge.
 	DelegateTable = "subcontrols"
-	// DelegateInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	DelegateInverseTable = "users"
+	// DelegateInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
 	DelegateColumn = "subcontrol_delegate"
 )
@@ -223,6 +221,9 @@ var ForeignKeys = []string{
 }
 
 var (
+	// MappedControlsPrimaryKey and MappedControlsColumn2 are the table columns denoting the
+	// primary key for the mapped_controls relation (M2M).
+	MappedControlsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"evidence_id", "subcontrol_id"}
@@ -566,7 +567,7 @@ func newMappedControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MappedControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, MappedControlsTable, MappedControlsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

@@ -89,13 +89,11 @@ mutation CreateControl($input: CreateControlInput!) {
       updatedBy
       controlOwner {
         id
-        firstName
-        lastName
+        name
       }
       delegate {
         id
-        firstName
-        lastName
+        name
       }
       programs {
         id
@@ -154,13 +152,11 @@ query GetAllControls {
         updatedBy
         controlOwner {
           id
-          firstName
-          lastName
+          name
         }
         delegate {
           id
-          firstName
-          lastName
+          name
         }
         standard {
           id
@@ -218,13 +214,11 @@ query GetControlByID($controlId: ID!) {
     updatedBy
     controlOwner {
       id
-      firstName
-      lastName
+      name
     }
     delegate {
       id
-      firstName
-      lastName
+      name
     }
     standard {
       id
@@ -282,13 +276,11 @@ query GetControls($where: ControlWhereInput) {
         updatedBy
         controlOwner {
           id
-          firstName
-          lastName
+          name
         }
         delegate {
           id
-          firstName
-          lastName
+          name
         }
         standard {
           id
@@ -347,13 +339,11 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       updatedBy
       controlOwner {
         id
-        firstName
-        lastName
+        name
       }
       delegate {
         id
-        firstName
-        lastName
+        name
       }
       standard {
         id

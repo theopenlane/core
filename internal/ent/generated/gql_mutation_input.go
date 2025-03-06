@@ -531,41 +531,41 @@ func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
 
 // CreateControlInput represents a mutation input for creating controls.
 type CreateControlInput struct {
-	Tags                   []string
-	Description            *string
-	Status                 *string
-	Source                 *enums.ControlSource
-	ControlType            *enums.ControlType
-	Category               *string
-	CategoryID             *string
-	Subcategory            *string
-	MappedCategories       []string
-	AssessmentObjectives   []models.AssessmentObjective
-	AssessmentMethods      []models.AssessmentMethod
-	ControlQuestions       []string
-	ImplementationGuidance []models.ImplementationGuidance
-	ExampleEvidence        []models.ExampleEvidence
-	References             []models.Reference
-	RefCode                string
-	OwnerID                *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	ViewerIDs              []string
-	StandardID             *string
-	ProgramIDs             []string
-	EvidenceIDs            []string
-	ImplementationID       *string
-	MappedControlsID       *string
-	ControlObjectiveIDs    []string
-	SubcontrolIDs          []string
-	TaskIDs                []string
-	NarrativeIDs           []string
-	RiskIDs                []string
-	ActionPlanIDs          []string
-	ProcedureIDs           []string
-	InternalPolicyIDs      []string
-	ControlOwnerID         *string
-	DelegateID             *string
+	Tags                     []string
+	Description              *string
+	Status                   *string
+	Source                   *enums.ControlSource
+	ControlType              *enums.ControlType
+	Category                 *string
+	CategoryID               *string
+	Subcategory              *string
+	MappedCategories         []string
+	AssessmentObjectives     []models.AssessmentObjective
+	AssessmentMethods        []models.AssessmentMethod
+	ControlQuestions         []string
+	ImplementationGuidance   []models.ImplementationGuidance
+	ExampleEvidence          []models.ExampleEvidence
+	References               []models.Reference
+	RefCode                  string
+	OwnerID                  *string
+	BlockedGroupIDs          []string
+	EditorIDs                []string
+	ViewerIDs                []string
+	StandardID               *string
+	ProgramIDs               []string
+	EvidenceIDs              []string
+	ControlImplementationIDs []string
+	MappedControlIDs         []string
+	ControlObjectiveIDs      []string
+	SubcontrolIDs            []string
+	TaskIDs                  []string
+	NarrativeIDs             []string
+	RiskIDs                  []string
+	ActionPlanIDs            []string
+	ProcedureIDs             []string
+	InternalPolicyIDs        []string
+	ControlOwnerID           *string
+	DelegateID               *string
 }
 
 // Mutate applies the CreateControlInput on the ControlMutation builder.
@@ -637,11 +637,11 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
-	if v := i.ImplementationID; v != nil {
-		m.SetImplementationID(*v)
+	if v := i.ControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
 	}
-	if v := i.MappedControlsID; v != nil {
-		m.SetMappedControlsID(*v)
+	if v := i.MappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
 	}
 	if v := i.ControlObjectiveIDs; len(v) > 0 {
 		m.AddControlObjectiveIDs(v...)
@@ -683,94 +683,96 @@ func (c *ControlCreate) SetInput(i CreateControlInput) *ControlCreate {
 
 // UpdateControlInput represents a mutation input for updating controls.
 type UpdateControlInput struct {
-	ClearTags                    bool
-	Tags                         []string
-	AppendTags                   []string
-	ClearDescription             bool
-	Description                  *string
-	ClearStatus                  bool
-	Status                       *string
-	ClearSource                  bool
-	Source                       *enums.ControlSource
-	ClearControlType             bool
-	ControlType                  *enums.ControlType
-	ClearCategory                bool
-	Category                     *string
-	ClearCategoryID              bool
-	CategoryID                   *string
-	ClearSubcategory             bool
-	Subcategory                  *string
-	ClearMappedCategories        bool
-	MappedCategories             []string
-	AppendMappedCategories       []string
-	ClearAssessmentObjectives    bool
-	AssessmentObjectives         []models.AssessmentObjective
-	AppendAssessmentObjectives   []models.AssessmentObjective
-	ClearAssessmentMethods       bool
-	AssessmentMethods            []models.AssessmentMethod
-	AppendAssessmentMethods      []models.AssessmentMethod
-	ClearControlQuestions        bool
-	ControlQuestions             []string
-	AppendControlQuestions       []string
-	ClearImplementationGuidance  bool
-	ImplementationGuidance       []models.ImplementationGuidance
-	AppendImplementationGuidance []models.ImplementationGuidance
-	ClearExampleEvidence         bool
-	ExampleEvidence              []models.ExampleEvidence
-	AppendExampleEvidence        []models.ExampleEvidence
-	ClearReferences              bool
-	References                   []models.Reference
-	AppendReferences             []models.Reference
-	RefCode                      *string
-	ClearBlockedGroups           bool
-	AddBlockedGroupIDs           []string
-	RemoveBlockedGroupIDs        []string
-	ClearEditors                 bool
-	AddEditorIDs                 []string
-	RemoveEditorIDs              []string
-	ClearViewers                 bool
-	AddViewerIDs                 []string
-	RemoveViewerIDs              []string
-	ClearStandard                bool
-	StandardID                   *string
-	ClearPrograms                bool
-	AddProgramIDs                []string
-	RemoveProgramIDs             []string
-	ClearEvidence                bool
-	AddEvidenceIDs               []string
-	RemoveEvidenceIDs            []string
-	ClearImplementation          bool
-	ImplementationID             *string
-	ClearMappedControls          bool
-	MappedControlsID             *string
-	ClearControlObjectives       bool
-	AddControlObjectiveIDs       []string
-	RemoveControlObjectiveIDs    []string
-	ClearSubcontrols             bool
-	AddSubcontrolIDs             []string
-	RemoveSubcontrolIDs          []string
-	ClearTasks                   bool
-	AddTaskIDs                   []string
-	RemoveTaskIDs                []string
-	ClearNarratives              bool
-	AddNarrativeIDs              []string
-	RemoveNarrativeIDs           []string
-	ClearRisks                   bool
-	AddRiskIDs                   []string
-	RemoveRiskIDs                []string
-	ClearActionPlans             bool
-	AddActionPlanIDs             []string
-	RemoveActionPlanIDs          []string
-	ClearProcedures              bool
-	AddProcedureIDs              []string
-	RemoveProcedureIDs           []string
-	ClearInternalPolicies        bool
-	AddInternalPolicyIDs         []string
-	RemoveInternalPolicyIDs      []string
-	ClearControlOwner            bool
-	ControlOwnerID               *string
-	ClearDelegate                bool
-	DelegateID                   *string
+	ClearTags                      bool
+	Tags                           []string
+	AppendTags                     []string
+	ClearDescription               bool
+	Description                    *string
+	ClearStatus                    bool
+	Status                         *string
+	ClearSource                    bool
+	Source                         *enums.ControlSource
+	ClearControlType               bool
+	ControlType                    *enums.ControlType
+	ClearCategory                  bool
+	Category                       *string
+	ClearCategoryID                bool
+	CategoryID                     *string
+	ClearSubcategory               bool
+	Subcategory                    *string
+	ClearMappedCategories          bool
+	MappedCategories               []string
+	AppendMappedCategories         []string
+	ClearAssessmentObjectives      bool
+	AssessmentObjectives           []models.AssessmentObjective
+	AppendAssessmentObjectives     []models.AssessmentObjective
+	ClearAssessmentMethods         bool
+	AssessmentMethods              []models.AssessmentMethod
+	AppendAssessmentMethods        []models.AssessmentMethod
+	ClearControlQuestions          bool
+	ControlQuestions               []string
+	AppendControlQuestions         []string
+	ClearImplementationGuidance    bool
+	ImplementationGuidance         []models.ImplementationGuidance
+	AppendImplementationGuidance   []models.ImplementationGuidance
+	ClearExampleEvidence           bool
+	ExampleEvidence                []models.ExampleEvidence
+	AppendExampleEvidence          []models.ExampleEvidence
+	ClearReferences                bool
+	References                     []models.Reference
+	AppendReferences               []models.Reference
+	RefCode                        *string
+	ClearBlockedGroups             bool
+	AddBlockedGroupIDs             []string
+	RemoveBlockedGroupIDs          []string
+	ClearEditors                   bool
+	AddEditorIDs                   []string
+	RemoveEditorIDs                []string
+	ClearViewers                   bool
+	AddViewerIDs                   []string
+	RemoveViewerIDs                []string
+	ClearStandard                  bool
+	StandardID                     *string
+	ClearPrograms                  bool
+	AddProgramIDs                  []string
+	RemoveProgramIDs               []string
+	ClearEvidence                  bool
+	AddEvidenceIDs                 []string
+	RemoveEvidenceIDs              []string
+	ClearControlImplementations    bool
+	AddControlImplementationIDs    []string
+	RemoveControlImplementationIDs []string
+	ClearMappedControls            bool
+	AddMappedControlIDs            []string
+	RemoveMappedControlIDs         []string
+	ClearControlObjectives         bool
+	AddControlObjectiveIDs         []string
+	RemoveControlObjectiveIDs      []string
+	ClearSubcontrols               bool
+	AddSubcontrolIDs               []string
+	RemoveSubcontrolIDs            []string
+	ClearTasks                     bool
+	AddTaskIDs                     []string
+	RemoveTaskIDs                  []string
+	ClearNarratives                bool
+	AddNarrativeIDs                []string
+	RemoveNarrativeIDs             []string
+	ClearRisks                     bool
+	AddRiskIDs                     []string
+	RemoveRiskIDs                  []string
+	ClearActionPlans               bool
+	AddActionPlanIDs               []string
+	RemoveActionPlanIDs            []string
+	ClearProcedures                bool
+	AddProcedureIDs                []string
+	RemoveProcedureIDs             []string
+	ClearInternalPolicies          bool
+	AddInternalPolicyIDs           []string
+	RemoveInternalPolicyIDs        []string
+	ClearControlOwner              bool
+	ControlOwnerID                 *string
+	ClearDelegate                  bool
+	DelegateID                     *string
 }
 
 // Mutate applies the UpdateControlInput on the ControlMutation builder.
@@ -943,17 +945,23 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveEvidenceIDs; len(v) > 0 {
 		m.RemoveEvidenceIDs(v...)
 	}
-	if i.ClearImplementation {
-		m.ClearImplementation()
+	if i.ClearControlImplementations {
+		m.ClearControlImplementations()
 	}
-	if v := i.ImplementationID; v != nil {
-		m.SetImplementationID(*v)
+	if v := i.AddControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
+	}
+	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
+		m.RemoveControlImplementationIDs(v...)
 	}
 	if i.ClearMappedControls {
 		m.ClearMappedControls()
 	}
-	if v := i.MappedControlsID; v != nil {
-		m.SetMappedControlsID(*v)
+	if v := i.AddMappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
+	}
+	if v := i.RemoveMappedControlIDs; len(v) > 0 {
+		m.RemoveMappedControlIDs(v...)
 	}
 	if i.ClearControlObjectives {
 		m.ClearControlObjectives()
@@ -1056,7 +1064,6 @@ func (c *ControlUpdateOne) SetInput(i UpdateControlInput) *ControlUpdateOne {
 // CreateControlImplementationInput represents a mutation input for creating controlimplementations.
 type CreateControlImplementationInput struct {
 	Tags               []string
-	ControlID          string
 	Status             *string
 	ImplementationDate *time.Time
 	Verified           *bool
@@ -1070,7 +1077,6 @@ func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	m.SetControlID(i.ControlID)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -1102,7 +1108,6 @@ type UpdateControlImplementationInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
-	ControlID               *string
 	ClearStatus             bool
 	Status                  *string
 	ClearImplementationDate bool
@@ -1113,7 +1118,7 @@ type UpdateControlImplementationInput struct {
 	VerificationDate        *time.Time
 	ClearDetails            bool
 	Details                 *string
-	ClearControl            bool
+	ClearControls           bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
 }
@@ -1128,9 +1133,6 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
-	}
-	if v := i.ControlID; v != nil {
-		m.SetControlID(*v)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()
@@ -1162,8 +1164,8 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
 	}
-	if i.ClearControl {
-		m.ClearControl()
+	if i.ClearControls {
+		m.ClearControls()
 	}
 	if v := i.AddControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -4041,11 +4043,11 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 
 // CreateMappedControlInput represents a mutation input for creating mappedcontrols.
 type CreateMappedControlInput struct {
-	Tags            []string
-	MappingType     *string
-	Relation        *string
-	ControlID       string
-	MappedControlID string
+	Tags          []string
+	MappingType   *string
+	Relation      *string
+	ControlIDs    []string
+	SubcontrolIDs []string
 }
 
 // Mutate applies the CreateMappedControlInput on the MappedControlMutation builder.
@@ -4059,8 +4061,12 @@ func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.Relation; v != nil {
 		m.SetRelation(*v)
 	}
-	m.SetControlID(i.ControlID)
-	m.SetMappedControlID(i.MappedControlID)
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateMappedControlInput on the MappedControlCreate builder.
@@ -4071,13 +4077,19 @@ func (c *MappedControlCreate) SetInput(i CreateMappedControlInput) *MappedContro
 
 // UpdateMappedControlInput represents a mutation input for updating mappedcontrols.
 type UpdateMappedControlInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	ClearMappingType bool
-	MappingType      *string
-	ClearRelation    bool
-	Relation         *string
+	ClearTags           bool
+	Tags                []string
+	AppendTags          []string
+	ClearMappingType    bool
+	MappingType         *string
+	ClearRelation       bool
+	Relation            *string
+	ClearControls       bool
+	AddControlIDs       []string
+	RemoveControlIDs    []string
+	ClearSubcontrols    bool
+	AddSubcontrolIDs    []string
+	RemoveSubcontrolIDs []string
 }
 
 // Mutate applies the UpdateMappedControlInput on the MappedControlMutation builder.
@@ -4102,6 +4114,24 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Relation; v != nil {
 		m.SetRelation(*v)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 

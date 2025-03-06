@@ -925,10 +925,6 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 		create = create.SetTags(tags)
 	}
 
-	if controlID, exists := m.ControlID(); exists {
-		create = create.SetControlID(controlID)
-	}
-
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
 	}
@@ -1021,12 +1017,6 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetTags(controlimplementation.Tags)
 		}
 
-		if controlID, exists := m.ControlID(); exists {
-			create = create.SetControlID(controlID)
-		} else {
-			create = create.SetControlID(controlimplementation.ControlID)
-		}
-
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -1096,7 +1086,6 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetDeletedAt(controlimplementation.DeletedAt).
 			SetDeletedBy(controlimplementation.DeletedBy).
 			SetTags(controlimplementation.Tags).
-			SetControlID(controlimplementation.ControlID).
 			SetStatus(controlimplementation.Status).
 			SetImplementationDate(controlimplementation.ImplementationDate).
 			SetVerified(controlimplementation.Verified).
@@ -4164,14 +4153,6 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetTags(tags)
 	}
 
-	if controlID, exists := m.ControlID(); exists {
-		create = create.SetControlID(controlID)
-	}
-
-	if mappedControlID, exists := m.MappedControlID(); exists {
-		create = create.SetMappedControlID(mappedControlID)
-	}
-
 	if mappingType, exists := m.MappingType(); exists {
 		create = create.SetMappingType(mappingType)
 	}
@@ -4252,18 +4233,6 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetTags(mappedcontrol.Tags)
 		}
 
-		if controlID, exists := m.ControlID(); exists {
-			create = create.SetControlID(controlID)
-		} else {
-			create = create.SetControlID(mappedcontrol.ControlID)
-		}
-
-		if mappedControlID, exists := m.MappedControlID(); exists {
-			create = create.SetMappedControlID(mappedControlID)
-		} else {
-			create = create.SetMappedControlID(mappedcontrol.MappedControlID)
-		}
-
 		if mappingType, exists := m.MappingType(); exists {
 			create = create.SetMappingType(mappingType)
 		} else {
@@ -4315,8 +4284,6 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDeletedAt(mappedcontrol.DeletedAt).
 			SetDeletedBy(mappedcontrol.DeletedBy).
 			SetTags(mappedcontrol.Tags).
-			SetControlID(mappedcontrol.ControlID).
-			SetMappedControlID(mappedcontrol.MappedControlID).
 			SetMappingType(mappedcontrol.MappingType).
 			SetRelation(mappedcontrol.Relation).
 			Save(ctx)

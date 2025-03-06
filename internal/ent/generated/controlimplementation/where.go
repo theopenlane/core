@@ -97,11 +97,6 @@ func DeletedBy(v string) predicate.ControlImplementation {
 	return predicate.ControlImplementation(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// ControlID applies equality check predicate on the "control_id" field. It's identical to ControlIDEQ.
-func ControlID(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldEQ(FieldControlID, v))
-}
-
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v string) predicate.ControlImplementation {
 	return predicate.ControlImplementation(sql.FieldEQ(FieldStatus, v))
@@ -512,71 +507,6 @@ func TagsNotNil() predicate.ControlImplementation {
 	return predicate.ControlImplementation(sql.FieldNotNull(FieldTags))
 }
 
-// ControlIDEQ applies the EQ predicate on the "control_id" field.
-func ControlIDEQ(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldEQ(FieldControlID, v))
-}
-
-// ControlIDNEQ applies the NEQ predicate on the "control_id" field.
-func ControlIDNEQ(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldNEQ(FieldControlID, v))
-}
-
-// ControlIDIn applies the In predicate on the "control_id" field.
-func ControlIDIn(vs ...string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldIn(FieldControlID, vs...))
-}
-
-// ControlIDNotIn applies the NotIn predicate on the "control_id" field.
-func ControlIDNotIn(vs ...string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldNotIn(FieldControlID, vs...))
-}
-
-// ControlIDGT applies the GT predicate on the "control_id" field.
-func ControlIDGT(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldGT(FieldControlID, v))
-}
-
-// ControlIDGTE applies the GTE predicate on the "control_id" field.
-func ControlIDGTE(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldGTE(FieldControlID, v))
-}
-
-// ControlIDLT applies the LT predicate on the "control_id" field.
-func ControlIDLT(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldLT(FieldControlID, v))
-}
-
-// ControlIDLTE applies the LTE predicate on the "control_id" field.
-func ControlIDLTE(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldLTE(FieldControlID, v))
-}
-
-// ControlIDContains applies the Contains predicate on the "control_id" field.
-func ControlIDContains(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldContains(FieldControlID, v))
-}
-
-// ControlIDHasPrefix applies the HasPrefix predicate on the "control_id" field.
-func ControlIDHasPrefix(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldHasPrefix(FieldControlID, v))
-}
-
-// ControlIDHasSuffix applies the HasSuffix predicate on the "control_id" field.
-func ControlIDHasSuffix(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldHasSuffix(FieldControlID, v))
-}
-
-// ControlIDEqualFold applies the EqualFold predicate on the "control_id" field.
-func ControlIDEqualFold(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldEqualFold(FieldControlID, v))
-}
-
-// ControlIDContainsFold applies the ContainsFold predicate on the "control_id" field.
-func ControlIDContainsFold(v string) predicate.ControlImplementation {
-	return predicate.ControlImplementation(sql.FieldContainsFold(FieldControlID, v))
-}
-
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v string) predicate.ControlImplementation {
 	return predicate.ControlImplementation(sql.FieldEQ(FieldStatus, v))
@@ -847,27 +777,27 @@ func DetailsContainsFold(v string) predicate.ControlImplementation {
 	return predicate.ControlImplementation(sql.FieldContainsFold(FieldDetails, v))
 }
 
-// HasControl applies the HasEdge predicate on the "control" edge.
-func HasControl() predicate.ControlImplementation {
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.ControlImplementation {
 	return predicate.ControlImplementation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, ControlTable, ControlColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlImplementations
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasControlWith applies the HasEdge predicate on the "control" edge with a given conditions (other predicates).
-func HasControlWith(preds ...predicate.Control) predicate.ControlImplementation {
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.ControlImplementation {
 	return predicate.ControlImplementation(func(s *sql.Selector) {
-		step := newControlStep()
+		step := newControlsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlImplementations
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

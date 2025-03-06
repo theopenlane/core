@@ -145,18 +145,6 @@ func (mchc *MappedControlHistoryCreate) SetTags(s []string) *MappedControlHistor
 	return mchc
 }
 
-// SetControlID sets the "control_id" field.
-func (mchc *MappedControlHistoryCreate) SetControlID(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetControlID(s)
-	return mchc
-}
-
-// SetMappedControlID sets the "mapped_control_id" field.
-func (mchc *MappedControlHistoryCreate) SetMappedControlID(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetMappedControlID(s)
-	return mchc
-}
-
 // SetMappingType sets the "mapping_type" field.
 func (mchc *MappedControlHistoryCreate) SetMappingType(s string) *MappedControlHistoryCreate {
 	mchc.mutation.SetMappingType(s)
@@ -269,12 +257,6 @@ func (mchc *MappedControlHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := mchc.mutation.ControlID(); !ok {
-		return &ValidationError{Name: "control_id", err: errors.New(`generated: missing required field "MappedControlHistory.control_id"`)}
-	}
-	if _, ok := mchc.mutation.MappedControlID(); !ok {
-		return &ValidationError{Name: "mapped_control_id", err: errors.New(`generated: missing required field "MappedControlHistory.mapped_control_id"`)}
-	}
 	return nil
 }
 
@@ -350,14 +332,6 @@ func (mchc *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sq
 	if value, ok := mchc.mutation.Tags(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
-	}
-	if value, ok := mchc.mutation.ControlID(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldControlID, field.TypeString, value)
-		_node.ControlID = value
-	}
-	if value, ok := mchc.mutation.MappedControlID(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldMappedControlID, field.TypeString, value)
-		_node.MappedControlID = value
 	}
 	if value, ok := mchc.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeString, value)

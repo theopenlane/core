@@ -37,10 +37,6 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldControlID holds the string denoting the control_id field in the database.
-	FieldControlID = "control_id"
-	// FieldMappedControlID holds the string denoting the mapped_control_id field in the database.
-	FieldMappedControlID = "mapped_control_id"
 	// FieldMappingType holds the string denoting the mapping_type field in the database.
 	FieldMappingType = "mapping_type"
 	// FieldRelation holds the string denoting the relation field in the database.
@@ -62,8 +58,6 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
-	FieldControlID,
-	FieldMappedControlID,
 	FieldMappingType,
 	FieldRelation,
 }
@@ -160,16 +154,6 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
-}
-
-// ByControlID orders the results by the control_id field.
-func ByControlID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlID, opts...).ToFunc()
-}
-
-// ByMappedControlID orders the results by the mapped_control_id field.
-func ByMappedControlID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappedControlID, opts...).ToFunc()
 }
 
 // ByMappingType orders the results by the mapping_type field.

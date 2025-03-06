@@ -277,7 +277,8 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 // if it is not set, it will return an empty string
 // this function does not ensure that the mutation was successful, it only extracts the id
 func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, parentField string) ([]string, error) {
-	if ok := m.FieldCleared(parentField); ok && m.Op().Is(ent.OpUpdateOne) {
+	if ok := m.FieldCleared(parentField); ok &&
+		(m.Op().Is(ent.OpUpdateOne) || m.Op().Is(ent.OpUpdate)) {
 		v, err := m.OldField(ctx, parentField)
 		if err != nil {
 			return nil, err

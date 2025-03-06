@@ -81,18 +81,14 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_MappedControl_controlID(ctx, field)
-			case "mappedControlID":
-				return ec.fieldContext_MappedControl_mappedControlID(ctx, field)
 			case "mappingType":
 				return ec.fieldContext_MappedControl_mappingType(ctx, field)
 			case "relation":
 				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "control":
-				return ec.fieldContext_MappedControl_control(ctx, field)
-			case "mappedControl":
-				return ec.fieldContext_MappedControl_mappedControl(ctx, field)
+			case "controls":
+				return ec.fieldContext_MappedControl_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
 		},
@@ -155,18 +151,14 @@ func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedContro
 				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_MappedControl_controlID(ctx, field)
-			case "mappedControlID":
-				return ec.fieldContext_MappedControl_mappedControlID(ctx, field)
 			case "mappingType":
 				return ec.fieldContext_MappedControl_mappingType(ctx, field)
 			case "relation":
 				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "control":
-				return ec.fieldContext_MappedControl_control(ctx, field)
-			case "mappedControl":
-				return ec.fieldContext_MappedControl_mappedControl(ctx, field)
+			case "controls":
+				return ec.fieldContext_MappedControl_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
 		},
@@ -273,18 +265,14 @@ func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedContro
 				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_MappedControl_controlID(ctx, field)
-			case "mappedControlID":
-				return ec.fieldContext_MappedControl_mappedControlID(ctx, field)
 			case "mappingType":
 				return ec.fieldContext_MappedControl_mappingType(ctx, field)
 			case "relation":
 				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "control":
-				return ec.fieldContext_MappedControl_control(ctx, field)
-			case "mappedControl":
-				return ec.fieldContext_MappedControl_mappedControl(ctx, field)
+			case "controls":
+				return ec.fieldContext_MappedControl_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
 		},

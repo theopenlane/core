@@ -172,20 +172,28 @@ func (c *Control) Evidence(ctx context.Context) (result []*Evidence, err error) 
 	return result, err
 }
 
-func (c *Control) Implementation(ctx context.Context) (*ControlImplementation, error) {
-	result, err := c.Edges.ImplementationOrErr()
-	if IsNotLoaded(err) {
-		result, err = c.QueryImplementation().Only(ctx)
+func (c *Control) ControlImplementations(ctx context.Context) (result []*ControlImplementation, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedControlImplementations(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ControlImplementationsOrErr()
 	}
-	return result, MaskNotFound(err)
+	if IsNotLoaded(err) {
+		result, err = c.QueryControlImplementations().All(ctx)
+	}
+	return result, err
 }
 
-func (c *Control) MappedControls(ctx context.Context) (*MappedControl, error) {
-	result, err := c.Edges.MappedControlsOrErr()
-	if IsNotLoaded(err) {
-		result, err = c.QueryMappedControls().Only(ctx)
+func (c *Control) MappedControls(ctx context.Context) (result []*MappedControl, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedMappedControls(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.MappedControlsOrErr()
 	}
-	return result, MaskNotFound(err)
+	if IsNotLoaded(err) {
+		result, err = c.QueryMappedControls().All(ctx)
+	}
+	return result, err
 }
 
 func (c *Control) ControlObjectives(ctx context.Context) (result []*ControlObjective, err error) {
@@ -284,7 +292,7 @@ func (c *Control) InternalPolicies(ctx context.Context) (result []*InternalPolic
 	return result, err
 }
 
-func (c *Control) ControlOwner(ctx context.Context) (*User, error) {
+func (c *Control) ControlOwner(ctx context.Context) (*Group, error) {
 	result, err := c.Edges.ControlOwnerOrErr()
 	if IsNotLoaded(err) {
 		result, err = c.QueryControlOwner().Only(ctx)
@@ -292,7 +300,7 @@ func (c *Control) ControlOwner(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (c *Control) Delegate(ctx context.Context) (*User, error) {
+func (c *Control) Delegate(ctx context.Context) (*Group, error) {
 	result, err := c.Edges.DelegateOrErr()
 	if IsNotLoaded(err) {
 		result, err = c.QueryDelegate().Only(ctx)
@@ -300,14 +308,14 @@ func (c *Control) Delegate(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (ci *ControlImplementation) Control(ctx context.Context) (result []*Control, err error) {
+func (ci *ControlImplementation) Controls(ctx context.Context) (result []*Control, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = ci.NamedControl(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = ci.NamedControls(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = ci.Edges.ControlOrErr()
+		result, err = ci.Edges.ControlsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = ci.QueryControl().All(ctx)
+		result, err = ci.QueryControls().All(ctx)
 	}
 	return result, err
 }
@@ -1488,18 +1496,26 @@ func (i *Invite) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (mc *MappedControl) Control(ctx context.Context) (*Control, error) {
-	result, err := mc.Edges.ControlOrErr()
+func (mc *MappedControl) Controls(ctx context.Context) (result []*Control, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = mc.NamedControls(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = mc.Edges.ControlsOrErr()
+	}
 	if IsNotLoaded(err) {
-		result, err = mc.QueryControl().Only(ctx)
+		result, err = mc.QueryControls().All(ctx)
 	}
 	return result, err
 }
 
-func (mc *MappedControl) MappedControl(ctx context.Context) (*Control, error) {
-	result, err := mc.Edges.MappedControlOrErr()
+func (mc *MappedControl) Subcontrols(ctx context.Context) (result []*Subcontrol, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = mc.NamedSubcontrols(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = mc.Edges.SubcontrolsOrErr()
+	}
 	if IsNotLoaded(err) {
-		result, err = mc.QueryMappedControl().Only(ctx)
+		result, err = mc.QuerySubcontrols().All(ctx)
 	}
 	return result, err
 }
@@ -2657,7 +2673,7 @@ func (s *Subcontrol) Control(ctx context.Context) (*Control, error) {
 	return result, err
 }
 
-func (s *Subcontrol) MappedControls(ctx context.Context) (result []*Control, err error) {
+func (s *Subcontrol) MappedControls(ctx context.Context) (result []*MappedControl, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = s.NamedMappedControls(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
@@ -2765,7 +2781,7 @@ func (s *Subcontrol) InternalPolicies(ctx context.Context) (result []*InternalPo
 	return result, err
 }
 
-func (s *Subcontrol) ControlOwner(ctx context.Context) (*User, error) {
+func (s *Subcontrol) ControlOwner(ctx context.Context) (*Group, error) {
 	result, err := s.Edges.ControlOwnerOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryControlOwner().Only(ctx)
@@ -2773,7 +2789,7 @@ func (s *Subcontrol) ControlOwner(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (s *Subcontrol) Delegate(ctx context.Context) (*User, error) {
+func (s *Subcontrol) Delegate(ctx context.Context) (*Group, error) {
 	result, err := s.Edges.DelegateOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryDelegate().Only(ctx)

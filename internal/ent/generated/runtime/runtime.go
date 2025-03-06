@@ -477,10 +477,6 @@ func init() {
 	controlimplementationDescTags := controlimplementationMixinFields3[0].Descriptor()
 	// controlimplementation.DefaultTags holds the default value on creation for the tags field.
 	controlimplementation.DefaultTags = controlimplementationDescTags.Default.([]string)
-	// controlimplementationDescControlID is the schema descriptor for control_id field.
-	controlimplementationDescControlID := controlimplementationFields[0].Descriptor()
-	// controlimplementation.ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
-	controlimplementation.ControlIDValidator = controlimplementationDescControlID.Validators[0].(func(string) error)
 	// controlimplementationDescID is the schema descriptor for id field.
 	controlimplementationDescID := controlimplementationMixinFields1[0].Descriptor()
 	// controlimplementation.DefaultID holds the default value on creation for the id field.
@@ -1931,14 +1927,6 @@ func init() {
 	mappedcontrolDescTags := mappedcontrolMixinFields3[0].Descriptor()
 	// mappedcontrol.DefaultTags holds the default value on creation for the tags field.
 	mappedcontrol.DefaultTags = mappedcontrolDescTags.Default.([]string)
-	// mappedcontrolDescControlID is the schema descriptor for control_id field.
-	mappedcontrolDescControlID := mappedcontrolFields[0].Descriptor()
-	// mappedcontrol.ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
-	mappedcontrol.ControlIDValidator = mappedcontrolDescControlID.Validators[0].(func(string) error)
-	// mappedcontrolDescMappedControlID is the schema descriptor for mapped_control_id field.
-	mappedcontrolDescMappedControlID := mappedcontrolFields[1].Descriptor()
-	// mappedcontrol.MappedControlIDValidator is a validator for the "mapped_control_id" field. It is called by the builders before save.
-	mappedcontrol.MappedControlIDValidator = mappedcontrolDescMappedControlID.Validators[0].(func(string) error)
 	// mappedcontrolDescID is the schema descriptor for id field.
 	mappedcontrolDescID := mappedcontrolMixinFields1[0].Descriptor()
 	// mappedcontrol.DefaultID holds the default value on creation for the id field.

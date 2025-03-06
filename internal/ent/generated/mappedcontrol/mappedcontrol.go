@@ -29,34 +29,26 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldControlID holds the string denoting the control_id field in the database.
-	FieldControlID = "control_id"
-	// FieldMappedControlID holds the string denoting the mapped_control_id field in the database.
-	FieldMappedControlID = "mapped_control_id"
 	// FieldMappingType holds the string denoting the mapping_type field in the database.
 	FieldMappingType = "mapping_type"
 	// FieldRelation holds the string denoting the relation field in the database.
 	FieldRelation = "relation"
-	// EdgeControl holds the string denoting the control edge name in mutations.
-	EdgeControl = "control"
-	// EdgeMappedControl holds the string denoting the mapped_control edge name in mutations.
-	EdgeMappedControl = "mapped_control"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
+	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
+	EdgeSubcontrols = "subcontrols"
 	// Table holds the table name of the mappedcontrol in the database.
 	Table = "mapped_controls"
-	// ControlTable is the table that holds the control relation/edge.
-	ControlTable = "mapped_controls"
-	// ControlInverseTable is the table name for the Control entity.
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "mapped_control_controls"
+	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlInverseTable = "controls"
-	// ControlColumn is the table column denoting the control relation/edge.
-	ControlColumn = "control_id"
-	// MappedControlTable is the table that holds the mapped_control relation/edge.
-	MappedControlTable = "mapped_controls"
-	// MappedControlInverseTable is the table name for the Control entity.
-	// It exists in this package in order to avoid circular dependency with the "control" package.
-	MappedControlInverseTable = "controls"
-	// MappedControlColumn is the table column denoting the mapped_control relation/edge.
-	MappedControlColumn = "mapped_control_id"
+	ControlsInverseTable = "controls"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "mapped_control_subcontrols"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
 )
 
 // Columns holds all SQL columns for mappedcontrol fields.
@@ -69,11 +61,18 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
-	FieldControlID,
-	FieldMappedControlID,
 	FieldMappingType,
 	FieldRelation,
 }
+
+var (
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -102,10 +101,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
-	ControlIDValidator func(string) error
-	// MappedControlIDValidator is a validator for the "mapped_control_id" field. It is called by the builders before save.
-	MappedControlIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -148,16 +143,6 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
-// ByControlID orders the results by the control_id field.
-func ByControlID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlID, opts...).ToFunc()
-}
-
-// ByMappedControlID orders the results by the mapped_control_id field.
-func ByMappedControlID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappedControlID, opts...).ToFunc()
-}
-
 // ByMappingType orders the results by the mapping_type field.
 func ByMappingType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingType, opts...).ToFunc()
@@ -168,30 +153,44 @@ func ByRelation(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelation, opts...).ToFunc()
 }
 
-// ByControlField orders the results by control field.
-func ByControlField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
 	}
 }
 
-// ByMappedControlField orders the results by mapped_control field.
-func ByMappedControlField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMappedControlStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newControlStep() *sqlgraph.Step {
+
+// BySubcontrolsCount orders the results by subcontrols count.
+func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
+	}
+}
+
+// BySubcontrols orders the results by subcontrols terms.
+func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, ControlTable, ControlColumn),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
 	)
 }
-func newMappedControlStep() *sqlgraph.Step {
+func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MappedControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, MappedControlTable, MappedControlColumn),
+		sqlgraph.To(SubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }

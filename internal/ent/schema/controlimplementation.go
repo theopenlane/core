@@ -21,9 +21,6 @@ type ControlImplementation struct {
 // Fields of the ControlImplementation
 func (ControlImplementation) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("control_id").
-			Comment("the id of the control that this implementation is for").
-			NotEmpty(),
 		field.String("status").
 			Optional().
 			Comment("status of the control implementation"),
@@ -55,8 +52,8 @@ func (ControlImplementation) Mixin() []ent.Mixin {
 // Edges of the ControlImplementation
 func (ControlImplementation) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("control", Control.Type).
-			Ref("implementation"),
+		edge.From("controls", Control.Type).
+			Ref("control_implementations"),
 	}
 }
 

@@ -81,8 +81,6 @@ func (ec *executionContext) fieldContext_ControlImplementationBulkCreatePayload_
 				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_ControlImplementation_controlID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":
@@ -93,8 +91,8 @@ func (ec *executionContext) fieldContext_ControlImplementationBulkCreatePayload_
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
-			case "control":
-				return ec.fieldContext_ControlImplementation_control(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},
@@ -157,8 +155,6 @@ func (ec *executionContext) fieldContext_ControlImplementationCreatePayload_cont
 				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_ControlImplementation_controlID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":
@@ -169,8 +165,8 @@ func (ec *executionContext) fieldContext_ControlImplementationCreatePayload_cont
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
-			case "control":
-				return ec.fieldContext_ControlImplementation_control(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},
@@ -277,8 +273,6 @@ func (ec *executionContext) fieldContext_ControlImplementationUpdatePayload_cont
 				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
-			case "controlID":
-				return ec.fieldContext_ControlImplementation_controlID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":
@@ -289,8 +283,8 @@ func (ec *executionContext) fieldContext_ControlImplementationUpdatePayload_cont
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
-			case "control":
-				return ec.fieldContext_ControlImplementation_control(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},

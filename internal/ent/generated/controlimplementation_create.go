@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -111,12 +110,6 @@ func (cic *ControlImplementationCreate) SetTags(s []string) *ControlImplementati
 	return cic
 }
 
-// SetControlID sets the "control_id" field.
-func (cic *ControlImplementationCreate) SetControlID(s string) *ControlImplementationCreate {
-	cic.mutation.SetControlID(s)
-	return cic
-}
-
 // SetStatus sets the "status" field.
 func (cic *ControlImplementationCreate) SetStatus(s string) *ControlImplementationCreate {
 	cic.mutation.SetStatus(s)
@@ -201,14 +194,14 @@ func (cic *ControlImplementationCreate) SetNillableID(s *string) *ControlImpleme
 	return cic
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (cic *ControlImplementationCreate) AddControlIDs(ids ...string) *ControlImplementationCreate {
 	cic.mutation.AddControlIDs(ids...)
 	return cic
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (cic *ControlImplementationCreate) AddControl(c ...*Control) *ControlImplementationCreate {
+// AddControls adds the "controls" edges to the Control entity.
+func (cic *ControlImplementationCreate) AddControls(c ...*Control) *ControlImplementationCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -283,14 +276,6 @@ func (cic *ControlImplementationCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cic *ControlImplementationCreate) check() error {
-	if _, ok := cic.mutation.ControlID(); !ok {
-		return &ValidationError{Name: "control_id", err: errors.New(`generated: missing required field "ControlImplementation.control_id"`)}
-	}
-	if v, ok := cic.mutation.ControlID(); ok {
-		if err := controlimplementation.ControlIDValidator(v); err != nil {
-			return &ValidationError{Name: "control_id", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.control_id": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -355,10 +340,6 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 		_spec.SetField(controlimplementation.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := cic.mutation.ControlID(); ok {
-		_spec.SetField(controlimplementation.FieldControlID, field.TypeString, value)
-		_node.ControlID = value
-	}
 	if value, ok := cic.mutation.Status(); ok {
 		_spec.SetField(controlimplementation.FieldStatus, field.TypeString, value)
 		_node.Status = value
@@ -379,18 +360,18 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 		_spec.SetField(controlimplementation.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
-	if nodes := cic.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := cic.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlimplementation.ControlTable,
-			Columns: []string{controlimplementation.ControlColumn},
+			Table:   controlimplementation.ControlsTable,
+			Columns: controlimplementation.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cic.schemaConfig.Control
+		edge.Schema = cic.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

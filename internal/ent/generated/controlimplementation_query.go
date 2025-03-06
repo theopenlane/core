@@ -23,14 +23,14 @@ import (
 // ControlImplementationQuery is the builder for querying ControlImplementation entities.
 type ControlImplementationQuery struct {
 	config
-	ctx              *QueryContext
-	order            []controlimplementation.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.ControlImplementation
-	withControl      *ControlQuery
-	loadTotal        []func(context.Context, []*ControlImplementation) error
-	modifiers        []func(*sql.Selector)
-	withNamedControl map[string]*ControlQuery
+	ctx               *QueryContext
+	order             []controlimplementation.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.ControlImplementation
+	withControls      *ControlQuery
+	loadTotal         []func(context.Context, []*ControlImplementation) error
+	modifiers         []func(*sql.Selector)
+	withNamedControls map[string]*ControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -67,8 +67,8 @@ func (ciq *ControlImplementationQuery) Order(o ...controlimplementation.OrderOpt
 	return ciq
 }
 
-// QueryControl chains the current query on the "control" edge.
-func (ciq *ControlImplementationQuery) QueryControl() *ControlQuery {
+// QueryControls chains the current query on the "controls" edge.
+func (ciq *ControlImplementationQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: ciq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ciq.prepareQuery(ctx); err != nil {
@@ -81,11 +81,11 @@ func (ciq *ControlImplementationQuery) QueryControl() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, controlimplementation.ControlTable, controlimplementation.ControlColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlimplementation.ControlsTable, controlimplementation.ControlsPrimaryKey...),
 		)
 		schemaConfig := ciq.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlControlImplementations
 		fromU = sqlgraph.SetNeighbors(ciq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -279,12 +279,12 @@ func (ciq *ControlImplementationQuery) Clone() *ControlImplementationQuery {
 		return nil
 	}
 	return &ControlImplementationQuery{
-		config:      ciq.config,
-		ctx:         ciq.ctx.Clone(),
-		order:       append([]controlimplementation.OrderOption{}, ciq.order...),
-		inters:      append([]Interceptor{}, ciq.inters...),
-		predicates:  append([]predicate.ControlImplementation{}, ciq.predicates...),
-		withControl: ciq.withControl.Clone(),
+		config:       ciq.config,
+		ctx:          ciq.ctx.Clone(),
+		order:        append([]controlimplementation.OrderOption{}, ciq.order...),
+		inters:       append([]Interceptor{}, ciq.inters...),
+		predicates:   append([]predicate.ControlImplementation{}, ciq.predicates...),
+		withControls: ciq.withControls.Clone(),
 		// clone intermediate query.
 		sql:       ciq.sql.Clone(),
 		path:      ciq.path,
@@ -292,14 +292,14 @@ func (ciq *ControlImplementationQuery) Clone() *ControlImplementationQuery {
 	}
 }
 
-// WithControl tells the query-builder to eager-load the nodes that are connected to
-// the "control" edge. The optional arguments are used to configure the query builder of the edge.
-func (ciq *ControlImplementationQuery) WithControl(opts ...func(*ControlQuery)) *ControlImplementationQuery {
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (ciq *ControlImplementationQuery) WithControls(opts ...func(*ControlQuery)) *ControlImplementationQuery {
 	query := (&ControlClient{config: ciq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ciq.withControl = query
+	ciq.withControls = query
 	return ciq
 }
 
@@ -388,7 +388,7 @@ func (ciq *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...quer
 		nodes       = []*ControlImplementation{}
 		_spec       = ciq.querySpec()
 		loadedTypes = [1]bool{
-			ciq.withControl != nil,
+			ciq.withControls != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -414,17 +414,17 @@ func (ciq *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...quer
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := ciq.withControl; query != nil {
-		if err := ciq.loadControl(ctx, query, nodes,
-			func(n *ControlImplementation) { n.Edges.Control = []*Control{} },
-			func(n *ControlImplementation, e *Control) { n.Edges.Control = append(n.Edges.Control, e) }); err != nil {
+	if query := ciq.withControls; query != nil {
+		if err := ciq.loadControls(ctx, query, nodes,
+			func(n *ControlImplementation) { n.Edges.Controls = []*Control{} },
+			func(n *ControlImplementation, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range ciq.withNamedControl {
-		if err := ciq.loadControl(ctx, query, nodes,
-			func(n *ControlImplementation) { n.appendNamedControl(name) },
-			func(n *ControlImplementation, e *Control) { n.appendNamedControl(name, e) }); err != nil {
+	for name, query := range ciq.withNamedControls {
+		if err := ciq.loadControls(ctx, query, nodes,
+			func(n *ControlImplementation) { n.appendNamedControls(name) },
+			func(n *ControlImplementation, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -436,34 +436,65 @@ func (ciq *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...quer
 	return nodes, nil
 }
 
-func (ciq *ControlImplementationQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Control)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*ControlImplementation)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+func (ciq *ControlImplementationQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Control)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlImplementation)
+	nids := make(map[string]map[*ControlImplementation]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Control(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(controlimplementation.ControlColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlimplementation.ControlsTable)
+		joinT.Schema(ciq.schemaConfig.ControlControlImplementations)
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(controlimplementation.ControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(controlimplementation.ControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlimplementation.ControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlImplementation]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.control_implementation
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "control_implementation" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "control_implementation" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -566,17 +597,17 @@ func (ciq *ControlImplementationQuery) Modify(modifiers ...func(s *sql.Selector)
 	return ciq.Select()
 }
 
-// WithNamedControl tells the query-builder to eager-load the nodes that are connected to the "control"
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (ciq *ControlImplementationQuery) WithNamedControl(name string, opts ...func(*ControlQuery)) *ControlImplementationQuery {
+func (ciq *ControlImplementationQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ControlImplementationQuery {
 	query := (&ControlClient{config: ciq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if ciq.withNamedControl == nil {
-		ciq.withNamedControl = make(map[string]*ControlQuery)
+	if ciq.withNamedControls == nil {
+		ciq.withNamedControls = make(map[string]*ControlQuery)
 	}
-	ciq.withNamedControl[name] = query
+	ciq.withNamedControls[name] = query
 	return ciq
 }
 

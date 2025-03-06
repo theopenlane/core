@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -89,8 +89,8 @@ type SubcontrolEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Control holds the value of the control edge.
 	Control *Control `json:"control,omitempty"`
-	// MappedControls holds the value of the mapped_controls edge.
-	MappedControls []*Control `json:"mapped_controls,omitempty"`
+	// mapped subcontrols that have a relation to another control or subcontrol
+	MappedControls []*MappedControl `json:"mapped_controls,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// ControlObjectives holds the value of the control_objectives edge.
@@ -108,16 +108,16 @@ type SubcontrolEdges struct {
 	// InternalPolicies holds the value of the internal_policies edge.
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// the user who is responsible for the subcontrol, defaults to the parent control owner if not set
-	ControlOwner *User `json:"control_owner,omitempty"`
+	ControlOwner *Group `json:"control_owner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate *User `json:"delegate,omitempty"`
+	Delegate *Group `json:"delegate,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
 	totalCount [13]map[string]int
 
-	namedMappedControls    map[string][]*Control
+	namedMappedControls    map[string][]*MappedControl
 	namedEvidence          map[string][]*Evidence
 	namedControlObjectives map[string][]*ControlObjective
 	namedTasks             map[string][]*Task
@@ -152,7 +152,7 @@ func (e SubcontrolEdges) ControlOrErr() (*Control, error) {
 
 // MappedControlsOrErr returns the MappedControls value or an error if the edge
 // was not loaded in eager-loading.
-func (e SubcontrolEdges) MappedControlsOrErr() ([]*Control, error) {
+func (e SubcontrolEdges) MappedControlsOrErr() ([]*MappedControl, error) {
 	if e.loadedTypes[2] {
 		return e.MappedControls, nil
 	}
@@ -233,22 +233,22 @@ func (e SubcontrolEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 
 // ControlOwnerOrErr returns the ControlOwner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e SubcontrolEdges) ControlOwnerOrErr() (*User, error) {
+func (e SubcontrolEdges) ControlOwnerOrErr() (*Group, error) {
 	if e.ControlOwner != nil {
 		return e.ControlOwner, nil
 	} else if e.loadedTypes[11] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "control_owner"}
 }
 
 // DelegateOrErr returns the Delegate value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e SubcontrolEdges) DelegateOrErr() (*User, error) {
+func (e SubcontrolEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
 	} else if e.loadedTypes[12] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
 }
@@ -511,7 +511,7 @@ func (s *Subcontrol) QueryControl() *ControlQuery {
 }
 
 // QueryMappedControls queries the "mapped_controls" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryMappedControls() *ControlQuery {
+func (s *Subcontrol) QueryMappedControls() *MappedControlQuery {
 	return NewSubcontrolClient(s.config).QueryMappedControls(s)
 }
 
@@ -556,12 +556,12 @@ func (s *Subcontrol) QueryInternalPolicies() *InternalPolicyQuery {
 }
 
 // QueryControlOwner queries the "control_owner" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryControlOwner() *UserQuery {
+func (s *Subcontrol) QueryControlOwner() *GroupQuery {
 	return NewSubcontrolClient(s.config).QueryControlOwner(s)
 }
 
 // QueryDelegate queries the "delegate" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryDelegate() *UserQuery {
+func (s *Subcontrol) QueryDelegate() *GroupQuery {
 	return NewSubcontrolClient(s.config).QueryDelegate(s)
 }
 
@@ -668,7 +668,7 @@ func (s *Subcontrol) String() string {
 
 // NamedMappedControls returns the MappedControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedMappedControls(name string) ([]*Control, error) {
+func (s *Subcontrol) NamedMappedControls(name string) ([]*MappedControl, error) {
 	if s.Edges.namedMappedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
@@ -679,12 +679,12 @@ func (s *Subcontrol) NamedMappedControls(name string) ([]*Control, error) {
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedMappedControls(name string, edges ...*Control) {
+func (s *Subcontrol) appendNamedMappedControls(name string, edges ...*MappedControl) {
 	if s.Edges.namedMappedControls == nil {
-		s.Edges.namedMappedControls = make(map[string][]*Control)
+		s.Edges.namedMappedControls = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedMappedControls[name] = []*Control{}
+		s.Edges.namedMappedControls[name] = []*MappedControl{}
 	} else {
 		s.Edges.namedMappedControls[name] = append(s.Edges.namedMappedControls[name], edges...)
 	}

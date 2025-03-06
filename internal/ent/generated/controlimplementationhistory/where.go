@@ -105,11 +105,6 @@ func DeletedBy(v string) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// ControlID applies equality check predicate on the "control_id" field. It's identical to ControlIDEQ.
-func ControlID(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldControlID, v))
-}
-
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v string) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldStatus, v))
@@ -653,71 +648,6 @@ func TagsIsNil() predicate.ControlImplementationHistory {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldTags))
-}
-
-// ControlIDEQ applies the EQ predicate on the "control_id" field.
-func ControlIDEQ(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldControlID, v))
-}
-
-// ControlIDNEQ applies the NEQ predicate on the "control_id" field.
-func ControlIDNEQ(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldControlID, v))
-}
-
-// ControlIDIn applies the In predicate on the "control_id" field.
-func ControlIDIn(vs ...string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldIn(FieldControlID, vs...))
-}
-
-// ControlIDNotIn applies the NotIn predicate on the "control_id" field.
-func ControlIDNotIn(vs ...string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldControlID, vs...))
-}
-
-// ControlIDGT applies the GT predicate on the "control_id" field.
-func ControlIDGT(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldGT(FieldControlID, v))
-}
-
-// ControlIDGTE applies the GTE predicate on the "control_id" field.
-func ControlIDGTE(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldControlID, v))
-}
-
-// ControlIDLT applies the LT predicate on the "control_id" field.
-func ControlIDLT(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldLT(FieldControlID, v))
-}
-
-// ControlIDLTE applies the LTE predicate on the "control_id" field.
-func ControlIDLTE(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldControlID, v))
-}
-
-// ControlIDContains applies the Contains predicate on the "control_id" field.
-func ControlIDContains(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldContains(FieldControlID, v))
-}
-
-// ControlIDHasPrefix applies the HasPrefix predicate on the "control_id" field.
-func ControlIDHasPrefix(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldControlID, v))
-}
-
-// ControlIDHasSuffix applies the HasSuffix predicate on the "control_id" field.
-func ControlIDHasSuffix(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldControlID, v))
-}
-
-// ControlIDEqualFold applies the EqualFold predicate on the "control_id" field.
-func ControlIDEqualFold(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldControlID, v))
-}
-
-// ControlIDContainsFold applies the ContainsFold predicate on the "control_id" field.
-func ControlIDContainsFold(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldControlID, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

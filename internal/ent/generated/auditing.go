@@ -337,9 +337,6 @@ func (cih *ControlImplementationHistory) changes(new *ControlImplementationHisto
 	if !reflect.DeepEqual(cih.Tags, new.Tags) {
 		changes = append(changes, NewChange(controlimplementationhistory.FieldTags, cih.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(cih.ControlID, new.ControlID) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldControlID, cih.ControlID, new.ControlID))
-	}
 	if !reflect.DeepEqual(cih.Status, new.Status) {
 		changes = append(changes, NewChange(controlimplementationhistory.FieldStatus, cih.Status, new.Status))
 	}
@@ -1269,12 +1266,6 @@ func (mch *MappedControlHistory) changes(new *MappedControlHistory) []Change {
 	}
 	if !reflect.DeepEqual(mch.Tags, new.Tags) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldTags, mch.Tags, new.Tags))
-	}
-	if !reflect.DeepEqual(mch.ControlID, new.ControlID) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldControlID, mch.ControlID, new.ControlID))
-	}
-	if !reflect.DeepEqual(mch.MappedControlID, new.MappedControlID) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldMappedControlID, mch.MappedControlID, new.MappedControlID))
 	}
 	if !reflect.DeepEqual(mch.MappingType, new.MappingType) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldMappingType, mch.MappingType, new.MappingType))

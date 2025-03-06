@@ -55,7 +55,9 @@ func (Subcontrol) Edges() []ent.Edge {
 			Ref("subcontrols"),
 
 		// controls can be mapped to other controls as a reference
-		edge.To("mapped_controls", Control.Type),
+		edge.From("mapped_controls", MappedControl.Type).
+			Ref("subcontrols").
+			Comment("mapped subcontrols that have a relation to another control or subcontrol"),
 
 		// evidence can be associated with the control
 		edge.From("evidence", Evidence.Type).
@@ -74,10 +76,10 @@ func (Subcontrol) Edges() []ent.Edge {
 		edge.To("internal_policies", InternalPolicy.Type),
 
 		// owner is the user who is responsible for the subcontrol
-		edge.To("control_owner", User.Type).
+		edge.To("control_owner", Group.Type).
 			Unique().
 			Comment("the user who is responsible for the subcontrol, defaults to the parent control owner if not set"),
-		edge.To("delegate", User.Type).
+		edge.To("delegate", Group.Type).
 			Unique().
 			Comment("temporary delegate for the control, used for temporary control ownership"),
 	}

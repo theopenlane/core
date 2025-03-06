@@ -1955,13 +1955,13 @@ type Control implements Node {
 	programs: [Program!]
 	evidence: [Evidence!]
 	"""
-	the implementation of the control
+	the implementation(s) of the control
 	"""
-	implementation: ControlImplementation
+	controlImplementations: [ControlImplementation!]
 	"""
-	controls that are mapped to this control
+	mapped subcontrols that have a relation to another control or subcontrol
 	"""
-	mappedControls: MappedControl
+	mappedControls: [MappedControl!]
 	controlObjectives: [ControlObjective!]
 	subcontrols: [Subcontrol!]
 	tasks: [Task!]
@@ -1971,13 +1971,13 @@ type Control implements Node {
 	procedures: [Procedure!]
 	internalPolicies: [InternalPolicy!]
 	"""
-	the user who is responsible for the control
+	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	"""
-	controlOwner: User
+	controlOwner: Group
 	"""
 	temporary delegate for the control, used for temporary control ownership
 	"""
-	delegate: User
+	delegate: Group
 }
 """
 Return response for createBulkControl mutation
@@ -2538,10 +2538,6 @@ type ControlImplementation implements Node {
 	"""
 	tags: [String!]
 	"""
-	the id of the control that this implementation is for
-	"""
-	controlID: String!
-	"""
 	status of the control implementation
 	"""
 	status: String
@@ -2561,7 +2557,7 @@ type ControlImplementation implements Node {
 	details of the control implementation
 	"""
 	details: String
-	control: [Control!]
+	controls: [Control!]
 }
 """
 Return response for createBulkControlImplementation mutation
@@ -2635,10 +2631,6 @@ type ControlImplementationHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
-	"""
-	the id of the control that this implementation is for
-	"""
-	controlID: String!
 	"""
 	status of the control implementation
 	"""
@@ -2849,22 +2841,6 @@ input ControlImplementationHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
-	control_id field predicates
-	"""
-	controlID: String
-	controlIDNEQ: String
-	controlIDIn: [String!]
-	controlIDNotIn: [String!]
-	controlIDGT: String
-	controlIDGTE: String
-	controlIDLT: String
-	controlIDLTE: String
-	controlIDContains: String
-	controlIDHasPrefix: String
-	controlIDHasSuffix: String
-	controlIDEqualFold: String
-	controlIDContainsFold: String
-	"""
 	status field predicates
 	"""
 	status: String
@@ -3061,22 +3037,6 @@ input ControlImplementationWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
-	control_id field predicates
-	"""
-	controlID: String
-	controlIDNEQ: String
-	controlIDIn: [String!]
-	controlIDNotIn: [String!]
-	controlIDGT: String
-	controlIDGTE: String
-	controlIDLT: String
-	controlIDLTE: String
-	controlIDContains: String
-	controlIDHasPrefix: String
-	controlIDHasSuffix: String
-	controlIDEqualFold: String
-	controlIDContainsFold: String
-	"""
 	status field predicates
 	"""
 	status: String
@@ -3146,10 +3106,10 @@ input ControlImplementationWhereInput {
 	detailsEqualFold: String
 	detailsContainsFold: String
 	"""
-	control edge predicates
+	controls edge predicates
 	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 }
 type ControlObjective implements Node {
 	id: ID!
@@ -4410,10 +4370,10 @@ input ControlWhereInput {
 	hasEvidence: Boolean
 	hasEvidenceWith: [EvidenceWhereInput!]
 	"""
-	implementation edge predicates
+	control_implementations edge predicates
 	"""
-	hasImplementation: Boolean
-	hasImplementationWith: [ControlImplementationWhereInput!]
+	hasControlImplementations: Boolean
+	hasControlImplementationsWith: [ControlImplementationWhereInput!]
 	"""
 	mapped_controls edge predicates
 	"""
@@ -4463,12 +4423,12 @@ input ControlWhereInput {
 	control_owner edge predicates
 	"""
 	hasControlOwner: Boolean
-	hasControlOwnerWith: [UserWhereInput!]
+	hasControlOwnerWith: [GroupWhereInput!]
 	"""
 	delegate edge predicates
 	"""
 	hasDelegate: Boolean
-	hasDelegateWith: [UserWhereInput!]
+	hasDelegateWith: [GroupWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -4604,10 +4564,6 @@ input CreateControlImplementationInput {
 	"""
 	tags: [String!]
 	"""
-	the id of the control that this implementation is for
-	"""
-	controlID: String!
-	"""
 	status of the control implementation
 	"""
 	status: String
@@ -4705,8 +4661,8 @@ input CreateControlInput {
 	standardID: ID
 	programIDs: [ID!]
 	evidenceIDs: [ID!]
-	implementationID: ID
-	mappedControlsID: ID
+	controlImplementationIDs: [ID!]
+	mappedControlIDs: [ID!]
 	controlObjectiveIDs: [ID!]
 	subcontrolIDs: [ID!]
 	taskIDs: [ID!]
@@ -5240,8 +5196,8 @@ input CreateMappedControlInput {
 	description of how the two controls are related
 	"""
 	relation: String
-	controlID: ID!
-	mappedControlID: ID!
+	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
 }
 input CreateMemberWithProgramInput {
 	role: ProgramMembershipRole
@@ -14437,14 +14393,6 @@ type MappedControl implements Node {
 	"""
 	tags: [String!]
 	"""
-	the id of the control being mapped
-	"""
-	controlID: ID!
-	"""
-	the id of the control that is mapped to
-	"""
-	mappedControlID: ID!
-	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
 	mappingType: String
@@ -14452,11 +14400,14 @@ type MappedControl implements Node {
 	description of how the two controls are related
 	"""
 	relation: String
-	control: Control!
 	"""
-	mapped control to the original control, meaning there is overlap between the controls
+	mapped controls that have a relation to each other
 	"""
-	mappedControl: Control!
+	controls: [Control!]
+	"""
+	mapped subcontrols that have a relation to each other
+	"""
+	subcontrols: [Subcontrol!]
 }
 """
 Return response for createBulkMappedControl mutation
@@ -14530,14 +14481,6 @@ type MappedControlHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
-	"""
-	the id of the control being mapped
-	"""
-	controlID: String!
-	"""
-	the id of the control that is mapped to
-	"""
-	mappedControlID: String!
 	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
@@ -14736,38 +14679,6 @@ input MappedControlHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
-	control_id field predicates
-	"""
-	controlID: String
-	controlIDNEQ: String
-	controlIDIn: [String!]
-	controlIDNotIn: [String!]
-	controlIDGT: String
-	controlIDGTE: String
-	controlIDLT: String
-	controlIDLTE: String
-	controlIDContains: String
-	controlIDHasPrefix: String
-	controlIDHasSuffix: String
-	controlIDEqualFold: String
-	controlIDContainsFold: String
-	"""
-	mapped_control_id field predicates
-	"""
-	mappedControlID: String
-	mappedControlIDNEQ: String
-	mappedControlIDIn: [String!]
-	mappedControlIDNotIn: [String!]
-	mappedControlIDGT: String
-	mappedControlIDGTE: String
-	mappedControlIDLT: String
-	mappedControlIDLTE: String
-	mappedControlIDContains: String
-	mappedControlIDHasPrefix: String
-	mappedControlIDHasSuffix: String
-	mappedControlIDEqualFold: String
-	mappedControlIDContainsFold: String
-	"""
 	mapping_type field predicates
 	"""
 	mappingType: String
@@ -14931,38 +14842,6 @@ input MappedControlWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
-	control_id field predicates
-	"""
-	controlID: ID
-	controlIDNEQ: ID
-	controlIDIn: [ID!]
-	controlIDNotIn: [ID!]
-	controlIDGT: ID
-	controlIDGTE: ID
-	controlIDLT: ID
-	controlIDLTE: ID
-	controlIDContains: ID
-	controlIDHasPrefix: ID
-	controlIDHasSuffix: ID
-	controlIDEqualFold: ID
-	controlIDContainsFold: ID
-	"""
-	mapped_control_id field predicates
-	"""
-	mappedControlID: ID
-	mappedControlIDNEQ: ID
-	mappedControlIDIn: [ID!]
-	mappedControlIDNotIn: [ID!]
-	mappedControlIDGT: ID
-	mappedControlIDGTE: ID
-	mappedControlIDLT: ID
-	mappedControlIDLTE: ID
-	mappedControlIDContains: ID
-	mappedControlIDHasPrefix: ID
-	mappedControlIDHasSuffix: ID
-	mappedControlIDEqualFold: ID
-	mappedControlIDContainsFold: ID
-	"""
 	mapping_type field predicates
 	"""
 	mappingType: String
@@ -14999,15 +14878,15 @@ input MappedControlWhereInput {
 	relationEqualFold: String
 	relationContainsFold: String
 	"""
-	control edge predicates
+	controls edge predicates
 	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
-	mapped_control edge predicates
+	subcontrols edge predicates
 	"""
-	hasMappedControl: Boolean
-	hasMappedControlWith: [ControlWhereInput!]
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 type Mutation {
 	"""
@@ -28720,7 +28599,10 @@ type Subcontrol implements Node {
 	controlID: ID!
 	owner: Organization
 	control: Control!
-	mappedControls: [Control!]
+	"""
+	mapped subcontrols that have a relation to another control or subcontrol
+	"""
+	mappedControls: [MappedControl!]
 	evidence: [Evidence!]
 	controlObjectives: [ControlObjective!]
 	tasks: [Task!]
@@ -28732,11 +28614,11 @@ type Subcontrol implements Node {
 	"""
 	the user who is responsible for the subcontrol, defaults to the parent control owner if not set
 	"""
-	controlOwner: User
+	controlOwner: Group
 	"""
 	temporary delegate for the control, used for temporary control ownership
 	"""
-	delegate: User
+	delegate: Group
 }
 """
 Return response for createBulkSubcontrol mutation
@@ -29596,7 +29478,7 @@ input SubcontrolWhereInput {
 	mapped_controls edge predicates
 	"""
 	hasMappedControls: Boolean
-	hasMappedControlsWith: [ControlWhereInput!]
+	hasMappedControlsWith: [MappedControlWhereInput!]
 	"""
 	evidence edge predicates
 	"""
@@ -29641,12 +29523,12 @@ input SubcontrolWhereInput {
 	control_owner edge predicates
 	"""
 	hasControlOwner: Boolean
-	hasControlOwnerWith: [UserWhereInput!]
+	hasControlOwnerWith: [GroupWhereInput!]
 	"""
 	delegate edge predicates
 	"""
 	hasDelegate: Boolean
-	hasDelegateWith: [UserWhereInput!]
+	hasDelegateWith: [GroupWhereInput!]
 }
 type Subscriber implements Node {
 	id: ID!
@@ -31895,10 +31777,6 @@ input UpdateControlImplementationInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the id of the control that this implementation is for
-	"""
-	controlID: String
-	"""
 	status of the control implementation
 	"""
 	status: String
@@ -31925,7 +31803,7 @@ input UpdateControlImplementationInput {
 	clearDetails: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
-	clearControl: Boolean
+	clearControls: Boolean
 }
 """
 UpdateControlInput is used for update Control object.
@@ -32036,9 +31914,11 @@ input UpdateControlInput {
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
-	implementationID: ID
-	clearImplementation: Boolean
-	mappedControlsID: ID
+	addControlImplementationIDs: [ID!]
+	removeControlImplementationIDs: [ID!]
+	clearControlImplementations: Boolean
+	addMappedControlIDs: [ID!]
+	removeMappedControlIDs: [ID!]
 	clearMappedControls: Boolean
 	addControlObjectiveIDs: [ID!]
 	removeControlObjectiveIDs: [ID!]
@@ -32816,6 +32696,12 @@ input UpdateMappedControlInput {
 	"""
 	relation: String
 	clearRelation: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 }
 """
 UpdateNarrativeInput is used for update Narrative object.

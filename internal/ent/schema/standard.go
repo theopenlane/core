@@ -104,7 +104,7 @@ func (Standard) Mixin() []ent.Mixin {
 // Hooks of the Standard
 func (Standard) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookStandardPublicAccess(),
+		hooks.HookStandardPublicAccessTuples(),
 	}
 }
 

@@ -68,7 +68,6 @@ query AdminSearch($query: String!) {
           id
           deletedBy
           tags
-          controlID
           status
           details
         }
@@ -207,8 +206,6 @@ query AdminSearch($query: String!) {
           id
           deletedBy
           tags
-          controlID
-          mappedControlID
           mappingType
           relation
         }

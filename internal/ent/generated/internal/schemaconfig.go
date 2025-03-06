@@ -17,6 +17,7 @@ type SchemaConfig struct {
 	ControlBlockedGroups             string // Control-blocked_groups->Group table.
 	ControlEditors                   string // Control-editors->Group table.
 	ControlViewers                   string // Control-viewers->Group table.
+	ControlControlImplementations    string // Control-control_implementations->ControlImplementation table.
 	ControlControlObjectives         string // Control-control_objectives->ControlObjective table.
 	ControlTasks                     string // Control-tasks->Task table.
 	ControlNarratives                string // Control-narratives->Narrative table.
@@ -81,6 +82,8 @@ type SchemaConfig struct {
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
 	MappedControl                    string // MappedControl table.
+	MappedControlControls            string // MappedControl-controls->Control table.
+	MappedControlSubcontrols         string // MappedControl-subcontrols->Subcontrol table.
 	MappedControlHistory             string // MappedControlHistory table.
 	Narrative                        string // Narrative table.
 	NarrativeBlockedGroups           string // Narrative-blocked_groups->Group table.

@@ -145,12 +145,6 @@ func (cihc *ControlImplementationHistoryCreate) SetTags(s []string) *ControlImpl
 	return cihc
 }
 
-// SetControlID sets the "control_id" field.
-func (cihc *ControlImplementationHistoryCreate) SetControlID(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetControlID(s)
-	return cihc
-}
-
 // SetStatus sets the "status" field.
 func (cihc *ControlImplementationHistoryCreate) SetStatus(s string) *ControlImplementationHistoryCreate {
 	cihc.mutation.SetStatus(s)
@@ -305,9 +299,6 @@ func (cihc *ControlImplementationHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := cihc.mutation.ControlID(); !ok {
-		return &ValidationError{Name: "control_id", err: errors.New(`generated: missing required field "ControlImplementationHistory.control_id"`)}
-	}
 	return nil
 }
 
@@ -383,10 +374,6 @@ func (cihc *ControlImplementationHistoryCreate) createSpec() (*ControlImplementa
 	if value, ok := cihc.mutation.Tags(); ok {
 		_spec.SetField(controlimplementationhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
-	}
-	if value, ok := cihc.mutation.ControlID(); ok {
-		_spec.SetField(controlimplementationhistory.FieldControlID, field.TypeString, value)
-		_node.ControlID = value
 	}
 	if value, ok := cihc.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeString, value)

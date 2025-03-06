@@ -12,8 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
-// HookStandardPublicAccess adds tuples for publicly available standards
-func HookStandardPublicAccess() ent.Hook {
+// HookStandardPublicAccessTuples adds tuples for publicly available standards
+// based on the system owned and isPublic fields; and deletes them when the fields are cleared.
+// see AddOrDeleteStandardTuple for details on how the fields are checked and it's called functions
+// for specifics on mutation types
+func HookStandardPublicAccessTuples() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
 			retVal, err := next.Mutate(ctx, m)

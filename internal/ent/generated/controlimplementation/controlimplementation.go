@@ -29,8 +29,6 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldControlID holds the string denoting the control_id field in the database.
-	FieldControlID = "control_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldImplementationDate holds the string denoting the implementation_date field in the database.
@@ -41,17 +39,15 @@ const (
 	FieldVerificationDate = "verification_date"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
-	// EdgeControl holds the string denoting the control edge name in mutations.
-	EdgeControl = "control"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
 	// Table holds the table name of the controlimplementation in the database.
 	Table = "control_implementations"
-	// ControlTable is the table that holds the control relation/edge.
-	ControlTable = "controls"
-	// ControlInverseTable is the table name for the Control entity.
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_control_implementations"
+	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlInverseTable = "controls"
-	// ControlColumn is the table column denoting the control relation/edge.
-	ControlColumn = "control_implementation"
+	ControlsInverseTable = "controls"
 )
 
 // Columns holds all SQL columns for controlimplementation fields.
@@ -64,13 +60,18 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
-	FieldControlID,
 	FieldStatus,
 	FieldImplementationDate,
 	FieldVerified,
 	FieldVerificationDate,
 	FieldDetails,
 }
+
+var (
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "control_implementation_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -99,8 +100,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
-	ControlIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -143,11 +142,6 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
-// ByControlID orders the results by the control_id field.
-func ByControlID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlID, opts...).ToFunc()
-}
-
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -173,23 +167,23 @@ func ByDetails(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDetails, opts...).ToFunc()
 }
 
-// ByControlCount orders the results by control count.
-func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
 	}
 }
 
-// ByControl orders the results by control terms.
-func ByControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newControlStep() *sqlgraph.Step {
+func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, ControlTable, ControlColumn),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }

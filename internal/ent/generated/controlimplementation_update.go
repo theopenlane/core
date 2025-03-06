@@ -123,20 +123,6 @@ func (ciu *ControlImplementationUpdate) ClearTags() *ControlImplementationUpdate
 	return ciu
 }
 
-// SetControlID sets the "control_id" field.
-func (ciu *ControlImplementationUpdate) SetControlID(s string) *ControlImplementationUpdate {
-	ciu.mutation.SetControlID(s)
-	return ciu
-}
-
-// SetNillableControlID sets the "control_id" field if the given value is not nil.
-func (ciu *ControlImplementationUpdate) SetNillableControlID(s *string) *ControlImplementationUpdate {
-	if s != nil {
-		ciu.SetControlID(*s)
-	}
-	return ciu
-}
-
 // SetStatus sets the "status" field.
 func (ciu *ControlImplementationUpdate) SetStatus(s string) *ControlImplementationUpdate {
 	ciu.mutation.SetStatus(s)
@@ -237,14 +223,14 @@ func (ciu *ControlImplementationUpdate) ClearDetails() *ControlImplementationUpd
 	return ciu
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (ciu *ControlImplementationUpdate) AddControlIDs(ids ...string) *ControlImplementationUpdate {
 	ciu.mutation.AddControlIDs(ids...)
 	return ciu
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (ciu *ControlImplementationUpdate) AddControl(c ...*Control) *ControlImplementationUpdate {
+// AddControls adds the "controls" edges to the Control entity.
+func (ciu *ControlImplementationUpdate) AddControls(c ...*Control) *ControlImplementationUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -257,20 +243,20 @@ func (ciu *ControlImplementationUpdate) Mutation() *ControlImplementationMutatio
 	return ciu.mutation
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (ciu *ControlImplementationUpdate) ClearControl() *ControlImplementationUpdate {
-	ciu.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (ciu *ControlImplementationUpdate) ClearControls() *ControlImplementationUpdate {
+	ciu.mutation.ClearControls()
 	return ciu
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (ciu *ControlImplementationUpdate) RemoveControlIDs(ids ...string) *ControlImplementationUpdate {
 	ciu.mutation.RemoveControlIDs(ids...)
 	return ciu
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (ciu *ControlImplementationUpdate) RemoveControl(c ...*Control) *ControlImplementationUpdate {
+// RemoveControls removes "controls" edges to Control entities.
+func (ciu *ControlImplementationUpdate) RemoveControls(c ...*Control) *ControlImplementationUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -320,16 +306,6 @@ func (ciu *ControlImplementationUpdate) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (ciu *ControlImplementationUpdate) check() error {
-	if v, ok := ciu.mutation.ControlID(); ok {
-		if err := controlimplementation.ControlIDValidator(v); err != nil {
-			return &ValidationError{Name: "control_id", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.control_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ciu *ControlImplementationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationUpdate {
 	ciu.modifiers = append(ciu.modifiers, modifiers...)
@@ -337,9 +313,6 @@ func (ciu *ControlImplementationUpdate) Modify(modifiers ...func(u *sql.UpdateBu
 }
 
 func (ciu *ControlImplementationUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ciu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementation.Table, controlimplementation.Columns, sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString))
 	if ps := ciu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -389,9 +362,6 @@ func (ciu *ControlImplementationUpdate) sqlSave(ctx context.Context) (n int, err
 	if ciu.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementation.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ciu.mutation.ControlID(); ok {
-		_spec.SetField(controlimplementation.FieldControlID, field.TypeString, value)
-	}
 	if value, ok := ciu.mutation.Status(); ok {
 		_spec.SetField(controlimplementation.FieldStatus, field.TypeString, value)
 	}
@@ -422,49 +392,49 @@ func (ciu *ControlImplementationUpdate) sqlSave(ctx context.Context) (n int, err
 	if ciu.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementation.FieldDetails, field.TypeString)
 	}
-	if ciu.mutation.ControlCleared() {
+	if ciu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlimplementation.ControlTable,
-			Columns: []string{controlimplementation.ControlColumn},
+			Table:   controlimplementation.ControlsTable,
+			Columns: controlimplementation.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ciu.schemaConfig.Control
+		edge.Schema = ciu.schemaConfig.ControlControlImplementations
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ciu.mutation.RemovedControlIDs(); len(nodes) > 0 && !ciu.mutation.ControlCleared() {
+	if nodes := ciu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ciu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlimplementation.ControlTable,
-			Columns: []string{controlimplementation.ControlColumn},
+			Table:   controlimplementation.ControlsTable,
+			Columns: controlimplementation.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ciu.schemaConfig.Control
+		edge.Schema = ciu.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ciu.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := ciu.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlimplementation.ControlTable,
-			Columns: []string{controlimplementation.ControlColumn},
+			Table:   controlimplementation.ControlsTable,
+			Columns: controlimplementation.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ciu.schemaConfig.Control
+		edge.Schema = ciu.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -584,20 +554,6 @@ func (ciuo *ControlImplementationUpdateOne) ClearTags() *ControlImplementationUp
 	return ciuo
 }
 
-// SetControlID sets the "control_id" field.
-func (ciuo *ControlImplementationUpdateOne) SetControlID(s string) *ControlImplementationUpdateOne {
-	ciuo.mutation.SetControlID(s)
-	return ciuo
-}
-
-// SetNillableControlID sets the "control_id" field if the given value is not nil.
-func (ciuo *ControlImplementationUpdateOne) SetNillableControlID(s *string) *ControlImplementationUpdateOne {
-	if s != nil {
-		ciuo.SetControlID(*s)
-	}
-	return ciuo
-}
-
 // SetStatus sets the "status" field.
 func (ciuo *ControlImplementationUpdateOne) SetStatus(s string) *ControlImplementationUpdateOne {
 	ciuo.mutation.SetStatus(s)
@@ -698,14 +654,14 @@ func (ciuo *ControlImplementationUpdateOne) ClearDetails() *ControlImplementatio
 	return ciuo
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (ciuo *ControlImplementationUpdateOne) AddControlIDs(ids ...string) *ControlImplementationUpdateOne {
 	ciuo.mutation.AddControlIDs(ids...)
 	return ciuo
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (ciuo *ControlImplementationUpdateOne) AddControl(c ...*Control) *ControlImplementationUpdateOne {
+// AddControls adds the "controls" edges to the Control entity.
+func (ciuo *ControlImplementationUpdateOne) AddControls(c ...*Control) *ControlImplementationUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -718,20 +674,20 @@ func (ciuo *ControlImplementationUpdateOne) Mutation() *ControlImplementationMut
 	return ciuo.mutation
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (ciuo *ControlImplementationUpdateOne) ClearControl() *ControlImplementationUpdateOne {
-	ciuo.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (ciuo *ControlImplementationUpdateOne) ClearControls() *ControlImplementationUpdateOne {
+	ciuo.mutation.ClearControls()
 	return ciuo
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (ciuo *ControlImplementationUpdateOne) RemoveControlIDs(ids ...string) *ControlImplementationUpdateOne {
 	ciuo.mutation.RemoveControlIDs(ids...)
 	return ciuo
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (ciuo *ControlImplementationUpdateOne) RemoveControl(c ...*Control) *ControlImplementationUpdateOne {
+// RemoveControls removes "controls" edges to Control entities.
+func (ciuo *ControlImplementationUpdateOne) RemoveControls(c ...*Control) *ControlImplementationUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -794,16 +750,6 @@ func (ciuo *ControlImplementationUpdateOne) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (ciuo *ControlImplementationUpdateOne) check() error {
-	if v, ok := ciuo.mutation.ControlID(); ok {
-		if err := controlimplementation.ControlIDValidator(v); err != nil {
-			return &ValidationError{Name: "control_id", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.control_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ciuo *ControlImplementationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationUpdateOne {
 	ciuo.modifiers = append(ciuo.modifiers, modifiers...)
@@ -811,9 +757,6 @@ func (ciuo *ControlImplementationUpdateOne) Modify(modifiers ...func(u *sql.Upda
 }
 
 func (ciuo *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node *ControlImplementation, err error) {
-	if err := ciuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementation.Table, controlimplementation.Columns, sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString))
 	id, ok := ciuo.mutation.ID()
 	if !ok {
@@ -880,9 +823,6 @@ func (ciuo *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node 
 	if ciuo.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementation.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ciuo.mutation.ControlID(); ok {
-		_spec.SetField(controlimplementation.FieldControlID, field.TypeString, value)
-	}
 	if value, ok := ciuo.mutation.Status(); ok {
 		_spec.SetField(controlimplementation.FieldStatus, field.TypeString, value)
 	}
@@ -913,49 +853,49 @@ func (ciuo *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node 
 	if ciuo.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementation.FieldDetails, field.TypeString)
 	}
-	if ciuo.mutation.ControlCleared() {
+	if ciuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlimplementation.ControlTable,
-			Columns: []string{controlimplementation.ControlColumn},
+			Table:   controlimplementation.ControlsTable,
+			Columns: controlimplementation.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ciuo.schemaConfig.Control
+		edge.Schema = ciuo.schemaConfig.ControlControlImplementations
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ciuo.mutation.RemovedControlIDs(); len(nodes) > 0 && !ciuo.mutation.ControlCleared() {
+	if nodes := ciuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ciuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlimplementation.ControlTable,
-			Columns: []string{controlimplementation.ControlColumn},
+			Table:   controlimplementation.ControlsTable,
+			Columns: controlimplementation.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ciuo.schemaConfig.Control
+		edge.Schema = ciuo.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ciuo.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := ciuo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlimplementation.ControlTable,
-			Columns: []string{controlimplementation.ControlColumn},
+			Table:   controlimplementation.ControlsTable,
+			Columns: controlimplementation.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ciuo.schemaConfig.Control
+		edge.Schema = ciuo.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

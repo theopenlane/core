@@ -4,12 +4,10 @@ query GetAllMappedControlHistories {
   mappedControlHistories {
     edges {
       node {
-        controlID
         createdAt
         createdBy
         historyTime
         id
-        mappedControlID
         mappingType
         operation
         ref
@@ -26,12 +24,10 @@ query GetMappedControlHistories($where: MappedControlHistoryWhereInput) {
   mappedControlHistories(where: $where) {
     edges {
       node {
-        controlID
         createdAt
         createdBy
         historyTime
         id
-        mappedControlID
         mappingType
         operation
         ref

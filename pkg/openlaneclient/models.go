@@ -1546,10 +1546,10 @@ type Control struct {
 	Standard *Standard   `json:"standard,omitempty"`
 	Programs []*Program  `json:"programs,omitempty"`
 	Evidence []*Evidence `json:"evidence,omitempty"`
-	// the implementation of the control
-	Implementation *ControlImplementation `json:"implementation,omitempty"`
-	// controls that are mapped to this control
-	MappedControls    *MappedControl      `json:"mappedControls,omitempty"`
+	// the implementation(s) of the control
+	ControlImplementations []*ControlImplementation `json:"controlImplementations,omitempty"`
+	// mapped subcontrols that have a relation to another control or subcontrol
+	MappedControls    []*MappedControl    `json:"mappedControls,omitempty"`
 	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
 	Subcontrols       []*Subcontrol       `json:"subcontrols,omitempty"`
 	Tasks             []*Task             `json:"tasks,omitempty"`
@@ -1558,10 +1558,10 @@ type Control struct {
 	ActionPlans       []*ActionPlan       `json:"actionPlans,omitempty"`
 	Procedures        []*Procedure        `json:"procedures,omitempty"`
 	InternalPolicies  []*InternalPolicy   `json:"internalPolicies,omitempty"`
-	// the user who is responsible for the control
-	ControlOwner *User `json:"controlOwner,omitempty"`
+	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate *User `json:"delegate,omitempty"`
+	Delegate *Group `json:"delegate,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -1967,8 +1967,6 @@ type ControlImplementation struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control that this implementation is for
-	ControlID string `json:"controlID"`
 	// status of the control implementation
 	Status *string `json:"status,omitempty"`
 	// date the control was implemented
@@ -1978,8 +1976,8 @@ type ControlImplementation struct {
 	// date the control implementation was verified
 	VerificationDate *time.Time `json:"verificationDate,omitempty"`
 	// details of the control implementation
-	Details *string    `json:"details,omitempty"`
-	Control []*Control `json:"control,omitempty"`
+	Details  *string    `json:"details,omitempty"`
+	Controls []*Control `json:"controls,omitempty"`
 }
 
 func (ControlImplementation) IsNode() {}
@@ -2033,8 +2031,6 @@ type ControlImplementationHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control that this implementation is for
-	ControlID string `json:"controlID"`
 	// status of the control implementation
 	Status *string `json:"status,omitempty"`
 	// date the control was implemented
@@ -2195,20 +2191,6 @@ type ControlImplementationHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
-	// control_id field predicates
-	ControlID             *string  `json:"controlID,omitempty"`
-	ControlIdneq          *string  `json:"controlIDNEQ,omitempty"`
-	ControlIDIn           []string `json:"controlIDIn,omitempty"`
-	ControlIDNotIn        []string `json:"controlIDNotIn,omitempty"`
-	ControlIdgt           *string  `json:"controlIDGT,omitempty"`
-	ControlIdgte          *string  `json:"controlIDGTE,omitempty"`
-	ControlIdlt           *string  `json:"controlIDLT,omitempty"`
-	ControlIdlte          *string  `json:"controlIDLTE,omitempty"`
-	ControlIDContains     *string  `json:"controlIDContains,omitempty"`
-	ControlIDHasPrefix    *string  `json:"controlIDHasPrefix,omitempty"`
-	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
-	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
-	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
 	// status field predicates
 	Status             *string  `json:"status,omitempty"`
 	StatusNeq          *string  `json:"statusNEQ,omitempty"`
@@ -2380,20 +2362,6 @@ type ControlImplementationWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
-	// control_id field predicates
-	ControlID             *string  `json:"controlID,omitempty"`
-	ControlIdneq          *string  `json:"controlIDNEQ,omitempty"`
-	ControlIDIn           []string `json:"controlIDIn,omitempty"`
-	ControlIDNotIn        []string `json:"controlIDNotIn,omitempty"`
-	ControlIdgt           *string  `json:"controlIDGT,omitempty"`
-	ControlIdgte          *string  `json:"controlIDGTE,omitempty"`
-	ControlIdlt           *string  `json:"controlIDLT,omitempty"`
-	ControlIdlte          *string  `json:"controlIDLTE,omitempty"`
-	ControlIDContains     *string  `json:"controlIDContains,omitempty"`
-	ControlIDHasPrefix    *string  `json:"controlIDHasPrefix,omitempty"`
-	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
-	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
-	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
 	// status field predicates
 	Status             *string  `json:"status,omitempty"`
 	StatusNeq          *string  `json:"statusNEQ,omitempty"`
@@ -2453,9 +2421,9 @@ type ControlImplementationWhereInput struct {
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
-	// control edge predicates
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 }
 
 type ControlObjective struct {
@@ -3459,9 +3427,9 @@ type ControlWhereInput struct {
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
-	// implementation edge predicates
-	HasImplementation     *bool                              `json:"hasImplementation,omitempty"`
-	HasImplementationWith []*ControlImplementationWhereInput `json:"hasImplementationWith,omitempty"`
+	// control_implementations edge predicates
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 	// mapped_controls edge predicates
 	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
 	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
@@ -3490,11 +3458,11 @@ type ControlWhereInput struct {
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// control_owner edge predicates
-	HasControlOwner     *bool             `json:"hasControlOwner,omitempty"`
-	HasControlOwnerWith []*UserWhereInput `json:"hasControlOwnerWith,omitempty"`
+	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
+	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
 	// delegate edge predicates
-	HasDelegate     *bool             `json:"hasDelegate,omitempty"`
-	HasDelegateWith []*UserWhereInput `json:"hasDelegateWith,omitempty"`
+	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
+	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -3575,8 +3543,6 @@ type CreateContactInput struct {
 type CreateControlImplementationInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control that this implementation is for
-	ControlID string `json:"controlID"`
 	// status of the control implementation
 	Status *string `json:"status,omitempty"`
 	// date the control was implemented
@@ -3624,26 +3590,26 @@ type CreateControlInput struct {
 	// references for the control
 	References []*models.Reference `json:"references,omitempty"`
 	// the unique reference code for the control
-	RefCode             string   `json:"refCode"`
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs           []string `json:"editorIDs,omitempty"`
-	ViewerIDs           []string `json:"viewerIDs,omitempty"`
-	StandardID          *string  `json:"standardID,omitempty"`
-	ProgramIDs          []string `json:"programIDs,omitempty"`
-	EvidenceIDs         []string `json:"evidenceIDs,omitempty"`
-	ImplementationID    *string  `json:"implementationID,omitempty"`
-	MappedControlsID    *string  `json:"mappedControlsID,omitempty"`
-	ControlObjectiveIDs []string `json:"controlObjectiveIDs,omitempty"`
-	SubcontrolIDs       []string `json:"subcontrolIDs,omitempty"`
-	TaskIDs             []string `json:"taskIDs,omitempty"`
-	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
-	RiskIDs             []string `json:"riskIDs,omitempty"`
-	ActionPlanIDs       []string `json:"actionPlanIDs,omitempty"`
-	ProcedureIDs        []string `json:"procedureIDs,omitempty"`
-	InternalPolicyIDs   []string `json:"internalPolicyIDs,omitempty"`
-	ControlOwnerID      *string  `json:"controlOwnerID,omitempty"`
-	DelegateID          *string  `json:"delegateID,omitempty"`
+	RefCode                  string   `json:"refCode"`
+	OwnerID                  *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs          []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                []string `json:"editorIDs,omitempty"`
+	ViewerIDs                []string `json:"viewerIDs,omitempty"`
+	StandardID               *string  `json:"standardID,omitempty"`
+	ProgramIDs               []string `json:"programIDs,omitempty"`
+	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
+	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
+	MappedControlIDs         []string `json:"mappedControlIDs,omitempty"`
+	ControlObjectiveIDs      []string `json:"controlObjectiveIDs,omitempty"`
+	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
+	TaskIDs                  []string `json:"taskIDs,omitempty"`
+	NarrativeIDs             []string `json:"narrativeIDs,omitempty"`
+	RiskIDs                  []string `json:"riskIDs,omitempty"`
+	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
+	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
+	InternalPolicyIDs        []string `json:"internalPolicyIDs,omitempty"`
+	ControlOwnerID           *string  `json:"controlOwnerID,omitempty"`
+	DelegateID               *string  `json:"delegateID,omitempty"`
 }
 
 // CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3997,9 +3963,9 @@ type CreateMappedControlInput struct {
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType *string `json:"mappingType,omitempty"`
 	// description of how the two controls are related
-	Relation        *string `json:"relation,omitempty"`
-	ControlID       string  `json:"controlID"`
-	MappedControlID string  `json:"mappedControlID"`
+	Relation      *string  `json:"relation,omitempty"`
+	ControlIDs    []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs []string `json:"subcontrolIDs,omitempty"`
 }
 
 type CreateMemberWithProgramInput struct {
@@ -11075,17 +11041,14 @@ type MappedControl struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control being mapped
-	ControlID string `json:"controlID"`
-	// the id of the control that is mapped to
-	MappedControlID string `json:"mappedControlID"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType *string `json:"mappingType,omitempty"`
 	// description of how the two controls are related
-	Relation *string  `json:"relation,omitempty"`
-	Control  *Control `json:"control"`
-	// mapped control to the original control, meaning there is overlap between the controls
-	MappedControl *Control `json:"mappedControl"`
+	Relation *string `json:"relation,omitempty"`
+	// mapped controls that have a relation to each other
+	Controls []*Control `json:"controls,omitempty"`
+	// mapped subcontrols that have a relation to each other
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 }
 
 func (MappedControl) IsNode() {}
@@ -11139,10 +11102,6 @@ type MappedControlHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the id of the control being mapped
-	ControlID string `json:"controlID"`
-	// the id of the control that is mapped to
-	MappedControlID string `json:"mappedControlID"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType *string `json:"mappingType,omitempty"`
 	// description of how the two controls are related
@@ -11297,34 +11256,6 @@ type MappedControlHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
-	// control_id field predicates
-	ControlID             *string  `json:"controlID,omitempty"`
-	ControlIdneq          *string  `json:"controlIDNEQ,omitempty"`
-	ControlIDIn           []string `json:"controlIDIn,omitempty"`
-	ControlIDNotIn        []string `json:"controlIDNotIn,omitempty"`
-	ControlIdgt           *string  `json:"controlIDGT,omitempty"`
-	ControlIdgte          *string  `json:"controlIDGTE,omitempty"`
-	ControlIdlt           *string  `json:"controlIDLT,omitempty"`
-	ControlIdlte          *string  `json:"controlIDLTE,omitempty"`
-	ControlIDContains     *string  `json:"controlIDContains,omitempty"`
-	ControlIDHasPrefix    *string  `json:"controlIDHasPrefix,omitempty"`
-	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
-	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
-	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
-	// mapped_control_id field predicates
-	MappedControlID             *string  `json:"mappedControlID,omitempty"`
-	MappedControlIdneq          *string  `json:"mappedControlIDNEQ,omitempty"`
-	MappedControlIDIn           []string `json:"mappedControlIDIn,omitempty"`
-	MappedControlIDNotIn        []string `json:"mappedControlIDNotIn,omitempty"`
-	MappedControlIdgt           *string  `json:"mappedControlIDGT,omitempty"`
-	MappedControlIdgte          *string  `json:"mappedControlIDGTE,omitempty"`
-	MappedControlIdlt           *string  `json:"mappedControlIDLT,omitempty"`
-	MappedControlIdlte          *string  `json:"mappedControlIDLTE,omitempty"`
-	MappedControlIDContains     *string  `json:"mappedControlIDContains,omitempty"`
-	MappedControlIDHasPrefix    *string  `json:"mappedControlIDHasPrefix,omitempty"`
-	MappedControlIDHasSuffix    *string  `json:"mappedControlIDHasSuffix,omitempty"`
-	MappedControlIDEqualFold    *string  `json:"mappedControlIDEqualFold,omitempty"`
-	MappedControlIDContainsFold *string  `json:"mappedControlIDContainsFold,omitempty"`
 	// mapping_type field predicates
 	MappingType             *string  `json:"mappingType,omitempty"`
 	MappingTypeNeq          *string  `json:"mappingTypeNEQ,omitempty"`
@@ -11469,34 +11400,6 @@ type MappedControlWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
-	// control_id field predicates
-	ControlID             *string  `json:"controlID,omitempty"`
-	ControlIdneq          *string  `json:"controlIDNEQ,omitempty"`
-	ControlIDIn           []string `json:"controlIDIn,omitempty"`
-	ControlIDNotIn        []string `json:"controlIDNotIn,omitempty"`
-	ControlIdgt           *string  `json:"controlIDGT,omitempty"`
-	ControlIdgte          *string  `json:"controlIDGTE,omitempty"`
-	ControlIdlt           *string  `json:"controlIDLT,omitempty"`
-	ControlIdlte          *string  `json:"controlIDLTE,omitempty"`
-	ControlIDContains     *string  `json:"controlIDContains,omitempty"`
-	ControlIDHasPrefix    *string  `json:"controlIDHasPrefix,omitempty"`
-	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
-	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
-	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
-	// mapped_control_id field predicates
-	MappedControlID             *string  `json:"mappedControlID,omitempty"`
-	MappedControlIdneq          *string  `json:"mappedControlIDNEQ,omitempty"`
-	MappedControlIDIn           []string `json:"mappedControlIDIn,omitempty"`
-	MappedControlIDNotIn        []string `json:"mappedControlIDNotIn,omitempty"`
-	MappedControlIdgt           *string  `json:"mappedControlIDGT,omitempty"`
-	MappedControlIdgte          *string  `json:"mappedControlIDGTE,omitempty"`
-	MappedControlIdlt           *string  `json:"mappedControlIDLT,omitempty"`
-	MappedControlIdlte          *string  `json:"mappedControlIDLTE,omitempty"`
-	MappedControlIDContains     *string  `json:"mappedControlIDContains,omitempty"`
-	MappedControlIDHasPrefix    *string  `json:"mappedControlIDHasPrefix,omitempty"`
-	MappedControlIDHasSuffix    *string  `json:"mappedControlIDHasSuffix,omitempty"`
-	MappedControlIDEqualFold    *string  `json:"mappedControlIDEqualFold,omitempty"`
-	MappedControlIDContainsFold *string  `json:"mappedControlIDContainsFold,omitempty"`
 	// mapping_type field predicates
 	MappingType             *string  `json:"mappingType,omitempty"`
 	MappingTypeNeq          *string  `json:"mappingTypeNEQ,omitempty"`
@@ -11529,12 +11432,12 @@ type MappedControlWhereInput struct {
 	RelationNotNil       *bool    `json:"relationNotNil,omitempty"`
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
-	// control edge predicates
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
-	// mapped_control edge predicates
-	HasMappedControl     *bool                `json:"hasMappedControl,omitempty"`
-	HasMappedControlWith []*ControlWhereInput `json:"hasMappedControlWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 }
 
 type Mutation struct {
@@ -18444,10 +18347,11 @@ type Subcontrol struct {
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the parent control
-	ControlID         string              `json:"controlID"`
-	Owner             *Organization       `json:"owner,omitempty"`
-	Control           *Control            `json:"control"`
-	MappedControls    []*Control          `json:"mappedControls,omitempty"`
+	ControlID string        `json:"controlID"`
+	Owner     *Organization `json:"owner,omitempty"`
+	Control   *Control      `json:"control"`
+	// mapped subcontrols that have a relation to another control or subcontrol
+	MappedControls    []*MappedControl    `json:"mappedControls,omitempty"`
 	Evidence          []*Evidence         `json:"evidence,omitempty"`
 	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
 	Tasks             []*Task             `json:"tasks,omitempty"`
@@ -18457,9 +18361,9 @@ type Subcontrol struct {
 	Procedures        []*Procedure        `json:"procedures,omitempty"`
 	InternalPolicies  []*InternalPolicy   `json:"internalPolicies,omitempty"`
 	// the user who is responsible for the subcontrol, defaults to the parent control owner if not set
-	ControlOwner *User `json:"controlOwner,omitempty"`
+	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate *User `json:"delegate,omitempty"`
+	Delegate *Group `json:"delegate,omitempty"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -19122,8 +19026,8 @@ type SubcontrolWhereInput struct {
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
 	// mapped_controls edge predicates
-	HasMappedControls     *bool                `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*ControlWhereInput `json:"hasMappedControlsWith,omitempty"`
+	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
+	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -19149,11 +19053,11 @@ type SubcontrolWhereInput struct {
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// control_owner edge predicates
-	HasControlOwner     *bool             `json:"hasControlOwner,omitempty"`
-	HasControlOwnerWith []*UserWhereInput `json:"hasControlOwnerWith,omitempty"`
+	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
+	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
 	// delegate edge predicates
-	HasDelegate     *bool             `json:"hasDelegate,omitempty"`
-	HasDelegateWith []*UserWhereInput `json:"hasDelegateWith,omitempty"`
+	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
+	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
 }
 
 type Subscriber struct {
@@ -20876,8 +20780,6 @@ type UpdateControlImplementationInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// the id of the control that this implementation is for
-	ControlID *string `json:"controlID,omitempty"`
 	// status of the control implementation
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
@@ -20895,7 +20797,7 @@ type UpdateControlImplementationInput struct {
 	ClearDetails     *bool    `json:"clearDetails,omitempty"`
 	AddControlIDs    []string `json:"addControlIDs,omitempty"`
 	RemoveControlIDs []string `json:"removeControlIDs,omitempty"`
-	ClearControl     *bool    `json:"clearControl,omitempty"`
+	ClearControls    *bool    `json:"clearControls,omitempty"`
 }
 
 // UpdateControlInput is used for update Control object.
@@ -20955,56 +20857,58 @@ type UpdateControlInput struct {
 	AppendReferences []*models.Reference `json:"appendReferences,omitempty"`
 	ClearReferences  *bool               `json:"clearReferences,omitempty"`
 	// the unique reference code for the control
-	RefCode                   *string  `json:"refCode,omitempty"`
-	AddBlockedGroupIDs        []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs     []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups        *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs              []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs           []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors              *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs              []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs           []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers              *bool    `json:"clearViewers,omitempty"`
-	StandardID                *string  `json:"standardID,omitempty"`
-	ClearStandard             *bool    `json:"clearStandard,omitempty"`
-	AddProgramIDs             []string `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool    `json:"clearPrograms,omitempty"`
-	AddEvidenceIDs            []string `json:"addEvidenceIDs,omitempty"`
-	RemoveEvidenceIDs         []string `json:"removeEvidenceIDs,omitempty"`
-	ClearEvidence             *bool    `json:"clearEvidence,omitempty"`
-	ImplementationID          *string  `json:"implementationID,omitempty"`
-	ClearImplementation       *bool    `json:"clearImplementation,omitempty"`
-	MappedControlsID          *string  `json:"mappedControlsID,omitempty"`
-	ClearMappedControls       *bool    `json:"clearMappedControls,omitempty"`
-	AddControlObjectiveIDs    []string `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool    `json:"clearControlObjectives,omitempty"`
-	AddSubcontrolIDs          []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs       []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols          *bool    `json:"clearSubcontrols,omitempty"`
-	AddTaskIDs                []string `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs             []string `json:"removeTaskIDs,omitempty"`
-	ClearTasks                *bool    `json:"clearTasks,omitempty"`
-	AddNarrativeIDs           []string `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs        []string `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives           *bool    `json:"clearNarratives,omitempty"`
-	AddRiskIDs                []string `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs             []string `json:"removeRiskIDs,omitempty"`
-	ClearRisks                *bool    `json:"clearRisks,omitempty"`
-	AddActionPlanIDs          []string `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs       []string `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans          *bool    `json:"clearActionPlans,omitempty"`
-	AddProcedureIDs           []string `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs        []string `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures           *bool    `json:"clearProcedures,omitempty"`
-	AddInternalPolicyIDs      []string `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs   []string `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies     *bool    `json:"clearInternalPolicies,omitempty"`
-	ControlOwnerID            *string  `json:"controlOwnerID,omitempty"`
-	ClearControlOwner         *bool    `json:"clearControlOwner,omitempty"`
-	DelegateID                *string  `json:"delegateID,omitempty"`
-	ClearDelegate             *bool    `json:"clearDelegate,omitempty"`
+	RefCode                        *string  `json:"refCode,omitempty"`
+	AddBlockedGroupIDs             []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs          []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups             *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                   []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors                   *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs                   []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs                []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers                   *bool    `json:"clearViewers,omitempty"`
+	StandardID                     *string  `json:"standardID,omitempty"`
+	ClearStandard                  *bool    `json:"clearStandard,omitempty"`
+	AddProgramIDs                  []string `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool    `json:"clearPrograms,omitempty"`
+	AddEvidenceIDs                 []string `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs              []string `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence                  *bool    `json:"clearEvidence,omitempty"`
+	AddControlImplementationIDs    []string `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs []string `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations    *bool    `json:"clearControlImplementations,omitempty"`
+	AddMappedControlIDs            []string `json:"addMappedControlIDs,omitempty"`
+	RemoveMappedControlIDs         []string `json:"removeMappedControlIDs,omitempty"`
+	ClearMappedControls            *bool    `json:"clearMappedControls,omitempty"`
+	AddControlObjectiveIDs         []string `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs      []string `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives         *bool    `json:"clearControlObjectives,omitempty"`
+	AddSubcontrolIDs               []string `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs            []string `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols               *bool    `json:"clearSubcontrols,omitempty"`
+	AddTaskIDs                     []string `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                  []string `json:"removeTaskIDs,omitempty"`
+	ClearTasks                     *bool    `json:"clearTasks,omitempty"`
+	AddNarrativeIDs                []string `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs             []string `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives                *bool    `json:"clearNarratives,omitempty"`
+	AddRiskIDs                     []string `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs                  []string `json:"removeRiskIDs,omitempty"`
+	ClearRisks                     *bool    `json:"clearRisks,omitempty"`
+	AddActionPlanIDs               []string `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs            []string `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans               *bool    `json:"clearActionPlans,omitempty"`
+	AddProcedureIDs                []string `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs             []string `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures                *bool    `json:"clearProcedures,omitempty"`
+	AddInternalPolicyIDs           []string `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs        []string `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies          *bool    `json:"clearInternalPolicies,omitempty"`
+	ControlOwnerID                 *string  `json:"controlOwnerID,omitempty"`
+	ClearControlOwner              *bool    `json:"clearControlOwner,omitempty"`
+	DelegateID                     *string  `json:"delegateID,omitempty"`
+	ClearDelegate                  *bool    `json:"clearDelegate,omitempty"`
 }
 
 // UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -21586,8 +21490,14 @@ type UpdateMappedControlInput struct {
 	MappingType      *string `json:"mappingType,omitempty"`
 	ClearMappingType *bool   `json:"clearMappingType,omitempty"`
 	// description of how the two controls are related
-	Relation      *string `json:"relation,omitempty"`
-	ClearRelation *bool   `json:"clearRelation,omitempty"`
+	Relation            *string  `json:"relation,omitempty"`
+	ClearRelation       *bool    `json:"clearRelation,omitempty"`
+	AddControlIDs       []string `json:"addControlIDs,omitempty"`
+	RemoveControlIDs    []string `json:"removeControlIDs,omitempty"`
+	ClearControls       *bool    `json:"clearControls,omitempty"`
+	AddSubcontrolIDs    []string `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs []string `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols    *bool    `json:"clearSubcontrols,omitempty"`
 }
 
 // UpdateNarrativeInput is used for update Narrative object.

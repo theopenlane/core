@@ -254,9 +254,8 @@ func adminSearchControlImplementations(ctx context.Context, query string) ([]*ge
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
-			controlimplementation.ControlIDContainsFold(query), // search by ControlID
-			controlimplementation.StatusContainsFold(query),    // search by Status
-			controlimplementation.DetailsContainsFold(query),   // search by Details
+			controlimplementation.StatusContainsFold(query),  // search by Status
+			controlimplementation.DetailsContainsFold(query), // search by Details
 		),
 	).All(ctx)
 }
@@ -639,10 +638,8 @@ func adminSearchMappedControls(ctx context.Context, query string) ([]*generated.
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
-			mappedcontrol.ControlIDContainsFold(query),       // search by ControlID
-			mappedcontrol.MappedControlIDContainsFold(query), // search by MappedControlID
-			mappedcontrol.MappingTypeContainsFold(query),     // search by MappingType
-			mappedcontrol.RelationContainsFold(query),        // search by Relation
+			mappedcontrol.MappingTypeContainsFold(query), // search by MappingType
+			mappedcontrol.RelationContainsFold(query),    // search by Relation
 		),
 	).All(ctx)
 }
