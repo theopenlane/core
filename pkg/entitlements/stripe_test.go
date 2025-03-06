@@ -3,10 +3,13 @@ package entitlements
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/client"
+
+	"github.com/theopenlane/core/pkg/entitlements/mocks"
 )
 
 func TestNew(t *testing.T) {
@@ -25,6 +28,63 @@ func TestNewErrMissingAPIKey(t *testing.T) {
 	stripeService, err := NewStripeClient()
 	c.Nil(stripeService)
 	c.ErrorIs(err, ErrMissingAPIKey)
+}
+
+func TestWithConfig(t *testing.T) {
+	config := Config{
+		PublicStripeKey:  "public_key",
+		PrivateStripeKey: "private_key",
+	}
+
+	option := WithConfig(config)
+	client := &StripeClient{}
+
+	option(client)
+
+	if client.Config != config {
+		t.Errorf("expected config %v, got %v", config, client.Config)
+	}
+}
+
+func TestNewConfig(t *testing.T) {
+	tests := []struct {
+		name string
+		opts []ConfigOpts
+		want *Config
+	}{
+		{
+			name: "custom config",
+			opts: []ConfigOpts{
+				WithEnabled(true),
+				WithPublicStripeKey("public_key"),
+				WithPrivateStripeKey("private_key"),
+				WithStripeWebhookSecret("webhook_secret"),
+				WithTrialSubscriptionPriceID("trial_price_id"),
+				WithPersonalOrgSubscriptionPriceID("personal_price_id"),
+				WithStripeWebhookURL("https://custom.webhook.url"),
+				WithStripeBillingPortalSuccessURL("https://custom.billing.success.url"),
+				WithStripeCancellationReturnURL("https://custom.cancellation.return.url"),
+			},
+			want: &Config{
+				Enabled:                        true,
+				PublicStripeKey:                "public_key",
+				PrivateStripeKey:               "private_key",
+				StripeWebhookSecret:            "webhook_secret",
+				TrialSubscriptionPriceID:       "trial_price_id",
+				PersonalOrgSubscriptionPriceID: "personal_price_id",
+				StripeWebhookURL:               "https://custom.webhook.url",
+				StripeBillingPortalSuccessURL:  "https://custom.billing.success.url",
+				StripeCancellationReturnURL:    "https://custom.cancellation.return.url",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := NewConfig(tt.opts...)
+			assert.Equal(t, tt.want, got)
+		})
+	}
 }
 
 func TestCreateCustomer(t *testing.T) {
@@ -59,7 +119,7 @@ func TestCreateCustomer(t *testing.T) {
 		},
 	}
 
-	stripeBackendMock := new(MockStripeBackend)
+	stripeBackendMock := new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
 		API:     stripeBackendMock,
 		Connect: stripeBackendMock,
@@ -97,7 +157,7 @@ func TestUpdateCustomer(t *testing.T) {
 		Phone: stripe.String("0987654321"),
 	}
 
-	stripeBackendMock := new(MockStripeBackend)
+	stripeBackendMock := new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
 		API:     stripeBackendMock,
 		Connect: stripeBackendMock,
@@ -128,7 +188,7 @@ func TestDeleteCustomer(t *testing.T) {
 		ID: "cus_123",
 	}
 
-	stripeBackendMock := new(MockStripeBackend)
+	stripeBackendMock := new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
 		API:     stripeBackendMock,
 		Connect: stripeBackendMock,
@@ -167,7 +227,7 @@ func TestCreateSubscription(t *testing.T) {
 		},
 	}
 
-	stripeBackendMock := new(MockStripeBackend)
+	stripeBackendMock := new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
 		API:     stripeBackendMock,
 		Connect: stripeBackendMock,
@@ -206,7 +266,7 @@ func TestUpdateSubscription(t *testing.T) {
 		},
 	}
 
-	stripeBackendMock := new(MockStripeBackend)
+	stripeBackendMock := new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
 		API:     stripeBackendMock,
 		Connect: stripeBackendMock,
@@ -239,7 +299,7 @@ func TestCancelSubscription(t *testing.T) {
 
 	cancelParams := &stripe.SubscriptionCancelParams{}
 
-	stripeBackendMock := new(MockStripeBackend)
+	stripeBackendMock := new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
 		API:     stripeBackendMock,
 		Connect: stripeBackendMock,
@@ -337,7 +397,7 @@ func TestMapStripeSubscription(t *testing.T) {
 		OrganizationID:   "org_123",
 	}
 
-	stripeBackendMock := new(MockStripeBackend)
+	stripeBackendMock := new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
 		API:     stripeBackendMock,
 		Connect: stripeBackendMock,

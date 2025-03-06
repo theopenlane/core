@@ -243,14 +243,9 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		return true
 	}
 
-	// Allow the interceptor to skip the query if the context has an allow
-	// bypass and its for a token
-	// these are queried during the auth flow and should not be filtered
-	if q.Type() == generated.TypeAPIToken || q.Type() == generated.TypePersonalAccessToken {
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
-			return true
-		}
-
+	// Allow the interceptor to skip the query if the context has an allow bypass
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return true
 	}
 
 	// skip interceptor if the context has the managed group key
