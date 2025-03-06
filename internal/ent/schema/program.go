@@ -100,10 +100,6 @@ func (Program) Edges() []ent.Edge {
 		edge.To("narratives", Narrative.Type),
 		// programs can have 1:many associated action plans
 		edge.To("action_plans", ActionPlan.Type),
-		// programs can have 1:many associated standards (frameworks)
-		edge.From("standards", Standard.Type).
-			Ref("programs").
-			Comment("the framework(s) that the program is based on"),
 		edge.From("users", User.Type).
 			Ref("programs").
 			// Skip the mutation input for the users edge

@@ -1,0 +1,41 @@
+
+
+query GetAllMappedControlHistories {
+  mappedControlHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        mappingType
+        operation
+        ref
+        relation
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetMappedControlHistories($where: MappedControlHistoryWhereInput) {
+  mappedControlHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        mappingType
+        operation
+        ref
+        relation
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

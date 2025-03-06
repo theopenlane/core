@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -171,16 +172,16 @@ func (cohc *ControlObjectiveHistoryCreate) SetName(s string) *ControlObjectiveHi
 	return cohc
 }
 
-// SetDescription sets the "description" field.
-func (cohc *ControlObjectiveHistoryCreate) SetDescription(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetDescription(s)
+// SetDesiredOutcome sets the "desired_outcome" field.
+func (cohc *ControlObjectiveHistoryCreate) SetDesiredOutcome(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetDesiredOutcome(s)
 	return cohc
 }
 
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableDescription(s *string) *ControlObjectiveHistoryCreate {
+// SetNillableDesiredOutcome sets the "desired_outcome" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableDesiredOutcome(s *string) *ControlObjectiveHistoryCreate {
 	if s != nil {
-		cohc.SetDescription(*s)
+		cohc.SetDesiredOutcome(*s)
 	}
 	return cohc
 }
@@ -195,6 +196,20 @@ func (cohc *ControlObjectiveHistoryCreate) SetStatus(s string) *ControlObjective
 func (cohc *ControlObjectiveHistoryCreate) SetNillableStatus(s *string) *ControlObjectiveHistoryCreate {
 	if s != nil {
 		cohc.SetStatus(*s)
+	}
+	return cohc
+}
+
+// SetSource sets the "source" field.
+func (cohc *ControlObjectiveHistoryCreate) SetSource(es enums.ControlSource) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetSource(es)
+	return cohc
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableSource(es *enums.ControlSource) *ControlObjectiveHistoryCreate {
+	if es != nil {
+		cohc.SetSource(*es)
 	}
 	return cohc
 }
@@ -227,92 +242,30 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableVersion(s *string) *Contro
 	return cohc
 }
 
-// SetControlNumber sets the "control_number" field.
-func (cohc *ControlObjectiveHistoryCreate) SetControlNumber(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetControlNumber(s)
+// SetCategory sets the "category" field.
+func (cohc *ControlObjectiveHistoryCreate) SetCategory(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetCategory(s)
 	return cohc
 }
 
-// SetNillableControlNumber sets the "control_number" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableControlNumber(s *string) *ControlObjectiveHistoryCreate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableCategory(s *string) *ControlObjectiveHistoryCreate {
 	if s != nil {
-		cohc.SetControlNumber(*s)
+		cohc.SetCategory(*s)
 	}
 	return cohc
 }
 
-// SetFamily sets the "family" field.
-func (cohc *ControlObjectiveHistoryCreate) SetFamily(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetFamily(s)
+// SetSubcategory sets the "subcategory" field.
+func (cohc *ControlObjectiveHistoryCreate) SetSubcategory(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetSubcategory(s)
 	return cohc
 }
 
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableFamily(s *string) *ControlObjectiveHistoryCreate {
+// SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableSubcategory(s *string) *ControlObjectiveHistoryCreate {
 	if s != nil {
-		cohc.SetFamily(*s)
-	}
-	return cohc
-}
-
-// SetClass sets the "class" field.
-func (cohc *ControlObjectiveHistoryCreate) SetClass(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetClass(s)
-	return cohc
-}
-
-// SetNillableClass sets the "class" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableClass(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetClass(*s)
-	}
-	return cohc
-}
-
-// SetSource sets the "source" field.
-func (cohc *ControlObjectiveHistoryCreate) SetSource(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetSource(s)
-	return cohc
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableSource(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetSource(*s)
-	}
-	return cohc
-}
-
-// SetMappedFrameworks sets the "mapped_frameworks" field.
-func (cohc *ControlObjectiveHistoryCreate) SetMappedFrameworks(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetMappedFrameworks(s)
-	return cohc
-}
-
-// SetNillableMappedFrameworks sets the "mapped_frameworks" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableMappedFrameworks(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetMappedFrameworks(*s)
-	}
-	return cohc
-}
-
-// SetDetails sets the "details" field.
-func (cohc *ControlObjectiveHistoryCreate) SetDetails(m map[string]interface{}) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetDetails(m)
-	return cohc
-}
-
-// SetExampleEvidence sets the "example_evidence" field.
-func (cohc *ControlObjectiveHistoryCreate) SetExampleEvidence(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetExampleEvidence(s)
-	return cohc
-}
-
-// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableExampleEvidence(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetExampleEvidence(*s)
+		cohc.SetSubcategory(*s)
 	}
 	return cohc
 }
@@ -382,6 +335,10 @@ func (cohc *ControlObjectiveHistoryCreate) defaults() {
 		v := controlobjectivehistory.DefaultTags
 		cohc.mutation.SetTags(v)
 	}
+	if _, ok := cohc.mutation.Source(); !ok {
+		v := controlobjectivehistory.DefaultSource
+		cohc.mutation.SetSource(v)
+	}
 	if _, ok := cohc.mutation.ID(); !ok {
 		v := controlobjectivehistory.DefaultID()
 		cohc.mutation.SetID(v)
@@ -406,6 +363,11 @@ func (cohc *ControlObjectiveHistoryCreate) check() error {
 	}
 	if _, ok := cohc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlObjectiveHistory.name"`)}
+	}
+	if v, ok := cohc.mutation.Source(); ok {
+		if err := controlobjectivehistory.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.source": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -495,13 +457,17 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := cohc.mutation.Description(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDescription, field.TypeString, value)
-		_node.Description = value
+	if value, ok := cohc.mutation.DesiredOutcome(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString, value)
+		_node.DesiredOutcome = value
 	}
 	if value, ok := cohc.mutation.Status(); ok {
 		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeString, value)
 		_node.Status = value
+	}
+	if value, ok := cohc.mutation.Source(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeEnum, value)
+		_node.Source = value
 	}
 	if value, ok := cohc.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjectivehistory.FieldControlObjectiveType, field.TypeString, value)
@@ -511,33 +477,13 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 		_spec.SetField(controlobjectivehistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := cohc.mutation.ControlNumber(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlNumber, field.TypeString, value)
-		_node.ControlNumber = value
+	if value, ok := cohc.mutation.Category(); ok {
+		_spec.SetField(controlobjectivehistory.FieldCategory, field.TypeString, value)
+		_node.Category = value
 	}
-	if value, ok := cohc.mutation.Family(); ok {
-		_spec.SetField(controlobjectivehistory.FieldFamily, field.TypeString, value)
-		_node.Family = value
-	}
-	if value, ok := cohc.mutation.Class(); ok {
-		_spec.SetField(controlobjectivehistory.FieldClass, field.TypeString, value)
-		_node.Class = value
-	}
-	if value, ok := cohc.mutation.Source(); ok {
-		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeString, value)
-		_node.Source = value
-	}
-	if value, ok := cohc.mutation.MappedFrameworks(); ok {
-		_spec.SetField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString, value)
-		_node.MappedFrameworks = value
-	}
-	if value, ok := cohc.mutation.Details(); ok {
-		_spec.SetField(controlobjectivehistory.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
-	}
-	if value, ok := cohc.mutation.ExampleEvidence(); ok {
-		_spec.SetField(controlobjectivehistory.FieldExampleEvidence, field.TypeString, value)
-		_node.ExampleEvidence = value
+	if value, ok := cohc.mutation.Subcategory(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSubcategory, field.TypeString, value)
+		_node.Subcategory = value
 	}
 	return _node, _spec
 }

@@ -36,6 +36,15 @@ extend type Query{
         query: String!
     ): ControlSearchResult
     """
+    Search across ControlImplementation objects
+    """
+    adminControlImplementationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlImplementationSearchResult
+    """
     Search across ControlObjective objects
     """
     adminControlObjectiveSearch(
@@ -125,6 +134,15 @@ extend type Query{
         """
         query: String!
     ): InternalPolicySearchResult
+    """
+    Search across MappedControl objects
+    """
+    adminMappedControlSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): MappedControlSearchResult
     """
     Search across Narrative objects
     """

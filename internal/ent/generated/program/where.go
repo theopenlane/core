@@ -1118,11 +1118,11 @@ func HasSubcontrols() predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1133,7 +1133,7 @@ func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Program {
 		step := newSubcontrolsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1424,35 +1424,6 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Program {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasStandards applies the HasEdge predicate on the "standards" edge.
-func HasStandards() predicate.Program {
-	return predicate.Program(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, StandardsTable, StandardsPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardPrograms
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasStandardsWith applies the HasEdge predicate on the "standards" edge with a given conditions (other predicates).
-func HasStandardsWith(preds ...predicate.Standard) predicate.Program {
-	return predicate.Program(func(s *sql.Selector) {
-		step := newStandardsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardPrograms
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

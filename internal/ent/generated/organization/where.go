@@ -2197,6 +2197,35 @@ func HasEvidenceWith(preds ...predicate.Evidence) predicate.Organization {
 	})
 }
 
+// HasStandards applies the HasEdge predicate on the "standards" edge.
+func HasStandards() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, StandardsTable, StandardsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStandardsWith applies the HasEdge predicate on the "standards" edge with a given conditions (other predicates).
+func HasStandardsWith(preds ...predicate.Standard) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newStandardsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

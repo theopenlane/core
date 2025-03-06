@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -196,14 +195,14 @@ func (tu *TemplateUpdate) ClearDescription() *TemplateUpdate {
 }
 
 // SetJsonconfig sets the "jsonconfig" field.
-func (tu *TemplateUpdate) SetJsonconfig(co customtypes.JSONObject) *TemplateUpdate {
-	tu.mutation.SetJsonconfig(co)
+func (tu *TemplateUpdate) SetJsonconfig(m map[string]interface{}) *TemplateUpdate {
+	tu.mutation.SetJsonconfig(m)
 	return tu
 }
 
 // SetUischema sets the "uischema" field.
-func (tu *TemplateUpdate) SetUischema(co customtypes.JSONObject) *TemplateUpdate {
-	tu.mutation.SetUischema(co)
+func (tu *TemplateUpdate) SetUischema(m map[string]interface{}) *TemplateUpdate {
+	tu.mutation.SetUischema(m)
 	return tu
 }
 
@@ -753,14 +752,14 @@ func (tuo *TemplateUpdateOne) ClearDescription() *TemplateUpdateOne {
 }
 
 // SetJsonconfig sets the "jsonconfig" field.
-func (tuo *TemplateUpdateOne) SetJsonconfig(co customtypes.JSONObject) *TemplateUpdateOne {
-	tuo.mutation.SetJsonconfig(co)
+func (tuo *TemplateUpdateOne) SetJsonconfig(m map[string]interface{}) *TemplateUpdateOne {
+	tuo.mutation.SetJsonconfig(m)
 	return tuo
 }
 
 // SetUischema sets the "uischema" field.
-func (tuo *TemplateUpdateOne) SetUischema(co customtypes.JSONObject) *TemplateUpdateOne {
-	tuo.mutation.SetUischema(co)
+func (tuo *TemplateUpdateOne) SetUischema(m map[string]interface{}) *TemplateUpdateOne {
+	tuo.mutation.SetUischema(m)
 	return tuo
 }
 

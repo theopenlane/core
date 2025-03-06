@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -24,23 +25,15 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "subcontrol id to update")
 
 	// command line flags for the update command
-	updateCmd.Flags().StringP("name", "n", "", "name of the subcontrol")
+	updateCmd.Flags().StringP("ref-code", "r", "", "the unique reference code of the subcontrol")
 	updateCmd.Flags().StringP("description", "d", "", "description of the subcontrol")
-	updateCmd.Flags().StringP("status", "s", "", "status of the subcontrol")
-	updateCmd.Flags().StringP("type", "t", "", "type of the subcontrol")
-	updateCmd.Flags().StringP("version", "v", "", "version of the subcontrol")
-	updateCmd.Flags().StringP("number", "u", "", "number of the subcontrol")
-	updateCmd.Flags().StringP("family", "f", "", "family of the subcontrol")
-	updateCmd.Flags().StringP("class", "l", "", "class of the subcontrol")
-	updateCmd.Flags().StringP("source", "o", "", "source of the subcontrol")
-	updateCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks with the subcontrol")
-
-	updateCmd.Flags().StringP("evidence", "e", "", "evidence of the subcontrol")
-	updateCmd.Flags().String("implementation-status", "", "implementation status of the subcontrol")
-	updateCmd.Flags().StringP("implementation-verification", "r", "", "implementation verification of the subcontrol")
-
-	updateCmd.Flags().StringSlice("add-controls", []string{}, "add control(s) to the subcontrol")
-	updateCmd.Flags().StringSlice("remove-controls", []string{}, "remove control(s) from the subcontrol")
+	updateCmd.Flags().StringP("source", "s", "", "source of the subcontrol, e.g. framework, template, custom, etc.")
+	updateCmd.Flags().StringP("category", "a", "", "category of the subcontrol")
+	updateCmd.Flags().StringP("category-id", "c", "", "category id of the subcontrol")
+	updateCmd.Flags().StringP("subcategory", "b", "", "subcategory of the subcontrol")
+	updateCmd.Flags().StringP("status", "t", "", "status of the subcontrol")
+	updateCmd.Flags().StringP("control-type", "y", "", "type of the subcontrol e.g. preventive, detective, corrective, or deterrent")
+	updateCmd.Flags().StringSliceP("mapped-categories", "m", []string{}, "mapped categories of the subcontrol to other standards")
 }
 
 // updateValidation validates the required fields for the command
@@ -52,9 +45,9 @@ func updateValidation() (id string, input openlaneclient.UpdateSubcontrolInput, 
 
 	// validation of required fields for the update command
 	// output the input struct with the required fields and optional fields based on the command line flags
-	name := cmd.Config.String("name")
-	if name != "" {
-		input.Name = &name
+	refCode := cmd.Config.String("ref-code")
+	if refCode != "" {
+		input.RefCode = &refCode
 	}
 
 	description := cmd.Config.String("description")
@@ -62,69 +55,39 @@ func updateValidation() (id string, input openlaneclient.UpdateSubcontrolInput, 
 		input.Description = &description
 	}
 
+	source := cmd.Config.String("source")
+	if source != "" {
+		input.Source = enums.ToControlSource(source)
+	}
+
+	category := cmd.Config.String("category")
+	if category != "" {
+		input.Category = &category
+	}
+
+	categoryID := cmd.Config.String("category-id")
+	if categoryID != "" {
+		input.CategoryID = &categoryID
+	}
+
+	subcategory := cmd.Config.String("subcategory")
+	if subcategory != "" {
+		input.Subcategory = &subcategory
+	}
+
 	status := cmd.Config.String("status")
 	if status != "" {
 		input.Status = &status
 	}
 
-	subcontrolType := cmd.Config.String("type")
-	if subcontrolType != "" {
-		input.SubcontrolType = &subcontrolType
+	controlType := cmd.Config.String("control-type")
+	if controlType != "" {
+		input.ControlType = enums.ToControlType(controlType)
 	}
 
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
-	}
-
-	number := cmd.Config.String("number")
-	if number != "" {
-		input.SubcontrolNumber = &number
-	}
-
-	family := cmd.Config.String("family")
-	if family != "" {
-		input.Family = &family
-	}
-
-	class := cmd.Config.String("class")
-	if class != "" {
-		input.Class = &class
-	}
-
-	source := cmd.Config.String("source")
-	if source != "" {
-		input.Source = &source
-	}
-
-	frameworks := cmd.Config.String("mapped-frameworks")
-	if frameworks != "" {
-		input.MappedFrameworks = &frameworks
-	}
-
-	evidence := cmd.Config.String("evidence")
-	if evidence != "" {
-		input.ImplementationEvidence = &evidence
-	}
-
-	implementationStatus := cmd.Config.String("implementation-status")
-	if implementationStatus != "" {
-		input.ImplementationStatus = &implementationStatus
-	}
-
-	implementationVerification := cmd.Config.String("implementation-verification")
-	if implementationVerification != "" {
-		input.ImplementationVerification = &implementationVerification
-	}
-
-	addControls := cmd.Config.Strings("add-controls")
-	if len(addControls) > 0 {
-		input.AddControlIDs = addControls
-	}
-
-	removeControls := cmd.Config.Strings("remove-controls")
-	if len(removeControls) > 0 {
-		input.RemoveControlIDs = removeControls
+	mappedCategories := cmd.Config.Strings("mapped-categories")
+	if len(mappedCategories) > 0 {
+		input.MappedCategories = mappedCategories
 	}
 
 	return id, input, nil

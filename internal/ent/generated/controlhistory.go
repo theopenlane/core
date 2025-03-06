@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -43,33 +45,39 @@ type ControlHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the name of the control
-	Name string `json:"name,omitempty"`
-	// description of the control
+	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
 	// status of the control
 	Status string `json:"status,omitempty"`
-	// type of the control
-	ControlType string `json:"control_type,omitempty"`
-	// version of the control
-	Version string `json:"version,omitempty"`
-	// control number or identifier
-	ControlNumber string `json:"control_number,omitempty"`
-	// family associated with the control
-	Family string `json:"family,omitempty"`
-	// class associated with the control
-	Class string `json:"class,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
-	Source string `json:"source,omitempty"`
-	// which control objectives are satisfied by the control
-	Satisfies string `json:"satisfies,omitempty"`
-	// mapped frameworks
-	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// json data including details of the control
-	Details map[string]interface{} `json:"details,omitempty"`
-	// example evidence to provide for the control
-	ExampleEvidence string `json:"example_evidence,omitempty"`
-	selectValues    sql.SelectValues
+	Source enums.ControlSource `json:"source,omitempty"`
+	// type of the control e.g. preventive, detective, corrective, or deterrent.
+	ControlType enums.ControlType `json:"control_type,omitempty"`
+	// category of the control
+	Category string `json:"category,omitempty"`
+	// category id of the control
+	CategoryID string `json:"category_id,omitempty"`
+	// subcategory of the control
+	Subcategory string `json:"subcategory,omitempty"`
+	// mapped categories of the control to other standards
+	MappedCategories []string `json:"mapped_categories,omitempty"`
+	// objectives of the audit assessment for the control
+	AssessmentObjectives []models.AssessmentObjective `json:"assessment_objectives,omitempty"`
+	// methods used to verify the control implementation during an audit
+	AssessmentMethods []models.AssessmentMethod `json:"assessment_methods,omitempty"`
+	// questions to ask to verify the control
+	ControlQuestions []string `json:"control_questions,omitempty"`
+	// implementation guidance for the control
+	ImplementationGuidance []models.ImplementationGuidance `json:"implementation_guidance,omitempty"`
+	// examples of evidence for the control
+	ExampleEvidence []models.ExampleEvidence `json:"example_evidence,omitempty"`
+	// references for the control
+	References []models.Reference `json:"references,omitempty"`
+	// the unique reference code for the control
+	RefCode string `json:"ref_code,omitempty"`
+	// the id of the standard that the control belongs to, if applicable
+	StandardID   string `json:"standard_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -77,11 +85,11 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlhistory.FieldTags, controlhistory.FieldDetails:
+		case controlhistory.FieldTags, controlhistory.FieldMappedCategories, controlhistory.FieldAssessmentObjectives, controlhistory.FieldAssessmentMethods, controlhistory.FieldControlQuestions, controlhistory.FieldImplementationGuidance, controlhistory.FieldExampleEvidence, controlhistory.FieldReferences:
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldOwnerID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks, controlhistory.FieldExampleEvidence:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldOwnerID, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldControlType, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -180,12 +188,6 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.OwnerID = value.String
 			}
-		case controlhistory.FieldName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
-			} else if value.Valid {
-				ch.Name = value.String
-			}
 		case controlhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
@@ -198,67 +200,103 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.Status = value.String
 			}
-		case controlhistory.FieldControlType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_type", values[i])
-			} else if value.Valid {
-				ch.ControlType = value.String
-			}
-		case controlhistory.FieldVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
-			} else if value.Valid {
-				ch.Version = value.String
-			}
-		case controlhistory.FieldControlNumber:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_number", values[i])
-			} else if value.Valid {
-				ch.ControlNumber = value.String
-			}
-		case controlhistory.FieldFamily:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field family", values[i])
-			} else if value.Valid {
-				ch.Family = value.String
-			}
-		case controlhistory.FieldClass:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field class", values[i])
-			} else if value.Valid {
-				ch.Class = value.String
-			}
 		case controlhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				ch.Source = value.String
+				ch.Source = enums.ControlSource(value.String)
 			}
-		case controlhistory.FieldSatisfies:
+		case controlhistory.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
+				return fmt.Errorf("unexpected type %T for field control_type", values[i])
 			} else if value.Valid {
-				ch.Satisfies = value.String
+				ch.ControlType = enums.ControlType(value.String)
 			}
-		case controlhistory.FieldMappedFrameworks:
+		case controlhistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_frameworks", values[i])
+				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				ch.MappedFrameworks = value.String
+				ch.Category = value.String
 			}
-		case controlhistory.FieldDetails:
+		case controlhistory.FieldCategoryID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
+			} else if value.Valid {
+				ch.CategoryID = value.String
+			}
+		case controlhistory.FieldSubcategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
+			} else if value.Valid {
+				ch.Subcategory = value.String
+			}
+		case controlhistory.FieldMappedCategories:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
+				return fmt.Errorf("unexpected type %T for field mapped_categories", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
+				if err := json.Unmarshal(*value, &ch.MappedCategories); err != nil {
+					return fmt.Errorf("unmarshal field mapped_categories: %w", err)
+				}
+			}
+		case controlhistory.FieldAssessmentObjectives:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_objectives", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.AssessmentObjectives); err != nil {
+					return fmt.Errorf("unmarshal field assessment_objectives: %w", err)
+				}
+			}
+		case controlhistory.FieldAssessmentMethods:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_methods", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.AssessmentMethods); err != nil {
+					return fmt.Errorf("unmarshal field assessment_methods: %w", err)
+				}
+			}
+		case controlhistory.FieldControlQuestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field control_questions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.ControlQuestions); err != nil {
+					return fmt.Errorf("unmarshal field control_questions: %w", err)
+				}
+			}
+		case controlhistory.FieldImplementationGuidance:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_guidance", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.ImplementationGuidance); err != nil {
+					return fmt.Errorf("unmarshal field implementation_guidance: %w", err)
 				}
 			}
 		case controlhistory.FieldExampleEvidence:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.ExampleEvidence); err != nil {
+					return fmt.Errorf("unmarshal field example_evidence: %w", err)
+				}
+			}
+		case controlhistory.FieldReferences:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field references", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.References); err != nil {
+					return fmt.Errorf("unmarshal field references: %w", err)
+				}
+			}
+		case controlhistory.FieldRefCode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
 			} else if value.Valid {
-				ch.ExampleEvidence = value.String
+				ch.RefCode = value.String
+			}
+		case controlhistory.FieldStandardID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
+			} else if value.Valid {
+				ch.StandardID = value.String
 			}
 		default:
 			ch.selectValues.Set(columns[i], values[i])
@@ -332,44 +370,53 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(ch.OwnerID)
 	builder.WriteString(", ")
-	builder.WriteString("name=")
-	builder.WriteString(ch.Name)
-	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(ch.Description)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(ch.Status)
 	builder.WriteString(", ")
-	builder.WriteString("control_type=")
-	builder.WriteString(ch.ControlType)
-	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(ch.Version)
-	builder.WriteString(", ")
-	builder.WriteString("control_number=")
-	builder.WriteString(ch.ControlNumber)
-	builder.WriteString(", ")
-	builder.WriteString("family=")
-	builder.WriteString(ch.Family)
-	builder.WriteString(", ")
-	builder.WriteString("class=")
-	builder.WriteString(ch.Class)
-	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(ch.Source)
+	builder.WriteString(fmt.Sprintf("%v", ch.Source))
 	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(ch.Satisfies)
+	builder.WriteString("control_type=")
+	builder.WriteString(fmt.Sprintf("%v", ch.ControlType))
 	builder.WriteString(", ")
-	builder.WriteString("mapped_frameworks=")
-	builder.WriteString(ch.MappedFrameworks)
+	builder.WriteString("category=")
+	builder.WriteString(ch.Category)
 	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Details))
+	builder.WriteString("category_id=")
+	builder.WriteString(ch.CategoryID)
+	builder.WriteString(", ")
+	builder.WriteString("subcategory=")
+	builder.WriteString(ch.Subcategory)
+	builder.WriteString(", ")
+	builder.WriteString("mapped_categories=")
+	builder.WriteString(fmt.Sprintf("%v", ch.MappedCategories))
+	builder.WriteString(", ")
+	builder.WriteString("assessment_objectives=")
+	builder.WriteString(fmt.Sprintf("%v", ch.AssessmentObjectives))
+	builder.WriteString(", ")
+	builder.WriteString("assessment_methods=")
+	builder.WriteString(fmt.Sprintf("%v", ch.AssessmentMethods))
+	builder.WriteString(", ")
+	builder.WriteString("control_questions=")
+	builder.WriteString(fmt.Sprintf("%v", ch.ControlQuestions))
+	builder.WriteString(", ")
+	builder.WriteString("implementation_guidance=")
+	builder.WriteString(fmt.Sprintf("%v", ch.ImplementationGuidance))
 	builder.WriteString(", ")
 	builder.WriteString("example_evidence=")
-	builder.WriteString(ch.ExampleEvidence)
+	builder.WriteString(fmt.Sprintf("%v", ch.ExampleEvidence))
+	builder.WriteString(", ")
+	builder.WriteString("references=")
+	builder.WriteString(fmt.Sprintf("%v", ch.References))
+	builder.WriteString(", ")
+	builder.WriteString("ref_code=")
+	builder.WriteString(ch.RefCode)
+	builder.WriteString(", ")
+	builder.WriteString("standard_id=")
+	builder.WriteString(ch.StandardID)
 	builder.WriteByte(')')
 	return builder.String()
 }

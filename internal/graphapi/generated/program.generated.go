@@ -133,8 +133,6 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
-			case "standards":
-				return ec.fieldContext_Program_standards(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":
@@ -253,8 +251,6 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
-			case "standards":
-				return ec.fieldContext_Program_standards(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":
@@ -417,8 +413,6 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
-			case "standards":
-				return ec.fieldContext_Program_standards(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":

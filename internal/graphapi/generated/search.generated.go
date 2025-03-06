@@ -180,8 +180,6 @@ func (ec *executionContext) fieldContext_ActionPlanSearchResult_actionPlans(_ co
 				return ec.fieldContext_ActionPlan_source(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
-			case "standard":
-				return ec.fieldContext_ActionPlan_standard(ctx, field)
 			case "risk":
 				return ec.fieldContext_ActionPlan_risk(ctx, field)
 			case "control":
@@ -278,6 +276,77 @@ func (ec *executionContext) fieldContext_ContactSearchResult_contacts(_ context.
 	return fc, nil
 }
 
+func (ec *executionContext) _ControlImplementationSearchResult_controlImplementations(ctx context.Context, field graphql.CollectedField, obj *model.ControlImplementationSearchResult) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlImplementationSearchResult_controlImplementations(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ControlImplementations, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.ControlImplementation)
+	fc.Result = res
+	return ec.marshalOControlImplementation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementationᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlImplementationSearchResult_controlImplementations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlImplementationSearchResult",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ControlImplementation_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ControlImplementation_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ControlImplementation_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ControlImplementation_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ControlImplementation_updatedBy(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_ControlImplementation_deletedAt(ctx, field)
+			case "deletedBy":
+				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_ControlImplementation_tags(ctx, field)
+			case "status":
+				return ec.fieldContext_ControlImplementation_status(ctx, field)
+			case "implementationDate":
+				return ec.fieldContext_ControlImplementation_implementationDate(ctx, field)
+			case "verified":
+				return ec.fieldContext_ControlImplementation_verified(ctx, field)
+			case "verificationDate":
+				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
+			case "details":
+				return ec.fieldContext_ControlImplementation_details(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlImplementation_controls(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ControlObjectiveSearchResult_controlObjectives(ctx context.Context, field graphql.CollectedField, obj *model.ControlObjectiveSearchResult) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ControlObjectiveSearchResult_controlObjectives(ctx, field)
 	if err != nil {
@@ -336,28 +405,20 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_ControlObjective_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ControlObjective_description(ctx, field)
+			case "desiredOutcome":
+				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlObjective_status(ctx, field)
+			case "source":
+				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
 			case "version":
 				return ec.fieldContext_ControlObjective_version(ctx, field)
-			case "controlNumber":
-				return ec.fieldContext_ControlObjective_controlNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_ControlObjective_family(ctx, field)
-			case "class":
-				return ec.fieldContext_ControlObjective_class(ctx, field)
-			case "source":
-				return ec.fieldContext_ControlObjective_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
-			case "details":
-				return ec.fieldContext_ControlObjective_details(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_ControlObjective_exampleEvidence(ctx, field)
+			case "category":
+				return ec.fieldContext_ControlObjective_category(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_ControlObjective_subcategory(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -366,26 +427,24 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_ControlObjective_viewers(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
-			case "controls":
-				return ec.fieldContext_ControlObjective_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_ControlObjective_procedures(ctx, field)
-			case "risks":
-				return ec.fieldContext_ControlObjective_risks(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
-			case "standard":
-				return ec.fieldContext_ControlObjective_standard(ctx, field)
-			case "narratives":
-				return ec.fieldContext_ControlObjective_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_ControlObjective_evidence(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlObjective_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ControlObjective_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_ControlObjective_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_ControlObjective_procedures(ctx, field)
+			case "risks":
+				return ec.fieldContext_ControlObjective_risks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_ControlObjective_narratives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -449,32 +508,38 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Control_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Control_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
-			case "controlType":
-				return ec.fieldContext_Control_controlType(ctx, field)
-			case "version":
-				return ec.fieldContext_Control_version(ctx, field)
-			case "controlNumber":
-				return ec.fieldContext_Control_controlNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_Control_family(ctx, field)
-			case "class":
-				return ec.fieldContext_Control_class(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Control_satisfies(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
-			case "details":
-				return ec.fieldContext_Control_details(ctx, field)
+			case "controlType":
+				return ec.fieldContext_Control_controlType(ctx, field)
+			case "category":
+				return ec.fieldContext_Control_category(ctx, field)
+			case "categoryID":
+				return ec.fieldContext_Control_categoryID(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_Control_subcategory(ctx, field)
+			case "mappedCategories":
+				return ec.fieldContext_Control_mappedCategories(ctx, field)
+			case "assessmentObjectives":
+				return ec.fieldContext_Control_assessmentObjectives(ctx, field)
+			case "assessmentMethods":
+				return ec.fieldContext_Control_assessmentMethods(ctx, field)
+			case "controlQuestions":
+				return ec.fieldContext_Control_controlQuestions(ctx, field)
+			case "implementationGuidance":
+				return ec.fieldContext_Control_implementationGuidance(ctx, field)
 			case "exampleEvidence":
 				return ec.fieldContext_Control_exampleEvidence(ctx, field)
+			case "references":
+				return ec.fieldContext_Control_references(ctx, field)
+			case "refCode":
+				return ec.fieldContext_Control_refCode(ctx, field)
+			case "standardID":
+				return ec.fieldContext_Control_standardID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -483,26 +548,36 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Control_viewers(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Control_procedures(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Control_subcontrols(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Control_controlObjectives(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
+			case "programs":
+				return ec.fieldContext_Control_programs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Control_evidence(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Control_controlImplementations(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Control_mappedControls(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Control_controlObjectives(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Control_subcontrols(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Control_tasks(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Control_narratives(ctx, field)
 			case "risks":
 				return ec.fieldContext_Control_risks(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Control_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Control_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Control_programs(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Control_evidence(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Control_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Control_internalPolicies(ctx, field)
+			case "controlOwner":
+				return ec.fieldContext_Control_controlOwner(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Control_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -1329,6 +1404,73 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 	return fc, nil
 }
 
+func (ec *executionContext) _MappedControlSearchResult_mappedControls(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlSearchResult) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MappedControlSearchResult_mappedControls(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MappedControls, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.MappedControl)
+	fc.Result = res
+	return ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MappedControlSearchResult_mappedControls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MappedControlSearchResult",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_MappedControl_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_MappedControl_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_MappedControl_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_MappedControl_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_MappedControl_deletedAt(ctx, field)
+			case "deletedBy":
+				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_MappedControl_tags(ctx, field)
+			case "mappingType":
+				return ec.fieldContext_MappedControl_mappingType(ctx, field)
+			case "relation":
+				return ec.fieldContext_MappedControl_relation(ctx, field)
+			case "controls":
+				return ec.fieldContext_MappedControl_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _NarrativeSearchResult_narratives(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeSearchResult) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_NarrativeSearchResult_narratives(ctx, field)
 	if err != nil {
@@ -1389,8 +1531,6 @@ func (ec *executionContext) fieldContext_NarrativeSearchResult_narratives(_ cont
 				return ec.fieldContext_Narrative_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Narrative_description(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
 			case "owner":
@@ -1401,14 +1541,8 @@ func (ec *executionContext) fieldContext_NarrativeSearchResult_narratives(_ cont
 				return ec.fieldContext_Narrative_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Narrative_viewers(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Narrative_internalPolicy(ctx, field)
-			case "control":
-				return ec.fieldContext_Narrative_control(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Narrative_procedure(ctx, field)
-			case "controlObjective":
-				return ec.fieldContext_Narrative_controlObjective(ctx, field)
+			case "satisfies":
+				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
 			}
@@ -1663,6 +1797,8 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Organization_evidence(ctx, field)
+			case "standards":
+				return ec.fieldContext_Organization_standards(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -2045,8 +2181,6 @@ func (ec *executionContext) fieldContext_ProgramSearchResult_programs(_ context.
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
-			case "standards":
-				return ec.fieldContext_Program_standards(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":
@@ -2351,36 +2485,40 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
+			case "shortName":
+				return ec.fieldContext_Standard_shortName(ctx, field)
+			case "framework":
+				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
-			case "family":
-				return ec.fieldContext_Standard_family(ctx, field)
+			case "governingBody":
+				return ec.fieldContext_Standard_governingBody(ctx, field)
+			case "domains":
+				return ec.fieldContext_Standard_domains(ctx, field)
+			case "link":
+				return ec.fieldContext_Standard_link(ctx, field)
 			case "status":
 				return ec.fieldContext_Standard_status(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Standard_isPublic(ctx, field)
+			case "freeToUse":
+				return ec.fieldContext_Standard_freeToUse(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "standardType":
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Standard_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Standard_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Standard_satisfies(ctx, field)
-			case "details":
-				return ec.fieldContext_Standard_details(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Standard_controlObjectives(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
+			case "owner":
+				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Standard_procedures(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Standard_actionPlans(ctx, field)
-			case "programs":
-				return ec.fieldContext_Standard_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -2444,50 +2582,64 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subcontrol_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
-			case "subcontrolType":
-				return ec.fieldContext_Subcontrol_subcontrolType(ctx, field)
-			case "version":
-				return ec.fieldContext_Subcontrol_version(ctx, field)
-			case "subcontrolNumber":
-				return ec.fieldContext_Subcontrol_subcontrolNumber(ctx, field)
-			case "family":
-				return ec.fieldContext_Subcontrol_family(ctx, field)
-			case "class":
-				return ec.fieldContext_Subcontrol_class(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
-			case "mappedFrameworks":
-				return ec.fieldContext_Subcontrol_mappedFrameworks(ctx, field)
-			case "implementationEvidence":
-				return ec.fieldContext_Subcontrol_implementationEvidence(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
-			case "implementationDate":
-				return ec.fieldContext_Subcontrol_implementationDate(ctx, field)
-			case "implementationVerification":
-				return ec.fieldContext_Subcontrol_implementationVerification(ctx, field)
-			case "implementationVerificationDate":
-				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
-			case "details":
-				return ec.fieldContext_Subcontrol_details(ctx, field)
+			case "controlType":
+				return ec.fieldContext_Subcontrol_controlType(ctx, field)
+			case "category":
+				return ec.fieldContext_Subcontrol_category(ctx, field)
+			case "categoryID":
+				return ec.fieldContext_Subcontrol_categoryID(ctx, field)
+			case "subcategory":
+				return ec.fieldContext_Subcontrol_subcategory(ctx, field)
+			case "mappedCategories":
+				return ec.fieldContext_Subcontrol_mappedCategories(ctx, field)
+			case "assessmentObjectives":
+				return ec.fieldContext_Subcontrol_assessmentObjectives(ctx, field)
+			case "assessmentMethods":
+				return ec.fieldContext_Subcontrol_assessmentMethods(ctx, field)
+			case "controlQuestions":
+				return ec.fieldContext_Subcontrol_controlQuestions(ctx, field)
+			case "implementationGuidance":
+				return ec.fieldContext_Subcontrol_implementationGuidance(ctx, field)
 			case "exampleEvidence":
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
+			case "references":
+				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "refCode":
+				return ec.fieldContext_Subcontrol_refCode(ctx, field)
+			case "controlID":
+				return ec.fieldContext_Subcontrol_controlID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "controls":
-				return ec.fieldContext_Subcontrol_controls(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Subcontrol_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Subcontrol_controlObjectives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Subcontrol_tasks(ctx, field)
+			case "narratives":
+				return ec.fieldContext_Subcontrol_narratives(ctx, field)
+			case "risks":
+				return ec.fieldContext_Subcontrol_risks(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Subcontrol_actionPlans(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Subcontrol_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "controlOwner":
+				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -2988,6 +3140,13 @@ func (ec *executionContext) _SearchResult(ctx context.Context, sel ast.Selection
 			return graphql.Null
 		}
 		return ec._ControlSearchResult(ctx, sel, obj)
+	case model.ControlImplementationSearchResult:
+		return ec._ControlImplementationSearchResult(ctx, sel, &obj)
+	case *model.ControlImplementationSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ControlImplementationSearchResult(ctx, sel, obj)
 	case model.ControlObjectiveSearchResult:
 		return ec._ControlObjectiveSearchResult(ctx, sel, &obj)
 	case *model.ControlObjectiveSearchResult:
@@ -3058,6 +3217,13 @@ func (ec *executionContext) _SearchResult(ctx context.Context, sel ast.Selection
 			return graphql.Null
 		}
 		return ec._InternalPolicySearchResult(ctx, sel, obj)
+	case model.MappedControlSearchResult:
+		return ec._MappedControlSearchResult(ctx, sel, &obj)
+	case *model.MappedControlSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._MappedControlSearchResult(ctx, sel, obj)
 	case model.NarrativeSearchResult:
 		return ec._NarrativeSearchResult(ctx, sel, &obj)
 	case *model.NarrativeSearchResult:
@@ -3257,6 +3423,42 @@ func (ec *executionContext) _ContactSearchResult(ctx context.Context, sel ast.Se
 			out.Values[i] = graphql.MarshalString("ContactSearchResult")
 		case "contacts":
 			out.Values[i] = ec._ContactSearchResult_contacts(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var controlImplementationSearchResultImplementors = []string{"ControlImplementationSearchResult", "SearchResult"}
+
+func (ec *executionContext) _ControlImplementationSearchResult(ctx context.Context, sel ast.SelectionSet, obj *model.ControlImplementationSearchResult) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlImplementationSearchResultImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlImplementationSearchResult")
+		case "controlImplementations":
+			out.Values[i] = ec._ControlImplementationSearchResult_controlImplementations(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3653,6 +3855,42 @@ func (ec *executionContext) _InternalPolicySearchResult(ctx context.Context, sel
 			out.Values[i] = graphql.MarshalString("InternalPolicySearchResult")
 		case "internalPolicies":
 			out.Values[i] = ec._InternalPolicySearchResult_internalPolicies(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var mappedControlSearchResultImplementors = []string{"MappedControlSearchResult", "SearchResult"}
+
+func (ec *executionContext) _MappedControlSearchResult(ctx context.Context, sel ast.SelectionSet, obj *model.MappedControlSearchResult) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, mappedControlSearchResultImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MappedControlSearchResult")
+		case "mappedControls":
+			out.Values[i] = ec._MappedControlSearchResult_mappedControls(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4344,6 +4582,13 @@ func (ec *executionContext) marshalOContactSearchResult2ᚖgithubᚗcomᚋtheope
 	return ec._ContactSearchResult(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOControlImplementationSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.ControlImplementationSearchResult) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ControlImplementationSearchResult(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOControlObjectiveSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.ControlObjectiveSearchResult) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -4419,6 +4664,13 @@ func (ec *executionContext) marshalOInternalPolicySearchResult2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._InternalPolicySearchResult(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOMappedControlSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlSearchResult) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._MappedControlSearchResult(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalONarrativeSearchResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeSearchResult(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeSearchResult) graphql.Marshaler {

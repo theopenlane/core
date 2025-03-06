@@ -1060,30 +1060,30 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: internalpolicy.NarrativesPrimaryKey,
+			Columns: []string{internalpolicy.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = ipu.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ipu.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ipu.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: internalpolicy.NarrativesPrimaryKey,
+			Columns: []string{internalpolicy.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = ipu.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1091,16 +1091,16 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if nodes := ipu.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: internalpolicy.NarrativesPrimaryKey,
+			Columns: []string{internalpolicy.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = ipu.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2276,30 +2276,30 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: internalpolicy.NarrativesPrimaryKey,
+			Columns: []string{internalpolicy.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = ipuo.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ipuo.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ipuo.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: internalpolicy.NarrativesPrimaryKey,
+			Columns: []string{internalpolicy.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = ipuo.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2307,16 +2307,16 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if nodes := ipuo.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: internalpolicy.NarrativesPrimaryKey,
+			Columns: []string{internalpolicy.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = ipuo.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

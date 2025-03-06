@@ -117,9 +117,9 @@ func Description(v string) predicate.Narrative {
 	return predicate.Narrative(sql.FieldEQ(FieldDescription, v))
 }
 
-// Satisfies applies equality check predicate on the "satisfies" field. It's identical to SatisfiesEQ.
-func Satisfies(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldEQ(FieldSatisfies, v))
+// Details applies equality check predicate on the "details" field. It's identical to DetailsEQ.
+func Details(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldEQ(FieldDetails, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -787,79 +787,59 @@ func DescriptionContainsFold(v string) predicate.Narrative {
 	return predicate.Narrative(sql.FieldContainsFold(FieldDescription, v))
 }
 
-// SatisfiesEQ applies the EQ predicate on the "satisfies" field.
-func SatisfiesEQ(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldEQ(FieldSatisfies, v))
+// DetailsEQ applies the EQ predicate on the "details" field.
+func DetailsEQ(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldEQ(FieldDetails, v))
 }
 
-// SatisfiesNEQ applies the NEQ predicate on the "satisfies" field.
-func SatisfiesNEQ(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldNEQ(FieldSatisfies, v))
+// DetailsNEQ applies the NEQ predicate on the "details" field.
+func DetailsNEQ(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldNEQ(FieldDetails, v))
 }
 
-// SatisfiesIn applies the In predicate on the "satisfies" field.
-func SatisfiesIn(vs ...string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldIn(FieldSatisfies, vs...))
+// DetailsIn applies the In predicate on the "details" field.
+func DetailsIn(vs ...string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldIn(FieldDetails, vs...))
 }
 
-// SatisfiesNotIn applies the NotIn predicate on the "satisfies" field.
-func SatisfiesNotIn(vs ...string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldNotIn(FieldSatisfies, vs...))
+// DetailsNotIn applies the NotIn predicate on the "details" field.
+func DetailsNotIn(vs ...string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldNotIn(FieldDetails, vs...))
 }
 
-// SatisfiesGT applies the GT predicate on the "satisfies" field.
-func SatisfiesGT(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldGT(FieldSatisfies, v))
+// DetailsGT applies the GT predicate on the "details" field.
+func DetailsGT(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldGT(FieldDetails, v))
 }
 
-// SatisfiesGTE applies the GTE predicate on the "satisfies" field.
-func SatisfiesGTE(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldGTE(FieldSatisfies, v))
+// DetailsGTE applies the GTE predicate on the "details" field.
+func DetailsGTE(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldGTE(FieldDetails, v))
 }
 
-// SatisfiesLT applies the LT predicate on the "satisfies" field.
-func SatisfiesLT(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldLT(FieldSatisfies, v))
+// DetailsLT applies the LT predicate on the "details" field.
+func DetailsLT(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldLT(FieldDetails, v))
 }
 
-// SatisfiesLTE applies the LTE predicate on the "satisfies" field.
-func SatisfiesLTE(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldLTE(FieldSatisfies, v))
+// DetailsLTE applies the LTE predicate on the "details" field.
+func DetailsLTE(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldLTE(FieldDetails, v))
 }
 
-// SatisfiesContains applies the Contains predicate on the "satisfies" field.
-func SatisfiesContains(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldContains(FieldSatisfies, v))
+// DetailsContains applies the Contains predicate on the "details" field.
+func DetailsContains(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldContains(FieldDetails, v))
 }
 
-// SatisfiesHasPrefix applies the HasPrefix predicate on the "satisfies" field.
-func SatisfiesHasPrefix(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldHasPrefix(FieldSatisfies, v))
+// DetailsHasPrefix applies the HasPrefix predicate on the "details" field.
+func DetailsHasPrefix(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldHasPrefix(FieldDetails, v))
 }
 
-// SatisfiesHasSuffix applies the HasSuffix predicate on the "satisfies" field.
-func SatisfiesHasSuffix(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldHasSuffix(FieldSatisfies, v))
-}
-
-// SatisfiesIsNil applies the IsNil predicate on the "satisfies" field.
-func SatisfiesIsNil() predicate.Narrative {
-	return predicate.Narrative(sql.FieldIsNull(FieldSatisfies))
-}
-
-// SatisfiesNotNil applies the NotNil predicate on the "satisfies" field.
-func SatisfiesNotNil() predicate.Narrative {
-	return predicate.Narrative(sql.FieldNotNull(FieldSatisfies))
-}
-
-// SatisfiesEqualFold applies the EqualFold predicate on the "satisfies" field.
-func SatisfiesEqualFold(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldEqualFold(FieldSatisfies, v))
-}
-
-// SatisfiesContainsFold applies the ContainsFold predicate on the "satisfies" field.
-func SatisfiesContainsFold(v string) predicate.Narrative {
-	return predicate.Narrative(sql.FieldContainsFold(FieldSatisfies, v))
+// DetailsHasSuffix applies the HasSuffix predicate on the "details" field.
+func DetailsHasSuffix(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldHasSuffix(FieldDetails, v))
 }
 
 // DetailsIsNil applies the IsNil predicate on the "details" field.
@@ -870,6 +850,16 @@ func DetailsIsNil() predicate.Narrative {
 // DetailsNotNil applies the NotNil predicate on the "details" field.
 func DetailsNotNil() predicate.Narrative {
 	return predicate.Narrative(sql.FieldNotNull(FieldDetails))
+}
+
+// DetailsEqualFold applies the EqualFold predicate on the "details" field.
+func DetailsEqualFold(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldEqualFold(FieldDetails, v))
+}
+
+// DetailsContainsFold applies the ContainsFold predicate on the "details" field.
+func DetailsContainsFold(v string) predicate.Narrative {
+	return predicate.Narrative(sql.FieldContainsFold(FieldDetails, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -988,41 +978,12 @@ func HasViewersWith(preds ...predicate.Group) predicate.Narrative {
 	})
 }
 
-// HasInternalPolicy applies the HasEdge predicate on the "internal_policy" edge.
-func HasInternalPolicy() predicate.Narrative {
+// HasSatisfies applies the HasEdge predicate on the "satisfies" edge.
+func HasSatisfies() predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasInternalPolicyWith applies the HasEdge predicate on the "internal_policy" edge with a given conditions (other predicates).
-func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.Narrative {
-	return predicate.Narrative(func(s *sql.Selector) {
-		step := newInternalPolicyStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasControl applies the HasEdge predicate on the "control" edge.
-func HasControl() predicate.Narrative {
-	return predicate.Narrative(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, SatisfiesTable, SatisfiesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
@@ -1031,71 +992,13 @@ func HasControl() predicate.Narrative {
 	})
 }
 
-// HasControlWith applies the HasEdge predicate on the "control" edge with a given conditions (other predicates).
-func HasControlWith(preds ...predicate.Control) predicate.Narrative {
+// HasSatisfiesWith applies the HasEdge predicate on the "satisfies" edge with a given conditions (other predicates).
+func HasSatisfiesWith(preds ...predicate.Control) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
-		step := newControlStep()
+		step := newSatisfiesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlNarratives
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasProcedure applies the HasEdge predicate on the "procedure" edge.
-func HasProcedure() predicate.Narrative {
-	return predicate.Narrative(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProcedureTable, ProcedurePrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasProcedureWith applies the HasEdge predicate on the "procedure" edge with a given conditions (other predicates).
-func HasProcedureWith(preds ...predicate.Procedure) predicate.Narrative {
-	return predicate.Narrative(func(s *sql.Selector) {
-		step := newProcedureStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasControlObjective applies the HasEdge predicate on the "control_objective" edge.
-func HasControlObjective() predicate.Narrative {
-	return predicate.Narrative(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveTable, ControlObjectivePrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasControlObjectiveWith applies the HasEdge predicate on the "control_objective" edge with a given conditions (other predicates).
-func HasControlObjectiveWith(preds ...predicate.ControlObjective) predicate.Narrative {
-	return predicate.Narrative(func(s *sql.Selector) {
-		step := newControlObjectiveStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

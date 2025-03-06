@@ -10,12 +10,21 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // SubcontrolCreate is the builder for creating a Subcontrol entity.
@@ -135,12 +144,6 @@ func (sc *SubcontrolCreate) SetNillableOwnerID(s *string) *SubcontrolCreate {
 	return sc
 }
 
-// SetName sets the "name" field.
-func (sc *SubcontrolCreate) SetName(s string) *SubcontrolCreate {
-	sc.mutation.SetName(s)
-	return sc
-}
-
 // SetDescription sets the "description" field.
 func (sc *SubcontrolCreate) SetDescription(s string) *SubcontrolCreate {
 	sc.mutation.SetDescription(s)
@@ -169,191 +172,127 @@ func (sc *SubcontrolCreate) SetNillableStatus(s *string) *SubcontrolCreate {
 	return sc
 }
 
-// SetSubcontrolType sets the "subcontrol_type" field.
-func (sc *SubcontrolCreate) SetSubcontrolType(s string) *SubcontrolCreate {
-	sc.mutation.SetSubcontrolType(s)
-	return sc
-}
-
-// SetNillableSubcontrolType sets the "subcontrol_type" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableSubcontrolType(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetSubcontrolType(*s)
-	}
-	return sc
-}
-
-// SetVersion sets the "version" field.
-func (sc *SubcontrolCreate) SetVersion(s string) *SubcontrolCreate {
-	sc.mutation.SetVersion(s)
-	return sc
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableVersion(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetVersion(*s)
-	}
-	return sc
-}
-
-// SetSubcontrolNumber sets the "subcontrol_number" field.
-func (sc *SubcontrolCreate) SetSubcontrolNumber(s string) *SubcontrolCreate {
-	sc.mutation.SetSubcontrolNumber(s)
-	return sc
-}
-
-// SetNillableSubcontrolNumber sets the "subcontrol_number" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableSubcontrolNumber(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetSubcontrolNumber(*s)
-	}
-	return sc
-}
-
-// SetFamily sets the "family" field.
-func (sc *SubcontrolCreate) SetFamily(s string) *SubcontrolCreate {
-	sc.mutation.SetFamily(s)
-	return sc
-}
-
-// SetNillableFamily sets the "family" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableFamily(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetFamily(*s)
-	}
-	return sc
-}
-
-// SetClass sets the "class" field.
-func (sc *SubcontrolCreate) SetClass(s string) *SubcontrolCreate {
-	sc.mutation.SetClass(s)
-	return sc
-}
-
-// SetNillableClass sets the "class" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableClass(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetClass(*s)
-	}
-	return sc
-}
-
 // SetSource sets the "source" field.
-func (sc *SubcontrolCreate) SetSource(s string) *SubcontrolCreate {
-	sc.mutation.SetSource(s)
+func (sc *SubcontrolCreate) SetSource(es enums.ControlSource) *SubcontrolCreate {
+	sc.mutation.SetSource(es)
 	return sc
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableSource(s *string) *SubcontrolCreate {
+func (sc *SubcontrolCreate) SetNillableSource(es *enums.ControlSource) *SubcontrolCreate {
+	if es != nil {
+		sc.SetSource(*es)
+	}
+	return sc
+}
+
+// SetControlType sets the "control_type" field.
+func (sc *SubcontrolCreate) SetControlType(et enums.ControlType) *SubcontrolCreate {
+	sc.mutation.SetControlType(et)
+	return sc
+}
+
+// SetNillableControlType sets the "control_type" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableControlType(et *enums.ControlType) *SubcontrolCreate {
+	if et != nil {
+		sc.SetControlType(*et)
+	}
+	return sc
+}
+
+// SetCategory sets the "category" field.
+func (sc *SubcontrolCreate) SetCategory(s string) *SubcontrolCreate {
+	sc.mutation.SetCategory(s)
+	return sc
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableCategory(s *string) *SubcontrolCreate {
 	if s != nil {
-		sc.SetSource(*s)
+		sc.SetCategory(*s)
 	}
 	return sc
 }
 
-// SetMappedFrameworks sets the "mapped_frameworks" field.
-func (sc *SubcontrolCreate) SetMappedFrameworks(s string) *SubcontrolCreate {
-	sc.mutation.SetMappedFrameworks(s)
+// SetCategoryID sets the "category_id" field.
+func (sc *SubcontrolCreate) SetCategoryID(s string) *SubcontrolCreate {
+	sc.mutation.SetCategoryID(s)
 	return sc
 }
 
-// SetNillableMappedFrameworks sets the "mapped_frameworks" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableMappedFrameworks(s *string) *SubcontrolCreate {
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableCategoryID(s *string) *SubcontrolCreate {
 	if s != nil {
-		sc.SetMappedFrameworks(*s)
+		sc.SetCategoryID(*s)
 	}
 	return sc
 }
 
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (sc *SubcontrolCreate) SetImplementationEvidence(s string) *SubcontrolCreate {
-	sc.mutation.SetImplementationEvidence(s)
+// SetSubcategory sets the "subcategory" field.
+func (sc *SubcontrolCreate) SetSubcategory(s string) *SubcontrolCreate {
+	sc.mutation.SetSubcategory(s)
 	return sc
 }
 
-// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableImplementationEvidence(s *string) *SubcontrolCreate {
+// SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableSubcategory(s *string) *SubcontrolCreate {
 	if s != nil {
-		sc.SetImplementationEvidence(*s)
+		sc.SetSubcategory(*s)
 	}
 	return sc
 }
 
-// SetImplementationStatus sets the "implementation_status" field.
-func (sc *SubcontrolCreate) SetImplementationStatus(s string) *SubcontrolCreate {
-	sc.mutation.SetImplementationStatus(s)
+// SetMappedCategories sets the "mapped_categories" field.
+func (sc *SubcontrolCreate) SetMappedCategories(s []string) *SubcontrolCreate {
+	sc.mutation.SetMappedCategories(s)
 	return sc
 }
 
-// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableImplementationStatus(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetImplementationStatus(*s)
-	}
+// SetAssessmentObjectives sets the "assessment_objectives" field.
+func (sc *SubcontrolCreate) SetAssessmentObjectives(mo []models.AssessmentObjective) *SubcontrolCreate {
+	sc.mutation.SetAssessmentObjectives(mo)
 	return sc
 }
 
-// SetImplementationDate sets the "implementation_date" field.
-func (sc *SubcontrolCreate) SetImplementationDate(t time.Time) *SubcontrolCreate {
-	sc.mutation.SetImplementationDate(t)
+// SetAssessmentMethods sets the "assessment_methods" field.
+func (sc *SubcontrolCreate) SetAssessmentMethods(mm []models.AssessmentMethod) *SubcontrolCreate {
+	sc.mutation.SetAssessmentMethods(mm)
 	return sc
 }
 
-// SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableImplementationDate(t *time.Time) *SubcontrolCreate {
-	if t != nil {
-		sc.SetImplementationDate(*t)
-	}
+// SetControlQuestions sets the "control_questions" field.
+func (sc *SubcontrolCreate) SetControlQuestions(s []string) *SubcontrolCreate {
+	sc.mutation.SetControlQuestions(s)
 	return sc
 }
 
-// SetImplementationVerification sets the "implementation_verification" field.
-func (sc *SubcontrolCreate) SetImplementationVerification(s string) *SubcontrolCreate {
-	sc.mutation.SetImplementationVerification(s)
-	return sc
-}
-
-// SetNillableImplementationVerification sets the "implementation_verification" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableImplementationVerification(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetImplementationVerification(*s)
-	}
-	return sc
-}
-
-// SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (sc *SubcontrolCreate) SetImplementationVerificationDate(t time.Time) *SubcontrolCreate {
-	sc.mutation.SetImplementationVerificationDate(t)
-	return sc
-}
-
-// SetNillableImplementationVerificationDate sets the "implementation_verification_date" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableImplementationVerificationDate(t *time.Time) *SubcontrolCreate {
-	if t != nil {
-		sc.SetImplementationVerificationDate(*t)
-	}
-	return sc
-}
-
-// SetDetails sets the "details" field.
-func (sc *SubcontrolCreate) SetDetails(m map[string]interface{}) *SubcontrolCreate {
-	sc.mutation.SetDetails(m)
+// SetImplementationGuidance sets the "implementation_guidance" field.
+func (sc *SubcontrolCreate) SetImplementationGuidance(mg []models.ImplementationGuidance) *SubcontrolCreate {
+	sc.mutation.SetImplementationGuidance(mg)
 	return sc
 }
 
 // SetExampleEvidence sets the "example_evidence" field.
-func (sc *SubcontrolCreate) SetExampleEvidence(s string) *SubcontrolCreate {
-	sc.mutation.SetExampleEvidence(s)
+func (sc *SubcontrolCreate) SetExampleEvidence(me []models.ExampleEvidence) *SubcontrolCreate {
+	sc.mutation.SetExampleEvidence(me)
 	return sc
 }
 
-// SetNillableExampleEvidence sets the "example_evidence" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableExampleEvidence(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetExampleEvidence(*s)
-	}
+// SetReferences sets the "references" field.
+func (sc *SubcontrolCreate) SetReferences(m []models.Reference) *SubcontrolCreate {
+	sc.mutation.SetReferences(m)
+	return sc
+}
+
+// SetRefCode sets the "ref_code" field.
+func (sc *SubcontrolCreate) SetRefCode(s string) *SubcontrolCreate {
+	sc.mutation.SetRefCode(s)
+	return sc
+}
+
+// SetControlID sets the "control_id" field.
+func (sc *SubcontrolCreate) SetControlID(s string) *SubcontrolCreate {
+	sc.mutation.SetControlID(s)
 	return sc
 }
 
@@ -376,19 +315,54 @@ func (sc *SubcontrolCreate) SetOwner(o *Organization) *SubcontrolCreate {
 	return sc.SetOwnerID(o.ID)
 }
 
-// AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (sc *SubcontrolCreate) AddControlIDs(ids ...string) *SubcontrolCreate {
-	sc.mutation.AddControlIDs(ids...)
+// SetControl sets the "control" edge to the Control entity.
+func (sc *SubcontrolCreate) SetControl(c *Control) *SubcontrolCreate {
+	return sc.SetControlID(c.ID)
+}
+
+// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
+func (sc *SubcontrolCreate) AddMappedControlIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddMappedControlIDs(ids...)
 	return sc
 }
 
-// AddControls adds the "controls" edges to the Control entity.
-func (sc *SubcontrolCreate) AddControls(c ...*Control) *SubcontrolCreate {
+// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
+func (sc *SubcontrolCreate) AddMappedControls(m ...*MappedControl) *SubcontrolCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return sc.AddMappedControlIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (sc *SubcontrolCreate) AddEvidenceIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddEvidenceIDs(ids...)
+	return sc
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (sc *SubcontrolCreate) AddEvidence(e ...*Evidence) *SubcontrolCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return sc.AddEvidenceIDs(ids...)
+}
+
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (sc *SubcontrolCreate) AddControlObjectiveIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddControlObjectiveIDs(ids...)
+	return sc
+}
+
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (sc *SubcontrolCreate) AddControlObjectives(c ...*ControlObjective) *SubcontrolCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return sc.AddControlIDs(ids...)
+	return sc.AddControlObjectiveIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
@@ -406,34 +380,117 @@ func (sc *SubcontrolCreate) AddTasks(t ...*Task) *SubcontrolCreate {
 	return sc.AddTaskIDs(ids...)
 }
 
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (sc *SubcontrolCreate) AddProgramIDs(ids ...string) *SubcontrolCreate {
-	sc.mutation.AddProgramIDs(ids...)
+// AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
+func (sc *SubcontrolCreate) AddNarrativeIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddNarrativeIDs(ids...)
 	return sc
 }
 
-// AddPrograms adds the "programs" edges to the Program entity.
-func (sc *SubcontrolCreate) AddPrograms(p ...*Program) *SubcontrolCreate {
+// AddNarratives adds the "narratives" edges to the Narrative entity.
+func (sc *SubcontrolCreate) AddNarratives(n ...*Narrative) *SubcontrolCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return sc.AddNarrativeIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (sc *SubcontrolCreate) AddRiskIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddRiskIDs(ids...)
+	return sc
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (sc *SubcontrolCreate) AddRisks(r ...*Risk) *SubcontrolCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return sc.AddRiskIDs(ids...)
+}
+
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (sc *SubcontrolCreate) AddActionPlanIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddActionPlanIDs(ids...)
+	return sc
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (sc *SubcontrolCreate) AddActionPlans(a ...*ActionPlan) *SubcontrolCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return sc.AddActionPlanIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (sc *SubcontrolCreate) AddProcedureIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddProcedureIDs(ids...)
+	return sc
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (sc *SubcontrolCreate) AddProcedures(p ...*Procedure) *SubcontrolCreate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return sc.AddProgramIDs(ids...)
+	return sc.AddProcedureIDs(ids...)
 }
 
-// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (sc *SubcontrolCreate) AddEvidenceIDs(ids ...string) *SubcontrolCreate {
-	sc.mutation.AddEvidenceIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (sc *SubcontrolCreate) AddInternalPolicyIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddInternalPolicyIDs(ids...)
 	return sc
 }
 
-// AddEvidence adds the "evidence" edges to the Evidence entity.
-func (sc *SubcontrolCreate) AddEvidence(e ...*Evidence) *SubcontrolCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (sc *SubcontrolCreate) AddInternalPolicies(i ...*InternalPolicy) *SubcontrolCreate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
 	}
-	return sc.AddEvidenceIDs(ids...)
+	return sc.AddInternalPolicyIDs(ids...)
+}
+
+// SetControlOwnerID sets the "control_owner" edge to the Group entity by ID.
+func (sc *SubcontrolCreate) SetControlOwnerID(id string) *SubcontrolCreate {
+	sc.mutation.SetControlOwnerID(id)
+	return sc
+}
+
+// SetNillableControlOwnerID sets the "control_owner" edge to the Group entity by ID if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableControlOwnerID(id *string) *SubcontrolCreate {
+	if id != nil {
+		sc = sc.SetControlOwnerID(*id)
+	}
+	return sc
+}
+
+// SetControlOwner sets the "control_owner" edge to the Group entity.
+func (sc *SubcontrolCreate) SetControlOwner(g *Group) *SubcontrolCreate {
+	return sc.SetControlOwnerID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (sc *SubcontrolCreate) SetDelegateID(id string) *SubcontrolCreate {
+	sc.mutation.SetDelegateID(id)
+	return sc
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableDelegateID(id *string) *SubcontrolCreate {
+	if id != nil {
+		sc = sc.SetDelegateID(*id)
+	}
+	return sc
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (sc *SubcontrolCreate) SetDelegate(g *Group) *SubcontrolCreate {
+	return sc.SetDelegateID(g.ID)
 }
 
 // Mutation returns the SubcontrolMutation object of the builder.
@@ -491,6 +548,14 @@ func (sc *SubcontrolCreate) defaults() error {
 		v := subcontrol.DefaultTags
 		sc.mutation.SetTags(v)
 	}
+	if _, ok := sc.mutation.Source(); !ok {
+		v := subcontrol.DefaultSource
+		sc.mutation.SetSource(v)
+	}
+	if _, ok := sc.mutation.ControlType(); !ok {
+		v := subcontrol.DefaultControlType
+		sc.mutation.SetControlType(v)
+	}
 	if _, ok := sc.mutation.ID(); !ok {
 		if subcontrol.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subcontrol.DefaultID (forgotten import generated/runtime?)")
@@ -516,16 +581,34 @@ func (sc *SubcontrolCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Subcontrol.name"`)}
-	}
-	if v, ok := sc.mutation.Name(); ok {
-		if err := subcontrol.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.name": %w`, err)}
+	if v, ok := sc.mutation.Source(); ok {
+		if err := subcontrol.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.source": %w`, err)}
 		}
 	}
-	if len(sc.mutation.ControlsIDs()) == 0 {
-		return &ValidationError{Name: "controls", err: errors.New(`generated: missing required edge "Subcontrol.controls"`)}
+	if v, ok := sc.mutation.ControlType(); ok {
+		if err := subcontrol.ControlTypeValidator(v); err != nil {
+			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.control_type": %w`, err)}
+		}
+	}
+	if _, ok := sc.mutation.RefCode(); !ok {
+		return &ValidationError{Name: "ref_code", err: errors.New(`generated: missing required field "Subcontrol.ref_code"`)}
+	}
+	if v, ok := sc.mutation.RefCode(); ok {
+		if err := subcontrol.RefCodeValidator(v); err != nil {
+			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.ref_code": %w`, err)}
+		}
+	}
+	if _, ok := sc.mutation.ControlID(); !ok {
+		return &ValidationError{Name: "control_id", err: errors.New(`generated: missing required field "Subcontrol.control_id"`)}
+	}
+	if v, ok := sc.mutation.ControlID(); ok {
+		if err := subcontrol.ControlIDValidator(v); err != nil {
+			return &ValidationError{Name: "control_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.control_id": %w`, err)}
+		}
+	}
+	if len(sc.mutation.ControlIDs()) == 0 {
+		return &ValidationError{Name: "control", err: errors.New(`generated: missing required edge "Subcontrol.control"`)}
 	}
 	return nil
 }
@@ -595,10 +678,6 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := sc.mutation.Name(); ok {
-		_spec.SetField(subcontrol.FieldName, field.TypeString, value)
-		_node.Name = value
-	}
 	if value, ok := sc.mutation.Description(); ok {
 		_spec.SetField(subcontrol.FieldDescription, field.TypeString, value)
 		_node.Description = value
@@ -607,61 +686,57 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
-	if value, ok := sc.mutation.SubcontrolType(); ok {
-		_spec.SetField(subcontrol.FieldSubcontrolType, field.TypeString, value)
-		_node.SubcontrolType = value
-	}
-	if value, ok := sc.mutation.Version(); ok {
-		_spec.SetField(subcontrol.FieldVersion, field.TypeString, value)
-		_node.Version = value
-	}
-	if value, ok := sc.mutation.SubcontrolNumber(); ok {
-		_spec.SetField(subcontrol.FieldSubcontrolNumber, field.TypeString, value)
-		_node.SubcontrolNumber = value
-	}
-	if value, ok := sc.mutation.Family(); ok {
-		_spec.SetField(subcontrol.FieldFamily, field.TypeString, value)
-		_node.Family = value
-	}
-	if value, ok := sc.mutation.Class(); ok {
-		_spec.SetField(subcontrol.FieldClass, field.TypeString, value)
-		_node.Class = value
-	}
 	if value, ok := sc.mutation.Source(); ok {
-		_spec.SetField(subcontrol.FieldSource, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if value, ok := sc.mutation.MappedFrameworks(); ok {
-		_spec.SetField(subcontrol.FieldMappedFrameworks, field.TypeString, value)
-		_node.MappedFrameworks = value
+	if value, ok := sc.mutation.ControlType(); ok {
+		_spec.SetField(subcontrol.FieldControlType, field.TypeEnum, value)
+		_node.ControlType = value
 	}
-	if value, ok := sc.mutation.ImplementationEvidence(); ok {
-		_spec.SetField(subcontrol.FieldImplementationEvidence, field.TypeString, value)
-		_node.ImplementationEvidence = value
+	if value, ok := sc.mutation.Category(); ok {
+		_spec.SetField(subcontrol.FieldCategory, field.TypeString, value)
+		_node.Category = value
 	}
-	if value, ok := sc.mutation.ImplementationStatus(); ok {
-		_spec.SetField(subcontrol.FieldImplementationStatus, field.TypeString, value)
-		_node.ImplementationStatus = value
+	if value, ok := sc.mutation.CategoryID(); ok {
+		_spec.SetField(subcontrol.FieldCategoryID, field.TypeString, value)
+		_node.CategoryID = value
 	}
-	if value, ok := sc.mutation.ImplementationDate(); ok {
-		_spec.SetField(subcontrol.FieldImplementationDate, field.TypeTime, value)
-		_node.ImplementationDate = value
+	if value, ok := sc.mutation.Subcategory(); ok {
+		_spec.SetField(subcontrol.FieldSubcategory, field.TypeString, value)
+		_node.Subcategory = value
 	}
-	if value, ok := sc.mutation.ImplementationVerification(); ok {
-		_spec.SetField(subcontrol.FieldImplementationVerification, field.TypeString, value)
-		_node.ImplementationVerification = value
+	if value, ok := sc.mutation.MappedCategories(); ok {
+		_spec.SetField(subcontrol.FieldMappedCategories, field.TypeJSON, value)
+		_node.MappedCategories = value
 	}
-	if value, ok := sc.mutation.ImplementationVerificationDate(); ok {
-		_spec.SetField(subcontrol.FieldImplementationVerificationDate, field.TypeTime, value)
-		_node.ImplementationVerificationDate = value
+	if value, ok := sc.mutation.AssessmentObjectives(); ok {
+		_spec.SetField(subcontrol.FieldAssessmentObjectives, field.TypeJSON, value)
+		_node.AssessmentObjectives = value
 	}
-	if value, ok := sc.mutation.Details(); ok {
-		_spec.SetField(subcontrol.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
+	if value, ok := sc.mutation.AssessmentMethods(); ok {
+		_spec.SetField(subcontrol.FieldAssessmentMethods, field.TypeJSON, value)
+		_node.AssessmentMethods = value
+	}
+	if value, ok := sc.mutation.ControlQuestions(); ok {
+		_spec.SetField(subcontrol.FieldControlQuestions, field.TypeJSON, value)
+		_node.ControlQuestions = value
+	}
+	if value, ok := sc.mutation.ImplementationGuidance(); ok {
+		_spec.SetField(subcontrol.FieldImplementationGuidance, field.TypeJSON, value)
+		_node.ImplementationGuidance = value
 	}
 	if value, ok := sc.mutation.ExampleEvidence(); ok {
-		_spec.SetField(subcontrol.FieldExampleEvidence, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldExampleEvidence, field.TypeJSON, value)
 		_node.ExampleEvidence = value
+	}
+	if value, ok := sc.mutation.References(); ok {
+		_spec.SetField(subcontrol.FieldReferences, field.TypeJSON, value)
+		_node.References = value
+	}
+	if value, ok := sc.mutation.RefCode(); ok {
+		_spec.SetField(subcontrol.FieldRefCode, field.TypeString, value)
+		_node.RefCode = value
 	}
 	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -681,18 +756,70 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.ControlIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   subcontrol.ControlsTable,
-			Columns: subcontrol.ControlsPrimaryKey,
+			Table:   subcontrol.ControlTable,
+			Columns: []string{subcontrol.ControlColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.ControlSubcontrols
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ControlID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.MappedControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedControlsTable,
+			Columns: subcontrol.MappedControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.MappedControlSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.EvidenceTable,
+			Columns: subcontrol.EvidencePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.EvidenceSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.ControlObjectivesTable,
+			Columns: subcontrol.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.SubcontrolControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -715,38 +842,125 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.ProgramsTable,
-			Columns: subcontrol.ProgramsPrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subcontrol.NarrativesTable,
+			Columns: []string{subcontrol.NarrativesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.ProgramSubcontrols
+		edge.Schema = sc.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.EvidenceTable,
-			Columns: subcontrol.EvidencePrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subcontrol.RisksTable,
+			Columns: []string{subcontrol.RisksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.EvidenceSubcontrols
+		edge.Schema = sc.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subcontrol.ActionPlansTable,
+			Columns: []string{subcontrol.ActionPlansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subcontrol.ProceduresTable,
+			Columns: []string{subcontrol.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subcontrol.InternalPoliciesTable,
+			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ControlOwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOwnerTable,
+			Columns: []string{subcontrol.ControlOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.subcontrol_control_owner = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.DelegateTable,
+			Columns: []string{subcontrol.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.subcontrol_delegate = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

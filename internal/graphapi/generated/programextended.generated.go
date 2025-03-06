@@ -68,7 +68,7 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"program", "standard", "controls", "risks", "internalPolicies", "procedures", "members"}
+	fieldsInOrder := [...]string{"program", "controls", "risks", "internalPolicies", "procedures", "members"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -82,13 +82,6 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 				return it, err
 			}
 			it.Program = data
-		case "standard":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standard"))
-			data, err := ec.unmarshalNCreateStandardInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateStandardInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Standard = data
 		case "controls":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controls"))
 			data, err := ec.unmarshalOCreateControlWithSubcontrolsInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateControlWithSubcontrolsInputᚄ(ctx, v)

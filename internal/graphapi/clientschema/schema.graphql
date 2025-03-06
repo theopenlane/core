@@ -395,7 +395,6 @@ type ActionPlan implements Node {
 	json data including details of the action plan
 	"""
 	details: Map
-	standard: [Standard!]
 	risk: [Risk!]
 	control: [Control!]
 	user: [User!]
@@ -1020,11 +1019,6 @@ input ActionPlanWhereInput {
 	sourceEqualFold: String
 	sourceContainsFold: String
 	"""
-	standard edge predicates
-	"""
-	hasStandard: Boolean
-	hasStandardWith: [StandardWhereInput!]
-	"""
 	risk edge predicates
 	"""
 	hasRisk: Boolean
@@ -1046,6 +1040,8 @@ input ActionPlanWhereInput {
 	hasProgramWith: [ProgramWhereInput!]
 }
 scalar Address
+scalar AssessmentMethod
+scalar AssessmentObjective
 type AuditLog implements Node {
 	table: String
 	time: Time
@@ -1879,11 +1875,7 @@ type Control implements Node {
 	"""
 	ownerID: ID
 	"""
-	the name of the control
-	"""
-	name: String!
-	"""
-	description of the control
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	"""
@@ -1891,45 +1883,61 @@ type Control implements Node {
 	"""
 	status: String
 	"""
-	type of the control
-	"""
-	controlType: String
-	"""
-	version of the control
-	"""
-	version: String
-	"""
-	control number or identifier
-	"""
-	controlNumber: String
-	"""
-	family associated with the control
-	"""
-	family: String
-	"""
-	class associated with the control
-	"""
-	class: String
-	"""
 	source of the control, e.g. framework, template, custom, etc.
 	"""
-	source: String
+	source: ControlControlSource
 	"""
-	which control objectives are satisfied by the control
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	satisfies: String
+	controlType: ControlControlType
 	"""
-	mapped frameworks
+	category of the control
 	"""
-	mappedFrameworks: String
+	category: String
 	"""
-	json data including details of the control
+	category id of the control
 	"""
-	details: Map
+	categoryID: String
 	"""
-	example evidence to provide for the control
+	subcategory of the control
 	"""
-	exampleEvidence: String
+	subcategory: String
+	"""
+	mapped categories of the control to other standards
+	"""
+	mappedCategories: [String!]
+	"""
+	objectives of the audit assessment for the control
+	"""
+	assessmentObjectives: [AssessmentObjective!]
+	"""
+	methods used to verify the control implementation during an audit
+	"""
+	assessmentMethods: [AssessmentMethod!]
+	"""
+	questions to ask to verify the control
+	"""
+	controlQuestions: [String!]
+	"""
+	implementation guidance for the control
+	"""
+	implementationGuidance: [ImplementationGuidance!]
+	"""
+	examples of evidence for the control
+	"""
+	exampleEvidence: [ExampleEvidence!]
+	"""
+	references for the control
+	"""
+	references: [Reference!]
+	"""
+	the unique reference code for the control
+	"""
+	refCode: String!
+	"""
+	the id of the standard that the control belongs to, if applicable
+	"""
+	standardID: ID
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -1943,16 +1951,33 @@ type Control implements Node {
 	provides view access to the risk to members of the group
 	"""
 	viewers: [Group!]
-	procedures: [Procedure!]
-	subcontrols: [Subcontrol!]
+	standard: Standard
+	programs: [Program!]
+	evidence: [Evidence!]
+	"""
+	the implementation(s) of the control
+	"""
+	controlImplementations: [ControlImplementation!]
+	"""
+	mapped subcontrols that have a relation to another control or subcontrol
+	"""
+	mappedControls: [MappedControl!]
 	controlObjectives: [ControlObjective!]
-	standard: [Standard!]
+	subcontrols: [Subcontrol!]
+	tasks: [Task!]
 	narratives: [Narrative!]
 	risks: [Risk!]
 	actionPlans: [ActionPlan!]
-	tasks: [Task!]
-	programs: [Program!]
-	evidence: [Evidence!]
+	procedures: [Procedure!]
+	internalPolicies: [InternalPolicy!]
+	"""
+	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	"""
+	controlOwner: Group
+	"""
+	temporary delegate for the control, used for temporary control ownership
+	"""
+	delegate: Group
 }
 """
 Return response for createBulkControl mutation
@@ -1979,6 +2004,24 @@ type ControlConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+ControlControlSource is enum for the field source
+"""
+enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+	FRAMEWORK
+	TEMPLATE
+	USER_DEFINED
+	IMPORTED
+}
+"""
+ControlControlType is enum for the field control_type
+"""
+enum ControlControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+	PREVENTATIVE
+	DETECTIVE
+	CORRECTIVE
+	DETERRENT
 }
 """
 Return response for createControl mutation
@@ -2035,11 +2078,7 @@ type ControlHistory implements Node {
 	"""
 	ownerID: String
 	"""
-	the name of the control
-	"""
-	name: String!
-	"""
-	description of the control
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	"""
@@ -2047,45 +2086,61 @@ type ControlHistory implements Node {
 	"""
 	status: String
 	"""
-	type of the control
-	"""
-	controlType: String
-	"""
-	version of the control
-	"""
-	version: String
-	"""
-	control number or identifier
-	"""
-	controlNumber: String
-	"""
-	family associated with the control
-	"""
-	family: String
-	"""
-	class associated with the control
-	"""
-	class: String
-	"""
 	source of the control, e.g. framework, template, custom, etc.
 	"""
-	source: String
+	source: ControlHistoryControlSource
 	"""
-	which control objectives are satisfied by the control
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	satisfies: String
+	controlType: ControlHistoryControlType
 	"""
-	mapped frameworks
+	category of the control
 	"""
-	mappedFrameworks: String
+	category: String
 	"""
-	json data including details of the control
+	category id of the control
 	"""
-	details: Map
+	categoryID: String
 	"""
-	example evidence to provide for the control
+	subcategory of the control
 	"""
-	exampleEvidence: String
+	subcategory: String
+	"""
+	mapped categories of the control to other standards
+	"""
+	mappedCategories: [String!]
+	"""
+	objectives of the audit assessment for the control
+	"""
+	assessmentObjectives: [AssessmentObjective!]
+	"""
+	methods used to verify the control implementation during an audit
+	"""
+	assessmentMethods: [AssessmentMethod!]
+	"""
+	questions to ask to verify the control
+	"""
+	controlQuestions: [String!]
+	"""
+	implementation guidance for the control
+	"""
+	implementationGuidance: [ImplementationGuidance!]
+	"""
+	examples of evidence for the control
+	"""
+	exampleEvidence: [ExampleEvidence!]
+	"""
+	references for the control
+	"""
+	references: [Reference!]
+	"""
+	the unique reference code for the control
+	"""
+	refCode: String!
+	"""
+	the id of the standard that the control belongs to, if applicable
+	"""
+	standardID: String
 }
 """
 A connection to a list of items.
@@ -2103,6 +2158,24 @@ type ControlHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+ControlHistoryControlSource is enum for the field source
+"""
+enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+	FRAMEWORK
+	TEMPLATE
+	USER_DEFINED
+	IMPORTED
+}
+"""
+ControlHistoryControlType is enum for the field control_type
+"""
+enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+	PREVENTATIVE
+	DETECTIVE
+	CORRECTIVE
+	DETERRENT
 }
 """
 An edge in a connection.
@@ -2310,22 +2383,6 @@ input ControlHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
-	name field predicates
-	"""
-	name: String
-	nameNEQ: String
-	nameIn: [String!]
-	nameNotIn: [String!]
-	nameGT: String
-	nameGTE: String
-	nameLT: String
-	nameLTE: String
-	nameContains: String
-	nameHasPrefix: String
-	nameHasSuffix: String
-	nameEqualFold: String
-	nameContainsFold: String
-	"""
 	description field predicates
 	"""
 	description: String
@@ -2362,167 +2419,697 @@ input ControlHistoryWhereInput {
 	statusEqualFold: String
 	statusContainsFold: String
 	"""
-	control_type field predicates
-	"""
-	controlType: String
-	controlTypeNEQ: String
-	controlTypeIn: [String!]
-	controlTypeNotIn: [String!]
-	controlTypeGT: String
-	controlTypeGTE: String
-	controlTypeLT: String
-	controlTypeLTE: String
-	controlTypeContains: String
-	controlTypeHasPrefix: String
-	controlTypeHasSuffix: String
-	controlTypeIsNil: Boolean
-	controlTypeNotNil: Boolean
-	controlTypeEqualFold: String
-	controlTypeContainsFold: String
-	"""
-	version field predicates
-	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
-	"""
-	control_number field predicates
-	"""
-	controlNumber: String
-	controlNumberNEQ: String
-	controlNumberIn: [String!]
-	controlNumberNotIn: [String!]
-	controlNumberGT: String
-	controlNumberGTE: String
-	controlNumberLT: String
-	controlNumberLTE: String
-	controlNumberContains: String
-	controlNumberHasPrefix: String
-	controlNumberHasSuffix: String
-	controlNumberIsNil: Boolean
-	controlNumberNotNil: Boolean
-	controlNumberEqualFold: String
-	controlNumberContainsFold: String
-	"""
-	family field predicates
-	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
-	"""
-	class field predicates
-	"""
-	class: String
-	classNEQ: String
-	classIn: [String!]
-	classNotIn: [String!]
-	classGT: String
-	classGTE: String
-	classLT: String
-	classLTE: String
-	classContains: String
-	classHasPrefix: String
-	classHasSuffix: String
-	classIsNil: Boolean
-	classNotNil: Boolean
-	classEqualFold: String
-	classContainsFold: String
-	"""
 	source field predicates
 	"""
-	source: String
-	sourceNEQ: String
-	sourceIn: [String!]
-	sourceNotIn: [String!]
-	sourceGT: String
-	sourceGTE: String
-	sourceLT: String
-	sourceLTE: String
-	sourceContains: String
-	sourceHasPrefix: String
-	sourceHasSuffix: String
+	source: ControlHistoryControlSource
+	sourceNEQ: ControlHistoryControlSource
+	sourceIn: [ControlHistoryControlSource!]
+	sourceNotIn: [ControlHistoryControlSource!]
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
-	sourceEqualFold: String
-	sourceContainsFold: String
 	"""
-	satisfies field predicates
+	control_type field predicates
 	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	controlType: ControlHistoryControlType
+	controlTypeNEQ: ControlHistoryControlType
+	controlTypeIn: [ControlHistoryControlType!]
+	controlTypeNotIn: [ControlHistoryControlType!]
+	controlTypeIsNil: Boolean
+	controlTypeNotNil: Boolean
 	"""
-	mapped_frameworks field predicates
+	category field predicates
 	"""
-	mappedFrameworks: String
-	mappedFrameworksNEQ: String
-	mappedFrameworksIn: [String!]
-	mappedFrameworksNotIn: [String!]
-	mappedFrameworksGT: String
-	mappedFrameworksGTE: String
-	mappedFrameworksLT: String
-	mappedFrameworksLTE: String
-	mappedFrameworksContains: String
-	mappedFrameworksHasPrefix: String
-	mappedFrameworksHasSuffix: String
-	mappedFrameworksIsNil: Boolean
-	mappedFrameworksNotNil: Boolean
-	mappedFrameworksEqualFold: String
-	mappedFrameworksContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
-	example_evidence field predicates
+	category_id field predicates
 	"""
-	exampleEvidence: String
-	exampleEvidenceNEQ: String
-	exampleEvidenceIn: [String!]
-	exampleEvidenceNotIn: [String!]
-	exampleEvidenceGT: String
-	exampleEvidenceGTE: String
-	exampleEvidenceLT: String
-	exampleEvidenceLTE: String
-	exampleEvidenceContains: String
-	exampleEvidenceHasPrefix: String
-	exampleEvidenceHasSuffix: String
-	exampleEvidenceIsNil: Boolean
-	exampleEvidenceNotNil: Boolean
-	exampleEvidenceEqualFold: String
-	exampleEvidenceContainsFold: String
+	categoryID: String
+	categoryIDNEQ: String
+	categoryIDIn: [String!]
+	categoryIDNotIn: [String!]
+	categoryIDGT: String
+	categoryIDGTE: String
+	categoryIDLT: String
+	categoryIDLTE: String
+	categoryIDContains: String
+	categoryIDHasPrefix: String
+	categoryIDHasSuffix: String
+	categoryIDIsNil: Boolean
+	categoryIDNotNil: Boolean
+	categoryIDEqualFold: String
+	categoryIDContainsFold: String
+	"""
+	subcategory field predicates
+	"""
+	subcategory: String
+	subcategoryNEQ: String
+	subcategoryIn: [String!]
+	subcategoryNotIn: [String!]
+	subcategoryGT: String
+	subcategoryGTE: String
+	subcategoryLT: String
+	subcategoryLTE: String
+	subcategoryContains: String
+	subcategoryHasPrefix: String
+	subcategoryHasSuffix: String
+	subcategoryIsNil: Boolean
+	subcategoryNotNil: Boolean
+	subcategoryEqualFold: String
+	subcategoryContainsFold: String
+	"""
+	ref_code field predicates
+	"""
+	refCode: String
+	refCodeNEQ: String
+	refCodeIn: [String!]
+	refCodeNotIn: [String!]
+	refCodeGT: String
+	refCodeGTE: String
+	refCodeLT: String
+	refCodeLTE: String
+	refCodeContains: String
+	refCodeHasPrefix: String
+	refCodeHasSuffix: String
+	refCodeEqualFold: String
+	refCodeContainsFold: String
+	"""
+	standard_id field predicates
+	"""
+	standardID: String
+	standardIDNEQ: String
+	standardIDIn: [String!]
+	standardIDNotIn: [String!]
+	standardIDGT: String
+	standardIDGTE: String
+	standardIDLT: String
+	standardIDLTE: String
+	standardIDContains: String
+	standardIDHasPrefix: String
+	standardIDHasSuffix: String
+	standardIDIsNil: Boolean
+	standardIDNotNil: Boolean
+	standardIDEqualFold: String
+	standardIDContainsFold: String
+}
+type ControlImplementation implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	status of the control implementation
+	"""
+	status: String
+	"""
+	date the control was implemented
+	"""
+	implementationDate: Time
+	"""
+	set to true if the control implementation has been verified
+	"""
+	verified: Boolean
+	"""
+	date the control implementation was verified
+	"""
+	verificationDate: Time
+	"""
+	details of the control implementation
+	"""
+	details: String
+	controls: [Control!]
+}
+"""
+Return response for createBulkControlImplementation mutation
+"""
+type ControlImplementationBulkCreatePayload {
+	"""
+	Created controlImplementations
+	"""
+	controlImplementations: [ControlImplementation!]
+}
+"""
+A connection to a list of items.
+"""
+type ControlImplementationConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [ControlImplementationEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createControlImplementation mutation
+"""
+type ControlImplementationCreatePayload {
+	"""
+	Created controlImplementation
+	"""
+	controlImplementation: ControlImplementation!
+}
+"""
+Return response for deleteControlImplementation mutation
+"""
+type ControlImplementationDeletePayload {
+	"""
+	Deleted controlImplementation ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type ControlImplementationEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: ControlImplementation
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+type ControlImplementationHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: ControlImplementationHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	status of the control implementation
+	"""
+	status: String
+	"""
+	date the control was implemented
+	"""
+	implementationDate: Time
+	"""
+	set to true if the control implementation has been verified
+	"""
+	verified: Boolean
+	"""
+	date the control implementation was verified
+	"""
+	verificationDate: Time
+	"""
+	details of the control implementation
+	"""
+	details: String
+}
+"""
+A connection to a list of items.
+"""
+type ControlImplementationHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [ControlImplementationHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ControlImplementationHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: ControlImplementationHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+ControlImplementationHistoryOpType is enum for the field operation
+"""
+enum ControlImplementationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+ControlImplementationHistoryWhereInput is used for filtering ControlImplementationHistory objects.
+Input was generated by ent.
+"""
+input ControlImplementationHistoryWhereInput {
+	not: ControlImplementationHistoryWhereInput
+	and: [ControlImplementationHistoryWhereInput!]
+	or: [ControlImplementationHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: ControlImplementationHistoryOpType
+	operationNEQ: ControlImplementationHistoryOpType
+	operationIn: [ControlImplementationHistoryOpType!]
+	operationNotIn: [ControlImplementationHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	deleted_at field predicates
+	"""
+	deletedAt: Time
+	deletedAtNEQ: Time
+	deletedAtIn: [Time!]
+	deletedAtNotIn: [Time!]
+	deletedAtGT: Time
+	deletedAtGTE: Time
+	deletedAtLT: Time
+	deletedAtLTE: Time
+	deletedAtIsNil: Boolean
+	deletedAtNotNil: Boolean
+	"""
+	deleted_by field predicates
+	"""
+	deletedBy: String
+	deletedByNEQ: String
+	deletedByIn: [String!]
+	deletedByNotIn: [String!]
+	deletedByGT: String
+	deletedByGTE: String
+	deletedByLT: String
+	deletedByLTE: String
+	deletedByContains: String
+	deletedByHasPrefix: String
+	deletedByHasSuffix: String
+	deletedByIsNil: Boolean
+	deletedByNotNil: Boolean
+	deletedByEqualFold: String
+	deletedByContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
+	"""
+	implementation_date field predicates
+	"""
+	implementationDate: Time
+	implementationDateNEQ: Time
+	implementationDateIn: [Time!]
+	implementationDateNotIn: [Time!]
+	implementationDateGT: Time
+	implementationDateGTE: Time
+	implementationDateLT: Time
+	implementationDateLTE: Time
+	implementationDateIsNil: Boolean
+	implementationDateNotNil: Boolean
+	"""
+	verified field predicates
+	"""
+	verified: Boolean
+	verifiedNEQ: Boolean
+	verifiedIsNil: Boolean
+	verifiedNotNil: Boolean
+	"""
+	verification_date field predicates
+	"""
+	verificationDate: Time
+	verificationDateNEQ: Time
+	verificationDateIn: [Time!]
+	verificationDateNotIn: [Time!]
+	verificationDateGT: Time
+	verificationDateGTE: Time
+	verificationDateLT: Time
+	verificationDateLTE: Time
+	verificationDateIsNil: Boolean
+	verificationDateNotNil: Boolean
+	"""
+	details field predicates
+	"""
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+}
+type ControlImplementationSearchResult {
+	controlImplementations: [ControlImplementation!]
+}
+"""
+Return response for updateControlImplementation mutation
+"""
+type ControlImplementationUpdatePayload {
+	"""
+	Updated controlImplementation
+	"""
+	controlImplementation: ControlImplementation!
+}
+"""
+ControlImplementationWhereInput is used for filtering ControlImplementation objects.
+Input was generated by ent.
+"""
+input ControlImplementationWhereInput {
+	not: ControlImplementationWhereInput
+	and: [ControlImplementationWhereInput!]
+	or: [ControlImplementationWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	deleted_at field predicates
+	"""
+	deletedAt: Time
+	deletedAtNEQ: Time
+	deletedAtIn: [Time!]
+	deletedAtNotIn: [Time!]
+	deletedAtGT: Time
+	deletedAtGTE: Time
+	deletedAtLT: Time
+	deletedAtLTE: Time
+	deletedAtIsNil: Boolean
+	deletedAtNotNil: Boolean
+	"""
+	deleted_by field predicates
+	"""
+	deletedBy: String
+	deletedByNEQ: String
+	deletedByIn: [String!]
+	deletedByNotIn: [String!]
+	deletedByGT: String
+	deletedByGTE: String
+	deletedByLT: String
+	deletedByLTE: String
+	deletedByContains: String
+	deletedByHasPrefix: String
+	deletedByHasSuffix: String
+	deletedByIsNil: Boolean
+	deletedByNotNil: Boolean
+	deletedByEqualFold: String
+	deletedByContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
+	"""
+	implementation_date field predicates
+	"""
+	implementationDate: Time
+	implementationDateNEQ: Time
+	implementationDateIn: [Time!]
+	implementationDateNotIn: [Time!]
+	implementationDateGT: Time
+	implementationDateGTE: Time
+	implementationDateLT: Time
+	implementationDateLTE: Time
+	implementationDateIsNil: Boolean
+	implementationDateNotNil: Boolean
+	"""
+	verified field predicates
+	"""
+	verified: Boolean
+	verifiedNEQ: Boolean
+	verifiedIsNil: Boolean
+	verifiedNotNil: Boolean
+	"""
+	verification_date field predicates
+	"""
+	verificationDate: Time
+	verificationDateNEQ: Time
+	verificationDateIn: [Time!]
+	verificationDateNotIn: [Time!]
+	verificationDateGT: Time
+	verificationDateGTE: Time
+	verificationDateLT: Time
+	verificationDateLTE: Time
+	verificationDateIsNil: Boolean
+	verificationDateNotNil: Boolean
+	"""
+	details field predicates
+	"""
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 }
 type ControlObjective implements Node {
 	id: ID!
@@ -2549,15 +3136,19 @@ type ControlObjective implements Node {
 	"""
 	name: String!
 	"""
-	description of the control objective
+	the desired outcome or target of the control objective
 	"""
-	description: String
+	desiredOutcome: String
 	"""
 	status of the control objective
 	"""
 	status: String
 	"""
-	type of the control objective
+	source of the control, e.g. framework, template, custom, etc.
+	"""
+	source: ControlObjectiveControlSource
+	"""
+	type of the control objective e.g. compliance, financial, operational, etc.
 	"""
 	controlObjectiveType: String
 	"""
@@ -2565,33 +3156,13 @@ type ControlObjective implements Node {
 	"""
 	version: String
 	"""
-	number of the control objective
+	category of the control
 	"""
-	controlNumber: String
+	category: String
 	"""
-	family of the control objective
+	subcategory of the control
 	"""
-	family: String
-	"""
-	class associated with the control objective
-	"""
-	class: String
-	"""
-	source of the control objective, e.g. framework, template, user-defined, etc.
-	"""
-	source: String
-	"""
-	mapped frameworks
-	"""
-	mappedFrameworks: String
-	"""
-	json data including details of the control objective
-	"""
-	details: Map
-	"""
-	example evidence to provide for the control
-	"""
-	exampleEvidence: String
+	subcategory: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -2605,16 +3176,15 @@ type ControlObjective implements Node {
 	provides view access to the risk to members of the group
 	"""
 	viewers: [Group!]
-	internalPolicies: [InternalPolicy!]
-	controls: [Control!]
-	procedures: [Procedure!]
-	risks: [Risk!]
-	subcontrols: [Subcontrol!]
-	standard: [Standard!]
-	narratives: [Narrative!]
-	tasks: [Task!]
 	programs: [Program!]
 	evidence: [Evidence!]
+	controls: [Control!]
+	subcontrols: [Subcontrol!]
+	internalPolicies: [InternalPolicy!]
+	procedures: [Procedure!]
+	risks: [Risk!]
+	narratives: [Narrative!]
+	tasks: [Task!]
 }
 """
 Return response for createBulkControlObjective mutation
@@ -2641,6 +3211,15 @@ type ControlObjectiveConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+ControlObjectiveControlSource is enum for the field source
+"""
+enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+	FRAMEWORK
+	TEMPLATE
+	USER_DEFINED
+	IMPORTED
 }
 """
 Return response for createControlObjective mutation
@@ -2701,15 +3280,19 @@ type ControlObjectiveHistory implements Node {
 	"""
 	name: String!
 	"""
-	description of the control objective
+	the desired outcome or target of the control objective
 	"""
-	description: String
+	desiredOutcome: String
 	"""
 	status of the control objective
 	"""
 	status: String
 	"""
-	type of the control objective
+	source of the control, e.g. framework, template, custom, etc.
+	"""
+	source: ControlObjectiveHistoryControlSource
+	"""
+	type of the control objective e.g. compliance, financial, operational, etc.
 	"""
 	controlObjectiveType: String
 	"""
@@ -2717,33 +3300,13 @@ type ControlObjectiveHistory implements Node {
 	"""
 	version: String
 	"""
-	number of the control objective
+	category of the control
 	"""
-	controlNumber: String
+	category: String
 	"""
-	family of the control objective
+	subcategory of the control
 	"""
-	family: String
-	"""
-	class associated with the control objective
-	"""
-	class: String
-	"""
-	source of the control objective, e.g. framework, template, user-defined, etc.
-	"""
-	source: String
-	"""
-	mapped frameworks
-	"""
-	mappedFrameworks: String
-	"""
-	json data including details of the control objective
-	"""
-	details: Map
-	"""
-	example evidence to provide for the control
-	"""
-	exampleEvidence: String
+	subcategory: String
 }
 """
 A connection to a list of items.
@@ -2761,6 +3324,15 @@ type ControlObjectiveHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+ControlObjectiveHistoryControlSource is enum for the field source
+"""
+enum ControlObjectiveHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+	FRAMEWORK
+	TEMPLATE
+	USER_DEFINED
+	IMPORTED
 }
 """
 An edge in a connection.
@@ -2984,23 +3556,23 @@ input ControlObjectiveHistoryWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
+	desired_outcome field predicates
 	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
+	desiredOutcome: String
+	desiredOutcomeNEQ: String
+	desiredOutcomeIn: [String!]
+	desiredOutcomeNotIn: [String!]
+	desiredOutcomeGT: String
+	desiredOutcomeGTE: String
+	desiredOutcomeLT: String
+	desiredOutcomeLTE: String
+	desiredOutcomeContains: String
+	desiredOutcomeHasPrefix: String
+	desiredOutcomeHasSuffix: String
+	desiredOutcomeIsNil: Boolean
+	desiredOutcomeNotNil: Boolean
+	desiredOutcomeEqualFold: String
+	desiredOutcomeContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -3019,6 +3591,15 @@ input ControlObjectiveHistoryWhereInput {
 	statusNotNil: Boolean
 	statusEqualFold: String
 	statusContainsFold: String
+	"""
+	source field predicates
+	"""
+	source: ControlObjectiveHistoryControlSource
+	sourceNEQ: ControlObjectiveHistoryControlSource
+	sourceIn: [ControlObjectiveHistoryControlSource!]
+	sourceNotIn: [ControlObjectiveHistoryControlSource!]
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
 	"""
 	control_objective_type field predicates
 	"""
@@ -3056,113 +3637,41 @@ input ControlObjectiveHistoryWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	control_number field predicates
+	category field predicates
 	"""
-	controlNumber: String
-	controlNumberNEQ: String
-	controlNumberIn: [String!]
-	controlNumberNotIn: [String!]
-	controlNumberGT: String
-	controlNumberGTE: String
-	controlNumberLT: String
-	controlNumberLTE: String
-	controlNumberContains: String
-	controlNumberHasPrefix: String
-	controlNumberHasSuffix: String
-	controlNumberIsNil: Boolean
-	controlNumberNotNil: Boolean
-	controlNumberEqualFold: String
-	controlNumberContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
-	family field predicates
+	subcategory field predicates
 	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
-	"""
-	class field predicates
-	"""
-	class: String
-	classNEQ: String
-	classIn: [String!]
-	classNotIn: [String!]
-	classGT: String
-	classGTE: String
-	classLT: String
-	classLTE: String
-	classContains: String
-	classHasPrefix: String
-	classHasSuffix: String
-	classIsNil: Boolean
-	classNotNil: Boolean
-	classEqualFold: String
-	classContainsFold: String
-	"""
-	source field predicates
-	"""
-	source: String
-	sourceNEQ: String
-	sourceIn: [String!]
-	sourceNotIn: [String!]
-	sourceGT: String
-	sourceGTE: String
-	sourceLT: String
-	sourceLTE: String
-	sourceContains: String
-	sourceHasPrefix: String
-	sourceHasSuffix: String
-	sourceIsNil: Boolean
-	sourceNotNil: Boolean
-	sourceEqualFold: String
-	sourceContainsFold: String
-	"""
-	mapped_frameworks field predicates
-	"""
-	mappedFrameworks: String
-	mappedFrameworksNEQ: String
-	mappedFrameworksIn: [String!]
-	mappedFrameworksNotIn: [String!]
-	mappedFrameworksGT: String
-	mappedFrameworksGTE: String
-	mappedFrameworksLT: String
-	mappedFrameworksLTE: String
-	mappedFrameworksContains: String
-	mappedFrameworksHasPrefix: String
-	mappedFrameworksHasSuffix: String
-	mappedFrameworksIsNil: Boolean
-	mappedFrameworksNotNil: Boolean
-	mappedFrameworksEqualFold: String
-	mappedFrameworksContainsFold: String
-	"""
-	example_evidence field predicates
-	"""
-	exampleEvidence: String
-	exampleEvidenceNEQ: String
-	exampleEvidenceIn: [String!]
-	exampleEvidenceNotIn: [String!]
-	exampleEvidenceGT: String
-	exampleEvidenceGTE: String
-	exampleEvidenceLT: String
-	exampleEvidenceLTE: String
-	exampleEvidenceContains: String
-	exampleEvidenceHasPrefix: String
-	exampleEvidenceHasSuffix: String
-	exampleEvidenceIsNil: Boolean
-	exampleEvidenceNotNil: Boolean
-	exampleEvidenceEqualFold: String
-	exampleEvidenceContainsFold: String
+	subcategory: String
+	subcategoryNEQ: String
+	subcategoryIn: [String!]
+	subcategoryNotIn: [String!]
+	subcategoryGT: String
+	subcategoryGTE: String
+	subcategoryLT: String
+	subcategoryLTE: String
+	subcategoryContains: String
+	subcategoryHasPrefix: String
+	subcategoryHasSuffix: String
+	subcategoryIsNil: Boolean
+	subcategoryNotNil: Boolean
+	subcategoryEqualFold: String
+	subcategoryContainsFold: String
 }
 type ControlObjectiveSearchResult {
 	controlObjectives: [ControlObjective!]
@@ -3341,23 +3850,23 @@ input ControlObjectiveWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
+	desired_outcome field predicates
 	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
+	desiredOutcome: String
+	desiredOutcomeNEQ: String
+	desiredOutcomeIn: [String!]
+	desiredOutcomeNotIn: [String!]
+	desiredOutcomeGT: String
+	desiredOutcomeGTE: String
+	desiredOutcomeLT: String
+	desiredOutcomeLTE: String
+	desiredOutcomeContains: String
+	desiredOutcomeHasPrefix: String
+	desiredOutcomeHasSuffix: String
+	desiredOutcomeIsNil: Boolean
+	desiredOutcomeNotNil: Boolean
+	desiredOutcomeEqualFold: String
+	desiredOutcomeContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -3376,6 +3885,15 @@ input ControlObjectiveWhereInput {
 	statusNotNil: Boolean
 	statusEqualFold: String
 	statusContainsFold: String
+	"""
+	source field predicates
+	"""
+	source: ControlObjectiveControlSource
+	sourceNEQ: ControlObjectiveControlSource
+	sourceIn: [ControlObjectiveControlSource!]
+	sourceNotIn: [ControlObjectiveControlSource!]
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
 	"""
 	control_objective_type field predicates
 	"""
@@ -3413,113 +3931,41 @@ input ControlObjectiveWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	control_number field predicates
+	category field predicates
 	"""
-	controlNumber: String
-	controlNumberNEQ: String
-	controlNumberIn: [String!]
-	controlNumberNotIn: [String!]
-	controlNumberGT: String
-	controlNumberGTE: String
-	controlNumberLT: String
-	controlNumberLTE: String
-	controlNumberContains: String
-	controlNumberHasPrefix: String
-	controlNumberHasSuffix: String
-	controlNumberIsNil: Boolean
-	controlNumberNotNil: Boolean
-	controlNumberEqualFold: String
-	controlNumberContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
-	family field predicates
+	subcategory field predicates
 	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
-	"""
-	class field predicates
-	"""
-	class: String
-	classNEQ: String
-	classIn: [String!]
-	classNotIn: [String!]
-	classGT: String
-	classGTE: String
-	classLT: String
-	classLTE: String
-	classContains: String
-	classHasPrefix: String
-	classHasSuffix: String
-	classIsNil: Boolean
-	classNotNil: Boolean
-	classEqualFold: String
-	classContainsFold: String
-	"""
-	source field predicates
-	"""
-	source: String
-	sourceNEQ: String
-	sourceIn: [String!]
-	sourceNotIn: [String!]
-	sourceGT: String
-	sourceGTE: String
-	sourceLT: String
-	sourceLTE: String
-	sourceContains: String
-	sourceHasPrefix: String
-	sourceHasSuffix: String
-	sourceIsNil: Boolean
-	sourceNotNil: Boolean
-	sourceEqualFold: String
-	sourceContainsFold: String
-	"""
-	mapped_frameworks field predicates
-	"""
-	mappedFrameworks: String
-	mappedFrameworksNEQ: String
-	mappedFrameworksIn: [String!]
-	mappedFrameworksNotIn: [String!]
-	mappedFrameworksGT: String
-	mappedFrameworksGTE: String
-	mappedFrameworksLT: String
-	mappedFrameworksLTE: String
-	mappedFrameworksContains: String
-	mappedFrameworksHasPrefix: String
-	mappedFrameworksHasSuffix: String
-	mappedFrameworksIsNil: Boolean
-	mappedFrameworksNotNil: Boolean
-	mappedFrameworksEqualFold: String
-	mappedFrameworksContainsFold: String
-	"""
-	example_evidence field predicates
-	"""
-	exampleEvidence: String
-	exampleEvidenceNEQ: String
-	exampleEvidenceIn: [String!]
-	exampleEvidenceNotIn: [String!]
-	exampleEvidenceGT: String
-	exampleEvidenceGTE: String
-	exampleEvidenceLT: String
-	exampleEvidenceLTE: String
-	exampleEvidenceContains: String
-	exampleEvidenceHasPrefix: String
-	exampleEvidenceHasSuffix: String
-	exampleEvidenceIsNil: Boolean
-	exampleEvidenceNotNil: Boolean
-	exampleEvidenceEqualFold: String
-	exampleEvidenceContainsFold: String
+	subcategory: String
+	subcategoryNEQ: String
+	subcategoryIn: [String!]
+	subcategoryNotIn: [String!]
+	subcategoryGT: String
+	subcategoryGTE: String
+	subcategoryLT: String
+	subcategoryLTE: String
+	subcategoryContains: String
+	subcategoryHasPrefix: String
+	subcategoryHasSuffix: String
+	subcategoryIsNil: Boolean
+	subcategoryNotNil: Boolean
+	subcategoryEqualFold: String
+	subcategoryContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -3541,15 +3987,30 @@ input ControlObjectiveWhereInput {
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
 	"""
-	internal_policies edge predicates
+	programs edge predicates
 	"""
-	hasInternalPolicies: Boolean
-	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
+	"""
+	evidence edge predicates
+	"""
+	hasEvidence: Boolean
+	hasEvidenceWith: [EvidenceWhereInput!]
 	"""
 	controls edge predicates
 	"""
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	procedures edge predicates
 	"""
@@ -3561,16 +4022,6 @@ input ControlObjectiveWhereInput {
 	hasRisks: Boolean
 	hasRisksWith: [RiskWhereInput!]
 	"""
-	subcontrols edge predicates
-	"""
-	hasSubcontrols: Boolean
-	hasSubcontrolsWith: [SubcontrolWhereInput!]
-	"""
-	standard edge predicates
-	"""
-	hasStandard: Boolean
-	hasStandardWith: [StandardWhereInput!]
-	"""
 	narratives edge predicates
 	"""
 	hasNarratives: Boolean
@@ -3580,16 +4031,6 @@ input ControlObjectiveWhereInput {
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
-	"""
-	programs edge predicates
-	"""
-	hasPrograms: Boolean
-	hasProgramsWith: [ProgramWhereInput!]
-	"""
-	evidence edge predicates
-	"""
-	hasEvidence: Boolean
-	hasEvidenceWith: [EvidenceWhereInput!]
 }
 type ControlSearchResult {
 	controls: [Control!]
@@ -3752,22 +4193,6 @@ input ControlWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
-	name field predicates
-	"""
-	name: String
-	nameNEQ: String
-	nameIn: [String!]
-	nameNotIn: [String!]
-	nameGT: String
-	nameGTE: String
-	nameLT: String
-	nameLTE: String
-	nameContains: String
-	nameHasPrefix: String
-	nameHasSuffix: String
-	nameEqualFold: String
-	nameContainsFold: String
-	"""
 	description field predicates
 	"""
 	description: String
@@ -3804,167 +4229,111 @@ input ControlWhereInput {
 	statusEqualFold: String
 	statusContainsFold: String
 	"""
-	control_type field predicates
-	"""
-	controlType: String
-	controlTypeNEQ: String
-	controlTypeIn: [String!]
-	controlTypeNotIn: [String!]
-	controlTypeGT: String
-	controlTypeGTE: String
-	controlTypeLT: String
-	controlTypeLTE: String
-	controlTypeContains: String
-	controlTypeHasPrefix: String
-	controlTypeHasSuffix: String
-	controlTypeIsNil: Boolean
-	controlTypeNotNil: Boolean
-	controlTypeEqualFold: String
-	controlTypeContainsFold: String
-	"""
-	version field predicates
-	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
-	"""
-	control_number field predicates
-	"""
-	controlNumber: String
-	controlNumberNEQ: String
-	controlNumberIn: [String!]
-	controlNumberNotIn: [String!]
-	controlNumberGT: String
-	controlNumberGTE: String
-	controlNumberLT: String
-	controlNumberLTE: String
-	controlNumberContains: String
-	controlNumberHasPrefix: String
-	controlNumberHasSuffix: String
-	controlNumberIsNil: Boolean
-	controlNumberNotNil: Boolean
-	controlNumberEqualFold: String
-	controlNumberContainsFold: String
-	"""
-	family field predicates
-	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
-	"""
-	class field predicates
-	"""
-	class: String
-	classNEQ: String
-	classIn: [String!]
-	classNotIn: [String!]
-	classGT: String
-	classGTE: String
-	classLT: String
-	classLTE: String
-	classContains: String
-	classHasPrefix: String
-	classHasSuffix: String
-	classIsNil: Boolean
-	classNotNil: Boolean
-	classEqualFold: String
-	classContainsFold: String
-	"""
 	source field predicates
 	"""
-	source: String
-	sourceNEQ: String
-	sourceIn: [String!]
-	sourceNotIn: [String!]
-	sourceGT: String
-	sourceGTE: String
-	sourceLT: String
-	sourceLTE: String
-	sourceContains: String
-	sourceHasPrefix: String
-	sourceHasSuffix: String
+	source: ControlControlSource
+	sourceNEQ: ControlControlSource
+	sourceIn: [ControlControlSource!]
+	sourceNotIn: [ControlControlSource!]
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
-	sourceEqualFold: String
-	sourceContainsFold: String
 	"""
-	satisfies field predicates
+	control_type field predicates
 	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	controlType: ControlControlType
+	controlTypeNEQ: ControlControlType
+	controlTypeIn: [ControlControlType!]
+	controlTypeNotIn: [ControlControlType!]
+	controlTypeIsNil: Boolean
+	controlTypeNotNil: Boolean
 	"""
-	mapped_frameworks field predicates
+	category field predicates
 	"""
-	mappedFrameworks: String
-	mappedFrameworksNEQ: String
-	mappedFrameworksIn: [String!]
-	mappedFrameworksNotIn: [String!]
-	mappedFrameworksGT: String
-	mappedFrameworksGTE: String
-	mappedFrameworksLT: String
-	mappedFrameworksLTE: String
-	mappedFrameworksContains: String
-	mappedFrameworksHasPrefix: String
-	mappedFrameworksHasSuffix: String
-	mappedFrameworksIsNil: Boolean
-	mappedFrameworksNotNil: Boolean
-	mappedFrameworksEqualFold: String
-	mappedFrameworksContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
-	example_evidence field predicates
+	category_id field predicates
 	"""
-	exampleEvidence: String
-	exampleEvidenceNEQ: String
-	exampleEvidenceIn: [String!]
-	exampleEvidenceNotIn: [String!]
-	exampleEvidenceGT: String
-	exampleEvidenceGTE: String
-	exampleEvidenceLT: String
-	exampleEvidenceLTE: String
-	exampleEvidenceContains: String
-	exampleEvidenceHasPrefix: String
-	exampleEvidenceHasSuffix: String
-	exampleEvidenceIsNil: Boolean
-	exampleEvidenceNotNil: Boolean
-	exampleEvidenceEqualFold: String
-	exampleEvidenceContainsFold: String
+	categoryID: String
+	categoryIDNEQ: String
+	categoryIDIn: [String!]
+	categoryIDNotIn: [String!]
+	categoryIDGT: String
+	categoryIDGTE: String
+	categoryIDLT: String
+	categoryIDLTE: String
+	categoryIDContains: String
+	categoryIDHasPrefix: String
+	categoryIDHasSuffix: String
+	categoryIDIsNil: Boolean
+	categoryIDNotNil: Boolean
+	categoryIDEqualFold: String
+	categoryIDContainsFold: String
+	"""
+	subcategory field predicates
+	"""
+	subcategory: String
+	subcategoryNEQ: String
+	subcategoryIn: [String!]
+	subcategoryNotIn: [String!]
+	subcategoryGT: String
+	subcategoryGTE: String
+	subcategoryLT: String
+	subcategoryLTE: String
+	subcategoryContains: String
+	subcategoryHasPrefix: String
+	subcategoryHasSuffix: String
+	subcategoryIsNil: Boolean
+	subcategoryNotNil: Boolean
+	subcategoryEqualFold: String
+	subcategoryContainsFold: String
+	"""
+	ref_code field predicates
+	"""
+	refCode: String
+	refCodeNEQ: String
+	refCodeIn: [String!]
+	refCodeNotIn: [String!]
+	refCodeGT: String
+	refCodeGTE: String
+	refCodeLT: String
+	refCodeLTE: String
+	refCodeContains: String
+	refCodeHasPrefix: String
+	refCodeHasSuffix: String
+	refCodeEqualFold: String
+	refCodeContainsFold: String
+	"""
+	standard_id field predicates
+	"""
+	standardID: ID
+	standardIDNEQ: ID
+	standardIDIn: [ID!]
+	standardIDNotIn: [ID!]
+	standardIDGT: ID
+	standardIDGTE: ID
+	standardIDLT: ID
+	standardIDLTE: ID
+	standardIDContains: ID
+	standardIDHasPrefix: ID
+	standardIDHasSuffix: ID
+	standardIDIsNil: Boolean
+	standardIDNotNil: Boolean
+	standardIDEqualFold: ID
+	standardIDContainsFold: ID
 	"""
 	owner edge predicates
 	"""
@@ -3986,25 +4355,45 @@ input ControlWhereInput {
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
 	"""
-	procedures edge predicates
+	standard edge predicates
 	"""
-	hasProcedures: Boolean
-	hasProceduresWith: [ProcedureWhereInput!]
+	hasStandard: Boolean
+	hasStandardWith: [StandardWhereInput!]
 	"""
-	subcontrols edge predicates
+	programs edge predicates
 	"""
-	hasSubcontrols: Boolean
-	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
+	"""
+	evidence edge predicates
+	"""
+	hasEvidence: Boolean
+	hasEvidenceWith: [EvidenceWhereInput!]
+	"""
+	control_implementations edge predicates
+	"""
+	hasControlImplementations: Boolean
+	hasControlImplementationsWith: [ControlImplementationWhereInput!]
+	"""
+	mapped_controls edge predicates
+	"""
+	hasMappedControls: Boolean
+	hasMappedControlsWith: [MappedControlWhereInput!]
 	"""
 	control_objectives edge predicates
 	"""
 	hasControlObjectives: Boolean
 	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
-	standard edge predicates
+	subcontrols edge predicates
 	"""
-	hasStandard: Boolean
-	hasStandardWith: [StandardWhereInput!]
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	tasks edge predicates
+	"""
+	hasTasks: Boolean
+	hasTasksWith: [TaskWhereInput!]
 	"""
 	narratives edge predicates
 	"""
@@ -4021,20 +4410,25 @@ input ControlWhereInput {
 	hasActionPlans: Boolean
 	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
-	tasks edge predicates
+	procedures edge predicates
 	"""
-	hasTasks: Boolean
-	hasTasksWith: [TaskWhereInput!]
+	hasProcedures: Boolean
+	hasProceduresWith: [ProcedureWhereInput!]
 	"""
-	programs edge predicates
+	internal_policies edge predicates
 	"""
-	hasPrograms: Boolean
-	hasProgramsWith: [ProgramWhereInput!]
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
-	evidence edge predicates
+	control_owner edge predicates
 	"""
-	hasEvidence: Boolean
-	hasEvidenceWith: [EvidenceWhereInput!]
+	hasControlOwner: Boolean
+	hasControlOwnerWith: [GroupWhereInput!]
+	"""
+	delegate edge predicates
+	"""
+	hasDelegate: Boolean
+	hasDelegateWith: [GroupWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -4114,7 +4508,6 @@ input CreateActionPlanInput {
 	json data including details of the action plan
 	"""
 	details: Map
-	standardIDs: [ID!]
 	riskIDs: [ID!]
 	controlIDs: [ID!]
 	userIDs: [ID!]
@@ -4162,6 +4555,37 @@ input CreateContactInput {
 	fileIDs: [ID!]
 }
 """
+CreateControlImplementationInput is used for create ControlImplementation object.
+Input was generated by ent.
+"""
+input CreateControlImplementationInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	status of the control implementation
+	"""
+	status: String
+	"""
+	date the control was implemented
+	"""
+	implementationDate: Time
+	"""
+	set to true if the control implementation has been verified
+	"""
+	verified: Boolean
+	"""
+	date the control implementation was verified
+	"""
+	verificationDate: Time
+	"""
+	details of the control implementation
+	"""
+	details: String
+	controlIDs: [ID!]
+}
+"""
 CreateControlInput is used for create Control object.
 Input was generated by ent.
 """
@@ -4171,11 +4595,7 @@ input CreateControlInput {
 	"""
 	tags: [String!]
 	"""
-	the name of the control
-	"""
-	name: String!
-	"""
-	description of the control
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	"""
@@ -4183,59 +4603,76 @@ input CreateControlInput {
 	"""
 	status: String
 	"""
-	type of the control
-	"""
-	controlType: String
-	"""
-	version of the control
-	"""
-	version: String
-	"""
-	control number or identifier
-	"""
-	controlNumber: String
-	"""
-	family associated with the control
-	"""
-	family: String
-	"""
-	class associated with the control
-	"""
-	class: String
-	"""
 	source of the control, e.g. framework, template, custom, etc.
 	"""
-	source: String
+	source: ControlControlSource
 	"""
-	which control objectives are satisfied by the control
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	satisfies: String
+	controlType: ControlControlType
 	"""
-	mapped frameworks
+	category of the control
 	"""
-	mappedFrameworks: String
+	category: String
 	"""
-	json data including details of the control
+	category id of the control
 	"""
-	details: Map
+	categoryID: String
 	"""
-	example evidence to provide for the control
+	subcategory of the control
 	"""
-	exampleEvidence: String
+	subcategory: String
+	"""
+	mapped categories of the control to other standards
+	"""
+	mappedCategories: [String!]
+	"""
+	objectives of the audit assessment for the control
+	"""
+	assessmentObjectives: [AssessmentObjective!]
+	"""
+	methods used to verify the control implementation during an audit
+	"""
+	assessmentMethods: [AssessmentMethod!]
+	"""
+	questions to ask to verify the control
+	"""
+	controlQuestions: [String!]
+	"""
+	implementation guidance for the control
+	"""
+	implementationGuidance: [ImplementationGuidance!]
+	"""
+	examples of evidence for the control
+	"""
+	exampleEvidence: [ExampleEvidence!]
+	"""
+	references for the control
+	"""
+	references: [Reference!]
+	"""
+	the unique reference code for the control
+	"""
+	refCode: String!
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
-	procedureIDs: [ID!]
-	subcontrolIDs: [ID!]
+	standardID: ID
+	programIDs: [ID!]
+	evidenceIDs: [ID!]
+	controlImplementationIDs: [ID!]
+	mappedControlIDs: [ID!]
 	controlObjectiveIDs: [ID!]
-	standardIDs: [ID!]
+	subcontrolIDs: [ID!]
+	taskIDs: [ID!]
 	narrativeIDs: [ID!]
 	riskIDs: [ID!]
 	actionPlanIDs: [ID!]
-	taskIDs: [ID!]
-	programIDs: [ID!]
-	evidenceIDs: [ID!]
+	procedureIDs: [ID!]
+	internalPolicyIDs: [ID!]
+	controlOwnerID: ID
+	delegateID: ID
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -4251,15 +4688,19 @@ input CreateControlObjectiveInput {
 	"""
 	name: String!
 	"""
-	description of the control objective
+	the desired outcome or target of the control objective
 	"""
-	description: String
+	desiredOutcome: String
 	"""
 	status of the control objective
 	"""
 	status: String
 	"""
-	type of the control objective
+	source of the control, e.g. framework, template, custom, etc.
+	"""
+	source: ControlObjectiveControlSource
+	"""
+	type of the control objective e.g. compliance, financial, operational, etc.
 	"""
 	controlObjectiveType: String
 	"""
@@ -4267,47 +4708,26 @@ input CreateControlObjectiveInput {
 	"""
 	version: String
 	"""
-	number of the control objective
+	category of the control
 	"""
-	controlNumber: String
+	category: String
 	"""
-	family of the control objective
+	subcategory of the control
 	"""
-	family: String
-	"""
-	class associated with the control objective
-	"""
-	class: String
-	"""
-	source of the control objective, e.g. framework, template, user-defined, etc.
-	"""
-	source: String
-	"""
-	mapped frameworks
-	"""
-	mappedFrameworks: String
-	"""
-	json data including details of the control objective
-	"""
-	details: Map
-	"""
-	example evidence to provide for the control
-	"""
-	exampleEvidence: String
+	subcategory: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
-	internalPolicyIDs: [ID!]
-	controlIDs: [ID!]
-	procedureIDs: [ID!]
-	riskIDs: [ID!]
-	subcontrolIDs: [ID!]
-	standardIDs: [ID!]
-	narrativeIDs: [ID!]
-	taskIDs: [ID!]
 	programIDs: [ID!]
 	evidenceIDs: [ID!]
+	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
+	internalPolicyIDs: [ID!]
+	procedureIDs: [ID!]
+	riskIDs: [ID!]
+	narrativeIDs: [ID!]
+	taskIDs: [ID!]
 }
 input CreateControlWithSubcontrolsInput {
 	control: CreateControlInput
@@ -4325,7 +4745,7 @@ input CreateDocumentDataInput {
 	"""
 	the json data of the document
 	"""
-	data: JSON!
+	data: Map!
 	ownerID: ID
 	templateID: ID!
 	entityIDs: [ID!]
@@ -4530,7 +4950,6 @@ input CreateFileInput {
 }
 input CreateFullProgramInput {
 	program: CreateProgramInput!
-	standard: CreateStandardInput!
 	controls: [CreateControlWithSubcontrolsInput!]
 	risks: [CreateRiskInput!]
 	internalPolicies: [CreateInternalPolicyInput!]
@@ -4761,6 +5180,26 @@ input CreateInviteInput {
 	ownerID: ID
 	eventIDs: [ID!]
 }
+"""
+CreateMappedControlInput is used for create MappedControl object.
+Input was generated by ent.
+"""
+input CreateMappedControlInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+	"""
+	mappingType: String
+	"""
+	description of how the two controls are related
+	"""
+	relation: String
+	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
+}
 input CreateMemberWithProgramInput {
 	role: ProgramMembershipRole
 	userID: ID!
@@ -4783,21 +5222,14 @@ input CreateNarrativeInput {
 	"""
 	description: String
 	"""
-	which controls are satisfied by the narrative
+	text data for the narrative document
 	"""
-	satisfies: String
-	"""
-	json data for the narrative document
-	"""
-	details: Map
+	details: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
-	internalPolicyIDs: [ID!]
-	controlIDs: [ID!]
-	procedureIDs: [ID!]
-	controlObjectiveIDs: [ID!]
+	satisfyIDs: [ID!]
 	programIDs: [ID!]
 }
 """
@@ -4924,6 +5356,7 @@ input CreateOrganizationInput {
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	evidenceIDs: [ID!]
+	standardIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -5133,7 +5566,6 @@ input CreateProgramInput {
 	evidenceIDs: [ID!]
 	narrativeIDs: [ID!]
 	actionPlanIDs: [ID!]
-	standardIDs: [ID!]
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -5216,21 +5648,49 @@ input CreateStandardInput {
 	"""
 	tags: [String!]
 	"""
-	the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+	the long name of the standard body
 	"""
 	name: String!
+	"""
+	short name of the standard, e.g. SOC 2, ISO 27001, etc.
+	"""
+	shortName: String
+	"""
+	unique identifier of the standard with version
+	"""
+	framework: String
 	"""
 	description of the standard
 	"""
 	description: String
 	"""
-	family of the standard, e.g. 800-53, 800-171, 27001, etc.
+	governing body of the standard, e.g. AICPA, etc.
 	"""
-	family: String
+	governingBody: String
+	"""
+	domains the standard covers, e.g. availability, confidentiality, etc.
+	"""
+	domains: [String!]
+	"""
+	link to the official standard documentation
+	"""
+	link: String
 	"""
 	status of the standard - active, deprecated, etc.
 	"""
 	status: String
+	"""
+	indicates if the standard should be made available to all users, only for public standards
+	"""
+	isPublic: Boolean
+	"""
+	indicates if the standard is freely distributable under a trial license, only for public standards
+	"""
+	freeToUse: Boolean
+	"""
+	indicates if the standard is owned by the the openlane system
+	"""
+	systemOwned: Boolean
 	"""
 	type of the standard - security, privacy, etc.
 	"""
@@ -5240,26 +5700,11 @@ input CreateStandardInput {
 	"""
 	version: String
 	"""
-	purpose and scope
+	internal revision of the standard
 	"""
-	purposeAndScope: String
-	"""
-	background of the standard
-	"""
-	background: String
-	"""
-	which controls are satisfied by the standard
-	"""
-	satisfies: String
-	"""
-	json data with details of the standard
-	"""
-	details: Map
-	controlObjectiveIDs: [ID!]
+	revision: String
+	ownerID: ID
 	controlIDs: [ID!]
-	procedureIDs: [ID!]
-	actionPlanIDs: [ID!]
-	programIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -5271,78 +5716,78 @@ input CreateSubcontrolInput {
 	"""
 	tags: [String!]
 	"""
-	the name of the subcontrol
-	"""
-	name: String!
-	"""
-	description of the subcontrol
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	"""
-	status of the subcontrol
+	status of the control
 	"""
 	status: String
 	"""
-	type of the subcontrol
+	source of the control, e.g. framework, template, custom, etc.
 	"""
-	subcontrolType: String
+	source: SubcontrolControlSource
 	"""
-	version of the control
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	version: String
+	controlType: SubcontrolControlType
 	"""
-	number of the subcontrol
+	category of the control
 	"""
-	subcontrolNumber: String
+	category: String
 	"""
-	subcontrol family
+	category id of the control
 	"""
-	family: String
+	categoryID: String
 	"""
-	subcontrol class
+	subcategory of the control
 	"""
-	class: String
+	subcategory: String
 	"""
-	source of the control, e.g. framework, template, user-defined, etc.
+	mapped categories of the control to other standards
 	"""
-	source: String
+	mappedCategories: [String!]
 	"""
-	mapped frameworks that the subcontrol is part of
+	objectives of the audit assessment for the control
 	"""
-	mappedFrameworks: String
+	assessmentObjectives: [AssessmentObjective!]
 	"""
-	implementation evidence of the subcontrol
+	methods used to verify the control implementation during an audit
 	"""
-	implementationEvidence: String
+	assessmentMethods: [AssessmentMethod!]
 	"""
-	implementation status
+	questions to ask to verify the control
 	"""
-	implementationStatus: String
+	controlQuestions: [String!]
 	"""
-	date the subcontrol was implemented
+	implementation guidance for the control
 	"""
-	implementationDate: Time
+	implementationGuidance: [ImplementationGuidance!]
 	"""
-	implementation verification
+	examples of evidence for the control
 	"""
-	implementationVerification: String
+	exampleEvidence: [ExampleEvidence!]
 	"""
-	date the subcontrol implementation was verified
+	references for the control
 	"""
-	implementationVerificationDate: Time
+	references: [Reference!]
 	"""
-	json data details of the subcontrol
+	the unique reference code for the control
 	"""
-	details: Map
-	"""
-	example evidence to provide for the control
-	"""
-	exampleEvidence: String
+	refCode: String!
 	ownerID: ID
-	controlIDs: [ID!]!
-	taskIDs: [ID!]
-	programIDs: [ID!]
+	controlID: ID!
+	mappedControlIDs: [ID!]
 	evidenceIDs: [ID!]
+	controlObjectiveIDs: [ID!]
+	taskIDs: [ID!]
+	narrativeIDs: [ID!]
+	riskIDs: [ID!]
+	actionPlanIDs: [ID!]
+	procedureIDs: [ID!]
+	internalPolicyIDs: [ID!]
+	controlOwnerID: ID
+	delegateID: ID
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -5449,11 +5894,11 @@ input CreateTemplateInput {
 	"""
 	the jsonschema object of the template
 	"""
-	jsonconfig: JSON!
+	jsonconfig: Map!
 	"""
 	the uischema for the template to render in the UI
 	"""
-	uischema: JSON
+	uischema: Map
 	ownerID: ID
 	documentIDs: [ID!]
 	fileIDs: [ID!]
@@ -5588,7 +6033,7 @@ type DocumentData implements Node {
 	"""
 	the json data of the document
 	"""
-	data: JSON!
+	data: Map!
 	owner: Organization
 	template: Template!
 	entity: [Entity!]
@@ -5677,7 +6122,7 @@ type DocumentDataHistory implements Node {
 	"""
 	the json data of the document
 	"""
-	data: JSON!
+	data: Map!
 }
 """
 A connection to a list of items.
@@ -8683,6 +9128,7 @@ input EvidenceWhereInput {
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
 }
+scalar ExampleEvidence
 type File implements Node {
 	id: ID!
 	createdAt: Time
@@ -12114,6 +12560,7 @@ input HushWhereInput {
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
 }
+scalar ImplementationGuidance
 type Integration implements Node {
 	id: ID!
 	createdAt: Time
@@ -13940,6 +14387,514 @@ scalar JSON
 The builtin Map type
 """
 scalar Map
+type MappedControl implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+	"""
+	mappingType: String
+	"""
+	description of how the two controls are related
+	"""
+	relation: String
+	"""
+	mapped controls that have a relation to each other
+	"""
+	controls: [Control!]
+	"""
+	mapped subcontrols that have a relation to each other
+	"""
+	subcontrols: [Subcontrol!]
+}
+"""
+Return response for createBulkMappedControl mutation
+"""
+type MappedControlBulkCreatePayload {
+	"""
+	Created mappedControls
+	"""
+	mappedControls: [MappedControl!]
+}
+"""
+A connection to a list of items.
+"""
+type MappedControlConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [MappedControlEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createMappedControl mutation
+"""
+type MappedControlCreatePayload {
+	"""
+	Created mappedControl
+	"""
+	mappedControl: MappedControl!
+}
+"""
+Return response for deleteMappedControl mutation
+"""
+type MappedControlDeletePayload {
+	"""
+	Deleted mappedControl ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type MappedControlEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: MappedControl
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+type MappedControlHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: MappedControlHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+	"""
+	mappingType: String
+	"""
+	description of how the two controls are related
+	"""
+	relation: String
+}
+"""
+A connection to a list of items.
+"""
+type MappedControlHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [MappedControlHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type MappedControlHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: MappedControlHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+MappedControlHistoryOpType is enum for the field operation
+"""
+enum MappedControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
+Input was generated by ent.
+"""
+input MappedControlHistoryWhereInput {
+	not: MappedControlHistoryWhereInput
+	and: [MappedControlHistoryWhereInput!]
+	or: [MappedControlHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: MappedControlHistoryOpType
+	operationNEQ: MappedControlHistoryOpType
+	operationIn: [MappedControlHistoryOpType!]
+	operationNotIn: [MappedControlHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	deleted_at field predicates
+	"""
+	deletedAt: Time
+	deletedAtNEQ: Time
+	deletedAtIn: [Time!]
+	deletedAtNotIn: [Time!]
+	deletedAtGT: Time
+	deletedAtGTE: Time
+	deletedAtLT: Time
+	deletedAtLTE: Time
+	deletedAtIsNil: Boolean
+	deletedAtNotNil: Boolean
+	"""
+	deleted_by field predicates
+	"""
+	deletedBy: String
+	deletedByNEQ: String
+	deletedByIn: [String!]
+	deletedByNotIn: [String!]
+	deletedByGT: String
+	deletedByGTE: String
+	deletedByLT: String
+	deletedByLTE: String
+	deletedByContains: String
+	deletedByHasPrefix: String
+	deletedByHasSuffix: String
+	deletedByIsNil: Boolean
+	deletedByNotNil: Boolean
+	deletedByEqualFold: String
+	deletedByContainsFold: String
+	"""
+	mapping_type field predicates
+	"""
+	mappingType: String
+	mappingTypeNEQ: String
+	mappingTypeIn: [String!]
+	mappingTypeNotIn: [String!]
+	mappingTypeGT: String
+	mappingTypeGTE: String
+	mappingTypeLT: String
+	mappingTypeLTE: String
+	mappingTypeContains: String
+	mappingTypeHasPrefix: String
+	mappingTypeHasSuffix: String
+	mappingTypeIsNil: Boolean
+	mappingTypeNotNil: Boolean
+	mappingTypeEqualFold: String
+	mappingTypeContainsFold: String
+	"""
+	relation field predicates
+	"""
+	relation: String
+	relationNEQ: String
+	relationIn: [String!]
+	relationNotIn: [String!]
+	relationGT: String
+	relationGTE: String
+	relationLT: String
+	relationLTE: String
+	relationContains: String
+	relationHasPrefix: String
+	relationHasSuffix: String
+	relationIsNil: Boolean
+	relationNotNil: Boolean
+	relationEqualFold: String
+	relationContainsFold: String
+}
+type MappedControlSearchResult {
+	mappedControls: [MappedControl!]
+}
+"""
+Return response for updateMappedControl mutation
+"""
+type MappedControlUpdatePayload {
+	"""
+	Updated mappedControl
+	"""
+	mappedControl: MappedControl!
+}
+"""
+MappedControlWhereInput is used for filtering MappedControl objects.
+Input was generated by ent.
+"""
+input MappedControlWhereInput {
+	not: MappedControlWhereInput
+	and: [MappedControlWhereInput!]
+	or: [MappedControlWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	deleted_at field predicates
+	"""
+	deletedAt: Time
+	deletedAtNEQ: Time
+	deletedAtIn: [Time!]
+	deletedAtNotIn: [Time!]
+	deletedAtGT: Time
+	deletedAtGTE: Time
+	deletedAtLT: Time
+	deletedAtLTE: Time
+	deletedAtIsNil: Boolean
+	deletedAtNotNil: Boolean
+	"""
+	deleted_by field predicates
+	"""
+	deletedBy: String
+	deletedByNEQ: String
+	deletedByIn: [String!]
+	deletedByNotIn: [String!]
+	deletedByGT: String
+	deletedByGTE: String
+	deletedByLT: String
+	deletedByLTE: String
+	deletedByContains: String
+	deletedByHasPrefix: String
+	deletedByHasSuffix: String
+	deletedByIsNil: Boolean
+	deletedByNotNil: Boolean
+	deletedByEqualFold: String
+	deletedByContainsFold: String
+	"""
+	mapping_type field predicates
+	"""
+	mappingType: String
+	mappingTypeNEQ: String
+	mappingTypeIn: [String!]
+	mappingTypeNotIn: [String!]
+	mappingTypeGT: String
+	mappingTypeGTE: String
+	mappingTypeLT: String
+	mappingTypeLTE: String
+	mappingTypeContains: String
+	mappingTypeHasPrefix: String
+	mappingTypeHasSuffix: String
+	mappingTypeIsNil: Boolean
+	mappingTypeNotNil: Boolean
+	mappingTypeEqualFold: String
+	mappingTypeContainsFold: String
+	"""
+	relation field predicates
+	"""
+	relation: String
+	relationNEQ: String
+	relationIn: [String!]
+	relationNotIn: [String!]
+	relationGT: String
+	relationGTE: String
+	relationLT: String
+	relationLTE: String
+	relationContains: String
+	relationHasPrefix: String
+	relationHasSuffix: String
+	relationIsNil: Boolean
+	relationNotNil: Boolean
+	relationEqualFold: String
+	relationContainsFold: String
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
+}
 type Mutation {
 	"""
 	Create a new actionPlan
@@ -14141,6 +15096,56 @@ type Mutation {
 		"""
 		id: ID!
 	): ControlDeletePayload!
+	"""
+	Create a new controlImplementation
+	"""
+	createControlImplementation(
+		"""
+		values of the controlImplementation
+		"""
+		input: CreateControlImplementationInput!
+	): ControlImplementationCreatePayload!
+	"""
+	Create multiple new controlImplementations
+	"""
+	createBulkControlImplementation(
+		"""
+		values of the controlImplementation
+		"""
+		input: [CreateControlImplementationInput!]
+	): ControlImplementationBulkCreatePayload!
+	"""
+	Create multiple new controlImplementations via file upload
+	"""
+	createBulkCSVControlImplementation(
+		"""
+		csv file containing values of the controlImplementation
+		"""
+		input: Upload!
+	): ControlImplementationBulkCreatePayload!
+	"""
+	Update an existing controlImplementation
+	"""
+	updateControlImplementation(
+		"""
+		ID of the controlImplementation
+		"""
+		id: ID!
+
+		"""
+		New values for the controlImplementation
+		"""
+		input: UpdateControlImplementationInput!
+	): ControlImplementationUpdatePayload!
+	"""
+	Delete an existing controlImplementation
+	"""
+	deleteControlImplementation(
+		"""
+		ID of the controlImplementation
+		"""
+		id: ID!
+	): ControlImplementationDeletePayload!
 	"""
 	Create a new controlObjective
 	"""
@@ -14823,6 +15828,56 @@ type Mutation {
 		id: ID!
 	): InviteDeletePayload!
 	"""
+	Create a new mappedControl
+	"""
+	createMappedControl(
+		"""
+		values of the mappedControl
+		"""
+		input: CreateMappedControlInput!
+	): MappedControlCreatePayload!
+	"""
+	Create multiple new mappedControls
+	"""
+	createBulkMappedControl(
+		"""
+		values of the mappedControl
+		"""
+		input: [CreateMappedControlInput!]
+	): MappedControlBulkCreatePayload!
+	"""
+	Create multiple new mappedControls via file upload
+	"""
+	createBulkCSVMappedControl(
+		"""
+		csv file containing values of the mappedControl
+		"""
+		input: Upload!
+	): MappedControlBulkCreatePayload!
+	"""
+	Update an existing mappedControl
+	"""
+	updateMappedControl(
+		"""
+		ID of the mappedControl
+		"""
+		id: ID!
+
+		"""
+		New values for the mappedControl
+		"""
+		input: UpdateMappedControlInput!
+	): MappedControlUpdatePayload!
+	"""
+	Delete an existing mappedControl
+	"""
+	deleteMappedControl(
+		"""
+		ID of the mappedControl
+		"""
+		id: ID!
+	): MappedControlDeletePayload!
+	"""
 	Create a new narrative
 	"""
 	createNarrative(
@@ -15333,24 +16388,6 @@ type Mutation {
 		input: CreateStandardInput!
 	): StandardCreatePayload!
 	"""
-	Create multiple new standards
-	"""
-	createBulkStandard(
-		"""
-		values of the standard
-		"""
-		input: [CreateStandardInput!]
-	): StandardBulkCreatePayload!
-	"""
-	Create multiple new standards via file upload
-	"""
-	createBulkCSVStandard(
-		"""
-		csv file containing values of the standard
-		"""
-		input: Upload!
-	): StandardBulkCreatePayload!
-	"""
 	Update an existing standard
 	"""
 	updateStandard(
@@ -15699,13 +16736,9 @@ type Narrative implements Node {
 	"""
 	description: String
 	"""
-	which controls are satisfied by the narrative
+	text data for the narrative document
 	"""
-	satisfies: String
-	"""
-	json data for the narrative document
-	"""
-	details: Map
+	details: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -15719,10 +16752,10 @@ type Narrative implements Node {
 	provides view access to the risk to members of the group
 	"""
 	viewers: [Group!]
-	internalPolicy: [InternalPolicy!]
-	control: [Control!]
-	procedure: [Procedure!]
-	controlObjective: [ControlObjective!]
+	"""
+	which controls are satisfied by the narrative
+	"""
+	satisfies: [Control!]
 	programs: [Program!]
 }
 """
@@ -15814,13 +16847,9 @@ type NarrativeHistory implements Node {
 	"""
 	description: String
 	"""
-	which controls are satisfied by the narrative
+	text data for the narrative document
 	"""
-	satisfies: String
-	"""
-	json data for the narrative document
-	"""
-	details: Map
+	details: String
 }
 """
 A connection to a list of items.
@@ -16079,23 +17108,23 @@ input NarrativeHistoryWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
-	satisfies field predicates
+	details field predicates
 	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
 }
 type NarrativeSearchResult {
 	narratives: [Narrative!]
@@ -16292,23 +17321,23 @@ input NarrativeWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
-	satisfies field predicates
+	details field predicates
 	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -16330,25 +17359,10 @@ input NarrativeWhereInput {
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
 	"""
-	internal_policy edge predicates
+	satisfies edge predicates
 	"""
-	hasInternalPolicy: Boolean
-	hasInternalPolicyWith: [InternalPolicyWhereInput!]
-	"""
-	control edge predicates
-	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
-	"""
-	procedure edge predicates
-	"""
-	hasProcedure: Boolean
-	hasProcedureWith: [ProcedureWhereInput!]
-	"""
-	control_objective edge predicates
-	"""
-	hasControlObjective: Boolean
-	hasControlObjectiveWith: [ControlObjectiveWhereInput!]
+	hasSatisfies: Boolean
+	hasSatisfiesWith: [ControlWhereInput!]
 	"""
 	programs edge predicates
 	"""
@@ -18431,6 +19445,7 @@ type Organization implements Node {
 	controls: [Control!]
 	subcontrols: [Subcontrol!]
 	evidence: [Evidence!]
+	standards: [Standard!]
 	members: [OrgMembership!]
 }
 """
@@ -19992,6 +21007,11 @@ input OrganizationWhereInput {
 	hasEvidence: Boolean
 	hasEvidenceWith: [EvidenceWhereInput!]
 	"""
+	standards edge predicates
+	"""
+	hasStandards: Boolean
+	hasStandardsWith: [StandardWhereInput!]
+	"""
 	members edge predicates
 	"""
 	hasMembers: Boolean
@@ -21389,10 +22409,6 @@ type Program implements Node {
 	evidence: [Evidence!]
 	narratives: [Narrative!]
 	actionPlans: [ActionPlan!]
-	"""
-	the framework(s) that the program is based on
-	"""
-	standards: [Standard!]
 	users: [User!]
 	members: [ProgramMembership!]
 }
@@ -22618,11 +23634,6 @@ input ProgramWhereInput {
 	hasActionPlans: Boolean
 	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
-	standards edge predicates
-	"""
-	hasStandards: Boolean
-	hasStandardsWith: [StandardWhereInput!]
-	"""
 	users edge predicates
 	"""
 	hasUsers: Boolean
@@ -22834,6 +23845,58 @@ type Query {
 		"""
 		where: ControlHistoryWhereInput
 	): ControlHistoryConnection!
+	controlImplementations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
+	controlImplementationHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Filtering options for ControlImplementationHistories returned from the connection.
+		"""
+		where: ControlImplementationHistoryWhereInput
+	): ControlImplementationHistoryConnection!
 	controlObjectives(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -23586,6 +24649,58 @@ type Query {
 		"""
 		where: InviteWhereInput
 	): InviteConnection!
+	mappedControls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Filtering options for MappedControls returned from the connection.
+		"""
+		where: MappedControlWhereInput
+	): MappedControlConnection!
+	mappedControlHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Filtering options for MappedControlHistories returned from the connection.
+		"""
+		where: MappedControlHistoryWhereInput
+	): MappedControlHistoryConnection!
 	narratives(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -24572,6 +25687,15 @@ type Query {
 		query: String!
 	): ControlSearchResult
 	"""
+	Search across ControlImplementation objects
+	"""
+	adminControlImplementationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): ControlImplementationSearchResult
+	"""
 	Search across ControlObjective objects
 	"""
 	adminControlObjectiveSearch(
@@ -24661,6 +25785,15 @@ type Query {
 		"""
 		query: String!
 	): InternalPolicySearchResult
+	"""
+	Search across MappedControl objects
+	"""
+	adminMappedControlSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): MappedControlSearchResult
 	"""
 	Search across Narrative objects
 	"""
@@ -24850,6 +25983,15 @@ type Query {
 		id: ID!
 	): Control!
 	"""
+	Look up controlImplementation by ID
+	"""
+	controlImplementation(
+		"""
+		ID of the controlImplementation
+		"""
+		id: ID!
+	): ControlImplementation!
+	"""
 	Look up controlObjective by ID
 	"""
 	controlObjective(
@@ -24975,6 +26117,15 @@ type Query {
 		"""
 		id: ID!
 	): Invite!
+	"""
+	Look up mappedControl by ID
+	"""
+	mappedControl(
+		"""
+		ID of the mappedControl
+		"""
+		id: ID!
+	): MappedControl!
 	"""
 	Look up narrative by ID
 	"""
@@ -25111,6 +26262,15 @@ type Query {
 		query: String!
 	): ControlSearchResult
 	"""
+	Search across ControlImplementation objects
+	"""
+	controlImplementationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): ControlImplementationSearchResult
+	"""
 	Search across ControlObjective objects
 	"""
 	controlObjectiveSearch(
@@ -25200,6 +26360,15 @@ type Query {
 		"""
 		query: String!
 	): InternalPolicySearchResult
+	"""
+	Search across MappedControl objects
+	"""
+	mappedControlSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): MappedControlSearchResult
 	"""
 	Search across Narrative objects
 	"""
@@ -25430,6 +26599,7 @@ type Query {
 		id: ID!
 	): UserSetting!
 }
+scalar Reference
 type Risk implements Node {
 	id: ID!
 	createdAt: Time
@@ -26369,7 +27539,7 @@ input RiskWhereInput {
 	hasPrograms: Boolean
 	hasProgramsWith: [ProgramWhereInput!]
 }
-union SearchResult = APITokenSearchResult | ActionPlanSearchResult | ContactSearchResult | ControlSearchResult | ControlObjectiveSearchResult | DocumentDataSearchResult | EntitySearchResult | EntityTypeSearchResult | EventSearchResult | EvidenceSearchResult | FileSearchResult | GroupSearchResult | IntegrationSearchResult | InternalPolicySearchResult | NarrativeSearchResult | OrgSubscriptionSearchResult | OrganizationSearchResult | OrganizationSettingSearchResult | PersonalAccessTokenSearchResult | ProcedureSearchResult | ProgramSearchResult | RiskSearchResult | StandardSearchResult | SubcontrolSearchResult | SubscriberSearchResult | TaskSearchResult | TemplateSearchResult | UserSearchResult | UserSettingSearchResult
+union SearchResult = APITokenSearchResult | ActionPlanSearchResult | ContactSearchResult | ControlSearchResult | ControlImplementationSearchResult | ControlObjectiveSearchResult | DocumentDataSearchResult | EntitySearchResult | EntityTypeSearchResult | EventSearchResult | EvidenceSearchResult | FileSearchResult | GroupSearchResult | IntegrationSearchResult | InternalPolicySearchResult | MappedControlSearchResult | NarrativeSearchResult | OrgSubscriptionSearchResult | OrganizationSearchResult | OrganizationSettingSearchResult | PersonalAccessTokenSearchResult | ProcedureSearchResult | ProgramSearchResult | RiskSearchResult | StandardSearchResult | SubcontrolSearchResult | SubscriberSearchResult | TaskSearchResult | TemplateSearchResult | UserSearchResult | UserSettingSearchResult
 type SearchResultConnection {
 	"""
 	Information to aid in pagination.
@@ -26397,21 +27567,53 @@ type Standard implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	the long name of the standard body
 	"""
 	name: String!
+	"""
+	short name of the standard, e.g. SOC 2, ISO 27001, etc.
+	"""
+	shortName: String
+	"""
+	unique identifier of the standard with version
+	"""
+	framework: String
 	"""
 	description of the standard
 	"""
 	description: String
 	"""
-	family of the standard, e.g. 800-53, 800-171, 27001, etc.
+	governing body of the standard, e.g. AICPA, etc.
 	"""
-	family: String
+	governingBody: String
+	"""
+	domains the standard covers, e.g. availability, confidentiality, etc.
+	"""
+	domains: [String!]
+	"""
+	link to the official standard documentation
+	"""
+	link: String
 	"""
 	status of the standard - active, deprecated, etc.
 	"""
 	status: String
+	"""
+	indicates if the standard should be made available to all users, only for public standards
+	"""
+	isPublic: Boolean
+	"""
+	indicates if the standard is freely distributable under a trial license, only for public standards
+	"""
+	freeToUse: Boolean
+	"""
+	indicates if the standard is owned by the the openlane system
+	"""
+	systemOwned: Boolean
 	"""
 	type of the standard - security, privacy, etc.
 	"""
@@ -26421,26 +27623,11 @@ type Standard implements Node {
 	"""
 	version: String
 	"""
-	purpose and scope
+	internal revision of the standard
 	"""
-	purposeAndScope: String
-	"""
-	background of the standard
-	"""
-	background: String
-	"""
-	which controls are satisfied by the standard
-	"""
-	satisfies: String
-	"""
-	json data with details of the standard
-	"""
-	details: Map
-	controlObjectives: [ControlObjective!]
+	revision: String
+	owner: Organization
 	controls: [Control!]
-	procedures: [Procedure!]
-	actionPlans: [ActionPlan!]
-	programs: [Program!]
 }
 """
 Return response for createBulkStandard mutation
@@ -26515,21 +27702,53 @@ type StandardHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
+	the long name of the standard body
 	"""
 	name: String!
+	"""
+	short name of the standard, e.g. SOC 2, ISO 27001, etc.
+	"""
+	shortName: String
+	"""
+	unique identifier of the standard with version
+	"""
+	framework: String
 	"""
 	description of the standard
 	"""
 	description: String
 	"""
-	family of the standard, e.g. 800-53, 800-171, 27001, etc.
+	governing body of the standard, e.g. AICPA, etc.
 	"""
-	family: String
+	governingBody: String
+	"""
+	domains the standard covers, e.g. availability, confidentiality, etc.
+	"""
+	domains: [String!]
+	"""
+	link to the official standard documentation
+	"""
+	link: String
 	"""
 	status of the standard - active, deprecated, etc.
 	"""
 	status: String
+	"""
+	indicates if the standard should be made available to all users, only for public standards
+	"""
+	isPublic: Boolean
+	"""
+	indicates if the standard is freely distributable under a trial license, only for public standards
+	"""
+	freeToUse: Boolean
+	"""
+	indicates if the standard is owned by the the openlane system
+	"""
+	systemOwned: Boolean
 	"""
 	type of the standard - security, privacy, etc.
 	"""
@@ -26539,21 +27758,9 @@ type StandardHistory implements Node {
 	"""
 	version: String
 	"""
-	purpose and scope
+	internal revision of the standard
 	"""
-	purposeAndScope: String
-	"""
-	background of the standard
-	"""
-	background: String
-	"""
-	which controls are satisfied by the standard
-	"""
-	satisfies: String
-	"""
-	json data with details of the standard
-	"""
-	details: Map
+	revision: String
 }
 """
 A connection to a list of items.
@@ -26744,6 +27951,24 @@ input StandardHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -26759,6 +27984,42 @@ input StandardHistoryWhereInput {
 	nameHasSuffix: String
 	nameEqualFold: String
 	nameContainsFold: String
+	"""
+	short_name field predicates
+	"""
+	shortName: String
+	shortNameNEQ: String
+	shortNameIn: [String!]
+	shortNameNotIn: [String!]
+	shortNameGT: String
+	shortNameGTE: String
+	shortNameLT: String
+	shortNameLTE: String
+	shortNameContains: String
+	shortNameHasPrefix: String
+	shortNameHasSuffix: String
+	shortNameIsNil: Boolean
+	shortNameNotNil: Boolean
+	shortNameEqualFold: String
+	shortNameContainsFold: String
+	"""
+	framework field predicates
+	"""
+	framework: String
+	frameworkNEQ: String
+	frameworkIn: [String!]
+	frameworkNotIn: [String!]
+	frameworkGT: String
+	frameworkGTE: String
+	frameworkLT: String
+	frameworkLTE: String
+	frameworkContains: String
+	frameworkHasPrefix: String
+	frameworkHasSuffix: String
+	frameworkIsNil: Boolean
+	frameworkNotNil: Boolean
+	frameworkEqualFold: String
+	frameworkContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -26778,23 +28039,41 @@ input StandardHistoryWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
-	family field predicates
+	governing_body field predicates
 	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
+	governingBody: String
+	governingBodyNEQ: String
+	governingBodyIn: [String!]
+	governingBodyNotIn: [String!]
+	governingBodyGT: String
+	governingBodyGTE: String
+	governingBodyLT: String
+	governingBodyLTE: String
+	governingBodyContains: String
+	governingBodyHasPrefix: String
+	governingBodyHasSuffix: String
+	governingBodyIsNil: Boolean
+	governingBodyNotNil: Boolean
+	governingBodyEqualFold: String
+	governingBodyContainsFold: String
+	"""
+	link field predicates
+	"""
+	link: String
+	linkNEQ: String
+	linkIn: [String!]
+	linkNotIn: [String!]
+	linkGT: String
+	linkGTE: String
+	linkLT: String
+	linkLTE: String
+	linkContains: String
+	linkHasPrefix: String
+	linkHasSuffix: String
+	linkIsNil: Boolean
+	linkNotNil: Boolean
+	linkEqualFold: String
+	linkContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -26813,6 +28092,27 @@ input StandardHistoryWhereInput {
 	statusNotNil: Boolean
 	statusEqualFold: String
 	statusContainsFold: String
+	"""
+	is_public field predicates
+	"""
+	isPublic: Boolean
+	isPublicNEQ: Boolean
+	isPublicIsNil: Boolean
+	isPublicNotNil: Boolean
+	"""
+	free_to_use field predicates
+	"""
+	freeToUse: Boolean
+	freeToUseNEQ: Boolean
+	freeToUseIsNil: Boolean
+	freeToUseNotNil: Boolean
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
 	"""
 	standard_type field predicates
 	"""
@@ -26850,59 +28150,23 @@ input StandardHistoryWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	purpose_and_scope field predicates
+	revision field predicates
 	"""
-	purposeAndScope: String
-	purposeAndScopeNEQ: String
-	purposeAndScopeIn: [String!]
-	purposeAndScopeNotIn: [String!]
-	purposeAndScopeGT: String
-	purposeAndScopeGTE: String
-	purposeAndScopeLT: String
-	purposeAndScopeLTE: String
-	purposeAndScopeContains: String
-	purposeAndScopeHasPrefix: String
-	purposeAndScopeHasSuffix: String
-	purposeAndScopeIsNil: Boolean
-	purposeAndScopeNotNil: Boolean
-	purposeAndScopeEqualFold: String
-	purposeAndScopeContainsFold: String
-	"""
-	background field predicates
-	"""
-	background: String
-	backgroundNEQ: String
-	backgroundIn: [String!]
-	backgroundNotIn: [String!]
-	backgroundGT: String
-	backgroundGTE: String
-	backgroundLT: String
-	backgroundLTE: String
-	backgroundContains: String
-	backgroundHasPrefix: String
-	backgroundHasSuffix: String
-	backgroundIsNil: Boolean
-	backgroundNotNil: Boolean
-	backgroundEqualFold: String
-	backgroundContainsFold: String
-	"""
-	satisfies field predicates
-	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
 }
 type StandardSearchResult {
 	standards: [Standard!]
@@ -27031,6 +28295,24 @@ input StandardWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -27046,6 +28328,42 @@ input StandardWhereInput {
 	nameHasSuffix: String
 	nameEqualFold: String
 	nameContainsFold: String
+	"""
+	short_name field predicates
+	"""
+	shortName: String
+	shortNameNEQ: String
+	shortNameIn: [String!]
+	shortNameNotIn: [String!]
+	shortNameGT: String
+	shortNameGTE: String
+	shortNameLT: String
+	shortNameLTE: String
+	shortNameContains: String
+	shortNameHasPrefix: String
+	shortNameHasSuffix: String
+	shortNameIsNil: Boolean
+	shortNameNotNil: Boolean
+	shortNameEqualFold: String
+	shortNameContainsFold: String
+	"""
+	framework field predicates
+	"""
+	framework: String
+	frameworkNEQ: String
+	frameworkIn: [String!]
+	frameworkNotIn: [String!]
+	frameworkGT: String
+	frameworkGTE: String
+	frameworkLT: String
+	frameworkLTE: String
+	frameworkContains: String
+	frameworkHasPrefix: String
+	frameworkHasSuffix: String
+	frameworkIsNil: Boolean
+	frameworkNotNil: Boolean
+	frameworkEqualFold: String
+	frameworkContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -27065,23 +28383,41 @@ input StandardWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
-	family field predicates
+	governing_body field predicates
 	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
+	governingBody: String
+	governingBodyNEQ: String
+	governingBodyIn: [String!]
+	governingBodyNotIn: [String!]
+	governingBodyGT: String
+	governingBodyGTE: String
+	governingBodyLT: String
+	governingBodyLTE: String
+	governingBodyContains: String
+	governingBodyHasPrefix: String
+	governingBodyHasSuffix: String
+	governingBodyIsNil: Boolean
+	governingBodyNotNil: Boolean
+	governingBodyEqualFold: String
+	governingBodyContainsFold: String
+	"""
+	link field predicates
+	"""
+	link: String
+	linkNEQ: String
+	linkIn: [String!]
+	linkNotIn: [String!]
+	linkGT: String
+	linkGTE: String
+	linkLT: String
+	linkLTE: String
+	linkContains: String
+	linkHasPrefix: String
+	linkHasSuffix: String
+	linkIsNil: Boolean
+	linkNotNil: Boolean
+	linkEqualFold: String
+	linkContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -27100,6 +28436,27 @@ input StandardWhereInput {
 	statusNotNil: Boolean
 	statusEqualFold: String
 	statusContainsFold: String
+	"""
+	is_public field predicates
+	"""
+	isPublic: Boolean
+	isPublicNEQ: Boolean
+	isPublicIsNil: Boolean
+	isPublicNotNil: Boolean
+	"""
+	free_to_use field predicates
+	"""
+	freeToUse: Boolean
+	freeToUseNEQ: Boolean
+	freeToUseIsNil: Boolean
+	freeToUseNotNil: Boolean
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
 	"""
 	standard_type field predicates
 	"""
@@ -27137,84 +28494,33 @@ input StandardWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	purpose_and_scope field predicates
+	revision field predicates
 	"""
-	purposeAndScope: String
-	purposeAndScopeNEQ: String
-	purposeAndScopeIn: [String!]
-	purposeAndScopeNotIn: [String!]
-	purposeAndScopeGT: String
-	purposeAndScopeGTE: String
-	purposeAndScopeLT: String
-	purposeAndScopeLTE: String
-	purposeAndScopeContains: String
-	purposeAndScopeHasPrefix: String
-	purposeAndScopeHasSuffix: String
-	purposeAndScopeIsNil: Boolean
-	purposeAndScopeNotNil: Boolean
-	purposeAndScopeEqualFold: String
-	purposeAndScopeContainsFold: String
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
 	"""
-	background field predicates
+	owner edge predicates
 	"""
-	background: String
-	backgroundNEQ: String
-	backgroundIn: [String!]
-	backgroundNotIn: [String!]
-	backgroundGT: String
-	backgroundGTE: String
-	backgroundLT: String
-	backgroundLTE: String
-	backgroundContains: String
-	backgroundHasPrefix: String
-	backgroundHasSuffix: String
-	backgroundIsNil: Boolean
-	backgroundNotNil: Boolean
-	backgroundEqualFold: String
-	backgroundContainsFold: String
-	"""
-	satisfies field predicates
-	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
-	"""
-	control_objectives edge predicates
-	"""
-	hasControlObjectives: Boolean
-	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
 	"""
 	controls edge predicates
 	"""
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
-	"""
-	procedures edge predicates
-	"""
-	hasProcedures: Boolean
-	hasProceduresWith: [ProcedureWhereInput!]
-	"""
-	action_plans edge predicates
-	"""
-	hasActionPlans: Boolean
-	hasActionPlansWith: [ActionPlanWhereInput!]
-	"""
-	programs edge predicates
-	"""
-	hasPrograms: Boolean
-	hasProgramsWith: [ProgramWhereInput!]
 }
 type Subcontrol implements Node {
 	id: ID!
@@ -27237,78 +28543,91 @@ type Subcontrol implements Node {
 	"""
 	ownerID: ID
 	"""
-	the name of the subcontrol
-	"""
-	name: String!
-	"""
-	description of the subcontrol
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	"""
-	status of the subcontrol
+	status of the control
 	"""
 	status: String
 	"""
-	type of the subcontrol
+	source of the control, e.g. framework, template, custom, etc.
 	"""
-	subcontrolType: String
+	source: SubcontrolControlSource
 	"""
-	version of the control
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	version: String
+	controlType: SubcontrolControlType
 	"""
-	number of the subcontrol
+	category of the control
 	"""
-	subcontrolNumber: String
+	category: String
 	"""
-	subcontrol family
+	category id of the control
 	"""
-	family: String
+	categoryID: String
 	"""
-	subcontrol class
+	subcategory of the control
 	"""
-	class: String
+	subcategory: String
 	"""
-	source of the control, e.g. framework, template, user-defined, etc.
+	mapped categories of the control to other standards
 	"""
-	source: String
+	mappedCategories: [String!]
 	"""
-	mapped frameworks that the subcontrol is part of
+	objectives of the audit assessment for the control
 	"""
-	mappedFrameworks: String
+	assessmentObjectives: [AssessmentObjective!]
 	"""
-	implementation evidence of the subcontrol
+	methods used to verify the control implementation during an audit
 	"""
-	implementationEvidence: String
+	assessmentMethods: [AssessmentMethod!]
 	"""
-	implementation status
+	questions to ask to verify the control
 	"""
-	implementationStatus: String
+	controlQuestions: [String!]
 	"""
-	date the subcontrol was implemented
+	implementation guidance for the control
 	"""
-	implementationDate: Time
+	implementationGuidance: [ImplementationGuidance!]
 	"""
-	implementation verification
+	examples of evidence for the control
 	"""
-	implementationVerification: String
+	exampleEvidence: [ExampleEvidence!]
 	"""
-	date the subcontrol implementation was verified
+	references for the control
 	"""
-	implementationVerificationDate: Time
+	references: [Reference!]
 	"""
-	json data details of the subcontrol
+	the unique reference code for the control
 	"""
-	details: Map
+	refCode: String!
 	"""
-	example evidence to provide for the control
+	the id of the parent control
 	"""
-	exampleEvidence: String
+	controlID: ID!
 	owner: Organization
-	controls: [Control!]!
-	tasks: [Task!]
-	programs: [Program!]
+	control: Control!
+	"""
+	mapped subcontrols that have a relation to another control or subcontrol
+	"""
+	mappedControls: [MappedControl!]
 	evidence: [Evidence!]
+	controlObjectives: [ControlObjective!]
+	tasks: [Task!]
+	narratives: [Narrative!]
+	risks: [Risk!]
+	actionPlans: [ActionPlan!]
+	procedures: [Procedure!]
+	internalPolicies: [InternalPolicy!]
+	"""
+	the user who is responsible for the subcontrol, defaults to the parent control owner if not set
+	"""
+	controlOwner: Group
+	"""
+	temporary delegate for the control, used for temporary control ownership
+	"""
+	delegate: Group
 }
 """
 Return response for createBulkSubcontrol mutation
@@ -27335,6 +28654,24 @@ type SubcontrolConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+SubcontrolControlSource is enum for the field source
+"""
+enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+	FRAMEWORK
+	TEMPLATE
+	USER_DEFINED
+	IMPORTED
+}
+"""
+SubcontrolControlType is enum for the field control_type
+"""
+enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+	PREVENTATIVE
+	DETECTIVE
+	CORRECTIVE
+	DETERRENT
 }
 """
 Return response for createSubcontrol mutation
@@ -27391,73 +28728,69 @@ type SubcontrolHistory implements Node {
 	"""
 	ownerID: String
 	"""
-	the name of the subcontrol
-	"""
-	name: String!
-	"""
-	description of the subcontrol
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	"""
-	status of the subcontrol
+	status of the control
 	"""
 	status: String
 	"""
-	type of the subcontrol
+	source of the control, e.g. framework, template, custom, etc.
 	"""
-	subcontrolType: String
+	source: SubcontrolHistoryControlSource
 	"""
-	version of the control
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	version: String
+	controlType: SubcontrolHistoryControlType
 	"""
-	number of the subcontrol
+	category of the control
 	"""
-	subcontrolNumber: String
+	category: String
 	"""
-	subcontrol family
+	category id of the control
 	"""
-	family: String
+	categoryID: String
 	"""
-	subcontrol class
+	subcategory of the control
 	"""
-	class: String
+	subcategory: String
 	"""
-	source of the control, e.g. framework, template, user-defined, etc.
+	mapped categories of the control to other standards
 	"""
-	source: String
+	mappedCategories: [String!]
 	"""
-	mapped frameworks that the subcontrol is part of
+	objectives of the audit assessment for the control
 	"""
-	mappedFrameworks: String
+	assessmentObjectives: [AssessmentObjective!]
 	"""
-	implementation evidence of the subcontrol
+	methods used to verify the control implementation during an audit
 	"""
-	implementationEvidence: String
+	assessmentMethods: [AssessmentMethod!]
 	"""
-	implementation status
+	questions to ask to verify the control
 	"""
-	implementationStatus: String
+	controlQuestions: [String!]
 	"""
-	date the subcontrol was implemented
+	implementation guidance for the control
 	"""
-	implementationDate: Time
+	implementationGuidance: [ImplementationGuidance!]
 	"""
-	implementation verification
+	examples of evidence for the control
 	"""
-	implementationVerification: String
+	exampleEvidence: [ExampleEvidence!]
 	"""
-	date the subcontrol implementation was verified
+	references for the control
 	"""
-	implementationVerificationDate: Time
+	references: [Reference!]
 	"""
-	json data details of the subcontrol
+	the unique reference code for the control
 	"""
-	details: Map
+	refCode: String!
 	"""
-	example evidence to provide for the control
+	the id of the parent control
 	"""
-	exampleEvidence: String
+	controlID: String!
 }
 """
 A connection to a list of items.
@@ -27475,6 +28808,24 @@ type SubcontrolHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+SubcontrolHistoryControlSource is enum for the field source
+"""
+enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+	FRAMEWORK
+	TEMPLATE
+	USER_DEFINED
+	IMPORTED
+}
+"""
+SubcontrolHistoryControlType is enum for the field control_type
+"""
+enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+	PREVENTATIVE
+	DETECTIVE
+	CORRECTIVE
+	DETERRENT
 }
 """
 An edge in a connection.
@@ -27682,22 +29033,6 @@ input SubcontrolHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
-	name field predicates
-	"""
-	name: String
-	nameNEQ: String
-	nameIn: [String!]
-	nameNotIn: [String!]
-	nameGT: String
-	nameGTE: String
-	nameLT: String
-	nameLTE: String
-	nameContains: String
-	nameHasPrefix: String
-	nameHasSuffix: String
-	nameEqualFold: String
-	nameContainsFold: String
-	"""
 	description field predicates
 	"""
 	description: String
@@ -27734,229 +29069,109 @@ input SubcontrolHistoryWhereInput {
 	statusEqualFold: String
 	statusContainsFold: String
 	"""
-	subcontrol_type field predicates
-	"""
-	subcontrolType: String
-	subcontrolTypeNEQ: String
-	subcontrolTypeIn: [String!]
-	subcontrolTypeNotIn: [String!]
-	subcontrolTypeGT: String
-	subcontrolTypeGTE: String
-	subcontrolTypeLT: String
-	subcontrolTypeLTE: String
-	subcontrolTypeContains: String
-	subcontrolTypeHasPrefix: String
-	subcontrolTypeHasSuffix: String
-	subcontrolTypeIsNil: Boolean
-	subcontrolTypeNotNil: Boolean
-	subcontrolTypeEqualFold: String
-	subcontrolTypeContainsFold: String
-	"""
-	version field predicates
-	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
-	"""
-	subcontrol_number field predicates
-	"""
-	subcontrolNumber: String
-	subcontrolNumberNEQ: String
-	subcontrolNumberIn: [String!]
-	subcontrolNumberNotIn: [String!]
-	subcontrolNumberGT: String
-	subcontrolNumberGTE: String
-	subcontrolNumberLT: String
-	subcontrolNumberLTE: String
-	subcontrolNumberContains: String
-	subcontrolNumberHasPrefix: String
-	subcontrolNumberHasSuffix: String
-	subcontrolNumberIsNil: Boolean
-	subcontrolNumberNotNil: Boolean
-	subcontrolNumberEqualFold: String
-	subcontrolNumberContainsFold: String
-	"""
-	family field predicates
-	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
-	"""
-	class field predicates
-	"""
-	class: String
-	classNEQ: String
-	classIn: [String!]
-	classNotIn: [String!]
-	classGT: String
-	classGTE: String
-	classLT: String
-	classLTE: String
-	classContains: String
-	classHasPrefix: String
-	classHasSuffix: String
-	classIsNil: Boolean
-	classNotNil: Boolean
-	classEqualFold: String
-	classContainsFold: String
-	"""
 	source field predicates
 	"""
-	source: String
-	sourceNEQ: String
-	sourceIn: [String!]
-	sourceNotIn: [String!]
-	sourceGT: String
-	sourceGTE: String
-	sourceLT: String
-	sourceLTE: String
-	sourceContains: String
-	sourceHasPrefix: String
-	sourceHasSuffix: String
+	source: SubcontrolHistoryControlSource
+	sourceNEQ: SubcontrolHistoryControlSource
+	sourceIn: [SubcontrolHistoryControlSource!]
+	sourceNotIn: [SubcontrolHistoryControlSource!]
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
-	sourceEqualFold: String
-	sourceContainsFold: String
 	"""
-	mapped_frameworks field predicates
+	control_type field predicates
 	"""
-	mappedFrameworks: String
-	mappedFrameworksNEQ: String
-	mappedFrameworksIn: [String!]
-	mappedFrameworksNotIn: [String!]
-	mappedFrameworksGT: String
-	mappedFrameworksGTE: String
-	mappedFrameworksLT: String
-	mappedFrameworksLTE: String
-	mappedFrameworksContains: String
-	mappedFrameworksHasPrefix: String
-	mappedFrameworksHasSuffix: String
-	mappedFrameworksIsNil: Boolean
-	mappedFrameworksNotNil: Boolean
-	mappedFrameworksEqualFold: String
-	mappedFrameworksContainsFold: String
+	controlType: SubcontrolHistoryControlType
+	controlTypeNEQ: SubcontrolHistoryControlType
+	controlTypeIn: [SubcontrolHistoryControlType!]
+	controlTypeNotIn: [SubcontrolHistoryControlType!]
+	controlTypeIsNil: Boolean
+	controlTypeNotNil: Boolean
 	"""
-	implementation_evidence field predicates
+	category field predicates
 	"""
-	implementationEvidence: String
-	implementationEvidenceNEQ: String
-	implementationEvidenceIn: [String!]
-	implementationEvidenceNotIn: [String!]
-	implementationEvidenceGT: String
-	implementationEvidenceGTE: String
-	implementationEvidenceLT: String
-	implementationEvidenceLTE: String
-	implementationEvidenceContains: String
-	implementationEvidenceHasPrefix: String
-	implementationEvidenceHasSuffix: String
-	implementationEvidenceIsNil: Boolean
-	implementationEvidenceNotNil: Boolean
-	implementationEvidenceEqualFold: String
-	implementationEvidenceContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
-	implementation_status field predicates
+	category_id field predicates
 	"""
-	implementationStatus: String
-	implementationStatusNEQ: String
-	implementationStatusIn: [String!]
-	implementationStatusNotIn: [String!]
-	implementationStatusGT: String
-	implementationStatusGTE: String
-	implementationStatusLT: String
-	implementationStatusLTE: String
-	implementationStatusContains: String
-	implementationStatusHasPrefix: String
-	implementationStatusHasSuffix: String
-	implementationStatusIsNil: Boolean
-	implementationStatusNotNil: Boolean
-	implementationStatusEqualFold: String
-	implementationStatusContainsFold: String
+	categoryID: String
+	categoryIDNEQ: String
+	categoryIDIn: [String!]
+	categoryIDNotIn: [String!]
+	categoryIDGT: String
+	categoryIDGTE: String
+	categoryIDLT: String
+	categoryIDLTE: String
+	categoryIDContains: String
+	categoryIDHasPrefix: String
+	categoryIDHasSuffix: String
+	categoryIDIsNil: Boolean
+	categoryIDNotNil: Boolean
+	categoryIDEqualFold: String
+	categoryIDContainsFold: String
 	"""
-	implementation_date field predicates
+	subcategory field predicates
 	"""
-	implementationDate: Time
-	implementationDateNEQ: Time
-	implementationDateIn: [Time!]
-	implementationDateNotIn: [Time!]
-	implementationDateGT: Time
-	implementationDateGTE: Time
-	implementationDateLT: Time
-	implementationDateLTE: Time
-	implementationDateIsNil: Boolean
-	implementationDateNotNil: Boolean
+	subcategory: String
+	subcategoryNEQ: String
+	subcategoryIn: [String!]
+	subcategoryNotIn: [String!]
+	subcategoryGT: String
+	subcategoryGTE: String
+	subcategoryLT: String
+	subcategoryLTE: String
+	subcategoryContains: String
+	subcategoryHasPrefix: String
+	subcategoryHasSuffix: String
+	subcategoryIsNil: Boolean
+	subcategoryNotNil: Boolean
+	subcategoryEqualFold: String
+	subcategoryContainsFold: String
 	"""
-	implementation_verification field predicates
+	ref_code field predicates
 	"""
-	implementationVerification: String
-	implementationVerificationNEQ: String
-	implementationVerificationIn: [String!]
-	implementationVerificationNotIn: [String!]
-	implementationVerificationGT: String
-	implementationVerificationGTE: String
-	implementationVerificationLT: String
-	implementationVerificationLTE: String
-	implementationVerificationContains: String
-	implementationVerificationHasPrefix: String
-	implementationVerificationHasSuffix: String
-	implementationVerificationIsNil: Boolean
-	implementationVerificationNotNil: Boolean
-	implementationVerificationEqualFold: String
-	implementationVerificationContainsFold: String
+	refCode: String
+	refCodeNEQ: String
+	refCodeIn: [String!]
+	refCodeNotIn: [String!]
+	refCodeGT: String
+	refCodeGTE: String
+	refCodeLT: String
+	refCodeLTE: String
+	refCodeContains: String
+	refCodeHasPrefix: String
+	refCodeHasSuffix: String
+	refCodeEqualFold: String
+	refCodeContainsFold: String
 	"""
-	implementation_verification_date field predicates
+	control_id field predicates
 	"""
-	implementationVerificationDate: Time
-	implementationVerificationDateNEQ: Time
-	implementationVerificationDateIn: [Time!]
-	implementationVerificationDateNotIn: [Time!]
-	implementationVerificationDateGT: Time
-	implementationVerificationDateGTE: Time
-	implementationVerificationDateLT: Time
-	implementationVerificationDateLTE: Time
-	implementationVerificationDateIsNil: Boolean
-	implementationVerificationDateNotNil: Boolean
-	"""
-	example_evidence field predicates
-	"""
-	exampleEvidence: String
-	exampleEvidenceNEQ: String
-	exampleEvidenceIn: [String!]
-	exampleEvidenceNotIn: [String!]
-	exampleEvidenceGT: String
-	exampleEvidenceGTE: String
-	exampleEvidenceLT: String
-	exampleEvidenceLTE: String
-	exampleEvidenceContains: String
-	exampleEvidenceHasPrefix: String
-	exampleEvidenceHasSuffix: String
-	exampleEvidenceIsNil: Boolean
-	exampleEvidenceNotNil: Boolean
-	exampleEvidenceEqualFold: String
-	exampleEvidenceContainsFold: String
+	controlID: String
+	controlIDNEQ: String
+	controlIDIn: [String!]
+	controlIDNotIn: [String!]
+	controlIDGT: String
+	controlIDGTE: String
+	controlIDLT: String
+	controlIDLTE: String
+	controlIDContains: String
+	controlIDHasPrefix: String
+	controlIDHasSuffix: String
+	controlIDEqualFold: String
+	controlIDContainsFold: String
 }
 type SubcontrolSearchResult {
 	subcontrols: [Subcontrol!]
@@ -28119,22 +29334,6 @@ input SubcontrolWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
-	name field predicates
-	"""
-	name: String
-	nameNEQ: String
-	nameIn: [String!]
-	nameNotIn: [String!]
-	nameGT: String
-	nameGTE: String
-	nameLT: String
-	nameLTE: String
-	nameContains: String
-	nameHasPrefix: String
-	nameHasSuffix: String
-	nameEqualFold: String
-	nameContainsFold: String
-	"""
 	description field predicates
 	"""
 	description: String
@@ -28171,254 +29370,174 @@ input SubcontrolWhereInput {
 	statusEqualFold: String
 	statusContainsFold: String
 	"""
-	subcontrol_type field predicates
-	"""
-	subcontrolType: String
-	subcontrolTypeNEQ: String
-	subcontrolTypeIn: [String!]
-	subcontrolTypeNotIn: [String!]
-	subcontrolTypeGT: String
-	subcontrolTypeGTE: String
-	subcontrolTypeLT: String
-	subcontrolTypeLTE: String
-	subcontrolTypeContains: String
-	subcontrolTypeHasPrefix: String
-	subcontrolTypeHasSuffix: String
-	subcontrolTypeIsNil: Boolean
-	subcontrolTypeNotNil: Boolean
-	subcontrolTypeEqualFold: String
-	subcontrolTypeContainsFold: String
-	"""
-	version field predicates
-	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
-	"""
-	subcontrol_number field predicates
-	"""
-	subcontrolNumber: String
-	subcontrolNumberNEQ: String
-	subcontrolNumberIn: [String!]
-	subcontrolNumberNotIn: [String!]
-	subcontrolNumberGT: String
-	subcontrolNumberGTE: String
-	subcontrolNumberLT: String
-	subcontrolNumberLTE: String
-	subcontrolNumberContains: String
-	subcontrolNumberHasPrefix: String
-	subcontrolNumberHasSuffix: String
-	subcontrolNumberIsNil: Boolean
-	subcontrolNumberNotNil: Boolean
-	subcontrolNumberEqualFold: String
-	subcontrolNumberContainsFold: String
-	"""
-	family field predicates
-	"""
-	family: String
-	familyNEQ: String
-	familyIn: [String!]
-	familyNotIn: [String!]
-	familyGT: String
-	familyGTE: String
-	familyLT: String
-	familyLTE: String
-	familyContains: String
-	familyHasPrefix: String
-	familyHasSuffix: String
-	familyIsNil: Boolean
-	familyNotNil: Boolean
-	familyEqualFold: String
-	familyContainsFold: String
-	"""
-	class field predicates
-	"""
-	class: String
-	classNEQ: String
-	classIn: [String!]
-	classNotIn: [String!]
-	classGT: String
-	classGTE: String
-	classLT: String
-	classLTE: String
-	classContains: String
-	classHasPrefix: String
-	classHasSuffix: String
-	classIsNil: Boolean
-	classNotNil: Boolean
-	classEqualFold: String
-	classContainsFold: String
-	"""
 	source field predicates
 	"""
-	source: String
-	sourceNEQ: String
-	sourceIn: [String!]
-	sourceNotIn: [String!]
-	sourceGT: String
-	sourceGTE: String
-	sourceLT: String
-	sourceLTE: String
-	sourceContains: String
-	sourceHasPrefix: String
-	sourceHasSuffix: String
+	source: SubcontrolControlSource
+	sourceNEQ: SubcontrolControlSource
+	sourceIn: [SubcontrolControlSource!]
+	sourceNotIn: [SubcontrolControlSource!]
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
-	sourceEqualFold: String
-	sourceContainsFold: String
 	"""
-	mapped_frameworks field predicates
+	control_type field predicates
 	"""
-	mappedFrameworks: String
-	mappedFrameworksNEQ: String
-	mappedFrameworksIn: [String!]
-	mappedFrameworksNotIn: [String!]
-	mappedFrameworksGT: String
-	mappedFrameworksGTE: String
-	mappedFrameworksLT: String
-	mappedFrameworksLTE: String
-	mappedFrameworksContains: String
-	mappedFrameworksHasPrefix: String
-	mappedFrameworksHasSuffix: String
-	mappedFrameworksIsNil: Boolean
-	mappedFrameworksNotNil: Boolean
-	mappedFrameworksEqualFold: String
-	mappedFrameworksContainsFold: String
+	controlType: SubcontrolControlType
+	controlTypeNEQ: SubcontrolControlType
+	controlTypeIn: [SubcontrolControlType!]
+	controlTypeNotIn: [SubcontrolControlType!]
+	controlTypeIsNil: Boolean
+	controlTypeNotNil: Boolean
 	"""
-	implementation_evidence field predicates
+	category field predicates
 	"""
-	implementationEvidence: String
-	implementationEvidenceNEQ: String
-	implementationEvidenceIn: [String!]
-	implementationEvidenceNotIn: [String!]
-	implementationEvidenceGT: String
-	implementationEvidenceGTE: String
-	implementationEvidenceLT: String
-	implementationEvidenceLTE: String
-	implementationEvidenceContains: String
-	implementationEvidenceHasPrefix: String
-	implementationEvidenceHasSuffix: String
-	implementationEvidenceIsNil: Boolean
-	implementationEvidenceNotNil: Boolean
-	implementationEvidenceEqualFold: String
-	implementationEvidenceContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
-	implementation_status field predicates
+	category_id field predicates
 	"""
-	implementationStatus: String
-	implementationStatusNEQ: String
-	implementationStatusIn: [String!]
-	implementationStatusNotIn: [String!]
-	implementationStatusGT: String
-	implementationStatusGTE: String
-	implementationStatusLT: String
-	implementationStatusLTE: String
-	implementationStatusContains: String
-	implementationStatusHasPrefix: String
-	implementationStatusHasSuffix: String
-	implementationStatusIsNil: Boolean
-	implementationStatusNotNil: Boolean
-	implementationStatusEqualFold: String
-	implementationStatusContainsFold: String
+	categoryID: String
+	categoryIDNEQ: String
+	categoryIDIn: [String!]
+	categoryIDNotIn: [String!]
+	categoryIDGT: String
+	categoryIDGTE: String
+	categoryIDLT: String
+	categoryIDLTE: String
+	categoryIDContains: String
+	categoryIDHasPrefix: String
+	categoryIDHasSuffix: String
+	categoryIDIsNil: Boolean
+	categoryIDNotNil: Boolean
+	categoryIDEqualFold: String
+	categoryIDContainsFold: String
 	"""
-	implementation_date field predicates
+	subcategory field predicates
 	"""
-	implementationDate: Time
-	implementationDateNEQ: Time
-	implementationDateIn: [Time!]
-	implementationDateNotIn: [Time!]
-	implementationDateGT: Time
-	implementationDateGTE: Time
-	implementationDateLT: Time
-	implementationDateLTE: Time
-	implementationDateIsNil: Boolean
-	implementationDateNotNil: Boolean
+	subcategory: String
+	subcategoryNEQ: String
+	subcategoryIn: [String!]
+	subcategoryNotIn: [String!]
+	subcategoryGT: String
+	subcategoryGTE: String
+	subcategoryLT: String
+	subcategoryLTE: String
+	subcategoryContains: String
+	subcategoryHasPrefix: String
+	subcategoryHasSuffix: String
+	subcategoryIsNil: Boolean
+	subcategoryNotNil: Boolean
+	subcategoryEqualFold: String
+	subcategoryContainsFold: String
 	"""
-	implementation_verification field predicates
+	ref_code field predicates
 	"""
-	implementationVerification: String
-	implementationVerificationNEQ: String
-	implementationVerificationIn: [String!]
-	implementationVerificationNotIn: [String!]
-	implementationVerificationGT: String
-	implementationVerificationGTE: String
-	implementationVerificationLT: String
-	implementationVerificationLTE: String
-	implementationVerificationContains: String
-	implementationVerificationHasPrefix: String
-	implementationVerificationHasSuffix: String
-	implementationVerificationIsNil: Boolean
-	implementationVerificationNotNil: Boolean
-	implementationVerificationEqualFold: String
-	implementationVerificationContainsFold: String
+	refCode: String
+	refCodeNEQ: String
+	refCodeIn: [String!]
+	refCodeNotIn: [String!]
+	refCodeGT: String
+	refCodeGTE: String
+	refCodeLT: String
+	refCodeLTE: String
+	refCodeContains: String
+	refCodeHasPrefix: String
+	refCodeHasSuffix: String
+	refCodeEqualFold: String
+	refCodeContainsFold: String
 	"""
-	implementation_verification_date field predicates
+	control_id field predicates
 	"""
-	implementationVerificationDate: Time
-	implementationVerificationDateNEQ: Time
-	implementationVerificationDateIn: [Time!]
-	implementationVerificationDateNotIn: [Time!]
-	implementationVerificationDateGT: Time
-	implementationVerificationDateGTE: Time
-	implementationVerificationDateLT: Time
-	implementationVerificationDateLTE: Time
-	implementationVerificationDateIsNil: Boolean
-	implementationVerificationDateNotNil: Boolean
-	"""
-	example_evidence field predicates
-	"""
-	exampleEvidence: String
-	exampleEvidenceNEQ: String
-	exampleEvidenceIn: [String!]
-	exampleEvidenceNotIn: [String!]
-	exampleEvidenceGT: String
-	exampleEvidenceGTE: String
-	exampleEvidenceLT: String
-	exampleEvidenceLTE: String
-	exampleEvidenceContains: String
-	exampleEvidenceHasPrefix: String
-	exampleEvidenceHasSuffix: String
-	exampleEvidenceIsNil: Boolean
-	exampleEvidenceNotNil: Boolean
-	exampleEvidenceEqualFold: String
-	exampleEvidenceContainsFold: String
+	controlID: ID
+	controlIDNEQ: ID
+	controlIDIn: [ID!]
+	controlIDNotIn: [ID!]
+	controlIDGT: ID
+	controlIDGTE: ID
+	controlIDLT: ID
+	controlIDLTE: ID
+	controlIDContains: ID
+	controlIDHasPrefix: ID
+	controlIDHasSuffix: ID
+	controlIDEqualFold: ID
+	controlIDContainsFold: ID
 	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
-	controls edge predicates
+	control edge predicates
 	"""
-	hasControls: Boolean
-	hasControlsWith: [ControlWhereInput!]
+	hasControl: Boolean
+	hasControlWith: [ControlWhereInput!]
+	"""
+	mapped_controls edge predicates
+	"""
+	hasMappedControls: Boolean
+	hasMappedControlsWith: [MappedControlWhereInput!]
+	"""
+	evidence edge predicates
+	"""
+	hasEvidence: Boolean
+	hasEvidenceWith: [EvidenceWhereInput!]
+	"""
+	control_objectives edge predicates
+	"""
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
 	tasks edge predicates
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
 	"""
-	programs edge predicates
+	narratives edge predicates
 	"""
-	hasPrograms: Boolean
-	hasProgramsWith: [ProgramWhereInput!]
+	hasNarratives: Boolean
+	hasNarrativesWith: [NarrativeWhereInput!]
 	"""
-	evidence edge predicates
+	risks edge predicates
 	"""
-	hasEvidence: Boolean
-	hasEvidenceWith: [EvidenceWhereInput!]
+	hasRisks: Boolean
+	hasRisksWith: [RiskWhereInput!]
+	"""
+	action_plans edge predicates
+	"""
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
+	"""
+	procedures edge predicates
+	"""
+	hasProcedures: Boolean
+	hasProceduresWith: [ProcedureWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
+	control_owner edge predicates
+	"""
+	hasControlOwner: Boolean
+	hasControlOwnerWith: [GroupWhereInput!]
+	"""
+	delegate edge predicates
+	"""
+	hasDelegate: Boolean
+	hasDelegateWith: [GroupWhereInput!]
 }
 type Subscriber implements Node {
 	id: ID!
@@ -29885,11 +31004,11 @@ type Template implements Node {
 	"""
 	the jsonschema object of the template
 	"""
-	jsonconfig: JSON!
+	jsonconfig: Map!
 	"""
 	the uischema for the template to render in the UI
 	"""
-	uischema: JSON
+	uischema: Map
 	owner: Organization
 	documents: [DocumentData!]
 	files: [File!]
@@ -29992,11 +31111,11 @@ type TemplateHistory implements Node {
 	"""
 	the jsonschema object of the template
 	"""
-	jsonconfig: JSON!
+	jsonconfig: Map!
 	"""
 	the uischema for the template to render in the UI
 	"""
-	uischema: JSON
+	uischema: Map
 }
 """
 A connection to a list of items.
@@ -30589,9 +31708,6 @@ input UpdateActionPlanInput {
 	"""
 	details: Map
 	clearDetails: Boolean
-	addStandardIDs: [ID!]
-	removeStandardIDs: [ID!]
-	clearStandard: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisk: Boolean
@@ -30659,6 +31775,46 @@ input UpdateContactInput {
 	clearFiles: Boolean
 }
 """
+UpdateControlImplementationInput is used for update ControlImplementation object.
+Input was generated by ent.
+"""
+input UpdateControlImplementationInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	status of the control implementation
+	"""
+	status: String
+	clearStatus: Boolean
+	"""
+	date the control was implemented
+	"""
+	implementationDate: Time
+	clearImplementationDate: Boolean
+	"""
+	set to true if the control implementation has been verified
+	"""
+	verified: Boolean
+	clearVerified: Boolean
+	"""
+	date the control implementation was verified
+	"""
+	verificationDate: Time
+	clearVerificationDate: Boolean
+	"""
+	details of the control implementation
+	"""
+	details: String
+	clearDetails: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
+}
+"""
 UpdateControlInput is used for update Control object.
 Input was generated by ent.
 """
@@ -30670,11 +31826,7 @@ input UpdateControlInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the name of the control
-	"""
-	name: String
-	"""
-	description of the control
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	clearDescription: Boolean
@@ -30684,55 +31836,76 @@ input UpdateControlInput {
 	status: String
 	clearStatus: Boolean
 	"""
-	type of the control
-	"""
-	controlType: String
-	clearControlType: Boolean
-	"""
-	version of the control
-	"""
-	version: String
-	clearVersion: Boolean
-	"""
-	control number or identifier
-	"""
-	controlNumber: String
-	clearControlNumber: Boolean
-	"""
-	family associated with the control
-	"""
-	family: String
-	clearFamily: Boolean
-	"""
-	class associated with the control
-	"""
-	class: String
-	clearClass: Boolean
-	"""
 	source of the control, e.g. framework, template, custom, etc.
 	"""
-	source: String
+	source: ControlControlSource
 	clearSource: Boolean
 	"""
-	which control objectives are satisfied by the control
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	satisfies: String
-	clearSatisfies: Boolean
+	controlType: ControlControlType
+	clearControlType: Boolean
 	"""
-	mapped frameworks
+	category of the control
 	"""
-	mappedFrameworks: String
-	clearMappedFrameworks: Boolean
+	category: String
+	clearCategory: Boolean
 	"""
-	json data including details of the control
+	category id of the control
 	"""
-	details: Map
-	clearDetails: Boolean
+	categoryID: String
+	clearCategoryID: Boolean
 	"""
-	example evidence to provide for the control
+	subcategory of the control
 	"""
-	exampleEvidence: String
+	subcategory: String
+	clearSubcategory: Boolean
+	"""
+	mapped categories of the control to other standards
+	"""
+	mappedCategories: [String!]
+	appendMappedCategories: [String!]
+	clearMappedCategories: Boolean
+	"""
+	objectives of the audit assessment for the control
+	"""
+	assessmentObjectives: [AssessmentObjective!]
+	appendAssessmentObjectives: [AssessmentObjective!]
+	clearAssessmentObjectives: Boolean
+	"""
+	methods used to verify the control implementation during an audit
+	"""
+	assessmentMethods: [AssessmentMethod!]
+	appendAssessmentMethods: [AssessmentMethod!]
+	clearAssessmentMethods: Boolean
+	"""
+	questions to ask to verify the control
+	"""
+	controlQuestions: [String!]
+	appendControlQuestions: [String!]
+	clearControlQuestions: Boolean
+	"""
+	implementation guidance for the control
+	"""
+	implementationGuidance: [ImplementationGuidance!]
+	appendImplementationGuidance: [ImplementationGuidance!]
+	clearImplementationGuidance: Boolean
+	"""
+	examples of evidence for the control
+	"""
+	exampleEvidence: [ExampleEvidence!]
+	appendExampleEvidence: [ExampleEvidence!]
 	clearExampleEvidence: Boolean
+	"""
+	references for the control
+	"""
+	references: [Reference!]
+	appendReferences: [Reference!]
+	clearReferences: Boolean
+	"""
+	the unique reference code for the control
+	"""
+	refCode: String
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -30742,18 +31915,29 @@ input UpdateControlInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
-	addProcedureIDs: [ID!]
-	removeProcedureIDs: [ID!]
-	clearProcedures: Boolean
-	addSubcontrolIDs: [ID!]
-	removeSubcontrolIDs: [ID!]
-	clearSubcontrols: Boolean
+	standardID: ID
+	clearStandard: Boolean
+	addProgramIDs: [ID!]
+	removeProgramIDs: [ID!]
+	clearPrograms: Boolean
+	addEvidenceIDs: [ID!]
+	removeEvidenceIDs: [ID!]
+	clearEvidence: Boolean
+	addControlImplementationIDs: [ID!]
+	removeControlImplementationIDs: [ID!]
+	clearControlImplementations: Boolean
+	addMappedControlIDs: [ID!]
+	removeMappedControlIDs: [ID!]
+	clearMappedControls: Boolean
 	addControlObjectiveIDs: [ID!]
 	removeControlObjectiveIDs: [ID!]
 	clearControlObjectives: Boolean
-	addStandardIDs: [ID!]
-	removeStandardIDs: [ID!]
-	clearStandard: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
+	addTaskIDs: [ID!]
+	removeTaskIDs: [ID!]
+	clearTasks: Boolean
 	addNarrativeIDs: [ID!]
 	removeNarrativeIDs: [ID!]
 	clearNarratives: Boolean
@@ -30763,15 +31947,16 @@ input UpdateControlInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	addTaskIDs: [ID!]
-	removeTaskIDs: [ID!]
-	clearTasks: Boolean
-	addProgramIDs: [ID!]
-	removeProgramIDs: [ID!]
-	clearPrograms: Boolean
-	addEvidenceIDs: [ID!]
-	removeEvidenceIDs: [ID!]
-	clearEvidence: Boolean
+	addProcedureIDs: [ID!]
+	removeProcedureIDs: [ID!]
+	clearProcedures: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
+	controlOwnerID: ID
+	clearControlOwner: Boolean
+	delegateID: ID
+	clearDelegate: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -30789,17 +31974,22 @@ input UpdateControlObjectiveInput {
 	"""
 	name: String
 	"""
-	description of the control objective
+	the desired outcome or target of the control objective
 	"""
-	description: String
-	clearDescription: Boolean
+	desiredOutcome: String
+	clearDesiredOutcome: Boolean
 	"""
 	status of the control objective
 	"""
 	status: String
 	clearStatus: Boolean
 	"""
-	type of the control objective
+	source of the control, e.g. framework, template, custom, etc.
+	"""
+	source: ControlObjectiveControlSource
+	clearSource: Boolean
+	"""
+	type of the control objective e.g. compliance, financial, operational, etc.
 	"""
 	controlObjectiveType: String
 	clearControlObjectiveType: Boolean
@@ -30809,40 +31999,15 @@ input UpdateControlObjectiveInput {
 	version: String
 	clearVersion: Boolean
 	"""
-	number of the control objective
+	category of the control
 	"""
-	controlNumber: String
-	clearControlNumber: Boolean
+	category: String
+	clearCategory: Boolean
 	"""
-	family of the control objective
+	subcategory of the control
 	"""
-	family: String
-	clearFamily: Boolean
-	"""
-	class associated with the control objective
-	"""
-	class: String
-	clearClass: Boolean
-	"""
-	source of the control objective, e.g. framework, template, user-defined, etc.
-	"""
-	source: String
-	clearSource: Boolean
-	"""
-	mapped frameworks
-	"""
-	mappedFrameworks: String
-	clearMappedFrameworks: Boolean
-	"""
-	json data including details of the control objective
-	"""
-	details: Map
-	clearDetails: Boolean
-	"""
-	example evidence to provide for the control
-	"""
-	exampleEvidence: String
-	clearExampleEvidence: Boolean
+	subcategory: String
+	clearSubcategory: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -30852,36 +32017,33 @@ input UpdateControlObjectiveInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
-	addInternalPolicyIDs: [ID!]
-	removeInternalPolicyIDs: [ID!]
-	clearInternalPolicies: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
-	addProcedureIDs: [ID!]
-	removeProcedureIDs: [ID!]
-	clearProcedures: Boolean
-	addRiskIDs: [ID!]
-	removeRiskIDs: [ID!]
-	clearRisks: Boolean
-	addSubcontrolIDs: [ID!]
-	removeSubcontrolIDs: [ID!]
-	clearSubcontrols: Boolean
-	addStandardIDs: [ID!]
-	removeStandardIDs: [ID!]
-	clearStandard: Boolean
-	addNarrativeIDs: [ID!]
-	removeNarrativeIDs: [ID!]
-	clearNarratives: Boolean
-	addTaskIDs: [ID!]
-	removeTaskIDs: [ID!]
-	clearTasks: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
+	addProcedureIDs: [ID!]
+	removeProcedureIDs: [ID!]
+	clearProcedures: Boolean
+	addRiskIDs: [ID!]
+	removeRiskIDs: [ID!]
+	clearRisks: Boolean
+	addNarrativeIDs: [ID!]
+	removeNarrativeIDs: [ID!]
+	clearNarratives: Boolean
+	addTaskIDs: [ID!]
+	removeTaskIDs: [ID!]
+	clearTasks: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -30897,7 +32059,7 @@ input UpdateDocumentDataInput {
 	"""
 	the json data of the document
 	"""
-	data: JSON
+	data: Map
 	templateID: ID
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
@@ -31526,6 +32688,34 @@ input UpdateInviteInput {
 	clearEvents: Boolean
 }
 """
+UpdateMappedControlInput is used for update MappedControl object.
+Input was generated by ent.
+"""
+input UpdateMappedControlInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
+	"""
+	mappingType: String
+	clearMappingType: Boolean
+	"""
+	description of how the two controls are related
+	"""
+	relation: String
+	clearRelation: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
+}
+"""
 UpdateNarrativeInput is used for update Narrative object.
 Input was generated by ent.
 """
@@ -31546,14 +32736,9 @@ input UpdateNarrativeInput {
 	description: String
 	clearDescription: Boolean
 	"""
-	which controls are satisfied by the narrative
+	text data for the narrative document
 	"""
-	satisfies: String
-	clearSatisfies: Boolean
-	"""
-	json data for the narrative document
-	"""
-	details: Map
+	details: String
 	clearDetails: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
@@ -31564,18 +32749,9 @@ input UpdateNarrativeInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
-	addInternalPolicyIDs: [ID!]
-	removeInternalPolicyIDs: [ID!]
-	clearInternalPolicy: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControl: Boolean
-	addProcedureIDs: [ID!]
-	removeProcedureIDs: [ID!]
-	clearProcedure: Boolean
-	addControlObjectiveIDs: [ID!]
-	removeControlObjectiveIDs: [ID!]
-	clearControlObjective: Boolean
+	addSatisfyIDs: [ID!]
+	removeSatisfyIDs: [ID!]
+	clearSatisfies: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
@@ -31745,6 +32921,9 @@ input UpdateOrganizationInput {
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
+	addStandardIDs: [ID!]
+	removeStandardIDs: [ID!]
+	clearStandards: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -32044,9 +33223,6 @@ input UpdateProgramInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	addStandardIDs: [ID!]
-	removeStandardIDs: [ID!]
-	clearStandards: Boolean
 	addProgramMembers: [CreateProgramMembershipInput!]
 	removeProgramMembers: [ID!]
 }
@@ -32151,24 +33327,60 @@ input UpdateStandardInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
+	the long name of the standard body
 	"""
 	name: String
+	"""
+	short name of the standard, e.g. SOC 2, ISO 27001, etc.
+	"""
+	shortName: String
+	clearShortName: Boolean
+	"""
+	unique identifier of the standard with version
+	"""
+	framework: String
+	clearFramework: Boolean
 	"""
 	description of the standard
 	"""
 	description: String
 	clearDescription: Boolean
 	"""
-	family of the standard, e.g. 800-53, 800-171, 27001, etc.
+	governing body of the standard, e.g. AICPA, etc.
 	"""
-	family: String
-	clearFamily: Boolean
+	governingBody: String
+	clearGoverningBody: Boolean
+	"""
+	domains the standard covers, e.g. availability, confidentiality, etc.
+	"""
+	domains: [String!]
+	appendDomains: [String!]
+	clearDomains: Boolean
+	"""
+	link to the official standard documentation
+	"""
+	link: String
+	clearLink: Boolean
 	"""
 	status of the standard - active, deprecated, etc.
 	"""
 	status: String
 	clearStatus: Boolean
+	"""
+	indicates if the standard should be made available to all users, only for public standards
+	"""
+	isPublic: Boolean
+	clearIsPublic: Boolean
+	"""
+	indicates if the standard is freely distributable under a trial license, only for public standards
+	"""
+	freeToUse: Boolean
+	clearFreeToUse: Boolean
+	"""
+	indicates if the standard is owned by the the openlane system
+	"""
+	systemOwned: Boolean
+	clearSystemOwned: Boolean
 	"""
 	type of the standard - security, privacy, etc.
 	"""
@@ -32180,40 +33392,15 @@ input UpdateStandardInput {
 	version: String
 	clearVersion: Boolean
 	"""
-	purpose and scope
+	internal revision of the standard
 	"""
-	purposeAndScope: String
-	clearPurposeAndScope: Boolean
-	"""
-	background of the standard
-	"""
-	background: String
-	clearBackground: Boolean
-	"""
-	which controls are satisfied by the standard
-	"""
-	satisfies: String
-	clearSatisfies: Boolean
-	"""
-	json data with details of the standard
-	"""
-	details: Map
-	clearDetails: Boolean
-	addControlObjectiveIDs: [ID!]
-	removeControlObjectiveIDs: [ID!]
-	clearControlObjectives: Boolean
+	revision: String
+	clearRevision: Boolean
+	ownerID: ID
+	clearOwner: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
-	addProcedureIDs: [ID!]
-	removeProcedureIDs: [ID!]
-	clearProcedures: Boolean
-	addActionPlanIDs: [ID!]
-	removeActionPlanIDs: [ID!]
-	clearActionPlans: Boolean
-	addProgramIDs: [ID!]
-	removeProgramIDs: [ID!]
-	clearPrograms: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -32227,100 +33414,118 @@ input UpdateSubcontrolInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the name of the subcontrol
-	"""
-	name: String
-	"""
-	description of the subcontrol
+	description of what the control is supposed to accomplish
 	"""
 	description: String
 	clearDescription: Boolean
 	"""
-	status of the subcontrol
+	status of the control
 	"""
 	status: String
 	clearStatus: Boolean
 	"""
-	type of the subcontrol
+	source of the control, e.g. framework, template, custom, etc.
 	"""
-	subcontrolType: String
-	clearSubcontrolType: Boolean
-	"""
-	version of the control
-	"""
-	version: String
-	clearVersion: Boolean
-	"""
-	number of the subcontrol
-	"""
-	subcontrolNumber: String
-	clearSubcontrolNumber: Boolean
-	"""
-	subcontrol family
-	"""
-	family: String
-	clearFamily: Boolean
-	"""
-	subcontrol class
-	"""
-	class: String
-	clearClass: Boolean
-	"""
-	source of the control, e.g. framework, template, user-defined, etc.
-	"""
-	source: String
+	source: SubcontrolControlSource
 	clearSource: Boolean
 	"""
-	mapped frameworks that the subcontrol is part of
+	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	mappedFrameworks: String
-	clearMappedFrameworks: Boolean
+	controlType: SubcontrolControlType
+	clearControlType: Boolean
 	"""
-	implementation evidence of the subcontrol
+	category of the control
 	"""
-	implementationEvidence: String
-	clearImplementationEvidence: Boolean
+	category: String
+	clearCategory: Boolean
 	"""
-	implementation status
+	category id of the control
 	"""
-	implementationStatus: String
-	clearImplementationStatus: Boolean
+	categoryID: String
+	clearCategoryID: Boolean
 	"""
-	date the subcontrol was implemented
+	subcategory of the control
 	"""
-	implementationDate: Time
-	clearImplementationDate: Boolean
+	subcategory: String
+	clearSubcategory: Boolean
 	"""
-	implementation verification
+	mapped categories of the control to other standards
 	"""
-	implementationVerification: String
-	clearImplementationVerification: Boolean
+	mappedCategories: [String!]
+	appendMappedCategories: [String!]
+	clearMappedCategories: Boolean
 	"""
-	date the subcontrol implementation was verified
+	objectives of the audit assessment for the control
 	"""
-	implementationVerificationDate: Time
-	clearImplementationVerificationDate: Boolean
+	assessmentObjectives: [AssessmentObjective!]
+	appendAssessmentObjectives: [AssessmentObjective!]
+	clearAssessmentObjectives: Boolean
 	"""
-	json data details of the subcontrol
+	methods used to verify the control implementation during an audit
 	"""
-	details: Map
-	clearDetails: Boolean
+	assessmentMethods: [AssessmentMethod!]
+	appendAssessmentMethods: [AssessmentMethod!]
+	clearAssessmentMethods: Boolean
 	"""
-	example evidence to provide for the control
+	questions to ask to verify the control
 	"""
-	exampleEvidence: String
+	controlQuestions: [String!]
+	appendControlQuestions: [String!]
+	clearControlQuestions: Boolean
+	"""
+	implementation guidance for the control
+	"""
+	implementationGuidance: [ImplementationGuidance!]
+	appendImplementationGuidance: [ImplementationGuidance!]
+	clearImplementationGuidance: Boolean
+	"""
+	examples of evidence for the control
+	"""
+	exampleEvidence: [ExampleEvidence!]
+	appendExampleEvidence: [ExampleEvidence!]
 	clearExampleEvidence: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	addTaskIDs: [ID!]
-	removeTaskIDs: [ID!]
-	clearTasks: Boolean
-	addProgramIDs: [ID!]
-	removeProgramIDs: [ID!]
-	clearPrograms: Boolean
+	"""
+	references for the control
+	"""
+	references: [Reference!]
+	appendReferences: [Reference!]
+	clearReferences: Boolean
+	"""
+	the unique reference code for the control
+	"""
+	refCode: String
+	controlID: ID
+	addMappedControlIDs: [ID!]
+	removeMappedControlIDs: [ID!]
+	clearMappedControls: Boolean
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
+	addTaskIDs: [ID!]
+	removeTaskIDs: [ID!]
+	clearTasks: Boolean
+	addNarrativeIDs: [ID!]
+	removeNarrativeIDs: [ID!]
+	clearNarratives: Boolean
+	addRiskIDs: [ID!]
+	removeRiskIDs: [ID!]
+	clearRisks: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
+	addProcedureIDs: [ID!]
+	removeProcedureIDs: [ID!]
+	clearProcedures: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
+	controlOwnerID: ID
+	clearControlOwner: Boolean
+	delegateID: ID
+	clearDelegate: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -32472,11 +33677,11 @@ input UpdateTemplateInput {
 	"""
 	the jsonschema object of the template
 	"""
-	jsonconfig: JSON
+	jsonconfig: Map
 	"""
 	the uischema for the template to render in the UI
 	"""
-	uischema: JSON
+	uischema: Map
 	clearUischema: Boolean
 	ownerID: ID
 	clearOwner: Boolean

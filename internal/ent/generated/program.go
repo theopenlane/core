@@ -94,17 +94,15 @@ type ProgramEdges struct {
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
-	// the framework(s) that the program is based on
-	Standards []*Standard `json:"standards,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [18]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -121,7 +119,6 @@ type ProgramEdges struct {
 	namedEvidence          map[string][]*Evidence
 	namedNarratives        map[string][]*Narrative
 	namedActionPlans       map[string][]*ActionPlan
-	namedStandards         map[string][]*Standard
 	namedUsers             map[string][]*User
 	namedMembers           map[string][]*ProgramMembership
 }
@@ -272,19 +269,10 @@ func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
-// StandardsOrErr returns the Standards value or an error if the edge
-// was not loaded in eager-loading.
-func (e ProgramEdges) StandardsOrErr() ([]*Standard, error) {
-	if e.loadedTypes[16] {
-		return e.Standards, nil
-	}
-	return nil, &NotLoadedError{edge: "standards"}
-}
-
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -293,7 +281,7 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -528,11 +516,6 @@ func (pr *Program) QueryNarratives() *NarrativeQuery {
 // QueryActionPlans queries the "action_plans" edge of the Program entity.
 func (pr *Program) QueryActionPlans() *ActionPlanQuery {
 	return NewProgramClient(pr.config).QueryActionPlans(pr)
-}
-
-// QueryStandards queries the "standards" edge of the Program entity.
-func (pr *Program) QueryStandards() *StandardQuery {
-	return NewProgramClient(pr.config).QueryStandards(pr)
 }
 
 // QueryUsers queries the "users" edge of the Program entity.
@@ -979,30 +962,6 @@ func (pr *Program) appendNamedActionPlans(name string, edges ...*ActionPlan) {
 		pr.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
 		pr.Edges.namedActionPlans[name] = append(pr.Edges.namedActionPlans[name], edges...)
-	}
-}
-
-// NamedStandards returns the Standards named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (pr *Program) NamedStandards(name string) ([]*Standard, error) {
-	if pr.Edges.namedStandards == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := pr.Edges.namedStandards[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (pr *Program) appendNamedStandards(name string, edges ...*Standard) {
-	if pr.Edges.namedStandards == nil {
-		pr.Edges.namedStandards = make(map[string][]*Standard)
-	}
-	if len(edges) == 0 {
-		pr.Edges.namedStandards[name] = []*Standard{}
-	} else {
-		pr.Edges.namedStandards[name] = append(pr.Edges.namedStandards[name], edges...)
 	}
 }
 

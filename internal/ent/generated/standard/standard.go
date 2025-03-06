@@ -29,65 +29,56 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldShortName holds the string denoting the short_name field in the database.
+	FieldShortName = "short_name"
+	// FieldFramework holds the string denoting the framework field in the database.
+	FieldFramework = "framework"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldFamily holds the string denoting the family field in the database.
-	FieldFamily = "family"
+	// FieldGoverningBody holds the string denoting the governing_body field in the database.
+	FieldGoverningBody = "governing_body"
+	// FieldDomains holds the string denoting the domains field in the database.
+	FieldDomains = "domains"
+	// FieldLink holds the string denoting the link field in the database.
+	FieldLink = "link"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldIsPublic holds the string denoting the is_public field in the database.
+	FieldIsPublic = "is_public"
+	// FieldFreeToUse holds the string denoting the free_to_use field in the database.
+	FieldFreeToUse = "free_to_use"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
 	// FieldStandardType holds the string denoting the standard_type field in the database.
 	FieldStandardType = "standard_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
-	// FieldPurposeAndScope holds the string denoting the purpose_and_scope field in the database.
-	FieldPurposeAndScope = "purpose_and_scope"
-	// FieldBackground holds the string denoting the background field in the database.
-	FieldBackground = "background"
-	// FieldSatisfies holds the string denoting the satisfies field in the database.
-	FieldSatisfies = "satisfies"
-	// FieldDetails holds the string denoting the details field in the database.
-	FieldDetails = "details"
-	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
-	EdgeControlObjectives = "control_objectives"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
-	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
-	EdgeProcedures = "procedures"
-	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
-	EdgeActionPlans = "action_plans"
-	// EdgePrograms holds the string denoting the programs edge name in mutations.
-	EdgePrograms = "programs"
 	// Table holds the table name of the standard in the database.
 	Table = "standards"
-	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
-	ControlObjectivesTable = "standard_control_objectives"
-	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
-	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlObjectivesInverseTable = "control_objectives"
-	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
-	ControlsTable = "standard_controls"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "standards"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
+	// ControlsTable is the table that holds the controls relation/edge.
+	ControlsTable = "controls"
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// ProceduresTable is the table that holds the procedures relation/edge.
-	ProceduresTable = "procedures"
-	// ProceduresInverseTable is the table name for the Procedure entity.
-	// It exists in this package in order to avoid circular dependency with the "procedure" package.
-	ProceduresInverseTable = "procedures"
-	// ProceduresColumn is the table column denoting the procedures relation/edge.
-	ProceduresColumn = "standard_procedures"
-	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
-	ActionPlansTable = "standard_action_plans"
-	// ActionPlansInverseTable is the table name for the ActionPlan entity.
-	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
-	ActionPlansInverseTable = "action_plans"
-	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
-	ProgramsTable = "standard_programs"
-	// ProgramsInverseTable is the table name for the Program entity.
-	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramsInverseTable = "programs"
+	// ControlsColumn is the table column denoting the controls relation/edge.
+	ControlsColumn = "standard_id"
 )
 
 // Columns holds all SQL columns for standard fields.
@@ -100,32 +91,22 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
 	FieldName,
+	FieldShortName,
+	FieldFramework,
 	FieldDescription,
-	FieldFamily,
+	FieldGoverningBody,
+	FieldDomains,
+	FieldLink,
 	FieldStatus,
+	FieldIsPublic,
+	FieldFreeToUse,
+	FieldSystemOwned,
 	FieldStandardType,
 	FieldVersion,
-	FieldPurposeAndScope,
-	FieldBackground,
-	FieldSatisfies,
-	FieldDetails,
+	FieldRevision,
 }
-
-var (
-	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
-	// primary key for the control_objectives relation (M2M).
-	ControlObjectivesPrimaryKey = []string{"standard_id", "control_objective_id"}
-	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
-	// primary key for the controls relation (M2M).
-	ControlsPrimaryKey = []string{"standard_id", "control_id"}
-	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
-	// primary key for the action_plans relation (M2M).
-	ActionPlansPrimaryKey = []string{"standard_id", "action_plan_id"}
-	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
-	// primary key for the programs relation (M2M).
-	ProgramsPrimaryKey = []string{"standard_id", "program_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -143,8 +124,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [2]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Hooks        [5]ent.Hook
+	Interceptors [3]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -155,6 +137,12 @@ var (
 	DefaultTags []string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultIsPublic holds the default value on creation for the "is_public" field.
+	DefaultIsPublic bool
+	// DefaultFreeToUse holds the default value on creation for the "free_to_use" field.
+	DefaultFreeToUse bool
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -197,9 +185,24 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByShortName orders the results by the short_name field.
+func ByShortName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldShortName, opts...).ToFunc()
+}
+
+// ByFramework orders the results by the framework field.
+func ByFramework(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFramework, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.
@@ -207,14 +210,34 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// ByFamily orders the results by the family field.
-func ByFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFamily, opts...).ToFunc()
+// ByGoverningBody orders the results by the governing_body field.
+func ByGoverningBody(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGoverningBody, opts...).ToFunc()
+}
+
+// ByLink orders the results by the link field.
+func ByLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLink, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByIsPublic orders the results by the is_public field.
+func ByIsPublic(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsPublic, opts...).ToFunc()
+}
+
+// ByFreeToUse orders the results by the free_to_use field.
+func ByFreeToUse(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFreeToUse, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
 }
 
 // ByStandardType orders the results by the standard_type field.
@@ -227,32 +250,15 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
-// ByPurposeAndScope orders the results by the purpose_and_scope field.
-func ByPurposeAndScope(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPurposeAndScope, opts...).ToFunc()
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
-// ByBackground orders the results by the background field.
-func ByBackground(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBackground, opts...).ToFunc()
-}
-
-// BySatisfies orders the results by the satisfies field.
-func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
-}
-
-// ByControlObjectivesCount orders the results by control_objectives count.
-func ByControlObjectivesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlObjectivesStep(), opts...)
-	}
-}
-
-// ByControlObjectives orders the results by control_objectives terms.
-func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlObjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -269,80 +275,17 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-
-// ByProceduresCount orders the results by procedures count.
-func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProceduresStep(), opts...)
-	}
-}
-
-// ByProcedures orders the results by procedures terms.
-func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProceduresStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByActionPlansCount orders the results by action_plans count.
-func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
-	}
-}
-
-// ByActionPlans orders the results by action_plans terms.
-func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByProgramsCount orders the results by programs count.
-func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
-	}
-}
-
-// ByPrograms orders the results by programs terms.
-func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-func newControlObjectivesStep() *sqlgraph.Step {
+func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
-	)
-}
-func newProceduresStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProceduresInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
-	)
-}
-func newActionPlansStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ActionPlansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
-	)
-}
-func newProgramsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
 	)
 }

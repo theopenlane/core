@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -45,7 +44,7 @@ type DocumentDataHistory struct {
 	// the template id of the document
 	TemplateID string `json:"template_id,omitempty"`
 	// the json data of the document
-	Data         customtypes.JSONObject `json:"data,omitempty"`
+	Data         map[string]interface{} `json:"data,omitempty"`
 	selectValues sql.SelectValues
 }
 

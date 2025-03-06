@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -48,6 +50,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -1907,6 +1911,504 @@ func (ch *ControlHistory) ToEdge(order *ControlHistoryOrder) *ControlHistoryEdge
 	return &ControlHistoryEdge{
 		Node:   ch,
 		Cursor: order.Field.toCursor(ch),
+	}
+}
+
+// ControlImplementationEdge is the edge representation of ControlImplementation.
+type ControlImplementationEdge struct {
+	Node   *ControlImplementation `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// ControlImplementationConnection is the connection containing edges to ControlImplementation.
+type ControlImplementationConnection struct {
+	Edges      []*ControlImplementationEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *ControlImplementationConnection) build(nodes []*ControlImplementation, pager *controlimplementationPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ControlImplementation
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ControlImplementation {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ControlImplementation {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ControlImplementationEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ControlImplementationEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ControlImplementationPaginateOption enables pagination customization.
+type ControlImplementationPaginateOption func(*controlimplementationPager) error
+
+// WithControlImplementationOrder configures pagination ordering.
+func WithControlImplementationOrder(order *ControlImplementationOrder) ControlImplementationPaginateOption {
+	if order == nil {
+		order = DefaultControlImplementationOrder
+	}
+	o := *order
+	return func(pager *controlimplementationPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultControlImplementationOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithControlImplementationFilter configures pagination filter.
+func WithControlImplementationFilter(filter func(*ControlImplementationQuery) (*ControlImplementationQuery, error)) ControlImplementationPaginateOption {
+	return func(pager *controlimplementationPager) error {
+		if filter == nil {
+			return errors.New("ControlImplementationQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type controlimplementationPager struct {
+	reverse bool
+	order   *ControlImplementationOrder
+	filter  func(*ControlImplementationQuery) (*ControlImplementationQuery, error)
+}
+
+func newControlImplementationPager(opts []ControlImplementationPaginateOption, reverse bool) (*controlimplementationPager, error) {
+	pager := &controlimplementationPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultControlImplementationOrder
+	}
+	return pager, nil
+}
+
+func (p *controlimplementationPager) applyFilter(query *ControlImplementationQuery) (*ControlImplementationQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *controlimplementationPager) toCursor(ci *ControlImplementation) Cursor {
+	return p.order.Field.toCursor(ci)
+}
+
+func (p *controlimplementationPager) applyCursors(query *ControlImplementationQuery, after, before *Cursor) (*ControlImplementationQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultControlImplementationOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *controlimplementationPager) applyOrder(query *ControlImplementationQuery) *ControlImplementationQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultControlImplementationOrder.Field {
+		query = query.Order(DefaultControlImplementationOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *controlimplementationPager) orderExpr(query *ControlImplementationQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultControlImplementationOrder.Field {
+			b.Comma().Ident(DefaultControlImplementationOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ControlImplementation.
+func (ci *ControlImplementationQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ControlImplementationPaginateOption,
+) (*ControlImplementationConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newControlImplementationPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if ci, err = pager.applyFilter(ci); err != nil {
+		return nil, err
+	}
+	conn := &ControlImplementationConnection{Edges: []*ControlImplementationEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := ci.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if ci, err = pager.applyCursors(ci, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		ci.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := ci.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	ci = pager.applyOrder(ci)
+	nodes, err := ci.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ControlImplementationOrderField defines the ordering field of ControlImplementation.
+type ControlImplementationOrderField struct {
+	// Value extracts the ordering value from the given ControlImplementation.
+	Value    func(*ControlImplementation) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) controlimplementation.OrderOption
+	toCursor func(*ControlImplementation) Cursor
+}
+
+// ControlImplementationOrder defines the ordering of ControlImplementation.
+type ControlImplementationOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *ControlImplementationOrderField `json:"field"`
+}
+
+// DefaultControlImplementationOrder is the default ordering of ControlImplementation.
+var DefaultControlImplementationOrder = &ControlImplementationOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ControlImplementationOrderField{
+		Value: func(ci *ControlImplementation) (ent.Value, error) {
+			return ci.ID, nil
+		},
+		column: controlimplementation.FieldID,
+		toTerm: controlimplementation.ByID,
+		toCursor: func(ci *ControlImplementation) Cursor {
+			return Cursor{ID: ci.ID}
+		},
+	},
+}
+
+// ToEdge converts ControlImplementation into ControlImplementationEdge.
+func (ci *ControlImplementation) ToEdge(order *ControlImplementationOrder) *ControlImplementationEdge {
+	if order == nil {
+		order = DefaultControlImplementationOrder
+	}
+	return &ControlImplementationEdge{
+		Node:   ci,
+		Cursor: order.Field.toCursor(ci),
+	}
+}
+
+// ControlImplementationHistoryEdge is the edge representation of ControlImplementationHistory.
+type ControlImplementationHistoryEdge struct {
+	Node   *ControlImplementationHistory `json:"node"`
+	Cursor Cursor                        `json:"cursor"`
+}
+
+// ControlImplementationHistoryConnection is the connection containing edges to ControlImplementationHistory.
+type ControlImplementationHistoryConnection struct {
+	Edges      []*ControlImplementationHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                            `json:"pageInfo"`
+	TotalCount int                                 `json:"totalCount"`
+}
+
+func (c *ControlImplementationHistoryConnection) build(nodes []*ControlImplementationHistory, pager *controlimplementationhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ControlImplementationHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ControlImplementationHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ControlImplementationHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ControlImplementationHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ControlImplementationHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ControlImplementationHistoryPaginateOption enables pagination customization.
+type ControlImplementationHistoryPaginateOption func(*controlimplementationhistoryPager) error
+
+// WithControlImplementationHistoryOrder configures pagination ordering.
+func WithControlImplementationHistoryOrder(order *ControlImplementationHistoryOrder) ControlImplementationHistoryPaginateOption {
+	if order == nil {
+		order = DefaultControlImplementationHistoryOrder
+	}
+	o := *order
+	return func(pager *controlimplementationhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultControlImplementationHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithControlImplementationHistoryFilter configures pagination filter.
+func WithControlImplementationHistoryFilter(filter func(*ControlImplementationHistoryQuery) (*ControlImplementationHistoryQuery, error)) ControlImplementationHistoryPaginateOption {
+	return func(pager *controlimplementationhistoryPager) error {
+		if filter == nil {
+			return errors.New("ControlImplementationHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type controlimplementationhistoryPager struct {
+	reverse bool
+	order   *ControlImplementationHistoryOrder
+	filter  func(*ControlImplementationHistoryQuery) (*ControlImplementationHistoryQuery, error)
+}
+
+func newControlImplementationHistoryPager(opts []ControlImplementationHistoryPaginateOption, reverse bool) (*controlimplementationhistoryPager, error) {
+	pager := &controlimplementationhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultControlImplementationHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *controlimplementationhistoryPager) applyFilter(query *ControlImplementationHistoryQuery) (*ControlImplementationHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *controlimplementationhistoryPager) toCursor(cih *ControlImplementationHistory) Cursor {
+	return p.order.Field.toCursor(cih)
+}
+
+func (p *controlimplementationhistoryPager) applyCursors(query *ControlImplementationHistoryQuery, after, before *Cursor) (*ControlImplementationHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultControlImplementationHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *controlimplementationhistoryPager) applyOrder(query *ControlImplementationHistoryQuery) *ControlImplementationHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultControlImplementationHistoryOrder.Field {
+		query = query.Order(DefaultControlImplementationHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *controlimplementationhistoryPager) orderExpr(query *ControlImplementationHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultControlImplementationHistoryOrder.Field {
+			b.Comma().Ident(DefaultControlImplementationHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ControlImplementationHistory.
+func (cih *ControlImplementationHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ControlImplementationHistoryPaginateOption,
+) (*ControlImplementationHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newControlImplementationHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if cih, err = pager.applyFilter(cih); err != nil {
+		return nil, err
+	}
+	conn := &ControlImplementationHistoryConnection{Edges: []*ControlImplementationHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := cih.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if cih, err = pager.applyCursors(cih, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		cih.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := cih.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	cih = pager.applyOrder(cih)
+	nodes, err := cih.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ControlImplementationHistoryOrderField defines the ordering field of ControlImplementationHistory.
+type ControlImplementationHistoryOrderField struct {
+	// Value extracts the ordering value from the given ControlImplementationHistory.
+	Value    func(*ControlImplementationHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) controlimplementationhistory.OrderOption
+	toCursor func(*ControlImplementationHistory) Cursor
+}
+
+// ControlImplementationHistoryOrder defines the ordering of ControlImplementationHistory.
+type ControlImplementationHistoryOrder struct {
+	Direction OrderDirection                          `json:"direction"`
+	Field     *ControlImplementationHistoryOrderField `json:"field"`
+}
+
+// DefaultControlImplementationHistoryOrder is the default ordering of ControlImplementationHistory.
+var DefaultControlImplementationHistoryOrder = &ControlImplementationHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ControlImplementationHistoryOrderField{
+		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
+			return cih.ID, nil
+		},
+		column: controlimplementationhistory.FieldID,
+		toTerm: controlimplementationhistory.ByID,
+		toCursor: func(cih *ControlImplementationHistory) Cursor {
+			return Cursor{ID: cih.ID}
+		},
+	},
+}
+
+// ToEdge converts ControlImplementationHistory into ControlImplementationHistoryEdge.
+func (cih *ControlImplementationHistory) ToEdge(order *ControlImplementationHistoryOrder) *ControlImplementationHistoryEdge {
+	if order == nil {
+		order = DefaultControlImplementationHistoryOrder
+	}
+	return &ControlImplementationHistoryEdge{
+		Node:   cih,
+		Cursor: order.Field.toCursor(cih),
 	}
 }
 
@@ -9244,6 +9746,504 @@ func (i *Invite) ToEdge(order *InviteOrder) *InviteEdge {
 	return &InviteEdge{
 		Node:   i,
 		Cursor: order.Field.toCursor(i),
+	}
+}
+
+// MappedControlEdge is the edge representation of MappedControl.
+type MappedControlEdge struct {
+	Node   *MappedControl `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// MappedControlConnection is the connection containing edges to MappedControl.
+type MappedControlConnection struct {
+	Edges      []*MappedControlEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *MappedControlConnection) build(nodes []*MappedControl, pager *mappedcontrolPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *MappedControl
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *MappedControl {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *MappedControl {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*MappedControlEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &MappedControlEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// MappedControlPaginateOption enables pagination customization.
+type MappedControlPaginateOption func(*mappedcontrolPager) error
+
+// WithMappedControlOrder configures pagination ordering.
+func WithMappedControlOrder(order *MappedControlOrder) MappedControlPaginateOption {
+	if order == nil {
+		order = DefaultMappedControlOrder
+	}
+	o := *order
+	return func(pager *mappedcontrolPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultMappedControlOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithMappedControlFilter configures pagination filter.
+func WithMappedControlFilter(filter func(*MappedControlQuery) (*MappedControlQuery, error)) MappedControlPaginateOption {
+	return func(pager *mappedcontrolPager) error {
+		if filter == nil {
+			return errors.New("MappedControlQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type mappedcontrolPager struct {
+	reverse bool
+	order   *MappedControlOrder
+	filter  func(*MappedControlQuery) (*MappedControlQuery, error)
+}
+
+func newMappedControlPager(opts []MappedControlPaginateOption, reverse bool) (*mappedcontrolPager, error) {
+	pager := &mappedcontrolPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultMappedControlOrder
+	}
+	return pager, nil
+}
+
+func (p *mappedcontrolPager) applyFilter(query *MappedControlQuery) (*MappedControlQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *mappedcontrolPager) toCursor(mc *MappedControl) Cursor {
+	return p.order.Field.toCursor(mc)
+}
+
+func (p *mappedcontrolPager) applyCursors(query *MappedControlQuery, after, before *Cursor) (*MappedControlQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultMappedControlOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *mappedcontrolPager) applyOrder(query *MappedControlQuery) *MappedControlQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultMappedControlOrder.Field {
+		query = query.Order(DefaultMappedControlOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *mappedcontrolPager) orderExpr(query *MappedControlQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultMappedControlOrder.Field {
+			b.Comma().Ident(DefaultMappedControlOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to MappedControl.
+func (mc *MappedControlQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...MappedControlPaginateOption,
+) (*MappedControlConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newMappedControlPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if mc, err = pager.applyFilter(mc); err != nil {
+		return nil, err
+	}
+	conn := &MappedControlConnection{Edges: []*MappedControlEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := mc.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if mc, err = pager.applyCursors(mc, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		mc.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := mc.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	mc = pager.applyOrder(mc)
+	nodes, err := mc.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// MappedControlOrderField defines the ordering field of MappedControl.
+type MappedControlOrderField struct {
+	// Value extracts the ordering value from the given MappedControl.
+	Value    func(*MappedControl) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) mappedcontrol.OrderOption
+	toCursor func(*MappedControl) Cursor
+}
+
+// MappedControlOrder defines the ordering of MappedControl.
+type MappedControlOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *MappedControlOrderField `json:"field"`
+}
+
+// DefaultMappedControlOrder is the default ordering of MappedControl.
+var DefaultMappedControlOrder = &MappedControlOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &MappedControlOrderField{
+		Value: func(mc *MappedControl) (ent.Value, error) {
+			return mc.ID, nil
+		},
+		column: mappedcontrol.FieldID,
+		toTerm: mappedcontrol.ByID,
+		toCursor: func(mc *MappedControl) Cursor {
+			return Cursor{ID: mc.ID}
+		},
+	},
+}
+
+// ToEdge converts MappedControl into MappedControlEdge.
+func (mc *MappedControl) ToEdge(order *MappedControlOrder) *MappedControlEdge {
+	if order == nil {
+		order = DefaultMappedControlOrder
+	}
+	return &MappedControlEdge{
+		Node:   mc,
+		Cursor: order.Field.toCursor(mc),
+	}
+}
+
+// MappedControlHistoryEdge is the edge representation of MappedControlHistory.
+type MappedControlHistoryEdge struct {
+	Node   *MappedControlHistory `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// MappedControlHistoryConnection is the connection containing edges to MappedControlHistory.
+type MappedControlHistoryConnection struct {
+	Edges      []*MappedControlHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *MappedControlHistoryConnection) build(nodes []*MappedControlHistory, pager *mappedcontrolhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *MappedControlHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *MappedControlHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *MappedControlHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*MappedControlHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &MappedControlHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// MappedControlHistoryPaginateOption enables pagination customization.
+type MappedControlHistoryPaginateOption func(*mappedcontrolhistoryPager) error
+
+// WithMappedControlHistoryOrder configures pagination ordering.
+func WithMappedControlHistoryOrder(order *MappedControlHistoryOrder) MappedControlHistoryPaginateOption {
+	if order == nil {
+		order = DefaultMappedControlHistoryOrder
+	}
+	o := *order
+	return func(pager *mappedcontrolhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultMappedControlHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithMappedControlHistoryFilter configures pagination filter.
+func WithMappedControlHistoryFilter(filter func(*MappedControlHistoryQuery) (*MappedControlHistoryQuery, error)) MappedControlHistoryPaginateOption {
+	return func(pager *mappedcontrolhistoryPager) error {
+		if filter == nil {
+			return errors.New("MappedControlHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type mappedcontrolhistoryPager struct {
+	reverse bool
+	order   *MappedControlHistoryOrder
+	filter  func(*MappedControlHistoryQuery) (*MappedControlHistoryQuery, error)
+}
+
+func newMappedControlHistoryPager(opts []MappedControlHistoryPaginateOption, reverse bool) (*mappedcontrolhistoryPager, error) {
+	pager := &mappedcontrolhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultMappedControlHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *mappedcontrolhistoryPager) applyFilter(query *MappedControlHistoryQuery) (*MappedControlHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *mappedcontrolhistoryPager) toCursor(mch *MappedControlHistory) Cursor {
+	return p.order.Field.toCursor(mch)
+}
+
+func (p *mappedcontrolhistoryPager) applyCursors(query *MappedControlHistoryQuery, after, before *Cursor) (*MappedControlHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultMappedControlHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *mappedcontrolhistoryPager) applyOrder(query *MappedControlHistoryQuery) *MappedControlHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultMappedControlHistoryOrder.Field {
+		query = query.Order(DefaultMappedControlHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *mappedcontrolhistoryPager) orderExpr(query *MappedControlHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultMappedControlHistoryOrder.Field {
+			b.Comma().Ident(DefaultMappedControlHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to MappedControlHistory.
+func (mch *MappedControlHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...MappedControlHistoryPaginateOption,
+) (*MappedControlHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newMappedControlHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if mch, err = pager.applyFilter(mch); err != nil {
+		return nil, err
+	}
+	conn := &MappedControlHistoryConnection{Edges: []*MappedControlHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := mch.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if mch, err = pager.applyCursors(mch, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		mch.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := mch.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	mch = pager.applyOrder(mch)
+	nodes, err := mch.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// MappedControlHistoryOrderField defines the ordering field of MappedControlHistory.
+type MappedControlHistoryOrderField struct {
+	// Value extracts the ordering value from the given MappedControlHistory.
+	Value    func(*MappedControlHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) mappedcontrolhistory.OrderOption
+	toCursor func(*MappedControlHistory) Cursor
+}
+
+// MappedControlHistoryOrder defines the ordering of MappedControlHistory.
+type MappedControlHistoryOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *MappedControlHistoryOrderField `json:"field"`
+}
+
+// DefaultMappedControlHistoryOrder is the default ordering of MappedControlHistory.
+var DefaultMappedControlHistoryOrder = &MappedControlHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &MappedControlHistoryOrderField{
+		Value: func(mch *MappedControlHistory) (ent.Value, error) {
+			return mch.ID, nil
+		},
+		column: mappedcontrolhistory.FieldID,
+		toTerm: mappedcontrolhistory.ByID,
+		toCursor: func(mch *MappedControlHistory) Cursor {
+			return Cursor{ID: mch.ID}
+		},
+	},
+}
+
+// ToEdge converts MappedControlHistory into MappedControlHistoryEdge.
+func (mch *MappedControlHistory) ToEdge(order *MappedControlHistoryOrder) *MappedControlHistoryEdge {
+	if order == nil {
+		order = DefaultMappedControlHistoryOrder
+	}
+	return &MappedControlHistoryEdge{
+		Node:   mch,
+		Cursor: order.Field.toCursor(mch),
 	}
 }
 

@@ -3,9 +3,11 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
@@ -25,76 +27,61 @@ type Subcontrol struct {
 
 // Fields returns file fields.
 func (Subcontrol) Fields() []ent.Field {
-	return []ent.Field{
-		field.String("name").
+	// add any fields that are specific to the subcontrol here
+	additionalFields := []ent.Field{
+		field.String("ref_code").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			NotEmpty().
-			Comment("the name of the subcontrol").
-			Annotations(entx.FieldSearchable()),
-		field.Text("description").
-			Optional().
-			Comment("description of the subcontrol"),
-		field.String("status").
-			Optional().
-			Comment("status of the subcontrol"),
-		field.String("subcontrol_type").
-			Optional().
-			Comment("type of the subcontrol").
-			Annotations(entx.FieldSearchable()),
-		field.String("version").
-			Optional().
-			Comment("version of the control"),
-		field.String("subcontrol_number").
-			Optional().
-			Comment("number of the subcontrol"),
-		field.Text("family").
-			Optional().
-			Comment("subcontrol family").
-			Annotations(entx.FieldSearchable()),
-		field.String("class").
-			Optional().
-			Comment("subcontrol class"),
-		field.String("source").
-			Optional().
-			Comment("source of the control, e.g. framework, template, user-defined, etc."),
-		field.Text("mapped_frameworks").
-			Optional().
-			Comment("mapped frameworks that the subcontrol is part of"),
-		field.String("implementation_evidence").
-			Optional().
-			Comment("implementation evidence of the subcontrol"),
-		field.String("implementation_status").
-			Optional().
-			Comment("implementation status"),
-		field.Time("implementation_date").
-			Optional().
-			Comment("date the subcontrol was implemented"),
-		field.String("implementation_verification").
-			Optional().
-			Comment("implementation verification"),
-		field.Time("implementation_verification_date").
-			Optional().
-			Comment("date the subcontrol implementation was verified"),
-		field.JSON("details", map[string]any{}).
-			Optional().
-			Comment("json data details of the subcontrol"),
-		field.Text("example_evidence").
-			Comment("example evidence to provide for the control").
-			Optional(),
+			Comment("the unique reference code for the control"),
+		field.String("control_id").
+			Unique().
+			Comment("the id of the parent control").
+			NotEmpty(),
 	}
+
+	return append(controlFields, additionalFields...)
 }
 
 // Edges of the Subcontrol
 func (Subcontrol) Edges() []ent.Edge {
 	return []ent.Edge{
-		// subcontrols are required to have at least one parent control
-		edge.From("controls", Control.Type).
+		// subcontrols are required to have a parent control
+		edge.From("control", Control.Type).
+			Unique().
+			Field("control_id").
 			Required().
 			Ref("subcontrols"),
-		edge.To("tasks", Task.Type),
-		edge.From("programs", Program.Type).
-			Ref("subcontrols"),
+
+		// controls can be mapped to other controls as a reference
+		edge.From("mapped_controls", MappedControl.Type).
+			Ref("subcontrols").
+			Comment("mapped subcontrols that have a relation to another control or subcontrol"),
+
+		// evidence can be associated with the control
 		edge.From("evidence", Evidence.Type).
 			Ref("subcontrols"),
+
+		edge.To("control_objectives", ControlObjective.Type),
+
+		// sub controls can have associated task, narratives, risks, and action plans
+		edge.To("tasks", Task.Type),
+		edge.To("narratives", Narrative.Type),
+		edge.To("risks", Risk.Type),
+		edge.To("action_plans", ActionPlan.Type),
+
+		// policies and procedures are used to implement the subcontrol
+		edge.To("procedures", Procedure.Type),
+		edge.To("internal_policies", InternalPolicy.Type),
+
+		// owner is the user who is responsible for the subcontrol
+		edge.To("control_owner", Group.Type).
+			Unique().
+			Comment("the user who is responsible for the subcontrol, defaults to the parent control owner if not set"),
+		edge.To("delegate", Group.Type).
+			Unique().
+			Comment("temporary delegate for the control, used for temporary control ownership"),
 	}
 }
 
@@ -107,10 +94,21 @@ func (Subcontrol) Mixin() []ent.Mixin {
 		emixin.TagMixin{},
 		// subcontrols can inherit permissions from the parent control
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"control_id"},
-			WithOrganizationOwner: true,
-			Ref:                   "subcontrols",
+			FieldNames:               []string{"control_id"},
+			WithOrganizationOwner:    true,
+			AllowEmptyForSystemAdmin: true, // allow organization owner to be empty
+			Ref:                      "subcontrols",
 		}),
+	}
+}
+
+func (Subcontrol) Indexes() []ent.Index {
+	return []ent.Index{
+		// ref_code should be unique within the parent control
+		index.Fields("control_id", "ref_code").
+			Unique().Annotations(
+			entsql.IndexWhere("deleted_at is NULL"),
+		),
 	}
 }
 

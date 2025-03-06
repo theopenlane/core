@@ -12,7 +12,6 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -53,17 +52,13 @@ func (Template) Fields() []ent.Field {
 		field.String("description").
 			Comment("the description of the template").
 			Optional(),
-		field.JSON("jsonconfig", customtypes.JSONObject{}).
+		field.JSON("jsonconfig", map[string]any{}).
 			Comment("the jsonschema object of the template").
 			Annotations(
-				entgql.Type("JSON"),
 				entx.FieldJSONPathSearchable("$id"),
 			),
-		field.JSON("uischema", customtypes.JSONObject{}).
+		field.JSON("uischema", map[string]any{}).
 			Comment("the uischema for the template to render in the UI").
-			Annotations(
-				entgql.Type("JSON"),
-			).
 			Optional(),
 	}
 }

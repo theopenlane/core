@@ -33,20 +33,17 @@ mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!])
       controls {
         id
         displayID
-        name
-        family
+        refCode
       }
       subcontrols {
         id
         displayID
-        name
-        family
+        refCode
       }
       controlObjectives {
         id
         displayID
         name
-        family
       }
     }
   }
@@ -94,20 +91,17 @@ query GetAllEvidences {
         controls {
           id
           displayID
-          name
-          family
+          refCode
         }
         subcontrols {
           id
           displayID
-          name
-          family
+          refCode
         }
         controlObjectives {
           id
           displayID
           name
-          family
         }
       }
     }
@@ -148,20 +142,17 @@ query GetEvidenceByID($evidenceId: ID!) {
     controls {
       id
       displayID
-      name
-      family
+      refCode
     }
     subcontrols {
       id
       displayID
-      name
-      family
+      refCode
     }
     controlObjectives {
       id
       displayID
       name
-      family
     }
   }
 }
@@ -202,20 +193,17 @@ query GetEvidences($where: EvidenceWhereInput) {
         controls {
           id
           displayID
-          name
-          family
+          refCode
         }
         subcontrols {
           id
           displayID
-          name
-          family
+          refCode
         }
         controlObjectives {
           id
           displayID
           name
-          family
         }
       }
     }
@@ -261,20 +249,17 @@ mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $e
       controls {
         id
         displayID
-        name
-        family
+        refCode
       }
       subcontrols {
         id
         displayID
-        name
-        family
+        refCode
       }
       controlObjectives {
         id
         displayID
         name
-        family
       }
     }
   }

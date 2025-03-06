@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
@@ -50,9 +49,9 @@ type TemplateHistory struct {
 	// the description of the template
 	Description string `json:"description,omitempty"`
 	// the jsonschema object of the template
-	Jsonconfig customtypes.JSONObject `json:"jsonconfig,omitempty"`
+	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema     customtypes.JSONObject `json:"uischema,omitempty"`
+	Uischema     map[string]interface{} `json:"uischema,omitempty"`
 	selectValues sql.SelectValues
 }
 

@@ -100,11 +100,13 @@ const (
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
-	// NarrativesTable is the table that holds the narratives relation/edge. The primary key declared below.
-	NarrativesTable = "procedure_narratives"
+	// NarrativesTable is the table that holds the narratives relation/edge.
+	NarrativesTable = "narratives"
 	// NarrativesInverseTable is the table name for the Narrative entity.
 	// It exists in this package in order to avoid circular dependency with the "narrative" package.
 	NarrativesInverseTable = "narratives"
+	// NarrativesColumn is the table column denoting the narratives relation/edge.
+	NarrativesColumn = "procedure_narratives"
 	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
 	RisksTable = "procedure_risks"
 	// RisksInverseTable is the table name for the Risk entity.
@@ -150,7 +152,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_procedures",
-	"standard_procedures",
+	"subcontrol_procedures",
 }
 
 var (
@@ -166,9 +168,6 @@ var (
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "procedure_id"}
-	// NarrativesPrimaryKey and NarrativesColumn2 are the table columns denoting the
-	// primary key for the narratives relation (M2M).
-	NarrativesPrimaryKey = []string{"procedure_id", "narrative_id"}
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"procedure_id", "risk_id"}
@@ -474,7 +473,7 @@ func newNarrativesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NarrativesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, NarrativesTable, NarrativesPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
 	)
 }
 func newRisksStep() *sqlgraph.Step {

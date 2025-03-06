@@ -988,11 +988,11 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	ctx = ent.NewContext(ctx, c.client.db)
 
 	if c.Name == "" {
-		c.Name = gofakeit.AppName()
+		c.Name = gofakeit.UUID()
 	}
 
 	mutation := c.client.db.Control.Create().
-		SetName(c.Name)
+		SetRefCode(c.Name)
 
 	if c.ProgramID != "" {
 		mutation.AddProgramIDs(c.ProgramID)
@@ -1012,18 +1012,18 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 	ctx = ent.NewContext(ctx, s.client.db)
 
 	if s.Name == "" {
-		s.Name = gofakeit.AppName()
+		s.Name = gofakeit.UUID()
 	}
 
 	mutation := s.client.db.Subcontrol.Create().
-		SetName(s.Name)
+		SetRefCode(s.Name)
 
 	if s.ControlID == "" {
 		control := (&ControlBuilder{client: s.client}).MustNew(ctx, t)
 		s.ControlID = control.ID
 	}
 
-	mutation.AddControlIDs(s.ControlID)
+	mutation.SetControlID(s.ControlID)
 
 	sc := mutation.
 		SaveX(ctx)
