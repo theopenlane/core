@@ -135,6 +135,12 @@ func HookUser() ent.Hook {
 				if err := updatePersonalOrgSetting(ctx, m.Client(), userCreated, org); err != nil {
 					return nil, err
 				}
+
+				// create a subscription for the personal org
+				if err := createPersonalOrgOrgSubscription(ctx, org, m.Client()); err != nil {
+					log.Warn().Msgf("failed to create personal org subscription in user hook")
+					return nil, err
+				}
 			}
 
 			return userCreated, err
@@ -301,6 +307,37 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 
 		return err
 	}
+
+	return nil
+}
+
+// createOrgSubscription creates the default organization subscription for a new org
+func createPersonalOrgOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if len(orgCreated.Edges.OrgSubscriptions) == 0 {
+		if err := defaultPersonalOrgSubscription(ctx, orgCreated, dbClient); err != nil {
+			log.Error().Err(err).Msg("error creating default org subscription")
+
+			return err
+		}
+
+		log.Warn().Msgf("created personal org subscription in the new sexy way")
+	}
+
+	return nil
+}
+
+func defaultPersonalOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
+	if err := dbClient.OrgSubscription.Create().
+		SetStripeSubscriptionID("PENDING_UPDATE").
+		SetOwnerID(orgCreated.ID).
+		SetActive(true).
+		SetStripeSubscriptionStatus("active").Exec(ctx); err != nil {
+		return err
+	}
+
+	log.Warn().Msgf("created org subscription in the new sexy way")
 
 	return nil
 }

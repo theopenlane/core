@@ -209,6 +209,34 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 	return nil
 }
 
+// createOrgSubscription creates the default organization subscription for a new org
+func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
+	// if this is empty generate a default org setting schema
+	if len(orgCreated.Edges.OrgSubscriptions) == 0 {
+		if err := defaultOrgSubscription(ctx, orgCreated, m); err != nil {
+			log.Error().Err(err).Msg("error creating default org subscription")
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
+	if err := m.Client().OrgSubscription.Create().
+		SetStripeSubscriptionID("PENDING_UPDATE").
+		SetOwnerID(orgCreated.ID).
+		SetActive(true).
+		SetStripeSubscriptionStatus("active").Exec(ctx); err != nil {
+		return err
+	}
+
+	log.Warn().Msgf("created org subscription in the new sexy way")
+
+	return nil
+}
+
 // createEntityTypes creates the default entity types for a new org
 func createEntityTypes(ctx context.Context, orgID string, m *generated.OrganizationMutation) error {
 	if m.EntConfig == nil || len(m.EntConfig.EntityTypes) == 0 {
@@ -239,6 +267,10 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 	// set the new org id in the auth context to process the rest of the post creation steps
 	if err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID); err != nil {
+		return err
+	}
+
+	if err := createOrgSubscription(ctx, orgCreated, m); err != nil {
 		return err
 	}
 
