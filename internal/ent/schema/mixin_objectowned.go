@@ -269,7 +269,7 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate)
+	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne)
 }
 
 // defaultObjectInterceptorFunc is the default interceptor function for the object owned mixin

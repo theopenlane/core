@@ -104,6 +104,9 @@ func Authenticate(conf *AuthOptions) echo.MiddlewareFunc {
 	}
 }
 
+// getTokenType returns the authentication type based on the bearer token
+// this is used to determine if the token is a personal access token or an API token
+// the default is JWT authentication
 func getTokenType(bearerToken string) auth.AuthenticationType {
 	switch {
 	case strings.HasPrefix(bearerToken, "tola_"):

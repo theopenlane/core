@@ -112,6 +112,11 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 		return true, nil
 	}
 
+	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+		return true, nil
+	}
+
+	// allow to skip the org interceptor middleware before a user could potentially be authenticated
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
@@ -149,7 +154,13 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 	newTarget, err := a.authCheck(ctx, user, targetOrgID)
 	if err != nil {
 		if targetOrgID != "" {
-			log.Error().Err(err).Msg("user attempting to switch into an org they cannot access, returning error")
+			log.Error().Err(err).Msg("user attempting to switch into an org they cannot access")
+
+			return nil, err
+		}
+
+		if newTarget == "" {
+			log.Error().Err(err).Msg("user attempting to authenticate into an org they cannot access; no alternative org returned")
 
 			return nil, err
 		}
@@ -177,6 +188,7 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 // GenerateUserSession creates a new session for the user and stores it in the response
 func (a *Client) generateUserSession(ctx context.Context, w http.ResponseWriter, userID string) (string, error) {
 	var err error
+
 	ctx, err = a.db.SessionConfig.CreateAndStoreSession(ctx, w, userID)
 	if err != nil {
 		return "", err
@@ -224,6 +236,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	if orgID == "" {
 		// get the default org for the user to check access
 		var err error
+
 		orgID, err = getUserDefaultOrg(ctx, user)
 		if err != nil {
 			return "", err
@@ -244,15 +257,9 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 
 	active, err := a.checkActiveSubscription(ctx, orgID)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to find orgsubscription for organization")
+		log.Error().Err(err).Msg("failed to find org subscription for organization")
 
 		return "", err
-	}
-
-	if !active {
-		log.Error().Err(err).Msg("organization subscription is not active")
-
-		return "", generated.ErrPermissionDenied
 	}
 
 	// ensure user is already a member of the destination organization
@@ -270,11 +277,12 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		return "", err
 	}
 
-	if allow {
+	// if the org is active and they are allowed, we can return the org
+	if active && allow {
 		return orgID, nil
 	}
 
-	// if the user was not allowed, we need to update the default org if we used their default org
+	// if the user was not allowed or the org is not active, we need to update the default org if we used their default org
 	// to authenticate
 	newOrgID, err := a.updateDefaultOrg(ctx, user, orgID)
 	if err != nil {
@@ -377,6 +385,7 @@ func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*g
 	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(ctx)
 }
 
+// skipOrgValidation checks if the org validation should be skipped based on the context
 func skipOrgValidation(ctx context.Context) bool {
 	// skip if explicitly allowed
 	if _, allow := privacy.DecisionFromContext(ctx); allow {

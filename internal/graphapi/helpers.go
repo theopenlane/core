@@ -210,9 +210,7 @@ func setOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 		return fmt.Errorf("%w: organization id %s not found in the authenticated organizations", rout.ErrBadRequest, orgID)
 	}
 
-	auth.SetOrganizationIDInAuthContext(ctx, *inputOrgID)
-
-	return nil
+	return auth.SetOrganizationIDInAuthContext(ctx, *inputOrgID)
 }
 
 // checkAllowedAuthType checks how the user is authenticated and returns an error

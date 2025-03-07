@@ -6,9 +6,10 @@ import (
 
 	"entgo.io/ent/entql"
 
+	"github.com/theopenlane/utils/contextx"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // AllowIfContextHasPrivacyTokenOfType allows a mutation
@@ -69,6 +70,12 @@ func AllowAfterApplyingPrivacyTokenFilter[T PrivacyToken]() privacy.QueryMutatio
 		})
 }
 
+// SkipTokenInContext checks if the context has a token of a specific type
+// and returns true if it does. It supports multiple token types
+// and checks for each type in the skipTypes slice. If any of the types
+// match, it returns true, otherwise it returns false
+// This function is useful for skipping certain rules based on the presence
+// of a token in the context
 func SkipTokenInContext(ctx context.Context, skipTypes []token.PrivacyToken) bool {
 	for _, tokenType := range skipTypes {
 		switch reflect.TypeOf(tokenType) {
