@@ -110,12 +110,14 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 		return true, nil
 	}
 
-	subscription, err := a.db.OrgSubscription.Query().Where(orgsubscription.HasOwnerWith(organization.ID((orgID)))).Only(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).First(allowCtx)
 	if err != nil {
 		return false, err
 	}
 
-	if !subscription.Active {
+	if subscription == nil || !subscription.Active {
 		return false, ErrOrgSubscriptionNotActive
 	}
 

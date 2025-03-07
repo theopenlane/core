@@ -228,6 +228,7 @@ func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organizat
 		SetStripeSubscriptionID("PENDING_UPDATE").
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
+		SetStripeCustomerID("PENDING_UPDATE").
 		SetStripeSubscriptionStatus("active").Exec(ctx); err != nil {
 		return err
 	}

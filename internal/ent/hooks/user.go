@@ -333,11 +333,12 @@ func defaultPersonalOrgSubscription(ctx context.Context, orgCreated *generated.O
 		SetStripeSubscriptionID("PENDING_UPDATE").
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
+		SetStripeCustomerID("PENDING_UPDATE").
 		SetStripeSubscriptionStatus("active").Exec(ctx); err != nil {
 		return err
 	}
 
-	log.Warn().Msgf("created org subscription in the new sexy way")
+	log.Warn().Msgf("created personal org subscription in the new sexy way")
 
 	return nil
 }
