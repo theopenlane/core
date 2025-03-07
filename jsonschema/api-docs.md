@@ -675,6 +675,7 @@ Config defines the configuration settings for the default rate limiter
 |**personalOrgSubscriptionPriceID**|`string`|||
 |**stripeWebhookURL**|`string`|||
 |**stripeBillingPortalSuccessURL**|`string`|||
+|**stripeCancellationReturnURL**|`string`|||
 
 **Additional Properties:** not allowed  
 

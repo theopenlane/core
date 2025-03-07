@@ -2,6 +2,7 @@ package authmanager
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -13,9 +14,11 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -95,6 +98,30 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	auth.TokenType = bearerScheme
 
 	return auth, nil
+}
+
+var (
+	// ErrOrgSubscriptionNotActive is the error message when the organization subscription is not active
+	ErrOrgSubscriptionNotActive = errors.New("organization subscription is not active")
+)
+
+func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
+	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+		return true, nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).First(allowCtx)
+	if err != nil {
+		return false, err
+	}
+
+	if subscription == nil || !subscription.Active {
+		return false, ErrOrgSubscriptionNotActive
+	}
+
+	return true, nil
 }
 
 // createClaims creates the claims for the JWT token using the id for the user and organization
@@ -183,6 +210,13 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 	return session, nil
 }
 
+var (
+	// ErrSubscriptionNotFound is the error message when the subscription is not found
+	ErrSubscriptionNotFound = errors.New("subscription not found")
+	// ErrSubscriptionNotActive is the error message when the subscription is not active
+	ErrSubscriptionNotActive = errors.New("subscription not active")
+)
+
 // authCheck checks if the user has access to the target organization before issuing a new session and claims
 // if the user does not have access to the target organization, the user's default org is used (or falls back)
 // to their personal org
@@ -209,10 +243,19 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		orgID = au.OrganizationID
 	}
 
+	active, err := a.checkActiveSubscription(ctx, orgID)
+	if err != nil {
+		log.Error().Err(err).Msgf("failed to find orgsubscription for organization %s", orgID)
+
+		return orgID, ErrSubscriptionNotFound
+	}
+
+	if !active {
+		log.Error().Err(err).Msg("organization subscription is not active")
+
+		return orgID, ErrSubscriptionNotActive
+	}
 	// ensure user is already a member of the destination organization
-	req := fgax.AccessCheck{
-		SubjectID:   au.SubjectID,
-		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
 		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 	}

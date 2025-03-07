@@ -888,6 +888,8 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_subscriber(ctx, field)
 			case "file":
 				return ec.fieldContext_Event_file(ctx, field)
+			case "orgsubscription":
+				return ec.fieldContext_Event_orgsubscription(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},
@@ -1636,6 +1638,10 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_events(ctx, field)
 			case "subscriptionURL":
 				return ec.fieldContext_OrgSubscription_subscriptionURL(ctx, field)
+			case "managePaymentMethods":
+				return ec.fieldContext_OrgSubscription_managePaymentMethods(ctx, field)
+			case "cancellation":
+				return ec.fieldContext_OrgSubscription_cancellation(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgSubscription", field.Name)
 		},

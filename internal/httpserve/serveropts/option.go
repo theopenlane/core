@@ -480,9 +480,12 @@ func WithObjectStorage() ServerOption {
 func WithEntitlements() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Entitlements.Enabled {
-			client := entitlements.NewStripeClient(
+			client, err := entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
 				entitlements.WithConfig(s.Config.Settings.Entitlements))
+			if err != nil {
+				log.Panic().Err(err).Msg("Error creating entitlements client")
+			}
 
 			s.Config.Handler.Entitlements = client
 		}
