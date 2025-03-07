@@ -72,7 +72,7 @@ require (
 	github.com/theopenlane/entx v0.4.4
 	github.com/theopenlane/gqlgen-plugins v0.4.5
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.8.5
+	github.com/theopenlane/iam v0.8.6
 	github.com/theopenlane/newman v0.1.3
 	github.com/theopenlane/riverboat v0.0.9
 	github.com/theopenlane/utils v0.4.3
