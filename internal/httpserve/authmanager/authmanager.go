@@ -219,6 +219,13 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 	return session, nil
 }
 
+var (
+	// ErrSubscriptionNotFound is the error message when the subscription is not found
+	ErrSubscriptionNotFound = errors.New("subscription not found")
+	// ErrSubscriptionNotActive is the error message when the subscription is not active
+	ErrSubscriptionNotActive = errors.New("subscription not active")
+)
+
 // authCheck checks if the user has access to the target organization before issuing a new session and claims
 // if the user does not have access to the target organization, the user's default org is used (or falls back)
 // to their personal org
