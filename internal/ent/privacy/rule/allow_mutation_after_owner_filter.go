@@ -23,7 +23,7 @@ func AllowMutationAfterApplyingOwnerFilter() privacy.MutationRule {
 				return privacy.Deny
 			}
 
-			viewerID, err := auth.GetUserIDFromContext(ctx)
+			viewerID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
 				return privacy.Skip
 			}

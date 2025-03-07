@@ -291,7 +291,7 @@ func validateOrgDeletion(ctx context.Context, m *generated.OrganizationMutation)
 
 // updateUserDefaultOrgOnDelete updates the user's default org if the org being deleted is the user's default org
 func updateUserDefaultOrgOnDelete(ctx context.Context, m *generated.OrganizationMutation) (string, error) {
-	currentUserID, err := auth.GetUserIDFromContext(ctx)
+	currentUserID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -353,7 +353,7 @@ func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationM
 	personalOrg, _ := m.PersonalOrg()
 
 	if !personalOrg {
-		userID, err := auth.GetUserIDFromContext(ctx)
+		userID, err := auth.GetSubjectIDFromContext(ctx)
 		if err != nil {
 			log.Error().Err(err).Msg("unable to get user id from context")
 			return "", err
@@ -444,7 +444,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	}
 
 	// get userID from context
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to organization")
 

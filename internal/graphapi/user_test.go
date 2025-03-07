@@ -80,8 +80,7 @@ func (suite *GraphTestSuite) TestQueryUsers() {
 		assert.Len(t, resp.Users.Edges, 1)
 
 		// setup valid user context
-		reqCtx, err := userContextWithID(testUser1.ID)
-		require.NoError(t, err)
+		reqCtx := testUser1.UserCtx
 
 		resp, err = suite.client.api.GetAllUsers(reqCtx)
 
@@ -191,8 +190,7 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
 
 	// setup valid user context
-	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, orgID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
 
 	weakPassword := "notsecure"
 
@@ -356,8 +354,7 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 	personalOrgID := user.Edges.Setting.Edges.DefaultOrg.ID
 
 	// setup valid user context
-	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, personalOrgID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(user.ID, personalOrgID)
 
 	testCases := []struct {
 		name     string
@@ -414,8 +411,7 @@ func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 
 	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
 
 	token := (&PersonalAccessTokenBuilder{client: suite.client, OwnerID: user.ID}).MustNew(reqCtx, t)
 

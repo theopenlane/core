@@ -73,7 +73,7 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 // GetAuthorizedObjectIDs does a list objects request to pull all ids the current user
 // has access to within the FGA system
 func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, error) {
-	user, err := auth.GetAuthenticatedUserContext(ctx)
+	user, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return []string{}, nil
 	}

@@ -23,8 +23,8 @@ func InterceptorOrganization() ent.Interceptor {
 			return nil
 		}
 
-		if rule.ContextHasPrivacyTokenOfType(ctx, &token.OrgInviteToken{}) ||
-			rule.ContextHasPrivacyTokenOfType(ctx, &token.SignUpToken{}) {
+		if rule.ContextHasPrivacyTokenOfType[*token.OrgInviteToken](ctx) ||
+			rule.ContextHasPrivacyTokenOfType[*token.SignUpToken](ctx) {
 			return nil
 		}
 

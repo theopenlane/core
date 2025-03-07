@@ -24,7 +24,9 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	au, err := auth.GetAuthenticatedUserContext(ctx.Request().Context())
+	reqCtx := ctx.Request().Context()
+
+	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("error getting authenticated user")
 
@@ -41,14 +43,8 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	// determine the subject type
-	subjectType := "user"
-	if au.AuthenticationType == auth.APITokenAuthentication {
-		subjectType = "service"
-	}
-
 	req := fgax.ListAccess{
-		SubjectType: subjectType,
+		SubjectType: auth.GetAuthzSubjectType(reqCtx),
 		SubjectID:   au.SubjectID,
 		ObjectID:    in.ID,
 		ObjectType:  fgax.Kind("organization"),

@@ -2,22 +2,26 @@ package authmanager
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/rs/zerolog/log"
-	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -58,13 +62,13 @@ func (a *Client) GetSessionConfig() *sessions.SessionConfig {
 // and is automatically switched into another organization
 // Before the sessions is issues, we check that the user still has access to the target organization
 // if not, the user's default org (or personal org) is used
-func (a *Client) GenerateUserAuthSessionWithOrg(ctx echo.Context, user *generated.User, targetOrgID string) (*models.AuthData, error) {
-	auth, err := a.createTokenPair(ctx.Request().Context(), user, targetOrgID)
+func (a *Client) GenerateUserAuthSessionWithOrg(ctx context.Context, w http.ResponseWriter, user *generated.User, targetOrgID string) (*models.AuthData, error) {
+	auth, err := a.createTokenPair(ctx, user, targetOrgID)
 	if err != nil {
 		return nil, err
 	}
 
-	auth.Session, err = a.generateUserSession(ctx, user.ID)
+	auth.Session, err = a.generateUserSession(ctx, w, user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -74,10 +78,10 @@ func (a *Client) GenerateUserAuthSessionWithOrg(ctx echo.Context, user *generate
 	return auth, nil
 }
 
-// generateNewAuthSession creates a new auth session for the user and their default organization id
+// GenerateUserAuthSession creates a new auth session for the user and their default organization id
 // this is used during the login process
-func (a *Client) GenerateUserAuthSession(ctx echo.Context, user *generated.User) (*models.AuthData, error) {
-	return a.GenerateUserAuthSessionWithOrg(ctx, user, "")
+func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User) (*models.AuthData, error) {
+	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "")
 }
 
 // GenerateOauthAuthSession creates a new auth session for the oauth user and their default organization id
@@ -95,6 +99,31 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	auth.TokenType = bearerScheme
 
 	return auth, nil
+}
+
+var (
+	// ErrOrgSubscriptionNotActive is the error message when the organization subscription is not active
+	ErrOrgSubscriptionNotActive = errors.New("organization subscription is not active")
+)
+
+func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
+	// if the entitlement manager is disabled, we can skip the check
+	if a.db.EntitlementManager == nil {
+		return true, nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
+	if err != nil {
+		return false, err
+	}
+
+	if subscription == nil || !subscription.Active {
+		return false, ErrOrgSubscriptionNotActive
+	}
+
+	return true, nil
 }
 
 // createClaims creates the claims for the JWT token using the id for the user and organization
@@ -146,14 +175,15 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 }
 
 // GenerateUserSession creates a new session for the user and stores it in the response
-func (a *Client) generateUserSession(ctx echo.Context, userID string) (string, error) {
-	// set sessions in response
-	if err := a.db.SessionConfig.CreateAndStoreSession(ctx, userID); err != nil {
+func (a *Client) generateUserSession(ctx context.Context, w http.ResponseWriter, userID string) (string, error) {
+	var err error
+	ctx, err = a.db.SessionConfig.CreateAndStoreSession(ctx, w, userID)
+	if err != nil {
 		return "", err
 	}
 
 	// return the session value for the UI to use
-	session, err := sessions.SessionToken(ctx.Request().Context())
+	session, err := sessions.SessionToken(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -186,27 +216,43 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 // authCheck checks if the user has access to the target organization before issuing a new session and claims
 // if the user does not have access to the target organization, the user's default org is used (or falls back)
 // to their personal org
-func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (newOrgID string, err error) {
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
-		return
+func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (string, error) {
+	if skip := skipOrgValidation(ctx); skip {
+		return orgID, nil
 	}
 
 	if orgID == "" {
 		// get the default org for the user to check access
+		var err error
 		orgID, err = getUserDefaultOrg(ctx, user)
 		if err != nil {
-			return
+			return "", err
 		}
 	}
 
-	au, err := auth.GetAuthenticatedUserContext(ctx)
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		return
+		log.Error().Err(err).Msg("unable to get authenticated user context")
+
+		return "", err
 	}
 
 	// if no org is provided, check with the authenticated org
 	if orgID == "" {
 		orgID = au.OrganizationID
+	}
+
+	active, err := a.checkActiveSubscription(ctx, orgID)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to find orgsubscription for organization")
+
+		return "", err
+	}
+
+	if !active {
+		log.Error().Err(err).Msg("organization subscription is not active")
+
+		return "", generated.ErrPermissionDenied
 	}
 
 	// ensure user is already a member of the destination organization
@@ -221,16 +267,16 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	if err != nil {
 		log.Error().Err(err).Msg("unable to check access")
 
-		return
+		return "", err
 	}
 
 	if allow {
-		return
+		return orgID, nil
 	}
 
 	// if the user was not allowed, we need to update the default org if we used their default org
 	// to authenticate
-	newOrgID, err = a.updateDefaultOrg(ctx, user, orgID)
+	newOrgID, err := a.updateDefaultOrg(ctx, user, orgID)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to update default org")
 
@@ -329,4 +375,24 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 // getPersonalOrgID returns the personal org ID for the user
 func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*generated.Organization, error) {
 	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(ctx)
+}
+
+func skipOrgValidation(ctx context.Context) bool {
+	// skip if explicitly allowed
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return true
+	}
+
+	// skip on org creation
+	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+		return true
+	}
+
+	// skip on privacy tokens
+	skipTokenType := []token.PrivacyToken{
+		&token.VerifyToken{},
+		&token.SignUpToken{},
+	}
+
+	return rule.SkipTokenInContext(ctx, skipTokenType)
 }

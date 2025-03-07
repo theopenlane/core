@@ -232,15 +232,13 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 // defaultObjectHookFunc is the default hook function for the object owned mixin
 var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// skip the hook if the context has the token type
 			// this is useful for tokens, where the user is not yet authenticated to
 			// a particular organization yet and auth policy allows this
-			for _, tokenType := range o.SkipTokenType {
-				if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
-					return next.Mutate(ctx, m)
-				}
+			if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
+				return next.Mutate(ctx, m)
 			}
 
 			skip, err := o.skipOrgHookForAdmins(ctx, m)
@@ -252,28 +250,26 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if m.Op() != ent.OpCreate {
-				objectIDs, err := interceptors.GetAuthorizedObjectIDs(ctx, strcase.SnakeCase(m.Type()))
-				if err != nil {
-					return nil, err
-				}
-
-				// filter by owner on update and delete mutations
-				mx, ok := m.(interface {
-					SetOp(ent.Op)
-					Client() *generated.Client
-					WhereP(...func(*sql.Selector))
-				})
-				if !ok {
-					return nil, ErrUnexpectedMutationType
-				}
-
-				o.P(mx, objectIDs)
+			objectIDs, err := interceptors.GetAuthorizedObjectIDs(ctx, strcase.SnakeCase(m.Type()))
+			if err != nil {
+				return nil, err
 			}
+
+			// filter by owner on update and delete mutations
+			mx, ok := m.(interface {
+				SetOp(ent.Op)
+				Client() *generated.Client
+				WhereP(...func(*sql.Selector))
+			})
+			if !ok {
+				return nil, ErrUnexpectedMutationType
+			}
+
+			o.P(mx, objectIDs)
 
 			return next.Mutate(ctx, m)
 		})
-	}
+	}, ent.OpCreate)
 }
 
 // defaultObjectInterceptorFunc is the default interceptor function for the object owned mixin

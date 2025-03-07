@@ -297,13 +297,11 @@ func (suite *GraphTestSuite) TestMutationDeleteAPIToken() {
 	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
 	orgID2 := user2.Edges.Setting.Edges.DefaultOrg.ID
 
-	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, orgID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
 
 	token := (&APITokenBuilder{client: suite.client}).MustNew(reqCtx, t)
 
-	reqCtx2, err := auth.NewTestContextWithOrgID(user2.ID, orgID2)
-	require.NoError(t, err)
+	reqCtx2 := auth.NewTestContextWithOrgID(user2.ID, orgID2)
 
 	token2 := (&APITokenBuilder{client: suite.client}).MustNew(reqCtx2, t)
 

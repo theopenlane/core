@@ -457,8 +457,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			}
 
 			// ensure entity types are created
-			newCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, resp.CreateOrganization.Organization.ID)
-			require.NoError(t, err)
+			newCtx := auth.NewTestContextWithOrgID(testUser1.ID, resp.CreateOrganization.Organization.ID)
 
 			et, err := suite.client.api.GetEntityTypes(newCtx, &openlaneclient.EntityTypeWhereInput{
 				OwnerID: &resp.CreateOrganization.Organization.ID,
@@ -506,13 +505,11 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 	groupProcedureCreators := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(adminUser.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, GroupID: groupProcedureCreators.ID}).MustNew(adminUser.UserCtx, t)
 
-	reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
 
 	// add a member to the org, to test permissions
 	om := (&OrgMemberBuilder{client: suite.client, OrgID: org.ID, Role: string(enums.RoleMember)}).MustNew(testUser1.UserCtx, t)
-	memberUserCtx, err := auth.NewTestContextWithOrgID(om.UserID, org.ID)
-	require.NoError(t, err)
+	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
 	// avatar file setup
 	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
@@ -800,8 +797,7 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
 
 	setting, err := suite.client.api.UpdateUserSetting(reqCtx, testUser1.UserInfo.Edges.Setting.ID,
 		openlaneclient.UpdateUserSettingInput{
@@ -868,8 +864,7 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 			assert.Equal(t, tc.orgID, resp.DeleteOrganization.DeletedID)
 
 			// update the context to have the correct org after the org is deleted
-			reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
-			require.NoError(t, err)
+			reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
 
 			// make sure the default org is reset
 			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, testUser1.UserInfo.Edges.Setting.ID)
@@ -901,8 +896,7 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
 
 	// add child org
 	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: org.ID}).MustNew(reqCtx, t)

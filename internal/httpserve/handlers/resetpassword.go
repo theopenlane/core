@@ -101,7 +101,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	}
 
 	// set context for remaining request based on logged in user
-	userCtx := setAuthenticatedContext(ctx, entUser)
+	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	if err := h.updateUserPassword(userCtx, entUser.ID, in.Password); err != nil {
 		log.Error().Err(err).Msg("error updating user password")

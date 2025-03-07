@@ -40,7 +40,7 @@ func TraverseUser() ent.Interceptor {
 			return filterUsingFGA(ctx, q)
 		case "user":
 			// if we are looking at self
-			userID, err := auth.GetUserIDFromContext(ctx)
+			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err == nil {
 				q.Where(user.ID(userID))
 

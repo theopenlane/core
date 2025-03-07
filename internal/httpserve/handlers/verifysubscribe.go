@@ -47,7 +47,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 	}
 
 	// add org to the authenticated context
-	reqCtx := auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
+	reqCtx := auth.WithAuthenticatedUser(ctxWithToken, &auth.AuthenticatedUser{
 		OrganizationID:  entSubscriber.OwnerID,
 		OrganizationIDs: []string{entSubscriber.OwnerID},
 	})

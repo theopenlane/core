@@ -29,7 +29,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	userID, err := auth.GetUserIDFromContext(reqCtx)
+	userID, err := auth.GetSubjectIDFromContext(reqCtx)
 	if err != nil {
 		log.Err(err).Msg("unable to get user id from context")
 

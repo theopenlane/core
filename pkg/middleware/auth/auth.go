@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -50,11 +52,11 @@ func Authenticate(conf *AuthOptions) echo.MiddlewareFunc {
 
 			// Get access token from the request, if not available then attempt to refresh
 			// using the refresh token cookie.
-			accessToken, err := auth.GetAccessToken(c)
+			bearerToken, err := auth.GetBearerToken(c)
 			if err != nil {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
-					if accessToken, err = reauthenticate(c); err != nil {
+					if bearerToken, err = reauthenticate(c); err != nil {
 						return rout.HTTPErrorResponse(err)
 					}
 				default:
@@ -62,29 +64,33 @@ func Authenticate(conf *AuthOptions) echo.MiddlewareFunc {
 				}
 			}
 
-			// verify the access token is authorized for use and extract claims.
-			authType := auth.JWTAuthentication
-
 			var (
 				au *auth.AuthenticatedUser
 				id string
 			)
 
-			claims, err := validator.Verify(accessToken)
+			reqCtx := c.Request().Context()
 
-			if err != nil {
-				au, id, err = checkToken(c.Request().Context(), conf, accessToken)
+			switch getTokenType(bearerToken) {
+			case auth.PATAuthentication, auth.APITokenAuthentication:
+				au, id, err = checkToken(reqCtx, conf, bearerToken)
 				if err != nil {
 					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
 				}
-			} else {
+
+			default:
+				claims, err := validator.Verify(bearerToken)
+				if err != nil {
+					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
+				}
+
 				// Add claims to context for use in downstream processing and continue handlers
-				au, err = createAuthenticatedUserFromClaims(c.Request().Context(), conf.DBClient, claims, authType)
+				au, err = createAuthenticatedUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 				if err != nil {
 					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
 				}
 
-				auth.SetAccessTokenContext(c, accessToken)
+				auth.SetRefreshToken(c, bearerToken)
 			}
 
 			auth.SetAuthenticatedUserContext(c, au)
@@ -98,6 +104,17 @@ func Authenticate(conf *AuthOptions) echo.MiddlewareFunc {
 	}
 }
 
+func getTokenType(bearerToken string) auth.AuthenticationType {
+	switch {
+	case strings.HasPrefix(bearerToken, "tola_"):
+		return auth.APITokenAuthentication
+	case strings.HasPrefix(bearerToken, "tolp_"):
+		return auth.PATAuthentication
+	}
+
+	return auth.JWTAuthentication
+}
+
 // updateLastUsed updates the last used time for the token depending on the authentication type
 func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.AuthenticatedUser, tokenID string) error {
 	switch au.AuthenticationType {
@@ -105,12 +122,16 @@ func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.Authenti
 		// allow the request, we know the user has access to the token, no need to check
 		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := dbClient.PersonalAccessToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
+			log.Error().Err(err).Msg("unable to update last used time for personal access token")
+
 			return err
 		}
 	case auth.APITokenAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
 		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := dbClient.APIToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
+			log.Err(err).Msg("unable to update last used time for API token")
+
 			return err
 		}
 	}

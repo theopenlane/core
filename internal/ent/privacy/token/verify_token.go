@@ -1,18 +1,15 @@
 package token
 
-import "context"
+import (
+	"context"
+
+	"github.com/theopenlane/utils/contextx"
+)
 
 // VerifyToken that implements the PrivacyToken interface
 type VerifyToken struct {
 	PrivacyToken
 	token string
-}
-
-type verifyTokenKey struct{}
-
-// GetContextKey from VerifyToken
-func (VerifyToken) GetContextKey() interface{} {
-	return verifyTokenKey{}
 }
 
 // NewVerifyTokenWithToken creates a new PrivacyToken of type SignUpToken with
@@ -35,13 +32,17 @@ func (token *VerifyToken) SetToken(t string) {
 
 // NewContextWithVerifyToken returns a new context with the verify token inside
 func NewContextWithVerifyToken(parent context.Context, verifyToken string) context.Context {
-	return context.WithValue(parent, verifyTokenKey{}, &VerifyToken{
+	return contextx.With(parent, &VerifyToken{
 		token: verifyToken,
 	})
 }
 
 // VerifyTokenFromContext parses a context for a verify token and returns the token
 func VerifyTokenFromContext(ctx context.Context) *VerifyToken {
-	token, _ := ctx.Value(verifyTokenKey{}).(*VerifyToken)
+	token, ok := contextx.From[*VerifyToken](ctx)
+	if !ok {
+		return nil
+	}
+
 	return token
 }

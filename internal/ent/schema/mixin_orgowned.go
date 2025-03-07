@@ -59,10 +59,8 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			// skip the hook if the context has the token type
 			// this is useful for tokens, where the user is not yet authenticated to
 			// a particular organization yet and auth policy allows this
-			for _, tokenType := range o.SkipTokenType {
-				if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
-					return next.Mutate(ctx, m)
-				}
+			if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
+				return next.Mutate(ctx, m)
 			}
 
 			skip, err := o.skipOrgHookForAdmins(ctx, m)
@@ -245,10 +243,8 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 	// skip the interceptor if the context has the token type
 	// this is useful for tokens, where the user is not yet authenticated to
 	// a particular organization yet
-	for _, tokenType := range o.SkipTokenType {
-		if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
-			return true
-		}
+	if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
+		return true
 	}
 
 	// Allow the interceptor to skip the query if the context has an allow

@@ -38,20 +38,15 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipUser bool
 
 			// add user permissions to the object on creation
 			if !skipUser && m.Op() == ent.OpCreate {
-				a, err := auth.GetAuthenticatedUserContext(ctx)
+				subjectID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil {
 					return nil, err
 				}
 
-				subject := auth.UserSubjectType
-				if a.AuthenticationType == auth.APITokenAuthentication {
-					subject = auth.ServiceSubjectType
-				}
-
 				// add user permissions to the object as the parent on creation
 				userTuple := fgax.GetTupleKey(fgax.TupleRequest{
-					SubjectID:   a.SubjectID,
-					SubjectType: subject,
+					SubjectID:   subjectID,
+					SubjectType: auth.GetAuthzSubjectType(ctx),
 					ObjectID:    objectID,                        // this is the object id being created
 					ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 					Relation:    ownerRelation,
@@ -224,7 +219,7 @@ func checkAccessForEdges(ctx context.Context, m ent.Mutation) error {
 
 // checkEdgesEditAccess takes a list of edges and looks for the permissions edges to confirm the user has edit access
 func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) error {
-	actor, err := auth.GetAuthenticatedUserContext(ctx)
+	actor, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -346,7 +341,7 @@ func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples 
 		}
 
 		// get the user id or service id from the context
-		subject, err := auth.GetAuthenticatedUserContext(ctx)
+		subject, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			return err
 		}
