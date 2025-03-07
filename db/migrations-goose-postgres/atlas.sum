@@ -1,4 +1,4 @@
-h1:pKLSL18Inrb/Jx3uUSk83q0qL49WgjOQvCHD42lNmQA=
+h1:0O75JXEQTZZAqzB5SFh3UGw+L/U6Q5hCovoDFtQYxPk=
 20241211231032_init.sql h1:Cj6GduEDECy6Y+8DfI6767WosqG2AKWybIyJJ6AgKqA=
 20241212223714_consistent_naming.sql h1:RvnNmsStlHkmAdSCnX1fFh/KYgfj1RMYYEc4iCN9JcQ=
 20250109002850_billing_address.sql h1:m0ek3WXqRgS3+ZbSa/DcIMB16vb8Tjm2MgNqyRll3rU=
@@ -18,3 +18,5 @@ h1:pKLSL18Inrb/Jx3uUSk83q0qL49WgjOQvCHD42lNmQA=
 20250220044406_org_settings_email_domains.sql h1:hP8w00BD64oe7OWsXlPJM92cqVtY0NIEIeonbnCsXnU=
 20250224191741_tasks.sql h1:v0CZ5nWgzjconA/hcat9QvZkmSBdxXkc/h84Erdcxnw=
 20250304210058_orgsubscriptionadditions.sql h1:jKVPW1egj+AhIj7rzFkMBnwFJGXI2J7Kjie6vU1PScs=
+20250306054727_standards.sql h1:Z0psI/WnfLAwiL9Vq/9cWvBSz9Jwyzuh2QeDGkYWLBw=
+20250307204740_orgsubs.sql h1:+3kWjt3Szar/ko03TtKw+RnifRX6MxRYDu48VQVz/GM=
