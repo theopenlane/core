@@ -224,7 +224,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 		}
 
 		if len(orgIDs) == 0 {
-			log.Warn().Msg("no organization ids found in context, but context was not skipped, no results will be returned")
+			log.Warn().Msg("no organization ids found in context, but interceptor was not skipped, no results will be returned")
 		}
 
 		// sets the owner id on the query for the current organization
