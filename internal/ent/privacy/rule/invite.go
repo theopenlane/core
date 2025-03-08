@@ -27,7 +27,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			return privacy.Skipf("no owner set on request, cannot check access")
 		}
 
-		user, err := auth.GetAuthenticatedUserContext(ctx)
+		user, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			return err
 		}

@@ -59,7 +59,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	}
 
 	// setup user context
-	userCtx := setAuthenticatedContext(ctx, meowuser)
+	userCtx := setAuthenticatedContext(ctxWithToken, meowuser)
 
 	// create email verification token
 	user := &User{

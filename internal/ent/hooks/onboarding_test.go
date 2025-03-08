@@ -17,8 +17,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 
 	user := suite.seedUser()
 
-	userCtx, err := auth.NewTestContextWithValidUser(user.ID)
-	require.NoError(t, err)
+	userCtx := auth.NewTestContextWithValidUser(user.ID)
 
 	name := "MITB"
 

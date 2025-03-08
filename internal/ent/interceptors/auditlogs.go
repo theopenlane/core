@@ -20,7 +20,7 @@ import (
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
 func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		au, err := auth.GetAuthenticatedUserContext(ctx)
+		au, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			return err
 		}
@@ -72,7 +72,7 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 
 // addFilter adds a filter to the query based on the authenticated user's organization
 func addFilter(ctx context.Context, q intercept.Query, orgOwned, userOwed bool, allowedOrgs []string) error {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}

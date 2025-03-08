@@ -63,7 +63,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	auth.SetAuthCookies(ctx.Response().Writer, accessToken, refreshToken, *h.SessionConfig.CookieConfig)
 
 	// set sessions in response
-	if err := h.SessionConfig.CreateAndStoreSession(ctx, user.ID); err != nil {
+	if _, err = h.SessionConfig.CreateAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, user.ID); err != nil {
 		log.Error().Err(err).Msg("error storing session")
 
 		return err

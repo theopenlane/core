@@ -26,9 +26,6 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 )
 
-// OrganizationCreationContextKey is the context key name for the organization creation context
-type OrganizationCreationContextKey struct{}
-
 // HookOrganization runs on org mutations to set default values that are not provided
 func HookOrganization() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -42,7 +39,7 @@ func HookOrganization() ent.Hook {
 				// set the context value to indicate this is an organization creation
 				// this is useful for skipping the hooks on the owner field if its part of the
 				// initial creation of the organization
-				ctx = contextx.With(ctx, OrganizationCreationContextKey{})
+				ctx = contextx.With(ctx, auth.OrganizationCreationContextKey{})
 
 				// generate a default org setting schema if not provided
 				if err := createOrgSettings(ctx, m); err != nil {
@@ -291,7 +288,7 @@ func validateOrgDeletion(ctx context.Context, m *generated.OrganizationMutation)
 
 // updateUserDefaultOrgOnDelete updates the user's default org if the org being deleted is the user's default org
 func updateUserDefaultOrgOnDelete(ctx context.Context, m *generated.OrganizationMutation) (string, error) {
-	currentUserID, err := auth.GetUserIDFromContext(ctx)
+	currentUserID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -353,7 +350,7 @@ func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationM
 	personalOrg, _ := m.PersonalOrg()
 
 	if !personalOrg {
-		userID, err := auth.GetUserIDFromContext(ctx)
+		userID, err := auth.GetSubjectIDFromContext(ctx)
 		if err != nil {
 			log.Error().Err(err).Msg("unable to get user id from context")
 			return "", err
@@ -444,7 +441,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	}
 
 	// get userID from context
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to organization")
 

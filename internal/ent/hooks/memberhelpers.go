@@ -38,7 +38,7 @@ func HookMembershipSelf(table string) ent.Hook {
 			}
 
 			// check if group member is the authenticated user
-			userID, err := auth.GetUserIDFromContext(ctx)
+			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
 				return nil, err
 			}

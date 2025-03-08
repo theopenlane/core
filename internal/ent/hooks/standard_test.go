@@ -20,8 +20,6 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 	t := suite.T()
 
 	user := suite.seedSystemAdmin()
-	ctx, err := auth.NewTestContextWithValidUser(user.ID)
-	require.NoError(t, err)
 
 	if len(user.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
@@ -29,8 +27,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 	orgID := user.Edges.OrgMemberships[0].ID
 
-	ctx, err = auth.NewTestContextWithOrgID(user.ID, orgID)
-	require.NoError(t, err)
+	ctx := auth.NewTestContextWithOrgID(user.ID, orgID)
 
 	tests := []struct {
 		name           string

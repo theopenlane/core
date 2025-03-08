@@ -69,7 +69,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, e
 
 // Self is the resolver for the self field.
 func (r *queryResolver) Self(ctx context.Context) (*generated.User, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
 	}

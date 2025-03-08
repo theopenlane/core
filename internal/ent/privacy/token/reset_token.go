@@ -1,18 +1,15 @@
 package token
 
-import "context"
+import (
+	"context"
+
+	"github.com/theopenlane/utils/contextx"
+)
 
 // ResetToken that implements the PrivacyToken interface
 type ResetToken struct {
 	PrivacyToken
 	token string
-}
-
-type resetTokenKey struct{}
-
-// GetContextKey from ResetToken
-func (ResetToken) GetContextKey() interface{} {
-	return resetTokenKey{}
 }
 
 // NewResetTokenWithToken creates a new PrivacyToken of type ResetToken with
@@ -35,13 +32,17 @@ func (token *ResetToken) SetToken(t string) {
 
 // NewContextWithResetToken returns a new context with the reset token inside
 func NewContextWithResetToken(parent context.Context, resetToken string) context.Context {
-	return context.WithValue(parent, resetTokenKey{}, &ResetToken{
+	return contextx.With(parent, &ResetToken{
 		token: resetToken,
 	})
 }
 
 // ResetTokenFromContext parses a context for a reset token and returns the token
 func ResetTokenFromContext(ctx context.Context) *ResetToken {
-	token, _ := ctx.Value(resetTokenKey{}).(*ResetToken)
+	token, ok := contextx.From[*ResetToken](ctx)
+	if !ok {
+		return nil
+	}
+
 	return token
 }

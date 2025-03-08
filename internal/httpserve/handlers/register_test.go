@@ -134,8 +134,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				assert.NotEmpty(t, out.ID)
 
 				// setup context to get the data back
-				ctx, err := auth.NewTestContextWithValidUser(out.ID)
-				require.NoError(t, err)
+				ctx := auth.NewTestContextWithValidUser(out.ID)
 
 				// we haven't set the user's default org yet in the context
 				// so allow the request to go through
@@ -148,9 +147,8 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				assert.NotEmpty(t, u.Edges.DefaultOrg)
 				require.NotEmpty(t, u.Edges.DefaultOrg.ID)
 
-				// setup echo context
-				ctx, err = auth.NewTestContextWithOrgID(out.ID, u.Edges.DefaultOrg.ID)
-				require.NoError(t, err)
+				// setup context
+				ctx = auth.NewTestContextWithOrgID(out.ID, u.Edges.DefaultOrg.ID)
 
 				// make sure user is an owner of their personal org
 				orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &openlaneclient.OrgMembershipWhereInput{

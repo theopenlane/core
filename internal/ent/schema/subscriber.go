@@ -140,13 +140,13 @@ func (Subscriber) Annotations() []schema.Annotation {
 func (Subscriber) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
 			entfga.CheckEditAccess[*generated.SubscriberMutation](),
 		),
 	)

@@ -41,7 +41,7 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 	}
 
 	// allow for org invite tokens
-	if rule.ContextHasPrivacyTokenOfType(ctx, &token.OrgInviteToken{}) {
+	if rule.ContextHasPrivacyTokenOfType[*token.OrgInviteToken](ctx) {
 		return true
 	}
 

@@ -116,7 +116,7 @@ func (UserSetting) Policy() ent.Policy {
 		),
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate,
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
 			rule.AllowIfSelf(),
 		),
 		policy.WithOnMutationRules(

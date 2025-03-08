@@ -105,7 +105,7 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 	)
 
 	orgMember.Role, ok = m.Role()
-	if !ok && m.Op().Is(ent.OpCreate) {
+	if !ok && op.Is(ent.OpCreate) {
 		// default to member role for new org members
 		orgMember.Role = enums.RoleMember
 	}

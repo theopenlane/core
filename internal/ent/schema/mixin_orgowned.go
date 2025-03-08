@@ -56,16 +56,7 @@ func NewOrgOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
 var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			// skip the hook if the context has the token type
-			// this is useful for tokens, where the user is not yet authenticated to
-			// a particular organization yet and auth policy allows this
-			for _, tokenType := range o.SkipTokenType {
-				if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
-					return next.Mutate(ctx, m)
-				}
-			}
-
-			skip, err := o.skipOrgHookForAdmins(ctx, m)
+			skip, err := o.orgHookSkipper(ctx, m)
 			if err != nil {
 				return nil, err
 			}
@@ -79,24 +70,27 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				if err := setOwnerIDField(ctx, m); err != nil {
 					return nil, err
 				}
-			} else {
-				orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-				if err != nil {
-					return nil, fmt.Errorf("failed to get organization id from context: %w", err)
-				}
 
-				// filter by owner on update and delete mutations
-				mx, ok := m.(interface {
-					SetOp(ent.Op)
-					Client() *generated.Client
-					WhereP(...func(*sql.Selector))
-				})
-				if !ok {
-					return nil, ErrUnexpectedMutationType
-				}
-
-				o.P(mx, orgIDs)
+				return next.Mutate(ctx, m)
 			}
+
+			// for other operations, add where filter based on the orgs in the context
+			orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+			if err != nil {
+				return nil, fmt.Errorf("failed to get organization id from context: %w", err)
+			}
+
+			// filter by owner on update and delete mutations
+			mx, ok := m.(interface {
+				SetOp(ent.Op)
+				Client() *generated.Client
+				WhereP(...func(*sql.Selector))
+			})
+			if !ok {
+				return nil, ErrUnexpectedMutationType
+			}
+
+			o.P(mx, orgIDs)
 
 			return next.Mutate(ctx, m)
 		})
@@ -151,7 +145,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 func setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 	// if the context has the organization creation context key, skip the hook
 	// because we don't want the owner to be based on the current organization
-	if _, ok := contextx.From[hooks.OrganizationCreationContextKey](ctx); ok {
+	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
 		return nil
 	}
 
@@ -245,10 +239,8 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 	// skip the interceptor if the context has the token type
 	// this is useful for tokens, where the user is not yet authenticated to
 	// a particular organization yet
-	for _, tokenType := range o.SkipTokenType {
-		if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
-			return true
-		}
+	if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
+		return true
 	}
 
 	// Allow the interceptor to skip the query if the context has an allow
@@ -267,4 +259,22 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 	}
 
 	return false
+}
+
+// orgHookSkipper skips the organization hook based on the context
+// looking for specific token types or mutations done by system admins
+func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context, m ent.Mutation) (bool, error) {
+	// skip the hook if the context has the token type
+	// this is useful for tokens, where the user is not yet authenticated to
+	// a particular organization yet and auth policy allows this
+	if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
+		return true, nil
+	}
+
+	skip, err := o.skipOrgHookForAdmins(ctx, m)
+	if err != nil {
+		return false, err
+	}
+
+	return skip, nil
 }

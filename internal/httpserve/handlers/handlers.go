@@ -56,9 +56,11 @@ type Handler struct {
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
 // during a login or verification process
-func setAuthenticatedContext(ctx echo.Context, user *ent.User) context.Context {
-	return auth.AddAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
+func setAuthenticatedContext(ctx context.Context, user *ent.User) context.Context {
+	ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
 		SubjectID:    user.ID,
 		SubjectEmail: user.Email,
 	})
+
+	return ctx
 }

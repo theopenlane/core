@@ -88,8 +88,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
 	// setup user context with the personal org
-	userCtx, err := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
-	require.NoError(t, err)
+	userCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests seeds
@@ -106,8 +105,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	testUser.OrganizationID = testOrg.ID
 
 	// setup user context with the org (and not the personal org)
-	testUser.UserCtx, err = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
-	require.NoError(t, err)
+	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
 
 	return testUser
 }

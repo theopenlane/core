@@ -32,7 +32,7 @@ func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privac
 
 		relation := fgax.CanEdit
 
-		user, err := auth.GetAuthenticatedUserContext(ctx)
+		user, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			return err
 		}

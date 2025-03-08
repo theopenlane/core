@@ -115,7 +115,7 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			// user must be authenticated to accept an invite, get their id from the context
-			userID, err := auth.GetUserIDFromContext(ctx)
+			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
 				log.Error().Err(err).Msg("unable to get user to add to organization")
 
@@ -232,7 +232,7 @@ func setRecipientAndToken(m *generated.InviteMutation) (*generated.InviteMutatio
 
 // setRequestor sets the requestor on the mutation
 func setRequestor(ctx context.Context, m *generated.InviteMutation) (*generated.InviteMutation, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return m, err
 	}

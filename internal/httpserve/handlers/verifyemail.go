@@ -50,7 +50,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		Email: entUser.Email,
 	}
 
-	userCtx := setAuthenticatedContext(ctx, entUser)
+	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	// check to see if user is already confirmed
 	if !entUser.Edges.Setting.EmailConfirmed {
@@ -103,7 +103,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, entUser)
+	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 

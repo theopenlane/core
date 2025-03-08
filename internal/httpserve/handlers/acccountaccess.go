@@ -27,7 +27,7 @@ func (h *Handler) AccountAccessHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	subject, err := auth.GetAuthenticatedUserContext(ctx.Request().Context())
+	subject, err := auth.GetAuthenticatedUserFromContext(ctx.Request().Context())
 	if err != nil {
 		log.Error().Err(err).Msg("error getting user id from context")
 

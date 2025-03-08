@@ -72,7 +72,7 @@ func (d SoftDeleteMixin) SoftDeleteHook(next ent.Mutator) ent.Mutator {
 			return next.Mutate(ctx, m)
 		}
 
-		actor, err := auth.GetUserIDFromContext(ctx)
+		actor, err := auth.GetSubjectIDFromContext(ctx)
 		if err != nil {
 			actor = "unknown"
 		}

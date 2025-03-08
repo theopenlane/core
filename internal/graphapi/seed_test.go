@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 )
 
 var (
@@ -58,16 +57,14 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
 	// setup user context with the personal org
-	userCtx, err := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
-	require.NoError(t, err)
+	userCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
 	// create a non-personal test organization
 	testOrg := (&OrganizationBuilder{client: suite.client}).MustNew(userCtx, t)
 	testUser.OrganizationID = testOrg.ID
 
 	// setup user context with the org (and not the personal org)
-	testUser.UserCtx, err = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
-	require.NoError(t, err)
+	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
 
 	// create a group under the organization
 	testGroup := (&GroupBuilder{client: suite.client, Owner: testUser.OrganizationID}).MustNew(testUser.UserCtx, t)
@@ -139,22 +136,5 @@ func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, userDeta
 	userDetails.OrganizationID = organizationID
 
 	// update the user context for the org member
-	var err error
-	userDetails.UserCtx, err = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID)
-	require.NoError(t, err)
-}
-
-// userContextWithID creates a new user context with the provided user ID
-func userContextWithID(userID string) (context.Context, error) {
-	// Use that user to create the organization
-	ec, err := auth.NewTestEchoContextWithValidUser(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	reqCtx := contextx.With(ec.Request().Context(), ec)
-
-	ec.SetRequest(ec.Request().WithContext(reqCtx))
-
-	return reqCtx, nil
+	userDetails.UserCtx = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID)
 }

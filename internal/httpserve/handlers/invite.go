@@ -55,7 +55,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get the authenticated user from the context
-	userID, err := auth.GetUserIDFromContext(reqCtx)
+	userID, err := auth.GetSubjectIDFromContext(reqCtx)
 	if err != nil {
 		log.Err(err).Msg("unable to get user id from context")
 
@@ -162,7 +162,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctx, user, invitedUser.OwnerID)
+	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 

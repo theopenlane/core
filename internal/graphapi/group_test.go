@@ -97,14 +97,10 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	reqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
+	reqCtx2 := auth.NewTestContextWithOrgID(testUser1.ID, org2.ID)
 
 	group1 := (&GroupBuilder{client: suite.client, Owner: org1.ID}).MustNew(reqCtx, t)
-
-	reqCtx2, err := auth.NewTestContextWithOrgID(testUser1.ID, org2.ID)
-	require.NoError(t, err)
-
 	group2 := (&GroupBuilder{client: suite.client, Owner: org2.ID}).MustNew(reqCtx2, t)
 
 	t.Run("Get Groups By Owner", func(t *testing.T) {
@@ -663,8 +659,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 	// add additional permissions as well as the same we will be updating to the group (control ID)
 	groupClone := (&GroupBuilder{client: suite.client, ProgramEditorsIDs: []string{programClone.ID}, ControlEditorsIDs: []string{controlClone.ID, control.ID}}).MustNew(testUser1.UserCtx, t)
 
-	gmCtx, err := auth.NewTestContextWithOrgID(gm.UserID, testUser1.OrganizationID)
-	require.NoError(t, err)
+	gmCtx := auth.NewTestContextWithOrgID(gm.UserID, testUser1.OrganizationID)
 
 	// ensure user cannot get access to the program
 	programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)

@@ -120,7 +120,7 @@ func setUserTFASetting(ctx context.Context, m *generated.TFASettingMutation, ena
 	if !ok {
 		var err error
 
-		userID, err = auth.GetUserIDFromContext(ctx)
+		userID, err = auth.GetSubjectIDFromContext(ctx)
 		if err != nil {
 			return err
 		}
@@ -143,7 +143,7 @@ func constructTOTPUser(ctx context.Context, m *generated.TFASettingMutation) (*t
 	if !ok {
 		var err error
 
-		userID, err = auth.GetUserIDFromContext(ctx)
+		userID, err = auth.GetSubjectIDFromContext(ctx)
 		if err != nil {
 			return nil, err
 		}

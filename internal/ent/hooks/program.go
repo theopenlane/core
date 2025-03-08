@@ -83,7 +83,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 
 func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.ProgramMutation) error {
 	// get userID from context
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
 

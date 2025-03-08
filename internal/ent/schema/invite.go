@@ -140,11 +140,11 @@ func (Invite) Hooks() []ent.Hook {
 func (Invite) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			rule.CanInviteUsers(),
 			entfga.CheckEditAccess[*generated.InviteMutation](),
 			rule.AllowMutationAfterApplyingOwnerFilter(),

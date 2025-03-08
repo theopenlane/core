@@ -210,27 +210,13 @@ func setOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 		return fmt.Errorf("%w: organization id %s not found in the authenticated organizations", rout.ErrBadRequest, orgID)
 	}
 
-	au, err := auth.GetAuthenticatedUserContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	au.OrganizationID = *inputOrgID
-
-	ec, err := echocontext.EchoContextFromContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	auth.SetAuthenticatedUserContext(ec, au)
-
-	return nil
+	return auth.SetOrganizationIDInAuthContext(ctx, *inputOrgID)
 }
 
 // checkAllowedAuthType checks how the user is authenticated and returns an error
 // if the user is authenticated with an API token for a user owned setting
 func checkAllowedAuthType(ctx context.Context) error {
-	ac, err := auth.GetAuthenticatedUserContext(ctx)
+	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return err
 	}
