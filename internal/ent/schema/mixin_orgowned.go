@@ -193,7 +193,7 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 // owned mixin
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		if skip := o.orgInterceptorSkipper(ctx, q); skip {
+		if skip := o.orgInterceptorSkipper(ctx); skip {
 			return nil
 		}
 
@@ -231,7 +231,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // if the context has a privacy token type, the interceptor is skipped
 // if the context has the managed group key, the interceptor is skipped
 // if the query is for a token and explicitly allowed, the interceptor is skipped
-func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
+func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
 	if entx.CheckSkipSoftDelete(ctx) {
 		return true
 	}
