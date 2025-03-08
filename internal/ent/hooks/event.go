@@ -164,6 +164,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 // OrganizationSettingCreate and OrganizationSettingUpdateOne are the topics for the organization setting events
 var OrganizationSettingCreate = "OrganizationSetting.OpCreate"
 var OrganizationSettingUpdateOne = "OrganizationSetting.OpUpdateOne"
+var OrgSubscriptionCreate = "OrgSubscription.OpCreate"
 
 // RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
 func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
@@ -172,17 +173,39 @@ func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
 
 // RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {
-	_, err := e.Emitter.On(OrganizationSettingCreate, handleOrganizationSettingsCreate)
+	//	_, err := e.Emitter.On(OrganizationSettingCreate, handleOrganizationSettingsCreate)
+	//	if err != nil {
+	//		log.Error().Err(ErrFailedToRegisterListener)
+	//		return err
+	//	}
+	//
+	//	_, err = e.Emitter.On(OrganizationSettingUpdateOne, handleOrganizationSettingsUpdateOne)
+	//	if err != nil {
+	//		log.Error().Err(ErrFailedToRegisterListener)
+	//		return err
+	//	}
+
+	return nil
+}
+
+func handleOrgSubscriptionCreated(event soiree.Event) error {
+	client := event.Client().(*entgen.Client)
+	entMgr := client.EntitlementManager
+
+	if entMgr == nil {
+		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
+
+		return nil
+	}
+
+	_, err := client.OrgSubscription.Get(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string))
 	if err != nil {
-		log.Error().Err(ErrFailedToRegisterListener)
+		log.Err(err).Msg("Failed to fetch organization subscription")
+
 		return err
 	}
 
-	_, err = e.Emitter.On(OrganizationSettingUpdateOne, handleOrganizationSettingsUpdateOne)
-	if err != nil {
-		log.Error().Err(ErrFailedToRegisterListener)
-		return err
-	}
+	//	orgSubs.OwnerID
 
 	return nil
 }
