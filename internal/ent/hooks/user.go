@@ -313,8 +313,6 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 
 // createOrgSubscription creates the default organization subscription for a new org
 func createPersonalOrgOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
 	if len(orgCreated.Edges.OrgSubscriptions) == 0 {
 		if err := defaultPersonalOrgSubscription(ctx, orgCreated, dbClient); err != nil {
 			log.Error().Err(err).Msg("error creating default org subscription")
