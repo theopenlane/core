@@ -17,8 +17,10 @@ type OrganizationCustomer struct {
 	OrganizationSubscriptionID string `json:"organization_subscription_id"`
 	StripeSubscriptionID       string `json:"stripe_subscription_id"`
 	PaymentMethodAdded         bool   `json:"payment_method_added"`
+	Email                      string `json:"billing_email"`
 	Features                   []string
 	FeatureNames               []string
+
 	Subscription
 	ContactInfo
 }
