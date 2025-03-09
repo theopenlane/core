@@ -313,6 +313,11 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 
 // createOrgSubscription creates the default organization subscription for a new org
 func createPersonalOrgOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
+	// skip if entitlement manager is not set
+	if dbClient.EntitlementManager == nil {
+		return nil
+	}
+
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error getting org subscriptions")
