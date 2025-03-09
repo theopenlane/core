@@ -180,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationCreateAPIToken() {
 			}
 
 			// ensure the owner is the org set in the request
-			assert.Equal(t, testUser1.OrganizationID, resp.CreateAPIToken.APIToken.OwnerID)
+			assert.Equal(t, testUser1.OrganizationID, *resp.CreateAPIToken.APIToken.OwnerID)
 
 			// token should not be redacted on create
 			assert.NotEqual(t, redacted, resp.CreateAPIToken.APIToken.Token)
@@ -279,7 +279,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 				assert.Len(t, resp.UpdateAPIToken.APIToken.Scopes, 1)
 			}
 
-			assert.Equal(t, testUser1.OrganizationID, resp.UpdateAPIToken.APIToken.OwnerID)
+			assert.Equal(t, testUser1.OrganizationID, *resp.UpdateAPIToken.APIToken.OwnerID)
 
 			// token should be redacted on update
 			assert.Equal(t, redacted, resp.UpdateAPIToken.APIToken.Token)
