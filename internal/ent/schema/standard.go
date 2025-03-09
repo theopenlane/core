@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Standard defines the standard schema.
@@ -74,7 +75,10 @@ func (Standard) Fields() []ent.Field {
 		field.String("version").
 			Optional().
 			Comment("version of the standard"),
-		field.String("revision").
+		field.JSON("revision", models.SemverVersion{}).
+			Default(models.SemverVersion{
+				Patch: 1, // default to v0.0.1
+			}).
 			Optional().
 			Comment("internal revision of the standard"),
 	}
