@@ -82,6 +82,7 @@ func (OrgSubscription) Mixin() []ent.Mixin {
 			SkipTokenType: []token.PrivacyToken{
 				&token.SignUpToken{},
 			},
+			HookFuncs: []HookFunc{}, // empty to skip the default hooks
 		})}
 }
 

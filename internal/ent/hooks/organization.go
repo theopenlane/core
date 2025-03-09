@@ -211,8 +211,15 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 
 // createOrgSubscription creates the default organization subscription for a new org
 func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
+	orgSubscriptions, err := orgCreated.OrgSubscriptions(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error getting org subscriptions")
+
+		return err
+	}
+
 	// if this is empty generate a default org setting schema
-	if len(orgCreated.Edges.OrgSubscriptions) == 0 {
+	if len(orgSubscriptions) == 0 {
 		if err := defaultOrgSubscription(ctx, orgCreated, m); err != nil {
 			log.Error().Err(err).Msg("error creating default org subscription")
 

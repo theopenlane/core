@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -192,7 +193,7 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 // owned mixin
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		if skip := o.orgInterceptorSkipper(ctx); skip {
+		if skip := o.orgInterceptorSkipper(ctx, q); skip {
 			return nil
 		}
 
@@ -230,7 +231,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // if the context has a privacy token type, the interceptor is skipped
 // if the context has the managed group key, the interceptor is skipped
 // if the query is for a token and explicitly allowed, the interceptor is skipped
-func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
+func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
 	if entx.CheckSkipSoftDelete(ctx) {
 		return true
 	}
@@ -242,6 +243,18 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
 		return true
 	}
 
+	// Allow the interceptor to skip the query if the context has an allow
+	// bypass and its for a token
+	// these are queried during the auth flow and should not be filtered
+	if q.Type() == generated.TypeAPIToken || q.Type() == generated.TypePersonalAccessToken {
+		if _, allow := privacy.DecisionFromContext(ctx); allow {
+			return true
+		}
+
+	}
+
+	// skip the interceptor if the context has the organization creation context key
+	// the events need to query the subscription for updates
 	if _, orgSubscription := contextx.From[auth.OrgSubscriptionContextKey](ctx); orgSubscription {
 		return true
 	}
