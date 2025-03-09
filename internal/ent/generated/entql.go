@@ -3119,6 +3119,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"orgsubscription",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+		},
+		"Event",
+		"OrgSubscription",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -4117,10 +4129,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"events",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 		},
 		"OrgSubscription",
@@ -8973,6 +8985,20 @@ func (f *EventFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *EventFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOrgsubscription applies a predicate to check if query has an edge orgsubscription.
+func (f *EventFilter) WhereHasOrgsubscription() {
+	f.Where(entql.HasEdge("orgsubscription"))
+}
+
+// WhereHasOrgsubscriptionWith applies a predicate to check if query has an edge orgsubscription with a given conditions (other predicates).
+func (f *EventFilter) WhereHasOrgsubscriptionWith(preds ...predicate.OrgSubscription) {
+	f.Where(entql.HasEdgeWith("orgsubscription", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

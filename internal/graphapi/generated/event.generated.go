@@ -107,6 +107,8 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_subscriber(ctx, field)
 			case "file":
 				return ec.fieldContext_Event_file(ctx, field)
+			case "orgsubscription":
+				return ec.fieldContext_Event_orgsubscription(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},
@@ -195,6 +197,8 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_subscriber(ctx, field)
 			case "file":
 				return ec.fieldContext_Event_file(ctx, field)
+			case "orgsubscription":
+				return ec.fieldContext_Event_orgsubscription(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},
@@ -327,6 +331,8 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_subscriber(ctx, field)
 			case "file":
 				return ec.fieldContext_Event_file(ctx, field)
+			case "orgsubscription":
+				return ec.fieldContext_Event_orgsubscription(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},

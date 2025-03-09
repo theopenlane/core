@@ -1,3 +1,5 @@
+
+
 query GetAllOrgSubscriptions {
   orgSubscriptions {
     edges {
@@ -5,40 +7,47 @@ query GetAllOrgSubscriptions {
         active
         createdAt
         createdBy
+        daysUntilDue
         expiresAt
+        featureLookupKeys
         features
         id
         ownerID
+        paymentMethodAdded
+        productPrice
         productTier
         stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
-        productPrice
         tags
+        trialExpiresAt
         updatedAt
         updatedBy
       }
     }
   }
 }
-
 query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
   orgSubscription(id: $orgSubscriptionId) {
     active
     createdAt
     createdBy
+    daysUntilDue
     expiresAt
+    featureLookupKeys
     features
     id
     ownerID
+    paymentMethodAdded
+    productPrice
     productTier
     stripeCustomerID
     stripeProductTierID
     stripeSubscriptionID
     stripeSubscriptionStatus
-    productPrice
     tags
+    trialExpiresAt
     updatedAt
     updatedBy
   }
@@ -51,17 +60,21 @@ query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
         active
         createdAt
         createdBy
+        daysUntilDue
         expiresAt
+        featureLookupKeys
         features
         id
         ownerID
+        paymentMethodAdded
+        productPrice
         productTier
         stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
-        productPrice
         tags
+        trialExpiresAt
         updatedAt
         updatedBy
       }

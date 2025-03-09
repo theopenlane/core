@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -324,6 +325,21 @@ func (eu *EventUpdate) AddFile(f ...*File) *EventUpdate {
 	return eu.AddFileIDs(ids...)
 }
 
+// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by IDs.
+func (eu *EventUpdate) AddOrgsubscriptionIDs(ids ...string) *EventUpdate {
+	eu.mutation.AddOrgsubscriptionIDs(ids...)
+	return eu
+}
+
+// AddOrgsubscription adds the "orgsubscription" edges to the OrgSubscription entity.
+func (eu *EventUpdate) AddOrgsubscription(o ...*OrgSubscription) *EventUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return eu.AddOrgsubscriptionIDs(ids...)
+}
+
 // Mutation returns the EventMutation object of the builder.
 func (eu *EventUpdate) Mutation() *EventMutation {
 	return eu.mutation
@@ -558,6 +574,27 @@ func (eu *EventUpdate) RemoveFile(f ...*File) *EventUpdate {
 		ids[i] = f[i].ID
 	}
 	return eu.RemoveFileIDs(ids...)
+}
+
+// ClearOrgsubscription clears all "orgsubscription" edges to the OrgSubscription entity.
+func (eu *EventUpdate) ClearOrgsubscription() *EventUpdate {
+	eu.mutation.ClearOrgsubscription()
+	return eu
+}
+
+// RemoveOrgsubscriptionIDs removes the "orgsubscription" edge to OrgSubscription entities by IDs.
+func (eu *EventUpdate) RemoveOrgsubscriptionIDs(ids ...string) *EventUpdate {
+	eu.mutation.RemoveOrgsubscriptionIDs(ids...)
+	return eu
+}
+
+// RemoveOrgsubscription removes "orgsubscription" edges to OrgSubscription entities.
+func (eu *EventUpdate) RemoveOrgsubscription(o ...*OrgSubscription) *EventUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return eu.RemoveOrgsubscriptionIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1195,6 +1232,54 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if eu.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.OrgSubscriptionEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.RemovedOrgsubscriptionIDs(); len(nodes) > 0 && !eu.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.OrgsubscriptionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = eu.schemaConfig.Event
 	ctx = internal.NewSchemaConfigContext(ctx, eu.schemaConfig)
 	_spec.AddModifiers(eu.modifiers...)
@@ -1500,6 +1585,21 @@ func (euo *EventUpdateOne) AddFile(f ...*File) *EventUpdateOne {
 	return euo.AddFileIDs(ids...)
 }
 
+// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by IDs.
+func (euo *EventUpdateOne) AddOrgsubscriptionIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.AddOrgsubscriptionIDs(ids...)
+	return euo
+}
+
+// AddOrgsubscription adds the "orgsubscription" edges to the OrgSubscription entity.
+func (euo *EventUpdateOne) AddOrgsubscription(o ...*OrgSubscription) *EventUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return euo.AddOrgsubscriptionIDs(ids...)
+}
+
 // Mutation returns the EventMutation object of the builder.
 func (euo *EventUpdateOne) Mutation() *EventMutation {
 	return euo.mutation
@@ -1734,6 +1834,27 @@ func (euo *EventUpdateOne) RemoveFile(f ...*File) *EventUpdateOne {
 		ids[i] = f[i].ID
 	}
 	return euo.RemoveFileIDs(ids...)
+}
+
+// ClearOrgsubscription clears all "orgsubscription" edges to the OrgSubscription entity.
+func (euo *EventUpdateOne) ClearOrgsubscription() *EventUpdateOne {
+	euo.mutation.ClearOrgsubscription()
+	return euo
+}
+
+// RemoveOrgsubscriptionIDs removes the "orgsubscription" edge to OrgSubscription entities by IDs.
+func (euo *EventUpdateOne) RemoveOrgsubscriptionIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.RemoveOrgsubscriptionIDs(ids...)
+	return euo
+}
+
+// RemoveOrgsubscription removes "orgsubscription" edges to OrgSubscription entities.
+func (euo *EventUpdateOne) RemoveOrgsubscription(o ...*OrgSubscription) *EventUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return euo.RemoveOrgsubscriptionIDs(ids...)
 }
 
 // Where appends a list predicates to the EventUpdate builder.
@@ -2396,6 +2517,54 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 			},
 		}
 		edge.Schema = euo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.OrgSubscriptionEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.RemovedOrgsubscriptionIDs(); len(nodes) > 0 && !euo.mutation.OrgsubscriptionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.OrgsubscriptionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgsubscriptionTable,
+			Columns: event.OrgsubscriptionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

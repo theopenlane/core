@@ -1,6 +1,7 @@
 package entitlements
 
 import (
+	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/client"
 )
 
@@ -12,18 +13,24 @@ type StripeClient struct {
 	apikey string
 	// config is the configuration for the Stripe client
 	Config Config
+	// Backends is a map of backend services
+	backends *stripe.Backends
 }
 
 // NewStripeClient creates a new Stripe client
-func NewStripeClient(opts ...StripeOptions) *StripeClient {
+func NewStripeClient(opts ...StripeOptions) (*StripeClient, error) {
 	sc := &StripeClient{}
 	for _, opt := range opts {
 		opt(sc)
 	}
 
-	sc.Client = client.New(sc.apikey, nil)
+	if sc.apikey == "" {
+		return nil, ErrMissingAPIKey
+	}
 
-	return sc
+	sc.Client = client.New(sc.apikey, sc.backends)
+
+	return sc, nil
 }
 
 // StripeOptions is a type for setting options on the Stripe client
@@ -40,5 +47,12 @@ func WithConfig(config Config) StripeOptions {
 func WithAPIKey(apiKey string) StripeOptions {
 	return func(sc *StripeClient) {
 		sc.apikey = apiKey
+	}
+}
+
+// WithBackends sets the backends for the Stripe client
+func WithBackends(backends *stripe.Backends) StripeOptions {
+	return func(sc *StripeClient) {
+		sc.backends = backends
 	}
 }

@@ -1,12 +1,20 @@
+
 mutation CreateBulkCSVPersonalAccessToken($input: Upload!) {
   createBulkCSVPersonalAccessToken(input: $input) {
     personalAccessTokens {
+      createdAt
+      createdBy
       description
       expiresAt
       id
+      isActive
       lastUsedAt
       name
+      revokedAt
+      revokedBy
+      revokedReason
       scopes
+      tags
       token
       updatedAt
       updatedBy
@@ -21,12 +29,19 @@ mutation CreateBulkCSVPersonalAccessToken($input: Upload!) {
 mutation CreateBulkPersonalAccessToken($input: [CreatePersonalAccessTokenInput!]) {
   createBulkPersonalAccessToken(input: $input) {
     personalAccessTokens {
+      createdAt
+      createdBy
       description
       expiresAt
       id
+      isActive
       lastUsedAt
       name
+      revokedAt
+      revokedBy
+      revokedReason
       scopes
+      tags
       token
       updatedAt
       updatedBy
@@ -41,12 +56,19 @@ mutation CreateBulkPersonalAccessToken($input: [CreatePersonalAccessTokenInput!]
 mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
   createPersonalAccessToken(input: $input) {
     personalAccessToken {
+      createdAt
+      createdBy
       description
       expiresAt
       id
+      isActive
       lastUsedAt
       name
+      revokedAt
+      revokedBy
+      revokedReason
       scopes
+      tags
       token
       updatedAt
       updatedBy
@@ -71,12 +93,19 @@ query GetAllPersonalAccessTokens {
   personalAccessTokens {
     edges {
       node {
+        createdAt
+        createdBy
         description
         expiresAt
         id
+        isActive
         lastUsedAt
         name
+        revokedAt
+        revokedBy
+        revokedReason
         scopes
+        tags
         token
         updatedAt
         updatedBy
@@ -91,12 +120,19 @@ query GetAllPersonalAccessTokens {
 
 query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
   personalAccessToken(id: $personalAccessTokenId) {
+    createdAt
+    createdBy
     description
     expiresAt
     id
+    isActive
     lastUsedAt
     name
+    revokedAt
+    revokedBy
+    revokedReason
     scopes
+    tags
     token
     updatedAt
     updatedBy
@@ -104,18 +140,54 @@ query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
       id
       name
     }
+}
+}
+
+query GetPersonalAccessTokens($where: PersonalAccessTokenWhereInput) {
+  personalAccessTokens(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        expiresAt
+        id
+        isActive
+        lastUsedAt
+        name
+        revokedAt
+        revokedBy
+        revokedReason
+        scopes
+        tags
+        token
+        updatedAt
+        updatedBy
+        organizations {
+          id
+          name
+          }
+    }
   }
+}
 }
 
 mutation UpdatePersonalAccessToken($updatePersonalAccessTokenId: ID!, $input: UpdatePersonalAccessTokenInput!) {
   updatePersonalAccessToken(id: $updatePersonalAccessTokenId, input: $input) {
     personalAccessToken {
+      createdAt
+      createdBy
       description
       expiresAt
       id
+      isActive
       lastUsedAt
       name
+      revokedAt
+      revokedBy
+      revokedReason
       scopes
+      tags
       token
       updatedAt
       updatedBy
