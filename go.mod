@@ -49,10 +49,10 @@ require (
 	github.com/openfga/go-sdk v0.6.5
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.1
-	github.com/projectdiscovery/cdncheck v1.1.8
+	github.com/projectdiscovery/cdncheck v1.1.9
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
-	github.com/projectdiscovery/utils v0.4.13
+	github.com/projectdiscovery/utils v0.4.14
 	github.com/prometheus/client_golang v1.21.1
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.1
@@ -72,7 +72,7 @@ require (
 	github.com/theopenlane/entx v0.5.0
 	github.com/theopenlane/gqlgen-plugins v0.4.5
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.9.0
+	github.com/theopenlane/iam v0.9.1
 	github.com/theopenlane/newman v0.1.3
 	github.com/theopenlane/riverboat v0.0.9
 	github.com/theopenlane/utils v0.4.3
@@ -510,7 +510,7 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
 	github.com/projectdiscovery/subfinder/v2 v2.7.0
-	github.com/projectdiscovery/wappalyzergo v0.2.18
+	github.com/projectdiscovery/wappalyzergo v0.2.19
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
