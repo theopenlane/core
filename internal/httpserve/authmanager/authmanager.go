@@ -118,6 +118,7 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 
 	// allow to skip the org interceptor middleware before a user could potentially be authenticated
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
 
 	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
 	if err != nil {

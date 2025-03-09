@@ -95,6 +95,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			}
 
 			o.StripeCustomerID = customer.ID
+			o.StripeSubscriptionID = psubs.ID
 			o.Metadata = customer.Metadata
 			o.Subscription = *psubs
 
@@ -103,7 +104,10 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 				return nil, err
 			}
 
-			return newOrg, nil
+			o.Features = newOrg.Features
+			o.FeatureNames = newOrg.FeatureNames
+
+			return o, nil
 		}
 
 		subs, err := sc.CreateTrialSubscription(customer)
@@ -114,6 +118,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subs.ID).Msg("trial subscription created")
 
 		o.StripeCustomerID = customer.ID
+		o.StripeSubscriptionID = subs.ID
 		o.Metadata = customer.Metadata
 		o.Subscription = *subs
 
@@ -122,7 +127,10 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			return nil, err
 		}
 
-		return newOrg, nil
+		o.Features = newOrg.Features
+		o.FeatureNames = newOrg.FeatureNames
+
+		return o, nil
 	case 1:
 		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
 		o.StripeCustomerID = customers[0].ID

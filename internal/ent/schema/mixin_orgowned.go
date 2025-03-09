@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -243,8 +242,7 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
 		return true
 	}
 
-	// Allow the interceptor to skip the query if the context has an allow bypass
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	if _, orgSubscription := contextx.From[auth.OrgSubscriptionContextKey](ctx); orgSubscription {
 		return true
 	}
 
