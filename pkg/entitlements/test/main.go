@@ -27,7 +27,11 @@ func main() {
 }
 
 func initStripeClient() entitlements.StripeClient {
-	client := entitlements.NewStripeClient(entitlements.WithAPIKey(""))
+	client, err := entitlements.NewStripeClient(entitlements.WithAPIKey(""))
+	if err != nil {
+		log.Fatal().Msgf("failed to initialize Stripe client: %v", err)
+	}
+
 	return *client
 }
 

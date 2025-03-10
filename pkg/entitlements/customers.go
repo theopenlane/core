@@ -95,6 +95,8 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			}
 
 			o.StripeCustomerID = customer.ID
+			o.StripeSubscriptionID = psubs.ID
+			o.Metadata = customer.Metadata
 			o.Subscription = *psubs
 
 			newOrg, err := sc.retrieveFeatureLists(o)
@@ -102,10 +104,13 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 				return nil, err
 			}
 
-			return newOrg, nil
+			o.Features = newOrg.Features
+			o.FeatureNames = newOrg.FeatureNames
+
+			return o, nil
 		}
 
-		subs, err := sc.CreateTrialSubscription(customer.ID)
+		subs, err := sc.CreateTrialSubscription(customer)
 		if err != nil {
 			return nil, err
 		}
@@ -113,6 +118,8 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subs.ID).Msg("trial subscription created")
 
 		o.StripeCustomerID = customer.ID
+		o.StripeSubscriptionID = subs.ID
+		o.Metadata = customer.Metadata
 		o.Subscription = *subs
 
 		newOrg, err := sc.retrieveFeatureLists(o)
@@ -120,12 +127,15 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			return nil, err
 		}
 
-		return newOrg, nil
+		o.Features = newOrg.Features
+		o.FeatureNames = newOrg.FeatureNames
+
+		return o, nil
 	case 1:
 		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
 		o.StripeCustomerID = customers[0].ID
 
-		feats, featNames, err := sc.retrieveActiveEntitlements(customers[0].ID)
+		feats, featNames, err := sc.RetrieveActiveEntitlements(customers[0].ID)
 		if err != nil {
 			return nil, err
 		}
@@ -150,6 +160,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 	}
 }
 
+// retrieveFeatureLists retrieves the features for a customer
 func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*OrganizationCustomer, error) {
 	var feats, featNames []string
 
@@ -158,7 +169,7 @@ func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*Organiza
 	for i := range maxRetries {
 		var err error
 
-		feats, featNames, err = sc.retrieveActiveEntitlements(o.StripeCustomerID)
+		feats, featNames, err = sc.RetrieveActiveEntitlements(o.StripeCustomerID)
 		if err != nil {
 			return nil, err
 		}
@@ -232,4 +243,32 @@ func (sc *StripeClient) DeleteCustomer(id string) error {
 	}
 
 	return nil
+}
+
+func (sc *StripeClient) MapStripeCustomer(c *stripe.Customer) *OrganizationCustomer {
+	var orgID, orgSettingsID, orgSubscriptionID string
+
+	for k, v := range c.Metadata {
+		if k == "organization_id" {
+			orgID = v
+			continue
+		}
+
+		if k == "organization_settings_id" {
+			orgSettingsID = v
+			continue
+		}
+
+		if k == "organization_subscription_id" {
+			orgSubscriptionID = v
+			continue
+		}
+	}
+
+	return &OrganizationCustomer{
+		StripeCustomerID:           c.ID,
+		OrganizationID:             orgID,
+		OrganizationSettingsID:     orgSettingsID,
+		OrganizationSubscriptionID: orgSubscriptionID,
+	}
 }

@@ -9,11 +9,12 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 )
 
+// Event holds the schema definition for the Event entity
 type Event struct {
 	ent.Schema
 }
 
-// Fields of the TicketEvent.
+// Fields of the Event
 func (Event) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("event_id").
@@ -39,6 +40,7 @@ func (Event) Edges() []ent.Edge {
 		edge.From("groupmembership", GroupMembership.Type).Ref("events"),
 		edge.From("subscriber", Subscriber.Type).Ref("events"),
 		edge.From("file", File.Type).Ref("events"),
+		edge.From("orgsubscription", OrgSubscription.Type).Ref("events"),
 	}
 }
 

@@ -15701,6 +15701,10 @@ type EventWhereInput struct {
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+
+	// "orgsubscription" edge predicates.
+	HasOrgsubscription     *bool                        `json:"hasOrgsubscription,omitempty"`
+	HasOrgsubscriptionWith []*OrgSubscriptionWhereInput `json:"hasOrgsubscriptionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -16281,6 +16285,24 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, event.HasFileWith(with...))
+	}
+	if i.HasOrgsubscription != nil {
+		p := event.HasOrgsubscription()
+		if !*i.HasOrgsubscription {
+			p = event.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrgsubscriptionWith) > 0 {
+		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgsubscriptionWith))
+		for _, w := range i.HasOrgsubscriptionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrgsubscriptionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, event.HasOrgsubscriptionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

@@ -852,6 +852,7 @@ type ComplexityRoot struct {
 		Metadata            func(childComplexity int) int
 		Organization        func(childComplexity int) int
 		Orgmembership       func(childComplexity int) int
+		Orgsubscription     func(childComplexity int) int
 		PersonalAccessToken func(childComplexity int) int
 		Subscriber          func(childComplexity int) int
 		Tags                func(childComplexity int) int
@@ -2139,6 +2140,7 @@ type ComplexityRoot struct {
 
 	OrgSubscription struct {
 		Active                   func(childComplexity int) int
+		Cancellation             func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DaysUntilDue             func(childComplexity int) int
@@ -2149,6 +2151,7 @@ type ComplexityRoot struct {
 		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
 		ID                       func(childComplexity int) int
+		ManagePaymentMethods     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		PaymentMethodAdded       func(childComplexity int) int
@@ -7250,6 +7253,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Event.Orgmembership(childComplexity), true
+
+	case "Event.orgsubscription":
+		if e.complexity.Event.Orgsubscription == nil {
+			break
+		}
+
+		return e.complexity.Event.Orgsubscription(childComplexity), true
 
 	case "Event.personalAccessToken":
 		if e.complexity.Event.PersonalAccessToken == nil {
@@ -14163,6 +14173,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.Active(childComplexity), true
 
+	case "OrgSubscription.cancellation":
+		if e.complexity.OrgSubscription.Cancellation == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.Cancellation(childComplexity), true
+
 	case "OrgSubscription.createdAt":
 		if e.complexity.OrgSubscription.CreatedAt == nil {
 			break
@@ -14232,6 +14249,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscription.ID(childComplexity), true
+
+	case "OrgSubscription.managePaymentMethods":
+		if e.complexity.OrgSubscription.ManagePaymentMethods == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.ManagePaymentMethods(childComplexity), true
 
 	case "OrgSubscription.owner":
 		if e.complexity.OrgSubscription.Owner == nil {
@@ -28733,6 +28757,7 @@ input CreateEventInput {
   hushIDs: [ID!]
   subscriberIDs: [ID!]
   fileIDs: [ID!]
+  orgsubscriptionIDs: [ID!]
 }
 """
 CreateEvidenceInput is used for create Evidence object.
@@ -31574,6 +31599,7 @@ type Event implements Node {
   groupmembership: [GroupMembership!]
   subscriber: [Subscriber!]
   file: [File!]
+  orgsubscription: [OrgSubscription!]
 }
 """
 A connection to a list of items.
@@ -32023,6 +32049,11 @@ input EventWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  orgsubscription edge predicates
+  """
+  hasOrgsubscription: Boolean
+  hasOrgsubscriptionWith: [OrgSubscriptionWhereInput!]
 }
 type Evidence implements Node {
   id: ID!
@@ -52149,6 +52180,9 @@ input UpdateEventInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFile: Boolean
+  addOrgsubscriptionIDs: [ID!]
+  removeOrgsubscriptionIDs: [ID!]
+  clearOrgsubscription: Boolean
 }
 """
 UpdateEvidenceInput is used for update Evidence object.
@@ -57240,6 +57274,8 @@ type OrgMembershipBulkCreatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/orgsubscriptionextended.graphql", Input: `extend type OrgSubscription {
     subscriptionURL: String
+    managePaymentMethods: String
+    cancellation: String
 }`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
