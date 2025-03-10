@@ -160,6 +160,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 	}
 }
 
+// retrieveFeatureLists retrieves the features for a customer
 func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*OrganizationCustomer, error) {
 	var feats, featNames []string
 

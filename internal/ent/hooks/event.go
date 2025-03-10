@@ -11,7 +11,6 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -163,9 +162,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 	}
 }
 
-// TODO [MKA]: create better methods for constructing object + event topic names; possibly update soiree to make topic management more friendly
 // OrganizationSettingCreate and OrganizationSettingUpdateOne are the topics for the organization setting events
-var OrganizationSettingCreate = "OrganizationSetting.OpCreate"
 var OrganizationSettingUpdateOne = "OrganizationSetting.OpUpdateOne"
 var OrgSubscriptionCreate = "OrgSubscription.OpCreate"
 
@@ -182,6 +179,7 @@ func RegisterListeners(e *Eventer) error {
 		return err
 	}
 
+	// TODO(MKA): after ensuring we overwrite fields from stripe into our system and viceversa, uncomment this event listener
 	//	_, err = e.Emitter.On(OrganizationSettingUpdateOne, handleOrganizationSettingsUpdateOne)
 	//	if err != nil {
 	//		log.Error().Err(ErrFailedToRegisterListener)
@@ -228,36 +226,12 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 		return err
 	}
 
-	log.Warn().Msgf("orgCust.Features: %+v", orgCust.Features)
-	log.Warn().Msgf("orgCust.FeatureNames: %+v", orgCust.FeatureNames)
-	log.Warn().Msgf("orgCust.StripeCustomerID: %+v", orgCust.StripeCustomerID)
-	log.Warn().Msgf("orgCust.OrganizationID: %+v", orgCust.OrganizationID)
-	log.Warn().Msgf("orgCust.OrganizationName: %+v", orgCust.OrganizationName)
-	log.Warn().Msgf("orgCust.OrganizationSettingsID: %+v", orgCust.OrganizationSettingsID)
-	log.Warn().Msgf("orgCust.PersonalOrg: %+v", orgCust.PersonalOrg)
-	log.Warn().Msgf("orgCust.Email: %+v", orgCust.Email)
-	log.Warn().Msgf("orgCust.OrganizationSubscriptionID: %+v", orgCust.OrganizationSubscriptionID)
-	log.Warn().Msgf("orgCust.StripeSubscriptionID: %+v", orgCust.StripeSubscriptionID)
-
-	newOrgSubs, err := mapCustomerToOrgSubs(allowCtx, orgCust, client)
+	_, err = mapCustomerToOrgSubs(allowCtx, orgCust, client)
 	if err != nil {
 		log.Err(err).Msg("Failed to map customer to org subscription")
 
 		return err
 	}
-
-	log.Warn().Msgf("newOrgSubs.StripeCustomerID: %+v", newOrgSubs.StripeCustomerID)
-	log.Warn().Msgf("newOrgSubs.StripeSubscriptionID: %+v", newOrgSubs.StripeSubscriptionID)
-	log.Warn().Msgf("newOrgSubs.OrganizationID: %+v", newOrgSubs.OwnerID)
-
-	log.Warn().Msgf("newOrgSubs.StripeSubscriptionStatus: %+v", newOrgSubs.StripeSubscriptionStatus)
-	log.Warn().Msgf("newOrgSubs.Active: %+v", newOrgSubs.Active)
-	log.Warn().Msgf("newOrgSubs.ProductTier: %+v", newOrgSubs.ProductTier)
-	log.Warn().Msgf("newOrgSubs.Features: %+v", newOrgSubs.Features)
-	log.Warn().Msgf("newOrgSubs.FeatureLookupKeys: %+v", newOrgSubs.FeatureLookupKeys)
-	log.Warn().Msgf("newOrgSubs.StripeProductTierID: %+v", newOrgSubs.StripeProductTierID)
-	log.Warn().Msgf("newOrgSubs.ProductPrice: %+v", newOrgSubs.ProductPrice)
-	log.Warn().Msgf("newOrgSubs.ExpiresAt: %+v", newOrgSubs.ExpiresAt)
 
 	return nil
 }
@@ -336,32 +310,6 @@ func getOrgFromSubs(ctx context.Context, orgSubs *entgen.OrgSubscription, client
 	return o, nil
 }
 
-func getOrgSetting(ctx context.Context, orgsettingID string, client interface{}) (*entgen.OrganizationSetting, error) {
-	if orgsettingID == "" {
-		return nil, fmt.Errorf("organizationsettingID is empty")
-	}
-
-	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
-	if err != nil {
-		log.Err(err).Msgf("Failed to fetch organization setting ID %s", orgsettingID)
-
-		return nil, err
-	}
-
-	return orgSetting, nil
-}
-
-func getOrg(ctx context.Context, orgID string, client interface{}) (*entgen.Organization, error) {
-	org, err := client.(*entgen.Client).Organization.Get(ctx, orgID)
-	if err != nil {
-		log.Err(err).Msgf("Failed to fetch organization by organization ID %s", orgID)
-
-		return nil, err
-	}
-
-	return org, nil
-}
-
 func getOrgSubs(ctx context.Context, orgsubsID string, client interface{}) (*entgen.OrgSubscription, error) {
 	if orgsubsID == "" {
 		return nil, fmt.Errorf("org subs ID is empty")
@@ -375,6 +323,36 @@ func getOrgSubs(ctx context.Context, orgsubsID string, client interface{}) (*ent
 	}
 
 	return orgSubs, nil
+}
+
+// handleOrganizationSettingsUpdateOne checks for updates to the organization settings and updates the customer in Stripe accordingly
+func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
+	client := event.Client().(*entgen.Client)
+	entMgr := client.EntitlementManager
+
+	if entMgr == nil {
+		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
+
+		return nil
+	}
+
+	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
+	if err != nil {
+		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
+
+		return err
+	}
+
+	// TODO(MKA): ensure all the fields which can be updated in stripe by the customer override what we store, and vice versa
+	if params, hasUpdate := entitlements.CheckForBillingUpdate(event.Properties(), orgCust); hasUpdate {
+		if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
+			log.Err(err).Msg("Failed to update customer")
+
+			return err
+		}
+	}
+
+	return nil
 }
 
 // fetchOrganizationIDbyOrgSettingID fetches the organization ID by the organization setting ID
@@ -423,133 +401,4 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 			PostalCode: &orgSetting.BillingAddress.PostalCode,
 		},
 	}, nil
-}
-
-// handleOrganizationSettingsCreate handles the creation of a customer in Stripe when an OrganizationSetting is created or updated
-func handleOrganizationSettingsCreate(event soiree.Event) error {
-	client := event.Client().(*entgen.Client)
-	entMgr := client.EntitlementManager
-
-	if entMgr == nil {
-		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
-
-		return nil
-	}
-
-	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
-	if err != nil {
-		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
-
-		return err
-	}
-
-	// our resolvers support creating organizations + settings with attributes in the payload, so in the event this is populated we want to do nothing
-	if orgCust.StripeCustomerID == "" {
-		customer, err := entMgr.FindOrCreateCustomer(event.Context(), orgCust)
-		if err != nil {
-			log.Err(err).Msg("Failed to create customer")
-
-			return err
-		}
-
-		orgSubs, err := createInternalOrgSubscription(event.Context(), customer, client)
-		if err != nil {
-			log.Err(err).Msg("Failed to create internal org subscription")
-
-			return err
-		}
-
-		if orgSubs != nil {
-			_, err := entMgr.UpdateSubscription(customer.Subscription.ID, &stripe.SubscriptionParams{
-				Metadata: map[string]string{
-					"organization_subscription_id": orgSubs.ID,
-				},
-			})
-			if err != nil {
-				log.Err(err).Msg("Failed to update subscription metadata")
-
-				return err
-			}
-
-			return nil
-		}
-	}
-
-	return nil
-}
-
-// handleOrganizationSettingsUpdateOne checks for updates to the organization settings and updates the customer in Stripe accordingly
-func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
-	client := event.Client().(*entgen.Client)
-	entMgr := client.EntitlementManager
-
-	if entMgr == nil {
-		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
-
-		return nil
-	}
-
-	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
-	if err != nil {
-		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
-
-		return err
-	}
-
-	if params, hasUpdate := entitlements.CheckForBillingUpdate(event.Properties(), orgCust); hasUpdate {
-		if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
-			log.Err(err).Msg("Failed to update customer")
-
-			return err
-		}
-	}
-
-	return nil
-}
-
-// createInternalOrgSubscription creates an internal org subscription
-func createInternalOrgSubscription(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) (orgSubs *entgen.OrgSubscription, err error) {
-	productName := ""
-	productPrice := models.Price{}
-
-	if len(customer.Prices) == 1 {
-		productName = customer.Prices[0].ProductName
-		productPrice.Amount = customer.Prices[0].Price
-		productPrice.Currency = customer.Prices[0].Currency
-		productPrice.Interval = customer.Prices[0].Interval
-	} else {
-		log.Warn().Msgf("Unable to determine product name and price, there are %v prices", len(customer.Prices))
-	}
-
-	expiresAt := time.Time{}
-	if customer.Subscription.EndDate != 0 {
-		expiresAt = time.Unix(customer.Subscription.EndDate, 0)
-	}
-
-	active := false
-	if customer.Subscription.Status == "active" || customer.Subscription.Status == "trialing" {
-		active = true
-	}
-
-	sub, err := client.(*entgen.Client).OrgSubscription.Create().
-		SetStripeSubscriptionID(customer.Subscription.ID).
-		SetOwnerID(customer.OrganizationID).
-		SetStripeCustomerID(customer.StripeCustomerID).
-		SetStripeSubscriptionStatus(customer.Subscription.Status).
-		SetActive(active).
-		SetProductTier(productName).
-		SetFeatures(customer.FeatureNames).
-		SetFeatureLookupKeys(customer.Features).
-		SetStripeProductTierID(customer.Subscription.ProductID).
-		SetProductPrice(productPrice).
-		SetExpiresAt(expiresAt).
-		Save(ctx)
-	if err != nil {
-		log.Err(err).Msg("Failed to create internal org subscription")
-		return nil, err
-	}
-
-	log.Info().Str("subscription", sub.ID).Msg("created internal org subscription")
-
-	return sub, nil
 }
