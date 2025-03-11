@@ -69,12 +69,12 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 
 // FindOrCreateCustomer attempts to lookup a customer by the organization ID which is set in both the
 // name field attribute as well as in the object metadata field
-func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *OrganizationCustomer) (*OrganizationCustomer, error) {
+func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *OrganizationCustomer) error {
 	log.Debug().Str("organization_id", o.OrganizationID).Msg("searching for customer")
 
 	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", o.OrganizationID))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	switch len(customers) {
@@ -83,61 +83,49 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 		customer, err := sc.CreateCustomer(o)
 		if err != nil {
-			return nil, err
+			return err
 		}
+
+		o.StripeCustomerID = customer.ID
+		o.Metadata = customer.Metadata
 
 		log.Debug().Str("customer_id", customer.ID).Msg("customer created")
 
+		// create a subscription based on the organization type
+		var subscription *Subscription
+
 		if o.PersonalOrg {
-			psubs, err := sc.CreatePersonalOrgFreeTierSubs(customer.ID)
+			subscription, err = sc.CreatePersonalOrgFreeTierSubs(customer.ID)
 			if err != nil {
-				return nil, err
+				return err
 			}
 
-			o.StripeCustomerID = customer.ID
-			o.StripeSubscriptionID = psubs.ID
-			o.Metadata = customer.Metadata
-			o.Subscription = *psubs
-
-			newOrg, err := sc.retrieveFeatureLists(o)
+			log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("personal org subscription created")
+		} else {
+			subscription, err = sc.CreateTrialSubscription(customer)
 			if err != nil {
-				return nil, err
+				return nil
 			}
 
-			o.Features = newOrg.Features
-			o.FeatureNames = newOrg.FeatureNames
-
-			return o, nil
+			log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("trial subscription created")
 		}
 
-		subs, err := sc.CreateTrialSubscription(customer)
-		if err != nil {
-			return nil, err
+		o.StripeSubscriptionID = subscription.ID
+		o.Subscription = *subscription
+
+		// update the features and feature names
+		if err := sc.retrieveFeatureLists(o); err != nil {
+			return ErrCustomerNotFound
 		}
 
-		log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subs.ID).Msg("trial subscription created")
-
-		o.StripeCustomerID = customer.ID
-		o.StripeSubscriptionID = subs.ID
-		o.Metadata = customer.Metadata
-		o.Subscription = *subs
-
-		newOrg, err := sc.retrieveFeatureLists(o)
-		if err != nil {
-			return nil, err
-		}
-
-		o.Features = newOrg.Features
-		o.FeatureNames = newOrg.FeatureNames
-
-		return o, nil
+		return nil
 	case 1:
 		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
 		o.StripeCustomerID = customers[0].ID
 
-		feats, featNames, err := sc.RetrieveActiveEntitlements(customers[0].ID)
+		feats, featNames, err := sc.retrieveActiveEntitlements(customers[0].ID)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		if len(feats) > 0 {
@@ -152,16 +140,16 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			o.FeatureNames = featNames
 		}
 
-		return o, nil
+		return nil
 	default:
 		log.Error().Err(ErrFoundMultipleCustomers).Str("organization_id", o.OrganizationID).Interface("customers", customers).Msg("found multiple customers, skipping all updates")
 
-		return nil, ErrFoundMultipleCustomers
+		return ErrFoundMultipleCustomers
 	}
 }
 
 // retrieveFeatureLists retrieves the features for a customer
-func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*OrganizationCustomer, error) {
+func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) error {
 	var feats, featNames []string
 
 	const maxRetries = 5
@@ -169,9 +157,9 @@ func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*Organiza
 	for i := range maxRetries {
 		var err error
 
-		feats, featNames, err = sc.RetrieveActiveEntitlements(o.StripeCustomerID)
+		feats, featNames, err = sc.retrieveActiveEntitlements(o.StripeCustomerID)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		// if we have features, break out of the loop
@@ -195,7 +183,7 @@ func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) (*Organiza
 	o.Features = feats
 	o.FeatureNames = featNames
 
-	return o, nil
+	return nil
 }
 
 // GetCustomerByStripeID gets a customer by ID
@@ -245,30 +233,28 @@ func (sc *StripeClient) DeleteCustomer(id string) error {
 	return nil
 }
 
+// MapStripeCustomer maps a stripe customer to an organization customer
+// this is used to convert the stripe customer object to our internal customer object
+// we use the metadata to store the organization ID, settings ID, and subscription ID
 func (sc *StripeClient) MapStripeCustomer(c *stripe.Customer) *OrganizationCustomer {
-	var orgID, orgSettingsID, orgSubscriptionID string
-
-	for k, v := range c.Metadata {
-		if k == "organization_id" {
-			orgID = v
-			continue
-		}
-
-		if k == "organization_settings_id" {
-			orgSettingsID = v
-			continue
-		}
-
-		if k == "organization_subscription_id" {
-			orgSubscriptionID = v
-			continue
-		}
+	orgCustomer := &OrganizationCustomer{
+		StripeCustomerID: c.ID,
 	}
 
-	return &OrganizationCustomer{
-		StripeCustomerID:           c.ID,
-		OrganizationID:             orgID,
-		OrganizationSettingsID:     orgSettingsID,
-		OrganizationSubscriptionID: orgSubscriptionID,
+	orgID, exists := c.Metadata["organization_id"]
+	if exists {
+		orgCustomer.OrganizationID = orgID
 	}
+
+	orgSettingID, exists := c.Metadata["organization_settings_id"]
+	if exists {
+		orgCustomer.OrganizationSettingsID = orgSettingID
+	}
+
+	orgSubID, exists := c.Metadata["organization_subscription_id"]
+	if exists {
+		orgCustomer.OrganizationSubscriptionID = orgSubID
+	}
+
+	return orgCustomer
 }

@@ -6,49 +6,38 @@ import (
 
 	"github.com/stripe/stripe-go/v81"
 	"gopkg.in/yaml.v3"
-
-	"github.com/theopenlane/core/pkg/models"
 )
 
-// CheckForBillingUpdate checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
+// GetUpdatedFields checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
 // and a boolean indicating whether there are updates
-func CheckForBillingUpdate(props map[string]interface{}, stripeCustomer *OrganizationCustomer) (params *stripe.CustomerParams, hasUpdate bool) {
+func GetUpdatedFields(props map[string]interface{}, orgCustomer *OrganizationCustomer) (params *stripe.CustomerParams) {
 	params = &stripe.CustomerParams{}
 
-	billingEmail, exists := props["billing_email"]
-	if exists && billingEmail != "" {
-		email := billingEmail.(string)
-		if stripeCustomer.Email != email {
-			params.Email = &email
-			hasUpdate = true
-		}
+	// if its in the properties, it has been updated
+	// use the current value from orgCustomer
+	_, exists := props["billing_email"]
+	if exists {
+		params.Email = &orgCustomer.Email
 	}
 
-	billingPhone, exists := props["billing_phone"]
-	if exists && billingPhone != "" {
-		phone := billingPhone.(string)
-		if stripeCustomer.Phone != phone {
-			params.Phone = &phone
-			hasUpdate = true
-		}
+	_, exists = props["billing_phone"]
+	if exists {
+		params.Phone = &orgCustomer.Phone
 	}
 
-	billingAddress, exists := props["billing_address"]
-	if exists && billingAddress != nil {
-		hasUpdate = true
-
-		address := billingAddress.(models.Address)
+	_, exists = props["billing_address"]
+	if exists {
 		params.Address = &stripe.AddressParams{
-			Line1:      &address.Line1,
-			Line2:      &address.Line2,
-			City:       &address.City,
-			State:      &address.State,
-			PostalCode: &address.PostalCode,
-			Country:    &address.Country,
+			Line1:      orgCustomer.Line1,
+			Line2:      orgCustomer.Line2,
+			City:       orgCustomer.City,
+			State:      orgCustomer.State,
+			PostalCode: orgCustomer.PostalCode,
+			Country:    orgCustomer.Country,
 		}
 	}
 
-	return params, hasUpdate
+	return params
 }
 
 // GetProducts retrieves all products from stripe which are active

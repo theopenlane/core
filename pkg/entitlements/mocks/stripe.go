@@ -117,10 +117,10 @@ func (t *FakeStripeClient) ConstructWebhookEvent(reqBody []byte, signature strin
 
 func (t *FakeStripeClient) NewCheckoutSession(
 	paymentMethods []string,
-	mode, successURL, CancelURL string,
+	mode, successURL, cancelURL string,
 	lineItems []*stripe.CheckoutSessionLineItemParams,
 	_ []*stripe.CheckoutSessionDiscountParams) *stripe.CheckoutSession {
-	return t.Called(paymentMethods, mode, successURL, CancelURL, lineItems).Get(0).(*stripe.CheckoutSession)
+	return t.Called(paymentMethods, mode, successURL, cancelURL, lineItems).Get(0).(*stripe.CheckoutSession)
 }
 
 // MockStripeBackend mock for Stripe Backend interface

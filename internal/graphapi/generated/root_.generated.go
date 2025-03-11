@@ -1761,7 +1761,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVNarrative             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationSetting   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVPersonalAccessToken   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProcedure             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgram               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgramMembership     func(childComplexity int, input graphql.Upload) int
@@ -1790,7 +1789,6 @@ type ComplexityRoot struct {
 		CreateBulkNarrative                func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkOrgMembership            func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
 		CreateBulkOrganizationSetting      func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
-		CreateBulkPersonalAccessToken      func(childComplexity int, input []*generated.CreatePersonalAccessTokenInput) int
 		CreateBulkProcedure                func(childComplexity int, input []*generated.CreateProcedureInput) int
 		CreateBulkProgram                  func(childComplexity int, input []*generated.CreateProgramInput) int
 		CreateBulkProgramMembership        func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
@@ -11390,18 +11388,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkCSVOrganizationSetting(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVPersonalAccessToken":
-		if e.complexity.Mutation.CreateBulkCSVPersonalAccessToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVPersonalAccessToken_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVPersonalAccessToken(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVProcedure":
 		if e.complexity.Mutation.CreateBulkCSVProcedure == nil {
 			break
@@ -11737,18 +11723,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateBulkOrganizationSetting(childComplexity, args["input"].([]*generated.CreateOrganizationSettingInput)), true
-
-	case "Mutation.createBulkPersonalAccessToken":
-		if e.complexity.Mutation.CreateBulkPersonalAccessToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkPersonalAccessToken_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkPersonalAccessToken(childComplexity, args["input"].([]*generated.CreatePersonalAccessTokenInput)), true
 
 	case "Mutation.createBulkProcedure":
 		if e.complexity.Mutation.CreateBulkProcedure == nil {
@@ -57299,24 +57273,6 @@ extend type Mutation{
         """
         input: CreatePersonalAccessTokenInput!
     ): PersonalAccessTokenCreatePayload!
-    """
-    Create multiple new personalAccessTokens
-    """
-    createBulkPersonalAccessToken(
-        """
-        values of the personalAccessToken
-        """
-        input: [CreatePersonalAccessTokenInput!]
-    ): PersonalAccessTokenBulkCreatePayload!
-    """
-    Create multiple new personalAccessTokens via file upload
-    """
-    createBulkCSVPersonalAccessToken(
-        """
-        csv file containing values of the personalAccessToken
-        """
-        input: Upload!
-    ): PersonalAccessTokenBulkCreatePayload!
     """
     Update an existing personalAccessToken
     """

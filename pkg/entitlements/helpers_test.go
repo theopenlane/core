@@ -7,20 +7,16 @@ import (
 	"github.com/stripe/stripe-go/v81"
 )
 
-func TestCheckForBillingUpdate(t *testing.T) {
+func TestGetUpdatedFields(t *testing.T) {
 	tests := []struct {
 		name           string
 		props          map[string]interface{}
 		stripeCustomer *OrganizationCustomer
 		expectedParams *stripe.CustomerParams
-		expectedUpdate bool
 	}{
 		{
-			name: "No updates",
-			props: map[string]interface{}{
-				"billing_email": "test@example.com",
-				"billing_phone": "1234567890",
-			},
+			name:  "No updates",
+			props: map[string]interface{}{},
 			stripeCustomer: &OrganizationCustomer{
 				ContactInfo: ContactInfo{
 					Email: "test@example.com",
@@ -28,12 +24,25 @@ func TestCheckForBillingUpdate(t *testing.T) {
 				},
 			},
 			expectedParams: &stripe.CustomerParams{},
-			expectedUpdate: false,
 		},
 		{
 			name: "Update email",
 			props: map[string]interface{}{
 				"billing_email": "new@example.com",
+			},
+			stripeCustomer: &OrganizationCustomer{
+				ContactInfo: ContactInfo{
+					Email: "test@example.com",
+					Phone: "1234567890",
+				},
+			},
+			expectedParams: &stripe.CustomerParams{
+				Email: stripe.String("test@example.com"),
+			},
+		},
+		{
+			name: "Update phone",
+			props: map[string]interface{}{
 				"billing_phone": "1234567890",
 			},
 			stripeCustomer: &OrganizationCustomer{
@@ -43,33 +52,14 @@ func TestCheckForBillingUpdate(t *testing.T) {
 				},
 			},
 			expectedParams: &stripe.CustomerParams{
-				Email: stripe.String("new@example.com"),
+				Phone: stripe.String("1234567890"),
 			},
-			expectedUpdate: true,
-		},
-		{
-			name: "Update phone",
-			props: map[string]interface{}{
-				"billing_email": "test@example.com",
-				"billing_phone": "0987654321",
-			},
-			stripeCustomer: &OrganizationCustomer{
-				ContactInfo: ContactInfo{
-					Email: "test@example.com",
-					Phone: "1234567890",
-				},
-			},
-			expectedParams: &stripe.CustomerParams{
-				Phone: stripe.String("0987654321"),
-			},
-			expectedUpdate: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			params, hasUpdate := CheckForBillingUpdate(tt.props, tt.stripeCustomer)
-			assert.Equal(t, tt.expectedUpdate, hasUpdate)
+			params := GetUpdatedFields(tt.props, tt.stripeCustomer)
 			assert.Equal(t, tt.expectedParams, params)
 		})
 	}

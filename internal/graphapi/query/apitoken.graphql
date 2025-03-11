@@ -22,54 +22,6 @@ mutation CreateAPIToken($input: CreateAPITokenInput!) {
   }
 }
 
-mutation CreateBulkAPIToken($input: [CreateAPITokenInput!]) {
-  createBulkAPIToken(input: $input) {
-    apiTokens {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      ownerID
-      revokedAt
-      revokedBy
-      revokedReason
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkCSVAPIToken($input: Upload!) {
-  createBulkCSVAPIToken(input: $input) {
-    apiTokens {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      ownerID
-      revokedAt
-      revokedBy
-      revokedReason
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation DeleteAPIToken($deleteAPITokenId: ID!) {
   deleteAPIToken(id: $deleteAPITokenId) {
     deletedID

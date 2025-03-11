@@ -140,7 +140,7 @@ func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(customerID string) (*Subsc
 }
 
 // CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
-func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
+func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (*Checkout, error) {
 	params := &stripe.BillingPortalSessionParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
@@ -154,17 +154,17 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 
 	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
 	if err != nil {
-		return Checkout{}, err
+		return nil, err
 	}
 
-	return Checkout{
+	return &Checkout{
 		ID:  billingPortalSession.ID,
 		URL: billingPortalSession.URL,
 	}, nil
 }
 
-// RetrieveActiveEntitlements retrieves active entitlements for a customer
-func (sc *StripeClient) RetrieveActiveEntitlements(customerID string) ([]string, []string, error) {
+// retrieveActiveEntitlements retrieves active entitlements for a customer
+func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string, []string, error) {
 	params := &stripe.EntitlementsActiveEntitlementListParams{
 		Customer: stripe.String(customerID),
 		Expand:   []*string{stripe.String("data.feature")},
@@ -241,7 +241,7 @@ type Subs struct {
 }
 
 // CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
-func (sc *StripeClient) CreateBillingPortalPaymentMethods(subsID, custID string) (BillingPortalSession, error) {
+func (sc *StripeClient) CreateBillingPortalPaymentMethods(subsID, custID string) (*BillingPortalSession, error) {
 	params := &stripe.BillingPortalSessionParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
@@ -252,16 +252,16 @@ func (sc *StripeClient) CreateBillingPortalPaymentMethods(subsID, custID string)
 
 	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
 	if err != nil {
-		return BillingPortalSession{}, err
+		return nil, err
 	}
 
-	return BillingPortalSession{
+	return &BillingPortalSession{
 		PaymentMethods: billingPortalSession.URL,
 	}, nil
 }
 
 // CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
-func (sc *StripeClient) CancellationBillingPortalSession(subsID, custID string) (BillingPortalSession, error) {
+func (sc *StripeClient) CancellationBillingPortalSession(subsID, custID string) (*BillingPortalSession, error) {
 	params := &stripe.BillingPortalSessionParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL, // this is the "return back to website" URL, not a cancellation / update specific one
@@ -281,10 +281,10 @@ func (sc *StripeClient) CancellationBillingPortalSession(subsID, custID string) 
 
 	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
 	if err != nil {
-		return BillingPortalSession{}, err
+		return nil, err
 	}
 
-	return BillingPortalSession{
+	return &BillingPortalSession{
 		Cancellation: billingPortalSession.URL,
 	}, nil
 }

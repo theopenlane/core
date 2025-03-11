@@ -6,12 +6,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/webhook"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
@@ -25,7 +28,10 @@ import (
 )
 
 const (
+	// stripeSignatureHeaderKey is the header key for the stripe signature
 	stripeSignatureHeaderKey = "Stripe-Signature"
+	// maxBodyBytes is the maximum size of the request body for stripe webhooks
+	maxBodyBytes = int64(65536)
 )
 
 // WebhookReceiverHandler handles incoming stripe webhook events
@@ -33,37 +39,49 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 	req := ctx.Request()
 	res := ctx.Response()
 
-	payload, err := io.ReadAll(http.MaxBytesReader(res.Writer, req.Body, int64(65536))) // nolint:mnd
+	payload, err := io.ReadAll(http.MaxBytesReader(res.Writer, req.Body, maxBodyBytes))
 	if err != nil {
+		log.Error().Err(err).Msg("failed to read request body")
+
 		return h.InternalServerError(ctx, err)
 	}
 
 	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), h.Entitlements.Config.StripeWebhookSecret)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to construct event")
+
 		return ctx.String(http.StatusConflict, fmt.Errorf("error verifying webhook signature. Error: %w", err).Error())
 	}
 
-	if !supportedEventTypes[string(event.Type)] {
+	if !supportedEventTypes[event.Type] {
+		log.Debug().Str("event_type", string(event.Type)).Msg("unsupported event type")
+
 		return h.BadRequest(ctx, ErrUnsupportedEventType)
 	}
 
 	newCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
+	newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
 
 	exists, err := h.checkForEventID(newCtx, event.ID)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to check for event ID")
+
 		return h.InternalServerError(ctx, err)
 	}
 
 	if !exists {
 		meowevent, err := h.createEvent(newCtx, ent.CreateEventInput{EventID: &event.ID})
 		if err != nil {
+			log.Error().Err(err).Msg("failed to create event")
+
 			return h.InternalServerError(ctx, err)
 		}
 
-		log.Debug().Msgf("Internal event: %v", meowevent)
+		log.Debug().Msgf("internal event: %v", meowevent)
 
-		_, err = h.HandleEvent(newCtx, &event)
-		if err != nil {
+		if err = h.HandleEvent(newCtx, &event); err != nil {
+			log.Error().Err(err).Msg("failed to handle event")
+
 			return h.InternalServerError(ctx, err)
 		}
 	}
@@ -83,47 +101,58 @@ func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
 	return &data, err
 }
 
-// HandleEvent umarshals event data and triggers a corresponding function to be executed based on case match
-func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) (orgCust *entitlements.OrganizationCustomer, err error) {
+// HandleEvent unmarshals event data and triggers a corresponding function to be executed based on case match
+func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 	switch e.Type {
-	case "customer.subscription.updated":
+	case stripe.EventTypeCustomerSubscriptionUpdated:
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
-		if err == nil {
-			return h.handleSubscriptionUpdated(c, subscription)
+		if err != nil {
+			return err
 		}
-	case "payment_method.attached":
-		cust, err := unmarshalEventData[stripe.PaymentMethod](e)
-		if err == nil {
-			return h.handlePaymentMethodAdded(c, cust)
+
+		return h.handleSubscriptionUpdated(c, subscription)
+	case stripe.EventTypePaymentMethodAttached:
+		paymentMethod, err := unmarshalEventData[stripe.PaymentMethod](e)
+		if err != nil {
+			return err
 		}
-	case "customer.subscription.trial_will_end":
-		cust, err := unmarshalEventData[stripe.Subscription](e)
-		if err == nil {
-			return h.trialWillEnd(c, cust)
+
+		return h.handlePaymentMethodAdded(c, paymentMethod)
+	case stripe.EventTypeCustomerSubscriptionTrialWillEnd:
+		subscription, err := unmarshalEventData[stripe.Subscription](e)
+		if err != nil {
+			return err
 		}
-	case "customer.subscription.deleted", "customer.subscription.paused":
-		cust, err := unmarshalEventData[stripe.Subscription](e)
-		if err == nil {
-			return h.handleSubscriptionPaused(c, cust)
+
+		return h.trialWillEnd(c, subscription)
+	case stripe.EventTypeCustomerSubscriptionDeleted, stripe.EventTypeCustomerSubscriptionPaused:
+		subscription, err := unmarshalEventData[stripe.Subscription](e)
+		if err != nil {
+			return err
 		}
+
+		return h.handleSubscriptionPaused(c, subscription)
+	default:
+		log.Warn().Str("event_type", string(e.Type)).Msg("unsupported event type")
+
+		return ErrUnsupportedEventType
 	}
-
-	return orgCust, nil
 }
 
-var supportedEventTypes = map[string]bool{
-	"customer.subscription.updated":        true,
-	"customer.subscription.deleted":        true,
-	"customer.subscription.paused":         true,
-	"customer.subscription.trial_will_end": true,
-	"payment_method.attached":              true,
+// supportedEventTypes is a map of supported stripe event types that the webhook receiver can handle
+var supportedEventTypes = map[stripe.EventType]bool{
+	stripe.EventTypeCustomerSubscriptionUpdated:      true,
+	stripe.EventTypeCustomerSubscriptionDeleted:      true,
+	stripe.EventTypeCustomerSubscriptionPaused:       true,
+	stripe.EventTypeCustomerSubscriptionTrialWillEnd: true,
+	stripe.EventTypePaymentMethodAttached:            true,
 }
 
-// InvalidateAPITokens invalidates all API tokens for an organization
+// invalidateAPITokens invalidates all API tokens for an organization
 func (h *Handler) invalidateAPITokens(c context.Context, orgID string) error {
 	if err := transaction.FromContext(c).APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
-		SetExpiresAt(time.Now().Add(-24 * time.Hour)).
+		SetExpiresAt(time.Now().Add(-24 * time.Hour)). // nolint:mnd // set expiration to 24 hours ago
 		SetRevokedAt(time.Now()).
 		SetRevokedReason("subscription paused or deleted").
 		SetRevokedBy("entitlements_engine").
@@ -135,203 +164,256 @@ func (h *Handler) invalidateAPITokens(c context.Context, orgID string) error {
 }
 
 // handleSubscriptionUpdated handles subscription updated events
-func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscription) (orgCust *entitlements.OrganizationCustomer, err error) {
-	orgSubs, err := SyncOrgSubscriptionWithStripe(ctx, s, nil)
+func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscription) (err error) {
+	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
 	if err != nil {
-		return orgCust, err
+		return err
 	}
 
-	if err := h.invalidateAPITokens(ctx, orgSubs.OwnerID); err != nil {
-		return orgCust, err
+	ownerID, err := syncOrgSubscriptionWithStripe(ctx, s, customer)
+	if err != nil {
+		return
 	}
 
-	if err := h.DBClient.PersonalAccessToken.Update().RemoveOrganizationIDs(orgSubs.OwnerID).Where(personalaccesstoken.HasOrganizationsWith(organization.ID(orgSubs.OwnerID))).Exec(ctx); err != nil {
-		return orgCust, err
+	err = h.invalidateAPITokens(ctx, *ownerID)
+	if err != nil {
+		return
 	}
 
-	return orgCust, nil
+	return h.DBClient.PersonalAccessToken.Update().
+		RemoveOrganizationIDs(*ownerID).
+		Where(personalaccesstoken.HasOrganizationsWith(organization.ID(*ownerID))).
+		Exec(ctx)
 }
 
 // handleSubscriptionUpdated handles subscription updated events
-func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subscription) (orgCust *entitlements.OrganizationCustomer, err error) {
-	_, err = SyncOrgSubscriptionWithStripe(ctx, s, nil)
+func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subscription) error {
+	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
 	if err != nil {
-		return orgCust, err
+		return err
 	}
 
-	return nil, nil
+	_, err = syncOrgSubscriptionWithStripe(ctx, s, customer)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// trialWillEnd handles trial will end events
+func (h *Handler) trialWillEnd(ctx context.Context, s *stripe.Subscription) error {
+	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
+	if err != nil {
+		return err
+	}
+
+	_, err = syncOrgSubscriptionWithStripe(ctx, s, customer)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // handlePaymentIntent handles payment intent events
-func (h *Handler) handlePaymentMethodAdded(ctx context.Context, stripeCust *stripe.PaymentMethod) (orgCust *entitlements.OrganizationCustomer, err error) {
-	if err := transaction.FromContext(ctx).OrgSubscription.Update().Where(orgsubscription.StripeCustomerID(stripeCust.Customer.ID)).
+func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *stripe.PaymentMethod) error {
+	if paymentMethod.Customer == nil {
+		log.Error().Msg("payment method has no customer, cannot proceed")
+
+		return nil
+	}
+
+	return transaction.FromContext(ctx).OrgSubscription.Update().
+		Where(orgsubscription.StripeCustomerID(paymentMethod.Customer.ID)).
 		SetPaymentMethodAdded(true).
-		Exec(ctx); err != nil {
-		return orgCust, err
-	}
-
-	return orgCust, nil
+		Exec(ctx)
 }
 
-// handlePaymentIntent handles payment intent events
-func (h *Handler) trialWillEnd(c context.Context, stripeCust *stripe.Subscription) (orgCust *entitlements.OrganizationCustomer, err error) {
-	_, err = SyncOrgSubscriptionWithStripe(c, stripeCust, nil)
-	if err != nil {
-		return orgCust, err
-	}
-
-	return orgCust, nil
-}
-
+// getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
 func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
-	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(ctx)
+	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+
+	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
+		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(allowCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to find OrgSubscription")
+		log.Error().Err(err).Msg("failed to find org subscription")
 		return nil, err
 	}
 
 	return orgSubscription, nil
 }
 
-// SyncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe
-func SyncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*ent.OrgSubscription, error) {
+// syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe
+func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
 	orgSubscription, err := getOrgSubscription(ctx, subscription)
 	if err != nil {
 		return nil, err
 	}
 
 	// map stripe data to internal OrgSubscription
-	stripeOrgSubscription := MapStripeToOrgSubscription(subscription, MapStripeCustomer(customer))
+	stripeOrgSubscription := mapStripeToOrgSubscription(subscription, mapStripeCustomer(customer))
 
 	// Check if any fields have changed before saving the updated OrgSubscription
 	changed := false
+	mutation := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSubscription)
 
 	if orgSubscription.StripeSubscriptionStatus != stripeOrgSubscription.StripeSubscriptionStatus {
-		orgSubscription.StripeSubscriptionStatus = stripeOrgSubscription.StripeSubscriptionStatus
+		mutation.SetStripeSubscriptionStatus(stripeOrgSubscription.StripeSubscriptionStatus)
+
 		changed = true
 
-		log.Debug().Msgf("Stripe subscription status changed to %s", orgSubscription.StripeSubscriptionStatus)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
 	}
 
-	if !equalSlices(orgSubscription.Features, stripeOrgSubscription.Features) {
-		orgSubscription.Features = stripeOrgSubscription.Features
+	if slices.Equal(orgSubscription.Features, stripeOrgSubscription.Features) {
+		mutation.SetFeatures(stripeOrgSubscription.Features)
+
 		changed = true
 
-		log.Debug().Msgf("Features changed to %v", orgSubscription.Features)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Strs("features", orgSubscription.Features).Msg("features changes")
 	}
 
 	if orgSubscription.ProductTier != stripeOrgSubscription.ProductTier {
-		orgSubscription.ProductTier = stripeOrgSubscription.ProductTier
+		mutation.SetProductTier(stripeOrgSubscription.ProductTier)
+
 		changed = true
 
-		log.Debug().Msgf("Product tier changed to %s", orgSubscription.ProductTier)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("tier", orgSubscription.ProductTier).Msg("tier changed")
 	}
 
 	if orgSubscription.ProductPrice != stripeOrgSubscription.ProductPrice {
-		orgSubscription.ProductPrice = stripeOrgSubscription.ProductPrice
+		stripeOrgSubscription.ProductPrice.Amount /= 100 // nolint:mnd // convert to dollars from cents
+
+		mutation.SetProductPrice(stripeOrgSubscription.ProductPrice)
+
 		changed = true
 
-		log.Debug().Msgf("Product price changed to %v", orgSubscription.ProductPrice)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("price", orgSubscription.ProductPrice.String()).Msgf("product price changed")
 	}
 
-	if orgSubscription.ExpiresAt != stripeOrgSubscription.ExpiresAt {
-		orgSubscription.ExpiresAt = stripeOrgSubscription.ExpiresAt
+	if stripeOrgSubscription.ExpiresAt != nil && orgSubscription.ExpiresAt != stripeOrgSubscription.ExpiresAt {
+		mutation.SetExpiresAt(*stripeOrgSubscription.ExpiresAt)
+
 		changed = true
 
-		log.Debug().Msgf("Subscription expires at %v", orgSubscription.ExpiresAt)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("expires_at", stripeOrgSubscription.ExpiresAt.String()).Msg("subscription expiration changed")
 	}
 
-	if !equalSlices(orgSubscription.FeatureLookupKeys, stripeOrgSubscription.FeatureLookupKeys) {
-		orgSubscription.FeatureLookupKeys = stripeOrgSubscription.FeatureLookupKeys
+	if slices.Equal(orgSubscription.FeatureLookupKeys, stripeOrgSubscription.FeatureLookupKeys) {
+		mutation.SetFeatureLookupKeys(stripeOrgSubscription.FeatureLookupKeys)
+
 		changed = true
 
-		log.Debug().Msgf("Feature lookup keys changed to %v", orgSubscription.FeatureLookupKeys)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Strs("feature_lookup_keys", orgSubscription.FeatureLookupKeys).Msg("feature lookup keys changed")
 	}
 
-	if orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
-		orgSubscription.TrialExpiresAt = stripeOrgSubscription.TrialExpiresAt
+	if orgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
+		mutation.SetTrialExpiresAt(*stripeOrgSubscription.TrialExpiresAt)
+
 		changed = true
 
-		log.Debug().Msgf("Trial expires at %v", orgSubscription.TrialExpiresAt)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("expires_at", orgSubscription.TrialExpiresAt.String()).Msg("trial expiration changed")
 	}
 
-	if orgSubscription.DaysUntilDue != stripeOrgSubscription.DaysUntilDue {
-		orgSubscription.DaysUntilDue = stripeOrgSubscription.DaysUntilDue
+	if stripeOrgSubscription.DaysUntilDue != nil && orgSubscription.DaysUntilDue != stripeOrgSubscription.DaysUntilDue {
+		mutation.SetDaysUntilDue(*stripeOrgSubscription.DaysUntilDue)
+
 		changed = true
 
-		log.Debug().Msgf("Days until due changed to %s", *orgSubscription.DaysUntilDue)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("days_until_due", *stripeOrgSubscription.DaysUntilDue).Msg("days until due changed")
 	}
 
-	if orgSubscription.PaymentMethodAdded != stripeOrgSubscription.PaymentMethodAdded {
-		orgSubscription.PaymentMethodAdded = stripeOrgSubscription.PaymentMethodAdded
+	if stripeOrgSubscription.PaymentMethodAdded != nil && orgSubscription.PaymentMethodAdded != stripeOrgSubscription.PaymentMethodAdded {
+		mutation.SetPaymentMethodAdded(*stripeOrgSubscription.PaymentMethodAdded)
+
 		changed = true
 
-		log.Debug().Msgf("Payment method added changed to %t", *orgSubscription.PaymentMethodAdded)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Bool("payment_method_added", *orgSubscription.PaymentMethodAdded).Msg("payment method added changed")
 	}
 
 	if orgSubscription.Active != stripeOrgSubscription.Active {
-		orgSubscription.Active = stripeOrgSubscription.Active
+		mutation.SetActive(stripeOrgSubscription.Active)
+
 		changed = true
 
-		log.Debug().Msgf("Subscription active status changed to %t", orgSubscription.Active)
+		log.Debug().Str("subscription_id", orgSubscription.ID).Bool("active", orgSubscription.Active).Msg("active status changed")
 	}
 
 	if changed {
 		// Save the updated OrgSubscription
-		err = transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSubscription).Exec(ctx)
+		err = mutation.Exec(ctx)
 		if err != nil {
 			log.Error().Err(err).Msg("failed to update OrgSubscription")
+
 			return nil, err
 		}
 	}
 
-	return orgSubscription, nil
+	return &orgSubscription.OwnerID, nil
 }
 
-// MapStripeCustomer maps a stripe.Customer to an OrganizationCustomer
-func MapStripeCustomer(c *stripe.Customer) *entitlements.OrganizationCustomer {
-	var orgID, orgSettingsID, orgSubscriptionID string
-
-	for k, v := range c.Metadata {
-		switch k {
-		case "organization_id":
-			orgID = v
-		case "organization_settings_id":
-			orgSettingsID = v
-		case "organization_subscription_id":
-			orgSubscriptionID = v
-		}
+// mapStripeCustomer maps a stripe.Customer to an OrganizationCustomer
+func mapStripeCustomer(c *stripe.Customer) *entitlements.OrganizationCustomer {
+	if c == nil {
+		return nil
 	}
 
-	paymentAdded := false
-	if c.Sources.Data != nil {
-		paymentAdded = true
+	orgCustomer := &entitlements.OrganizationCustomer{
+		StripeCustomerID: c.ID,
 	}
 
-	return &entitlements.OrganizationCustomer{
-		StripeCustomerID:           c.ID,
-		OrganizationID:             orgID,
-		OrganizationName:           c.Metadata["organization_name"],
-		OrganizationSettingsID:     orgSettingsID,
-		OrganizationSubscriptionID: orgSubscriptionID,
-		PaymentMethodAdded:         paymentAdded,
+	orgID, ok := c.Metadata["organization_id"]
+	if ok {
+		orgCustomer.OrganizationID = orgID
 	}
+
+	orgSettingsID, ok := c.Metadata["organization_settings_id"]
+	if ok {
+		orgCustomer.OrganizationSettingsID = orgSettingsID
+	}
+
+	orgSubscriptionID, ok := c.Metadata["organization_subscription_id"]
+	if ok {
+		orgCustomer.OrganizationSubscriptionID = orgSubscriptionID
+	}
+
+	orgName, ok := c.Metadata["organization_name"]
+	if ok {
+		orgCustomer.OrganizationName = orgName
+	}
+
+	if c.Sources != nil && c.Sources.Data != nil {
+		orgCustomer.PaymentMethodAdded = true
+	}
+
+	return orgCustomer
 }
 
-// MapStripeToOrgSubscription maps a stripe.Subscription and OrganizationCustomer to an ent.OrgSubscription
-func MapStripeToOrgSubscription(subscription *stripe.Subscription, customer *entitlements.OrganizationCustomer) *ent.OrgSubscription {
+// mapStripeToOrgSubscription maps a stripe.Subscription and OrganizationCustomer to an ent.OrgSubscription
+func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *entitlements.OrganizationCustomer) *ent.OrgSubscription {
 	productName := ""
 	productPrice := models.Price{}
 
-	if len(subscription.Items.Data) == 1 {
-		productName = subscription.Items.Data[0].Price.Product.Name
-		productPrice.Amount = subscription.Items.Data[0].Price.UnitAmountDecimal
-		productPrice.Currency = string(subscription.Items.Data[0].Price.Currency)
-		productPrice.Interval = string(subscription.Items.Data[0].Price.Recurring.Interval)
+	if subscription == nil {
+		return nil
+	}
+
+	if subscription.Items != nil && len(subscription.Items.Data) == 1 {
+		item := subscription.Items.Data[0]
+		if item.Price != nil {
+			if item.Price.Product != nil {
+				productName = item.Price.Product.Name
+			}
+
+			productPrice.Amount = subscription.Items.Data[0].Price.UnitAmountDecimal
+			productPrice.Currency = string(subscription.Items.Data[0].Price.Currency)
+			productPrice.Interval = string(subscription.Items.Data[0].Price.Recurring.Interval)
+		}
 	}
 
 	active := false
-	if subscription.Status == "active" || subscription.Status == "trialing" {
+	if subscription.Status == stripe.SubscriptionStatusActive || subscription.Status == stripe.SubscriptionStatusTrialing {
 		active = true
 	}
 
@@ -354,21 +436,6 @@ func MapStripeToOrgSubscription(subscription *stripe.Subscription, customer *ent
 func int64ToStringPtr(i int64) *string {
 	s := fmt.Sprintf("%d", i)
 	return &s
-}
-
-// equalSlices checks if two slices are equal
-func equalSlices(a, b []string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-
-	return true
 }
 
 // timePtr returns a pointer to the given time.Time value
