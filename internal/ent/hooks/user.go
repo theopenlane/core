@@ -311,7 +311,7 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 	return nil
 }
 
-// createOrgSubscription creates the default organization subscription for a new org
+// createPersonalOrgOrgSubscription creates the default organization subscription a personal organization
 func createPersonalOrgOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
 	// skip if entitlement manager is not set
 	if dbClient.EntitlementManager == nil {
@@ -327,31 +327,25 @@ func createPersonalOrgOrgSubscription(ctx context.Context, orgCreated *generated
 
 	if len(orgSubscriptions) == 0 {
 		if err := defaultPersonalOrgSubscription(ctx, orgCreated, dbClient); err != nil {
-			log.Error().Err(err).Msg("error creating default org subscription")
+			log.Error().Err(err).Msg("error creating personal org subscription")
 
 			return err
 		}
-
-		log.Warn().Msgf("created personal org subscription in the new sexy way")
 	}
 
 	return nil
 }
 
+// defaultPersonalOrgSubscription creates the default subscription for a personal organization
 func defaultPersonalOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
-	if err := dbClient.OrgSubscription.Create().
+	return dbClient.OrgSubscription.Create().
 		SetStripeSubscriptionID("PENDING_UPDATE").
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
-		SetStripeSubscriptionStatus("active").Exec(ctx); err != nil {
-		return err
-	}
-
-	log.Warn().Msgf("created org subscription in the new sexy way")
-
-	return nil
+		SetStripeSubscriptionStatus("active").Exec(ctx)
 }
 
+// setDefaultOrg sets the default org for a user in their settings
 func setDefaultOrg(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) (*generated.UserSetting, error) {
 	setting, err := user.Setting(ctx)
 	if err != nil {

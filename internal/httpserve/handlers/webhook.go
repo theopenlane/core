@@ -417,7 +417,7 @@ func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *ent
 		active = true
 	}
 
-	orgSubscription := &ent.OrgSubscription{
+	return &ent.OrgSubscription{
 		StripeSubscriptionID:     subscription.ID,
 		TrialExpiresAt:           timePtr(time.Unix(subscription.TrialEnd, 0)),
 		StripeSubscriptionStatus: string(subscription.Status),
@@ -428,8 +428,6 @@ func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *ent
 		FeatureLookupKeys:        customer.FeatureNames,
 		DaysUntilDue:             int64ToStringPtr(subscription.DaysUntilDue),
 	}
-
-	return orgSubscription
 }
 
 // int64ToStringPtr converts an int64 to a *string
