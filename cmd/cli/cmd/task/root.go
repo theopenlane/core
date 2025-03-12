@@ -54,6 +54,8 @@ func consoleOutput(e any) error {
 		e = nodes
 	case *openlaneclient.GetTaskByID:
 		e = v.Task
+	case *openlaneclient.CreateBulkCSVTask:
+		e = v.CreateBulkCSVTask.Tasks
 	case *openlaneclient.CreateTask:
 		e = v.CreateTask.Task
 	case *openlaneclient.UpdateTask:

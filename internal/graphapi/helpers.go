@@ -8,6 +8,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
+	"github.com/rs/zerolog/log"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -17,6 +18,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/graphutils"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
@@ -68,6 +70,9 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 		// gqlgen will parse the variables and convert the graphql.Upload to a struct with the file data
 		uploads := []objects.FileUpload{}
 
+		// check for the input key in the request, this is used for uploads and shouldn't be processed
+		inputKey := graphutils.GetInputFieldVariableName(ctx)
+
 		for k, v := range op.Variables {
 			ups := getUploadsFromRequest(v)
 
@@ -80,6 +85,13 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 				}
 
 				var err error
+
+				// skip the input key
+				if k == inputKey {
+					log.Debug().Str("file", up.Filename).Msg("skipping input key, this is for bulk upload")
+
+					continue
+				}
 
 				fileUpload, err = retrieveObjectDetails(rctx, k, fileUpload)
 				if err != nil {
