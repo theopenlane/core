@@ -64,7 +64,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 
 	log.Debug().Str("relation", relation).Msg("checking access to organization")
 
-	au, err := auth.GetAuthenticatedUserContext(ctx)
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -103,7 +103,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			relation = fgax.CanDelete
 		}
 
-		user, err := auth.GetAuthenticatedUserContext(ctx)
+		user, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			return err
 		}

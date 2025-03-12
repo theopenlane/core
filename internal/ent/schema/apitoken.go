@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // APIToken holds the schema definition for the APIToken entity.
@@ -137,6 +138,7 @@ func (APIToken) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
+			rule.AllowIfContextAllowRule(),
 			entfga.CheckEditAccess[*generated.APITokenMutation](),
 		),
 	)

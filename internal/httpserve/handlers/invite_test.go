@@ -44,8 +44,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	userSetting, err := recipient.Setting(ctx)
 	require.NoError(t, err)
 
-	recipientCtx, err := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
-	require.NoError(t, err)
+	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 
 	testCases := []struct {
 		name     string

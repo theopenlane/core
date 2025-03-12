@@ -6,6 +6,8 @@ import (
 
 	"entgo.io/ent/entql"
 
+	"github.com/theopenlane/utils/contextx"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -16,30 +18,27 @@ import (
 // matches the expected type, and if so, it returns `privacy.Allow`.
 // If the types do not match, it returns `privacy.Skipf` with a message
 // indicating that no token was found in the context with the expected type
-func AllowIfContextHasPrivacyTokenOfType(emptyToken token.PrivacyToken) privacy.QueryMutationRule {
+func AllowIfContextHasPrivacyTokenOfType[T token.PrivacyToken]() privacy.QueryMutationRule {
 	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
-		if ContextHasPrivacyTokenOfType(ctx, emptyToken) {
-			return privacy.Allowf("found token in context with type %T", emptyToken)
+		if ContextHasPrivacyTokenOfType[T](ctx) {
+			return privacy.Allowf("found token in context")
 		}
 
-		return privacy.Skipf("no token found from context with type %T", emptyToken)
+		return privacy.Skipf("no token found from context")
 	})
 }
 
 // ContextHasPrivacyTokenOfType checks the context for the token type and returns true if they match
-func ContextHasPrivacyTokenOfType(ctx context.Context, emptyToken token.PrivacyToken) bool {
-	if emptyToken == nil {
+func ContextHasPrivacyTokenOfType[T token.PrivacyToken](ctx context.Context) bool {
+	_, ok := contextx.From[T](ctx)
+	if !ok {
 		return false
 	}
 
-	actualTokenType := reflect.TypeOf(ctx.Value(emptyToken.GetContextKey()))
-	expectedTokenType := reflect.TypeOf(emptyToken)
-
-	return actualTokenType == expectedTokenType
+	return ok
 }
 
 type PrivacyToken interface {
-	GetContextKey() interface{}
 	GetToken() string
 }
 
@@ -47,7 +46,7 @@ type PrivacyToken interface {
 // if a privacy token of a specific type is found in the context. It
 // also applies a privacy filter to the token before allowing the
 // mutation to proceed
-func AllowAfterApplyingPrivacyTokenFilter[T PrivacyToken](emptyToken PrivacyToken) privacy.QueryMutationRule {
+func AllowAfterApplyingPrivacyTokenFilter[T PrivacyToken]() privacy.QueryMutationRule {
 	type Filter interface {
 		WhereToken(p entql.StringP)
 	}
@@ -59,16 +58,39 @@ func AllowAfterApplyingPrivacyTokenFilter[T PrivacyToken](emptyToken PrivacyToke
 				return privacy.Deny
 			}
 
-			actualToken := ctx.Value(emptyToken.GetContextKey())
-			actualTokenType := reflect.TypeOf(actualToken)
-			expectedTokenType := reflect.TypeOf(emptyToken)
+			actualToken, ok := contextx.From[T](ctx)
 
-			if actualTokenType == expectedTokenType {
-				tokenFilter.WhereToken(entql.StringEQ(actualToken.(T).GetToken()))
+			if ok {
+				tokenFilter.WhereToken(entql.StringEQ(actualToken.GetToken()))
 
 				return privacy.Allowf("applied privacy token filter")
 			}
 
-			return privacy.Skipf("no token found from context with type %T", emptyToken)
+			return privacy.Skipf("no token found from context")
 		})
+}
+
+// SkipTokenInContext checks if the context has a token of a specific type
+// and returns true if it does. It supports multiple token types
+// and checks for each type in the skipTypes slice. If any of the types
+// match, it returns true, otherwise it returns false
+// This function is useful for skipping certain rules based on the presence
+// of a token in the context
+func SkipTokenInContext(ctx context.Context, skipTypes []token.PrivacyToken) bool {
+	for _, tokenType := range skipTypes {
+		switch reflect.TypeOf(tokenType) {
+		case reflect.TypeOf(&token.VerifyToken{}):
+			return ContextHasPrivacyTokenOfType[*token.VerifyToken](ctx)
+		case reflect.TypeOf(&token.OrgInviteToken{}):
+			return ContextHasPrivacyTokenOfType[*token.OrgInviteToken](ctx)
+		case reflect.TypeOf(&token.SignUpToken{}):
+			return ContextHasPrivacyTokenOfType[*token.SignUpToken](ctx)
+		case reflect.TypeOf(&token.OauthTooToken{}):
+			return ContextHasPrivacyTokenOfType[*token.OauthTooToken](ctx)
+		case reflect.TypeOf(&token.ResetToken{}):
+			return ContextHasPrivacyTokenOfType[*token.ResetToken](ctx)
+		}
+	}
+
+	return false
 }

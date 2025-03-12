@@ -142,8 +142,7 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, orgID, email, 
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	ctx, err := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
-	require.NoError(t, err)
+	ctx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
 
 	reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 

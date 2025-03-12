@@ -98,12 +98,12 @@ func (PasswordResetToken) Hooks() []ent.Hook {
 func (PasswordResetToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.AllowAfterApplyingPrivacyTokenFilter[*token.ResetToken](&token.ResetToken{}),
+			rule.AllowAfterApplyingPrivacyTokenFilter[*token.ResetToken](),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate,
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.ResetToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

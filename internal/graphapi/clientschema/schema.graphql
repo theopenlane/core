@@ -4826,6 +4826,7 @@ input CreateEventInput {
 	hushIDs: [ID!]
 	subscriberIDs: [ID!]
 	fileIDs: [ID!]
+	orgsubscriptionIDs: [ID!]
 }
 """
 CreateEvidenceInput is used for create Evidence object.
@@ -7802,6 +7803,7 @@ type Event implements Node {
 	groupmembership: [GroupMembership!]
 	subscriber: [Subscriber!]
 	file: [File!]
+	orgsubscription: [OrgSubscription!]
 }
 """
 Return response for createBulkEvent mutation
@@ -8290,6 +8292,11 @@ input EventWhereInput {
 	"""
 	hasFile: Boolean
 	hasFileWith: [FileWhereInput!]
+	"""
+	orgsubscription edge predicates
+	"""
+	hasOrgsubscription: Boolean
+	hasOrgsubscriptionWith: [OrgSubscriptionWhereInput!]
 }
 type Evidence implements Node {
 	id: ID!
@@ -16104,24 +16111,6 @@ type Mutation {
 		input: CreatePersonalAccessTokenInput!
 	): PersonalAccessTokenCreatePayload!
 	"""
-	Create multiple new personalAccessTokens
-	"""
-	createBulkPersonalAccessToken(
-		"""
-		values of the personalAccessToken
-		"""
-		input: [CreatePersonalAccessTokenInput!]
-	): PersonalAccessTokenBulkCreatePayload!
-	"""
-	Create multiple new personalAccessTokens via file upload
-	"""
-	createBulkCSVPersonalAccessToken(
-		"""
-		csv file containing values of the personalAccessToken
-		"""
-		input: Upload!
-	): PersonalAccessTokenBulkCreatePayload!
-	"""
 	Update an existing personalAccessToken
 	"""
 	updatePersonalAccessToken(
@@ -18547,6 +18536,8 @@ type OrgSubscription implements Node {
 	owner: Organization
 	events: [Event!]
 	subscriptionURL: String
+	managePaymentMethods: String
+	cancellation: String
 }
 """
 A connection to a list of items.
@@ -32180,6 +32171,9 @@ input UpdateEventInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFile: Boolean
+	addOrgsubscriptionIDs: [ID!]
+	removeOrgsubscriptionIDs: [ID!]
+	clearOrgsubscription: Boolean
 }
 """
 UpdateEvidenceInput is used for update Evidence object.

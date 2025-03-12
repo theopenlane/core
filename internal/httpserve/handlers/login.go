@@ -52,10 +52,10 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	}
 
 	// set context for remaining request based on logged in user
-	userCtx := setAuthenticatedContext(ctx, user)
+	userCtx := setAuthenticatedContext(reqCtx, user)
 
 	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, user)
+	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, user)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 

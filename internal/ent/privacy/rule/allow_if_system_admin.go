@@ -37,7 +37,7 @@ func AllowMutationIfSystemAdmin() privacy.MutationRuleFunc {
 
 // CheckIsSystemAdmin checks if the user is a system admin based on the authz service
 func CheckIsSystemAdmin(ctx context.Context, m ent.Mutation) (bool, error) {
-	au, err := auth.GetAuthenticatedUserContext(ctx)
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return false, err
 	}

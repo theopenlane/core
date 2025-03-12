@@ -503,20 +503,6 @@ func (ec *executionContext) _PersonalAccessTokenUpdatePayload(ctx context.Contex
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNPersonalAccessTokenBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.PersonalAccessTokenBulkCreatePayload) graphql.Marshaler {
-	return ec._PersonalAccessTokenBulkCreatePayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNPersonalAccessTokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PersonalAccessTokenBulkCreatePayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._PersonalAccessTokenBulkCreatePayload(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNPersonalAccessTokenCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.PersonalAccessTokenCreatePayload) graphql.Marshaler {
 	return ec._PersonalAccessTokenCreatePayload(ctx, sel, &v)
 }

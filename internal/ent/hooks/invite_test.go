@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/iam/auth"
@@ -18,11 +17,7 @@ import (
 func TestSetRequestor(t *testing.T) {
 	// setup valid user
 	userID := ulids.New().String()
-	userCtx, err := auth.NewTestEchoContextWithValidUser(userID)
-	require.NoError(t, err)
-
-	// create parent context
-	ctx := contextx.With(userCtx.Request().Context(), userCtx)
+	userCtx := auth.NewTestContextWithValidUser(userID)
 
 	tests := []struct {
 		name    string
@@ -32,7 +27,7 @@ func TestSetRequestor(t *testing.T) {
 	}{
 		{
 			name:    "happy path, user found in context",
-			ctx:     ctx,
+			ctx:     userCtx,
 			want:    userID,
 			wantErr: false,
 		},

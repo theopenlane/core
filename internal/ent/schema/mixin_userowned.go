@@ -113,13 +113,11 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 
 				// skip the hook if the context has the token type
 				// this is useful for tokens, where the user is not yet (e.g. email verification tokens)
-				for _, tokenType := range userOwned.SkipTokenType {
-					if rule.ContextHasPrivacyTokenOfType(ctx, tokenType) {
-						return next.Mutate(ctx, m)
-					}
+				if skip := rule.SkipTokenInContext(ctx, userOwned.SkipTokenType); skip {
+					return next.Mutate(ctx, m)
 				}
 
-				userID, err := auth.GetUserIDFromContext(ctx)
+				userID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil {
 					return nil, fmt.Errorf("failed to get user id from context: %w", err)
 				}
@@ -163,7 +161,7 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 					return nil
 				}
 
-				userID, err := auth.GetUserIDFromContext(ctx)
+				userID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil {
 					ctxQuery := ent.QueryFromContext(ctx)
 

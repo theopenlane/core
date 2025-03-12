@@ -122,7 +122,7 @@ func (OrgMembership) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),
 		),
 	)

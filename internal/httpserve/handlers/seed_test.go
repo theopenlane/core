@@ -24,6 +24,8 @@ type testUserDetails struct {
 	PersonalOrgID string
 	// OrganizationID is the ID of the organization of the user
 	OrganizationID string
+	// SubscriptionID is the ID of the subscription of the user
+	SubscriptionID string
 	// UserCtx is the context of the user that can be used for the test requests that require authentication
 	UserCtx context.Context
 }
@@ -88,8 +90,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
 	// setup user context with the personal org
-	userCtx, err := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
-	require.NoError(t, err)
+	userCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests seeds
@@ -99,15 +100,19 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	userCtx = ent.NewContext(userCtx, suite.db)
 
 	// create a non-personal test organization
+	orgSetting := suite.db.OrganizationSetting.Create().
+		SetBillingEmail(testUser.UserInfo.Email).
+		SaveX(userCtx)
+
 	testOrg := suite.db.Organization.Create().
 		SetName(gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun()).
+		SetSettingID(orgSetting.ID).
 		SaveX(userCtx)
 
 	testUser.OrganizationID = testOrg.ID
 
 	// setup user context with the org (and not the personal org)
-	testUser.UserCtx, err = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
-	require.NoError(t, err)
+	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
 
 	return testUser
 }

@@ -414,7 +414,7 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 // addTokenEditPermissions adds the edit permissions for the api token to the object
 func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID string, objectType string) error {
 	// get auth info from context
-	ac, err := auth.GetAuthenticatedUserContext(ctx)
+	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 

@@ -67,6 +67,8 @@ var (
 	ErrPersonalOrgsNoBilling = errors.New("personal orgs do not have billing")
 	// ErrInvalidRecoveryCode is returned when the recovery code is invalid
 	ErrInvalidRecoveryCode = errors.New("invalid code provided")
+	// ErrUnsupportedEventType is returned when the event type is not supported
+	ErrUnsupportedEventType = errors.New("unsupported event type")
 )
 
 var (

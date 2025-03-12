@@ -19,7 +19,7 @@ const (
 func HookCreatePersonalAccessToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.PersonalAccessTokenFunc(func(ctx context.Context, m *generated.PersonalAccessTokenMutation) (generated.Value, error) {
-			userID, err := auth.GetUserIDFromContext(ctx)
+			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
 				return nil, err
 			}

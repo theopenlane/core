@@ -48,7 +48,7 @@ func InterceptorUserSetting() ent.Interceptor {
 			}
 		default:
 			// if we are looking at self
-			userID, err := auth.GetUserIDFromContext(ctx)
+			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err == nil {
 				q.Where(usersetting.UserID(userID))
 

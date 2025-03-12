@@ -55,7 +55,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get the authenticated user from the context
-	userID, err := auth.GetUserIDFromContext(reqCtx)
+	userID, err := auth.GetSubjectIDFromContext(reqCtx)
 	if err != nil {
 		log.Err(err).Msg("unable to get user id from context")
 
@@ -162,7 +162,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctx, user, invitedUser.OwnerID)
+	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 
@@ -183,7 +183,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	return h.Created(ctx, out)
 }
 
-// validateInviteRequest validates the required fields are set in the user request
+// validateInviteRequest is a helper function that validates the required fields are set in the user request
 func (i *Invite) validateInviteRequest() error {
 	// ensure the token is set
 	if i.Token == "" {
@@ -193,6 +193,7 @@ func (i *Invite) validateInviteRequest() error {
 	return nil
 }
 
+// validateUser is a helper function that ensures the logged-in user is the same as the invite
 func (i *Invite) validateUser(email string) error {
 	// ensure the logged in user is the same as the invite
 	if i.Email != email {
@@ -202,7 +203,7 @@ func (i *Invite) validateUser(email string) error {
 	return nil
 }
 
-// GetInviteToken returns the invitation token if its valid
+// GetInviteToken returns the invitation token if it's valid
 func (i *Invite) GetInviteToken() string {
 	if i.InviteToken.Token.Valid {
 		return i.InviteToken.Token.String
@@ -211,7 +212,7 @@ func (i *Invite) GetInviteToken() string {
 	return ""
 }
 
-// GetInviteExpires returns the expiration time of invite token
+// GetInviteExpires returns the expiration time of the invite token
 func (i *Invite) GetInviteExpires() (time.Time, error) {
 	if i.InviteToken.Expires.Valid {
 		return time.Parse(time.RFC3339Nano, i.InviteToken.Expires.String)
@@ -247,7 +248,7 @@ func updateInviteStatusAccepted(ctx context.Context, i *generated.Invite) error 
 	return nil
 }
 
-// updateInviteStatusAccepted updates the status of an invite to "Expired"
+// updateInviteStatusExpired updates the status of an invite to "Expired"
 func updateInviteStatusExpired(ctx context.Context, i *generated.Invite) error {
 	_, err := transaction.FromContext(ctx).Invite.UpdateOneID(i.ID).SetStatus(enums.InvitationExpired).Save(ctx)
 	if err != nil {

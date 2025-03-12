@@ -22,7 +22,7 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 			return privacy.Skipf("mutation is not a create operation, skipping")
 		}
 
-		au, err := auth.GetAuthenticatedUserContext(ctx)
+		au, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			log.Err(err).Msg("unable to get authenticated user context")
 

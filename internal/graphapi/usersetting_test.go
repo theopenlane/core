@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *GraphTestSuite) TestQueryUserSetting() {
@@ -112,8 +113,7 @@ func (suite *GraphTestSuite) TestQueryUserSettings() {
 		assert.Equal(t, len(resp.UserSettings.Edges), 1)
 
 		// setup valid user context
-		reqCtx, err := userContextWithID(user1.ID)
-		require.NoError(t, err)
+		reqCtx := auth.NewTestContextWithValidUser(user1.ID)
 
 		resp, err = suite.client.api.GetAllUserSettings(reqCtx)
 

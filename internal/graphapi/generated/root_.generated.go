@@ -852,6 +852,7 @@ type ComplexityRoot struct {
 		Metadata            func(childComplexity int) int
 		Organization        func(childComplexity int) int
 		Orgmembership       func(childComplexity int) int
+		Orgsubscription     func(childComplexity int) int
 		PersonalAccessToken func(childComplexity int) int
 		Subscriber          func(childComplexity int) int
 		Tags                func(childComplexity int) int
@@ -1760,7 +1761,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVNarrative             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationSetting   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVPersonalAccessToken   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProcedure             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgram               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgramMembership     func(childComplexity int, input graphql.Upload) int
@@ -1789,7 +1789,6 @@ type ComplexityRoot struct {
 		CreateBulkNarrative                func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkOrgMembership            func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
 		CreateBulkOrganizationSetting      func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
-		CreateBulkPersonalAccessToken      func(childComplexity int, input []*generated.CreatePersonalAccessTokenInput) int
 		CreateBulkProcedure                func(childComplexity int, input []*generated.CreateProcedureInput) int
 		CreateBulkProgram                  func(childComplexity int, input []*generated.CreateProgramInput) int
 		CreateBulkProgramMembership        func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
@@ -2139,6 +2138,7 @@ type ComplexityRoot struct {
 
 	OrgSubscription struct {
 		Active                   func(childComplexity int) int
+		Cancellation             func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DaysUntilDue             func(childComplexity int) int
@@ -2149,6 +2149,7 @@ type ComplexityRoot struct {
 		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
 		ID                       func(childComplexity int) int
+		ManagePaymentMethods     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		PaymentMethodAdded       func(childComplexity int) int
@@ -7251,6 +7252,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Event.Orgmembership(childComplexity), true
 
+	case "Event.orgsubscription":
+		if e.complexity.Event.Orgsubscription == nil {
+			break
+		}
+
+		return e.complexity.Event.Orgsubscription(childComplexity), true
+
 	case "Event.personalAccessToken":
 		if e.complexity.Event.PersonalAccessToken == nil {
 			break
@@ -11380,18 +11388,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkCSVOrganizationSetting(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVPersonalAccessToken":
-		if e.complexity.Mutation.CreateBulkCSVPersonalAccessToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVPersonalAccessToken_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVPersonalAccessToken(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVProcedure":
 		if e.complexity.Mutation.CreateBulkCSVProcedure == nil {
 			break
@@ -11727,18 +11723,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateBulkOrganizationSetting(childComplexity, args["input"].([]*generated.CreateOrganizationSettingInput)), true
-
-	case "Mutation.createBulkPersonalAccessToken":
-		if e.complexity.Mutation.CreateBulkPersonalAccessToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkPersonalAccessToken_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkPersonalAccessToken(childComplexity, args["input"].([]*generated.CreatePersonalAccessTokenInput)), true
 
 	case "Mutation.createBulkProcedure":
 		if e.complexity.Mutation.CreateBulkProcedure == nil {
@@ -14163,6 +14147,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.Active(childComplexity), true
 
+	case "OrgSubscription.cancellation":
+		if e.complexity.OrgSubscription.Cancellation == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.Cancellation(childComplexity), true
+
 	case "OrgSubscription.createdAt":
 		if e.complexity.OrgSubscription.CreatedAt == nil {
 			break
@@ -14232,6 +14223,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscription.ID(childComplexity), true
+
+	case "OrgSubscription.managePaymentMethods":
+		if e.complexity.OrgSubscription.ManagePaymentMethods == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.ManagePaymentMethods(childComplexity), true
 
 	case "OrgSubscription.owner":
 		if e.complexity.OrgSubscription.Owner == nil {
@@ -28733,6 +28731,7 @@ input CreateEventInput {
   hushIDs: [ID!]
   subscriberIDs: [ID!]
   fileIDs: [ID!]
+  orgsubscriptionIDs: [ID!]
 }
 """
 CreateEvidenceInput is used for create Evidence object.
@@ -31574,6 +31573,7 @@ type Event implements Node {
   groupmembership: [GroupMembership!]
   subscriber: [Subscriber!]
   file: [File!]
+  orgsubscription: [OrgSubscription!]
 }
 """
 A connection to a list of items.
@@ -32023,6 +32023,11 @@ input EventWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  orgsubscription edge predicates
+  """
+  hasOrgsubscription: Boolean
+  hasOrgsubscriptionWith: [OrgSubscriptionWhereInput!]
 }
 type Evidence implements Node {
   id: ID!
@@ -52149,6 +52154,9 @@ input UpdateEventInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFile: Boolean
+  addOrgsubscriptionIDs: [ID!]
+  removeOrgsubscriptionIDs: [ID!]
+  clearOrgsubscription: Boolean
 }
 """
 UpdateEvidenceInput is used for update Evidence object.
@@ -57240,6 +57248,8 @@ type OrgMembershipBulkCreatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/orgsubscriptionextended.graphql", Input: `extend type OrgSubscription {
     subscriptionURL: String
+    managePaymentMethods: String
+    cancellation: String
 }`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
@@ -57263,24 +57273,6 @@ extend type Mutation{
         """
         input: CreatePersonalAccessTokenInput!
     ): PersonalAccessTokenCreatePayload!
-    """
-    Create multiple new personalAccessTokens
-    """
-    createBulkPersonalAccessToken(
-        """
-        values of the personalAccessToken
-        """
-        input: [CreatePersonalAccessTokenInput!]
-    ): PersonalAccessTokenBulkCreatePayload!
-    """
-    Create multiple new personalAccessTokens via file upload
-    """
-    createBulkCSVPersonalAccessToken(
-        """
-        csv file containing values of the personalAccessToken
-        """
-        input: Upload!
-    ): PersonalAccessTokenBulkCreatePayload!
     """
     Update an existing personalAccessToken
     """

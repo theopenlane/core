@@ -44,8 +44,14 @@ var (
 	ErrNoControls = errors.New("subcontrol must have at least one control assigned")
 	// ErrUnableToCast is returned when a type assertion fails
 	ErrUnableToCast = errors.New("unable to cast")
+	// ErrNoSubscriptions is returned when an organization has no subscriptions
+	ErrNoSubscriptions = errors.New("organization has no subscriptions")
 	// ErrTooManySubscriptions is returned when an organization has too many subscriptions
 	ErrTooManySubscriptions = errors.New("organization has too many subscriptions")
+	// ErrTooManyPrices is returned when an organization has too many subscriptions
+	ErrTooManyPrices = errors.New("organization has too many prices on a subscription")
+	// ErrNoPrices is returned when a subscription has no price
+	ErrNoPrices = errors.New("subscription has no price")
 	// ErrManagedGroup is returned when a user attempts to modify a managed group
 	ErrManagedGroup = errors.New("managed groups cannot be modified")
 	// ErrMaxAttemptsOrganization is returned when the max attempts have been reached to create an organization via onboarding

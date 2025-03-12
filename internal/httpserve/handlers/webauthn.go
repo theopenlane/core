@@ -46,7 +46,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	}
 
 	// set context for remaining request based on logged in user
-	userCtx := setAuthenticatedContext(ctx, entUser)
+	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	// set webauthn allowed
 	if err := h.setWebauthnAllowed(userCtx, entUser); err != nil {
@@ -139,14 +139,16 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// get user from the database
-	entUser, err := h.getUserByID(ctx.Request().Context(), userID, enums.AuthProvider(webauthnProvider))
+	entUser, err := h.getUserByID(reqCtx, userID, enums.AuthProvider(webauthnProvider))
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
 	// set user in the viewer context for the rest of the request
-	userCtx := setAuthenticatedContext(ctx, entUser)
+	userCtx := setAuthenticatedContext(reqCtx, entUser)
 
 	// follows https://www.w3.org/TR/webauthn/#sctn-registering-a-new-credential
 	response, err := protocol.ParseCredentialCreationResponseBody(ctx.Request().Body)
@@ -184,7 +186,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, entUser)
+	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 
@@ -253,18 +255,20 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	if _, err = h.WebAuthn.ValidateDiscoverableLogin(h.userHandler(ctx.Request().Context()), wd, response); err != nil {
+	reqCtx := ctx.Request().Context()
+
+	if _, err = h.WebAuthn.ValidateDiscoverableLogin(h.userHandler(reqCtx), wd, response); err != nil {
 		return h.BadRequest(ctx, err)
 	}
 
 	// get user from the database
-	entUser, err := h.getUserByID(ctx.Request().Context(), string(response.Response.UserHandle), enums.AuthProvider(webauthnProvider))
+	entUser, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProvider(webauthnProvider))
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
 	// create claims for verified user
-	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, entUser)
+	auth, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 

@@ -57,7 +57,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 	}
 
 	// setup user context
-	userCtx := setAuthenticatedContext(ctx, entUser)
+	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	// create email verification token
 	user := &User{

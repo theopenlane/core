@@ -21,7 +21,7 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 	}
 
 	// get the userID from the context
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 	}
 
 	// get the userID from the context
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 	}
 
 	// get the userID from the context
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}

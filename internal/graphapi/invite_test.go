@@ -84,10 +84,9 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 	_ = (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
 
 	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"meow.net"}}).MustNew(testUser1.UserCtx, t)
-	orgWithRestrictionsCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
-	require.NoError(t, err)
 
-	user1Context, err := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
+	orgWithRestrictionsCtx := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
+	user1Context := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
 
 	testCases := []struct {
 		name             string

@@ -32,7 +32,7 @@ func HookOrgOwnedTuples(skipUser bool) ent.Hook {
 
 			// add user permissions to the object on creation
 			if !skipUser && m.Op() == ent.OpCreate {
-				a, err := auth.GetAuthenticatedUserContext(ctx)
+				a, err := auth.GetAuthenticatedUserFromContext(ctx)
 				if err != nil {
 					return nil, err
 				}

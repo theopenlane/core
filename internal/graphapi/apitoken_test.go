@@ -180,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationCreateAPIToken() {
 			}
 
 			// ensure the owner is the org set in the request
-			assert.Equal(t, testUser1.OrganizationID, resp.CreateAPIToken.APIToken.Owner.ID)
+			assert.Equal(t, testUser1.OrganizationID, *resp.CreateAPIToken.APIToken.OwnerID)
 
 			// token should not be redacted on create
 			assert.NotEqual(t, redacted, resp.CreateAPIToken.APIToken.Token)
@@ -279,7 +279,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 				assert.Len(t, resp.UpdateAPIToken.APIToken.Scopes, 1)
 			}
 
-			assert.Equal(t, testUser1.OrganizationID, resp.UpdateAPIToken.APIToken.Owner.ID)
+			assert.Equal(t, testUser1.OrganizationID, *resp.UpdateAPIToken.APIToken.OwnerID)
 
 			// token should be redacted on update
 			assert.Equal(t, redacted, resp.UpdateAPIToken.APIToken.Token)
@@ -297,13 +297,11 @@ func (suite *GraphTestSuite) TestMutationDeleteAPIToken() {
 	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
 	orgID2 := user2.Edges.Setting.Edges.DefaultOrg.ID
 
-	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, orgID)
-	require.NoError(t, err)
+	reqCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
 
 	token := (&APITokenBuilder{client: suite.client}).MustNew(reqCtx, t)
 
-	reqCtx2, err := auth.NewTestContextWithOrgID(user2.ID, orgID2)
-	require.NoError(t, err)
+	reqCtx2 := auth.NewTestContextWithOrgID(user2.ID, orgID2)
 
 	token2 := (&APITokenBuilder{client: suite.client}).MustNew(reqCtx2, t)
 

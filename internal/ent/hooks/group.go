@@ -217,7 +217,7 @@ func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutati
 	}
 
 	// get userID from context
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to group")
 

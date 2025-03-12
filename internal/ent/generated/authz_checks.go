@@ -31,7 +31,7 @@ func (q *APITokenQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -127,7 +127,7 @@ func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -168,7 +168,7 @@ func (m *APITokenMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -205,7 +205,7 @@ func (q *ContactQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -301,7 +301,7 @@ func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -342,7 +342,7 @@ func (m *ContactMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -379,7 +379,7 @@ func (q *ContactHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -452,7 +452,7 @@ func (q *ControlQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -520,7 +520,7 @@ func (m *ControlMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -561,7 +561,7 @@ func (m *ControlMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -598,7 +598,7 @@ func (q *ControlHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -671,7 +671,7 @@ func (q *ControlObjectiveQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -739,7 +739,7 @@ func (m *ControlObjectiveMutation) CheckAccessForEdit(ctx context.Context) error
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -780,7 +780,7 @@ func (m *ControlObjectiveMutation) CheckAccessForDelete(ctx context.Context) err
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -817,7 +817,7 @@ func (q *ControlObjectiveHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -890,7 +890,7 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -958,7 +958,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -999,7 +999,7 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1036,7 +1036,7 @@ func (q *DocumentDataHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1109,7 +1109,7 @@ func (q *EntityQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1205,7 +1205,7 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -1246,7 +1246,7 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1283,7 +1283,7 @@ func (q *EntityHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1356,7 +1356,7 @@ func (q *EntityTypeQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1452,7 +1452,7 @@ func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -1493,7 +1493,7 @@ func (m *EntityTypeMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1530,7 +1530,7 @@ func (q *EntityTypeHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1603,7 +1603,7 @@ func (q *EvidenceQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1671,7 +1671,7 @@ func (m *EvidenceMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -1712,7 +1712,7 @@ func (m *EvidenceMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1749,7 +1749,7 @@ func (q *EvidenceHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1822,7 +1822,7 @@ func (q *FileQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1890,7 +1890,7 @@ func (m *FileMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -1931,7 +1931,7 @@ func (m *FileMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -1968,7 +1968,7 @@ func (q *FileHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2041,7 +2041,7 @@ func (q *GroupQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2109,7 +2109,7 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -2150,7 +2150,7 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2187,7 +2187,7 @@ func (q *GroupHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2260,7 +2260,7 @@ func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2368,7 +2368,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -2409,7 +2409,7 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2446,7 +2446,7 @@ func (q *GroupMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2519,7 +2519,7 @@ func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2627,7 +2627,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -2668,7 +2668,7 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2705,7 +2705,7 @@ func (q *GroupSettingHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2778,7 +2778,7 @@ func (q *IntegrationQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2874,7 +2874,7 @@ func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -2915,7 +2915,7 @@ func (m *IntegrationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -2952,7 +2952,7 @@ func (q *IntegrationHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3025,7 +3025,7 @@ func (q *InternalPolicyQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3093,7 +3093,7 @@ func (m *InternalPolicyMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -3134,7 +3134,7 @@ func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3171,7 +3171,7 @@ func (q *InternalPolicyHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3244,7 +3244,7 @@ func (q *InviteQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3340,7 +3340,7 @@ func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -3381,7 +3381,7 @@ func (m *InviteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3418,7 +3418,7 @@ func (q *NarrativeQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3486,7 +3486,7 @@ func (m *NarrativeMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -3527,7 +3527,7 @@ func (m *NarrativeMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3564,7 +3564,7 @@ func (q *NarrativeHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3637,7 +3637,7 @@ func (q *NoteQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3705,7 +3705,7 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -3746,7 +3746,7 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3783,7 +3783,7 @@ func (q *NoteHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3856,7 +3856,7 @@ func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -3964,7 +3964,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -4005,7 +4005,7 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4042,7 +4042,7 @@ func (q *OrgMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4115,7 +4115,7 @@ func (q *OrganizationQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4183,7 +4183,7 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -4224,7 +4224,7 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4261,7 +4261,7 @@ func (q *OrganizationHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4334,7 +4334,7 @@ func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4442,7 +4442,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -4483,7 +4483,7 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4520,7 +4520,7 @@ func (q *OrganizationSettingHistoryQuery) CheckAccess(ctx context.Context) error
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4593,7 +4593,7 @@ func (q *ProcedureQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4661,7 +4661,7 @@ func (m *ProcedureMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -4702,7 +4702,7 @@ func (m *ProcedureMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4739,7 +4739,7 @@ func (q *ProcedureHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4812,7 +4812,7 @@ func (q *ProgramQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4880,7 +4880,7 @@ func (m *ProgramMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -4921,7 +4921,7 @@ func (m *ProgramMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -4958,7 +4958,7 @@ func (q *ProgramHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5031,7 +5031,7 @@ func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5139,7 +5139,7 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -5180,7 +5180,7 @@ func (m *ProgramMembershipMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5217,7 +5217,7 @@ func (q *ProgramMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5290,7 +5290,7 @@ func (q *RiskQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5358,7 +5358,7 @@ func (m *RiskMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -5399,7 +5399,7 @@ func (m *RiskMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5436,7 +5436,7 @@ func (q *RiskHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5509,7 +5509,7 @@ func (q *SubcontrolQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5577,7 +5577,7 @@ func (m *SubcontrolMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -5618,7 +5618,7 @@ func (m *SubcontrolMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5655,7 +5655,7 @@ func (q *SubcontrolHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5728,7 +5728,7 @@ func (q *SubscriberQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5824,7 +5824,7 @@ func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -5865,7 +5865,7 @@ func (m *SubscriberMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5902,7 +5902,7 @@ func (q *TaskQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -5970,7 +5970,7 @@ func (m *TaskMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -6011,7 +6011,7 @@ func (m *TaskMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -6048,7 +6048,7 @@ func (q *TaskHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -6121,7 +6121,7 @@ func (q *TemplateQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -6217,7 +6217,7 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -6258,7 +6258,7 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 
@@ -6295,7 +6295,7 @@ func (q *TemplateHistoryQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user id from context")
 

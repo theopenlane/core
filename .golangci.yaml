@@ -60,6 +60,7 @@ issues:
     - pkg/entitlements/test/*
     - cmd/cli/cmd/*
     - pkg/sleuth/static/*
+    - pkg/entitlements/mocks/*
   exclude-files:
     - internal/graphapi/model/gen_models.go
     - pkg/openlaneclient/graphclient.go

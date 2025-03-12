@@ -38,9 +38,8 @@ type Event struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EventQuery when eager-loading is set.
-	Edges                   EventEdges `json:"edges"`
-	org_subscription_events *string
-	selectValues            sql.SelectValues
+	Edges        EventEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // EventEdges holds the relations/edges for other nodes in the graph.
@@ -67,11 +66,13 @@ type EventEdges struct {
 	Subscriber []*Subscriber `json:"subscriber,omitempty"`
 	// File holds the value of the file edge.
 	File []*File `json:"file,omitempty"`
+	// Orgsubscription holds the value of the orgsubscription edge.
+	Orgsubscription []*OrgSubscription `json:"orgsubscription,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
 	namedUser                map[string][]*User
 	namedGroup               map[string][]*Group
@@ -84,6 +85,7 @@ type EventEdges struct {
 	namedGroupmembership     map[string][]*GroupMembership
 	namedSubscriber          map[string][]*Subscriber
 	namedFile                map[string][]*File
+	namedOrgsubscription     map[string][]*OrgSubscription
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -185,6 +187,15 @@ func (e EventEdges) FileOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "file"}
 }
 
+// OrgsubscriptionOrErr returns the Orgsubscription value or an error if the edge
+// was not loaded in eager-loading.
+func (e EventEdges) OrgsubscriptionOrErr() ([]*OrgSubscription, error) {
+	if e.loadedTypes[11] {
+		return e.Orgsubscription, nil
+	}
+	return nil, &NotLoadedError{edge: "orgsubscription"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Event) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -196,8 +207,6 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case event.FieldCreatedAt, event.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case event.ForeignKeys[0]: // org_subscription_events
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -277,13 +286,6 @@ func (e *Event) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
-		case event.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field org_subscription_events", values[i])
-			} else if value.Valid {
-				e.org_subscription_events = new(string)
-				*e.org_subscription_events = value.String
-			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -350,6 +352,11 @@ func (e *Event) QuerySubscriber() *SubscriberQuery {
 // QueryFile queries the "file" edge of the Event entity.
 func (e *Event) QueryFile() *FileQuery {
 	return NewEventClient(e.config).QueryFile(e)
+}
+
+// QueryOrgsubscription queries the "orgsubscription" edge of the Event entity.
+func (e *Event) QueryOrgsubscription() *OrgSubscriptionQuery {
+	return NewEventClient(e.config).QueryOrgsubscription(e)
 }
 
 // Update returns a builder for updating this Event.
@@ -666,6 +673,30 @@ func (e *Event) appendNamedFile(name string, edges ...*File) {
 		e.Edges.namedFile[name] = []*File{}
 	} else {
 		e.Edges.namedFile[name] = append(e.Edges.namedFile[name], edges...)
+	}
+}
+
+// NamedOrgsubscription returns the Orgsubscription named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Event) NamedOrgsubscription(name string) ([]*OrgSubscription, error) {
+	if e.Edges.namedOrgsubscription == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedOrgsubscription[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Event) appendNamedOrgsubscription(name string, edges ...*OrgSubscription) {
+	if e.Edges.namedOrgsubscription == nil {
+		e.Edges.namedOrgsubscription = make(map[string][]*OrgSubscription)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedOrgsubscription[name] = []*OrgSubscription{}
+	} else {
+		e.Edges.namedOrgsubscription[name] = append(e.Edges.namedOrgsubscription[name], edges...)
 	}
 }
 

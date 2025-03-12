@@ -4,9 +4,10 @@ import (
 	"context"
 	"time"
 
+	echo "github.com/theopenlane/echox"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
@@ -25,8 +26,8 @@ const (
 type Auth struct {
 	// AuthenticationType is the type of authentication used, e.g. JWT, API key, etc.
 	AuthenticationType auth.AuthenticationType `json:"authentication_type,omitempty"`
-	// AuthorizedOrganization is the organization ID of the authenticated user
-	AuthorizedOrganization string `json:"authorized_organization,omitempty"`
+	// AuthorizedOrganizations is the organization ID(s) of the authenticated user
+	AuthorizedOrganizations []string `json:"authorized_organization,omitempty"`
 	// AccessToken is the access token used for authentication, if the user did an action (e.g. created a new organization)
 	// that updated the access token, this will be the new access token
 	AccessToken string `json:"access_token,omitempty"`
@@ -119,21 +120,21 @@ func getRequestID(ctx context.Context) string {
 // getAuthData retrieves the auth data from the context if available
 // all errors are ignored because the auth data is optional
 func getAuthData(ctx context.Context) Auth {
-	ac, _ := auth.GetAuthenticatedUserContext(ctx)
+	ac, _ := auth.GetAuthenticatedUserFromContext(ctx)
 	if ac == nil {
 		// return early to prevent nil pointer panics
 		return Auth{}
 	}
 
-	at, _ := auth.GetAccessTokenContext(ctx)
-	rt, _ := auth.GetRefreshTokenContext(ctx)
+	at, _ := auth.AccessTokenFromContext(ctx)
+	rt, _ := auth.RefreshTokenFromContext(ctx)
 	session, _ := sessions.SessionToken(ctx)
 
 	return Auth{
-		AuthenticationType:     ac.AuthenticationType,
-		AuthorizedOrganization: ac.OrganizationID,
-		AccessToken:            at,
-		RefreshToken:           rt,
-		SessionID:              session,
+		AuthenticationType:      ac.AuthenticationType,
+		AuthorizedOrganizations: ac.OrganizationIDs,
+		AccessToken:             at,
+		RefreshToken:            rt,
+		SessionID:               session,
 	}
 }

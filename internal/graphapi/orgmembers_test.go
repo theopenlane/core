@@ -22,8 +22,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 
 	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
-	childReqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, childOrg.ID)
-	require.NoError(t, err)
+	childReqCtx := auth.NewTestContextWithOrgID(testUser1.ID, childOrg.ID)
 
 	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID}).MustNew(childReqCtx, t)
 	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
@@ -121,8 +120,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 	require.NoError(t, err)
 	require.Len(t, orgMember, 1)
 
-	userCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
-	require.NoError(t, err)
+	userCtx := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -131,8 +129,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(testUser1.UserCtx, t)
 
 	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(testUser1.UserCtx, t)
-	otherOrgCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
-	require.NoError(t, err)
+	otherOrgCtx := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
 
 	testCases := []struct {
 		name   string

@@ -2,12 +2,13 @@ package token
 
 import (
 	"context"
+
+	"github.com/theopenlane/utils/contextx"
 )
 
 // PrivacyToken interface
 type PrivacyToken interface {
-	GetContextKey() interface{}
-	WhereToken(string) interface{}
+	WhereToken(string) any
 }
 
 // SignUpToken that implements the PrivacyToken interface
@@ -15,8 +16,6 @@ type SignUpToken struct {
 	PrivacyToken
 	email string
 }
-
-type signUpTokenKey struct{}
 
 // NewSignUpTokenWithEmail creates a new PrivacyToken of type SignUpToken with
 // email set
@@ -36,16 +35,11 @@ func (token *SignUpToken) SetEmail(email string) {
 	token.email = email
 }
 
-// GetContextKey from SignUpToken
-func (SignUpToken) GetContextKey() interface{} {
-	return signUpTokenKey{}
-}
-
 // NewContextWithSignUpToken creates a new context with a sign-up token. It takes a
 // parent context and a sign-up token as parameters and returns a new context with
 // the sign-up token added
 func NewContextWithSignUpToken(parent context.Context, email string) context.Context {
-	return context.WithValue(parent, signUpTokenKey{}, &SignUpToken{
+	return contextx.With(parent, &SignUpToken{
 		email: email,
 	})
 }
@@ -55,6 +49,10 @@ func NewContextWithSignUpToken(parent context.Context, email string) context.Con
 // It then type asserts the value to an EmailSignUpToken and returns it. If the
 // value is not of type EmailSignUpToken, it returns nil
 func EmailSignUpTokenFromContext(ctx context.Context) *SignUpToken {
-	token, _ := ctx.Value(signUpTokenKey{}).(*SignUpToken)
+	token, ok := contextx.From[*SignUpToken](ctx)
+	if !ok {
+		return nil
+	}
+
 	return token
 }

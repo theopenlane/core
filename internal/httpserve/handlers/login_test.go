@@ -31,11 +31,11 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	// add login handler
 	suite.e.POST("login", suite.h.LoginHandler)
 
-	ec := echocontext.NewTestEchoContext().Request().Context()
+	ctx := echocontext.NewTestEchoContext().Request().Context()
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// create users in the database
 	validPassword := "sup3rs3cu7e!"

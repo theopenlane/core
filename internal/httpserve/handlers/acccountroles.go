@@ -50,7 +50,7 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context) error {
 		req.Relations = DefaultAllRelations
 	}
 
-	subjectID, err := auth.GetUserIDFromContext(ctx.Request().Context())
+	subjectID, err := auth.GetSubjectIDFromContext(ctx.Request().Context())
 	if err != nil {
 		log.Error().Err(err).Msg("error getting user id from context")
 

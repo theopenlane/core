@@ -33,7 +33,9 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 		Message: "We've received your request to have the password associated with this email reset. Please check your email.",
 	}
 
-	entUser, err := h.getUserByEmail(ctx.Request().Context(), in.Email, enums.AuthProviderCredentials)
+	reqCtx := ctx.Request().Context()
+
+	entUser, err := h.getUserByEmail(reqCtx, in.Email, enums.AuthProviderCredentials)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			// return a 200 response even if user is not found to avoid
@@ -54,7 +56,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 		ID:        entUser.ID,
 	}
 
-	authCtx := setAuthenticatedContext(ctx, entUser)
+	authCtx := setAuthenticatedContext(reqCtx, entUser)
 
 	if _, err = h.storeAndSendPasswordResetToken(authCtx, user); err != nil {
 		return h.InternalServerError(ctx, err)
