@@ -408,25 +408,6 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 	}, nil
 }
 
-// bulkCreatePersonalAccessToken uses the CreateBulk function to create multiple PersonalAccessToken entities
-func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, input []*generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.PersonalAccessTokenCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.PersonalAccessToken.Create().SetInput(*data)
-	}
-
-	res, err := c.PersonalAccessToken.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "personalaccesstoken"})
-	}
-
-	// return response
-	return &model.PersonalAccessTokenBulkCreatePayload{
-		PersonalAccessTokens: res,
-	}, nil
-}
-
 // bulkCreateProcedure uses the CreateBulk function to create multiple Procedure entities
 func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

@@ -135,6 +135,11 @@ func HookUser() ent.Hook {
 				if err := updatePersonalOrgSetting(ctx, m.Client(), userCreated, org); err != nil {
 					return nil, err
 				}
+
+				// create a subscription for the personal org
+				if err := createOrgSubscription(ctx, org, m); err != nil {
+					return nil, err
+				}
 			}
 
 			return userCreated, err
@@ -142,6 +147,8 @@ func HookUser() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
+// HookUserPermissions runs on user creations to add user _self permissions
+// these are used for parent inherited relations on other objects in the system
 func HookUserPermissions() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.UserFunc(func(ctx context.Context, m *generated.UserMutation) (generated.Value, error) {
@@ -305,6 +312,7 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 	return nil
 }
 
+// setDefaultOrg sets the default org for a user in their settings
 func setDefaultOrg(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) (*generated.UserSetting, error) {
 	setting, err := user.Setting(ctx)
 	if err != nil {

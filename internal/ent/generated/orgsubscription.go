@@ -67,7 +67,9 @@ type OrgSubscription struct {
 	Edges        OrgSubscriptionEdges `json:"edges"`
 	selectValues sql.SelectValues
 
-	SubscriptionURL string `json:"subscriptionURL,omitempty"`
+	SubscriptionURL      string `json:"subscriptionURL,omitempty"`
+	ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
+	Cancellation         string `json:"cancellation,omitempty"`
 }
 
 // OrgSubscriptionEdges holds the relations/edges for other nodes in the graph.

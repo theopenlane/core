@@ -676,30 +676,30 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if osu.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.Event
+		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := osu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osu.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.Event
+		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -707,16 +707,16 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if nodes := osu.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.Event
+		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1417,30 +1417,30 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	}
 	if osuo.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.Event
+		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := osuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osuo.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.Event
+		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1448,16 +1448,16 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	}
 	if nodes := osuo.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   orgsubscription.EventsTable,
-			Columns: []string{orgsubscription.EventsColumn},
+			Columns: orgsubscription.EventsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.Event
+		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

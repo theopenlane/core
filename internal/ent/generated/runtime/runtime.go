@@ -2251,10 +2251,8 @@ func init() {
 	orgsubscriptionMixin := schema.OrgSubscription{}.Mixin()
 	orgsubscriptionMixinHooks0 := orgsubscriptionMixin[0].Hooks()
 	orgsubscriptionMixinHooks3 := orgsubscriptionMixin[3].Hooks()
-	orgsubscriptionMixinHooks4 := orgsubscriptionMixin[4].Hooks()
 	orgsubscription.Hooks[0] = orgsubscriptionMixinHooks0[0]
 	orgsubscription.Hooks[1] = orgsubscriptionMixinHooks3[0]
-	orgsubscription.Hooks[2] = orgsubscriptionMixinHooks4[0]
 	orgsubscriptionMixinInters3 := orgsubscriptionMixin[3].Interceptors()
 	orgsubscriptionMixinInters4 := orgsubscriptionMixin[4].Interceptors()
 	orgsubscriptionInters := schema.OrgSubscription{}.Interceptors()

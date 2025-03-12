@@ -97,6 +97,7 @@ type SchemaConfig struct {
 	OrgMembershipEvents              string // OrgMembership-events->Event table.
 	OrgMembershipHistory             string // OrgMembershipHistory table.
 	OrgSubscription                  string // OrgSubscription table.
+	OrgSubscriptionEvents            string // OrgSubscription-events->Event table.
 	OrgSubscriptionHistory           string // OrgSubscriptionHistory table.
 	Organization                     string // Organization table.
 	OrganizationPersonalAccessTokens string // Organization-personal_access_tokens->PersonalAccessToken table.

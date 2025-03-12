@@ -4537,6 +4537,7 @@ input CreateEventInput {
   hushIDs: [ID!]
   subscriberIDs: [ID!]
   fileIDs: [ID!]
+  orgsubscriptionIDs: [ID!]
 }
 """
 CreateEvidenceInput is used for create Evidence object.
@@ -7378,6 +7379,7 @@ type Event implements Node {
   groupmembership: [GroupMembership!]
   subscriber: [Subscriber!]
   file: [File!]
+  orgsubscription: [OrgSubscription!]
 }
 """
 A connection to a list of items.
@@ -7827,6 +7829,11 @@ input EventWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  orgsubscription edge predicates
+  """
+  hasOrgsubscription: Boolean
+  hasOrgsubscriptionWith: [OrgSubscriptionWhereInput!]
 }
 type Evidence implements Node {
   id: ID!
@@ -27953,6 +27960,9 @@ input UpdateEventInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFile: Boolean
+  addOrgsubscriptionIDs: [ID!]
+  removeOrgsubscriptionIDs: [ID!]
+  clearOrgsubscription: Boolean
 }
 """
 UpdateEvidenceInput is used for update Evidence object.

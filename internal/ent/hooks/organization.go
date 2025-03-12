@@ -209,6 +209,47 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 	return nil
 }
 
+// createOrgSubscription creates the default organization subscription for a new org
+func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+	// ensure we can always pull the org subscription for the organization
+	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+
+	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
+	if err != nil {
+		log.Error().Err(err).Msg("error getting org subscriptions")
+
+		return err
+	}
+
+	// if this is empty generate a default org setting schema
+	if len(orgSubscriptions) == 0 {
+		if err := defaultOrgSubscription(ctx, orgCreated, m); err != nil {
+			log.Error().Err(err).Msg("error creating default org subscription")
+
+			return err
+		}
+	}
+
+	log.Debug().Msg("created default org subscription")
+
+	return nil
+}
+
+const (
+	// subscriptionPendingUpdate is the status for a pending subscription update
+	// when the object is initially created in our database
+	subscriptionPendingUpdate = "PENDING_UPDATE"
+)
+
+// defaultOrgSubscription is the default way to create an org subscription when an organization is first created
+func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+	return m.Client().OrgSubscription.Create().
+		SetStripeSubscriptionID(subscriptionPendingUpdate).
+		SetOwnerID(orgCreated.ID).
+		SetActive(true).
+		SetStripeSubscriptionStatus("active").Exec(ctx)
+}
+
 // createEntityTypes creates the default entity types for a new org
 func createEntityTypes(ctx context.Context, orgID string, m *generated.OrganizationMutation) error {
 	if m.EntConfig == nil || len(m.EntConfig.EntityTypes) == 0 {
@@ -239,6 +280,10 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 	// set the new org id in the auth context to process the rest of the post creation steps
 	if err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID); err != nil {
+		return err
+	}
+
+	if err := createOrgSubscription(ctx, orgCreated, m); err != nil {
 		return err
 	}
 
