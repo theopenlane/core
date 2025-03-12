@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // Standard defines the standard schema.
@@ -75,12 +74,6 @@ func (Standard) Fields() []ent.Field {
 		field.String("version").
 			Optional().
 			Comment("version of the standard"),
-		field.JSON("revision", models.SemverVersion{}).
-			Default(models.SemverVersion{
-				Patch: 1, // default to v0.0.1
-			}).
-			Optional().
-			Comment("internal revision of the standard"),
 	}
 }
 
@@ -98,6 +91,7 @@ func (Standard) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		mixin.RevisionMixin{},
 		NewOrgOwnedMixin(ObjectOwnedMixin{
 			Ref:                      "standards",
 			AllowEmptyForSystemAdmin: true, // allow empty org_id
