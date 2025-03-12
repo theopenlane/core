@@ -213,17 +213,12 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 	return customer, nil
 }
 
-// UpdateCustomer updates a customer
+// UpdateCustomer updates a customer in stripe with the provided params and ID
 func (sc *StripeClient) UpdateCustomer(id string, params *stripe.CustomerParams) (*stripe.Customer, error) {
-	customer, err := sc.Client.Customers.Update(id, params)
-	if err != nil {
-		return nil, err
-	}
-
-	return customer, nil
+	return sc.Client.Customers.Update(id, params)
 }
 
-// DeleteCustomer deletes a customer
+// DeleteCustomer deletes a customer by ID from stripe
 func (sc *StripeClient) DeleteCustomer(id string) error {
 	_, err := sc.Client.Customers.Del(id, nil)
 	if err != nil {
@@ -233,28 +228,69 @@ func (sc *StripeClient) DeleteCustomer(id string) error {
 	return nil
 }
 
+// GetOrganizationIDFromMetadata gets the organization ID from the metadata
+// if it exists, otherwise returns an empty string
+func GetOrganizationIDFromMetadata(metadata map[string]string) string {
+	orgID, exists := metadata["organization_id"]
+	if exists {
+		return orgID
+	}
+
+	return ""
+}
+
+// GetOrganizationNameFromMetadata gets the organization name from the metadata
+// if it exists, otherwise returns an empty string
+func GetOrganizationNameFromMetadata(metadata map[string]string) string {
+	orgName, exists := metadata["organization_name"]
+	if exists {
+		return orgName
+	}
+
+	return ""
+}
+
+// GetOrganizationSettingsIDFromMetadata gets the organization settings ID from the metadata
+// if it exists, otherwise returns an empty string
+func GetOrganizationSettingsIDFromMetadata(metadata map[string]string) string {
+	orgSettingsID, exists := metadata["organization_settings_id"]
+	if exists {
+		return orgSettingsID
+	}
+
+	return ""
+}
+
+// GetOrganizationSubscriptionIDFromMetadata gets the organization subscription ID from the metadata
+// if it exists, otherwise returns an empty string
+func GetOrganizationSubscriptionIDFromMetadata(metadata map[string]string) string {
+	orgSubID, exists := metadata["organization_subscription_id"]
+	if exists {
+		return orgSubID
+	}
+
+	return ""
+}
+
 // MapStripeCustomer maps a stripe customer to an organization customer
 // this is used to convert the stripe customer object to our internal customer object
 // we use the metadata to store the organization ID, settings ID, and subscription ID
-func (sc *StripeClient) MapStripeCustomer(c *stripe.Customer) *OrganizationCustomer {
-	orgCustomer := &OrganizationCustomer{
-		StripeCustomerID: c.ID,
+func MapStripeCustomer(c *stripe.Customer) *OrganizationCustomer {
+	if c == nil {
+		return nil
 	}
 
-	orgID, exists := c.Metadata["organization_id"]
-	if exists {
-		orgCustomer.OrganizationID = orgID
+	paymentAdded := false
+	if c.Sources != nil && c.Sources.Data != nil {
+		paymentAdded = true
 	}
 
-	orgSettingID, exists := c.Metadata["organization_settings_id"]
-	if exists {
-		orgCustomer.OrganizationSettingsID = orgSettingID
+	return &OrganizationCustomer{
+		StripeCustomerID:           c.ID,
+		OrganizationID:             GetOrganizationIDFromMetadata(c.Metadata),
+		OrganizationSettingsID:     GetOrganizationSettingsIDFromMetadata(c.Metadata),
+		OrganizationSubscriptionID: GetOrganizationSubscriptionIDFromMetadata(c.Metadata),
+		OrganizationName:           GetOrganizationNameFromMetadata(c.Metadata),
+		PaymentMethodAdded:         paymentAdded,
 	}
-
-	orgSubID, exists := c.Metadata["organization_subscription_id"]
-	if exists {
-		orgCustomer.OrganizationSubscriptionID = orgSubID
-	}
-
-	return orgCustomer
 }

@@ -189,7 +189,7 @@ func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string,
 	return feat, featNames, nil
 }
 
-// mapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
+// MapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
 func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscription {
 	subscript := Subscription{}
 

@@ -145,6 +145,7 @@ func (PersonalAccessToken) Interceptors() []ent.Interceptor {
 func (PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
+			rule.AllowIfContextAllowRule(),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 			privacy.AlwaysAllowRule(),
 		},

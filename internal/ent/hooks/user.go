@@ -137,8 +137,7 @@ func HookUser() ent.Hook {
 				}
 
 				// create a subscription for the personal org
-				if err := createPersonalOrgOrgSubscription(ctx, org, m.Client()); err != nil {
-					log.Warn().Msgf("failed to create personal org subscription in user hook")
+				if err := createOrgSubscription(ctx, org, m); err != nil {
 					return nil, err
 				}
 			}
@@ -148,6 +147,8 @@ func HookUser() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
+// HookUserPermissions runs on user creations to add user _self permissions
+// these are used for parent inherited relations on other objects in the system
 func HookUserPermissions() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.UserFunc(func(ctx context.Context, m *generated.UserMutation) (generated.Value, error) {
@@ -309,40 +310,6 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 	}
 
 	return nil
-}
-
-// createPersonalOrgOrgSubscription creates the default organization subscription a personal organization
-func createPersonalOrgOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
-	// skip if entitlement manager is not set
-	if dbClient.EntitlementManager == nil {
-		return nil
-	}
-
-	orgSubscriptions, err := orgCreated.OrgSubscriptions(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("error getting org subscriptions")
-
-		return err
-	}
-
-	if len(orgSubscriptions) == 0 {
-		if err := defaultPersonalOrgSubscription(ctx, orgCreated, dbClient); err != nil {
-			log.Error().Err(err).Msg("error creating personal org subscription")
-
-			return err
-		}
-	}
-
-	return nil
-}
-
-// defaultPersonalOrgSubscription creates the default subscription for a personal organization
-func defaultPersonalOrgSubscription(ctx context.Context, orgCreated *generated.Organization, dbClient *generated.Client) error {
-	return dbClient.OrgSubscription.Create().
-		SetStripeSubscriptionID("PENDING_UPDATE").
-		SetOwnerID(orgCreated.ID).
-		SetActive(true).
-		SetStripeSubscriptionStatus("active").Exec(ctx)
 }
 
 // setDefaultOrg sets the default org for a user in their settings

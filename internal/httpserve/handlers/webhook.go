@@ -34,7 +34,19 @@ const (
 	maxBodyBytes = int64(65536)
 )
 
-// WebhookReceiverHandler handles incoming stripe webhook events
+// supportedEventTypes is a map of supported stripe event types that the webhook receiver can handle
+var supportedEventTypes = map[stripe.EventType]bool{
+	stripe.EventTypeCustomerSubscriptionUpdated:      true,
+	stripe.EventTypeCustomerSubscriptionDeleted:      true,
+	stripe.EventTypeCustomerSubscriptionPaused:       true,
+	stripe.EventTypeCustomerSubscriptionTrialWillEnd: true,
+	stripe.EventTypePaymentMethodAttached:            true,
+	// TODO: add support for these events so details like billing address can be updated
+	// from stripe back to the database
+	stripe.EventTypeCustomerUpdated: false,
+}
+
+// WebhookReceiverHandler handles incoming stripe webhook events for the supported event types
 func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 	req := ctx.Request()
 	res := ctx.Response()
@@ -124,7 +136,7 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 			return err
 		}
 
-		return h.trialWillEnd(c, subscription)
+		return h.handleTrialWillEnd(c, subscription)
 	case stripe.EventTypeCustomerSubscriptionDeleted, stripe.EventTypeCustomerSubscriptionPaused:
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
 		if err != nil {
@@ -132,6 +144,14 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 		}
 
 		return h.handleSubscriptionPaused(c, subscription)
+	// TODO: add support for these events so details like billing address can be updated
+	// case stripe.EventTypeCustomerUpdated:
+	// customer, err := unmarshalEventData[stripe.Customer](e)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// return h.handleCustomerUpdated(c, customer)
 	default:
 		log.Warn().Str("event_type", string(e.Type)).Msg("unsupported event type")
 
@@ -139,32 +159,53 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 	}
 }
 
-// supportedEventTypes is a map of supported stripe event types that the webhook receiver can handle
-var supportedEventTypes = map[stripe.EventType]bool{
-	stripe.EventTypeCustomerSubscriptionUpdated:      true,
-	stripe.EventTypeCustomerSubscriptionDeleted:      true,
-	stripe.EventTypeCustomerSubscriptionPaused:       true,
-	stripe.EventTypeCustomerSubscriptionTrialWillEnd: true,
-	stripe.EventTypePaymentMethodAttached:            true,
-}
-
 // invalidateAPITokens invalidates all API tokens for an organization
-func (h *Handler) invalidateAPITokens(c context.Context, orgID string) error {
-	if err := transaction.FromContext(c).APIToken.Update().Where(apitoken.OwnerID(orgID)).
+func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)              // bypass privacy policy
+	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{}) // bypass org owned interceptor
+
+	num, err := h.DBClient.APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
 		SetExpiresAt(time.Now().Add(-24 * time.Hour)). // nolint:mnd // set expiration to 24 hours ago
 		SetRevokedAt(time.Now()).
 		SetRevokedReason("subscription paused or deleted").
 		SetRevokedBy("entitlements_engine").
-		Exec(c); err != nil {
+		Save(allowCtx)
+	if err != nil {
 		return err
 	}
+
+	log.Debug().Str("organization_id", orgID).Int("num_tokens_revoked", num).Msg("revoked API tokens")
 
 	return nil
 }
 
-// handleSubscriptionUpdated handles subscription updated events
+// invalidatePersonalAccessTokens invalidates all personal access tokens tokens for an organization
+func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID string) error {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)              // bypass privacy policy
+	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{}) // bypass org owned interceptor
+
+	num, err := h.DBClient.PersonalAccessToken.Update().
+		RemoveOrganizationIDs(orgID).
+		Where(personalaccesstoken.HasOrganizationsWith(organization.ID(orgID))).
+		Save(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	log.Debug().Str("organization_id", orgID).Int("num_tokens_revoked", num).Msg("revoked personal access tokens tokens")
+
+	return nil
+}
+
+// handleSubscriptionPaused handles subscription updated events for paused subscriptions
 func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscription) (err error) {
+	if s.Customer == nil {
+		log.Error().Msg("subscription has no customer, cannot proceed")
+
+		return ErrSubscriberNotFound
+	}
+
 	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
 	if err != nil {
 		return err
@@ -180,14 +221,17 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return
 	}
 
-	return h.DBClient.PersonalAccessToken.Update().
-		RemoveOrganizationIDs(*ownerID).
-		Where(personalaccesstoken.HasOrganizationsWith(organization.ID(*ownerID))).
-		Exec(ctx)
+	return h.invalidatePersonalAccessTokens(ctx, *ownerID)
 }
 
 // handleSubscriptionUpdated handles subscription updated events
 func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subscription) error {
+	if s.Customer == nil {
+		log.Error().Msg("subscription has no customer, cannot proceed")
+
+		return ErrSubscriberNotFound
+	}
+
 	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
 	if err != nil {
 		return err
@@ -201,22 +245,12 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 	return nil
 }
 
-// trialWillEnd handles trial will end events
-func (h *Handler) trialWillEnd(ctx context.Context, s *stripe.Subscription) error {
-	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
-	if err != nil {
-		return err
-	}
-
-	_, err = syncOrgSubscriptionWithStripe(ctx, s, customer)
-	if err != nil {
-		return err
-	}
-
-	return nil
+// handleTrialWillEnd handles trial will end events, currently just calls handleSubscriptionUpdated
+func (h *Handler) handleTrialWillEnd(ctx context.Context, s *stripe.Subscription) error {
+	return h.handleSubscriptionUpdated(ctx, s)
 }
 
-// handlePaymentIntent handles payment intent events
+// handlePaymentMethodAdded handles payment intent events for added payment methods
 func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *stripe.PaymentMethod) error {
 	if paymentMethod.Customer == nil {
 		log.Error().Msg("payment method has no customer, cannot proceed")
@@ -244,7 +278,8 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 	return orgSubscription, nil
 }
 
-// syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe
+// syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
+// returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
 func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
 	orgSubscription, err := getOrgSubscription(ctx, subscription)
 	if err != nil {
@@ -252,7 +287,7 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 	}
 
 	// map stripe data to internal OrgSubscription
-	stripeOrgSubscription := mapStripeToOrgSubscription(subscription, mapStripeCustomer(customer))
+	stripeOrgSubscription := mapStripeToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
 
 	// Check if any fields have changed before saving the updated OrgSubscription
 	changed := false
@@ -353,51 +388,14 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 	return &orgSubscription.OwnerID, nil
 }
 
-// mapStripeCustomer maps a stripe.Customer to an OrganizationCustomer
-func mapStripeCustomer(c *stripe.Customer) *entitlements.OrganizationCustomer {
-	if c == nil {
-		return nil
-	}
-
-	orgCustomer := &entitlements.OrganizationCustomer{
-		StripeCustomerID: c.ID,
-	}
-
-	orgID, ok := c.Metadata["organization_id"]
-	if ok {
-		orgCustomer.OrganizationID = orgID
-	}
-
-	orgSettingsID, ok := c.Metadata["organization_settings_id"]
-	if ok {
-		orgCustomer.OrganizationSettingsID = orgSettingsID
-	}
-
-	orgSubscriptionID, ok := c.Metadata["organization_subscription_id"]
-	if ok {
-		orgCustomer.OrganizationSubscriptionID = orgSubscriptionID
-	}
-
-	orgName, ok := c.Metadata["organization_name"]
-	if ok {
-		orgCustomer.OrganizationName = orgName
-	}
-
-	if c.Sources != nil && c.Sources.Data != nil {
-		orgCustomer.PaymentMethodAdded = true
-	}
-
-	return orgCustomer
-}
-
 // mapStripeToOrgSubscription maps a stripe.Subscription and OrganizationCustomer to an ent.OrgSubscription
 func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *entitlements.OrganizationCustomer) *ent.OrgSubscription {
-	productName := ""
-	productPrice := models.Price{}
-
 	if subscription == nil {
 		return nil
 	}
+
+	productName := ""
+	productPrice := models.Price{}
 
 	if subscription.Items != nil && len(subscription.Items.Data) == 1 {
 		item := subscription.Items.Data[0]

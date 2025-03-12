@@ -50,6 +50,8 @@ var (
 	ErrTooManySubscriptions = errors.New("organization has too many subscriptions")
 	// ErrTooManyPrices is returned when an organization has too many subscriptions
 	ErrTooManyPrices = errors.New("organization has too many prices on a subscription")
+	// ErrNoPrices is returned when a subscription has no price
+	ErrNoPrices = errors.New("subscription has no price")
 	// ErrManagedGroup is returned when a user attempts to modify a managed group
 	ErrManagedGroup = errors.New("managed groups cannot be modified")
 	// ErrMaxAttemptsOrganization is returned when the max attempts have been reached to create an organization via onboarding

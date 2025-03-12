@@ -210,8 +210,11 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 }
 
 // createOrgSubscription creates the default organization subscription for a new org
-func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
-	orgSubscriptions, err := orgCreated.OrgSubscriptions(ctx)
+func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+	// ensure we can always pull the org subscription for the organization
+	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+
+	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("error getting org subscriptions")
 
@@ -227,21 +230,24 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 		}
 	}
 
+	log.Debug().Msg("created default org subscription")
+
 	return nil
 }
 
-func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
-	if err := m.Client().OrgSubscription.Create().
-		SetStripeSubscriptionID("PENDING_UPDATE").
+const (
+	// subscriptionPendingUpdate is the status for a pending subscription update
+	// when the object is initially created in our database
+	subscriptionPendingUpdate = "PENDING_UPDATE"
+)
+
+// defaultOrgSubscription is the default way to create an org subscription when an organization is first created
+func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+	return m.Client().OrgSubscription.Create().
+		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
-		SetStripeSubscriptionStatus("active").Exec(ctx); err != nil {
-		return err
-	}
-
-	log.Warn().Msgf("created org subscription in the new sexy way")
-
-	return nil
+		SetStripeSubscriptionStatus("active").Exec(ctx)
 }
 
 // createEntityTypes creates the default entity types for a new org

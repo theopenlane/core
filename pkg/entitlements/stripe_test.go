@@ -1,4 +1,4 @@
-package entitlements
+package entitlements_test
 
 import (
 	"testing"
@@ -9,6 +9,7 @@ import (
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/client"
 
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 )
 
@@ -17,7 +18,7 @@ func TestNew(t *testing.T) {
 
 	t.Setenv("STRIPE_SECRET_KEY", "secret_key")
 
-	stripeService, err := NewStripeClient(WithAPIKey("secret_key"))
+	stripeService, err := entitlements.NewStripeClient(entitlements.WithAPIKey("secret_key"))
 	c.NoError(err)
 	c.IsType(stripeService, stripeService)
 }
@@ -25,19 +26,19 @@ func TestNew(t *testing.T) {
 func TestNewErrMissingAPIKey(t *testing.T) {
 	c := require.New(t)
 
-	stripeService, err := NewStripeClient()
+	stripeService, err := entitlements.NewStripeClient()
 	c.Nil(stripeService)
-	c.ErrorIs(err, ErrMissingAPIKey)
+	c.ErrorIs(err, entitlements.ErrMissingAPIKey)
 }
 
 func TestWithConfig(t *testing.T) {
-	config := Config{
+	config := entitlements.Config{
 		PublicStripeKey:  "public_key",
 		PrivateStripeKey: "private_key",
 	}
 
-	option := WithConfig(config)
-	client := &StripeClient{}
+	option := entitlements.WithConfig(config)
+	client := &entitlements.StripeClient{}
 
 	option(client)
 
@@ -49,23 +50,23 @@ func TestWithConfig(t *testing.T) {
 func TestNewConfig(t *testing.T) {
 	tests := []struct {
 		name string
-		opts []ConfigOpts
-		want *Config
+		opts []entitlements.ConfigOpts
+		want *entitlements.Config
 	}{
 		{
 			name: "custom config",
-			opts: []ConfigOpts{
-				WithEnabled(true),
-				WithPublicStripeKey("public_key"),
-				WithPrivateStripeKey("private_key"),
-				WithStripeWebhookSecret("webhook_secret"),
-				WithTrialSubscriptionPriceID("trial_price_id"),
-				WithPersonalOrgSubscriptionPriceID("personal_price_id"),
-				WithStripeWebhookURL("https://custom.webhook.url"),
-				WithStripeBillingPortalSuccessURL("https://custom.billing.success.url"),
-				WithStripeCancellationReturnURL("https://custom.cancellation.return.url"),
+			opts: []entitlements.ConfigOpts{
+				entitlements.WithEnabled(true),
+				entitlements.WithPublicStripeKey("public_key"),
+				entitlements.WithPrivateStripeKey("private_key"),
+				entitlements.WithStripeWebhookSecret("webhook_secret"),
+				entitlements.WithTrialSubscriptionPriceID("trial_price_id"),
+				entitlements.WithPersonalOrgSubscriptionPriceID("personal_price_id"),
+				entitlements.WithStripeWebhookURL("https://custom.webhook.url"),
+				entitlements.WithStripeBillingPortalSuccessURL("https://custom.billing.success.url"),
+				entitlements.WithStripeCancellationReturnURL("https://custom.cancellation.return.url"),
 			},
-			want: &Config{
+			want: &entitlements.Config{
 				Enabled:                        true,
 				PublicStripeKey:                "public_key",
 				PrivateStripeKey:               "private_key",
@@ -81,7 +82,7 @@ func TestNewConfig(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewConfig(tt.opts...)
+			got := entitlements.NewConfig(tt.opts...)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -109,11 +110,11 @@ func TestCreateCustomer(t *testing.T) {
 		},
 	}
 
-	orgCustomer := &OrganizationCustomer{
+	orgCustomer := &entitlements.OrganizationCustomer{
 		OrganizationID:         "org_123",
 		OrganizationSettingsID: "settings_123",
 		OrganizationName:       "Test Organization",
-		ContactInfo: ContactInfo{
+		ContactInfo: entitlements.ContactInfo{
 			Email: "test@example.com",
 			Phone: "1234567890",
 		},
@@ -134,7 +135,7 @@ func TestCreateCustomer(t *testing.T) {
 
 	mockStripeClient := client.New("sk_test", stripeTestBackends)
 
-	service := StripeClient{
+	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
@@ -170,10 +171,14 @@ func TestUpdateCustomer(t *testing.T) {
 		*mockCustomerResult = *expectedCustomer
 	}).Return(nil)
 
-	mockStripeClient := client.New("sk_test", stripeTestBackends)
+	mockStripeClient, err := entitlements.NewStripeClient(
+		entitlements.WithAPIKey("sk_test"),
+		entitlements.WithBackends(stripeTestBackends),
+	)
+	c.NoError(err)
 
-	service := StripeClient{
-		Client: mockStripeClient,
+	service := entitlements.StripeClient{
+		Client: mockStripeClient.Client,
 	}
 
 	customer, err := service.UpdateCustomer("cus_123", updateParams)
@@ -201,13 +206,17 @@ func TestDeleteCustomer(t *testing.T) {
 		*mockCustomerResult = *expectedCustomer
 	}).Return(nil)
 
-	mockStripeClient := client.New("sk_test", stripeTestBackends)
+	mockStripeClient, err := entitlements.NewStripeClient(
+		entitlements.WithAPIKey("sk_test"),
+		entitlements.WithBackends(stripeTestBackends),
+	)
+	c.NoError(err)
 
-	service := StripeClient{
-		Client: mockStripeClient,
+	service := entitlements.StripeClient{
+		Client: mockStripeClient.Client,
 	}
 
-	err := service.DeleteCustomer("cus_123")
+	err = service.DeleteCustomer("cus_123")
 	c.NoError(err)
 }
 
@@ -242,7 +251,7 @@ func TestCreateSubscription(t *testing.T) {
 
 	mockStripeClient := client.New("sk_test", stripeTestBackends)
 
-	service := StripeClient{
+	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
@@ -281,7 +290,7 @@ func TestUpdateSubscription(t *testing.T) {
 
 	mockStripeClient := client.New("sk_test", stripeTestBackends)
 
-	service := StripeClient{
+	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
@@ -314,38 +323,13 @@ func TestCancelSubscription(t *testing.T) {
 
 	mockStripeClient := client.New("sk_test", stripeTestBackends)
 
-	service := StripeClient{
+	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
 	subscription, err := service.CancelSubscription("sub_123", cancelParams)
 	c.NoError(err)
 	c.Equal(expectedSubscription, subscription)
-}
-
-func TestMapStripeCustomer(t *testing.T) {
-	c := require.New(t)
-
-	stripeCustomer := &stripe.Customer{
-		ID: "cus_123",
-		Metadata: map[string]string{
-			"organization_id":              "org_123",
-			"organization_settings_id":     "settings_123",
-			"organization_subscription_id": "sub_123",
-		},
-	}
-
-	expectedCustomer := &OrganizationCustomer{
-		StripeCustomerID:           "cus_123",
-		OrganizationID:             "org_123",
-		OrganizationSettingsID:     "settings_123",
-		OrganizationSubscriptionID: "sub_123",
-	}
-
-	service := StripeClient{}
-
-	customer := service.MapStripeCustomer(stripeCustomer)
-	c.Equal(expectedCustomer, customer)
 }
 
 func TestMapStripeSubscription(t *testing.T) {
@@ -376,9 +360,9 @@ func TestMapStripeSubscription(t *testing.T) {
 		},
 	}
 
-	expectedSubscription := &Subscription{
+	expectedSubscription := &entitlements.Subscription{
 		ID: "sub_123",
-		Prices: []Price{
+		Prices: []entitlements.Price{
 			{
 				ID:          "price_123",
 				Price:       10.00,
@@ -415,7 +399,7 @@ func TestMapStripeSubscription(t *testing.T) {
 
 	mockStripeClient := client.New("sk_test", stripeTestBackends)
 
-	service := StripeClient{
+	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
