@@ -3467,6 +3467,19 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			e.WithNamedFile(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
+
+		case "orgsubscription":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrgSubscriptionClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, orgsubscriptionImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedOrgsubscription(alias, func(wq *OrgSubscriptionQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[event.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, event.FieldCreatedAt)

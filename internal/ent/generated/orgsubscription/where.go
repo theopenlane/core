@@ -1256,11 +1256,11 @@ func HasEvents() predicate.OrgSubscription {
 	return predicate.OrgSubscription(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1271,7 +1271,7 @@ func HasEventsWith(preds ...predicate.Event) predicate.OrgSubscription {
 		step := newEventsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

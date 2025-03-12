@@ -22,7 +22,7 @@ func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscript
 	})
 
 	if !i.Next() {
-		sub, err := sc.CreateTrialSubscription(customerID)
+		sub, err := sc.CreateTrialSubscription(&stripe.Customer{ID: customerID})
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to create trial subscription")
 			return nil, err
@@ -32,7 +32,7 @@ func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscript
 	}
 
 	// assumes customer can only have 1 subscription if there are any
-	subs := sc.mapStripeSubscription(i.Subscription())
+	subs := sc.MapStripeSubscription(i.Subscription())
 
 	return subs, nil
 }
@@ -84,9 +84,9 @@ func (sc *StripeClient) CancelSubscription(id string, params *stripe.Subscriptio
 var trialdays int64 = 30
 
 // CreateTrialSubscription creates a trial subscription with the configured price
-func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscription, error) {
+func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscription, error) {
 	params := &stripe.SubscriptionParams{
-		Customer: stripe.String(customerID),
+		Customer: stripe.String(cust.ID),
 		Items: []*stripe.SubscriptionItemsParams{
 			{
 				Price: &sc.Config.TrialSubscriptionPriceID,
@@ -96,6 +96,7 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 		PaymentSettings: &stripe.SubscriptionPaymentSettingsParams{
 			SaveDefaultPaymentMethod: stripe.String(string(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription)),
 		},
+		Metadata:         cust.Metadata,
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
 		TrialSettings: &stripe.SubscriptionTrialSettingsParams{
 			EndBehavior: &stripe.SubscriptionTrialSettingsEndBehaviorParams{
@@ -112,7 +113,7 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 
 	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
-	mappedsubscription := sc.mapStripeSubscription(subs)
+	mappedsubscription := sc.MapStripeSubscription(subs)
 
 	return mappedsubscription, nil
 }
@@ -135,11 +136,11 @@ func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(customerID string) (*Subsc
 		return nil, err
 	}
 
-	return sc.mapStripeSubscription(subs), nil
+	return sc.MapStripeSubscription(subs), nil
 }
 
 // CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
-func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
+func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (*Checkout, error) {
 	params := &stripe.BillingPortalSessionParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
@@ -153,15 +154,16 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 
 	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
 	if err != nil {
-		return Checkout{}, err
+		return nil, err
 	}
 
-	return Checkout{
+	return &Checkout{
 		ID:  billingPortalSession.ID,
 		URL: billingPortalSession.URL,
 	}, nil
 }
 
+// retrieveActiveEntitlements retrieves active entitlements for a customer
 func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string, []string, error) {
 	params := &stripe.EntitlementsActiveEntitlementListParams{
 		Customer: stripe.String(customerID),
@@ -187,8 +189,8 @@ func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string,
 	return feat, featNames, nil
 }
 
-// mapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
-func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscription {
+// MapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
+func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscription {
 	subscript := Subscription{}
 
 	prices := []Price{}
@@ -236,4 +238,53 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 type Subs struct {
 	SubsID string
 	Prices []Price
+}
+
+// CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
+func (sc *StripeClient) CreateBillingPortalPaymentMethods(subsID, custID string) (*BillingPortalSession, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("payment_method_update"),
+		},
+	}
+
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
+	if err != nil {
+		return nil, err
+	}
+
+	return &BillingPortalSession{
+		PaymentMethods: billingPortalSession.URL,
+	}, nil
+}
+
+// CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
+func (sc *StripeClient) CancellationBillingPortalSession(subsID, custID string) (*BillingPortalSession, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL, // this is the "return back to website" URL, not a cancellation / update specific one
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("subscription_cancel"),
+			SubscriptionCancel: &stripe.BillingPortalSessionFlowDataSubscriptionCancelParams{
+				Subscription: &subsID,
+			},
+			AfterCompletion: &stripe.BillingPortalSessionFlowDataAfterCompletionParams{
+				Type: stripe.String("redirect"),
+				Redirect: &stripe.BillingPortalSessionFlowDataAfterCompletionRedirectParams{
+					ReturnURL: &sc.Config.StripeCancellationReturnURL,
+				},
+			},
+		},
+	}
+
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
+	if err != nil {
+		return nil, err
+	}
+
+	return &BillingPortalSession{
+		Cancellation: billingPortalSession.URL,
+	}, nil
 }

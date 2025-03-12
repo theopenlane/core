@@ -1,3 +1,5 @@
 extend type OrgSubscription {
     subscriptionURL: String
+    managePaymentMethods: String
+    cancellation: String
 }

@@ -1925,6 +1925,7 @@ type CreateEventInput struct {
 	HushIDs                []string
 	SubscriberIDs          []string
 	FileIDs                []string
+	OrgsubscriptionIDs     []string
 }
 
 // Mutate applies the CreateEventInput on the EventMutation builder.
@@ -1968,6 +1969,9 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
+	}
+	if v := i.OrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
 	}
 }
 
@@ -2016,6 +2020,9 @@ type UpdateEventInput struct {
 	ClearFile                    bool
 	AddFileIDs                   []string
 	RemoveFileIDs                []string
+	ClearOrgsubscription         bool
+	AddOrgsubscriptionIDs        []string
+	RemoveOrgsubscriptionIDs     []string
 }
 
 // Mutate applies the UpdateEventInput on the EventMutation builder.
@@ -2130,6 +2137,15 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearOrgsubscription {
+		m.ClearOrgsubscription()
+	}
+	if v := i.AddOrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
+	}
+	if v := i.RemoveOrgsubscriptionIDs; len(v) > 0 {
+		m.RemoveOrgsubscriptionIDs(v...)
 	}
 }
 

@@ -20,6 +20,10 @@ type Price struct {
 
 // String returns a string representation of the price
 func (p Price) String() string {
+	if p.Amount == 0 {
+		return "Free"
+	}
+
 	return fmt.Sprintf("%v(%s)/%s", p.Amount, p.Currency, p.Interval)
 }
 

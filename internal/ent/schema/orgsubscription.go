@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -76,8 +77,13 @@ func (OrgSubscription) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		NewOrgOwnMixinWithRef("org_subscriptions"),
-	}
+		NewOrgOwnedMixin(ObjectOwnedMixin{
+			Ref: "org_subscriptions",
+			SkipTokenType: []token.PrivacyToken{
+				&token.SignUpToken{},
+			},
+			HookFuncs: []HookFunc{}, // empty to skip the default hooks
+		})}
 }
 
 // Annotations of the OrgSubscription
@@ -86,7 +92,6 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		// since we only have queries, we can just use the interceptors for queries and can skip the fga generated checks
-		// entfga.MembershipChecks("organization"),
 	}
 }
 

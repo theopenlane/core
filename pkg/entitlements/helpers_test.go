@@ -1,75 +1,66 @@
-package entitlements
+package entitlements_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v81"
+	"github.com/theopenlane/core/pkg/entitlements"
 )
 
-func TestCheckForBillingUpdate(t *testing.T) {
+func TestGetUpdatedFields(t *testing.T) {
 	tests := []struct {
 		name           string
 		props          map[string]interface{}
-		stripeCustomer *OrganizationCustomer
+		stripeCustomer *entitlements.OrganizationCustomer
 		expectedParams *stripe.CustomerParams
-		expectedUpdate bool
 	}{
 		{
-			name: "No updates",
-			props: map[string]interface{}{
-				"billing_email": "test@example.com",
-				"billing_phone": "1234567890",
-			},
-			stripeCustomer: &OrganizationCustomer{
-				ContactInfo: ContactInfo{
+			name:  "No updates",
+			props: map[string]interface{}{},
+			stripeCustomer: &entitlements.OrganizationCustomer{
+				ContactInfo: entitlements.ContactInfo{
 					Email: "test@example.com",
 					Phone: "1234567890",
 				},
 			},
 			expectedParams: &stripe.CustomerParams{},
-			expectedUpdate: false,
 		},
 		{
 			name: "Update email",
 			props: map[string]interface{}{
 				"billing_email": "new@example.com",
-				"billing_phone": "1234567890",
 			},
-			stripeCustomer: &OrganizationCustomer{
-				ContactInfo: ContactInfo{
+			stripeCustomer: &entitlements.OrganizationCustomer{
+				ContactInfo: entitlements.ContactInfo{
 					Email: "test@example.com",
 					Phone: "1234567890",
 				},
 			},
 			expectedParams: &stripe.CustomerParams{
-				Email: stripe.String("new@example.com"),
+				Email: stripe.String("test@example.com"),
 			},
-			expectedUpdate: true,
 		},
 		{
 			name: "Update phone",
 			props: map[string]interface{}{
-				"billing_email": "test@example.com",
-				"billing_phone": "0987654321",
+				"billing_phone": "1234567890",
 			},
-			stripeCustomer: &OrganizationCustomer{
-				ContactInfo: ContactInfo{
+			stripeCustomer: &entitlements.OrganizationCustomer{
+				ContactInfo: entitlements.ContactInfo{
 					Email: "test@example.com",
 					Phone: "1234567890",
 				},
 			},
 			expectedParams: &stripe.CustomerParams{
-				Phone: stripe.String("0987654321"),
+				Phone: stripe.String("1234567890"),
 			},
-			expectedUpdate: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			params, hasUpdate := CheckForBillingUpdate(tt.props, tt.stripeCustomer)
-			assert.Equal(t, tt.expectedUpdate, hasUpdate)
+			params := entitlements.GetUpdatedFields(tt.props, tt.stripeCustomer)
 			assert.Equal(t, tt.expectedParams, params)
 		})
 	}

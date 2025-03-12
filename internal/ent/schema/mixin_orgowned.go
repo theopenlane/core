@@ -253,6 +253,12 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 
 	}
 
+	// skip the interceptor if the context has the organization creation context key
+	// the events need to query the subscription for updates
+	if _, orgSubscription := contextx.From[auth.OrgSubscriptionContextKey](ctx); orgSubscription {
+		return true
+	}
+
 	// skip interceptor if the context has the managed group key
 	if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
 		return true
@@ -268,6 +274,12 @@ func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context, m ent.Mutation) (b
 	// this is useful for tokens, where the user is not yet authenticated to
 	// a particular organization yet and auth policy allows this
 	if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
+		return true, nil
+	}
+
+	// skip the interceptor if the context has the organization creation context key
+	// the events need to query for objects such as api tokens, which are org owned
+	if _, orgSubscription := contextx.From[auth.OrgSubscriptionContextKey](ctx); orgSubscription {
 		return true, nil
 	}
 

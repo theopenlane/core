@@ -17,7 +17,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 
 	user := suite.seedUser()
 
-	userCtx := auth.NewTestContextWithValidUser(user.ID)
+	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
 
 	name := "MITB"
 

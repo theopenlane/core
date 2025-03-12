@@ -3719,6 +3719,7 @@ type CreateEventInput struct {
 	HushIDs                []string       `json:"hushIDs,omitempty"`
 	SubscriberIDs          []string       `json:"subscriberIDs,omitempty"`
 	FileIDs                []string       `json:"fileIDs,omitempty"`
+	OrgsubscriptionIDs     []string       `json:"orgsubscriptionIDs,omitempty"`
 }
 
 // CreateEvidenceInput is used for create Evidence object.
@@ -5902,6 +5903,7 @@ type Event struct {
 	Groupmembership     []*GroupMembership     `json:"groupmembership,omitempty"`
 	Subscriber          []*Subscriber          `json:"subscriber,omitempty"`
 	File                []*File                `json:"file,omitempty"`
+	Orgsubscription     []*OrgSubscription     `json:"orgsubscription,omitempty"`
 }
 
 func (Event) IsNode() {}
@@ -6290,6 +6292,9 @@ type EventWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// orgsubscription edge predicates
+	HasOrgsubscription     *bool                        `json:"hasOrgsubscription,omitempty"`
+	HasOrgsubscriptionWith []*OrgSubscriptionWhereInput `json:"hasOrgsubscriptionWith,omitempty"`
 }
 
 type Evidence struct {
@@ -12886,10 +12891,12 @@ type OrgSubscription struct {
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys []string      `json:"featureLookupKeys,omitempty"`
-	Owner             *Organization `json:"owner,omitempty"`
-	Events            []*Event      `json:"events,omitempty"`
-	SubscriptionURL   *string       `json:"subscriptionURL,omitempty"`
+	FeatureLookupKeys    []string      `json:"featureLookupKeys,omitempty"`
+	Owner                *Organization `json:"owner,omitempty"`
+	Events               []*Event      `json:"events,omitempty"`
+	SubscriptionURL      *string       `json:"subscriptionURL,omitempty"`
+	ManagePaymentMethods *string       `json:"managePaymentMethods,omitempty"`
+	Cancellation         *string       `json:"cancellation,omitempty"`
 }
 
 func (OrgSubscription) IsNode() {}
@@ -21096,6 +21103,9 @@ type UpdateEventInput struct {
 	AddFileIDs                   []string       `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                []string       `json:"removeFileIDs,omitempty"`
 	ClearFile                    *bool          `json:"clearFile,omitempty"`
+	AddOrgsubscriptionIDs        []string       `json:"addOrgsubscriptionIDs,omitempty"`
+	RemoveOrgsubscriptionIDs     []string       `json:"removeOrgsubscriptionIDs,omitempty"`
+	ClearOrgsubscription         *bool          `json:"clearOrgsubscription,omitempty"`
 }
 
 // UpdateEvidenceInput is used for update Evidence object.

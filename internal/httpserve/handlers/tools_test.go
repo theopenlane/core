@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -38,6 +39,7 @@ var (
 		Version: 0,
 		Key:     "9f0c6da662f018b58b04a093e2dbb2e1d8d54250",
 	}
+	webhookSecret = "whsec_test_secret"
 )
 
 const (
@@ -47,14 +49,15 @@ const (
 // HandlerTestSuite handles the setup and teardown between tests
 type HandlerTestSuite struct {
 	suite.Suite
-	e           *echo.Echo
-	db          *ent.Client
-	api         *openlaneclient.OpenlaneClient
-	h           *handlers.Handler
-	fga         *fgax.Client
-	tf          *testutils.TestFixture
-	ofgaTF      *fgatest.OpenFGATestFixture
-	objectStore *objects.Objects
+	e                 *echo.Echo
+	db                *ent.Client
+	api               *openlaneclient.OpenlaneClient
+	h                 *handlers.Handler
+	fga               *fgax.Client
+	tf                *testutils.TestFixture
+	ofgaTF            *fgatest.OpenFGATestFixture
+	stripeMockBackend *mocks.MockStripeBackend
+	objectStore       *objects.Objects
 }
 
 // TestHandlerTestSuite runs all the tests in the HandlerTestSuite

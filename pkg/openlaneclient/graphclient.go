@@ -26,10 +26,11 @@ type OpenlaneGraphClient interface {
 	GetActionPlanHistories(ctx context.Context, where *ActionPlanHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetActionPlanHistories, error)
 	AdminSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*AdminSearch, error)
 	CreateAPIToken(ctx context.Context, input CreateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateAPIToken, error)
-	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
+	DeleteAPIToken(ctx context.Context, deleteAPITokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAPIToken, error)
 	GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error)
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
-	DeleteAPIToken(ctx context.Context, deleteAPITokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAPIToken, error)
+	GetAPITokens(ctx context.Context, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
+	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateContact(ctx context.Context, input CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateContact, error)
@@ -234,12 +235,11 @@ type OpenlaneGraphClient interface {
 	GetOrgSubscriptions(ctx context.Context, where *OrgSubscriptionWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOrgSubscriptions, error)
 	GetAllOrgSubscriptionHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllOrgSubscriptionHistories, error)
 	GetOrgSubscriptionHistories(ctx context.Context, where *OrgSubscriptionHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOrgSubscriptionHistories, error)
-	CreateBulkCSVPersonalAccessToken(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVPersonalAccessToken, error)
-	CreateBulkPersonalAccessToken(ctx context.Context, input []*CreatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkPersonalAccessToken, error)
 	CreatePersonalAccessToken(ctx context.Context, input CreatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreatePersonalAccessToken, error)
 	DeletePersonalAccessToken(ctx context.Context, deletePersonalAccessTokenID string, interceptors ...clientv2.RequestInterceptor) (*DeletePersonalAccessToken, error)
 	GetAllPersonalAccessTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPersonalAccessTokens, error)
 	GetPersonalAccessTokenByID(ctx context.Context, personalAccessTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetPersonalAccessTokenByID, error)
+	GetPersonalAccessTokens(ctx context.Context, where *PersonalAccessTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPersonalAccessTokens, error)
 	UpdatePersonalAccessToken(ctx context.Context, updatePersonalAccessTokenID string, input UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePersonalAccessToken, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProcedure, error)
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
@@ -4195,30 +4195,24 @@ func (t *AdminSearch_AdminSearch) GetNodes() []*AdminSearch_AdminSearch_Nodes {
 	return t.Nodes
 }
 
-type CreateAPIToken_CreateAPIToken_APIToken_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateAPIToken_CreateAPIToken_APIToken_Owner) GetID() string {
-	if t == nil {
-		t = &CreateAPIToken_CreateAPIToken_APIToken_Owner{}
-	}
-	return t.ID
-}
-
 type CreateAPIToken_CreateAPIToken_APIToken struct {
-	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt   *time.Time                                    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID          string                                        "json:\"id\" graphql:\"id\""
-	LastUsedAt  *time.Time                                    "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Name        string                                        "json:\"name\" graphql:\"name\""
-	Owner       *CreateAPIToken_CreateAPIToken_APIToken_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Scopes      []string                                      "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Token       string                                        "json:\"token\" graphql:\"token\""
-	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	Name          string     "json:\"name\" graphql:\"name\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string   "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateAPIToken_CreateAPIToken_APIToken) GetCreatedAt() *time.Time {
@@ -4251,6 +4245,12 @@ func (t *CreateAPIToken_CreateAPIToken_APIToken) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetIsActive() *bool {
+	if t == nil {
+		t = &CreateAPIToken_CreateAPIToken_APIToken{}
+	}
+	return t.IsActive
+}
 func (t *CreateAPIToken_CreateAPIToken_APIToken) GetLastUsedAt() *time.Time {
 	if t == nil {
 		t = &CreateAPIToken_CreateAPIToken_APIToken{}
@@ -4263,17 +4263,41 @@ func (t *CreateAPIToken_CreateAPIToken_APIToken) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateAPIToken_CreateAPIToken_APIToken) GetOwner() *CreateAPIToken_CreateAPIToken_APIToken_Owner {
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateAPIToken_CreateAPIToken_APIToken{}
 	}
-	return t.Owner
+	return t.OwnerID
+}
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &CreateAPIToken_CreateAPIToken_APIToken{}
+	}
+	return t.RevokedAt
+}
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &CreateAPIToken_CreateAPIToken_APIToken{}
+	}
+	return t.RevokedBy
+}
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &CreateAPIToken_CreateAPIToken_APIToken{}
+	}
+	return t.RevokedReason
 }
 func (t *CreateAPIToken_CreateAPIToken_APIToken) GetScopes() []string {
 	if t == nil {
 		t = &CreateAPIToken_CreateAPIToken_APIToken{}
 	}
 	return t.Scopes
+}
+func (t *CreateAPIToken_CreateAPIToken_APIToken) GetTags() []string {
+	if t == nil {
+		t = &CreateAPIToken_CreateAPIToken_APIToken{}
+	}
+	return t.Tags
 }
 func (t *CreateAPIToken_CreateAPIToken_APIToken) GetToken() string {
 	if t == nil {
@@ -4305,140 +4329,35 @@ func (t *CreateAPIToken_CreateAPIToken) GetAPIToken() *CreateAPIToken_CreateAPIT
 	return &t.APIToken
 }
 
-type UpdateAPIToken_UpdateAPIToken_APIToken_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
+type DeleteAPIToken_DeleteAPIToken struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
 
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken_Owner) GetID() string {
+func (t *DeleteAPIToken_DeleteAPIToken) GetDeletedID() string {
 	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken_Owner{}
+		t = &DeleteAPIToken_DeleteAPIToken{}
 	}
-	return t.ID
-}
-
-type UpdateAPIToken_UpdateAPIToken_APIToken struct {
-	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt   *time.Time                                    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID          string                                        "json:\"id\" graphql:\"id\""
-	LastUsedAt  *time.Time                                    "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Name        string                                        "json:\"name\" graphql:\"name\""
-	Owner       *UpdateAPIToken_UpdateAPIToken_APIToken_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Scopes      []string                                      "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Token       string                                        "json:\"token\" graphql:\"token\""
-	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetDescription() *string {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.Description
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetExpiresAt() *time.Time {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.ExpiresAt
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetID() string {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.ID
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetLastUsedAt() *time.Time {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.LastUsedAt
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetName() string {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.Name
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetOwner() *UpdateAPIToken_UpdateAPIToken_APIToken_Owner {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.Owner
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetScopes() []string {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.Scopes
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetToken() string {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.Token
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
-	}
-	return t.UpdatedBy
-}
-
-type UpdateAPIToken_UpdateAPIToken struct {
-	APIToken UpdateAPIToken_UpdateAPIToken_APIToken "json:\"apiToken\" graphql:\"apiToken\""
-}
-
-func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIToken_APIToken {
-	if t == nil {
-		t = &UpdateAPIToken_UpdateAPIToken{}
-	}
-	return &t.APIToken
-}
-
-type GetAllAPITokens_APITokens_Edges_Node_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllAPITokens_APITokens_Edges_Node_Owner) GetID() string {
-	if t == nil {
-		t = &GetAllAPITokens_APITokens_Edges_Node_Owner{}
-	}
-	return t.ID
+	return t.DeletedID
 }
 
 type GetAllAPITokens_APITokens_Edges_Node struct {
-	CreatedAt   *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                     "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt   *time.Time                                  "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID          string                                      "json:\"id\" graphql:\"id\""
-	LastUsedAt  *time.Time                                  "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Name        string                                      "json:\"name\" graphql:\"name\""
-	Owner       *GetAllAPITokens_APITokens_Edges_Node_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Scopes      []string                                    "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Token       string                                      "json:\"token\" graphql:\"token\""
-	UpdatedAt   *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	Name          string     "json:\"name\" graphql:\"name\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string   "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllAPITokens_APITokens_Edges_Node) GetCreatedAt() *time.Time {
@@ -4471,6 +4390,12 @@ func (t *GetAllAPITokens_APITokens_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetIsActive() *bool {
+	if t == nil {
+		t = &GetAllAPITokens_APITokens_Edges_Node{}
+	}
+	return t.IsActive
+}
 func (t *GetAllAPITokens_APITokens_Edges_Node) GetLastUsedAt() *time.Time {
 	if t == nil {
 		t = &GetAllAPITokens_APITokens_Edges_Node{}
@@ -4483,17 +4408,41 @@ func (t *GetAllAPITokens_APITokens_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllAPITokens_APITokens_Edges_Node) GetOwner() *GetAllAPITokens_APITokens_Edges_Node_Owner {
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetAllAPITokens_APITokens_Edges_Node{}
 	}
-	return t.Owner
+	return t.OwnerID
+}
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAPITokens_APITokens_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetAllAPITokens_APITokens_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetAllAPITokens_APITokens_Edges_Node{}
+	}
+	return t.RevokedReason
 }
 func (t *GetAllAPITokens_APITokens_Edges_Node) GetScopes() []string {
 	if t == nil {
 		t = &GetAllAPITokens_APITokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *GetAllAPITokens_APITokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAPITokens_APITokens_Edges_Node{}
+	}
+	return t.Tags
 }
 func (t *GetAllAPITokens_APITokens_Edges_Node) GetToken() string {
 	if t == nil {
@@ -4537,9 +4486,16 @@ func (t *GetAllAPITokens_APITokens) GetEdges() []*GetAllAPITokens_APITokens_Edge
 }
 
 type GetAPITokenByID_APIToken_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
 }
 
+func (t *GetAPITokenByID_APIToken_Owner) GetDisplayName() string {
+	if t == nil {
+		t = &GetAPITokenByID_APIToken_Owner{}
+	}
+	return t.DisplayName
+}
 func (t *GetAPITokenByID_APIToken_Owner) GetID() string {
 	if t == nil {
 		t = &GetAPITokenByID_APIToken_Owner{}
@@ -4548,18 +4504,23 @@ func (t *GetAPITokenByID_APIToken_Owner) GetID() string {
 }
 
 type GetAPITokenByID_APIToken struct {
-	CreatedAt   *time.Time                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                         "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt   *time.Time                      "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID          string                          "json:\"id\" graphql:\"id\""
-	LastUsedAt  *time.Time                      "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Name        string                          "json:\"name\" graphql:\"name\""
-	Owner       *GetAPITokenByID_APIToken_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Scopes      []string                        "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Token       string                          "json:\"token\" graphql:\"token\""
-	UpdatedAt   *time.Time                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                         "json:\"description,omitempty\" graphql:\"description\""
+	ExpiresAt     *time.Time                      "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string                          "json:\"id\" graphql:\"id\""
+	IsActive      *bool                           "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time                      "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	Name          string                          "json:\"name\" graphql:\"name\""
+	Owner         *GetAPITokenByID_APIToken_Owner "json:\"owner,omitempty\" graphql:\"owner\""
+	RevokedAt     *time.Time                      "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string                         "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string                         "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string                        "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string                        "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string                          "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAPITokenByID_APIToken) GetCreatedAt() *time.Time {
@@ -4592,6 +4553,12 @@ func (t *GetAPITokenByID_APIToken) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetAPITokenByID_APIToken) GetIsActive() *bool {
+	if t == nil {
+		t = &GetAPITokenByID_APIToken{}
+	}
+	return t.IsActive
+}
 func (t *GetAPITokenByID_APIToken) GetLastUsedAt() *time.Time {
 	if t == nil {
 		t = &GetAPITokenByID_APIToken{}
@@ -4610,11 +4577,35 @@ func (t *GetAPITokenByID_APIToken) GetOwner() *GetAPITokenByID_APIToken_Owner {
 	}
 	return t.Owner
 }
+func (t *GetAPITokenByID_APIToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetAPITokenByID_APIToken{}
+	}
+	return t.RevokedAt
+}
+func (t *GetAPITokenByID_APIToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetAPITokenByID_APIToken{}
+	}
+	return t.RevokedBy
+}
+func (t *GetAPITokenByID_APIToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetAPITokenByID_APIToken{}
+	}
+	return t.RevokedReason
+}
 func (t *GetAPITokenByID_APIToken) GetScopes() []string {
 	if t == nil {
 		t = &GetAPITokenByID_APIToken{}
 	}
 	return t.Scopes
+}
+func (t *GetAPITokenByID_APIToken) GetTags() []string {
+	if t == nil {
+		t = &GetAPITokenByID_APIToken{}
+	}
+	return t.Tags
 }
 func (t *GetAPITokenByID_APIToken) GetToken() string {
 	if t == nil {
@@ -4635,15 +4626,283 @@ func (t *GetAPITokenByID_APIToken) GetUpdatedBy() *string {
 	return t.UpdatedBy
 }
 
-type DeleteAPIToken_DeleteAPIToken struct {
-	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+type GetAPITokens_APITokens_Edges_Node struct {
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	Name          string     "json:\"name\" graphql:\"name\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string   "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *DeleteAPIToken_DeleteAPIToken) GetDeletedID() string {
+func (t *GetAPITokens_APITokens_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
-		t = &DeleteAPIToken_DeleteAPIToken{}
+		t = &GetAPITokens_APITokens_Edges_Node{}
 	}
-	return t.DeletedID
+	return t.CreatedAt
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetIsActive() *bool {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.IsActive
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.RevokedReason
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetScopes() []string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.Scopes
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAPITokens_APITokens_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAPITokens_APITokens_Edges struct {
+	Node *GetAPITokens_APITokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAPITokens_APITokens_Edges) GetNode() *GetAPITokens_APITokens_Edges_Node {
+	if t == nil {
+		t = &GetAPITokens_APITokens_Edges{}
+	}
+	return t.Node
+}
+
+type GetAPITokens_APITokens struct {
+	Edges []*GetAPITokens_APITokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAPITokens_APITokens) GetEdges() []*GetAPITokens_APITokens_Edges {
+	if t == nil {
+		t = &GetAPITokens_APITokens{}
+	}
+	return t.Edges
+}
+
+type UpdateAPIToken_UpdateAPIToken_APIToken struct {
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	Name          string     "json:\"name\" graphql:\"name\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string   "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetDescription() *string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.Description
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.ExpiresAt
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetID() string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.ID
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetIsActive() *bool {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.IsActive
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.LastUsedAt
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetName() string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.Name
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.RevokedAt
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.RevokedBy
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.RevokedReason
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetScopes() []string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.Scopes
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetTags() []string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.Tags
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetToken() string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.Token
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAPIToken_UpdateAPIToken_APIToken) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken_APIToken{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateAPIToken_UpdateAPIToken struct {
+	APIToken UpdateAPIToken_UpdateAPIToken_APIToken "json:\"apiToken\" graphql:\"apiToken\""
+}
+
+func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIToken_APIToken {
+	if t == nil {
+		t = &UpdateAPIToken_UpdateAPIToken{}
+	}
+	return &t.APIToken
 }
 
 type CreateBulkContact_CreateBulkContact_Contacts struct {
@@ -33478,10 +33737,13 @@ type GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	Active                   bool          "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                *string       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DaysUntilDue             *string       "json:\"daysUntilDue,omitempty\" graphql:\"daysUntilDue\""
 	ExpiresAt                *time.Time    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PaymentMethodAdded       *bool         "json:\"paymentMethodAdded,omitempty\" graphql:\"paymentMethodAdded\""
 	ProductPrice             *models.Price "json:\"productPrice,omitempty\" graphql:\"productPrice\""
 	ProductTier              *string       "json:\"productTier,omitempty\" graphql:\"productTier\""
 	StripeCustomerID         *string       "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
@@ -33489,6 +33751,7 @@ type GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	StripeSubscriptionID     *string       "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
+	TrialExpiresAt           *time.Time    "json:\"trialExpiresAt,omitempty\" graphql:\"trialExpiresAt\""
 	UpdatedAt                *time.Time    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                *string       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -33511,11 +33774,23 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedBy() *str
 	}
 	return t.CreatedBy
 }
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetDaysUntilDue() *string {
+	if t == nil {
+		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.DaysUntilDue
+}
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetExpiresAt() *time.Time {
 	if t == nil {
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ExpiresAt
+}
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetFeatureLookupKeys() []string {
+	if t == nil {
+		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.FeatureLookupKeys
 }
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetFeatures() []string {
 	if t == nil {
@@ -33534,6 +33809,12 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetOwnerID() *strin
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetPaymentMethodAdded() *bool {
+	if t == nil {
+		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.PaymentMethodAdded
 }
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetProductPrice() *models.Price {
 	if t == nil {
@@ -33577,6 +33858,12 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetTags() []string 
 	}
 	return t.Tags
 }
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetTrialExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.TrialExpiresAt
+}
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
@@ -33616,10 +33903,13 @@ type GetOrgSubscriptionByID_OrgSubscription struct {
 	Active                   bool          "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                *string       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DaysUntilDue             *string       "json:\"daysUntilDue,omitempty\" graphql:\"daysUntilDue\""
 	ExpiresAt                *time.Time    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PaymentMethodAdded       *bool         "json:\"paymentMethodAdded,omitempty\" graphql:\"paymentMethodAdded\""
 	ProductPrice             *models.Price "json:\"productPrice,omitempty\" graphql:\"productPrice\""
 	ProductTier              *string       "json:\"productTier,omitempty\" graphql:\"productTier\""
 	StripeCustomerID         *string       "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
@@ -33627,6 +33917,7 @@ type GetOrgSubscriptionByID_OrgSubscription struct {
 	StripeSubscriptionID     *string       "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
+	TrialExpiresAt           *time.Time    "json:\"trialExpiresAt,omitempty\" graphql:\"trialExpiresAt\""
 	UpdatedAt                *time.Time    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                *string       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -33649,11 +33940,23 @@ func (t *GetOrgSubscriptionByID_OrgSubscription) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetOrgSubscriptionByID_OrgSubscription) GetDaysUntilDue() *string {
+	if t == nil {
+		t = &GetOrgSubscriptionByID_OrgSubscription{}
+	}
+	return t.DaysUntilDue
+}
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetExpiresAt() *time.Time {
 	if t == nil {
 		t = &GetOrgSubscriptionByID_OrgSubscription{}
 	}
 	return t.ExpiresAt
+}
+func (t *GetOrgSubscriptionByID_OrgSubscription) GetFeatureLookupKeys() []string {
+	if t == nil {
+		t = &GetOrgSubscriptionByID_OrgSubscription{}
+	}
+	return t.FeatureLookupKeys
 }
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetFeatures() []string {
 	if t == nil {
@@ -33672,6 +33975,12 @@ func (t *GetOrgSubscriptionByID_OrgSubscription) GetOwnerID() *string {
 		t = &GetOrgSubscriptionByID_OrgSubscription{}
 	}
 	return t.OwnerID
+}
+func (t *GetOrgSubscriptionByID_OrgSubscription) GetPaymentMethodAdded() *bool {
+	if t == nil {
+		t = &GetOrgSubscriptionByID_OrgSubscription{}
+	}
+	return t.PaymentMethodAdded
 }
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetProductPrice() *models.Price {
 	if t == nil {
@@ -33715,6 +34024,12 @@ func (t *GetOrgSubscriptionByID_OrgSubscription) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetOrgSubscriptionByID_OrgSubscription) GetTrialExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetOrgSubscriptionByID_OrgSubscription{}
+	}
+	return t.TrialExpiresAt
+}
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetOrgSubscriptionByID_OrgSubscription{}
@@ -33732,10 +34047,13 @@ type GetOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	Active                   bool          "json:\"active\" graphql:\"active\""
 	CreatedAt                *time.Time    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                *string       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DaysUntilDue             *string       "json:\"daysUntilDue,omitempty\" graphql:\"daysUntilDue\""
 	ExpiresAt                *time.Time    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PaymentMethodAdded       *bool         "json:\"paymentMethodAdded,omitempty\" graphql:\"paymentMethodAdded\""
 	ProductPrice             *models.Price "json:\"productPrice,omitempty\" graphql:\"productPrice\""
 	ProductTier              *string       "json:\"productTier,omitempty\" graphql:\"productTier\""
 	StripeCustomerID         *string       "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
@@ -33743,6 +34061,7 @@ type GetOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	StripeSubscriptionID     *string       "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
+	TrialExpiresAt           *time.Time    "json:\"trialExpiresAt,omitempty\" graphql:\"trialExpiresAt\""
 	UpdatedAt                *time.Time    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                *string       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -33765,11 +34084,23 @@ func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetCreatedBy() *string
 	}
 	return t.CreatedBy
 }
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetDaysUntilDue() *string {
+	if t == nil {
+		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.DaysUntilDue
+}
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetExpiresAt() *time.Time {
 	if t == nil {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ExpiresAt
+}
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetFeatureLookupKeys() []string {
+	if t == nil {
+		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.FeatureLookupKeys
 }
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetFeatures() []string {
 	if t == nil {
@@ -33788,6 +34119,12 @@ func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetOwnerID() *string {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetPaymentMethodAdded() *bool {
+	if t == nil {
+		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.PaymentMethodAdded
 }
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetProductPrice() *models.Price {
 	if t == nil {
@@ -33830,6 +34167,12 @@ func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetTags() []string {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetTrialExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
+	}
+	return t.TrialExpiresAt
 }
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -34170,212 +34513,6 @@ func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories) GetEdges() []*Get
 	return t.Edges
 }
 
-type CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens_Organizations struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens_Organizations) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens_Organizations{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens_Organizations) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens_Organizations{}
-	}
-	return t.Name
-}
-
-type CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens struct {
-	Description   *string                                                                                                 "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt     *time.Time                                                                                              "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID            string                                                                                                  "json:\"id\" graphql:\"id\""
-	LastUsedAt    *time.Time                                                                                              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Name          string                                                                                                  "json:\"name\" graphql:\"name\""
-	Organizations []*CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
-	Scopes        []string                                                                                                "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Token         string                                                                                                  "json:\"token\" graphql:\"token\""
-	UpdatedAt     *time.Time                                                                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetExpiresAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.ExpiresAt
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetLastUsedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.LastUsedAt
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetOrganizations() []*CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens_Organizations {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Organizations
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetScopes() []string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Scopes
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetToken() string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Token
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken struct {
-	PersonalAccessTokens []*CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
-}
-
-func (t *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken) GetPersonalAccessTokens() []*CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken_PersonalAccessTokens {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken{}
-	}
-	return t.PersonalAccessTokens
-}
-
-type CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens_Organizations struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens_Organizations) GetID() string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens_Organizations{}
-	}
-	return t.ID
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens_Organizations) GetName() string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens_Organizations{}
-	}
-	return t.Name
-}
-
-type CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens struct {
-	Description   *string                                                                                           "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt     *time.Time                                                                                        "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID            string                                                                                            "json:\"id\" graphql:\"id\""
-	LastUsedAt    *time.Time                                                                                        "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Name          string                                                                                            "json:\"name\" graphql:\"name\""
-	Organizations []*CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
-	Scopes        []string                                                                                          "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Token         string                                                                                            "json:\"token\" graphql:\"token\""
-	UpdatedAt     *time.Time                                                                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                                                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Description
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetExpiresAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.ExpiresAt
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetID() string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.ID
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetLastUsedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.LastUsedAt
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetName() string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Name
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetOrganizations() []*CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens_Organizations {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Organizations
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetScopes() []string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Scopes
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetToken() string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.Token
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken struct {
-	PersonalAccessTokens []*CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
-}
-
-func (t *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken) GetPersonalAccessTokens() []*CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken_PersonalAccessTokens {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken{}
-	}
-	return t.PersonalAccessTokens
-}
-
 type CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken_Organizations struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -34406,19 +34543,38 @@ func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken
 }
 
 type CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken struct {
+	CreatedAt     *time.Time                                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                                                                  "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt     *time.Time                                                                               "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string                                                                                   "json:\"id\" graphql:\"id\""
+	IsActive      *bool                                                                                    "json:\"isActive,omitempty\" graphql:\"isActive\""
 	LastUsedAt    *time.Time                                                                               "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	Name          string                                                                                   "json:\"name\" graphql:\"name\""
 	Organizations []*CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
 	Owner         CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken_Owner            "json:\"owner\" graphql:\"owner\""
+	RevokedAt     *time.Time                                                                               "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string                                                                                  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string                                                                                  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
 	Scopes        []string                                                                                 "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string                                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	Token         string                                                                                   "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.CreatedAt
+}
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.CreatedBy
+}
 func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetDescription() *string {
 	if t == nil {
 		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
@@ -34436,6 +34592,12 @@ func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken
 		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
 	}
 	return t.ID
+}
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetIsActive() *bool {
+	if t == nil {
+		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.IsActive
 }
 func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -34461,11 +34623,35 @@ func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken
 	}
 	return &t.Owner
 }
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.RevokedAt
+}
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.RevokedBy
+}
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.RevokedReason
+}
 func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetScopes() []string {
 	if t == nil {
 		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
 	}
 	return t.Scopes
+}
+func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetTags() []string {
+	if t == nil {
+		t = &CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.Tags
 }
 func (t *CreatePersonalAccessToken_CreatePersonalAccessToken_PersonalAccessToken) GetToken() string {
 	if t == nil {
@@ -34527,18 +34713,37 @@ func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organization
 }
 
 type GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node struct {
+	CreatedAt     *time.Time                                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                                                     "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt     *time.Time                                                                  "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string                                                                      "json:\"id\" graphql:\"id\""
+	IsActive      *bool                                                                       "json:\"isActive,omitempty\" graphql:\"isActive\""
 	LastUsedAt    *time.Time                                                                  "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	Name          string                                                                      "json:\"name\" graphql:\"name\""
 	Organizations []*GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+	RevokedAt     *time.Time                                                                  "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string                                                                     "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string                                                                     "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
 	Scopes        []string                                                                    "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string                                                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	Token         string                                                                      "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.CreatedBy
+}
 func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
@@ -34556,6 +34761,12 @@ func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetID() str
 		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetIsActive() *bool {
+	if t == nil {
+		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.IsActive
 }
 func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -34575,11 +34786,35 @@ func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetOrganiza
 	}
 	return t.Organizations
 }
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.RevokedReason
+}
 func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetScopes() []string {
 	if t == nil {
 		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.Tags
 }
 func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetToken() string {
 	if t == nil {
@@ -34641,18 +34876,37 @@ func (t *GetPersonalAccessTokenByID_PersonalAccessToken_Organizations) GetName()
 }
 
 type GetPersonalAccessTokenByID_PersonalAccessToken struct {
+	CreatedAt     *time.Time                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                                         "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt     *time.Time                                                      "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string                                                          "json:\"id\" graphql:\"id\""
+	IsActive      *bool                                                           "json:\"isActive,omitempty\" graphql:\"isActive\""
 	LastUsedAt    *time.Time                                                      "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	Name          string                                                          "json:\"name\" graphql:\"name\""
 	Organizations []*GetPersonalAccessTokenByID_PersonalAccessToken_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+	RevokedAt     *time.Time                                                      "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string                                                         "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string                                                         "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
 	Scopes        []string                                                        "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string                                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	Token         string                                                          "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
+	}
+	return t.CreatedBy
+}
 func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetDescription() *string {
 	if t == nil {
 		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
@@ -34670,6 +34924,12 @@ func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetID() string {
 		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
 	}
 	return t.ID
+}
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetIsActive() *bool {
+	if t == nil {
+		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
+	}
+	return t.IsActive
 }
 func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -34689,11 +34949,35 @@ func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetOrganizations() []*G
 	}
 	return t.Organizations
 }
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
+	}
+	return t.RevokedAt
+}
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
+	}
+	return t.RevokedBy
+}
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
+	}
+	return t.RevokedReason
+}
 func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetScopes() []string {
 	if t == nil {
 		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
 	}
 	return t.Scopes
+}
+func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetTags() []string {
+	if t == nil {
+		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
+	}
+	return t.Tags
 }
 func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetToken() string {
 	if t == nil {
@@ -34712,6 +34996,169 @@ func (t *GetPersonalAccessTokenByID_PersonalAccessToken) GetUpdatedBy() *string 
 		t = &GetPersonalAccessTokenByID_PersonalAccessToken{}
 	}
 	return t.UpdatedBy
+}
+
+type GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations) GetID() string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations{}
+	}
+	return t.ID
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations) GetName() string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations{}
+	}
+	return t.Name
+}
+
+type GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node struct {
+	CreatedAt     *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                                                  "json:\"description,omitempty\" graphql:\"description\""
+	ExpiresAt     *time.Time                                                               "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string                                                                   "json:\"id\" graphql:\"id\""
+	IsActive      *bool                                                                    "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time                                                               "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	Name          string                                                                   "json:\"name\" graphql:\"name\""
+	Organizations []*GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+	RevokedAt     *time.Time                                                               "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string                                                                  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string                                                                  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes        []string                                                                 "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string                                                                   "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetIsActive() *bool {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.IsActive
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetOrganizations() []*GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.Organizations
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.RevokedReason
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetScopes() []string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.Scopes
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPersonalAccessTokens_PersonalAccessTokens_Edges struct {
+	Node *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPersonalAccessTokens_PersonalAccessTokens_Edges) GetNode() *GetPersonalAccessTokens_PersonalAccessTokens_Edges_Node {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens_Edges{}
+	}
+	return t.Node
+}
+
+type GetPersonalAccessTokens_PersonalAccessTokens struct {
+	Edges []*GetPersonalAccessTokens_PersonalAccessTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetPersonalAccessTokens_PersonalAccessTokens) GetEdges() []*GetPersonalAccessTokens_PersonalAccessTokens_Edges {
+	if t == nil {
+		t = &GetPersonalAccessTokens_PersonalAccessTokens{}
+	}
+	return t.Edges
 }
 
 type UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken_Organizations struct {
@@ -34744,19 +35191,38 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken
 }
 
 type UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken struct {
+	CreatedAt     *time.Time                                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                                                                                  "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt     *time.Time                                                                               "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string                                                                                   "json:\"id\" graphql:\"id\""
+	IsActive      *bool                                                                                    "json:\"isActive,omitempty\" graphql:\"isActive\""
 	LastUsedAt    *time.Time                                                                               "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	Name          string                                                                                   "json:\"name\" graphql:\"name\""
 	Organizations []*UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
 	Owner         UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken_Owner            "json:\"owner\" graphql:\"owner\""
+	RevokedAt     *time.Time                                                                               "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string                                                                                  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string                                                                                  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
 	Scopes        []string                                                                                 "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags          []string                                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	Token         string                                                                                   "json:\"token\" graphql:\"token\""
 	UpdatedAt     *time.Time                                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.CreatedBy
+}
 func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetDescription() *string {
 	if t == nil {
 		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
@@ -34774,6 +35240,12 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken
 		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
 	}
 	return t.ID
+}
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetIsActive() *bool {
+	if t == nil {
+		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.IsActive
 }
 func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -34799,11 +35271,35 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken
 	}
 	return &t.Owner
 }
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.RevokedAt
+}
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.RevokedBy
+}
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.RevokedReason
+}
 func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetScopes() []string {
 	if t == nil {
 		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
 	}
 	return t.Scopes
+}
+func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetTags() []string {
+	if t == nil {
+		t = &UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken{}
+	}
+	return t.Tags
 }
 func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken_PersonalAccessToken) GetToken() string {
 	if t == nil {
@@ -53953,15 +54449,15 @@ func (t *CreateAPIToken) GetCreateAPIToken() *CreateAPIToken_CreateAPIToken {
 	return &t.CreateAPIToken
 }
 
-type UpdateAPIToken struct {
-	UpdateAPIToken UpdateAPIToken_UpdateAPIToken "json:\"updateAPIToken\" graphql:\"updateAPIToken\""
+type DeleteAPIToken struct {
+	DeleteAPIToken DeleteAPIToken_DeleteAPIToken "json:\"deleteAPIToken\" graphql:\"deleteAPIToken\""
 }
 
-func (t *UpdateAPIToken) GetUpdateAPIToken() *UpdateAPIToken_UpdateAPIToken {
+func (t *DeleteAPIToken) GetDeleteAPIToken() *DeleteAPIToken_DeleteAPIToken {
 	if t == nil {
-		t = &UpdateAPIToken{}
+		t = &DeleteAPIToken{}
 	}
-	return &t.UpdateAPIToken
+	return &t.DeleteAPIToken
 }
 
 type GetAllAPITokens struct {
@@ -53986,15 +54482,26 @@ func (t *GetAPITokenByID) GetAPIToken() *GetAPITokenByID_APIToken {
 	return &t.APIToken
 }
 
-type DeleteAPIToken struct {
-	DeleteAPIToken DeleteAPIToken_DeleteAPIToken "json:\"deleteAPIToken\" graphql:\"deleteAPIToken\""
+type GetAPITokens struct {
+	APITokens GetAPITokens_APITokens "json:\"apiTokens\" graphql:\"apiTokens\""
 }
 
-func (t *DeleteAPIToken) GetDeleteAPIToken() *DeleteAPIToken_DeleteAPIToken {
+func (t *GetAPITokens) GetAPITokens() *GetAPITokens_APITokens {
 	if t == nil {
-		t = &DeleteAPIToken{}
+		t = &GetAPITokens{}
 	}
-	return &t.DeleteAPIToken
+	return &t.APITokens
+}
+
+type UpdateAPIToken struct {
+	UpdateAPIToken UpdateAPIToken_UpdateAPIToken "json:\"updateAPIToken\" graphql:\"updateAPIToken\""
+}
+
+func (t *UpdateAPIToken) GetUpdateAPIToken() *UpdateAPIToken_UpdateAPIToken {
+	if t == nil {
+		t = &UpdateAPIToken{}
+	}
+	return &t.UpdateAPIToken
 }
 
 type CreateBulkContact struct {
@@ -56241,28 +56748,6 @@ func (t *GetOrgSubscriptionHistories) GetOrgSubscriptionHistories() *GetOrgSubsc
 	return &t.OrgSubscriptionHistories
 }
 
-type CreateBulkCSVPersonalAccessToken struct {
-	CreateBulkCSVPersonalAccessToken CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken "json:\"createBulkCSVPersonalAccessToken\" graphql:\"createBulkCSVPersonalAccessToken\""
-}
-
-func (t *CreateBulkCSVPersonalAccessToken) GetCreateBulkCSVPersonalAccessToken() *CreateBulkCSVPersonalAccessToken_CreateBulkCSVPersonalAccessToken {
-	if t == nil {
-		t = &CreateBulkCSVPersonalAccessToken{}
-	}
-	return &t.CreateBulkCSVPersonalAccessToken
-}
-
-type CreateBulkPersonalAccessToken struct {
-	CreateBulkPersonalAccessToken CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken "json:\"createBulkPersonalAccessToken\" graphql:\"createBulkPersonalAccessToken\""
-}
-
-func (t *CreateBulkPersonalAccessToken) GetCreateBulkPersonalAccessToken() *CreateBulkPersonalAccessToken_CreateBulkPersonalAccessToken {
-	if t == nil {
-		t = &CreateBulkPersonalAccessToken{}
-	}
-	return &t.CreateBulkPersonalAccessToken
-}
-
 type CreatePersonalAccessToken struct {
 	CreatePersonalAccessToken CreatePersonalAccessToken_CreatePersonalAccessToken "json:\"createPersonalAccessToken\" graphql:\"createPersonalAccessToken\""
 }
@@ -56305,6 +56790,17 @@ func (t *GetPersonalAccessTokenByID) GetPersonalAccessToken() *GetPersonalAccess
 		t = &GetPersonalAccessTokenByID{}
 	}
 	return &t.PersonalAccessToken
+}
+
+type GetPersonalAccessTokens struct {
+	PersonalAccessTokens GetPersonalAccessTokens_PersonalAccessTokens "json:\"personalAccessTokens\" graphql:\"personalAccessTokens\""
+}
+
+func (t *GetPersonalAccessTokens) GetPersonalAccessTokens() *GetPersonalAccessTokens_PersonalAccessTokens {
+	if t == nil {
+		t = &GetPersonalAccessTokens{}
+	}
+	return &t.PersonalAccessTokens
 }
 
 type UpdatePersonalAccessToken struct {
@@ -58398,20 +58894,23 @@ func (c *Client) AdminSearch(ctx context.Context, query string, interceptors ...
 const CreateAPITokenDocument = `mutation CreateAPIToken ($input: CreateAPITokenInput!) {
 	createAPIToken(input: $input) {
 		apiToken {
-			id
-			token
-			scopes
-			owner {
-				id
-			}
 			createdAt
-			updatedAt
 			createdBy
-			updatedBy
-			name
-			expiresAt
 			description
+			expiresAt
+			id
+			isActive
 			lastUsedAt
+			name
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			token
+			updatedAt
+			updatedBy
 		}
 	}
 }
@@ -58424,122 +58923,6 @@ func (c *Client) CreateAPIToken(ctx context.Context, input CreateAPITokenInput, 
 
 	var res CreateAPIToken
 	if err := c.Client.Post(ctx, "CreateAPIToken", CreateAPITokenDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateAPITokenDocument = `mutation UpdateAPIToken ($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
-	updateAPIToken(id: $updateAPITokenId, input: $input) {
-		apiToken {
-			id
-			token
-			scopes
-			owner {
-				id
-			}
-			createdAt
-			updatedAt
-			createdBy
-			updatedBy
-			name
-			expiresAt
-			description
-			lastUsedAt
-		}
-	}
-}
-`
-
-func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error) {
-	vars := map[string]any{
-		"updateAPITokenId": updateAPITokenID,
-		"input":            input,
-	}
-
-	var res UpdateAPIToken
-	if err := c.Client.Post(ctx, "UpdateAPIToken", UpdateAPITokenDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetAllAPITokensDocument = `query GetAllAPITokens {
-	apiTokens {
-		edges {
-			node {
-				id
-				token
-				scopes
-				owner {
-					id
-				}
-				createdAt
-				updatedAt
-				createdBy
-				updatedBy
-				name
-				expiresAt
-				description
-				lastUsedAt
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error) {
-	vars := map[string]any{}
-
-	var res GetAllAPITokens
-	if err := c.Client.Post(ctx, "GetAllAPITokens", GetAllAPITokensDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetAPITokenByIDDocument = `query GetAPITokenByID ($apiTokenId: ID!) {
-	apiToken(id: $apiTokenId) {
-		id
-		token
-		scopes
-		owner {
-			id
-		}
-		createdAt
-		updatedAt
-		createdBy
-		updatedBy
-		name
-		expiresAt
-		description
-		lastUsedAt
-	}
-}
-`
-
-func (c *Client) GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error) {
-	vars := map[string]any{
-		"apiTokenId": apiTokenID,
-	}
-
-	var res GetAPITokenByID
-	if err := c.Client.Post(ctx, "GetAPITokenByID", GetAPITokenByIDDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -58564,6 +58947,178 @@ func (c *Client) DeleteAPIToken(ctx context.Context, deleteAPITokenID string, in
 
 	var res DeleteAPIToken
 	if err := c.Client.Post(ctx, "DeleteAPIToken", DeleteAPITokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAPITokensDocument = `query GetAllAPITokens {
+	apiTokens {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				name
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error) {
+	vars := map[string]any{}
+
+	var res GetAllAPITokens
+	if err := c.Client.Post(ctx, "GetAllAPITokens", GetAllAPITokensDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAPITokenByIDDocument = `query GetAPITokenByID ($apiTokenId: ID!) {
+	apiToken(id: $apiTokenId) {
+		createdAt
+		createdBy
+		description
+		expiresAt
+		id
+		isActive
+		lastUsedAt
+		name
+		owner {
+			id
+			displayName
+		}
+		revokedAt
+		revokedBy
+		revokedReason
+		scopes
+		tags
+		token
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error) {
+	vars := map[string]any{
+		"apiTokenId": apiTokenID,
+	}
+
+	var res GetAPITokenByID
+	if err := c.Client.Post(ctx, "GetAPITokenByID", GetAPITokenByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAPITokensDocument = `query GetAPITokens ($where: APITokenWhereInput) {
+	apiTokens(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				name
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAPITokens(ctx context.Context, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetAPITokens
+	if err := c.Client.Post(ctx, "GetAPITokens", GetAPITokensDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAPITokenDocument = `mutation UpdateAPIToken ($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
+	updateAPIToken(id: $updateAPITokenId, input: $input) {
+		apiToken {
+			createdAt
+			createdBy
+			description
+			expiresAt
+			id
+			isActive
+			lastUsedAt
+			name
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			token
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error) {
+	vars := map[string]any{
+		"updateAPITokenId": updateAPITokenID,
+		"input":            input,
+	}
+
+	var res UpdateAPIToken
+	if err := c.Client.Post(ctx, "UpdateAPIToken", UpdateAPITokenDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -67373,17 +67928,21 @@ const GetAllOrgSubscriptionsDocument = `query GetAllOrgSubscriptions {
 				active
 				createdAt
 				createdBy
+				daysUntilDue
 				expiresAt
+				featureLookupKeys
 				features
 				id
 				ownerID
+				paymentMethodAdded
+				productPrice
 				productTier
 				stripeCustomerID
 				stripeProductTierID
 				stripeSubscriptionID
 				stripeSubscriptionStatus
-				productPrice
 				tags
+				trialExpiresAt
 				updatedAt
 				updatedBy
 			}
@@ -67412,17 +67971,21 @@ const GetOrgSubscriptionByIDDocument = `query GetOrgSubscriptionByID ($orgSubscr
 		active
 		createdAt
 		createdBy
+		daysUntilDue
 		expiresAt
+		featureLookupKeys
 		features
 		id
 		ownerID
+		paymentMethodAdded
+		productPrice
 		productTier
 		stripeCustomerID
 		stripeProductTierID
 		stripeSubscriptionID
 		stripeSubscriptionStatus
-		productPrice
 		tags
+		trialExpiresAt
 		updatedAt
 		updatedBy
 	}
@@ -67453,17 +68016,21 @@ const GetOrgSubscriptionsDocument = `query GetOrgSubscriptions ($where: OrgSubsc
 				active
 				createdAt
 				createdBy
+				daysUntilDue
 				expiresAt
+				featureLookupKeys
 				features
 				id
 				ownerID
+				paymentMethodAdded
+				productPrice
 				productTier
 				stripeCustomerID
 				stripeProductTierID
 				stripeSubscriptionID
 				stripeSubscriptionStatus
-				productPrice
 				tags
+				trialExpiresAt
 				updatedAt
 				updatedBy
 			}
@@ -67577,91 +68144,22 @@ func (c *Client) GetOrgSubscriptionHistories(ctx context.Context, where *OrgSubs
 	return &res, nil
 }
 
-const CreateBulkCSVPersonalAccessTokenDocument = `mutation CreateBulkCSVPersonalAccessToken ($input: Upload!) {
-	createBulkCSVPersonalAccessToken(input: $input) {
-		personalAccessTokens {
-			description
-			expiresAt
-			id
-			lastUsedAt
-			name
-			scopes
-			token
-			updatedAt
-			updatedBy
-			organizations {
-				id
-				name
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVPersonalAccessToken(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVPersonalAccessToken, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVPersonalAccessToken
-	if err := c.Client.Post(ctx, "CreateBulkCSVPersonalAccessToken", CreateBulkCSVPersonalAccessTokenDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkPersonalAccessTokenDocument = `mutation CreateBulkPersonalAccessToken ($input: [CreatePersonalAccessTokenInput!]) {
-	createBulkPersonalAccessToken(input: $input) {
-		personalAccessTokens {
-			description
-			expiresAt
-			id
-			lastUsedAt
-			name
-			scopes
-			token
-			updatedAt
-			updatedBy
-			organizations {
-				id
-				name
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkPersonalAccessToken(ctx context.Context, input []*CreatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkPersonalAccessToken, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkPersonalAccessToken
-	if err := c.Client.Post(ctx, "CreateBulkPersonalAccessToken", CreateBulkPersonalAccessTokenDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreatePersonalAccessTokenDocument = `mutation CreatePersonalAccessToken ($input: CreatePersonalAccessTokenInput!) {
 	createPersonalAccessToken(input: $input) {
 		personalAccessToken {
+			createdAt
+			createdBy
 			description
 			expiresAt
 			id
+			isActive
 			lastUsedAt
 			name
+			revokedAt
+			revokedBy
+			revokedReason
 			scopes
+			tags
 			token
 			updatedAt
 			updatedBy
@@ -67722,12 +68220,19 @@ const GetAllPersonalAccessTokensDocument = `query GetAllPersonalAccessTokens {
 	personalAccessTokens {
 		edges {
 			node {
+				createdAt
+				createdBy
 				description
 				expiresAt
 				id
+				isActive
 				lastUsedAt
 				name
+				revokedAt
+				revokedBy
+				revokedReason
 				scopes
+				tags
 				token
 				updatedAt
 				updatedBy
@@ -67758,12 +68263,19 @@ func (c *Client) GetAllPersonalAccessTokens(ctx context.Context, interceptors ..
 
 const GetPersonalAccessTokenByIDDocument = `query GetPersonalAccessTokenByID ($personalAccessTokenId: ID!) {
 	personalAccessToken(id: $personalAccessTokenId) {
+		createdAt
+		createdBy
 		description
 		expiresAt
 		id
+		isActive
 		lastUsedAt
 		name
+		revokedAt
+		revokedBy
+		revokedReason
 		scopes
+		tags
 		token
 		updatedAt
 		updatedBy
@@ -67792,15 +68304,69 @@ func (c *Client) GetPersonalAccessTokenByID(ctx context.Context, personalAccessT
 	return &res, nil
 }
 
+const GetPersonalAccessTokensDocument = `query GetPersonalAccessTokens ($where: PersonalAccessTokenWhereInput) {
+	personalAccessTokens(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				name
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				token
+				updatedAt
+				updatedBy
+				organizations {
+					id
+					name
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPersonalAccessTokens(ctx context.Context, where *PersonalAccessTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPersonalAccessTokens, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPersonalAccessTokens
+	if err := c.Client.Post(ctx, "GetPersonalAccessTokens", GetPersonalAccessTokensDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const UpdatePersonalAccessTokenDocument = `mutation UpdatePersonalAccessToken ($updatePersonalAccessTokenId: ID!, $input: UpdatePersonalAccessTokenInput!) {
 	updatePersonalAccessToken(id: $updatePersonalAccessTokenId, input: $input) {
 		personalAccessToken {
+			createdAt
+			createdBy
 			description
 			expiresAt
 			id
+			isActive
 			lastUsedAt
 			name
+			revokedAt
+			revokedBy
+			revokedReason
 			scopes
+			tags
 			token
 			updatedAt
 			updatedBy
@@ -73235,10 +73801,11 @@ var DocumentOperationNames = map[string]string{
 	GetActionPlanHistoriesDocument:               "GetActionPlanHistories",
 	AdminSearchDocument:                          "AdminSearch",
 	CreateAPITokenDocument:                       "CreateAPIToken",
-	UpdateAPITokenDocument:                       "UpdateAPIToken",
+	DeleteAPITokenDocument:                       "DeleteAPIToken",
 	GetAllAPITokensDocument:                      "GetAllAPITokens",
 	GetAPITokenByIDDocument:                      "GetAPITokenByID",
-	DeleteAPITokenDocument:                       "DeleteAPIToken",
+	GetAPITokensDocument:                         "GetAPITokens",
+	UpdateAPITokenDocument:                       "UpdateAPIToken",
 	CreateBulkContactDocument:                    "CreateBulkContact",
 	CreateBulkCSVContactDocument:                 "CreateBulkCSVContact",
 	CreateContactDocument:                        "CreateContact",
@@ -73443,12 +74010,11 @@ var DocumentOperationNames = map[string]string{
 	GetOrgSubscriptionsDocument:                  "GetOrgSubscriptions",
 	GetAllOrgSubscriptionHistoriesDocument:       "GetAllOrgSubscriptionHistories",
 	GetOrgSubscriptionHistoriesDocument:          "GetOrgSubscriptionHistories",
-	CreateBulkCSVPersonalAccessTokenDocument:     "CreateBulkCSVPersonalAccessToken",
-	CreateBulkPersonalAccessTokenDocument:        "CreateBulkPersonalAccessToken",
 	CreatePersonalAccessTokenDocument:            "CreatePersonalAccessToken",
 	DeletePersonalAccessTokenDocument:            "DeletePersonalAccessToken",
 	GetAllPersonalAccessTokensDocument:           "GetAllPersonalAccessTokens",
 	GetPersonalAccessTokenByIDDocument:           "GetPersonalAccessTokenByID",
+	GetPersonalAccessTokensDocument:              "GetPersonalAccessTokens",
 	UpdatePersonalAccessTokenDocument:            "UpdatePersonalAccessToken",
 	CreateBulkCSVProcedureDocument:               "CreateBulkCSVProcedure",
 	CreateBulkProcedureDocument:                  "CreateBulkProcedure",
