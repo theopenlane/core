@@ -32,9 +32,12 @@ func (RevisionMixin) Fields() []ent.Field {
 			Comment("revision bump type - major, minor, patch, or draft").
 			Annotations(
 				entgql.Skip(
-					^entgql.SkipMutationUpdateInput, // only allow updates to update the revision field
+					^entgql.SkipEnumField & ^entgql.SkipMutationUpdateInput,
+					// only allow updates to update the revision field
+					// entgql.SkipMutationCreateInput, entgql.SkipMutationCreateInput,
+					// entgql.SkipOrderField, entgql.SkipWhereInput,
 				),
-				entsql.Skip(),
+				entsql.Skip(), // this is not a database field
 			),
 	}
 }

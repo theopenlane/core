@@ -113,38 +113,32 @@ mutation CreateProgram($input: CreateProgramInput!) {
       updatedAt
       updatedBy
       procedures {
-        background
         createdAt
         createdBy
-        description
         details
         id
         displayID
         name
         procedureType
-        purposeAndScope
         status
         tags
         updatedAt
         updatedBy
-        version
+        revision
       }
       internalPolicies {
-        background
         createdAt
         createdBy
-        description
         details
         id
         displayID
         name
         policyType
-        purposeAndScope
         status
         tags
         updatedAt
         updatedBy
-        version
+        revision
       }
       editors {
         id
@@ -207,38 +201,32 @@ query GetAllPrograms {
         updatedAt
         updatedBy
         procedures {
-          background
           createdAt
           createdBy
-          description
           details
           id
           displayID
           name
           procedureType
-          purposeAndScope
           status
           tags
           updatedAt
           updatedBy
-          version
+          revision
         }
         internalPolicies {
-          background
           createdAt
           createdBy
-          description
           details
           id
           displayID
           name
           policyType
-          purposeAndScope
           status
           tags
           updatedAt
           updatedBy
-          version
+          revision
         }
         editors {
           id
@@ -284,38 +272,32 @@ query GetProgramByID($programId: ID!) {
     updatedAt
     updatedBy
     procedures {
-      background
       createdAt
       createdBy
-      description
       details
       id
       displayID
       name
       procedureType
-      purposeAndScope
       status
       tags
       updatedAt
       updatedBy
-      version
+      revision
     }
     internalPolicies {
-      background
       createdAt
       createdBy
-      description
       details
       id
       displayID
       name
       policyType
-      purposeAndScope
       status
       tags
       updatedAt
       updatedBy
-      version
+      revision
     }
     editors {
       id
@@ -361,38 +343,32 @@ query GetPrograms($where: ProgramWhereInput) {
         updatedAt
         updatedBy
         procedures {
-          background
           createdAt
           createdBy
-          description
           details
           id
           displayID
           name
           procedureType
-          purposeAndScope
           status
           tags
           updatedAt
           updatedBy
-          version
+          revision
         }
         internalPolicies {
-          background
           createdAt
           createdBy
-          description
           details
           id
           displayID
           name
           policyType
-          purposeAndScope
           status
           tags
           updatedAt
           updatedBy
-          version
+          revision
         }
         editors {
           id
@@ -438,36 +414,30 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       updatedAt
       updatedBy
       procedures {
-        background
         createdAt
         createdBy
-        description
         details
         id
         name
         procedureType
-        purposeAndScope
         status
         tags
         updatedAt
         updatedBy
-        version
+        revision
       }
       internalPolicies {
-        background
         createdAt
         createdBy
-        description
         details
         id
         name
         policyType
-        purposeAndScope
         status
         tags
         updatedAt
         updatedBy
-        version
+        revision
       }
       editors {
         id

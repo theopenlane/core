@@ -8,7 +8,10 @@ import (
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ActionPlan defines the actionplan schema.
@@ -19,26 +22,16 @@ type ActionPlan struct {
 // Fields returns actionplan fields.
 func (ActionPlan) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").
-			Comment("the name of the action plan"),
-		field.Text("description").
-			Optional().
-			Comment("description of the action plan"),
-		field.String("status").
-			Optional().
-			Comment("status of the action plan"),
 		field.Time("due_date").
 			Optional().
 			Comment("due date of the action plan"),
-		field.String("priority").
+		field.Enum("priority").
+			GoType(enums.Priority("")).
 			Optional().
 			Comment("priority of the action plan"),
 		field.String("source").
 			Optional().
 			Comment("source of the action plan"),
-		field.JSON("details", map[string]any{}).
-			Optional().
-			Comment("json data including details of the action plan"),
 	}
 }
 
@@ -63,6 +56,9 @@ func (ActionPlan) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+
+		DocumentMixin{DocumentType: "action plan"},
+		mixin.RevisionMixin{},
 	}
 }
 
@@ -73,4 +69,16 @@ func (ActionPlan) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 	}
+}
+
+// Policy of the ActionPlan
+func (ActionPlan) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+		),
+		policy.WithMutationRules(
+			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+		),
+	)
 }

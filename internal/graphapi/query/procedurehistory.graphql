@@ -2,24 +2,24 @@ query GetAllProcedureHistories {
   procedureHistories {
     edges {
       node {
-        background
+        approvalRequired
         createdAt
         createdBy
-        description
         details
+        displayID
         historyTime
         id
         name
         operation
+        ownerID
         procedureType
-        purposeAndScope
         ref
-        satisfies
+        reviewDue
+        reviewFrequency
         status
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }
@@ -29,24 +29,24 @@ query GetProcedureHistories($where: ProcedureHistoryWhereInput) {
   procedureHistories(where: $where) {
     edges {
       node {
-        background
+        approvalRequired
         createdAt
         createdBy
-        description
         details
+        displayID
         historyTime
         id
         name
         operation
+        ownerID
         procedureType
-        purposeAndScope
         ref
-        satisfies
+        reviewDue
+        reviewFrequency
         status
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }

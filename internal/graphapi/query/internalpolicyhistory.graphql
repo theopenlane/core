@@ -1,24 +1,27 @@
+
+
 query GetAllInternalPolicyHistories {
   internalPolicyHistories {
     edges {
       node {
-        background
+        approvalRequired
         createdAt
         createdBy
-        description
         details
+        displayID
         historyTime
         id
         name
         operation
+        ownerID
         policyType
-        purposeAndScope
         ref
+        reviewDue
+        reviewFrequency
         status
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }
@@ -28,23 +31,24 @@ query GetInternalPolicyHistories($where: InternalPolicyHistoryWhereInput) {
   internalPolicyHistories(where: $where) {
     edges {
       node {
-        background
+        approvalRequired
         createdAt
         createdBy
-        description
         details
+        displayID
         historyTime
         id
         name
         operation
+        ownerID
         policyType
-        purposeAndScope
         ref
+        reviewDue
+        reviewFrequency
         status
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }

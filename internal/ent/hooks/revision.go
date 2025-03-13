@@ -20,6 +20,7 @@ type MutationWithRevision interface {
 	Revision() (*models.SemverVersion, bool)
 	RevisionCleared() bool
 	SetRevision(mv *models.SemverVersion)
+	RevisionBump() (r models.VersionBump, exists bool)
 
 	GenericMutation
 }
@@ -54,8 +55,18 @@ func HookRevisionUpdate() ent.Hook {
 				return nil, err
 			}
 
-			// bump the patch version
-			currentRevision.BumpPatch()
+			revisionBump, _ := mut.RevisionBump()
+
+			switch revisionBump {
+			case models.Major:
+				currentRevision.BumpMajor()
+			case models.Minor:
+				currentRevision.BumpMinor()
+			case models.PreRelease:
+				currentRevision.PreRelease = "draft"
+			default:
+				currentRevision.BumpPatch()
+			}
 
 			// set the revision to the current revision
 			mut.SetRevision(currentRevision)
