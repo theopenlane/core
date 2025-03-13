@@ -4,10 +4,12 @@ import (
 	"context"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -79,6 +81,21 @@ func create(ctx context.Context) error {
 		client, err = cmd.SetupClientWithAuth(ctx)
 		cobra.CheckErr(err)
 		defer cmd.StoreSessionCookies(client)
+	}
+
+	if cmd.InputFile != "" {
+		u, err := objects.NewUploadFile(cmd.InputFile)
+		cobra.CheckErr(err)
+
+		o, err := client.CreateBulkCSVTask(ctx, graphql.Upload{
+			File:        u.File,
+			Filename:    u.Filename,
+			Size:        u.Size,
+			ContentType: u.ContentType,
+		})
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
 	}
 
 	input, err := createValidation()

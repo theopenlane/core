@@ -3,7 +3,6 @@ package objects
 import (
 	"context"
 	"path/filepath"
-	"slices"
 
 	"github.com/rs/zerolog/log"
 
@@ -13,24 +12,12 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 )
 
-var (
-	// keys that should be skipped when uploading files
-	// these keys are used for bulk uploads
-	skipKeys = []string{"input"}
-)
-
 // Upload handles the file Upload process per key in the multipart form and returns the uploaded files
 // in addition to uploading the files to the storage, it also creates the file in the database
 func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload) ([]objects.File, error) {
 	uploadedFiles := make([]objects.File, 0, len(files))
 
 	for _, f := range files {
-		if slices.Contains(skipKeys, f.Key) {
-			// skip the input key
-			log.Debug().Str("file", f.Filename).Msg("skipping input key, this is for bulk upload")
-			continue
-		}
-
 		// create the file in the database
 		entFile, err := createFile(ctx, u, f)
 		if err != nil {
