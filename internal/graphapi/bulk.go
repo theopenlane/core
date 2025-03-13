@@ -4,6 +4,9 @@ package graphapi
 
 import (
 	"context"
+	"encoding/csv"
+	"fmt"
+	"os"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
@@ -28,6 +31,59 @@ func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*ge
 	}, nil
 }
 
+// generateSampleCSVActionPlan generates a sample CSV file for ActionPlan based on the CreateActionPlanInput fields
+func generateSampleCSVActionPlan() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"Status",
+		"DueDate",
+		"Priority",
+		"Source",
+		"Details",
+		"RiskIDs",
+		"ControlIDs",
+		"UserIDs",
+		"ProgramIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_actionplan.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_status",
+		"example_duedate",
+		"example_priority",
+		"example_source",
+		"example_details",
+		"example_riskids",
+		"example_controlids",
+		"example_userids",
+		"example_programids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for ActionPlan created: sample_actionplan.csv\n")
+	return nil
+}
+
 // bulkCreateAPIToken uses the CreateBulk function to create multiple APIToken entities
 func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*model.APITokenBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -45,6 +101,57 @@ func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*gene
 	return &model.APITokenBulkCreatePayload{
 		APITokens: res,
 	}, nil
+}
+
+// generateSampleCSVAPIToken generates a sample CSV file for APIToken based on the CreateAPITokenInput fields
+func generateSampleCSVAPIToken() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"ExpiresAt",
+		"Description",
+		"Scopes",
+		"LastUsedAt",
+		"IsActive",
+		"RevokedReason",
+		"RevokedBy",
+		"RevokedAt",
+		"OwnerId",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_apitoken.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_expiresat",
+		"example_description",
+		"example_scopes",
+		"example_lastusedat",
+		"example_isactive",
+		"example_revokedreason",
+		"example_revokedby",
+		"example_revokedat",
+		"example_ownerid",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for APIToken created: sample_apitoken.csv\n")
+	return nil
 }
 
 // bulkCreateContact uses the CreateBulk function to create multiple Contact entities
@@ -66,6 +173,57 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 	}, nil
 }
 
+// generateSampleCSVContact generates a sample CSV file for Contact based on the CreateContactInput fields
+func generateSampleCSVContact() error {
+	headers := []string{
+		"Tags",
+		"FullName",
+		"Title",
+		"Company",
+		"Email",
+		"PhoneNumber",
+		"Address",
+		"Status",
+		"OwnerId",
+		"EntityIDs",
+		"FileIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_contact.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_fullname",
+		"example_title",
+		"example_company",
+		"example_email",
+		"example_phonenumber",
+		"example_address",
+		"example_status",
+		"example_ownerid",
+		"example_entityids",
+		"example_fileids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Contact created: sample_contact.csv\n")
+	return nil
+}
+
 // bulkCreateControl uses the CreateBulk function to create multiple Control entities
 func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*generated.CreateControlInput) (*model.ControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -83,6 +241,105 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 	return &model.ControlBulkCreatePayload{
 		Controls: res,
 	}, nil
+}
+
+// generateSampleCSVControl generates a sample CSV file for Control based on the CreateControlInput fields
+func generateSampleCSVControl() error {
+	headers := []string{
+		"Tags",
+		"Description",
+		"Status",
+		"Source",
+		"ControlType",
+		"Category",
+		"CategoryId",
+		"Subcategory",
+		"MappedCategories",
+		"AssessmentObjectives",
+		"AssessmentMethods",
+		"ControlQuestions",
+		"ImplementationGuidance",
+		"ExampleEvidence",
+		"References",
+		"RefCode",
+		"OwnerId",
+		"BlockedGroupIDs",
+		"EditorIDs",
+		"ViewerIDs",
+		"StandardId",
+		"ProgramIDs",
+		"EvidenceIDs",
+		"ControlImplementationIDs",
+		"MappedControlIDs",
+		"ControlObjectiveIDs",
+		"SubcontrolIDs",
+		"TaskIDs",
+		"NarrativeIDs",
+		"RiskIDs",
+		"ActionPlanIDs",
+		"ProcedureIDs",
+		"InternalPolicyIDs",
+		"ControlOwnerId",
+		"DelegateId",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_control.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_description",
+		"example_status",
+		"example_source",
+		"example_controltype",
+		"example_category",
+		"example_categoryid",
+		"example_subcategory",
+		"example_mappedcategories",
+		"example_assessmentobjectives",
+		"example_assessmentmethods",
+		"example_controlquestions",
+		"example_implementationguidance",
+		"example_exampleevidence",
+		"example_references",
+		"example_refcode",
+		"example_ownerid",
+		"example_blockedgroupids",
+		"example_editorids",
+		"example_viewerids",
+		"example_standardid",
+		"example_programids",
+		"example_evidenceids",
+		"example_controlimplementationids",
+		"example_mappedcontrolids",
+		"example_controlobjectiveids",
+		"example_subcontrolids",
+		"example_taskids",
+		"example_narrativeids",
+		"example_riskids",
+		"example_actionplanids",
+		"example_procedureids",
+		"example_internalpolicyids",
+		"example_controlownerid",
+		"example_delegateid",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Control created: sample_control.csv\n")
+	return nil
 }
 
 // bulkCreateControlImplementation uses the CreateBulk function to create multiple ControlImplementation entities
@@ -104,6 +361,49 @@ func (r *mutationResolver) bulkCreateControlImplementation(ctx context.Context, 
 	}, nil
 }
 
+// generateSampleCSVControlImplementation generates a sample CSV file for ControlImplementation based on the CreateControlImplementationInput fields
+func generateSampleCSVControlImplementation() error {
+	headers := []string{
+		"Tags",
+		"Status",
+		"ImplementationDate",
+		"Verified",
+		"VerificationDate",
+		"Details",
+		"ControlIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_controlimplementation.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_status",
+		"example_implementationdate",
+		"example_verified",
+		"example_verificationdate",
+		"example_details",
+		"example_controlids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for ControlImplementation created: sample_controlimplementation.csv\n")
+	return nil
+}
+
 // bulkCreateControlObjective uses the CreateBulk function to create multiple ControlObjective entities
 func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*model.ControlObjectiveBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -121,6 +421,79 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	return &model.ControlObjectiveBulkCreatePayload{
 		ControlObjectives: res,
 	}, nil
+}
+
+// generateSampleCSVControlObjective generates a sample CSV file for ControlObjective based on the CreateControlObjectiveInput fields
+func generateSampleCSVControlObjective() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"DesiredOutcome",
+		"Status",
+		"Source",
+		"ControlObjectiveType",
+		"Version",
+		"Category",
+		"Subcategory",
+		"OwnerId",
+		"BlockedGroupIDs",
+		"EditorIDs",
+		"ViewerIDs",
+		"ProgramIDs",
+		"EvidenceIDs",
+		"ControlIDs",
+		"SubcontrolIDs",
+		"InternalPolicyIDs",
+		"ProcedureIDs",
+		"RiskIDs",
+		"NarrativeIDs",
+		"TaskIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_controlobjective.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_desiredoutcome",
+		"example_status",
+		"example_source",
+		"example_controlobjectivetype",
+		"example_version",
+		"example_category",
+		"example_subcategory",
+		"example_ownerid",
+		"example_blockedgroupids",
+		"example_editorids",
+		"example_viewerids",
+		"example_programids",
+		"example_evidenceids",
+		"example_controlids",
+		"example_subcontrolids",
+		"example_internalpolicyids",
+		"example_procedureids",
+		"example_riskids",
+		"example_narrativeids",
+		"example_taskids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for ControlObjective created: sample_controlobjective.csv\n")
+	return nil
 }
 
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
@@ -142,6 +515,47 @@ func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*
 	}, nil
 }
 
+// generateSampleCSVDocumentData generates a sample CSV file for DocumentData based on the CreateDocumentDataInput fields
+func generateSampleCSVDocumentData() error {
+	headers := []string{
+		"Tags",
+		"Data",
+		"OwnerId",
+		"TemplateId",
+		"EntityIDs",
+		"FileIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_documentdata.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_data",
+		"example_ownerid",
+		"example_templateid",
+		"example_entityids",
+		"example_fileids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for DocumentData created: sample_documentdata.csv\n")
+	return nil
+}
+
 // bulkCreateEntity uses the CreateBulk function to create multiple Entity entities
 func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -159,6 +573,61 @@ func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*genera
 	return &model.EntityBulkCreatePayload{
 		Entities: res,
 	}, nil
+}
+
+// generateSampleCSVEntity generates a sample CSV file for Entity based on the CreateEntityInput fields
+func generateSampleCSVEntity() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"DisplayName",
+		"Description",
+		"Domains",
+		"Status",
+		"OwnerId",
+		"ContactIDs",
+		"DocumentIDs",
+		"NoteIDs",
+		"FileIDs",
+		"EntityTypeId",
+		"Note",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_entity.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_displayname",
+		"example_description",
+		"example_domains",
+		"example_status",
+		"example_ownerid",
+		"example_contactids",
+		"example_documentids",
+		"example_noteids",
+		"example_fileids",
+		"example_entitytypeid",
+		"example_note",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Entity created: sample_entity.csv\n")
+	return nil
 }
 
 // bulkCreateEntityType uses the CreateBulk function to create multiple EntityType entities
@@ -180,6 +649,43 @@ func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*ge
 	}, nil
 }
 
+// generateSampleCSVEntityType generates a sample CSV file for EntityType based on the CreateEntityTypeInput fields
+func generateSampleCSVEntityType() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"OwnerId",
+		"EntityIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_entitytype.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_ownerid",
+		"example_entityids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for EntityType created: sample_entitytype.csv\n")
+	return nil
+}
+
 // bulkCreateEvent uses the CreateBulk function to create multiple Event entities
 func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generated.CreateEventInput) (*model.EventBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -197,6 +703,65 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 	return &model.EventBulkCreatePayload{
 		Events: res,
 	}, nil
+}
+
+// generateSampleCSVEvent generates a sample CSV file for Event based on the CreateEventInput fields
+func generateSampleCSVEvent() error {
+	headers := []string{
+		"Tags",
+		"EventId",
+		"CorrelationId",
+		"EventType",
+		"Metadata",
+		"UserIDs",
+		"GroupIDs",
+		"IntegrationIDs",
+		"OrganizationIDs",
+		"InviteIDs",
+		"PersonalAccessTokenIDs",
+		"HushIDs",
+		"SubscriberIDs",
+		"FileIDs",
+		"OrgsubscriptionIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_event.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_eventid",
+		"example_correlationid",
+		"example_eventtype",
+		"example_metadata",
+		"example_userids",
+		"example_groupids",
+		"example_integrationids",
+		"example_organizationids",
+		"example_inviteids",
+		"example_personalaccesstokenids",
+		"example_hushids",
+		"example_subscriberids",
+		"example_fileids",
+		"example_orgsubscriptionids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Event created: sample_event.csv\n")
+	return nil
 }
 
 // bulkCreateGroup uses the CreateBulk function to create multiple Group entities
@@ -218,6 +783,99 @@ func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generat
 	}, nil
 }
 
+// generateSampleCSVGroup generates a sample CSV file for Group based on the CreateGroupInput fields
+func generateSampleCSVGroup() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"GravatarLogoUrl",
+		"LogoUrl",
+		"DisplayName",
+		"OwnerId",
+		"ProcedureEditorIDs",
+		"ProcedureBlockedGroupIDs",
+		"InternalPolicyEditorIDs",
+		"InternalPolicyBlockedGroupIDs",
+		"ProgramEditorIDs",
+		"ProgramBlockedGroupIDs",
+		"ProgramViewerIDs",
+		"RiskEditorIDs",
+		"RiskBlockedGroupIDs",
+		"RiskViewerIDs",
+		"ControlObjectiveEditorIDs",
+		"ControlObjectiveBlockedGroupIDs",
+		"ControlObjectiveViewerIDs",
+		"ControlEditorIDs",
+		"ControlBlockedGroupIDs",
+		"ControlViewerIDs",
+		"NarrativeEditorIDs",
+		"NarrativeBlockedGroupIDs",
+		"NarrativeViewerIDs",
+		"SettingId",
+		"EventIDs",
+		"IntegrationIDs",
+		"FileIDs",
+		"TaskIDs",
+		"CreateGroupSettings",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_group.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_gravatarlogourl",
+		"example_logourl",
+		"example_displayname",
+		"example_ownerid",
+		"example_procedureeditorids",
+		"example_procedureblockedgroupids",
+		"example_internalpolicyeditorids",
+		"example_internalpolicyblockedgroupids",
+		"example_programeditorids",
+		"example_programblockedgroupids",
+		"example_programviewerids",
+		"example_riskeditorids",
+		"example_riskblockedgroupids",
+		"example_riskviewerids",
+		"example_controlobjectiveeditorids",
+		"example_controlobjectiveblockedgroupids",
+		"example_controlobjectiveviewerids",
+		"example_controleditorids",
+		"example_controlblockedgroupids",
+		"example_controlviewerids",
+		"example_narrativeeditorids",
+		"example_narrativeblockedgroupids",
+		"example_narrativeviewerids",
+		"example_settingid",
+		"example_eventids",
+		"example_integrationids",
+		"example_fileids",
+		"example_taskids",
+		"example_creategroupsettings",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Group created: sample_group.csv\n")
+	return nil
+}
+
 // bulkCreateGroupMembership uses the CreateBulk function to create multiple GroupMembership entities
 func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input []*generated.CreateGroupMembershipInput) (*model.GroupMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -235,6 +893,43 @@ func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input 
 	return &model.GroupMembershipBulkCreatePayload{
 		GroupMemberships: res,
 	}, nil
+}
+
+// generateSampleCSVGroupMembership generates a sample CSV file for GroupMembership based on the CreateGroupMembershipInput fields
+func generateSampleCSVGroupMembership() error {
+	headers := []string{
+		"Role",
+		"GroupId",
+		"UserId",
+		"EventIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_groupmembership.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_role",
+		"example_groupid",
+		"example_userid",
+		"example_eventids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for GroupMembership created: sample_groupmembership.csv\n")
+	return nil
 }
 
 // bulkCreateGroupSetting uses the CreateBulk function to create multiple GroupSetting entities
@@ -256,6 +951,45 @@ func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*
 	}, nil
 }
 
+// generateSampleCSVGroupSetting generates a sample CSV file for GroupSetting based on the CreateGroupSettingInput fields
+func generateSampleCSVGroupSetting() error {
+	headers := []string{
+		"Visibility",
+		"JoinPolicy",
+		"SyncToSlack",
+		"SyncToGithub",
+		"GroupId",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_groupsetting.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_visibility",
+		"example_joinpolicy",
+		"example_synctoslack",
+		"example_synctogithub",
+		"example_groupid",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for GroupSetting created: sample_groupsetting.csv\n")
+	return nil
+}
+
 // bulkCreateHush uses the CreateBulk function to create multiple Hush entities
 func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -273,6 +1007,51 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 	return &model.HushBulkCreatePayload{
 		Hushes: res,
 	}, nil
+}
+
+// generateSampleCSVHush generates a sample CSV file for Hush based on the CreateHushInput fields
+func generateSampleCSVHush() error {
+	headers := []string{
+		"Name",
+		"Description",
+		"Kind",
+		"SecretName",
+		"SecretValue",
+		"IntegrationIDs",
+		"OrganizationIDs",
+		"EventIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_hush.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_name",
+		"example_description",
+		"example_kind",
+		"example_secretname",
+		"example_secretvalue",
+		"example_integrationids",
+		"example_organizationids",
+		"example_eventids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Hush created: sample_hush.csv\n")
+	return nil
 }
 
 // bulkCreateIntegration uses the CreateBulk function to create multiple Integration entities
@@ -294,6 +1073,49 @@ func (r *mutationResolver) bulkCreateIntegration(ctx context.Context, input []*g
 	}, nil
 }
 
+// generateSampleCSVIntegration generates a sample CSV file for Integration based on the CreateIntegrationInput fields
+func generateSampleCSVIntegration() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"Kind",
+		"OwnerId",
+		"SecretIDs",
+		"EventIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_integration.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_kind",
+		"example_ownerid",
+		"example_secretids",
+		"example_eventids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Integration created: sample_integration.csv\n")
+	return nil
+}
+
 // bulkCreateInternalPolicy uses the CreateBulk function to create multiple InternalPolicy entities
 func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -311,6 +1133,73 @@ func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input [
 	return &model.InternalPolicyBulkCreatePayload{
 		InternalPolicies: res,
 	}, nil
+}
+
+// generateSampleCSVInternalPolicy generates a sample CSV file for InternalPolicy based on the CreateInternalPolicyInput fields
+func generateSampleCSVInternalPolicy() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"Status",
+		"ReviewDue",
+		"PolicyType",
+		"Version",
+		"PurposeAndScope",
+		"Background",
+		"Details",
+		"OwnerId",
+		"BlockedGroupIDs",
+		"EditorIDs",
+		"ControlObjectiveIDs",
+		"ControlIDs",
+		"ProcedureIDs",
+		"NarrativeIDs",
+		"TaskIDs",
+		"ProgramIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_internalpolicy.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_status",
+		"example_reviewdue",
+		"example_policytype",
+		"example_version",
+		"example_purposeandscope",
+		"example_background",
+		"example_details",
+		"example_ownerid",
+		"example_blockedgroupids",
+		"example_editorids",
+		"example_controlobjectiveids",
+		"example_controlids",
+		"example_procedureids",
+		"example_narrativeids",
+		"example_taskids",
+		"example_programids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for InternalPolicy created: sample_internalpolicy.csv\n")
+	return nil
 }
 
 // bulkCreateInvite uses the CreateBulk function to create multiple Invite entities
@@ -332,6 +1221,51 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	}, nil
 }
 
+// generateSampleCSVInvite generates a sample CSV file for Invite based on the CreateInviteInput fields
+func generateSampleCSVInvite() error {
+	headers := []string{
+		"Expires",
+		"Recipient",
+		"Status",
+		"Role",
+		"SendAttempts",
+		"RequestorId",
+		"OwnerId",
+		"EventIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_invite.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_expires",
+		"example_recipient",
+		"example_status",
+		"example_role",
+		"example_sendattempts",
+		"example_requestorid",
+		"example_ownerid",
+		"example_eventids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Invite created: sample_invite.csv\n")
+	return nil
+}
+
 // bulkCreateMappedControl uses the CreateBulk function to create multiple MappedControl entities
 func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []*generated.CreateMappedControlInput) (*model.MappedControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -349,6 +1283,45 @@ func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []
 	return &model.MappedControlBulkCreatePayload{
 		MappedControls: res,
 	}, nil
+}
+
+// generateSampleCSVMappedControl generates a sample CSV file for MappedControl based on the CreateMappedControlInput fields
+func generateSampleCSVMappedControl() error {
+	headers := []string{
+		"Tags",
+		"MappingType",
+		"Relation",
+		"ControlIDs",
+		"SubcontrolIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_mappedcontrol.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_mappingtype",
+		"example_relation",
+		"example_controlids",
+		"example_subcontrolids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for MappedControl created: sample_mappedcontrol.csv\n")
+	return nil
 }
 
 // bulkCreateNarrative uses the CreateBulk function to create multiple Narrative entities
@@ -370,6 +1343,55 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 	}, nil
 }
 
+// generateSampleCSVNarrative generates a sample CSV file for Narrative based on the CreateNarrativeInput fields
+func generateSampleCSVNarrative() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"Details",
+		"OwnerId",
+		"BlockedGroupIDs",
+		"EditorIDs",
+		"ViewerIDs",
+		"SatisfyIDs",
+		"ProgramIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_narrative.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_details",
+		"example_ownerid",
+		"example_blockedgroupids",
+		"example_editorids",
+		"example_viewerids",
+		"example_satisfyids",
+		"example_programids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Narrative created: sample_narrative.csv\n")
+	return nil
+}
+
 // bulkCreateOrganizationSetting uses the CreateBulk function to create multiple OrganizationSetting entities
 func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -387,6 +1409,59 @@ func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, in
 	return &model.OrganizationSettingBulkCreatePayload{
 		OrganizationSettings: res,
 	}, nil
+}
+
+// generateSampleCSVOrganizationSetting generates a sample CSV file for OrganizationSetting based on the CreateOrganizationSettingInput fields
+func generateSampleCSVOrganizationSetting() error {
+	headers := []string{
+		"Tags",
+		"Domains",
+		"BillingContact",
+		"BillingEmail",
+		"BillingPhone",
+		"BillingAddress",
+		"TaxIdentifier",
+		"GeoLocation",
+		"BillingNotificationsEnabled",
+		"AllowedEmailDomains",
+		"OrganizationId",
+		"FileIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_organizationsetting.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_domains",
+		"example_billingcontact",
+		"example_billingemail",
+		"example_billingphone",
+		"example_billingaddress",
+		"example_taxidentifier",
+		"example_geolocation",
+		"example_billingnotificationsenabled",
+		"example_allowedemaildomains",
+		"example_organizationid",
+		"example_fileids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for OrganizationSetting created: sample_organizationsetting.csv\n")
+	return nil
 }
 
 // bulkCreateOrgMembership uses the CreateBulk function to create multiple OrgMembership entities
@@ -408,6 +1483,43 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 	}, nil
 }
 
+// generateSampleCSVOrgMembership generates a sample CSV file for OrgMembership based on the CreateOrgMembershipInput fields
+func generateSampleCSVOrgMembership() error {
+	headers := []string{
+		"Role",
+		"OrganizationId",
+		"UserId",
+		"EventIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_orgmembership.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_role",
+		"example_organizationid",
+		"example_userid",
+		"example_eventids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for OrgMembership created: sample_orgmembership.csv\n")
+	return nil
+}
+
 // bulkCreateProcedure uses the CreateBulk function to create multiple Procedure entities
 func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -425,6 +1537,75 @@ func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*gen
 	return &model.ProcedureBulkCreatePayload{
 		Procedures: res,
 	}, nil
+}
+
+// generateSampleCSVProcedure generates a sample CSV file for Procedure based on the CreateProcedureInput fields
+func generateSampleCSVProcedure() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"Status",
+		"ProcedureType",
+		"ReviewDue",
+		"Version",
+		"PurposeAndScope",
+		"Background",
+		"Satisfies",
+		"Details",
+		"OwnerId",
+		"BlockedGroupIDs",
+		"EditorIDs",
+		"ControlIDs",
+		"InternalPolicyIDs",
+		"NarrativeIDs",
+		"RiskIDs",
+		"TaskIDs",
+		"ProgramIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_procedure.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_status",
+		"example_proceduretype",
+		"example_reviewdue",
+		"example_version",
+		"example_purposeandscope",
+		"example_background",
+		"example_satisfies",
+		"example_details",
+		"example_ownerid",
+		"example_blockedgroupids",
+		"example_editorids",
+		"example_controlids",
+		"example_internalpolicyids",
+		"example_narrativeids",
+		"example_riskids",
+		"example_taskids",
+		"example_programids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Procedure created: sample_procedure.csv\n")
+	return nil
 }
 
 // bulkCreateProgram uses the CreateBulk function to create multiple Program entities
@@ -446,6 +1627,85 @@ func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*gener
 	}, nil
 }
 
+// generateSampleCSVProgram generates a sample CSV file for Program based on the CreateProgramInput fields
+func generateSampleCSVProgram() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"Status",
+		"StartDate",
+		"EndDate",
+		"AuditorReady",
+		"AuditorWriteComments",
+		"AuditorReadComments",
+		"OwnerId",
+		"BlockedGroupIDs",
+		"EditorIDs",
+		"ViewerIDs",
+		"ControlIDs",
+		"SubcontrolIDs",
+		"ControlObjectiveIDs",
+		"InternalPolicyIDs",
+		"ProcedureIDs",
+		"RiskIDs",
+		"TaskIDs",
+		"NoteIDs",
+		"FileIDs",
+		"EvidenceIDs",
+		"NarrativeIDs",
+		"ActionPlanIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_program.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_status",
+		"example_startdate",
+		"example_enddate",
+		"example_auditorready",
+		"example_auditorwritecomments",
+		"example_auditorreadcomments",
+		"example_ownerid",
+		"example_blockedgroupids",
+		"example_editorids",
+		"example_viewerids",
+		"example_controlids",
+		"example_subcontrolids",
+		"example_controlobjectiveids",
+		"example_internalpolicyids",
+		"example_procedureids",
+		"example_riskids",
+		"example_taskids",
+		"example_noteids",
+		"example_fileids",
+		"example_evidenceids",
+		"example_narrativeids",
+		"example_actionplanids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Program created: sample_program.csv\n")
+	return nil
+}
+
 // bulkCreateProgramMembership uses the CreateBulk function to create multiple ProgramMembership entities
 func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, input []*generated.CreateProgramMembershipInput) (*model.ProgramMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -463,6 +1723,41 @@ func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, inpu
 	return &model.ProgramMembershipBulkCreatePayload{
 		ProgramMemberships: res,
 	}, nil
+}
+
+// generateSampleCSVProgramMembership generates a sample CSV file for ProgramMembership based on the CreateProgramMembershipInput fields
+func generateSampleCSVProgramMembership() error {
+	headers := []string{
+		"Role",
+		"ProgramId",
+		"UserId",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_programmembership.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_role",
+		"example_programid",
+		"example_userid",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for ProgramMembership created: sample_programmembership.csv\n")
+	return nil
 }
 
 // bulkCreateRisk uses the CreateBulk function to create multiple Risk entities
@@ -484,6 +1779,73 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	}, nil
 }
 
+// generateSampleCSVRisk generates a sample CSV file for Risk based on the CreateRiskInput fields
+func generateSampleCSVRisk() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"Description",
+		"Status",
+		"RiskType",
+		"BusinessCosts",
+		"Impact",
+		"Likelihood",
+		"Mitigation",
+		"Satisfies",
+		"Details",
+		"OwnerId",
+		"BlockedGroupIDs",
+		"EditorIDs",
+		"ViewerIDs",
+		"ControlIDs",
+		"ProcedureIDs",
+		"ActionPlanIDs",
+		"ProgramIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_risk.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_description",
+		"example_status",
+		"example_risktype",
+		"example_businesscosts",
+		"example_impact",
+		"example_likelihood",
+		"example_mitigation",
+		"example_satisfies",
+		"example_details",
+		"example_ownerid",
+		"example_blockedgroupids",
+		"example_editorids",
+		"example_viewerids",
+		"example_controlids",
+		"example_procedureids",
+		"example_actionplanids",
+		"example_programids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Risk created: sample_risk.csv\n")
+	return nil
+}
+
 // bulkCreateSubcontrol uses the CreateBulk function to create multiple Subcontrol entities
 func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -501,6 +1863,93 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 	return &model.SubcontrolBulkCreatePayload{
 		Subcontrols: res,
 	}, nil
+}
+
+// generateSampleCSVSubcontrol generates a sample CSV file for Subcontrol based on the CreateSubcontrolInput fields
+func generateSampleCSVSubcontrol() error {
+	headers := []string{
+		"Tags",
+		"Description",
+		"Status",
+		"Source",
+		"ControlType",
+		"Category",
+		"CategoryId",
+		"Subcategory",
+		"MappedCategories",
+		"AssessmentObjectives",
+		"AssessmentMethods",
+		"ControlQuestions",
+		"ImplementationGuidance",
+		"ExampleEvidence",
+		"References",
+		"RefCode",
+		"OwnerId",
+		"ControlId",
+		"MappedControlIDs",
+		"EvidenceIDs",
+		"ControlObjectiveIDs",
+		"TaskIDs",
+		"NarrativeIDs",
+		"RiskIDs",
+		"ActionPlanIDs",
+		"ProcedureIDs",
+		"InternalPolicyIDs",
+		"ControlOwnerId",
+		"DelegateId",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_subcontrol.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_description",
+		"example_status",
+		"example_source",
+		"example_controltype",
+		"example_category",
+		"example_categoryid",
+		"example_subcategory",
+		"example_mappedcategories",
+		"example_assessmentobjectives",
+		"example_assessmentmethods",
+		"example_controlquestions",
+		"example_implementationguidance",
+		"example_exampleevidence",
+		"example_references",
+		"example_refcode",
+		"example_ownerid",
+		"example_controlid",
+		"example_mappedcontrolids",
+		"example_evidenceids",
+		"example_controlobjectiveids",
+		"example_taskids",
+		"example_narrativeids",
+		"example_riskids",
+		"example_actionplanids",
+		"example_procedureids",
+		"example_internalpolicyids",
+		"example_controlownerid",
+		"example_delegateid",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Subcontrol created: sample_subcontrol.csv\n")
+	return nil
 }
 
 // bulkCreateSubscriber uses the CreateBulk function to create multiple Subscriber entities
@@ -522,6 +1971,45 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 	}, nil
 }
 
+// generateSampleCSVSubscriber generates a sample CSV file for Subscriber based on the CreateSubscriberInput fields
+func generateSampleCSVSubscriber() error {
+	headers := []string{
+		"Tags",
+		"Email",
+		"PhoneNumber",
+		"OwnerId",
+		"EventIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_subscriber.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_email",
+		"example_phonenumber",
+		"example_ownerid",
+		"example_eventids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Subscriber created: sample_subscriber.csv\n")
+	return nil
+}
+
 // bulkCreateTask uses the CreateBulk function to create multiple Task entities
 func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -539,6 +2027,75 @@ func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generate
 	return &model.TaskBulkCreatePayload{
 		Tasks: res,
 	}, nil
+}
+
+// generateSampleCSVTask generates a sample CSV file for Task based on the CreateTaskInput fields
+func generateSampleCSVTask() error {
+	headers := []string{
+		"Tags",
+		"Title",
+		"Description",
+		"Details",
+		"Status",
+		"Category",
+		"Due",
+		"Completed",
+		"OwnerId",
+		"AssignerId",
+		"AssigneeId",
+		"CommentIDs",
+		"GroupIDs",
+		"InternalPolicyIDs",
+		"ProcedureIDs",
+		"ControlIDs",
+		"ControlObjectiveIDs",
+		"SubcontrolIDs",
+		"ProgramIDs",
+		"EvidenceIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_task.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_title",
+		"example_description",
+		"example_details",
+		"example_status",
+		"example_category",
+		"example_due",
+		"example_completed",
+		"example_ownerid",
+		"example_assignerid",
+		"example_assigneeid",
+		"example_commentids",
+		"example_groupids",
+		"example_internalpolicyids",
+		"example_procedureids",
+		"example_controlids",
+		"example_controlobjectiveids",
+		"example_subcontrolids",
+		"example_programids",
+		"example_evidenceids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Task created: sample_task.csv\n")
+	return nil
 }
 
 // bulkCreateTemplate uses the CreateBulk function to create multiple Template entities
@@ -560,6 +2117,53 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 	}, nil
 }
 
+// generateSampleCSVTemplate generates a sample CSV file for Template based on the CreateTemplateInput fields
+func generateSampleCSVTemplate() error {
+	headers := []string{
+		"Tags",
+		"Name",
+		"TemplateType",
+		"Description",
+		"Jsonconfig",
+		"Uischema",
+		"OwnerId",
+		"DocumentIDs",
+		"FileIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_template.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_name",
+		"example_templatetype",
+		"example_description",
+		"example_jsonconfig",
+		"example_uischema",
+		"example_ownerid",
+		"example_documentids",
+		"example_fileids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for Template created: sample_template.csv\n")
+	return nil
+}
+
 // bulkCreateUserSetting uses the CreateBulk function to create multiple UserSetting entities
 func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -577,4 +2181,55 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 	return &model.UserSettingBulkCreatePayload{
 		UserSettings: res,
 	}, nil
+}
+
+// generateSampleCSVUserSetting generates a sample CSV file for UserSetting based on the CreateUserSettingInput fields
+func generateSampleCSVUserSetting() error {
+	headers := []string{
+		"Tags",
+		"Locked",
+		"SilencedAt",
+		"SuspendedAt",
+		"Status",
+		"EmailConfirmed",
+		"IsWebauthnAllowed",
+		"IsTfaEnabled",
+		"UserId",
+		"DefaultOrgId",
+		"FileIDs",
+	}
+
+	file, err := os.Create(fmt.Sprintf("sample_usersetting.csv"))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	if err := writer.Write(headers); err != nil {
+		return err
+	}
+
+	// Add example row
+	exampleRow := []string{
+		"example_tags",
+		"example_locked",
+		"example_silencedat",
+		"example_suspendedat",
+		"example_status",
+		"example_emailconfirmed",
+		"example_iswebauthnallowed",
+		"example_istfaenabled",
+		"example_userid",
+		"example_defaultorgid",
+		"example_fileids",
+	}
+	if err := writer.Write(exampleRow); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sample CSV for UserSetting created: sample_usersetting.csv\n")
+	return nil
 }
