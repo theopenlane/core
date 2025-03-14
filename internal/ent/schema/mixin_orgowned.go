@@ -90,7 +90,7 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return nil, ErrUnexpectedMutationType
 			}
 
-			o.P(mx, orgIDs)
+			o.PWithField(mx, ownerFieldName, orgIDs)
 
 			return next.Mutate(ctx, m)
 		})

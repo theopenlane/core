@@ -190,33 +190,24 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 	return res
 }
 
-// P adds a storage-level predicate to the queries and mutations.
+// P adds a storage-level predicate to the queries and mutations for the provided field name
 func (o ObjectOwnedMixin) PWithField(w interface{ WhereP(...func(*sql.Selector)) }, fieldName string, objectIDs []string) {
-	// if the field is only owned by one field, use that field
-	// this is used by the organization owned mixin
-	if len(o.FieldNames) == 1 && o.FieldNames[0] == ownerFieldName {
-		selector := sql.FieldIn(o.FieldNames[0], objectIDs...)
-		if o.AllowEmptyForSystemAdmin {
-			// allow for empty values if the flag is set
-			w.WhereP(
-				sql.OrPredicates(
-					sql.FieldIsNull(o.FieldNames[0]),
-					selector,
-				),
-			)
-
-			return
-		}
-
-		// default selector by owner_id
-		w.WhereP(selector)
+	selector := sql.FieldIn(fieldName, objectIDs...)
+	if o.AllowEmptyForSystemAdmin && fieldName == ownerFieldName {
+		// allow for empty values if the flag is set
+		w.WhereP(
+			sql.OrPredicates(
+				sql.FieldIsNull(fieldName),
+				selector,
+			),
+		)
 
 		return
 	}
 
 	// otherwise we are using getting all objects filtered by the field name
 	// usually "id" or "owner_id"
-	w.WhereP(sql.FieldIn(fieldName, objectIDs...))
+	w.WhereP(selector)
 }
 
 // P adds the predicate to the queries, using the "id" field
