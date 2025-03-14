@@ -803,13 +803,7 @@ type ExampleCSVRequest struct {
 	Filename string `json:"filename" description:"the file name to check for" example:"actionplan"`
 }
 
-// TFAReply holds the response to TFARequest
-type ExampleCSVReply struct {
-	rout.Reply
-	Message string `json:"message"`
-}
-
-// Validate ensures the required fields are set on the TFARequest request
+// Validate ensures the required fields are set on the ExampleCSVRequest request
 func (r *ExampleCSVRequest) Validate() error {
 	if r.Filename == "" {
 		return rout.NewMissingRequiredFieldError("filename")
@@ -821,11 +815,4 @@ func (r *ExampleCSVRequest) Validate() error {
 // ExampleLoginSuccessRequest is an example of a successful tfa validation request for OpenAPI documentation
 var ExampleExampleCSVRequest = ExampleCSVRequest{
 	Filename: "actionplan",
-}
-
-// ExampleLoginSuccessResponse is an example of a successful tfa validation response for OpenAPI documentation
-var ExampleExampleCSVReply = ExampleCSVReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
 }
