@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"embed"
-	"io"
 	"net/http"
 
 	"github.com/rs/zerolog/log"
@@ -25,18 +24,7 @@ func (h *Handler) ExampleCSV(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	log.Warn().Msgf("input was validated")
-
-	file, err := examplecsv.Open("csv/sample_" + in.Filename + ".csv")
-	if err != nil {
-		log.Warn().Msgf("failed to open example csv file: %s", in.Filename)
-		return h.InternalServerError(ctx, err)
-	}
-	defer file.Close()
-
-	log.Warn().Msgf("example csv file: %s", in.Filename)
-
-	content, err := io.ReadAll(file)
+	content, err := examplecsv.ReadFile("csv/sample_" + in.Filename + ".csv")
 	if err != nil {
 		log.Warn().Msgf("failed to read example csv file: %s", in.Filename)
 		return h.InternalServerError(ctx, err)
