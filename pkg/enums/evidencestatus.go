@@ -6,15 +6,22 @@ import (
 	"strings"
 )
 
+// EvidenceStatus is a custom type for evidence status
 type EvidenceStatus string
 
 var (
-	EvidenceReady           EvidenceStatus = "READY"
-	EvidenceApproved        EvidenceStatus = "APPROVED"
+	// EvidenceReady is the status to indicate that the evidence is ready for auditor review
+	EvidenceReady EvidenceStatus = "READY"
+	// EvidenceApproved is the status to indicate that the evidence has been approved by the auditor
+	EvidenceApproved EvidenceStatus = "APPROVED"
+	// EvidenceMissingArtifact is the status to indicate that the evidence is missing an artifact
 	EvidenceMissingArtifact EvidenceStatus = "MISSING_ARTIFACT"
-	EvidenceNeedsRenewal    EvidenceStatus = "NEEDS_RENEWAL"
-	EvidenceRejected        EvidenceStatus = "REJECTED"
-	EvidenceInvalid         EvidenceStatus = "EVIDENCE_STATUS_INVALID"
+	// EvidenceNeedsRenewal is the status to indicate that the evidence needs to be renewed
+	EvidenceNeedsRenewal EvidenceStatus = "NEEDS_RENEWAL"
+	// EvidenceRejected is the status to indicate that the evidence has been rejected by the auditor
+	EvidenceRejected EvidenceStatus = "REJECTED"
+	// EvidenceInvalid is the status to indicate that the evidence is invalid
+	EvidenceInvalid EvidenceStatus = "EVIDENCE_STATUS_INVALID"
 )
 
 // Values returns a slice of strings that represents all the possible values of the EvidenceStatus enum.

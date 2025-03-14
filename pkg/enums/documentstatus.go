@@ -6,14 +6,21 @@ import (
 	"strings"
 )
 
+// DocumentStatus is a custom type for document status
 type DocumentStatus string
 
 var (
-	DocumentPublished     DocumentStatus = "PUBLISHED"
-	DocumentDraft         DocumentStatus = "DRAFT"
+	// DocumentPublished indicates that the document is published
+	DocumentPublished DocumentStatus = "PUBLISHED"
+	// DocumentDraft indicates that the document is in draft status
+	DocumentDraft DocumentStatus = "DRAFT"
+	// DocumentNeedsApproval indicates that the document needs approval
 	DocumentNeedsApproval DocumentStatus = "NEEDS_APPROVAL"
-	DocumentApproved      DocumentStatus = "APPROVED"
-	DocumentArchived      DocumentStatus = "ARCHIVED"
+	// DocumentApproved indicates that the document has been approved and is ready to be published
+	DocumentApproved DocumentStatus = "APPROVED"
+	// DocumentArchived indicates that the document has been archived and is no longer active
+	DocumentArchived DocumentStatus = "ARCHIVED"
+	// DocumentStatusInvalid indicates that the document status is invalid
 	DocumentStatusInvalid DocumentStatus = "DOCUMENT_STATUS_INVALID"
 )
 

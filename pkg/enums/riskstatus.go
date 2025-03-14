@@ -6,15 +6,22 @@ import (
 	"strings"
 )
 
+// RiskStatus is a custom type for risk status
 type RiskStatus string
 
 var (
-	RiskOpen       RiskStatus = "OPEN"
+	// RiskOpen indicates that the risk is open and has not been mitigated
+	RiskOpen RiskStatus = "OPEN"
+	// RiskInProgress indicates that the risk is being actively worked on
 	RiskInProgress RiskStatus = "IN_PROGRESS"
-	RiskOngoing    RiskStatus = "ONGOING"
-	RiskMitigated  RiskStatus = "MITIGATED"
-	RiskArchived   RiskStatus = "ARCHIVED"
-	RiskInvalid    RiskStatus = "RISK_STATUS_INVALID"
+	// RiskOngoing indicates that the risk is ongoing and has not been mitigated
+	RiskOngoing RiskStatus = "ONGOING"
+	// RiskMitigated indicates that the risk has been mitigated
+	RiskMitigated RiskStatus = "MITIGATED"
+	// RiskArchived indicates that the risk has been archived and is no longer active
+	RiskArchived RiskStatus = "ARCHIVED"
+	// RiskInvalid indicates that the risk status is invalid
+	RiskInvalid RiskStatus = "RISK_STATUS_INVALID"
 )
 
 // Values returns a slice of strings that represents all the possible values of the RiskStatus enum.

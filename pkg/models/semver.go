@@ -6,6 +6,7 @@ import (
 )
 
 const (
+	// DefaultRevision is the default revision to be used for new records
 	DefaultRevision = "v0.0.1"
 )
 
@@ -59,7 +60,7 @@ func ToSemverVersion(version *string) (*SemverVersion, error) {
 	ver = strings.TrimPrefix(ver, "v")
 
 	if strings.Contains(ver, "-") {
-		versionParts := strings.SplitN(ver, "-", 2)
+		versionParts := strings.SplitN(ver, "-", 2) //nolint:mnd
 
 		// set pre-release version if it exists
 		semver.PreRelease = versionParts[1]
@@ -173,6 +174,7 @@ func SetPreRelease(v string) (string, error) {
 			if _, err := fmt.Sscanf(preRelease[1], "%d", &preReleaseVersion); err != nil {
 				return "", err
 			}
+
 			semver.PreRelease = fmt.Sprintf("%s-%d", preRelease[0], preReleaseVersion+1)
 		} else {
 			semver.PreRelease = fmt.Sprintf("%s-%d", semver.PreRelease, 1)

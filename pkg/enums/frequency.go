@@ -6,13 +6,18 @@ import (
 	"strings"
 )
 
+// Frequency is a custom type for frequency
 type Frequency string
 
 var (
-	FrequencyYearly     Frequency = "YEARLY"
-	FrequencyQuarterly  Frequency = "QUARTERLY"
+	// FrequencyYearly indicates that the frequency should occur yearly
+	FrequencyYearly Frequency = "YEARLY"
+	// FrequencyQuarterly indicates that the frequency should occur quarterly
+	FrequencyQuarterly Frequency = "QUARTERLY"
+	// FrequencyBiAnnually indicates that the frequency should occur bi-annually
 	FrequencyBiAnnually Frequency = "BIANNUALLY"
-	FrequencyMonthly    Frequency = "MONTHLY"
+	// FrequencyMonthly indicates that the frequency should occur monthly
+	FrequencyMonthly Frequency = "MONTHLY"
 )
 
 // Values returns a slice of strings that represents all the possible values of the Frequency enum.

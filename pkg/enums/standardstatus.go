@@ -6,13 +6,18 @@ import (
 	"strings"
 )
 
+// StandardStatus is a custom type for standard status
 type StandardStatus string
 
 var (
-	StandardActive   StandardStatus = "ACTIVE"
-	StandardDraft    StandardStatus = "DRAFT"
+	// StandardActive indicates that the standard is active and in use
+	StandardActive StandardStatus = "ACTIVE"
+	// StandardDraft indicates that the standard is in draft status and not yet finalized
+	StandardDraft StandardStatus = "DRAFT"
+	// StandardArchived indicates that the standard has been archived and is no longer active
 	StandardArchived StandardStatus = "ARCHIVED"
-	StandardInvalid  StandardStatus = "STANDARD_STATUS_INVALID"
+	// StandardInvalid indicates that the standard status is invalid
+	StandardInvalid StandardStatus = "STANDARD_STATUS_INVALID"
 )
 
 // Values returns a slice of strings that represents all the possible values of the StandardStatus enum.

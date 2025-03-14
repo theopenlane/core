@@ -40,7 +40,6 @@ func (a Address) String() string {
 // MarshalGQL implement the Marshaler interface for gqlgen
 func (a Address) MarshalGQL(w io.Writer) {
 	marshalGQLJSON(w, a)
-
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen

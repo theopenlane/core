@@ -8,9 +8,10 @@ import (
 	"entgo.io/ent/schema/mixin"
 	"golang.org/x/mod/semver"
 
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/rout"
 )
 
 // RevisionMixin implements the revision pattern for schemas.
@@ -33,17 +34,6 @@ func (RevisionMixin) Fields() []ent.Field {
 			}).
 			Optional().
 			Comment("revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set"),
-		// field.Enum("revision_bump").
-		// 	Optional().
-		// 	GoType(models.VersionBump("")).
-		// 	Comment("revision bump type - major, minor, patch, or draft").
-		// 	StorageKey("revision").
-		// 	Annotations(
-		// 		entgql.Skip(
-		// 			^entgql.SkipEnumField & ^entgql.SkipMutationUpdateInput,
-		// 		),
-		// 		entsql.Skip(), // this is not a database field
-		// 	),
 	}
 }
 
