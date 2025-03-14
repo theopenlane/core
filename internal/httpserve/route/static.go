@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/httpsling"
 )
 
 // registerJwksWellKnownHandler supplies the JWKS endpoint
@@ -140,6 +141,31 @@ func registerAppleMerchantHandler(router *Router) (err error) {
 		Path:        path,
 		Middlewares: mw,
 		Handler:     echo.StaticFileHandler("applemerchant", applemerchant),
+	}
+
+	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// registerExampleCSVHandler serves up the text output of the example csv file
+func registerExampleCSVHandler(router *Router) (err error) {
+	path := "/example/csv"
+	method := http.MethodPost
+	name := "ExampleCSV"
+
+	route := echo.Route{
+		Name:        name,
+		Method:      method,
+		Path:        path,
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			c.Response().Header().Set(httpsling.HeaderContentType, "text/csv")
+
+			return router.Handler.ExampleCSV(c)
+		},
 	}
 
 	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {

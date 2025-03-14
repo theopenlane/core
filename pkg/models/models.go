@@ -793,3 +793,26 @@ var ExampleTFASSuccessResponse = TFAReply{
 		Success: true,
 	},
 }
+
+// =========
+// EXAMPLECSV REQUEST
+// =========
+
+// ExampleCSVRequest holds the payload for serving example CSV files
+type ExampleCSVRequest struct {
+	Filename string `json:"filename" description:"the file name to check for" example:"actionplan"`
+}
+
+// Validate ensures the required fields are set on the ExampleCSVRequest request
+func (r *ExampleCSVRequest) Validate() error {
+	if r.Filename == "" {
+		return rout.NewMissingRequiredFieldError("filename")
+	}
+
+	return nil
+}
+
+// ExampleLoginSuccessRequest is an example of a successful tfa validation request for OpenAPI documentation
+var ExampleExampleCSVRequest = ExampleCSVRequest{
+	Filename: "actionplan",
+}
