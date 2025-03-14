@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -125,6 +126,13 @@ func (suite *GraphTestSuite) TestQueryEvidences() {
 	// create multiple objects by adminUser, org owner should have access to them as well
 	(&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	(&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+
+	// add evidence for the user to another org; this should not be returned for JWT auth, since it's
+	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
+	(&EvidenceBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
 
 	testCases := []struct {
 		name            string

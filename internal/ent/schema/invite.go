@@ -103,7 +103,7 @@ func (Invite) Mixin() []ent.Mixin {
 // Indexes of the Invite
 func (Invite) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("recipient", "owner_id").
+		index.Fields("recipient", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

@@ -46,8 +46,8 @@ func NewOrgOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
 		o.HookFuncs = []HookFunc{defaultOrgHookFunc}
 	}
 
-	if o.InterceptorFunc == nil {
-		o.InterceptorFunc = defaultOrgInterceptorFunc
+	if o.InterceptorFuncs == nil {
+		o.InterceptorFuncs = []InterceptorFunc{defaultOrgInterceptorFunc}
 	}
 
 	return o
@@ -90,7 +90,7 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return nil, ErrUnexpectedMutationType
 			}
 
-			o.P(mx, orgIDs)
+			o.PWithField(mx, ownerFieldName, orgIDs)
 
 			return next.Mutate(ctx, m)
 		})
@@ -222,7 +222,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 		}
 
 		// sets the owner id on the query for the current organization
-		o.P(q, orgIDs)
+		o.PWithField(q, ownerFieldName, orgIDs)
 
 		return nil
 	})

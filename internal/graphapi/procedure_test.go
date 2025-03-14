@@ -7,6 +7,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/enums"
@@ -91,6 +92,12 @@ func (suite *GraphTestSuite) TestQueryProcedures() {
 	// create multiple Procedures to be queried using testUser1
 	(&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+
+	// add procedure for another org; it should not be returned in the list
+	(&ProcedureBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
 
 	testCases := []struct {
 		name            string

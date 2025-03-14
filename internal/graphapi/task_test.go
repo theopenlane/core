@@ -8,6 +8,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/enums"
@@ -76,6 +77,12 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 	(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.PersonalOrgID)
+
+	// add a task for the user to another org; this should not be returned for JWT auth, since it's
+	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
+	(&TaskBuilder{client: suite.client, AssigneeID: testUser1.ID}).MustNew(userCtxPersonalOrg, t)
+
 	testCases := []struct {
 		name            string
 		client          *openlaneclient.OpenlaneClient
@@ -89,10 +96,10 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 			expectedResults: 2,
 		},
 		{
-			name:            "happy path, using pat",
+			name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: 2,
+			expectedResults: 3,
 		},
 		{
 			name:            "another user, no entities should be returned",
