@@ -149,9 +149,6 @@ func registerAppleMerchantHandler(router *Router) (err error) {
 	return nil
 }
 
-//go:embed csv/*.csv
-var examplecsv embed.FS
-
 // registerExampleCSVHandler serves up the text output of the example csv file
 func registerExampleCSVHandler(router *Router) (err error) {
 	path := "/example/csv"
